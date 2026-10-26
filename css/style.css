@@ -611,7 +611,7 @@ button.it.sel{border-color:var(--gold)}
 /* ---- colour scheme: Tavern (warm wood and gold, the look of the story and event scenes) ---- */
 :root.th-tavern{--ink:#140d0a;--panel:#221612;--panel2:#2e1e16;--line:#5a3a22;--fg:#ead9c0;--muted:#b09a80;--gold:#f0c850}
 .th-tavern .mbox,.th-tavern .panel,.th-tavern .sbx,.th-tavern .nm-scroll,.th-tavern .nm-side,.th-tavern .vp{border-color:#7a5230}
-.th-tavern button{background:#2e1e16;border-color:#5a3a22;color:#f3e6d0}.th-tavern button.go{background:var(--gold);color:#2a1a0e;border-color:var(--gold)}
+:where(.th-tavern) button{background:#2e1e16;border-color:#5a3a22;color:#f3e6d0}:where(.th-tavern) button.go{background:var(--gold);color:#2a1a0e;border-color:var(--gold)}
 .th-tavern .umenu{background:rgba(34,22,18,.96);border-color:#7a5230}
 .th-tavern h2,.th-tavern .tv-name{color:#f0c850}
 .th-tavern .title{--gold:#d8b15a}
