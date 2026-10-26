@@ -9,7 +9,9 @@ function mcost(u,x,y){const t=ter(x,y);if(CLS[u.cls].phase)return 1;if(t.k==='la
 const hostile=(a,b)=>(a.team==='e')!==(b.team==='e');
 /* Skills: u.skill is the personal skill (free). u.skills holds extras: {id,src:'lv10'} (free) or {id,src:'scroll'} (costs capacity). */
 const has=(u,id)=>u.skill===id||!!(u.skills&&u.skills.some(x=>x.id===id));
-const capUsed=u=>(u.skills||[]).reduce((a,x)=>a+(x.src==='scroll'?SKILLS[x.id].cost:0),0);
+/* skill capacity used: the personal skill always takes PERSONAL_CAP, scroll-learned skills take their cost */
+const PERSONAL_CAP=5;
+const capUsed=u=>(u.skill&&u.team!=='e'?PERSONAL_CAP:0)+(u.skills||[]).reduce((a,x)=>a+(x.src==='scroll'?SKILLS[x.id].cost:0),0);
 const capOf=u=>u.cap||BASE_CAP;
 function learnBlock(u,k){if(has(u,k))return`${u.name} already knows ${SKILLS[k].n}.`;const c=SKILLS[k].cost;if(capUsed(u)+c>capOf(u))return`Needs ${c} capacity; ${u.name} has ${capOf(u)-capUsed(u)} free.`;return null}
 function promoBlock(u){if(u.team!=='p')return'Only allies can ascend.';if(!CLS[u.cls].promo)return`${u.name} has already ascended.`;if(u.lv<PROMO_LV)return`${u.name} needs Lv ${PROMO_LV} to ascend.`;return null}

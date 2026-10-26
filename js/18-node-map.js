@@ -72,7 +72,7 @@ function mapScreen(preview){
       ${(run.woes||[]).length?`<div class="ns-h woe">Woes</div>${run.woes.map(w=>`<div class="ns-row"><img src="${woeArt(w.id)}" alt=""><span>${woeText(w)}</span></div>`).join('')}`:''}</aside>
     <div class="nm-info"></div>
     <aside class="nm-side nm-unit" hidden></aside>
-    <div class="nm-squad">${run.roster.map((u,ui)=>`<div data-u="${ui}" role="button" tabindex="0"><img src="${uSpr(u)}" alt=""><span>${u.name}</span><small>Lv ${u.lv}${u.hp<u.maxhp?` · ${u.hp}/${u.maxhp} HP`:''}</small></div>`).join('')}</div>`;
+    <div class="nm-squad">${run.roster.map((u,ui)=>`<div data-u="${ui}" role="button" tabindex="0"><img src="${uSpr(u)}" alt=""><span>${u.name}</span><small>Lv ${u.lv}</small>${squadHp(u)}</div>`).join('')}</div>`;
   tip('map','The road ahead','Tap a glowing room to see what it is, then tap it again to go there. Every route has a treasure room and a tavern, 4 or 5 fights (the red skull is an elite) and a rest, plus a mix of events and recruits. Then a camp and the boss.');
   mapEl.hidden=false;mapEl.style.background=`radial-gradient(ellipse at 50% 0%,${actBiome().bg},#121018 72%)`;
   const sc=mapEl.querySelector('.nm-scroll'),focus=ok[0]?Y(ok[0].r):H;sc.scrollTop=Math.max(0,focus-sc.clientHeight/2);
@@ -85,7 +85,7 @@ function mapScreen(preview){
     if(!e.target.closest('.nm-unit,[data-u]'))closeUnit();
     if(e.target.closest('[data-close]')){mapEl.onclick=null;mapEl.hidden=true;sfx('select');return res(null)}
     const sv=e.target.closest('[data-salve]');if(sv){const u=run.roster[+sv.dataset.uu],it=u.items[+sv.dataset.salve],amt=Math.min(salveAmt(it.k),u.maxhp-u.hp);u.hp+=amt;it.u--;if(it.u<=0)u.items.splice(+sv.dataset.salve,1);sfx('heal');saveGame();
-      sv.closest('.nm-side,.nm-info').innerHTML=unitBox(u);const sm=mapEl.querySelector(`.nm-squad [data-u="${+sv.dataset.uu}"] small`);if(sm)sm.textContent=`Lv ${u.lv}${u.hp<u.maxhp?` · ${u.hp}/${u.maxhp} HP`:''}`;toast(`${u.name} recovers ${amt} HP`);return}
+      sv.closest('.nm-side,.nm-info').innerHTML=unitBox(u);const sm=mapEl.querySelector(`.nm-squad [data-u="${+sv.dataset.uu}"] .sq-hp`);if(sm)sm.outerHTML=squadHp(u);toast(`${u.name} recovers ${amt} HP`);return}
     const su=e.target.closest('[data-u]');if(su){const u=run.roster[+su.dataset.u],box=mapEl.querySelector('.nm-unit');sfx('select');
       if(su.classList.contains('on')&&!box.hidden){closeUnit();return}
       mapEl.querySelectorAll('.nm-squad .on').forEach(x=>x.classList.remove('on'));su.classList.add('on');box.hidden=false;box.innerHTML=unitBox(u);return}
@@ -100,6 +100,8 @@ function mapScreen(preview){
     const any=e.target.closest('.nd');if(any){const[r,i]=any.dataset.n.split(',').map(Number),t=M[r][i].t;mapEl.querySelector('.nm-info').innerHTML=''}
   }});
 }
+/* HP under each squad member on the map: a bar (green, amber below half, red below a quarter) and the number */
+const squadHp=u=>{const f=u.hp/u.maxhp;return`<span class="sq-hp${f<.25?' lo':f<.5?' mid':''}"><i><b style="width:${f*100}%"></b></i><em>${u.hp}/${u.maxhp}</em></span>`};
 const unitBox=u=>`<button type="button" class="nu-x" data-ux="1" aria-label="Close">✕</button>${unitDetail(u)}`;
 /* a unit's full details for the map screen: stats, skills (with capacity) and items */
 function unitDetail(u){const C=CLS[u.cls],sk=[u.skill,...(u.skills||[]).map(x=>x.id)].filter(Boolean);
