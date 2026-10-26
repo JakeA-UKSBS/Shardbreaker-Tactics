@@ -40,7 +40,7 @@ function playStory(lines){
 
 const titleEl=document.createElement('div');titleEl.className='title';titleEl.hidden=true;document.body.appendChild(titleEl);
 /* the title scene: a great blighted crystal in the distance, its red veins spreading through the land */
-function titleCrystalArt(){const c='TCRYS';if(sprCache[c])return sprCache[c];const W=120,p=Px(W,W),D='#4a0614',M='#8a1224',R='#c8283a',L='#ff5a6a',H='#ffb0b8';
+function titleCrystalArt_draw(){const c='TCRYS';if(sprCache[c])return sprCache[c];const W=120,p=Px(W,W),D='#4a0614',M='#8a1224',R='#c8283a',L='#ff5a6a',H='#ffb0b8';
   const spire=(x,base,top,w,lean)=>{const t=[x+lean,top],bl=[x-w,base],br=[x+w,base],ml=[x-w*.8+lean*.3,top+(base-top)*.25],mr=[x+w*.8+lean*.3,top+(base-top)*.25];
     p.poly([t,mr,br,bl,ml],R);p.poly([t,ml,bl,[x+lean*.2,base]],M);p.poly([t,[x+lean*.2,base],br,mr],L);p.line(Math.round(t[0]),Math.round(t[1]),Math.round(x+lean*.2),base,H);
     for(let k=0;k<3;k++){const y=top+(base-top)*(.35+k*.2);p.line(Math.round(x-w*.6),Math.round(y),Math.round(x+lean*.1),Math.round(y+6),D)}};
@@ -96,3 +96,6 @@ function start(data){
 }
 window.claude?.hot?.snapshot?.(()=>({state,history,rewinds,chStart,run,def:CH[0],rng:rngS}));
 window.claude?.hot?.ready?window.claude.hot.ready(start):start(window.claude?.hot?.data??{});
+
+/* PNG art: each of these uses art/<key>.png when it exists, else the drawing code above (see art() in 03-pixel-art.js) */
+function titleCrystalArt(){return art('title/crystal',()=>titleCrystalArt_draw())}

@@ -1,7 +1,7 @@
 /* Flying Ship tiles */
 /* ================= SHIP ART ================= */
 /* The ship is drawn under transparent deck/hull/mast tiles, built from the map letters: d deck, h hull, M mast, H helm. */
-function shipArt(wreck){
+function shipArt_draw(wreck){
   const S=16,p=Px(MW*S,MH*S),isShip=(x,y)=>x>=0&&y>=0&&x<MW&&y<MH&&'dMhH'.includes(MAP[y][x]),hs=(x,y)=>((x*73856093)^(y*19349663))>>>0;
   for(let y=0;y<MH;y++)for(let x=0;x<MW;x++)if(MAP[y][x]==='~'&&hs(x,y)%4===0)p.ell(x*S+6+hs(x,y)%5,y*S+9,6+hs(x,y)%4,2.6,'rgba(225,232,245,.35)');
   const mastRows=MAP.map((r,y)=>r.includes('M')?y:-1).filter(y=>y>=0);
@@ -22,11 +22,15 @@ function shipArt(wreck){
     else{p.poly([[X-w,sy],[X+w,sy],[X+w-3,sy+13],[X-w+3,sy+13]],'#efe6cf');p.rect(X-w,sy,2*w,2,'#c9b98f');p.rect(X-w+3,sy+11,2*w-6,2,'#c9b98f');p.ell(X,sy+6,2.5,2.5,'#9fd8ff')}}
   return p.url();
 }
-function shipSideArt(){const p=Px(120,72);
+function shipSideArt_draw(){const p=Px(120,72);
   p.poly([[10,44],[110,44],[100,60],[22,60]],'#7a5230');p.rect(12,44,98,4,'#5a3a20');for(let x=20;x<100;x+=10)p.rect(x,50,2,8,'#4f331d');
   [30,60,88].forEach(x=>p.ell(x,54,2,2,'#9fd8ff'));
   p.poly([[108,44],[118,34],[116,46],[106,52]],'#7a5230');p.ell(118,33,2,2,GOLD);p.poly([[12,44],[4,32],[12,35],[17,44]],'#6b4325');
   [[35,10],[60,3],[85,10]].forEach(([x,t])=>{p.rect(x,t,2,41,'#4f331d');for(let k=0;k<3;k++){const y=t+3+k*12,w=14-k*2;p.poly([[x-w,y],[x+w+2,y],[x+w,y+10],[x-w+2,y+10]],CREAM);p.rect(x-w,y,2*w+2,1,'#c9b98f')}});
   p.outline(OUT);return p.url()}
-function shipWingArt(){const p=Px(120,72);for(let k=0;k<6;k++){p.line(42,46,4+k*3,18+k*5,k%2?'#8a5a34':'#b07a42',3);p.line(78,46,114-k*3,18+k*5,k%2?'#8a5a34':'#b07a42',3)}p.outline(OUT);return p.url()}
+function shipWingArt_draw(){const p=Px(120,72);for(let k=0;k<6;k++){p.line(42,46,4+k*3,18+k*5,k%2?'#8a5a34':'#b07a42',3);p.line(78,46,114-k*3,18+k*5,k%2?'#8a5a34':'#b07a42',3)}p.outline(OUT);return p.url()}
 
+/* PNG art: each of these uses art/<key>.png when it exists, else the drawing code above (see art() in 03-pixel-art.js) */
+function shipArt(wreck){return art('ship/ship'+(wreck?'-wreck':''),()=>shipArt_draw(wreck))}
+function shipSideArt(){return art('ship/side',()=>shipSideArt_draw())}
+function shipWingArt(){return art('ship/wing',()=>shipWingArt_draw())}

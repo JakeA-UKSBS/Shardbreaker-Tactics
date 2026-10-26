@@ -1,6 +1,6 @@
 /* The Sage's tent intro and the Crossroads squad pick */
 /* ---- the muster: the run's opening scene at the crossroads, where you pick your starting squad ---- */
-function musterArt(){const c='MUS';if(sprCache[c])return sprCache[c];const W=160,H=90,p=Px(W,H);
+function musterArt_draw(){const c='MUS';if(sprCache[c])return sprCache[c];const W=160,H=90,p=Px(W,H);
   ['#2a2a4a','#3a3456','#5a4060','#8a5060','#c87058','#e8a060'].forEach((col,i)=>p.rect(0,i*8,W,8,col));p.ell(40,46,9,9,'#ffd27a');p.ell(40,46,6,6,'#fff0c0');
   p.poly([[0,52],[18,34],[34,46],[52,30],[74,48],[96,32],[118,46],[140,28],[160,42],[160,60],[0,60]],'#3a2e48');
   p.poly([[0,58],[24,46],[50,56],[80,44],[110,56],[136,46],[160,54],[160,64],[0,64]],'#2a2436');
@@ -9,22 +9,22 @@ function musterArt(){const c='MUS';if(sprCache[c])return sprCache[c];const W=160
   p.line(80,74,72,80,'#5a3a22',2);p.line(72,74,88,80,'#4a2e1a',2);p.poly([[80,62],[85,72],[80,75],[75,72]],'#ff8a3c');p.poly([[80,66],[82,72],[80,74],[78,72]],'#ffe14a');
   p.rect(18,66,10,7,'#7a5a3a');p.rect(16,64,14,3,'#5a3a22');p.rect(112,70,12,6,'#5a4a3a');
   return sprCache[c]=p.url()}
-function flagArt(){const c='FLAG';if(sprCache[c])return sprCache[c];const p=Px(16,16);p.rect(4,1,1,14,'#8a6040');p.poly([[5,2],[14,4],[5,8]],'#d8483a');p.line(5,3,11,4,'#f0c850');p.rect(2,14,5,1,'#5a3a22');p.outline(OUT);return sprCache[c]=p.url()}
+function flagArt_draw(){const c='FLAG';if(sprCache[c])return sprCache[c];const p=Px(16,16);p.rect(4,1,1,14,'#8a6040');p.poly([[5,2],[14,4],[5,8]],'#d8483a');p.line(5,3,11,4,'#f0c850');p.rect(2,14,5,1,'#5a3a22');p.outline(OUT);return sprCache[c]=p.url()}
 const musEl=document.createElement('div');musEl.className='tav mus';musEl.hidden=true;document.body.appendChild(musEl);
 const STAT_HELP=[['HP','Health. A unit falls at 0.'],['Str','Damage with blades, axes, lances and bows (fighters).'],['Mag','Damage with sigils, and healing (casters).'],['Luck','Hit chance and critical hits, and guards against enemy crits. Some skills trigger off Luck.'],['Spd','Avoid. 4 more Spd than your foe means you strike twice.'],['Def','Cuts physical damage taken.'],['Res','Cuts magic damage taken.'],['Wt','Weapon weight. Each point above your Str (or Mag) costs 1 Spd.'],['Move','Tiles the unit can move each turn.']];
 const statHelpHTML=()=>`<div class="stathelp" hidden>${STAT_HELP.map(([k,d])=>`<div><b>${k}</b><span>${d}</span></div>`).join('')}</div>`;
 /* ---- the sage's tent: Ithren talks over his crystal ball, then (once unlocked) asks how deep into the blight to go ---- */
-function sageRoomArt(){const c='SAGEROOM';if(sprCache[c])return sprCache[c];const W=160,H=90,p=Px(W,H);
+function sageRoomArt_draw(){const c='SAGEROOM';if(sprCache[c])return sprCache[c];const W=160,H=90,p=Px(W,H);
   p.rect(0,0,W,H,'#1e1428');for(let x=0;x<W;x+=16){p.poly([[x,0],[x+8,0],[x+12,90],[x+4,90]],'#2a1c38');p.line(x+8,0,x+12,90,'#352448')}
   p.poly([[0,0],[160,0],[160,8],[120,14],[80,6],[40,14],[0,8]],'#3a2650');for(const x of[20,60,100,140])p.ell(x,10,2,3,GOLD);
   for(const[x,y]of[[18,44],[142,48]]){p.rect(x-2,y,4,10,'#efe6cf');p.ell(x,y-2,1.6,2.4,'#ffd27a');p.set(x,y-3,'#fff6c0');p.ell(x,y-2,6,6,'#3a2a3a',(a,b)=>!p.g[b*W+a])}
   p.rect(0,70,W,20,'#2a1e22');for(let i=0;i<30;i++)p.set((i*53)%W,72+(i*7)%16,'#3a2a2e');
   return sprCache[c]=p.url()}
-function sageTableArt(){const c='SAGETABLE';if(sprCache[c])return sprCache[c];const W=160,H=90,p=Px(W,H);
+function sageTableArt_draw(){const c='SAGETABLE';if(sprCache[c])return sprCache[c];const W=160,H=90,p=Px(W,H);
   p.poly([[44,66],[116,66],[124,90],[36,90]],'#4a2a5a');p.ell(80,66,36,6,'#5a3670');for(let x=40;x<122;x+=6)p.line(x,68,x-2,90,'#3a2048');p.rect(44,64,72,2,GOLD);
   p.rect(72,58,16,4,'#b8912f');p.rect(70,61,20,2,'#8a6a20');
   p.outline('#120a18');return sprCache[c]=p.url()}
-function sageBallArt(){const c='SAGEBALL';if(sprCache[c])return sprCache[c];const W=160,H=90,p=Px(W,H);
+function sageBallArt_draw(){const c='SAGEBALL';if(sprCache[c])return sprCache[c];const W=160,H=90,p=Px(W,H);
   p.ell(80,46,13,13,'#7a4ab8');p.ell(81,45,10.5,10.5,'#9a6ad8');p.ell(83,43,6,6,'#c9a8ff');p.ell(75,40,2.4,1.8,'#ffffff');p.set(87,52,'#e0c8ff');p.set(73,50,'#5a2a98');
   for(let a=0;a<10;a++)p.set(80+Math.round(17*Math.cos(a/10*6.28)),46+Math.round(16*Math.sin(a/10*6.28)),'#d8b8ff');
   p.outline('#120a18');return sprCache[c]=p.url()}
@@ -77,4 +77,9 @@ async function musterScene(opts,need){
     res(g.dataset.g==='go'?chosen.map(i=>opts[i]):null)}});
 }
 
-
+/* PNG art: each of these uses art/<key>.png when it exists, else the drawing code above (see art() in 03-pixel-art.js) */
+function musterArt(){return art('scenes/crossroads',()=>musterArt_draw())}
+function flagArt(){return art('nodes/start',()=>flagArt_draw())}
+function sageRoomArt(){return art('scenes/sage-room',()=>sageRoomArt_draw())}
+function sageTableArt(){return art('scenes/sage-table',()=>sageTableArt_draw())}
+function sageBallArt(){return art('scenes/sage-ball',()=>sageBallArt_draw())}

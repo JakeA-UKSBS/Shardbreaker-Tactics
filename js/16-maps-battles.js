@@ -45,7 +45,7 @@ Object.assign(TER,{
   'c':{n:'Cave Floor',k:'cave',c:1,av:0,df:0},'x':{n:'Iridescent Rock',k:'cavewall',c:99,av:0,df:0},'g':{n:'Malachite',k:'malachite',c:2,av:20,df:2},
   'e':{n:'Emerald Cluster',k:'emerald',c:2,av:20,df:2},'u':{n:'Ruby Cluster',k:'ruby',c:2,av:20,df:2},'p':{n:'Sapphire Cluster',k:'sapphire',c:2,av:20,df:2}
 });
-function bioTile2(k){
+function bioTile2_draw(k){
   const p=Px(16,16),o=Px(16,16),dots=(c,pts)=>pts.forEach(([x,y])=>p.set(x,y,c)),S=[[2,3],[9,2],[13,6],[4,12],[11,13],[7,8],[14,11]];
   const gem=(c)=>{o.poly([[3,14],[5,6],[7,14]],c);o.poly([[6,14],[9,2],[12,14]],c);o.poly([[10,14],[13,7],[14,14]],shade(c,.8));o.line(9,4,9,12,shade(c,1.4));o.set(5,8,shade(c,1.5))};
   if(k==='sandstone'||k==='quicksand'){p.rect(0,0,16,16,'#b8a070');dots('#a08858',S)}
@@ -201,8 +201,12 @@ function genBattle(n,kind){
 }
 
 /* boulders: an impassable pile of stones drawn over the map's own ground (see the tile builder in render) */
-function boulderArt(){const o=Px(16,16),R1='#8a8478',R2='#a8a294',R3='#6a655c',R4='#c4bfb2';
+function boulderArt_draw(){const o=Px(16,16),R1='#8a8478',R2='#a8a294',R3='#6a655c',R4='#c4bfb2';
   o.ell(5.5,11,4.6,3.8,R1);o.ell(11.5,10.5,4,4.4,R3);o.ell(11,9.5,3.4,3.6,R1);o.ell(8,6.5,4.4,4,R2);o.ell(7,5.2,2.4,1.6,R4);o.ell(4.5,10,2,1.2,R2);
   o.line(8,9,10,11,R3);o.line(3,13,7,14,R3);o.set(13,8,R2);o.set(6,4,'#e0dcd2');o.set(9,12,'#7a9a5a');o.set(10,13,'#6a8a4a');
   o.outline('#1a1414');return o.url()}
 texStyle.textContent+=`.tile.boulder::before{inset:0;background:url(${boulderArt()}) 0 0/100% 100%}`;
+
+/* PNG art: each of these uses art/<key>.png when it exists, else the drawing code above (see art() in 03-pixel-art.js) */
+function bioTile2(k){return art('tiles/'+k,()=>bioTile2_draw(k))}
+function boulderArt(){return art('tiles/boulder',()=>boulderArt_draw())}

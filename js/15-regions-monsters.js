@@ -9,7 +9,7 @@ Object.assign(TER,{
   's':{n:'Ankle-deep Water',k:'shallow',c:1,av:0,df:0,slow:true},'n':{n:'Sand',k:'sand',c:1,av:0,df:0},'v':{n:'Mangrove Roots',k:'mangrove',c:2,av:20,df:1,slow:true},
   'y':{n:'Cursed Thicket',k:'curse',c:2,av:25,df:1},'b':{n:'Basalt',k:'basalt',c:1,av:0,df:0},'l':{n:'Magma',k:'lava',c:99,av:0,df:0}
 });
-function bioTile(k){
+function bioTile_draw(k){
   const p=Px(16,16),o=Px(16,16),dots=(c,pts)=>pts.forEach(([x,y])=>p.set(x,y,c)),S=[[2,3],[9,2],[13,6],[4,12],[11,13],[7,8],[14,11]];
   if(k==='myc'||k==='shroom'){p.rect(0,0,16,16,'#4e4058');p.line(0,5,7,9,'#665576');p.line(7,9,16,6,'#665576');p.line(4,16,9,9,'#665576');p.line(11,0,12,7,'#5c4d6a');dots('#c9b8ff',[[3,3],[12,12],[8,13],[14,2]])}
   if(k==='shroom'){o.rect(6,9,4,6,'#efe6cf');o.rect(6,9,1,6,'#cfc4aa');o.ell(8,7,7,4.5,'#d8483a',(x,y)=>y<=8);o.rect(2,8,12,1,'#a8302a');o.ell(5,5,1.3,1,'#fff');o.ell(10,4,1.5,1.1,'#fff');o.ell(12,7,1,1,'#fff')}
@@ -119,3 +119,6 @@ const BIOMES={
     maps:['maze1','vaults','pillars'],bossMap:'mazeHeart',pool:[['Gremlin',3],['Beholder',2,3]],elitePool:[['Beholder',3],['Gremlin',2]],
     boss:{name:'',cls:'MinotaurM',s:[34,12,0,6,4,2,9,2],items:['steelAxe'],skill:'fury',look:{style:'bald',horns:true,beard:true,hair:'#2a1a14',skin:'#7a4e32',cloth:'#4a3a2a',eye:'#ff5a3a',hornGem:'#d8323a',crysAt:[{core:[15,19],col:'#d8323a'}]}}}
 };
+
+/* PNG art: each of these uses art/<key>.png when it exists, else the drawing code above (see art() in 03-pixel-art.js) */
+function bioTile(k){return art('tiles/'+k,()=>bioTile_draw(k))}
