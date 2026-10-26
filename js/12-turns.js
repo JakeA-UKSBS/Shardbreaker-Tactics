@@ -152,7 +152,8 @@ async function fight(a,ai,d){
   const ep=p&&p.summon?state.units.find(x=>x.id===p.owner&&x.hp>0):p;
   if(p&&p.hp>0&&ep){const dealt=res.ev.some(e=>(e.by==='a')===(p===a)&&e.dmg>0);const g=gainExp(ep,Math.min(100,Math.round(expFor(ep,o,dealt,o.hp<=0)*EXP_RATE*(R('tome')?1.5:1)*(has(ep,'quickstudy')?2:1))));if(ep!==p&&g)toast(`${ep.name} gains ${g.amt} EXP`);await showExp(ep,g);if(g&&g.gains)await levelUp(ep,g)}
   if(p&&o.hp<=0&&p.hp>0&&R('fang')){const h=Math.min(5,p.maxhp-p.hp);if(h){p.hp+=h;pop(p,'+'+h,'heal')}}
-  if(p&&o.hp<=0&&p.hp>0)for(const it of o.items.filter(i=>i.d)){if(p.items.length<5){p.items.push({k:it.k,u:it.u});toast(`${p.name} got ${IT[it.k].n}`)}else{(state.loot=state.loot||[]).push(it.k);toast(`${IT[it.k].n} added to the spoils`)}}
+  if(p&&o.hp<=0&&p.hp>0)/* enemy drops go to the spoils: after the win the Found picker asks who takes each one */
+    for(const it of o.items.filter(i=>i.d)){(state.loot=state.loot||[]).push(it.k);pop(o,IT[it.k].n+' dropped','heal');toast(`${IT[it.k].n} dropped: added to the spoils`)}
   await closeScene();
   if(a.hp>0&&d.hp<=0&&a.team==='p'&&phase==='player'&&has(a,'momentum')&&a.gf!==state.turn){a.gf=state.turn;a.acted=false;pop(a,'Momentum!','heal')}
   if(a.hp>0&&has(a,'hitrun')&&man(a,d)===1){let best=null,bd=-1;for(const[dx,dy]of DIRS){const x=a.x+dx,y=a.y+dy;if(x<0||y<0||x>=MW||y>=MH||unitAt(x,y)||mcost(a,x,y)>=99)continue;
