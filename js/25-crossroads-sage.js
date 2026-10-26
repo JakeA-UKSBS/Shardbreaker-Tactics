@@ -34,7 +34,7 @@ async function sageScene(){
   const lines=['Ah, you came. Sit, sit. Look into the glass with me.',
     'A blight has taken root in these lands: malignant crystals. They grow through living creatures and twist them into something cruel.',
     'Worse, the crystallised beasts give off a scent that drives people to rage. The nearby kingdoms are already at each other’s throats.',
-    `The glass shows where the blight runs deepest: first ${theN(B1)}, then ${theN(B2)}. Break the crystals at their heart, and the scent will fade.`,
+    `The glass shows where the blight runs deepest: first ${theN(B1)}, then ${theN(B2)}. Beyond them lies its source, the Crystal Heart. Shatter it, and the scent will fade.`,
     'An army would only feed the war. A small band can slip through. Travellers have gathered at the crossroads. Choose three to walk this road, and choose well: not all of them will come back.'];
   /* difficulty: arrows over the crystal ball, only once Ascension is unlocked */
   let asc=0;const diffHTML=()=>prof.asc?`<div class="sg-diff"><button type="button" data-d="-1" aria-label="Easier"${asc<=0?' disabled':''}>◀</button><span><b>${asc?'Ascension '+asc:'Normal'}</b><small>${asc?ASC[asc]:'The standard run.'}</small></span><button type="button" data-d="1" aria-label="Harder"${asc>=prof.asc?' disabled':''}>▶</button></div>`:'';
@@ -55,7 +55,7 @@ async function musterScene(opts,need){
   /* stand the travellers in an arc around the campfire: the far ones behind it, smaller */
   const ang=i=>Math.PI*(1-i/(n-1)),pos=i=>50+38*Math.cos(ang(i)),up=i=>8+24*Math.sin(ang(i)),sc=i=>1-.22*Math.sin(ang(i));
   musEl.innerHTML=`<div class="tv-scene"><img class="tv-bg" src="${musterArt()}" alt="">
-      <div class="ms-post" aria-label="Signpost"><span class="ms-sign"><small>Act 1</small>${B1.n}</span><span class="ms-sign"><small>Act 2</small>${B2.n}</span></div>
+      <div class="ms-post" aria-label="Signpost"><span class="ms-sign"><small>Act 1</small>${B1.n}</span><span class="ms-sign"><small>Act 2</small>${B2.n}</span><span class="ms-sign"><small>Act 3</small>${BIOMES.heart.n}</span></div>
       ${opts.map((u,i)=>`<button type="button" class="mu" data-u="${i}" style="left:${pos(i)}%;bottom:${up(i)}%;--s:${sc(i)};z-index:${10-Math.round(Math.sin(ang(i))*5)}" aria-label="${u.name}"><img src="${uSpr(u)}" alt=""${pos(i)>50?' class="fl"':''}><span>${u.name}</span></button>`).join('')}
       <button type="button" class="ms-map" data-g="map" aria-label="Look at the map" title="Look at the map"><img src="${mapIconArt()}" alt="">Map</button><span class="tv-gold">Seed ${run.seed}</span></div>
     <div class="tv-box"><div class="ms-head"><b class="ms-count"></b><button type="button" class="mini ms-info" data-g="info" aria-expanded="false">ⓘ What do stats do?</button></div>${statHelpHTML()}

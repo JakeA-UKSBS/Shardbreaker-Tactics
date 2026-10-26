@@ -110,6 +110,18 @@ Stone corridors with no daylight. Something with too many eyes watches from the 
 | --- | --- |
 | ![Gremlin](visuals/monsters/Gremlin.png) | ![Beholder](visuals/monsters/Beholder.png) |
 
+### The Heart of the Blight
+
+Scorched ground split by veins of glowing gem. Every crystal in these lands grew from what waits here. **Rule:** The Heart never moves, but it strikes from 2 to 6 tiles away. Get next to it: it can’t hit what’s beside it. It calls more blighted monsters every other turn.
+
+| Boss: The Crystal Heart | Attacking |
+| --- | --- |
+| ![The Crystal Heart](visuals/bosses/heart.png) | ![The Crystal Heart attacking](visuals/bosses/heart_attack.png) |
+
+|  |
+|
+|  |
+
 ### Sandstone Desert
 
 Dunes and sandstone ruins under a white sun. Jackals run in packs, and the quicksand swallows the careless. **Rule:** A unit that starts its turn in quicksand has 1 less Move. Sandstone rocks block the way.
@@ -368,9 +380,13 @@ The iridescent cave walls and feldspar-with-smoky-quartz sandstone are based on 
 | --- | --- | --- |
 | ![spire](visuals/scenes/event_spire.png) | ![oracle](visuals/scenes/event_oracle.png) | ![sage](visuals/scenes/event_sage.png) |
 
-| hoard |
+| hoard | echo | fallen |
+| --- | --- | --- |
+| ![hoard](visuals/scenes/event_hoard.png) | ![echo](visuals/scenes/event_echo.png) | ![fallen](visuals/scenes/event_fallen.png) |
+
+| seam |
 | --- |
-| ![hoard](visuals/scenes/event_hoard.png) |
+| ![seam](visuals/scenes/event_seam.png) |
 
 Each event scene is tinted to the region it appears in (shown here in the first region).
 
@@ -412,6 +428,6 @@ The ship isn't a tile set: it's drawn on the fly from the map letters (d deck, h
 
 ## Battle backdrops
 
-The side-on fight scene uses a backdrop for the current region (`battleBgArt` in js/09-battle-scene.js, 160×90, horizon at y 63). Regions without one fall back to the old terrain gradients.
+The side-on fight scene uses a backdrop for the current region (`battleBgArt` in js/09-battle-scene.js, 160×90, horizon at y 63). Regions without one fall back to the old terrain gradients. `heart` is Act 3.
 
 ![Battle backdrops](visuals/scenes/battle_backdrops.png)

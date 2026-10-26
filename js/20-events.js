@@ -1,9 +1,9 @@
 /* Event scenes, events, woes and event helpers */
 /* ---- events: a scene of what's happening, a short text, and choices. Each choice's go() returns the outcome text, or null to step back. ---- */
-const REG_SKY={mushroom:['#2a2040','#5a3a6a','#8a5a8a'],shadow:['#14121e','#24223a','#3a3450'],swamp:['#1a2a24','#2e4a3a','#4a6a4a'],forest:['#1a221c','#2e3a2e','#4a5240'],
+const REG_SKY={heart:['#0e0408','#2e0c16','#4e1424'],mushroom:['#2a2040','#5a3a6a','#8a5a8a'],shadow:['#14121e','#24223a','#3a3450'],swamp:['#1a2a24','#2e4a3a','#4a6a4a'],forest:['#1a221c','#2e3a2e','#4a5240'],
   mountain:['#2a1414','#5a2a1e','#a8482a'],ship:['#26304a','#56668c','#8e9ab8'],labyrinth:['#141218','#24202c','#34303e'],
   desert:['#c8783a','#e8a85a','#f3d08a'],snow:['#4a6a9a','#8aaad0','#c8daf0'],cavern:['#120e1a','#221a2e','#342a44']};
-const REG_GROUND={mushroom:'#4e4058',shadow:'#34303c',swamp:'#3f5a4a',forest:'#3e4436',mountain:'#3a3034',ship:'#7a5230',labyrinth:'#4a4652',desert:'#c9a060',snow:'#e4ecf4',cavern:'#3a3444'};
+const REG_GROUND={heart:'#1e1416',mushroom:'#4e4058',shadow:'#34303c',swamp:'#3f5a4a',forest:'#3e4436',mountain:'#3a3034',ship:'#7a5230',labyrinth:'#4a4652',desert:'#c9a060',snow:'#e4ecf4',cavern:'#3a3444'};
 function eventScene(prop){
   const B=actBiome(),c='EV|'+prop+'|'+B.id;if(sprCache[c])return sprCache[c];
   const W=160,H=90,p=Px(W,H),sky=REG_SKY[B.id]||REG_SKY.forest,gr=REG_GROUND[B.id]||'#3e4436';
@@ -237,8 +237,24 @@ Object.assign(EVENTS,{
       u.items.push({k,u:IT[k].uses});run.gold=gold()+40;addWoe('wound',1);addWoe('marked',1,u);sfx('fanfare');return`${u.name} grabs the <b>${IT[k].n}</b> and a fistful of gold. Something wakes. You’ll be hunted next fight, ${u.name} most of all.`}},
     {l:'Pocket some gold quietly',sub:'+40 gold',go:async()=>{run.gold=gold()+40;sfx('item');return'40 gold, and nothing stirs.'}}]}}
 });
+/* ---- act 3 events: only these appear on the road to the Crystal Heart ---- */
+Object.assign(EVENTS,{
+  echo:{t:'Ithren’s Echo',act:3,art:'sage',d:'The air shivers, and Ithren’s voice comes through the crystal, faint and far away. “You’re close now. I can give you one thing. Choose.”',o:[
+    {l:'“Mend us”',sub:'Everyone heals fully, and your woes are lifted',go:async()=>{run.roster.forEach(u=>u.hp=u.maxhp);run.woes=[];sfx('heal');return'Warmth runs through the squad. Every wound closes, and the weight you were carrying lifts.'}},
+    {l:'“Sharpen us”',sub:'Every unit +1 Str and +1 Mag',go:async()=>{run.roster.forEach(u=>{bump(u,'str',1);bump(u,'mag',1)});sfx('ding');return'Your hands steady. Every unit gains 1 Str and 1 Mag.'}},
+    {l:'“Shield us”',sub:'Every unit +2 Res',go:async()=>{run.roster.forEach(u=>bump(u,'res',2));sfx('ding');return'A pale light settles over the squad. Every unit gains 2 Res.'}}]},
+  fallen:{t:'Those Who Came Before',act:3,art:'battlefield',d:'Another squad got this far. Their gear lies where they fell, half grown over with red crystal.',o:null,make:()=>{
+    const last=(prof.hist||[]).flatMap(h=>h.fallen||[])[0];if(last)EVENTS.fallen.d=`Another squad got this far. Their gear lies where they fell, half grown over with red crystal. One of the blades is ${last.n}’s.`;return[
+    {l:'Take a fallen weapon',sub:'One unit’s weapon is reforged +2',go:async()=>{const u=await pickUnit('Whose weapon is reforged?','Their weapon gains +2 (up to +3).',u=>weaponOf(u)?null:'No weapon');if(!u)return null;const it=weaponOf(u);forge(it);forge(it);sfx('item');return`${u.name} works the old steel into their own. <b>${IT[it.k].n}</b>.`}},
+    {l:'Bury them',sub:'Every unit gains 50 EXP',go:async()=>{await expAll(run.roster,50);return'You do what you can for them. The squad goes on quieter (+50 EXP).'}}]}},
+  seam:{t:'The Bleeding Seam',act:3,art:'shrine',d:'A seam of red crystal pulses in the rock like a heartbeat. It runs straight towards the Heart.',o:[
+    {l:'Break the seam',sub:'The Crystal Heart starts with 20% less HP; every unit loses 3 HP now',go:async()=>{run.heartCut=1;run.roster.forEach(u=>u.hp=Math.max(1,u.hp-3));sfx('broke');return'The seam shatters and something deep below screams. The shards bite on the way out (−3 HP each), but the Heart is weaker for it.'}},
+    {l:'Pry out a shard',sub:'A rare relic; one unit is Marked next fight',go:async()=>{const k=await relicPick(1,['r'],'A shard of the Heart','It’s warm, and it’s watching.');const v=pick(run.roster);addWoe('marked',1,v);return`${k?`<b>${RELICS[k].n}</b>. `:''}${v.name} feels something turn to look at them.`}},
+    {l:'Leave it',go:async()=>'You step over it. It keeps beating.'}]}
+});
 async function eventNode(){
-  const ks=Object.keys(EVENTS).filter(k=>!EVENTS[k].act||EVENTS[k].act===(run.act||1)),seen=run.seenEv=run.seenEv||[],fresh=ks.filter(k=>!seen.includes(k)),ek=pick(fresh.length?fresh:ks),E=EVENTS[ek],opts=(E.card=null,E.o||E.make());seen.push(ek);
+  /* act 3 only draws act-3 events; acts 1 and 2 never do */
+  const A3=(run.act||1)>=3,ks=Object.keys(EVENTS).filter(k=>A3?EVENTS[k].act===3:!EVENTS[k].act||EVENTS[k].act===(run.act||1)),seen=run.seenEv=run.seenEv||[],fresh=ks.filter(k=>!seen.includes(k)),ek=pick(fresh.length?fresh:ks),E=EVENTS[ek],opts=(E.card=null,E.o||E.make());seen.push(ek);
   music(actBiome().id);
   for(;;){
     const m=await evShow(E,E.d,opts.map((x,i)=>{const poor=x.cost&&gold()<x.cost,none=x.need&&!x.need();return[String(i),x.l,(x.sub||'')+(poor?' (not enough gold)':none?' (nobody can use it)':''),poor||none]}));

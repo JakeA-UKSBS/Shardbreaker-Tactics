@@ -43,7 +43,10 @@ Object.assign(TER,{
   'k':{n:'Sandstone Rocks',k:'sandstone',c:99,av:0,df:0},'^':{n:'Boulders',k:'boulder',c:99,av:0,df:0},'z':{n:'Quicksand',k:'quicksand',c:1,av:0,df:0,slow:true},
   'o':{n:'Snow',k:'snow',c:1,av:0,df:0},'j':{n:'Deep Snow',k:'deepsnow',c:1,av:0,df:0,slow:true},'a':{n:'Blue Agate',k:'agate',c:2,av:20,df:2},'i':{n:'Frozen Lake',k:'ice',c:1,av:-10,df:0},
   'c':{n:'Cave Floor',k:'cave',c:1,av:0,df:0},'x':{n:'Iridescent Rock',k:'cavewall',c:99,av:0,df:0},'g':{n:'Malachite',k:'malachite',c:2,av:20,df:2},
-  'e':{n:'Emerald Cluster',k:'emerald',c:2,av:20,df:2},'u':{n:'Ruby Cluster',k:'ruby',c:2,av:20,df:2},'p':{n:'Sapphire Cluster',k:'sapphire',c:2,av:20,df:2}
+  'e':{n:'Emerald Cluster',k:'emerald',c:2,av:20,df:2},'u':{n:'Ruby Cluster',k:'ruby',c:2,av:20,df:2},'p':{n:'Sapphire Cluster',k:'sapphire',c:2,av:20,df:2},
+  /* the Heart of the Blight: scorched ground with glowing gem veins, blighted gem clusters and crystal spires */
+  'S':{n:'Scorched Ground',k:'scorch',c:1,av:0,df:0},'G':{n:'Blighted Emerald',k:'bgem-g',c:2,av:20,df:2},'U':{n:'Blighted Ruby',k:'bgem-r',c:2,av:20,df:2},
+  'P':{n:'Blighted Sapphire',k:'bgem-b',c:2,av:20,df:2},'Y':{n:'Blighted Amethyst',k:'bgem-v',c:2,av:20,df:2},'K':{n:'Crystal Spire',k:'spire',c:99,av:0,df:0}
 });
 function bioTile2_draw(k){
   const p=Px(16,16),o=Px(16,16),dots=(c,pts)=>pts.forEach(([x,y])=>p.set(x,y,c)),S=[[2,3],[9,2],[13,6],[4,12],[11,13],[7,8],[14,11]];
@@ -60,6 +63,12 @@ function bioTile2_draw(k){
   if(k==='deepsnow'){p.ell(5,6,5,3,'#f4f8ff');p.ell(11,11,5,3,'#f4f8ff');p.line(1,9,6,9,'#b8c8dc');p.line(8,14,14,14,'#b8c8dc')}
   if(k==='agate')gem('#4a7ac8');
   if(k==='ice'){p.rect(0,0,16,16,'#a8d0ec');p.line(2,3,9,5,'#e8f6ff');p.line(9,5,14,2,'#e8f6ff');p.line(5,12,12,10,'#d0ecff');p.set(12,6,'#ffffff')}
+  /* scorched ground: near-black, cracked, with veins of gem glowing in the cracks */
+  if(k==='scorch'||k.startsWith('bgem')||k==='spire'){p.rect(0,0,16,16,'#1e1416');S.forEach(([x,y])=>{p.set(x,y,'#140c0e');p.set(x+1,y-1,'#2c1e20')});
+    const V=k==='bgem-g'?'#3fd38a':k==='bgem-b'?'#4a7aff':k==='bgem-v'?'#b46aff':'#ff3a4a';
+    p.line(0,10,5,8,'#3a0c14');p.line(5,8,9,11,'#3a0c14');p.line(9,11,16,7,'#3a0c14');p.line(11,0,12,4,'#2e0a10');p.set(7,10,shade(V,.55));if(k!=='scorch')p.set(6,9,V)}
+  if(k==='bgem-g')gem('#2a9a5a');if(k==='bgem-r')gem('#b8202e');if(k==='bgem-b')gem('#2a4ab8');if(k==='bgem-v')gem('#7a3ab0');
+  if(k==='spire'){o.poly([[3,15],[6,3],[9,15]],'#6a0e1c');o.poly([[7,15],[11,0],[14,15]],'#8a1224');o.line(11,2,11,14,'#ff5a6a');o.line(6,5,6,14,'#c8283a');o.set(10,6,'#ffb0b8')}
   if(k==='cave'||k==='emerald'||k==='ruby'||k==='sapphire'){p.rect(0,0,16,16,'#3a3444');S.forEach(([x,y])=>{p.set(x,y,'#2e2838');p.set(x+1,y-1,'#4a4456')})}
   if(k==='emerald')gem('#3aa86a');if(k==='ruby')gem('#c8323a');if(k==='sapphire')gem('#3a5ac8');
   if(k==='cavewall'){const IR=['#3a5ac8','#3a5ac8','#5a3ab0','#9a3aa0','#3a9a7a','#7aa83a','#3a5ac8'];
@@ -70,7 +79,7 @@ function bioTile2_draw(k){
   o.outline('#1a1414');for(let i=0;i<256;i++)if(o.g[i])p.g[i]=o.g[i];
   return p.url();
 }
-texStyle.textContent+=['sandstone','quicksand','snow','deepsnow','agate','ice','cave','cavewall','emerald','ruby','sapphire'].map(k=>`.t-${k}{background:url(${bioTile2(k)}) 0 0/100% 100%}`).join('');
+texStyle.textContent+=['sandstone','quicksand','snow','deepsnow','agate','ice','cave','cavewall','emerald','ruby','sapphire','scorch','bgem-g','bgem-r','bgem-b','bgem-v','spire'].map(k=>`.t-${k}{background:url(${bioTile2(k)}) 0 0/100% 100%}`).join('');
 Object.assign(BIOMES,{
   desert:{n:'Sandstone Desert',bg:'#4a3a24',town:['n','k'],townN:'Oasis Town',d:'Dunes and sandstone ruins under a white sun. Jackals run in packs, and the quicksand swallows the careless.',
     tip:['desert','Quicksand','A unit that starts its turn in quicksand has 1 less Move. Sandstone rocks block the way.'],
@@ -90,7 +99,8 @@ Object.assign(BIOMES.swamp,{town:['n','v'],townN:'Stilt Village'});Object.assign
 for(const k in BIOMES)BIOMES[k].id=k;
 /* region name with its article: 'the Sunless Isle', 'The Labyrinth', 'Mycelia' */
 const theN=B=>B.noThe||/^The /.test(B.n)?B.n:'the '+B.n,TheN=B=>{const t=theN(B);return t[0].toUpperCase()+t.slice(1)};
-const ACTS=2;
+/* acts 1 and 2 are drawn from the regions; act 3 is always the Heart of the Blight */
+const ACTS=3;
 const MUSIC={title:'music/title.mp3',tavern:'music/tavern.mp3'};for(const k in BIOMES)MUSIC[k]=`music/${k}.mp3`;
 let bgm=null,bgmKey='';
 /* Background music: drop mp3s into music/ (title.mp3, mushroom.mp3, shadow.mp3, swamp.mp3, forest.mp3, mountain.mp3, ship.mp3, labyrinth.mp3). Missing files are skipped. */
@@ -132,6 +142,11 @@ const MAPS={
   mazeHeart:{n:'Labyrinth Heart',map:["#############","###_______###","##___#_#___##","#__m_____m__#","#_#___T___#_#","#___#___#___#","#__m_____m__#","##_#_____#_##","#____m_m____#","##__#___#__##","###___F___###","####_____####","#############"],start:[[6,11],[5,11],[7,11],[4,11],[8,11],[6,10]]}
 };
 Object.assign(MAPS,{
+  /* Act 3: the Heart of the Blight */
+  heartHall:{n:'Hall of Veins',map:["SSKSSSSKSS","SYSSUSSGSS","SSSSSSSSPS","KSSGSSUSSK","SSSSKKSSSS","SPSSSSSSYS","SSSUSSGSSS","SSSSSSSSSS","SYSSSSSSUS","SSSSSSSSSS"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
+  heartCore:{n:'Heart Chamber',map:["KSSSSSSSSK","SSYSTSSUSS","SSSSSSSSSS","SGSSSSSSPS","SSSSSSSSSS","KSUSSSSYSK","SSSSGSSSSS","SSPSSSSUSS","SSSSSSSSSS","SSSSSSSSSS","SSSSSSSSSS"],start:[[4,10],[5,10],[3,10],[6,10],[4,9],[5,9]]}
+});
+Object.assign(MAPS,{
   dunes:{n:"Shifting Dunes",map:["nnnnzznnnn","knnnzznnnk","nnnnnnnnnn","nzznnknnnn","nzznnnnnzz","nnnnnnnnzz","nnnFnnnnnn","nnnnnnknnn","nnnnnnnnnn","nnnnnnnnnn"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   oasis:{n:"Oasis",map:["nnnnwwnnnn","nnnwwwwnnn","knnnwwnnnk","nnnnnnnnnn","zznnknnzzn","zznnnnnzzn","nnnnnnnnnn","nknnnnnnkn","nnnnnnnnnn","nnnnnnnnnn"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   canyon:{n:"Sandstone Canyon",map:["nnnnzznnnn","nnknnnnknn","nnknnnnknn","nnnnnnnnnn","zznnkknnzz","nnnnkknnnn","nknnnnnnkn","nnnnnnnnnn","nnnnnnnnnn","nnnnnnnnnn"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
@@ -155,7 +170,8 @@ function spawnTiles(m){
 }
 /* sky tiles along the map's edge, for fliers diving in */
 function skyEdge(m){const out=[],H=m.map.length,W=m.map[0].length;for(let y=0;y<H;y++)for(let x=0;x<W;x++)if((x===0||y===0||x===W-1||y===H-1)&&m.map[y][x]==='~'&&y<H-3)out.push({x,y});return shuffle(out)}
-function actBiome(){const a=run&&run.act||1;return BIOMES[(run&&run.biomes&&run.biomes[a-1])||'forest']}
+function actBiome(){const a=run&&run.act||1;if(a>=3){const H=BIOMES.heart,P=(run.biomes||[]).slice(0,2).map(b=>BIOMES[b]).filter(Boolean);H.pool=H.elitePool=P.flatMap(B=>B.elitePool);return H}
+  return BIOMES[(run&&run.biomes&&run.biomes[a-1])||'forest']}
 /* bosses lumber: they move, but only a couple of tiles a turn */
 const BOSS_MOV=2;
 function genBattle(n,kind){
@@ -175,17 +191,17 @@ function genBattle(n,kind){
   const bossName=B.boss.name||pick(BOSSN)+' '+pick(BOSST),turns=ship&&!bossFight?(elite?6:5):town?ri(5,7):0;
   const goal=bossFight?'boss':ship||town?'defend':'rout';
   const def={biome:B.id,title:bossFight?m.n:town?`Defend the ${m.n}`:m.n+(elite?' (Elite)':''),goal,turns,map:m.map,start:m.start,gifts:{},
-    intro:bossFight?`${bossName} waits for you in the ${m.n}. Defeat it to clear ${theN(B)}.`:ship?`Fliers are diving on the ship. Hold the deck for ${turns} turns.`:town?`Crystallised beasts are closing on the ${m.n.toLowerCase()}. Hold them off for ${turns} turns.`:elite?`A pack led by something old and strong holds the ${m.n.toLowerCase()}. Rout them all.`:`${count} monsters wait in the ${m.n.toLowerCase()}. Rout them.`};
+    intro:bossFight&&B.boss.intro?B.boss.intro:bossFight?`${bossName} waits for you in the ${m.n}. Defeat it to clear ${theN(B)}.`:ship?`Fliers are diving on the ship. Hold the deck for ${turns} turns.`:town?`Crystallised beasts are closing on the ${m.n.toLowerCase()}. Hold them off for ${turns} turns.`:elite?`A pack led by something old and strong holds the ${m.n.toLowerCase()}. Rout them all.`:`${count} monsters wait in the ${m.n.toLowerCase()}. Rout them.`};
   def.foes=()=>{const tiles=spawnTiles(m),out=[];
     list.forEach((c,i)=>{const lv=Math.max(1,lvBase+(rand()<.3?1:0)-(c==='Wolf'?1:0)+(elite?2:0)),u=mkMon(c,lv),t=tiles[i%tiles.length];u.x=t.x;u.y=t.y;
       if(elite&&i===0){u.name='Elder '+u.name;u.boss=true;const eb=A(2)?2:1;ST.forEach(k=>{if(k==='hp'){u.maxhp+=6*eb;u.hp+=6*eb}else u[k]+=2*eb});u.skill=u.skill||pick(['fury','brace','swift','shieldwall'])}
       if(rand()<.2){const k=pick(['qiPill','qiPill','steelJian','steelAxe','steelSpear','steelBow','leather','cloak','boots']);u.items.push({k,u:IT[k].uses,d:true})}out.push(u)});
-    if(bossFight){let bx=6,by=3;m.map.forEach((r,y)=>{const x=r.indexOf('T');if(x>=0){bx=x;by=y}});
+    if(bossFight){let bx=6,by=3;MAPS[mk].map.forEach((r,y)=>{const x=r.indexOf('T');if(x>=0){bx=x;by=y}});/* the altar marks where the boss stands */
       const b=B.boss,up=[10,3,3,3,2,2,3,3].map((v,i)=>v*(act-1)+(A(2)?[8,2,2,1,1,0,2,2][i]:0));
-      const fits=(x,y)=>cellsOf(x,y,2).every(([cx,cy])=>cy>=0&&cx>=0&&cy<m.map.length&&cx<m.map[0].length&&TER[m.map[cy][cx]].c<99);
+      const bsz=b.sz||2,fits=(x,y)=>cellsOf(x,y,bsz).every(([cx,cy])=>cy>=0&&cx>=0&&cy<m.map.length&&cx<m.map[0].length&&TER[m.map[cy][cx]].c<99);
       for(const[dx,dy]of[[0,0],[-1,0],[0,-1],[-1,-1],[1,0],[0,1]])if(fits(bx+dx,by+dy)){bx+=dx;by+=dy;break}
-      const bu=boss({id:'boss',name:bossName,cls:b.cls,lv:6+6*(act-1),mov:Math.min(b.mov||BOSS_MOV,BOSS_MOV),x:bx,y:by,s:b.s.map((v,i)=>v+up[i]),items:b.items,skill:b.skill,look:b.look?clone(b.look):monLook(b.cls)});bu.sz=2;
-      const bc=new Set(cellsOf(bx,by,2).map(c=>key(...c))),tk=new Set([...bc,...out.map(u=>key(u.x,u.y))]);
+      const bu=boss({id:'boss',name:bossName,cls:b.cls,lv:6+6*(act-1),mov:b.mov!=null?b.mov:BOSS_MOV,x:bx,y:by,s:b.s.map((v,i)=>v+up[i]),items:b.items,skill:b.skill,look:b.look?clone(b.look):monLook(b.cls)});bu.sz=bsz;if(B.id==='heart'&&run.heartCut){bu.maxhp=bu.hp=Math.round(bu.maxhp*.8)}/* the Bleeding Seam event */
+      const bc=new Set(cellsOf(bx,by,bsz).map(c=>key(...c))),tk=new Set([...bc,...out.map(u=>key(u.x,u.y))]);
       for(const u of out)if(bc.has(key(u.x,u.y))){let t=null;for(const s of spawnTiles(m))if(!tk.has(key(s.x,s.y))){t=s;break}if(t){u.x=t.x;u.y=t.y;tk.add(key(t.x,t.y))}}
       out.push(bu)}
     if(A(5))out.forEach(u=>{if(!u.skill)u.skill=pick(['fury','brace','swift','shieldwall','focus'])});
@@ -195,7 +211,8 @@ function genBattle(n,kind){
   if(ship){const edge=skyEdge(m),fl=pool.map(p=>p[0]);let e=0;for(let t=2;t<=(bossFight?6:turns);t++)W[t]=Array.from({length:1+(t%2===0?1:0)+(act>=2?1:0)},()=>({c:pick(fl),lv:Math.max(1,lvBase-1),...edge[(e++)%edge.length]}))}
   if(town){const top=[];m.map.forEach((r,y)=>{if(y<=1)[...r].forEach((ch,x)=>{if(TER[ch].c<99)top.push({x,y})})});shuffle(top);let e=0;for(let t=2;t<=turns;t++)W[t]=Array.from({length:1+(t%2)+(act>=2?1:0)},()=>({c:roll(),lv:Math.max(1,lvBase-1),...top[(e++)%top.length]}))}
   m.map.forEach((r,y)=>[...r].forEach((ch,x)=>{if(ch==='C')def.gifts[key(x,y)]=rand()<.3?'pyrite':'gold:'+ri(15,30)}));
-  if(bossFight&&B.boss.summon)for(const t of[3,5,7,9])W[t]=[{c:B.boss.summon,lv:lvBase,x:6,y:3,ifBoss:1},{c:B.boss.summon,lv:lvBase,x:6,y:3,ifBoss:1}];
+  /* summoning bosses: two more every other turn. summon:'*' picks from the region's pool */
+  if(bossFight&&B.boss.summon){const sc=()=>B.boss.summon==='*'?roll():B.boss.summon;for(const t of[3,5,7,9])W[t]=[{c:sc(),lv:lvBase,x:6,y:3,ifBoss:1},{c:sc(),lv:lvBase,x:6,y:3,ifBoss:1}];def.summonTxt=B.boss.summonTxt}
   if(Object.keys(W).length)def.waves=W;
   return def;
 }

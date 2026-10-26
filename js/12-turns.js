@@ -197,7 +197,7 @@ function checkEnd(){if(over)return;const c=CH[state.ch];
 function spawnWaves(t){const w=CH[state.ch].waves;if(!w||!w[t])return;const bo=state.units.find(u=>u.boss&&u.team==='e'&&u.id==='boss');
   const fs=typeof w[t]==='function'?w[t]():w[t].filter(d=>!d.ifBoss||bo).map((d,i)=>{const u=mkMon(d.c,d.lv);u.id=`w${t}_${i}`;u.x=d.ifBoss?bo.x:d.x;u.y=d.ifBoss?bo.y:d.y;return u});
   if(!fs.length)return;const taken=new Set(state.units.filter(u=>u.hp>0).flatMap(u=>cellsOf(u.x,u.y,u.sz).map(c=>key(...c))));
-  for(const f of fs){const p=freeNear(f.x,f.y,taken,f);f.x=p.x;f.y=p.y;taken.add(key(p.x,p.y));state.units.push(f)}render();toast(bo&&CH[state.ch].waves[t][0]?.ifBoss?`${bo.name} raises the dead!`:'Enemy reinforcements!')}
+  for(const f of fs){const p=freeNear(f.x,f.y,taken,f);f.x=p.x;f.y=p.y;taken.add(key(p.x,p.y));state.units.push(f)}render();toast(bo&&CH[state.ch].waves[t][0]?.ifBoss?CH[state.ch].summonTxt||`${bo.name} raises the dead!`:'Enemy reinforcements!')}
 async function stageTwo(){
   busy=true;const c=CH[state.ch];state.stage=2;render();await sleep(500);
   await playStory(STORY[state.ch]&&(state.freed?STORY[state.ch].freed:STORY[state.ch].mid));

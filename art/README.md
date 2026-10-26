@@ -20,6 +20,7 @@ You only need to rebuild the manifest when you **add** or **delete** a PNG: `nod
 | `backdrops/` | Fight-scene backdrop per region (horizon at y 63) | 160×90 |
 | `scenes/` | Tavern, Crossroads, Ithren's tent, cage bars | 160×90 (`tavern-counter` is 160×34) |
 | `title/` | Title-screen crystal | 120×120 |
+| `bosses/` | The Crystal Heart (act 3 boss, 3×3 tiles): idle and `-strike` | 96×96 |
 | `ship/` | Flying Ship parts (region is switched off for now) | as exported |
 
 ## The code-drawn versions
@@ -38,5 +39,5 @@ The tool needs Node and Playwright: `npm i -D playwright && npx playwright insta
 These are still drawn in code:
 
 - **Units and monsters:** their looks (hair, skin, cloth, gem colours) are randomised per unit.
-- **Bosses.**
+- **The other bosses.**
 - **Event scenes:** each one combines the region's background with the event's prop.

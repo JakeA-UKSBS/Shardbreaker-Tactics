@@ -47,7 +47,7 @@ const keys = await page.evaluate(() => {
   each(TAGS, tagArt); each(RELICS, relicArt); each(MEALS, mealArt); each(WOES, woeArt); each(BIOMES, battleBgArt);
   [mugArt, tavernArt, counterArt, musterArt, flagArt, sageRoomArt, sageTableArt, sageBallArt, mapIconArt, coinArt,
    swordsArt, eliteArt, campArt, chestArt, eventArt, titleCrystalArt, cageBarsArt, boulderArt, shipSideArt, shipWingArt,
-   () => shipArt(0), () => shipArt(1)].forEach(f => { try { f() } catch (_) {} });
+   () => shipArt(0), () => shipArt(1), () => BIG.crystal({}, false), () => BIG.crystal({}, true)].forEach(f => { try { f() } catch (_) {} });
   return Object.keys(ART_GEN).sort();
 });
 if (listOnly) { console.log(keys.join('\n')); await browser.close(); process.exit(0); }

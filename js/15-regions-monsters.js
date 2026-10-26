@@ -34,6 +34,8 @@ IT.bite={n:'Bite',t:'heavy',kind:'claw',mt:9,hit:75,crit:10,r:[1,1],uses:99,key:
 IT.antlers={n:'Antlers',t:'pole',kind:'claw',mt:6,hit:85,crit:5,r:[1,1],uses:99,key:'antlers'};
 IT.mallet={n:'Mallet',t:'heavy',kind:'claw',mt:6,hit:85,crit:0,r:[1,1],uses:99,key:'mallet'};
 IT.hooves={n:'Hooves',t:'blade',kind:'claw',mt:5,hit:90,crit:0,r:[1,1],uses:99,key:'hooves'};
+/* the Crystal Heart's attack: crystals grow on the target and shatter. Long range, but it can't strike next to itself */
+IT.shatter={n:'Shatter',t:'art',kind:'talisman',el:'crystal',mt:6,hit:85,crit:0,r:[2,6],uses:99,mag:true,key:'shatter'};
 IT.breath={n:'Magma Breath',t:'art',kind:'talisman',el:'fire',mt:9,hit:80,crit:0,r:[1,2],uses:99,mag:true,key:'breath'};
 SKILLS.venom={n:'Venom',cost:15,d:'On a hit, poisons the target: it loses 3 HP at the start of each of its turns for 3 turns (never below 1 HP).'};
 IT.scroll_venom={n:'Venom Scroll',t:'scroll',kind:'scroll',skill:'venom',uses:1,key:'scroll_venom'};
@@ -49,6 +51,7 @@ Object.assign(CLS,{
   Boulder:{n:'Boulder Golem',w:['heavy'],body:'golem',mov:4},FireSprite:{n:'Fire Sprite',w:['art'],body:'flame',mov:5,lava:true},MagmaDragon:{n:'Magma Dragon',w:['art','heavy'],body:'dragon',mov:0,lava:true},
   WyvernM:{n:'Wyvern',w:['heavy'],body:'mount',mov:6,fly:true},PegasusM:{n:'Pegasus',w:['blade'],body:'mount',mov:7,fly:true},Tempest:{n:'Storm Elemental',w:['art'],body:'storm',mov:3,fly:true},
   Beholder:{n:'Beholder',w:['art'],body:'eye',mov:4},
+  CrystalHeart:{n:'Crystal Heart',w:['art'],body:'crystal',mov:0},
   Lurker:{n:'Bog Lurker',w:['blade'],body:'gator',mov:4,wade:true},Treant:{n:'Blighted Treant',w:['heavy'],body:'golem',mov:3}
 });
 CLS.LamiaM.wade=true;
@@ -88,7 +91,7 @@ const MONLOOK={
   Beholder:()=>({body:pick(['#8a4a6a','#4a6a8a','#6a4a3a']),eye:pick(['#5fc2a0','#ffd23f','#ff5a3a'])})
 };
 /* regions switched off for now: still defined (art, maps, docs) but runs never pick them. The Flying Ship and Mycelia are off for now; delete them from this list to bring them back */
-const BIOMES_OFF=['ship','mushroom'],biomeIds=()=>Object.keys(BIOMES).filter(b=>!BIOMES_OFF.includes(b));
+const BIOMES_OFF=['ship','mushroom'],biomeIds=()=>Object.keys(BIOMES).filter(b=>!BIOMES_OFF.includes(b)&&b!=='heart');
 const BIOMES={
   mushroom:{n:'Mycelia',noThe:1,bg:'#3a2a48',d:'Glowing mycelium and giant toadstools. The fungus folk have turned feverish under the blight, and their spores poison on a hit.',
     tip:['spores','Poison spores','Fungus attacks poison on a hit: 3 damage at the start of each of your turns for 3 turns. A Salve cures it.'],
@@ -117,7 +120,12 @@ const BIOMES={
   labyrinth:{n:'The Labyrinth',bg:'#2a2630',d:'Stone corridors with no daylight. Something with too many eyes watches from the dark.',
     tip:['maze','The Labyrinth','Beholders can turn units to stone with their gaze. Stone units skip their next turn.'],
     maps:['maze1','vaults','pillars'],bossMap:'mazeHeart',pool:[['Gremlin',3],['Beholder',2,3]],elitePool:[['Beholder',3],['Gremlin',2]],
-    boss:{name:'',cls:'MinotaurM',s:[34,12,0,6,4,2,9,2],items:['steelAxe'],skill:'fury',look:{style:'bald',horns:true,beard:true,hair:'#2a1a14',skin:'#7a4e32',cloth:'#4a3a2a',eye:'#ff5a3a',hornGem:'#d8323a',crysAt:[{core:[15,19],col:'#d8323a'}]}}}
+    boss:{name:'',cls:'MinotaurM',s:[34,12,0,6,4,2,9,2],items:['steelAxe'],skill:'fury',look:{style:'bald',horns:true,beard:true,hair:'#2a1a14',skin:'#7a4e32',cloth:'#4a3a2a',eye:'#ff5a3a',hornGem:'#d8323a',crysAt:[{core:[15,19],col:'#d8323a'}]}}},
+  /* Act 3, the end of every run: not in the region draw (biomeIds). Its monsters are the elites of the two regions you came through (actBiome fills the pools) */
+  heart:{n:'The Heart of the Blight',noThe:1,bg:'#3a1018',d:'Scorched ground split by veins of glowing gem. Every crystal in these lands grew from what waits here.',
+    tip:['heart','The Crystal Heart','The Heart never moves, but it strikes from 2 to 6 tiles away. Get next to it: it can’t hit what’s beside it. It calls more blighted monsters every other turn.'],
+    maps:['heartHall'],bossMap:'heartCore',pool:[],elitePool:[],
+    boss:{name:'The Crystal Heart',cls:'CrystalHeart',sz:3,mov:0,s:[56,0,8,8,0,0,8,8],items:['shatter'],skill:'focus',summon:'*',summonTxt:'The Crystal Heart calls the blighted!',intro:'The Crystal Heart beats at the centre of the chamber, and every crystal in these lands beats with it. Shatter it to end the blight.',look:{crys:false}}}
 };
 
 /* PNG art: each of these uses art/<key>.png when it exists, else the drawing code above (see art() in 03-pixel-art.js) */
