@@ -651,3 +651,6 @@ button.it.sel{border-color:var(--gold)}
 .proj-m.arrow{width:18px;height:3px;margin:-1px 0 0 -9px;border-radius:1px;background:#e8dcc0;box-shadow:none}
 .proj-m.spin{width:12px;height:12px;border-radius:2px;background:#bfc4cc;box-shadow:none}
 .fx-m{position:absolute;width:56px;height:56px;margin:-28px 0 0 -28px;border-radius:50%;pointer-events:none;border:3px solid currentColor;opacity:0}
+/* docked command menu / forecast: bottom-left or bottom-right of the map view */
+.vp>.umenu{top:auto;bottom:10px;left:auto;right:auto;z-index:40}
+.vp>.umenu.dl{left:10px}.vp>.umenu.dr{right:10px}
