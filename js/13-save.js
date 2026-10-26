@@ -3,7 +3,7 @@
 const SAVE='sbtactics.save.v1',OPTS='sbtactics.opts';
 function saveGame(){if(!run)return;const map=run.phase==='map';try{localStorage.setItem(SAVE,JSON.stringify({state:map?null:state,rewinds,chStart:map?null:chStart,run,def:map?null:CH[0],rng:rngS}))}catch(_){}}
 function loadGame(){try{return JSON.parse(localStorage.getItem(SAVE))}catch(_){return null}}
-function setMap(){MAP=CH[state.ch].map;MW=MAP[0].length;MH=MAP.length}
+function setMap(){setMapFor(state.ch)}
 function setupChapter(ci,roster){
   foeSeq=0;const c=CH[ci];setMapFor(ci);
   (c.join||[]).forEach(id=>{if(!roster.some(r=>r.id===id))roster.push(mkHero(heroDef(id)))});
@@ -17,7 +17,9 @@ function setupChapter(ci,roster){
   state={ch:ci,turn:1,units:[...heroes,...extra,...fs],visited:[],sprung:[],stage,reserve};
   history=[];rewinds=3;chStart=clone(state);enterMap();
 }
-function setMapFor(ci){MAP=CH[ci].map;MW=MAP[0].length;MH=MAP.length}
+/* heights: a map's own h rows (one digit per tile), else hills and rubble sit 1 level up */
+function heightsOf(c){return c.h?c.h.map(r=>[...r].map(Number)):c.map.map(r=>[...r].map(ch=>TER[ch]&&TER[ch].k==='hill'?1:0))}
+function setMapFor(ci){MAP=CH[ci].map;MW=MAP[0].length;MH=MAP.length;HM=heightsOf(CH[ci])}
 function npc(id,x,y,o){return Object.assign(mkHero(heroDef(id)),{team:'g',x,y,hold:true},o||{})}
 function enterMap(){setMap();over=null;phase='player';busy=false;ui='idle';clearSel();buildBoard();render();requestAnimationFrame(()=>initCam())}
 async function chapterIntro(){

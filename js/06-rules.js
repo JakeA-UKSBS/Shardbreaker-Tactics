@@ -17,10 +17,19 @@ function learnBlock(u,k){if(has(u,k))return`${u.name} already knows ${SKILLS[k].
 function promoBlock(u){if(u.team!=='p')return'Only allies can ascend.';if(!CLS[u.cls].promo)return`${u.name} has already ascended.`;if(u.lv<PROMO_LV)return`${u.name} needs Lv ${PROMO_LV} to ascend.`;return null}
 const elv=u=>u.lv+(CLS[u.cls].tier===2?15:0);
 const canUse=(u,k)=>CLS[u.cls].w.includes(IT[k].t);
-function wpnsAt(u,dist){const out=[];u.items.forEach((it,i)=>{const w=IT[it.k];if(isWpn(it.k)&&canUse(u,it.k)&&it.u>0&&dist>=w.r[0]&&dist<=w.r[1])out.push(i)});return out}
+/* ---- height (Ogre/FFTA style) ----
+   Each tile has a height level (hOf). A unit can only step up or down JUMP levels at a time (fliers and ghosts ignore it).
+   Attacking from above: +10 Hit and +1 damage per level (max 3); from below: -10 Hit per level.
+   Bows reach 1 tile further for every 2 levels of height over the target (max +2). */
+const JUMP=2,jumpOf=u=>CLS[u.cls].jump??JUMP;
+function canStep(u,fx,fy,tx,ty){const C=CLS[u.cls];if(C.fly||C.phase||(u.sz||1)>1)return true;return Math.abs(hOf(tx,ty)-hOf(fx,fy))<=jumpOf(u)}
+const hDiff=(a,b)=>clamp(hOf(a.x,a.y)-hOf(b.x,b.y),-3,3);
+function rngBonus(w,a,b){return a&&b&&w.t==='bow'?clamp(Math.floor((hOf(a.x,a.y)-hOf(b.x,b.y))/2),0,2):0}
+/* o (the target) is optional: without it, height can't add bow range */
+function wpnsAt(u,dist,o){const out=[];u.items.forEach((it,i)=>{const w=IT[it.k];if(isWpn(it.k)&&canUse(u,it.k)&&it.u>0&&dist>=w.r[0]&&dist<=w.r[1]+rngBonus(w,u,o))out.push(i)});return out}
 function staffIdx(u){return u.items.findIndex(it=>IT[it.k].t==='spirit'&&canUse(u,it.k)&&it.u>0)}
 function eqIdx(u){return u.items.findIndex(it=>isWpn(it.k)&&canUse(u,it.k))}
-function maxRange(u){let m=0;u.items.forEach(it=>{if((isWpn(it.k)||IT[it.k].t==='spirit')&&canUse(u,it.k))m=Math.max(m,IT[it.k].r[1])});return m}
+function maxRange(u){let m=0;u.items.forEach(it=>{if((isWpn(it.k)||IT[it.k].t==='spirit')&&canUse(u,it.k))m=Math.max(m,IT[it.k].r[1]+(IT[it.k].t==='bow'?2:0))});return m}
 function minRange(u){let m=9;u.items.forEach(it=>{if((isWpn(it.k)||IT[it.k].t==='spirit')&&canUse(u,it.k))m=Math.min(m,IT[it.k].r[0])});return m===9?1:m}
 function aura(u){if(u.team!=='p')return 0;const l=state.units.find(o=>has(o,'rally')&&o.hp>0&&o.team===u.team&&o.id!==u.id);return l&&man(l,u)<=2?10:0}
 
@@ -46,17 +55,17 @@ function calc(x,xw,y,yw,ctx){
   /* weapon triangle and elements are switched off for now: every matchup is neutral (TRI, ELE and typeChart() are kept for later) */
   if(TYPES_ON){if(yw&&TRI[xw.t]===yw.t)adv=1;else if(yw&&TRI[yw.t]===xw.t)adv=-1;
   if(yw&&xw.t==='art'&&yw.t==='art'){if(ELE[xw.el]===yw.el)adv=1;else if(ELE[yw.el]===xw.el)adv=-1}}
-  const eff=effHit(x,xw,y)||(xw.t==='bow'&&CLS[y.cls].fly?2:0);let pow=(xw.mag?x.mag:x.str)+xw.mt*(eff||1)+(eff&&R('trophies')?2:0)+adv+RB.pow+(xw.mag?0:gx.str);if(has(x,'kindle')&&ctx.init===x)pow+=2;
+  const eff=effHit(x,xw,y)||(xw.t==='bow'&&CLS[y.cls].fly?2:0);const hd=hDiff(x,y);let pow=Math.max(0,hd)+(xw.mag?x.mag:x.str)+xw.mt*(eff||1)+(eff&&R('trophies')?2:0)+adv+RB.pow+(xw.mag?0:gx.str);if(has(x,'kindle')&&ctx.init===x)pow+=2;
   const yf=!!CLS[y.cls].fly;let df=(xw.mag?y.res+gy.res:y.def+gy.def)+(yf?0:t.df)+RB.df;if(has(y,'brace')&&ctx.phase==='enemy'&&ctx.init!==y)df+=4;
   if(state.units.some(o=>o!==y&&o.team===y.team&&o.hp>0&&man(o,y)===1&&has(o,'guardian')))df+=2;const xm=CLS[x.cls].mnt||CLS[x.cls].fly,ym=CLS[y.cls].mnt||CLS[y.cls].fly;if(has(y,'pikewall')&&xm)df+=4;
   const dead=has(x,'deadeye');
-  const acc=xw.hit+x.lck*2+(xw.brk&&yw&&yw.t===xw.brk?50:0)+(has(x,'earlyedge')&&state.turn<=5?20:0)+adv*15+aura(x)+(dead?20:0)+RB.acc+(has(x,'pikewall')&&ym?10:0);
+  const acc=hd*10+xw.hit+x.lck*2+(xw.brk&&yw&&yw.t===xw.brk?50:0)+(has(x,'earlyedge')&&state.turn<=5?20:0)+adv*15+aura(x)+(dead?20:0)+RB.acc+(has(x,'pikewall')&&ym?10:0);
   const avo=AS(y,yw)*2+y.lck+(yw&&yw.brk&&yw.brk===xw.t?50:0)+(has(y,'earlyedge')&&state.turn<=5?20:0)+(dead||yf?0:t.av)+aura(y)+RB.avo;
   let crit=RB.crit+(xw.crit||0)+(CLS[x.cls].crit||0)+Math.floor(x.lck/2)-Math.floor(y.lck/2);if(has(x,'focus')&&!state.units.some(o=>o!==x&&o.team===x.team&&o.hp>0&&man(o,x)===1))crit+=10;if(has(x,'fury')&&x.hp*2<=x.maxhp)crit+=15;
-  return{dmg:Math.max(0,pow-df),pow,df,hit:clamp(acc-avo,0,100),crit:x.team==='e'?0:clamp(crit,0,100),n:AS(x,xw)+(has(x,'swift')&&ctx.init===x?3:0)-AS(y,yw)>=4?2:1,adv,eff};
+  return{dmg:Math.max(0,pow-df),pow,df,hit:clamp(acc-avo,0,100),crit:x.team==='e'?0:clamp(crit,0,100),n:AS(x,xw)+(has(x,'swift')&&ctx.init===x?3:0)-AS(y,yw)>=4?2:1,adv,eff,hd};
 }
 function forecast(a,ai,d){
-  const dist=man(a,d),aw=IT[a.items[ai].k],dl=d.stone?[]:wpnsAt(d,dist),di=dl.length?dl[0]:-1,dw=di>=0?IT[d.items[di].k]:null,ctx={init:a,phase};
+  const dist=man(a,d),aw=IT[a.items[ai].k],dl=d.stone?[]:wpnsAt(d,dist,a),di=dl.length?dl[0]:-1,dw=di>=0?IT[d.items[di].k]:null,ctx={init:a,phase};
   return{A:calc(a,aw,d,dw,ctx),D:dw?calc(d,dw,a,aw,ctx):null,ai,di,aw,dw,dist};
 }
 function resolve(a,ai,d){

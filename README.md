@@ -1,4 +1,6 @@
-# Shardbreaker (roguelike)
+# Shardbreaker Tactics
+
+An isometric, height-based fork of Shardbreaker (FFTA / Tactics Ogre style). See [docs/DESIGN.md](docs/DESIGN.md) for where it's heading and what's built so far. Below is the original Shardbreaker readme.
 
 A run-based tactics roguelike in the style of GBA Fire Emblem. Built for PC first (map left, command panel right), and still playable on phones. Forked from Nightbound's engine.
 

@@ -636,3 +636,18 @@ button.it.sel{border-color:var(--gold)}
 .sq-hp b{display:block;height:100%;background:#5fd068}.sq-hp.mid b{background:#e8b83a}.sq-hp.lo b{background:#e8483a}.sq-hp em{font-style:normal;font-size:11px;font-weight:700;color:var(--fg)}
 /* the Crystal Heart's Shatter: a spinning red shard */
 .proj.crystal{width:22px;height:30px;background:linear-gradient(135deg,#ffb0b8,#ff5a6a 40%,#8a1224);clip-path:polygon(50% 0,100% 60%,50% 100%,0 60%);filter:drop-shadow(0 0 4px #ff5a6a)}
+
+/* ---- isometric board (Shardbreaker Tactics greybox) ----
+   tiles are square art turned into diamonds with a transform; .blk holds each block's two side faces */
+.board.iso{display:block}
+.board.iso .tile{position:absolute;transform-origin:0 0}
+.board.iso .blk{position:absolute;pointer-events:none;--c:#4a4038}
+.board.iso .blk svg{display:block}
+.board.iso .pop,.board.iso .shard,.board.iso .proj-m,.board.iso .fx-m{z-index:9000}
+.board.iso .umenu{z-index:9500}
+.ufc-w.hgt{color:var(--gold);font-size:12px}
+/* on-map attack effects */
+.proj-m{position:absolute;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;pointer-events:none;background:#fff;box-shadow:0 0 8px 3px currentColor}
+.proj-m.arrow{width:18px;height:3px;margin:-1px 0 0 -9px;border-radius:1px;background:#e8dcc0;box-shadow:none}
+.proj-m.spin{width:12px;height:12px;border-radius:2px;background:#bfc4cc;box-shadow:none}
+.fx-m{position:absolute;width:56px;height:56px;margin:-28px 0 0 -28px;border-radius:50%;pointer-events:none;border:3px solid currentColor;opacity:0}
