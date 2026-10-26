@@ -52,6 +52,8 @@ Object.assign(CLS,{
   WyvernM:{n:'Wyvern',w:['heavy'],body:'mount',mov:6,fly:true},PegasusM:{n:'Pegasus',w:['blade'],body:'mount',mov:7,fly:true},Tempest:{n:'Storm Elemental',w:['art'],body:'storm',mov:3,fly:true},
   Beholder:{n:'Beholder',w:['art'],body:'eye',mov:4},
   CrystalHeart:{n:'Crystal Heart',w:['art'],body:'crystal',mov:0},
+  /* the Heart's own creatures (Act 3) */
+  Shardling:{n:'Shardling',w:['blade'],body:'shardling',mov:5},Prism:{n:'Prism',w:['art'],body:'prism',mov:4,fly:true},Sentinel:{n:'Crystal Sentinel',w:['heavy'],body:'sentinel',mov:3},
   Lurker:{n:'Bog Lurker',w:['blade'],body:'gator',mov:4,wade:true},Treant:{n:'Blighted Treant',w:['heavy'],body:'golem',mov:3}
 });
 CLS.LamiaM.wade=true;
@@ -70,6 +72,9 @@ Object.assign(FOE,{
   WyvernM:{b:[20,7,0,4,4,0,6,0],g:[.7,.45,0,.3,.25,.05,.3,.05],items:['bite'],look:{}},
   PegasusM:{b:[16,4,2,6,8,4,2,6],g:[.55,.3,.1,.4,.45,.3,.1,.35],items:['hooves'],look:{}},
   Beholder:{b:[20,0,6,6,3,2,4,6],g:[.6,0,.4,.35,.2,.1,.2,.3],items:['darkT'],look:{}},
+  Shardling:{b:[16,6,0,5,8,0,3,1],g:[.55,.4,0,.35,.4,0,.2,.1],items:['claws'],look:{}},
+  Prism:{b:[15,0,6,5,4,0,2,6],g:[.5,0,.4,.3,.25,0,.1,.35],items:['shards'],look:{}},
+  Sentinel:{b:[24,7,0,3,2,0,9,2],g:[.8,.4,0,.25,.1,0,.4,.1],items:['slam'],look:{}},
   Lurker:{b:[18,6,0,4,5,1,4,0],g:[.65,.4,0,.3,.3,.1,.2,.05],items:['fangs'],look:{}},
   Treant:{b:[24,6,0,3,1,0,6,3],g:[.8,.4,0,.25,.1,0,.3,.15],items:['slam'],look:{}}
 });
@@ -86,6 +91,8 @@ const MONLOOK={
   PegasusM:()=>({mount:'pegasus',horse:pick(['#f3f0e8','#e0e6f0','#3a3440'])}),
   Gnome:()=>({hat:pick(['#c8322e','#3a7a3a','#c87a2a','#6a3a8a']),cloth:pick(['#3a6ab0','#5a3a22','#3a7a5a'])}),
   Snake:()=>({body:pick(['#4f8a3a','#7a6a2a','#3a6a5a'])}),
+  /* crystal creatures: mostly blood red, sometimes another gem. crys:false = no extra crystals stuck on (they are crystal) */
+  Shardling:()=>({crys:false,gem:pick(['#c8283a','#c8283a','#c8283a','#2a9a5a','#3a5ac8','#8a3ac0'])}),Prism:()=>({crys:false,gem:pick(['#c8283a','#c8283a','#3a5ac8','#8a3ac0'])}),Sentinel:()=>({crys:false,gem:pick(['#a8202e','#a8202e','#2a8a4a','#7a3ab0'])}),
   Lurker:()=>({crysSmall:true,body:pick(['#4a5a32','#3a4a3a','#5a5a3a'])}),
   Treant:()=>({body:pick(['#5a4a32','#4a3a2a','#6a5a3a']),eye:'#9aff6a',leaves:pick(['#3f7a42','#5a6a2a','#6a3a5a'])}),
   Beholder:()=>({body:pick(['#8a4a6a','#4a6a8a','#6a4a3a']),eye:pick(['#5fc2a0','#ffd23f','#ff5a3a'])})
@@ -121,10 +128,10 @@ const BIOMES={
     tip:['maze','The Labyrinth','Beholders can turn units to stone with their gaze. Stone units skip their next turn.'],
     maps:['maze1','vaults','pillars'],bossMap:'mazeHeart',pool:[['Gremlin',3],['Beholder',2,3]],elitePool:[['Beholder',3],['Gremlin',2]],
     boss:{name:'',cls:'MinotaurM',s:[34,12,0,6,4,2,9,2],items:['steelAxe'],skill:'fury',look:{style:'bald',horns:true,beard:true,hair:'#2a1a14',skin:'#7a4e32',cloth:'#4a3a2a',eye:'#ff5a3a',hornGem:'#d8323a',crysAt:[{core:[15,19],col:'#d8323a'}]}}},
-  /* Act 3, the end of every run: not in the region draw (biomeIds). Its monsters are the elites of the two regions you came through (actBiome fills the pools) */
+  /* Act 3, the end of every run: not in the region draw (biomeIds). Its monsters are the Heart's own crystal creatures */
   heart:{n:'The Heart of the Blight',noThe:1,bg:'#3a1018',d:'Scorched ground split by veins of glowing gem. Every crystal in these lands grew from what waits here.',
     tip:['heart','The Crystal Heart','The Heart never moves, but it strikes from 2 to 6 tiles away. Get next to it: it can’t hit what’s beside it. It calls more blighted monsters every other turn.'],
-    maps:['heartHall'],bossMap:'heartCore',pool:[],elitePool:[],
+    maps:['heartHall'],bossMap:'heartCore',pool:[['Shardling',4],['Prism',3],['Sentinel',2]],elitePool:[['Sentinel',3],['Shardling',2],['Prism',2]],
     boss:{name:'The Crystal Heart',cls:'CrystalHeart',sz:3,mov:0,s:[56,0,8,8,0,0,8,8],items:['shatter'],skill:'focus',summon:'*',summonTxt:'The Crystal Heart calls the blighted!',intro:'The Crystal Heart beats at the centre of the chamber, and every crystal in these lands beats with it. Shatter it to end the blight.',look:{crys:false}}}
 };
 

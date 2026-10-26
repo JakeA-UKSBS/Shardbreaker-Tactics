@@ -118,9 +118,9 @@ Scorched ground split by veins of glowing gem. Every crystal in these lands grew
 | --- | --- |
 | ![The Crystal Heart](visuals/bosses/heart.png) | ![The Crystal Heart attacking](visuals/bosses/heart_attack.png) |
 
-|  |
-|
-|  |
+| Shardling | Prism | Crystal Sentinel |
+| --- | --- | --- |
+| ![Shardling](visuals/monsters/Shardling.png) | ![Prism](visuals/monsters/Prism.png) | ![Crystal Sentinel](visuals/monsters/Sentinel.png) |
 
 ### Sandstone Desert
 
@@ -234,13 +234,13 @@ Looks are random (hair, skin, cloth, headgear, cape, beard; mounts get random co
 
 ### Guard
 
-| Blade Guard | Blade Bastion (promoted) | Axe Guard | Lance Cavalier | Lance Paladin (promoted) |
+| Axe Guard | Axe Bastion (promoted) | Axe Guard | Lance Cavalier | Lance Paladin (promoted) |
 | --- | --- | --- | --- | --- |
-| ![Blade Guard](visuals/classes/tank_0.png) | ![Blade Bastion (promoted)](visuals/classes/tank_1.png) | ![Axe Guard](visuals/classes/tank_2.png) | ![Lance Cavalier](visuals/classes/tank_3.png) | ![Lance Paladin (promoted)](visuals/classes/tank_4.png) |
+| ![Axe Guard](visuals/classes/tank_0.png) | ![Axe Bastion (promoted)](visuals/classes/tank_1.png) | ![Axe Guard](visuals/classes/tank_2.png) | ![Lance Cavalier](visuals/classes/tank_3.png) | ![Lance Paladin (promoted)](visuals/classes/tank_4.png) |
 
-| Lance Cavalier | Axe Wyvern Knight | Axe Dragonmaster (promoted) | Blade Wyvern Knight |
+| Axe Cavalier | Lance Wyvern Knight | Lance Dragonmaster (promoted) | Axe Wyvern Knight |
 | --- | --- | --- | --- |
-| ![Lance Cavalier](visuals/classes/tank_5.png) | ![Axe Wyvern Knight](visuals/classes/tank_6.png) | ![Axe Dragonmaster (promoted)](visuals/classes/tank_7.png) | ![Blade Wyvern Knight](visuals/classes/tank_8.png) |
+| ![Axe Cavalier](visuals/classes/tank_5.png) | ![Lance Wyvern Knight](visuals/classes/tank_6.png) | ![Lance Dragonmaster (promoted)](visuals/classes/tank_7.png) | ![Axe Wyvern Knight](visuals/classes/tank_8.png) |
 
 ### Skirmisher
 
@@ -248,9 +248,9 @@ Looks are random (hair, skin, cloth, headgear, cape, beard; mounts get random co
 | --- | --- | --- | --- | --- |
 | ![Lance Skirmisher](visuals/classes/skirm_0.png) | ![Lance Duelist (promoted)](visuals/classes/skirm_1.png) | ![Blade Skirmisher](visuals/classes/skirm_2.png) | ![Lance Outrider](visuals/classes/skirm_3.png) | ![Lance Ranger (promoted)](visuals/classes/skirm_4.png) |
 
-| Bow Outrider | Lance Pegasus Knight | Lance Falcon Knight (promoted) | Blade Pegasus Knight |
+| Lance Outrider | Blade Pegasus Knight | Blade Falcon Knight (promoted) | Blade Pegasus Knight |
 | --- | --- | --- | --- |
-| ![Bow Outrider](visuals/classes/skirm_5.png) | ![Lance Pegasus Knight](visuals/classes/skirm_6.png) | ![Lance Falcon Knight (promoted)](visuals/classes/skirm_7.png) | ![Blade Pegasus Knight](visuals/classes/skirm_8.png) |
+| ![Lance Outrider](visuals/classes/skirm_5.png) | ![Blade Pegasus Knight](visuals/classes/skirm_6.png) | ![Blade Falcon Knight (promoted)](visuals/classes/skirm_7.png) | ![Blade Pegasus Knight](visuals/classes/skirm_8.png) |
 
 ### Sigilist
 

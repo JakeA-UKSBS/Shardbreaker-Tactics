@@ -374,6 +374,23 @@ function fig0(L,cls,team,pose,wk){
     if(strike)[[4,4],[28,6],[27,26],[5,25]].forEach(([x,y])=>p.set(x,y,hi));
     p.outline(OUT);return p.url()}
   /* ---- body: fire sprite / wisp ---- */
+  /* ---- bodies: the Heart's crystal creatures (Act 3). L.gem is the crystal colour ---- */
+  if(body==='shardling'){const c=L.gem||'#c8283a',c2=shade(c,.62),c3=shade(c,1.45),ey=L.eye||'#fff0b0',f=strike?3:0;
+    p.line(12,30,13,24,c2,2);p.line(20,30,19,24,c2,2);
+    p.poly([[8+f,25],[11+f,9],[15+f,25]],c2);p.poly([[12+f,26],[17+f,3],[22+f,26]],c);p.poly([[19+f,25],[24+f,11],[26+f,25]],c2);
+    p.line(17+f,5,17+f,24,c3);p.line(12+f,12,12+f,23,shade(c,1.15));p.rect(14+f,15,2,2,ey);p.rect(19+f,15,2,2,ey);
+    if(strike){p.poly([[26,20],[31,17],[27,23]],c3)}p.ell(17,31,8,1,'#1a0c10');p.outline(OUT);return p.url()}
+  if(body==='sentinel'){const c=L.gem||'#c8283a',c2=shade(c,.6),c3=shade(c,1.45),ey=L.eye||'#fff0b0',f=strike?4:0;
+    p.rect(11,26,4,5,c2);p.rect(18,26,4,5,c2);
+    p.poly([[8,26],[10,10],[16,5],[23,10],[25,26]],c);p.poly([[8,26],[10,10],[16,5],[16,26]],c2);p.line(16,6,16,25,c3);p.line(20,9,23,24,shade(c,1.2));
+    p.poly([[13,5],[16,0],[19,5]],c3);p.rect(12,12,3,2,ey);p.rect(18,12,3,2,ey);
+    p.poly([[3,13],[8,12],[8,22],[4,24]],c2);p.poly([[25+f,12],[30+f,13],[29+f,24],[25+f,22]],c);p.line(27+f,14,27+f,22,c3);
+    p.ell(16,31,10,1,'#1a0c10');p.outline(OUT);return p.url()}
+  if(body==='prism'){const c=L.gem||'#c8283a',c2=shade(c,.6),c3=shade(c,1.5),ey=L.eye||'#fff0b0',y=strike?-2:0,f=strike?2:0;
+    p.poly([[16+f,2+y],[25+f,14+y],[16+f,26+y],[7+f,14+y]],c);p.poly([[16+f,2+y],[16+f,26+y],[7+f,14+y]],c2);p.line(16+f,3+y,16+f,25+y,c3);p.line(7+f,14+y,25+f,14+y,shade(c,.8));
+    p.ell(16+f,14+y,3,2.4,'#14060c');p.ell(16+f,14+y,1.6,1.6,ey);
+    for(const[x,yy]of[[4,6],[28,8],[27,22],[5,21]]){p.poly([[x,yy-2],[x+1,yy],[x,yy+2],[x-1,yy]],c3)}
+    p.ell(16,31,6,1,'#1a0c10');p.outline(OUT);return p.url()}
   if(body==='flame'){const c=L.body||'#ff8a3c',c2=L.core||'#ffe14a',c3=L.rim||'#c8322e',f=strike?3:0;
     p.poly([[16,1],[22,9],[25,18],[22,26],[10,26],[7,18],[10,9],[12,12]],c3);p.ell(16,19,7,7,c);p.poly([[16,5],[21,14],[11,14]],c);p.ell(16,21,4,4,c2);
     p.rect(13,18,2,2,INK);p.rect(18,18,2,2,INK);p.set(15,22,INK);p.set(17,22,INK);[[8,6],[24,5],[27,13],[5,14]].forEach(([x,y])=>p.set(x,y,c2));
