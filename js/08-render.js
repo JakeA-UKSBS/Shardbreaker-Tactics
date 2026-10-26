@@ -211,22 +211,12 @@ function renderPanel(){
   else if(ui==='terrain')h=terInfo;
   else h=`<p class="hint"><b>${CH[state.ch].title}.</b> Tap a blue unit to move it. Drag to pan the map, pinch to zoom.</p>`;
   panel.innerHTML=h;
-  /* the command menu floats beside the unit on the board, FE-style */
-  let mEl=$('#umenu');if(!mEl||!mEl.isConnected){mEl=document.createElement('div');mEl.id='umenu';mEl.className='umenu';boardEl.appendChild(mEl);
+  /* the command menu and the forecast dock in a bottom corner of the map view, on the side away from the fight */
+  let mEl=$('#umenu');if(!mEl||!mEl.isConnected){mEl=document.createElement('div');mEl.id='umenu';mEl.className='umenu';vp.appendChild(mEl);
     for(const ev of['pointerdown','pointerup','wheel'])mEl.addEventListener(ev,e=>e.stopPropagation());mEl.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||busy)return;act(b.dataset.act)})}
   const pop=ui==='confirm'&&tmode==='atk'&&pending;mEl.classList.toggle('ufc',!!pop);
-  const ovl=(r,l,t,w,hh)=>r.l<l+w&&r.l+r.w>l&&r.t<t+hh&&r.t+r.h>t;
-  if(fm&&pop){mEl.innerHTML=fm;mEl.hidden=false;const w=mEl.offsetWidth,hh=mEl.offsetHeight,B=uBox(pending),avoid=[uBox(u),B];
-    /* beside the target, on the side that covers neither fighter and stays on the map */
-    const cl=(l,t)=>[Math.max(0,Math.min(l,BW-w)),Math.max(0,Math.min(t,BH-hh))];
-    const spots=[cl(B.l+B.w+6,B.t-20),cl(B.l-6-w,B.t-20),cl(B.l+B.w/2-w/2,B.t-hh-6),cl(B.l+B.w/2-w/2,B.t+B.h+6)];
-    const hits=([l,t])=>avoid.filter(r=>ovl(r,l,t,w,hh)).length;
-    const sp=spots.slice().sort((a,b)=>hits(a)-hits(b))[0];mEl.style.left=sp[0]+'px';mEl.style.top=sp[1]+'px'}
-  else if(fm&&u){mEl.innerHTML=fm;mEl.hidden=false;const w=mEl.offsetWidth,hh=mEl.offsetHeight,A=uBox(u),top=Math.max(0,Math.min(A.t-8,BH-hh));
-    /* beside the unit, on whichever side doesn't cover a target or run off the map */
-    const spots=[[A.l+A.w+6,top],[A.l-6-w,top],[A.l+A.w+6,A.t+A.h+4],[A.l-6-w,A.t+A.h+4]].filter(([l,t])=>l>=0&&l+w<=BW&&t+hh<=BH+40);
-    const clear=([l,t])=>!(ui==='target'||ui==='confirm')||!targets.some(o=>ovl(uBox(o),l,t,w,hh));
-    const sp=spots.find(clear)||spots[0]||[A.l+A.w+6,top];mEl.style.left=sp[0]+'px';mEl.style.top=sp[1]+'px'}else mEl.hidden=true;
+  if(fm&&(pop||u)){mEl.innerHTML=fm;mEl.hidden=false;const xs=[u,pop?pending:null].filter(Boolean).map(o=>{const r=uBox(o);return cam.x+(r.l+r.w/2)*cam.s}),mid=xs.reduce((a,x)=>a+x,0)/xs.length;
+    mEl.classList.toggle('dl',mid>vb().w/2);mEl.classList.toggle('dr',mid<=vb().w/2)}else mEl.hidden=true;
 }
 panel.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||busy)return;act(b.dataset.act)});
 
