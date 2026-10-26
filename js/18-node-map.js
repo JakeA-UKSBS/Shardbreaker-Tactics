@@ -1,7 +1,7 @@
 /* The branching node map and its screen */
 /* ---- node map ----
    ROWS floors of 3 lanes, then a camp and the boss. Each lane holds the CORE rooms plus FLEX more drawn at random
-   (another recruit, event, elite or battle), so routes differ. A crossing between lanes is only kept if every path
+   (another recruit, event, elite or battle), so routes differ. A few crossings between lanes are added (see genMap), each only kept if every path
    through the map still passes pathOk: a treasure room and a tavern, 4-5 fights, at most 2 elites. */
 const CORE={battle:3,elite:1,tavern:1,rest:1,event:1,treasure:1},FLEX=['recruit','recruit','event','elite','battle'],FLEX_N=2;
 const ROWS=Object.values(CORE).reduce((a,b)=>a+b,0)+FLEX_N;
@@ -29,7 +29,9 @@ function genMap(){
   for(let r=0;r<ROWS;r++)rows.push(lanes.map(l=>({t:l[r],next:[]})));
   for(let r=0;r<ROWS-1;r++)rows[r].forEach((n,i)=>n.next=[i]);
   const cand=[];for(let r=0;r<ROWS-1;r++)for(let i=0;i<3;i++)for(const j of[i-1,i+1])if(j>=0&&j<3)cand.push([r,i,j]);
-  for(const[r,i,j]of shuffle(cand)){if(rand()<.35)continue;rows[r][i].next.push(j);if(!pathsOk(rows))rows[r][i].next.pop()}
+  /* only a few places to switch lanes: 3-4 crossings per map, never two on the same floor or on neighbouring floors */
+  const want=ri(3,4),used=new Set();let got=0;
+  for(const[r,i,j]of shuffle(cand)){if(got>=want)break;if(used.has(r)||used.has(r-1)||used.has(r+1))continue;rows[r][i].next.push(j);if(!pathsOk(rows)){rows[r][i].next.pop();continue}used.add(r);got++}
   rows.push([{t:'rest',next:[0]}],[{t:'boss',next:[]}]);rows[ROWS-1].forEach(n=>n.next=[0]);
   rows.forEach(row=>row.forEach((n,i)=>n.x=row.length===1?50:18+i*32+ri(-5,5)));
   return{rows};
