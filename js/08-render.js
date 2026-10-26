@@ -8,12 +8,27 @@ const uEls={};
 function buildBoard(){
   boardEl.innerHTML='';for(const id in uEls)delete uEls[id];
   const c=CH[state.ch];boardEl.classList.toggle('bright',!!c.bright);boardEl.style.background=MAP.some(r=>r.includes('~'))?'linear-gradient(#26304a,#56668c 55%,#8e9ab8)':'';
-  if(MAP.some(r=>/[dMhH]/.test(r))){const im=document.createElement('img');im.className='underlay';im.alt='';im.src=shipArt(!!c.wreck);im.style.width=MW*T+'px';im.style.height=MH*T+'px';boardEl.appendChild(im)}
-  boardEl.style.gridTemplateColumns=`repeat(${MW},${T}px)`;boardEl.style.width=MW*T+'px';boardEl.style.height=MH*T+'px';
+  /* isometric: each tile is its square art mapped onto a diamond (the top face), over a block of side faces down to the ground */
+  const mx=Math.max(0,...MAP.flatMap((r,y)=>[...r].map((_,x)=>vhOf(x,y))));
+  OX=MH*TW/2;OY=56+mx*HS;BW=(MW+MH)*TW/2;BH=OY+(MW+MH)*TH/2+HS+12;
+  boardEl.classList.add('iso');boardEl.style.gridTemplateColumns='';boardEl.style.width=BW+'px';boardEl.style.height=BH+'px';
   /* boulders and features (hills, chests, houses, shrines, tents, crags, trees) sit on the map's usual ground */const gc={};for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const t=ter(x,y);if(t.c<99&&!OVER_T.includes(t.k))gc[t.k]=(gc[t.k]||0)+1}const gk=Object.keys(gc).sort((a,b)=>gc[b]-gc[a])[0]||'plain';
+  const firstOf={};
   for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const t=document.createElement('div'),tk=ter(x,y).k;const vol=CH[state.ch]&&CH[state.ch].biome==='mountain',ov=tk==='hill'&&vol?'crag':tk;
-    t.className=tk==='boulder'?'tile t-'+gk+' boulder':OVER_T.includes(ov)&&gk!=='plain'?`tile t-${gk} ov ov-${ov}`:'tile t-'+tk;t.dataset.k=key(x,y);boardEl.appendChild(t)}
+    t.className=tk==='boulder'?'tile t-'+gk+' boulder':OVER_T.includes(ov)&&gk!=='plain'?`tile t-${gk} ov ov-${ov}`:'tile t-'+tk;t.dataset.k=key(x,y);
+    const vh=vhOf(x,y),p=tileTop(x,y,vh),z=(x+y)*4;
+    Object.assign(t.style,{left:p.x+'px',top:p.y+'px',zIndex:z+1,transform:`matrix(${TW/2/T},${TH/2/T},${-TW/2/T},${TH/2/T},0,0)`});
+    if(tk==='sky'){t.style.visibility='hidden';boardEl.appendChild(t);continue}
+    const D=(vh+1)*HS,sd=document.createElement('div'),sk=t.className.split(' ')[1];sd.className='blk';sd.dataset.t=sk;
+    Object.assign(sd.style,{left:p.x-TW/2+'px',top:p.y+'px',width:TW+'px',height:TH+D+'px',zIndex:z});
+    let ln='';for(let i=1;i<=vh;i++){const yy=TH/2+i*HS;ln+=`M0 ${yy}L${TW/2} ${yy+TH/2}L${TW} ${yy}`}
+    sd.innerHTML=`<svg width="${TW}" height="${TH+D}"><polygon points="0,${TH/2} ${TW/2},${TH} ${TW/2},${TH+D} 0,${TH/2+D}" fill="var(--c)"/><polygon points="0,${TH/2} ${TW/2},${TH} ${TW/2},${TH+D} 0,${TH/2+D}" fill="#000" opacity=".3"/><polygon points="${TW/2},${TH} ${TW},${TH/2} ${TW},${TH/2+D} ${TW/2},${TH+D}" fill="var(--c)"/><polygon points="${TW/2},${TH} ${TW},${TH/2} ${TW},${TH/2+D} ${TW/2},${TH+D}" fill="#000" opacity=".5"/><path d="${ln}" stroke="#000" stroke-opacity=".25" fill="none"/></svg>`;
+    boardEl.appendChild(sd);boardEl.appendChild(t);firstOf[sk]=firstOf[sk]||t}
+  /* side faces take the average colour of their tile's art */
+  for(const k in firstOf){const m=/url\("?(.*?)"?\)/.exec(getComputedStyle(firstOf[k]).backgroundImage);if(!m)continue;sideColor(m[1],c=>boardEl.querySelectorAll(`.blk[data-t="${k}"]`).forEach(e=>e.style.setProperty('--c',c)))}
 }
+const SIDEC={};
+function sideColor(src,cb){if(SIDEC[src])return cb(SIDEC[src]);const im=new Image();im.onload=()=>{const cv=document.createElement('canvas');cv.width=cv.height=1;const cx=cv.getContext('2d');cx.drawImage(im,0,0,1,1);let d;try{d=cx.getImageData(0,0,1,1).data}catch(_){return}/* opened from file://: PNG art can't be read back, keep the default */cb(SIDEC[src]=`rgb(${d[0]},${d[1]},${d[2]})`)};im.src=src}
 function threatMap(){const m=new Map();for(const e of state.units.filter(u=>u.team==='e'&&u.hp>0&&!u.recruit)){const ms=reach(e),all=new Set([...ms,...fringeOf(e,ms)]);for(const k of all){if(!m.has(k))m.set(k,[]);m.get(k).push(e.id)}}return m}
 function threatLine(k){const ids=danger&&threatMap().get(k);if(!ids||!ids.length)return danger?'<p class="hint">No enemy can reach this tile next turn.</p>':'';return`<p class="hint" style="color:#f0a08a">In reach of ${ids.length} enem${ids.length>1?'ies':'y'}: <b>${ids.map(i=>byId(i).name).join(', ')}</b> (ringed in red).</p>`}
 /* 2x2 bosses: scale the art so the creature itself fills its whole 2x2 footprint (art has empty margins) */
@@ -45,8 +60,8 @@ function render(){
     live.add(u.id);let el=uEls[u.id];
     if(!el){el=document.createElement('div');el.innerHTML='<img alt=""><div class="hpb"><i></i></div>';boardEl.appendChild(el);uEls[u.id]=el}
     el.className='unit '+u.team+(u.summon?' sum':'')+(u.stone?' stone':'')+(u.psn?' psn':'')+(u.boss?' boss':'')+(u.look&&u.look.magma?' magma':'')+(u.look&&u.look.spirit?' spirit':'')+(u.acted&&u.team==='p'?' done':'')+(thr.has(u.id)?' threat':'');
-    el.style.left=u.x*T+'px';el.style.top=u.y*T+'px';{const w=(u.sz||1)*T+'px';if(el.style.width!==w){el.style.width=el.style.height=w;el.firstChild.style.width=el.firstChild.style.height=w}}
-    if(u.hp<=0&&!el.dataset.dead&&el.isConnected&&el.style.opacity!==''){el.dataset.dead=1;dieFx(el,boardEl,(u.x+(u.sz||1)/2)*T,(u.y+(u.sz||1)/2)*T,u,1,settings.anim)}else if(u.hp>0)delete el.dataset.dead;
+    const ub=uBox(u);el.style.left=ub.l+'px';el.style.top=ub.t+'px';el.style.zIndex=unitZ(u);{const w=ub.w+'px';if(el.style.width!==w){el.style.width=el.style.height=w;el.firstChild.style.width=el.firstChild.style.height=w}}
+    if(u.hp<=0&&!el.dataset.dead&&el.isConnected&&el.style.opacity!==''){el.dataset.dead=1;dieFx(el,boardEl,ub.l+ub.w/2,ub.t+ub.h/2,u,1)}else if(u.hp>0)delete el.dataset.dead;
     el.style.opacity=u.hp>0?1:0;
     const src=sprite(u,'idle',mapWk(u)),img=el.firstChild;if(img.dataset.s!==src){img.src=src;img.dataset.s=src;img.style.transform='';img.style.transformOrigin='';if(u.sz>1&&src.startsWith('data:'))fillBox(img,src,u.team==='e')}img.classList.toggle('hi',isHi(u.cls,u.sz));
     el.querySelector('.hpb i').style.width=(u.hp/u.maxhp*100)+'%';
@@ -79,7 +94,7 @@ function card(u){
    <div class="ch"><b>${u.name}</b><span>${CLS[u.cls].n} · Lv ${u.lv}</span></div>
    <div class="hp"><span class="bar"><i style="width:${u.hp/u.maxhp*100}%"></i></span><span>${u.hp}/${u.maxhp} HP</span></div>
    ${u.team==='p'?`<div class="xp"><span class="bar"><i style="width:${u.exp}%"></i></span><span>${u.exp} EXP</span></div>`:''}
-   <div class="eq">${w?`<img src="${icon(w.key)}" alt="">${w.n} (Rng ${rngTxt(w.r)})`:'Unarmed'}${sk?` · <b class="sk">${sk.n}</b>`:''} · ${terrText(t)}${u.psn?` · <b class="psnt">Poisoned (${u.psn})</b>`:''}${(()=>{const g=gearOf(u),t=Object.entries(g).filter(([,v])=>v).map(([k,v])=>`${v>0?'+':''}${v} ${GEAR_N[k]}`);return t.length?` · Gear ${t.join(', ')}`:''})()}</div>
+   <div class="eq">${w?`<img src="${icon(w.key)}" alt="">${w.n} (Rng ${rngTxt(w.r)})`:'Unarmed'}${sk?` · <b class="sk">${sk.n}</b>`:''} · ${terrText(t)} · H${hOf(u.x,u.y)}${u.psn?` · <b class="psnt">Poisoned (${u.psn})</b>`:''}${(()=>{const g=gearOf(u),t=Object.entries(g).filter(([,v])=>v).map(([k,v])=>`${v>0?'+':''}${v} ${GEAR_N[k]}`);return t.length?` · Gear ${t.join(', ')}`:''})()}</div>
    ${u.recruit?`<div class="eq sk">Can be recruited: move ${lordName()} next to ${u.name} and Talk.</div>`:''}
   </div><button class="mini" type="button" data-act="sheet:${u.id}">Details</button></div>`;
   return h;
@@ -180,12 +195,13 @@ function renderPanel(){
     if(tmode==='heal'){const si=spiritFor(u,pending),w=IT[u.items[si].k],amt=Math.min(w.amt,pending.maxhp-pending.hp);
       h=`<div class="wsel"><img src="${icon(w.key)}" alt="">${w.n}</div><p class="hint">Heal <b>${pending.name}</b>: ${pending.hp} → ${pending.hp+amt} HP. Tap ${pending.name} again or press Heal.</p><div class="acts"><button class="go" type="button" data-act="doheal">Heal</button><button type="button" data-act="back">Back</button></div>`}
     else{
-      const f=forecast(u,pendW,pending),A=f.A,D=f.D,list=wpnsAt(u,f.dist);
+      const f=forecast(u,pendW,pending),A=f.A,D=f.D,list=wpnsAt(u,f.dist,pending);
       const aft=(hp,s)=>Math.max(0,hp-(s?s.dmg*s.n:0)),effT=tagsOf(pending).filter(t=>effOf(f.aw).includes(t)||Object.entries(SLAYER).some(([k,v])=>v===t&&has(u,k))||(t==='spectral'&&/Paladin/.test(CLS[u.cls].n)));
       /* the forecast pops out on the board next to the fight; the panel keeps the attacker's card */
       h=card(u)+`<p class="hint">Attack ${pending.name}? Tap it again, or press Attack.</p>`;
       fm=`<div class="ufc-h"><span class="pc">${u.name}</span>${list.length>1?'<button class="mini" type="button" data-act="wprev" aria-label="Previous weapon">◀</button>':''}<img src="${icon(f.aw.key)}" alt="" title="${f.aw.n}">${list.length>1?'<button class="mini" type="button" data-act="wnext" aria-label="Next weapon">▶</button>':''}<span class="ec">${pending.name}</span></div>
       <div class="ufc-w">${f.aw.n}<button class="mini" type="button" data-act="chart" aria-label="Effective damage chart">?</button></div>
+      ${A.hd?`<div class="ufc-w hgt">${A.hd>0?`High ground: +${A.hd*10} Hit, +${A.hd} Dmg`:`Low ground: ${A.hd*10} Hit`}</div>`:''}
       <div class="ufc-g"><b>${u.hp}→${aft(u.hp,D)}</b><i>HP</i><b>${pending.hp}→${aft(pending.hp,A)}</b><b>${A.dmg}${A.n>1?' ×2':''}</b><i>DMG</i><b>${D?D.dmg+(D.n>1?' ×2':''):'–'}</b><b>${A.hit}%</b><i>HIT</i><b>${D?D.hit+'%':'–'}</b><b>${A.crit}%</b><i>CRT</i><b>${D?D.crit+'%':'–'}</b></div>
       ${A.eff?`<button type="button" class="effl" data-act="chart">${effT.map(t=>`<img src="${tagArt(t)}" alt="">`).join('')}Effective ×${A.eff}</button>`:''}
       <div class="ufc-b"><button class="go" type="button" data-act="attack-go">Attack</button><button type="button" data-act="back">Back</button></div>`;
@@ -199,17 +215,18 @@ function renderPanel(){
   let mEl=$('#umenu');if(!mEl||!mEl.isConnected){mEl=document.createElement('div');mEl.id='umenu';mEl.className='umenu';boardEl.appendChild(mEl);
     for(const ev of['pointerdown','pointerup','wheel'])mEl.addEventListener(ev,e=>e.stopPropagation());mEl.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||busy)return;act(b.dataset.act)})}
   const pop=ui==='confirm'&&tmode==='atk'&&pending;mEl.classList.toggle('ufc',!!pop);
-  if(fm&&pop){mEl.innerHTML=fm;mEl.hidden=false;const w=mEl.offsetWidth,hh=mEl.offsetHeight,P=pending,np=P.sz||1,avoid=[u,P];
+  const ovl=(r,l,t,w,hh)=>r.l<l+w&&r.l+r.w>l&&r.t<t+hh&&r.t+r.h>t;
+  if(fm&&pop){mEl.innerHTML=fm;mEl.hidden=false;const w=mEl.offsetWidth,hh=mEl.offsetHeight,B=uBox(pending),avoid=[uBox(u),B];
     /* beside the target, on the side that covers neither fighter and stays on the map */
-    const cl=(l,t)=>[Math.max(0,Math.min(l,MW*T-w)),Math.max(0,Math.min(t,MH*T-hh))];
-    const spots=[cl((P.x+np)*T+6,P.y*T-20),cl(P.x*T-6-w,P.y*T-20),cl(P.x*T-w/2+T/2,P.y*T-hh-6),cl(P.x*T-w/2+T/2,(P.y+np)*T+6)];
-    const hits=([l,t])=>avoid.filter(o=>o.x*T<l+w&&(o.x+(o.sz||1))*T>l&&o.y*T<t+hh&&(o.y+(o.sz||1))*T>t).length;
+    const cl=(l,t)=>[Math.max(0,Math.min(l,BW-w)),Math.max(0,Math.min(t,BH-hh))];
+    const spots=[cl(B.l+B.w+6,B.t-20),cl(B.l-6-w,B.t-20),cl(B.l+B.w/2-w/2,B.t-hh-6),cl(B.l+B.w/2-w/2,B.t+B.h+6)];
+    const hits=([l,t])=>avoid.filter(r=>ovl(r,l,t,w,hh)).length;
     const sp=spots.slice().sort((a,b)=>hits(a)-hits(b))[0];mEl.style.left=sp[0]+'px';mEl.style.top=sp[1]+'px'}
-  else if(fm&&u){mEl.innerHTML=fm;mEl.hidden=false;const w=mEl.offsetWidth,hh=mEl.offsetHeight,n=u.sz||1,top=Math.max(0,Math.min(u.y*T-8,MH*T-hh));
+  else if(fm&&u){mEl.innerHTML=fm;mEl.hidden=false;const w=mEl.offsetWidth,hh=mEl.offsetHeight,A=uBox(u),top=Math.max(0,Math.min(A.t-8,BH-hh));
     /* beside the unit, on whichever side doesn't cover a target or run off the map */
-    const spots=[[(u.x+n)*T+6,top],[u.x*T-6-w,top],[(u.x+n)*T+6,(u.y+n)*T+4],[u.x*T-6-w,(u.y+n)*T+4]].filter(([l,t])=>l>=0&&l+w<=MW*T&&t+hh<=MH*T+40);
-    const clear=([l,t])=>!(ui==='target'||ui==='confirm')||!targets.some(o=>o.x*T<l+w&&(o.x+(o.sz||1))*T>l&&o.y*T<t+hh&&(o.y+(o.sz||1))*T>t);
-    const sp=spots.find(clear)||spots[0]||[(u.x+n)*T+6,top];mEl.style.left=sp[0]+'px';mEl.style.top=sp[1]+'px'}else mEl.hidden=true;
+    const spots=[[A.l+A.w+6,top],[A.l-6-w,top],[A.l+A.w+6,A.t+A.h+4],[A.l-6-w,A.t+A.h+4]].filter(([l,t])=>l>=0&&l+w<=BW&&t+hh<=BH+40);
+    const clear=([l,t])=>!(ui==='target'||ui==='confirm')||!targets.some(o=>ovl(uBox(o),l,t,w,hh));
+    const sp=spots.find(clear)||spots[0]||[A.l+A.w+6,top];mEl.style.left=sp[0]+'px';mEl.style.top=sp[1]+'px'}else mEl.hidden=true;
 }
 panel.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||busy)return;act(b.dataset.act)});
 

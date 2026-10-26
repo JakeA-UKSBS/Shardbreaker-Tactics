@@ -1,6 +1,6 @@
 /* Seeded random numbers and the basic unit constructors */
 /* ================= STATE ================= */
-let state,history=[],rewinds=3,chStart=null,MAP=[],MW=8,MH=11;
+let state,history=[],rewinds=3,chStart=null,MAP=[],HM=[],MW=8,MH=11;
 let ui='idle',sel=null,pre=null,origin=null,moveSet=null,fringe=null,targets=[],tmode='atk',pending=null,pendW=0,phase='player',busy=false,over=null,inspect=null,danger=false,details=false,itemSel=null,terInfo='';
 let settings={anim:true,sound:true,tips:false,seen:[],lord:'m',rewind:false,dev:false,theme:'tavern'};
 /* colour schemes: tavern (warm wood and gold, like the story scenes) or jade (Obsidian & Jade) */
@@ -27,6 +27,8 @@ const pick=a=>a[Math.floor(rand()*a.length)];
 const unitAt=(x,y)=>state.units.find(u=>u.hp>0&&x>=u.x&&y>=u.y&&x<u.x+(u.sz||1)&&y<u.y+(u.sz||1));
 const byId=id=>state.units.find(u=>u.id===id);
 const ter=(x,y)=>TER[MAP[y][x]];
+/* tile height level (0 = ground). HM is set with the map in setMapFor() */
+const hOf=(x,y)=>(HM[y]&&HM[y][x])||0;
 
 function mkHero(h){const u={id:h.id,name:h.name,cls:h.cls,team:'p',lv:h.lv,exp:0,skill:h.skill,skills:[],cap:BASE_CAP,look:h.look,pic:h.pic,g:h.g,lord:!!h.lord,mov:CLS[h.cls].mov,items:h.items.map(k=>({k,u:IT[k].uses})),acted:false,x:0,y:0};ST.forEach((s,i)=>u[s]=h.s[i]);u.maxhp=u.hp;return u}
 function foe(cls,lv,x,y,o={}){

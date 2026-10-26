@@ -252,21 +252,10 @@ function drawHiWeapon(p,kind,w,c,h,a,P,hb,pt,limb){
   else if(kind==='umbrella'){const tip=pt(...h,a,18);limb(h,tip,BROWN,1);p.poly([pt(...tip,a+180,8),pt(...pt(...tip,a+180,8),a+90,7),tip,pt(...pt(...tip,a+180,8),a-90,7)],'#e58fb0')}
 }
 
-/* map and card sprite (64x64) and battle frames (96x96) */
+/* map and card sprite (64x64) */
 
 /* ==================================================================
    ENTRY POINTS
    hiFig: the 64px map/card sprite (cached).
-   rigFrame: a 96px battle frame (cached).
-   rigStart / rigStop / rigShow: drive the battle scene, idle breathing
-   loop plus the action frames called from strikeAnim().
    ================================================================== */
 function hiFig(L,cls,team,pose,wk){const k=['HI',cls,team,pose,wk,JSON.stringify(L)].join('|');return sprCache[k]||(sprCache[k]=hiArt(L,cls,team,wk,pose==='strike'?'swing':'idle',0,64))}
-function rigOf(u){return u&&isHi(u.cls,u.sz)?{}:null}
-function rigFrame(u,R,w,name,i){const k=['RIG',u.cls,u.team,name,i||0,w&&w.key,JSON.stringify(u.look)].join('|');return sprCache[k]||(sprCache[k]=hiArt(u.look,u.cls,u.team,w&&w.key,name,i,96))}
-/* idle breathing loop for one side of the battle scene; paused while an action plays */
-const rigIdle={};
-function rigStart(side,u,w){rigStop(side);const R=rigOf(u);if(!R)return;w=w||(mapWk(u)&&IT[mapWk(u)]);const img=$('#fig'+side);let i=0;img.src=rigFrame(u,R,w,'idle',0);img.classList.add('rig');
-  rigIdle[side]={u,w,R,busy:false,t:setInterval(()=>{const s=rigIdle[side];if(!s||s.busy)return;i^=1;img.src=rigFrame(u,R,w,'idle',i)},D(420))}}
-function rigStop(side){const s=rigIdle[side];if(s){clearInterval(s.t);delete rigIdle[side]}const img=$('#fig'+side);if(img)img.classList.remove('rig')}
-function rigShow(side,name){const s=rigIdle[side];if(!s)return false;s.busy=name!=='idle';$('#fig'+side).src=rigFrame(s.u,s.R,s.w,name,0);return true}

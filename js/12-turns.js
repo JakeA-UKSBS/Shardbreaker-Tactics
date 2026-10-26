@@ -18,11 +18,11 @@ function afterMove(u){
   ui='menu';
   render();
 }
-function openConfirm(t){pending=t;const u=byId(sel);if(tmode==='atk')pendW=wpnsAt(u,man(u,t))[0];ui='confirm';render();
+function openConfirm(t){pending=t;const u=byId(sel);if(tmode==='atk')pendW=wpnsAt(u,man(u,t),t)[0];ui='confirm';render();
   if(tmode==='atk')tip('forecast','Battle forecast','This shows damage, hit chance and crit chance for both sides. A gold Effective chip means a hit deals double weapon might. Tap the enemy again, or press Attack, to strike.');}
 function bestApproach(u,o){
   let best=null,bs2=-1e9;
-  for(const k of moveSet){const[x,y]=k.split(',').map(Number),d=Math.abs(x-o.x)+Math.abs(y-o.y);if(!wpnsAt(u,d).length)continue;
+  for(const k of moveSet){const[x,y]=k.split(',').map(Number),d=Math.abs(x-o.x)+Math.abs(y-o.y);if(!wpnsAt({...u,x,y},d,o).length)continue;
     const s=(x===origin.x&&y===origin.y?100:0)+ter(x,y).av-(Math.abs(x-origin.x)+Math.abs(y-origin.y));if(s>bs2){bs2=s;best={x,y}}}
   return best;
 }
@@ -48,7 +48,7 @@ function tap(x,y){
   if(o&&o.team==='p'&&!o.acted){sfx('select');select(o);return}
   if(o){sfx('select');inspect=o;moveSet=reach(o);fringe=fringeOf(o,moveSet);ui='idle';render();return}
   const t=ter(x,y),vil=MAP[y][x]==='V';
-  terInfo=`<div class="ch"><b>${t.n}</b><span>Terrain</span></div><p class="hint">${t.c>=99?'Impassable.':'Move cost '+t.c+'.'}${t.df?' +'+t.df+' Def.':''}${t.av?' +'+t.av+' Avoid.':''}${t.heal?' Heals 10% HP each turn.':''}${vil?(state.visited.includes(k)?' Already visited.':' Move a unit here and choose Visit for a gift.'):''}${MAP[y][x]==='C'?(state.visited.includes(k)?' Empty.':' Move a unit here and choose Open.'):''}</p>`;
+  terInfo=`<div class="ch"><b>${t.n}</b><span>Terrain · Height ${hOf(x,y)}</span></div><p class="hint">${t.c>=99?'Impassable.':'Move cost '+t.c+'.'}${t.df?' +'+t.df+' Def.':''}${t.av?' +'+t.av+' Avoid.':''}${t.heal?' Heals 10% HP each turn.':''}${vil?(state.visited.includes(k)?' Already visited.':' Move a unit here and choose Visit for a gift.'):''}${MAP[y][x]==='C'?(state.visited.includes(k)?' Empty.':' Move a unit here and choose Open.'):''}</p>`;
   threatTile=k;terInfo+=threatLine(k);ui='terrain';render();
 }
 
@@ -114,7 +114,7 @@ async function act(a){
   if(a==='trade'){busy=true;await tradeWith(u);busy=false;render();return}
   if(a.startsWith('item:')){itemSel=+a.slice(5);render();return}
   if(a==='equip'){const it=u.items.splice(itemSel,1)[0];u.items.unshift(it);itemSel=0;render();return}
-  if(a==='wprev'||a==='wnext'){const l=wpnsAt(u,man(u,pending)),i=l.indexOf(pendW);pendW=l[(i+(a==='wnext'?1:l.length-1))%l.length];render();return}
+  if(a==='wprev'||a==='wnext'){const l=wpnsAt(u,man(u,pending),pending),i=l.indexOf(pendW);pendW=l[(i+(a==='wnext'?1:l.length-1))%l.length];render();return}
   if(a==='wait'){commit();finishAction();return}
   if(a==='summon'){if(!canSummon(u))return;commit();doSummon(u);finishAction();return}
   if(a==='learn'){const it=u.items[itemSel],k=IT[it.k].skill;if(learnBlock(u,k))return;(u.skills=u.skills||[]).push({id:k,src:'scroll'});u.items.splice(itemSel,1);itemSel=null;sfx('item');toast(`${u.name} learned ${SKILLS[k].n}`);saveGame();render();return}
@@ -140,7 +140,7 @@ async function act(a){
 async function fight(a,ai,d){
   busy=true;render();if(ensureVisible(d.x,d.y))await sleep(380);
   const res=resolve(a,ai,d);
-  if(settings.anim)await scenePlay(a,d,res);else await quickPlay(a,d,res);
+  await quickPlay(a,d,res);
   a.hp=res.hpA;d.hp=res.hpD;
   for(const u of[a,d])if(u.team==='p'&&u.hp<=0&&R('phoenix')&&!run.phx){u.hp=1;run.phx=1;pop(u,'Phoenix!','heal');sfx('rise');toast(`The Phoenix Feather saves ${u.name}`)}
   for(const[u,i,n]of[[a,ai,res.used.a],[d,res.f.di,res.used.d]]){if(i<0||!n)continue;const it=u.items[i];if(endless(it.k))continue;it.u-=n;if(it.u<=0){u.items.splice(i,1);sfx('broke');toast(`${u.name}'s ${IT[it.k].n} broke`)}}
@@ -154,9 +154,8 @@ async function fight(a,ai,d){
   if(p&&o.hp<=0&&p.hp>0&&R('fang')){const h=Math.min(5,p.maxhp-p.hp);if(h){p.hp+=h;pop(p,'+'+h,'heal')}}
   if(p&&o.hp<=0&&p.hp>0)/* enemy drops go to the spoils: after the win the Found picker asks who takes each one */
     for(const it of o.items.filter(i=>i.d)){(state.loot=state.loot||[]).push(it.k);pop(o,IT[it.k].n+' dropped','heal');toast(`${IT[it.k].n} dropped: added to the spoils`)}
-  await closeScene();
   if(a.hp>0&&d.hp<=0&&a.team==='p'&&phase==='player'&&has(a,'momentum')&&a.gf!==state.turn){a.gf=state.turn;a.acted=false;pop(a,'Momentum!','heal')}
-  if(a.hp>0&&has(a,'hitrun')&&man(a,d)===1){let best=null,bd=-1;for(const[dx,dy]of DIRS){const x=a.x+dx,y=a.y+dy;if(x<0||y<0||x>=MW||y>=MH||unitAt(x,y)||mcost(a,x,y)>=99)continue;
+  if(a.hp>0&&has(a,'hitrun')&&man(a,d)===1){let best=null,bd=-1;for(const[dx,dy]of DIRS){const x=a.x+dx,y=a.y+dy;if(x<0||y<0||x>=MW||y>=MH||unitAt(x,y)||mcost(a,x,y)>=99||!canStep(a,a.x,a.y,x,y))continue;
     const dd=Math.min(99,...state.units.filter(o=>hostile(o,a)&&o.hp>0).map(o=>man(o,{x,y})));if(dd>bd){bd=dd;best={x,y}}}if(best&&bd>1){a.x=best.x;a.y=best.y}}
   render();if(a.hp<=0||d.hp<=0)await sleep(380);
   state.units=state.units.filter(u=>u.hp>0);busy=false;render();checkEnd();
@@ -226,7 +225,7 @@ function field(ts,u){
 function aiPlan(e){
   const tiles=[...reach(e)].map(k=>k.split(',').map(Number)),ps=state.units.filter(u=>u.hp>0&&hostile(u,e));let best=null;
   for(const[x,y]of tiles)for(const p of ps){const d=man({x,y,sz:e.sz},p);
-    for(const wi of wpnsAt(e,d)){const f=forecast({...e,x,y},wi,p),A=f.A,D=f.D;
+    for(const wi of wpnsAt({...e,x,y},d,p)){const f=forecast({...e,x,y},wi,p),A=f.A,D=f.D;
       const s=A.dmg*A.n*A.hit/100+(A.dmg*A.n>=p.hp?40:0)-(D?D.dmg*D.n*D.hit/200:0)+ter(x,y).av/10+(p.lord?3:0)+(has(p,'taunt')||markedU(p)?25:0);
       if(!best||s>best.s)best={s,tile:{x,y},target:p,wi}}}
   if(best||e.hold||e.mov===0)return best||{};

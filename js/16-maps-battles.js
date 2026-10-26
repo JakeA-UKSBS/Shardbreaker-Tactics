@@ -160,6 +160,12 @@ Object.assign(MAPS,{
   glitter:{n:"Glittering Hall",map:["CcecccuceC","cccccccccc","cuccpccecp","ccccccccc^","ecccCccccc","^ccp^ccucc","^ccccc^cce","cucccccccc","cccccccccc","cccccccccc"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   amethystHollow:{n:"Amethyst Hollow",map:["xcccTcccCx","cceccccucc","cccccccccc","cpccxxccec","cccccccccc","xcccccccCx","cuccccccpc","cccccccccc","cccccccccc","cccccccccc"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]}
 });
+
+/* hand-made height maps (greybox): one digit per tile, 0 = ground. Maps without h get hills and rubble at 1. */
+MAPS.woodland.h=["4443210011", "4443210012", "4440000012", "0000000001", "0000000000", "0011000000", "0012000110", "0000000110", "0000000000", "0000000000"];
+MAPS.brook.h=["4433333344", "3333333333", "3333333333", "0100000010", "1111111111", "1111111111", "1122111111", "1122110000", "0000000000", "0000000000"];
+MAPS.clearing.h=["1111111111", "1111222111", "1112222211", "0112332110", "0112332100", "0011221000", "0001110000", "0000000000", "0000000000", "0000000000"];
+MAPS.heart.h=["2213333122", "2213333122", "1112222111", "0001111000", "0000000000", "0000000000", "0000000000", "0000000000", "0000000000", "0000000000"];
 /* settlements for Defend fights: 1 = the region's ground, 2 = its cover */
 const TOWN=["1111111111","2111111112","1111221111","#11111111#","#1V11A1V1#","1111111111","V11121111V","11111F1111","1111111111","1111111111"];
 for(const k in BIOMES){const B=BIOMES[k];if(B.town)MAPS['town_'+k]={n:B.townN,map:TOWN.map(r=>r.replaceAll('1',B.town[0]).replaceAll('2',B.town[1])),start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]}}
@@ -190,7 +196,7 @@ function genBattle(n,kind){
   while(list.length<count){const c=roll();list.push(c);if(c==='Wolf'&&list.length<count&&rand()<.6)list.push('Wolf')}
   const bossName=B.boss.name||pick(BOSSN)+' '+pick(BOSST),turns=ship&&!bossFight?(elite?6:5):town?ri(5,7):0;
   const goal=bossFight?'boss':ship||town?'defend':'rout';
-  const def={biome:B.id,title:bossFight?m.n:town?`Defend the ${m.n}`:m.n+(elite?' (Elite)':''),goal,turns,map:m.map,start:m.start,gifts:{},
+  const def={biome:B.id,title:bossFight?m.n:town?`Defend the ${m.n}`:m.n+(elite?' (Elite)':''),goal,turns,map:m.map,h:m.h,start:m.start,gifts:{},
     intro:bossFight&&B.boss.intro?B.boss.intro:bossFight?`${bossName} waits for you in the ${m.n}. Defeat it to clear ${theN(B)}.`:ship?`Fliers are diving on the ship. Hold the deck for ${turns} turns.`:town?`Crystallised beasts are closing on the ${m.n.toLowerCase()}. Hold them off for ${turns} turns.`:elite?`A pack led by something old and strong holds the ${m.n.toLowerCase()}. Rout them all.`:`${count} monsters wait in the ${m.n.toLowerCase()}. Rout them.`};
   def.foes=()=>{const tiles=spawnTiles(m),out=[];
     list.forEach((c,i)=>{const lv=Math.max(1,lvBase+(rand()<.3?1:0)-(c==='Wolf'?1:0)+(elite?2:0)),u=mkMon(c,lv),t=tiles[i%tiles.length];u.x=t.x;u.y=t.y;
