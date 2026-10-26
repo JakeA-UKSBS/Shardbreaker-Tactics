@@ -41,7 +41,7 @@ function tap(x,y){
     cancelMove();return;
   }
   if(ui==='menu'||ui==='items'){cancelMove();return}
-  if(ui==='target'||ui==='confirm'){const t=targets.find(t=>t.x===x&&t.y===y);
+  if(ui==='target'||ui==='confirm'){const t=targets.find(t=>x>=t.x&&y>=t.y&&x<t.x+(t.sz||1)&&y<t.y+(t.sz||1));/* any tile of a 2×2 boss counts */
     if(t&&ui==='confirm'&&t===pending){act(tmode==='heal'?'doheal':'attack-go');return}
     if(t){sfx('select');openConfirm(t)}else{pending=null;ui='menu';render()}return}
   clearSel();
