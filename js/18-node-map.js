@@ -36,14 +36,14 @@ function genMap(){
   rows.forEach(row=>row.forEach((n,i)=>n.x=row.length===1?50:18+i*32+ri(-5,5)));
   return{rows};
 }
-function mapIconArt(){const c='MAPI';if(NODE_IC[c])return NODE_IC[c];const p=Px(16,16);p.poly([[1,3],[5,1],[10,3],[15,1],[15,13],[10,15],[5,13],[1,15]],'#e9dcb4');p.poly([[5,1],[10,3],[10,15],[5,13]],'#d8c898');
+function mapIconArt_draw(){const c='MAPI';if(NODE_IC[c])return NODE_IC[c];const p=Px(16,16);p.poly([[1,3],[5,1],[10,3],[15,1],[15,13],[10,15],[5,13],[1,15]],'#e9dcb4');p.poly([[5,1],[10,3],[10,15],[5,13]],'#d8c898');
   p.line(3,11,6,8,'#8a5a32');p.line(6,8,9,9,'#8a5a32');p.line(9,9,12,5,'#8a5a32');p.set(12,4,RED);p.set(13,5,RED);p.set(11,5,RED);p.set(12,6,RED);p.set(3,12,'#3a6a9a');p.outline(OUT);return NODE_IC[c]=p.url()}
-function coinArt(){const c='COIN';if(NODE_IC[c])return NODE_IC[c];const p=Px(16,16);p.ell(8,8,6,6,'#b8912f');p.ell(8,8,4.6,4.6,GOLD);p.ell(7,7,2,2,'#f3dc9a');p.rect(7,5,2,6,'#b8912f');p.outline(OUT);return NODE_IC[c]=p.url()}
-function swordsArt(){const p=Px(16,16),B='#d8dde6',E='#f4f7fb';p.line(2,2,11,11,B,2);p.line(3,2,11,10,E);p.line(13,2,4,11,B,2);p.line(12,2,4,10,E);p.line(9,12,13,8,GOLD,2);p.line(2,8,6,12,GOLD,2);p.rect(12,12,2,2,RED);p.rect(2,12,2,2,RED);p.outline(OUT);return p.url()}
-function eliteArt(){const p=Px(16,16),B='#e8e2d0',D='#8a2a22';p.line(3,6,1,1,B,2);p.line(12,6,14,1,B,2);p.ell(8,8,5,4.5,B);p.rect(5,11,6,3,B);p.rect(5,7,2,2,D);p.rect(9,7,2,2,D);p.set(5,7,'#ff5a3a');p.set(10,7,'#ff5a3a');p.set(8,10,INK);p.rect(6,13,1,1,INK);p.rect(8,13,1,1,INK);p.rect(10,13,1,1,INK);p.outline(OUT);return p.url()}
-function campArt(){const p=Px(16,16);p.line(2,14,13,10,BROWN,2);p.line(2,10,13,14,BROWN2,2);p.poly([[8,1],[12,10],[8,12],[4,10]],'#ff8a3c');p.poly([[8,5],[10,10],[8,11],[6,10]],'#ffe14a');p.outline(OUT);return p.url()}
-function chestArt(){const p=Px(16,16);p.rect(2,6,12,8,BROWN);p.ell(8,6,6,3,BROWN2,(x,y)=>y<=6);p.rect(2,8,12,1,GOLD);p.rect(7,8,2,3,GOLD);p.rect(2,6,1,8,BROWN2);p.rect(13,6,1,8,BROWN2);p.set(8,9,INK);p.outline(OUT);return p.url()}
-function eventArt(){const p=Px(16,16);p.ell(8,8,6.5,6.5,'#6a4a8a');p.line(6,5,8,4,'#f3dc9a',2);p.line(9,4,10,6,'#f3dc9a',2);p.line(10,7,8,9,'#f3dc9a',2);p.rect(7,10,2,1,'#f3dc9a');p.rect(7,12,2,2,'#f3dc9a');p.outline(OUT);return p.url()}
+function coinArt_draw(){const c='COIN';if(NODE_IC[c])return NODE_IC[c];const p=Px(16,16);p.ell(8,8,6,6,'#b8912f');p.ell(8,8,4.6,4.6,GOLD);p.ell(7,7,2,2,'#f3dc9a');p.rect(7,5,2,6,'#b8912f');p.outline(OUT);return NODE_IC[c]=p.url()}
+function swordsArt_draw(){const p=Px(16,16),B='#d8dde6',E='#f4f7fb';p.line(2,2,11,11,B,2);p.line(3,2,11,10,E);p.line(13,2,4,11,B,2);p.line(12,2,4,10,E);p.line(9,12,13,8,GOLD,2);p.line(2,8,6,12,GOLD,2);p.rect(12,12,2,2,RED);p.rect(2,12,2,2,RED);p.outline(OUT);return p.url()}
+function eliteArt_draw(){const p=Px(16,16),B='#e8e2d0',D='#8a2a22';p.line(3,6,1,1,B,2);p.line(12,6,14,1,B,2);p.ell(8,8,5,4.5,B);p.rect(5,11,6,3,B);p.rect(5,7,2,2,D);p.rect(9,7,2,2,D);p.set(5,7,'#ff5a3a');p.set(10,7,'#ff5a3a');p.set(8,10,INK);p.rect(6,13,1,1,INK);p.rect(8,13,1,1,INK);p.rect(10,13,1,1,INK);p.outline(OUT);return p.url()}
+function campArt_draw(){const p=Px(16,16);p.line(2,14,13,10,BROWN,2);p.line(2,10,13,14,BROWN2,2);p.poly([[8,1],[12,10],[8,12],[4,10]],'#ff8a3c');p.poly([[8,5],[10,10],[8,11],[6,10]],'#ffe14a');p.outline(OUT);return p.url()}
+function chestArt_draw(){const p=Px(16,16);p.rect(2,6,12,8,BROWN);p.ell(8,6,6,3,BROWN2,(x,y)=>y<=6);p.rect(2,8,12,1,GOLD);p.rect(7,8,2,3,GOLD);p.rect(2,6,1,8,BROWN2);p.rect(13,6,1,8,BROWN2);p.set(8,9,INK);p.outline(OUT);return p.url()}
+function eventArt_draw(){const p=Px(16,16);p.ell(8,8,6.5,6.5,'#6a4a8a');p.line(6,5,8,4,'#f3dc9a',2);p.line(9,4,10,6,'#f3dc9a',2);p.line(10,7,8,9,'#f3dc9a',2);p.rect(7,10,2,1,'#f3dc9a');p.rect(7,12,2,2,'#f3dc9a');p.outline(OUT);return p.url()}
 const RUN_LEN=ROWS+2;
 /* difficulty runs on a 10-floor scale whatever the map length */
 const flScale=n=>Math.round((n||1)*10/RUN_LEN);
@@ -127,4 +127,11 @@ async function mapStep(){
   mapEl.hidden=true;run.phase='battle';await beginBattle();
 }
 
-
+/* PNG art: each of these uses art/<key>.png when it exists, else the drawing code above (see art() in 03-pixel-art.js) */
+function mapIconArt(){return art('ui/map',()=>mapIconArt_draw())}
+function coinArt(){return art('ui/coin',()=>coinArt_draw())}
+function swordsArt(){return art('nodes/battle',()=>swordsArt_draw())}
+function eliteArt(){return art('nodes/elite',()=>eliteArt_draw())}
+function campArt(){return art('nodes/rest',()=>campArt_draw())}
+function chestArt(){return art('nodes/treasure',()=>chestArt_draw())}
+function eventArt(){return art('nodes/event',()=>eventArt_draw())}

@@ -89,7 +89,7 @@ function eventScene(prop){
 }
 const evEl=document.createElement('div');evEl.className='tav ev';evEl.hidden=true;document.body.appendChild(evEl);
 /* the cage's bars, drawn over the traveller inside */
-function cageBarsArt(){if(sprCache.CAGEBARS)return sprCache.CAGEBARS;const p=Px(160,90);for(let x=60;x<=100;x+=8){p.rect(x,33,1,34,METAL);p.rect(x+1,33,1,34,'#5a6070')}p.rect(58,30,44,3,METAL2);p.rect(58,30,44,1,METAL);p.rect(58,67,44,3,METAL2);p.ring(93,42,2.5,GOLD);p.set(93,45,GOLD);return sprCache.CAGEBARS=p.url()}
+function cageBarsArt_draw(){if(sprCache.CAGEBARS)return sprCache.CAGEBARS;const p=Px(160,90);for(let x=60;x<=100;x+=8){p.rect(x,33,1,34,METAL);p.rect(x+1,33,1,34,'#5a6070')}p.rect(58,30,44,3,METAL2);p.rect(58,30,44,1,METAL);p.rect(58,67,44,3,METAL2);p.ring(93,42,2.5,GOLD);p.set(93,45,GOLD);return sprCache.CAGEBARS=p.url()}
 function evShow(E,text,opts){
   evEl.innerHTML=`<div class="tv-scene"><img class="tv-bg" src="${eventScene(E.art)}" alt="">${E.ov&&E.card?E.ov:''}<span class="tv-gold">${gold()} gold</span></div>
     <div class="tv-box"><div class="tv-name">${E.t}</div><p class="tv-text">${text}</p>${E.card&&opts.length>1?E.card:''}<div class="tv-opts">${opts.map(([k,l,sub,dis])=>`<button type="button" class="tv-o" data-t="${k}"${dis?' disabled':''}>${l}${sub?`<span>${sub}</span>`:''}</button>`).join('')}</div></div>`;
@@ -162,7 +162,7 @@ const Wo=id=>!!(run&&run.woes&&run.woes.some(w=>w.id===id&&w.n>0));
 const markedU=u=>u.team==='p'&&!!(run&&run.woes&&run.woes.some(w=>w.id==='marked'&&w.u===u.id));
 function addWoe(id,n,u){(run.woes=run.woes||[]).push({id,n,u:u&&u.id,nm:u&&u.name})}
 const woeText=w=>`<b>${WOES[w.id].n}${w.nm?': '+w.nm:''}.</b> ${WOES[w.id].d} for ${w.n} more fight${w.n>1?'s':''}.`;
-function woeArt(id){const c='WO|'+id;if(sprCache[c])return sprCache[c];const p=Px(16,16);
+function woeArt_draw(id){const c='WO|'+id;if(sprCache[c])return sprCache[c];const p=Px(16,16);
   if(id==='wound'){p.line(3,13,13,3,'#c8322e',2);p.line(3,3,13,13,'#c8322e',2);p.ell(8,8,2,2,'#ff8a7a')}
   if(id==='weary'){p.rect(3,6,4,7,'#7a5230');p.rect(3,11,6,3,'#7a5230');p.rect(10,3,2,6,'#c8322e');p.poly([[8,9],[14,9],[11,13]],'#c8322e')}
   if(id==='marked'){p.ring(8,8,6,'#c8322e');p.ring(8,8,3,'#c8322e');p.ell(8,8,1.2,1.2,'#ff8a7a');p.line(8,0,8,4,'#c8322e');p.line(8,12,8,15,'#c8322e')}
@@ -248,4 +248,6 @@ async function eventNode(){
   }
 }
 
-
+/* PNG art: each of these uses art/<key>.png when it exists, else the drawing code above (see art() in 03-pixel-art.js) */
+function cageBarsArt(){return art('scenes/cage-bars',()=>cageBarsArt_draw())}
+function woeArt(id){return art('woes/'+id,()=>woeArt_draw(id))}

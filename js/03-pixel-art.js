@@ -111,6 +111,14 @@ function horseUnder(p,L,TC,cloth,strike,bare){
   q.outline(OUT);return q.url();
 }
 const sprCache={};
+/* ---- PNG art ----
+   Fixed art (tiles, item icons, relics, meals, woes, map nodes, scenes, battle backdrops, the title crystal) loads from
+   art/<key>.png when art/manifest.js lists it. The drawing code stays as the generator: tools/export-art.mjs runs it
+   to make the PNGs (it never overwrites an existing one unless told to), and it's the fallback for any key without a PNG.
+   Units and monsters are still drawn in code. Add ?codeart to the page URL to see the code-drawn versions. */
+const ART_PNG=new Set(typeof ART_FILES!=='undefined'&&!/[?&]codeart\b/.test(location.search)?ART_FILES:[]);
+const ART_GEN={};/* key -> its drawing function, so tools/export-art.mjs can find every key */
+function art(key,draw){ART_GEN[key]=draw;if(ART_PNG.has(key))return'art/'+key+'.png';const c='ART|'+key;return sprCache[c]||(sprCache[c]=draw())}
 /* crystallised creatures: every enemy grows gem shards along the top of its silhouette, plus a facet in its body */
 const CRYS=['#b07ae8','#5fd3e8','#e86a9a','#6ae8a0','#e8c85a'];
 /* hand-placed crystals (32px coords): {core:[x,y]} = a facet set into the body, {gem:[x,y,h]} = a small shard */
@@ -494,7 +502,7 @@ function fig0(L,cls,team,pose,wk){
 /* ==================================================================
    ITEM ICONS (16px): one line per weapon kind, then gear
    ================================================================== */
-function iconArt(k){
+function iconArt_draw(k){
   const w=IT[k],p=Px(16,16),c=wcol(w),kd=w.kind;
   if(kd==='greatsword'){p.line(3,13,14,1,c.blade,2);p.line(4,13,14,2,c.edge);p.line(1,10,6,15,c.hilt,2);p.set(1,15,RED)}
   if(kd==='sword'){p.line(4,12,13,2,c.blade);p.line(5,12,13,3,c.edge);p.line(2,9,6,13,c.hilt);p.set(2,14,RED);p.set(1,15,RED)}
@@ -526,7 +534,7 @@ function iconArt(k){
   p.outline(OUT);return p.url();
 }
 /* body-tag icons (wing, shell, paw, crown, wisp, leaf) for map badges, sheets and the effectiveness chart */
-function tagArt(t){const c='TAG|'+t;if(sprCache[c])return sprCache[c];const p=Px(16,16);
+function tagArt_draw(t){const c='TAG|'+t;if(sprCache[c])return sprCache[c];const p=Px(16,16);
   if(t==='flier'){p.poly([[2,10],[6,4],[14,2],[11,6],[14,7],[9,9],[12,11],[6,12]],'#e8eef8');p.line(4,10,12,4,'#9aa8c0')}
   if(t==='armoured'){p.ell(8,9,6,5.5,'#9aa3b5');p.ell(8,8,4.4,4,'#c3cad6');p.line(4,9,12,9,'#6a7385');p.line(8,4,8,13,'#6a7385');p.set(6,6,'#eef2f8')}
   if(t==='beast'){p.ell(8,10,3.4,3,'#c9a070');for(const[x,y]of[[3.5,6],[6.5,4],[9.5,4],[12.5,6]])p.ell(x,y,1.6,1.8,'#c9a070')}
@@ -546,7 +554,7 @@ function icon(k){const c='I|'+k;return sprCache[c]||(sprCache[c]=iconArt(k))}
    ================================================================== */
 /* bare=true: only the feature (no grass), so it can sit on any region's ground */
 const OVER_T=['forest','hill','village','fort','chest','tent','cliff','crag'];
-function tileArt(kind,used,bare){
+function tileArt_draw(kind,used,bare){
   const p=Px(16,16),o=Px(16,16),G='#4b5244',G2='#3e4439',G3='#5c6453';
   if(!bare)p.rect(0,0,16,16,G);if(!bare)[[2,3],[9,2],[13,6],[4,12],[11,13],[7,8],[14,11]].forEach(([x,y])=>{p.set(x,y,G2);p.set(x+1,y-1,G3)});
   if(kind==='forest'){[[4,15],[11,14]].forEach(([x,b])=>{const D='#2e2a2c',D2='#4a423d';o.line(x,b,x,4,D,2);o.line(x,8,x-3,4,D);o.line(x-3,4,x-4,1,D);o.line(x+1,6,x+4,2,D2);o.line(x+4,2,x+5,0,D2);o.line(x,4,x+1,0,D)})}
@@ -569,3 +577,7 @@ texStyle.textContent+=OVER_T.map(k=>`.tile.ov-${k}::before{inset:0;background:ur
 texStyle.textContent+=`.board.bright .t-wall{background:url(${tileArt('shellwall')}) 0 0/100% 100%;filter:none}.board.bright .t-floor{background:url(${tileArt('shellfloor')}) 0 0/100% 100%;filter:none}.t-tent{background:url(${tileArt('tent')}) 0 0/100% 100%}.t-cliff{background:url(${tileArt('cliff')}) 0 0/100% 100%}`;
 document.body.appendChild(texStyle);
 
+/* PNG art: each of these uses art/<key>.png when it exists, else the drawing code above (see art() in 03-pixel-art.js) */
+function iconArt(k){return art('icons/'+String(k).split('~')[0],()=>iconArt_draw(k))}
+function tagArt(t){return art('tags/'+t,()=>tagArt_draw(t))}
+function tileArt(kind,used,bare){return art('tiles/'+kind+(used?'-used':'')+(bare?'-bare':''),()=>tileArt_draw(kind,used,bare))}

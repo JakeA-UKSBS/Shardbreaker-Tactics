@@ -58,7 +58,7 @@ async function strikeAnim(X,Y,e,w,dist){
    BATTLE BACKDROPS: one pixel-art scene per region (160x90, scaled to fill).
    The horizon sits at y=63 so fighters stand on the ground band.
    ================================================================== */
-function battleBgArt(id){const c='BG|'+id;if(sprCache[c])return sprCache[c];const W=160,H=90,p=Px(W,H),G=63;
+function battleBgArt_draw(id){const c='BG|'+id;if(sprCache[c])return sprCache[c];const W=160,H=90,p=Px(W,H),G=63;
   const sky=cols=>cols.forEach((col,i)=>p.rect(0,Math.round(i*G/cols.length),W,Math.ceil(G/cols.length)+1,col));
   const ridge=(pts,col)=>p.poly([[0,G+1],...pts,[W,G+1]],col);
   const ground=(a,b,dots)=>{p.rect(0,G,W,H-G,a);p.rect(0,G,W,2,b);for(let i=0;i<70;i++)p.set((i*53+7)%W,G+3+(i*17)%(H-G-3),dots[i%dots.length])};
@@ -129,3 +129,5 @@ async function showExp(u,g){
   await sleep(D(450));box.remove();
 }
 
+/* PNG art: each of these uses art/<key>.png when it exists, else the drawing code above (see art() in 03-pixel-art.js) */
+function battleBgArt(id){return art('backdrops/'+id,()=>battleBgArt_draw(id))}

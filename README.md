@@ -1,10 +1,4 @@
-# Shardbreaker Tactics
-
-The experimental fork of Shardbreaker for FFTA/Ogre-style ideas: jobs and abilities, height maps, a fixed named roster, and new reasons to fight. It started as a copy of [Shardbreaker](https://github.com/JakeA-UKSBS/Shardbreaker) at commit fcd610e; the roguelike carries on there unchanged. Ideas and decisions are in [docs/DESIGN.md](docs/DESIGN.md).
-
-Saves use their own keys (sbtactics.*), so they never clash with Shardbreaker on the same site.
-
-## The game it started from
+# Shardbreaker (roguelike)
 
 A run-based tactics roguelike in the style of GBA Fire Emblem. Built for PC first (map left, command panel right), and still playable on phones. Forked from Nightbound's engine.
 
@@ -12,6 +6,8 @@ See [docs/VISUALS.md](docs/VISUALS.md) for pictures of every region, boss, monst
 
 ## Run it
 Open `index.html` in a browser (or serve the folder, e.g. VS Code's Live Server). `index.html` is just the page shell; the styles are in `css/style.css` and the game is split into numbered files in `js/`, loaded in order (plain scripts sharing one global scope, no build step). On PC: Esc or right-click backs out of a move or menu, E ends the turn, the mouse wheel zooms.
+
+The fixed art (tiles, icons, relics, scenes, backdrops) loads from PNGs in `art/`: edit them in any pixel editor and refresh. See [art/README.md](art/README.md) for sizes and the export tool.
 
 ## Music
 Drop mp3 files into a `music/` folder next to `index.html`: `title.mp3`, `tavern.mp3`, `mushroom.mp3`, `shadow.mp3`, `swamp.mp3`, `forest.mp3`, `mountain.mp3`, `ship.mp3`, `labyrinth.mp3`, `desert.mp3`, `snow.mp3`, `cavern.mp3`. Each loops while you're in that region (map and battles). Missing files are skipped. "Sound and music" in Options turns it off.
