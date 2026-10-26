@@ -615,3 +615,20 @@ button.it.sel{border-color:var(--gold)}
 .th-tavern .umenu{background:rgba(34,22,18,.96);border-color:#7a5230}
 .th-tavern h2,.th-tavern .tv-name{color:#f0c850}
 .th-tavern .title{--gold:#d8b15a}
+/* ---- node map layout: the map gets the space; gold, relics and the squad sit in a column on the left (PC) ---- */
+@media (min-width:960px){
+  .nmap{display:grid;grid-template-columns:280px minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;column-gap:16px;row-gap:10px;padding:16px 20px}
+  .nmap .nm-head{grid-column:1/-1;max-width:none}
+  .nmap .nm-side:not(.nm-unit){display:block;position:static;grid-column:1;grid-row:2;width:auto;max-height:none;min-height:0;overflow:auto;align-self:start}
+  .nmap .nm-squad{grid-column:1;grid-row:3;max-width:none;flex-wrap:wrap;overflow:visible;margin:0}
+  .nmap .nm-scroll{grid-column:2;grid-row:2/4;max-width:none;margin:0}
+  .nmap .nm-board{max-width:900px}
+  .nmap .nm-relics{display:none}
+  .nmap .nm-info{grid-column:2;grid-row:3;position:absolute;left:14px;right:14px;bottom:12px;max-width:none;margin:0;min-height:0;pointer-events:none}
+  .nmap .nm-info:not(:empty){background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 12px}
+}
+/* unit details float over the map instead of squeezing it */
+.nmap .nm-unit{display:block;position:absolute;left:auto;right:24px;top:88px;bottom:20px;max-height:none;width:min(400px,calc(100% - 32px));overflow:auto;z-index:3;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;box-sizing:border-box;box-shadow:0 10px 30px rgba(0,0,0,.55)}
+.nmap .nm-unit[hidden]{display:none}
+@media (max-width:959px){.nmap .nm-unit{right:16px;top:auto;max-height:70%}}
+.nu-x{position:sticky;top:0;float:right;margin:-4px -6px 0 8px;width:32px;height:32px;padding:0;border-radius:50%;z-index:1}

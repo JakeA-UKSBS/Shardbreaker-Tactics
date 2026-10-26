@@ -6,7 +6,7 @@ async function beginBattle(){
 }
 async function newRun(){
   const seed=(Date.now()^Math.floor(Math.random()*1e9))>>>0;seedRng(seed);
-  run={seed,n:0,uid:1,roster:[],pos:null,path:[],act:1,relics:[],rr:{},gold:30,meals:[],lost:0,ate:0};run.biomes=shuffle(Object.keys(BIOMES)).slice(0,ACTS);
+  run={seed,n:0,uid:1,roster:[],pos:null,path:[],act:1,relics:[],rr:{},gold:30,meals:[],lost:0,ate:0};run.biomes=shuffle(biomeIds()).slice(0,ACTS);
   const opts=Array.from({length:unl('draft6')?6:5},(_,i)=>genUnit(unl('veterans')?3:2,i===0?'support':undefined));shuffle(opts);
   run.map=genMap();titleEl.hidden=true;const asc=await sageScene();if(asc===null){titleEl.hidden=false;return false}run.asc=asc;if(A(3))run.gold=0;if(unl('funds'))run.gold+=20;
   {const k=await relicPick(3,['s'],'Ithren’s gift','“Take this to assist you.”');if(k==='purse')run.gold+=30}

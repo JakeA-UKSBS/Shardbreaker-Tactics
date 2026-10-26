@@ -1,6 +1,6 @@
 /* Profile, achievements, unlocks, Ascension, Records */
 /* ---- profile: what carries over between runs (runs played, wins, ascension, achievements, unlocks) ---- */
-const PROF='sbtactics.profile';
+const PROF='embermarch2.profile';
 let prof={un:[],runs:0,wins:0,asc:0,ach:[],bosses:[]};
 function loadProf(){try{const p=JSON.parse(localStorage.getItem(PROF));if(p)prof=Object.assign(prof,p)}catch(_){}}
 function saveProf(){try{localStorage.setItem(PROF,JSON.stringify(prof))}catch(_){}}
@@ -33,7 +33,7 @@ const ACH=[
   {id:'arcane',n:'Arcane Circle',d:'Finish a run with 3 or more sigil casters in the squad.',win:1,ok:sq=>sq.filter(u=>wields(u,'art')&&!isRole(u,'support')).length>=3,cnt:sq=>sq.filter(u=>wields(u,'art')&&!isRole(u,'support')).length,need:3,rw:null},
   {id:'skyfleet',n:'Sky Fleet',d:'Finish a run with 3 or more fliers in the squad.',win:1,ok:sq=>sq.filter(u=>CLS[u.cls].fly).length>=3,cnt:sq=>sq.filter(u=>CLS[u.cls].fly).length,need:3,rw:null},
   {id:'feast',n:'Feast',d:'Eat a meal at 2 taverns in one run.',ok:()=>(run.ate||0)>=2,cnt:()=>run.ate||0,need:2,rw:'gourmet'},
-  {id:'explorer',n:'Cartographer',d:'Defeat the boss of every region, across any number of runs.',ok:()=>Object.keys(BIOMES).every(b=>prof.bosses.includes(b)),prog:()=>prof.bosses.length,need:Object.keys(BIOMES).length,rw:null}
+  {id:'explorer',n:'Cartographer',d:'Defeat the boss of every region, across any number of runs.',ok:()=>biomeIds().every(b=>prof.bosses.includes(b)),prog:()=>prof.bosses.filter(b=>biomeIds().includes(b)).length,need:biomeIds().length,rw:null}
 ];
 /* extra relics join the pool after this many runs (RELICS[k].x) */
 const relicOpen=k=>!RELICS[k].x||prof.runs>=RELICS[k].x;

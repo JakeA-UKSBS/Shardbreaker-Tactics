@@ -87,6 +87,8 @@ const MONLOOK={
   Treant:()=>({body:pick(['#5a4a32','#4a3a2a','#6a5a3a']),eye:'#9aff6a',leaves:pick(['#3f7a42','#5a6a2a','#6a3a5a'])}),
   Beholder:()=>({body:pick(['#8a4a6a','#4a6a8a','#6a4a3a']),eye:pick(['#5fc2a0','#ffd23f','#ff5a3a'])})
 };
+/* regions switched off for now: still defined (art, maps, docs) but runs never pick them. The Flying Ship didn't fit the theme */
+const BIOMES_OFF=['ship'],biomeIds=()=>Object.keys(BIOMES).filter(b=>!BIOMES_OFF.includes(b));
 const BIOMES={
   mushroom:{n:'Mycelia',noThe:1,bg:'#3a2a48',d:'Glowing mycelium and giant toadstools. The fungus folk have turned feverish under the blight, and their spores poison on a hit.',
     tip:['spores','Poison spores','Fungus attacks poison on a hit: 3 damage at the start of each of your turns for 3 turns. A Salve cures it.'],

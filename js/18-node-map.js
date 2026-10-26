@@ -1,12 +1,10 @@
 /* The branching node map and its screen */
 /* ---- node map ----
-   ROWS floors of 3 lanes, then the boss. Every path from floor 1 to the boss holds exactly the rooms in MIX
-   (battles and elites both count as combat). Lanes are shuffles of the same mix, and a crossing between lanes
-   is only kept if every path through the map still matches MIX, so no route can dodge the treasure room. */
-const MIX={battle:3,elite:1,recruit:1,tavern:1,rest:1,event:2,treasure:1};
-/* one lane swaps a battle for a second elite */
-const MIX_HARD=Object.assign({},MIX,{battle:MIX.battle-1,elite:MIX.elite+1});
-const ROWS=Object.values(MIX).reduce((a,b)=>a+b,0);
+   ROWS floors of 3 lanes, then a camp and the boss. Each lane holds the CORE rooms plus FLEX more drawn at random
+   (another recruit, event, elite or battle), so routes differ. A crossing between lanes is only kept if every path
+   through the map still passes pathOk: a treasure room and a tavern, 4-5 fights, at most 2 elites. */
+const CORE={battle:3,elite:1,tavern:1,rest:1,event:1,treasure:1},FLEX=['recruit','recruit','event','elite','battle'],FLEX_N=2;
+const ROWS=Object.values(CORE).reduce((a,b)=>a+b,0)+FLEX_N;
 const NODE_N={tavern:'Tavern',battle:'Battle',elite:'Elite',recruit:'Recruit',rest:'Rest',event:'Event',treasure:'Treasure',boss:'Boss'};
 const NODE_D={tavern:'Heal fully, and spend gold on a drink, a meal and a sellsword.',battle:'Fight monsters for EXP and loot.',elite:'Elite fight: a stronger pack led by an Elder monster. Drops a relic and a jade weapon.',recruit:'Pick 1 of 3 new units.',rest:'Heal fully, and train one unit: it gains a level.',
   event:'Something unexpected: a smith, a shrine, an old armoury…',treasure:'A treasure room. Pick 1 of 3 items.',boss:'The act boss.'};
@@ -17,21 +15,17 @@ function laneOk(a){
   for(let i=0;i+1<a.length;i++)if(a[i]===a[i+1]&&a[i]!=='battle')return false;
   return true;
 }
-function laneFrom(base){
-  for(let k=0;k<200;k++){const a=base?base.slice():shuffle(Object.entries(MIX).flatMap(([t,n])=>Array(n).fill(t)));
-    if(base)for(let s=0;s<2;s++){const i=ri(1,ROWS-1),j=ri(1,ROWS-1);[a[i],a[j]]=[a[j],a[i]]}
-    if(laneOk(a))return a}
-  return base.slice();
+function laneFrom(){
+  for(let k=0;k<200;k++){const a=shuffle([...Object.entries(CORE).flatMap(([t,n])=>Array(n).fill(t)),...shuffle(FLEX.slice()).slice(0,FLEX_N)]);if(laneOk(a))return a}
+  return['battle','event','battle','tavern','elite','treasure','battle','rest','recruit','event'];
 }
+const pathOk=c=>c.treasure>=1&&c.tavern>=1&&(c.elite||0)<=2&&(c.battle||0)+(c.elite||0)>=4&&(c.battle||0)+(c.elite||0)<=5;
 function pathsOk(rows){
-  /* room counts packed into one number, one decimal digit per room type */
-  const K=Object.keys(MIX),P=Object.fromEntries(K.map((k,i)=>[k,10**i])),pack=m=>K.reduce((a,k)=>a+m[k]*P[k],0),want=[pack(MIX),pack(MIX_HARD)];
-  const walk=(r,i,c)=>{c+=P[rows[r][i].t];return r===ROWS-1?want.includes(c):rows[r][i].next.every(j=>walk(r+1,j,c))};
-  return rows[0].every((_,i)=>walk(0,i,0));
+  const walk=(r,i,c)=>{c={...c,[rows[r][i].t]:(c[rows[r][i].t]||0)+1};return r===ROWS-1?pathOk(c):rows[r][i].next.every(j=>walk(r+1,j,c))};
+  return rows[0].every((_,i)=>walk(0,i,{}));
 }
 function genMap(){
-  const l0=laneFrom(null),lanes=[laneFrom(l0),l0,laneFrom(l0)],rows=[],h=ri(0,2);
-  for(let k=0;k<200;k++){const a=lanes[h].slice(),b=shuffle(a.map((t,i)=>t==='battle'&&i>=3?i:-1).filter(i=>i>=0))[0];if(b==null)break;a[b]='elite';if(laneOk(a)){lanes[h]=a;break}}
+  const lanes=[0,1,2].map(()=>{for(;;){const l=laneFrom(),c={};l.forEach(t=>c[t]=(c[t]||0)+1);if(pathOk(c))return l}}),rows=[];
   for(let r=0;r<ROWS;r++)rows.push(lanes.map(l=>({t:l[r],next:[]})));
   for(let r=0;r<ROWS-1;r++)rows[r].forEach((n,i)=>n.next=[i]);
   const cand=[];for(let r=0;r<ROWS-1;r++)for(let i=0;i<3;i++)for(const j of[i-1,i+1])if(j>=0&&j<3)cand.push([r,i,j]);
@@ -77,16 +71,22 @@ function mapScreen(preview){
     <div class="nm-info"></div>
     <aside class="nm-side nm-unit" hidden></aside>
     <div class="nm-squad">${run.roster.map((u,ui)=>`<div data-u="${ui}" role="button" tabindex="0"><img src="${uSpr(u)}" alt=""><span>${u.name}</span><small>Lv ${u.lv}${u.hp<u.maxhp?` · ${u.hp}/${u.maxhp} HP`:''}</small></div>`).join('')}</div>`;
-  tip('map','The road ahead','Tap a glowing room to see what it is, then tap it again to go there. Every route has the same rooms in a different order: 3 battles, an elite (the red skull), a recruit, a tavern, a rest, an event and a treasure room, then the boss.');
+  tip('map','The road ahead','Tap a glowing room to see what it is, then tap it again to go there. Every route has a treasure room and a tavern, 4 or 5 fights (the red skull is an elite) and a rest, plus a mix of events and recruits. Then a camp and the boss.');
   mapEl.hidden=false;mapEl.style.background=`radial-gradient(ellipse at 50% 0%,${actBiome().bg},#121018 72%)`;
   const sc=mapEl.querySelector('.nm-scroll'),focus=ok[0]?Y(ok[0].r):H;sc.scrollTop=Math.max(0,focus-sc.clientHeight/2);
+  /* the unit panel floats over the map; tap the unit again, the ✕, anywhere off the panel, Esc or right-click to close it */
+  const closeUnit=()=>{const box=mapEl.querySelector('.nm-unit');if(box)box.hidden=true;mapEl.querySelectorAll('.nm-squad .on').forEach(x=>x.classList.remove('on'))};
+  mapEl.oncontextmenu=e=>{e.preventDefault();closeUnit()};mapEl.onkeydown=null;
+  if(!mapEl._esc){mapEl._esc=1;document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!mapEl.hidden&&mapEl._close)mapEl._close()})}mapEl._close=closeUnit;
   return new Promise(res=>{let sel=null;mapEl.onclick=e=>{
+    if(e.target.closest('[data-ux]')){closeUnit();return}
+    if(!e.target.closest('.nm-unit,[data-u]'))closeUnit();
     if(e.target.closest('[data-close]')){mapEl.onclick=null;mapEl.hidden=true;sfx('select');return res(null)}
     const sv=e.target.closest('[data-salve]');if(sv){const u=run.roster[+sv.dataset.uu],it=u.items[+sv.dataset.salve],amt=Math.min(salveAmt(it.k),u.maxhp-u.hp);u.hp+=amt;it.u--;if(it.u<=0)u.items.splice(+sv.dataset.salve,1);sfx('heal');saveGame();
-      sv.closest('.nm-side,.nm-info').innerHTML=unitDetail(u);const sm=mapEl.querySelector(`.nm-squad [data-u="${+sv.dataset.uu}"] small`);if(sm)sm.textContent=`Lv ${u.lv}${u.hp<u.maxhp?` · ${u.hp}/${u.maxhp} HP`:''}`;toast(`${u.name} recovers ${amt} HP`);return}
-    const su=e.target.closest('[data-u]');if(su){const u=run.roster[+su.dataset.u],box=mapEl.querySelector('.nm-unit'),html=unitDetail(u);sfx('select');
-      mapEl.querySelectorAll('.nm-squad .on').forEach(x=>x.classList.remove('on'));su.classList.add('on');
-      if(innerWidth>=1200){box.hidden=false;box.innerHTML=html}else mapEl.querySelector('.nm-info').innerHTML=html;return}
+      sv.closest('.nm-side,.nm-info').innerHTML=unitBox(u);const sm=mapEl.querySelector(`.nm-squad [data-u="${+sv.dataset.uu}"] small`);if(sm)sm.textContent=`Lv ${u.lv}${u.hp<u.maxhp?` · ${u.hp}/${u.maxhp} HP`:''}`;toast(`${u.name} recovers ${amt} HP`);return}
+    const su=e.target.closest('[data-u]');if(su){const u=run.roster[+su.dataset.u],box=mapEl.querySelector('.nm-unit');sfx('select');
+      if(su.classList.contains('on')&&!box.hidden){closeUnit();return}
+      mapEl.querySelectorAll('.nm-squad .on').forEach(x=>x.classList.remove('on'));su.classList.add('on');box.hidden=false;box.innerHTML=unitBox(u);return}
     const wo=e.target.closest('[data-woe]');if(wo){mapEl.querySelector('.nm-info').innerHTML=woeText(run.woes[+wo.dataset.woe]);return}
     const ml=e.target.closest('[data-meal]');if(ml){const X=MEALS[ml.dataset.meal],n=run.meals.find(m=>m.id===ml.dataset.meal).n;mapEl.querySelector('.nm-info').innerHTML=`<b>${X.n}.</b> ${X.d} for ${n} more fight${n>1?'s':''}.`;return}
     const rl=e.target.closest('[data-rel]');if(rl){const X=RELICS[rl.dataset.rel];mapEl.querySelector('.nm-info').innerHTML=`<b>${X.n}.</b> ${X.d}`;return}
@@ -98,6 +98,7 @@ function mapScreen(preview){
     const any=e.target.closest('.nd');if(any){const[r,i]=any.dataset.n.split(',').map(Number),t=M[r][i].t;mapEl.querySelector('.nm-info').innerHTML=''}
   }});
 }
+const unitBox=u=>`<button type="button" class="nu-x" data-ux="1" aria-label="Close">✕</button>${unitDetail(u)}`;
 /* a unit's full details for the map screen: stats, skills (with capacity) and items */
 function unitDetail(u){const C=CLS[u.cls],sk=[u.skill,...(u.skills||[]).map(x=>x.id)].filter(Boolean);
   return`<div class="nu-head"><img src="${portrait(u)}" alt=""><div><b>${u.name}</b><span>${C.n} · Lv ${u.lv} · ${u.exp} EXP</span><span>HP ${u.hp}/${u.maxhp} · Move ${u.mov}</span></div></div>
