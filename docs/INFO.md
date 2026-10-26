@@ -245,7 +245,7 @@ Learned skills cost capacity (base 20, +5 when promoted). Personal skills are fr
 | Sage’s Satchel | Heirloom | Everyone in your starting squad carries an extra Salve. |
 | Waybread | Heirloom | Units recover 3 more HP after each fight. |
 | Coin Purse | Starter | Start the run with 30 more gold. |
-| Ithren’s Ward | Starter | Units take 1 less damage from magic. |
+| Ithren’s Ward | Starter | All your units get +1 Res. |
 | Sprig of Renewal | Starter | Every unit heals 1 HP at the start of each player phase. |
 
 ## Rules of thumb

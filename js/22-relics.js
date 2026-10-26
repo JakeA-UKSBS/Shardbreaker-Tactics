@@ -29,7 +29,7 @@ const RELICS={
   satchel:{n:'Sage’s Satchel',r:'h',d:'Everyone in your starting squad carries an extra Salve.'},
   waybread:{n:'Waybread',r:'h',d:'Units recover 3 more HP after each fight.'},
   purse:{n:'Coin Purse',r:'s',d:'Start the run with 30 more gold.'},
-  ward:{n:'Ithren’s Ward',r:'s',d:'Units take 1 less damage from magic.'},
+  ward:{n:'Ithren’s Ward',r:'s',d:'All your units get +1 Res.'},
   sprig:{n:'Sprig of Renewal',r:'s',d:'Every unit heals 1 HP at the start of each player phase.'}
 };
 const RC={c:'#9fd8ff',u:'#c58aff',r:'#ffd23f',s:'#9fe8a0',h:'#e8b87a'},RN={c:'Common',u:'Uncommon',r:'Rare',s:'Starter',h:'Heirloom'};
@@ -49,6 +49,7 @@ function relicCalc(x,xw,y){
   const o={pow:0,df:0,acc:0,avo:0,crit:0};if(!run)return o;
   /* early ease: in Act 1, enemies deal 2 less damage on floors 1-3 and 1 less on 4-6 */
   if(x.team==='e'&&!A(3)&&(run.act||1)===1&&flScale(run.n)<7)o.pow-=2-Math.floor((flScale(run.n)-1)/3);
+  /* Ithren's Ward: +1 Res, which only matters against magic, so it's added to the defence there */
   if(y.team==='p'&&xw.mag&&R('ward'))o.df+=1;
   if(x.team==='p'){if(M('boar'))o.pow+=2;if(M('bread'))o.acc+=15}if(y.team==='p'&&M('pie'))o.df+=2;
   if(!run.relics)return o;
