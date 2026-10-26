@@ -172,8 +172,8 @@ An effective hit multiplies weapon Mt ×2. Only your side deals them for now.
 
 | Monster type | Who has it | Beaten by |
 |---|---|---|
-| Flier | Gloomwing, Storm Harpy, Harpy, Hawk, Wyvern, Pegasus, Roc, Wisp, Spirit Hawk | Bows |
-| Armoured | Mindsnail, Fallen Sentinel, Iron Husk, Boulder Golem, Sandstone Golem, Pyrite Colossus, Agate Golem, Gem Golem, Gemsnail, Amethyst Turtle, Pebble Golem, Stone Warden | War Hammer, Stonebane |
+| Flier | Gloomwing, Storm Harpy, Harpy, Hawk, Wyvern, Pegasus, Prism, Roc, Wisp, Spirit Hawk | Bows |
+| Armoured | Mindsnail, Fallen Sentinel, Iron Husk, Boulder Golem, Crystal Sentinel, Sandstone Golem, Pyrite Colossus, Agate Golem, Gem Golem, Gemsnail, Amethyst Turtle, Pebble Golem, Stone Warden | War Hammer, Stonebane |
 | Beast | Wolf, Hawk, Snake, Alligator, Cursed Stag, Magma Dragon, Wyvern, Pegasus, Bog Lurker, Jackal, Sand Worm, Frost Wolf, Agate Wyrm, Hollow Bear, Bone Wyrm, Roc, Spirit Wolf, Spirit Hawk | Hunting Spear, Wolfsbane |
 | Colossal | Every 2×2 boss | Giantslayer |
 | Spectral | Ghost, Fire Sprite, Frost Sprite, Wisp | Light sigils, Holy Sword, Spiritbane, Paladins |
@@ -269,7 +269,7 @@ Learned skills cost capacity (base 20, +5 when promoted). Personal skills are fr
 | Volcanic Isle | Fire Sprite 3, Boulder Golem 3 (fl 3+), Harpy 1 (fl 4+) | Boulder Golem, Fire Sprite, Harpy | Pyraxis, the Magma Dragon |
 | The Flying Ship | Harpy 3, Wyvern 2 (fl 3+) | Wyvern, Harpy | The Great Roc |
 | The Labyrinth | Gremlin 3, Beholder 2 (fl 3+) | Beholder, Gremlin | Minotaur lord |
-| The Heart of the Blight |  |  | The Crystal Heart |
+| The Heart of the Blight | Shardling 4, Prism 3, Crystal Sentinel 2 | Crystal Sentinel, Shardling, Prism | The Crystal Heart |
 | Sandstone Desert | Jackal 4, Sand Worm 3 (fl 2+), Sandstone Golem 2 (fl 4+) | Sandstone Golem, Jackal, Sand Worm | The Pyrite Colossus |
 | Agate Peaks | Frost Wolf 4, Frost Sprite 3 (fl 2+), Agate Golem 2 (fl 4+) | Agate Golem, Frost Wolf, Frost Sprite | Glacius, the Agate Wyrm |
 | Gemstone Caverns | Gremlin 3, Gemsnail 3 (fl 2+), Gem Golem 2 (fl 4+) | Gem Golem, Gemsnail, Gremlin | Amethyra, the Amethyst Turtle |

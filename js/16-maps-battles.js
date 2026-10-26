@@ -170,7 +170,7 @@ function spawnTiles(m){
 }
 /* sky tiles along the map's edge, for fliers diving in */
 function skyEdge(m){const out=[],H=m.map.length,W=m.map[0].length;for(let y=0;y<H;y++)for(let x=0;x<W;x++)if((x===0||y===0||x===W-1||y===H-1)&&m.map[y][x]==='~'&&y<H-3)out.push({x,y});return shuffle(out)}
-function actBiome(){const a=run&&run.act||1;if(a>=3){const H=BIOMES.heart,P=(run.biomes||[]).slice(0,2).map(b=>BIOMES[b]).filter(Boolean);H.pool=H.elitePool=P.flatMap(B=>B.elitePool);return H}
+function actBiome(){const a=run&&run.act||1;if(a>=3)return BIOMES.heart;
   return BIOMES[(run&&run.biomes&&run.biomes[a-1])||'forest']}
 /* bosses lumber: they move, but only a couple of tiles a turn */
 const BOSS_MOV=2;
