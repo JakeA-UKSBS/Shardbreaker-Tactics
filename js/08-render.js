@@ -48,7 +48,7 @@ function render(){
     el.style.left=u.x*T+'px';el.style.top=u.y*T+'px';{const w=(u.sz||1)*T+'px';if(el.style.width!==w){el.style.width=el.style.height=w;el.firstChild.style.width=el.firstChild.style.height=w}}
     if(u.hp<=0&&!el.dataset.dead&&el.isConnected&&el.style.opacity!==''){el.dataset.dead=1;dieFx(el,boardEl,(u.x+(u.sz||1)/2)*T,(u.y+(u.sz||1)/2)*T,u,1,settings.anim)}else if(u.hp>0)delete el.dataset.dead;
     el.style.opacity=u.hp>0?1:0;
-    const src=sprite(u,'idle',mapWk(u)),img=el.firstChild;if(img.dataset.s!==src){img.src=src;img.dataset.s=src;img.style.transform='';img.style.transformOrigin='';if(u.sz>1)fillBox(img,src,u.team==='e')}img.classList.toggle('hi',isHi(u.cls,u.sz));
+    const src=sprite(u,'idle',mapWk(u)),img=el.firstChild;if(img.dataset.s!==src){img.src=src;img.dataset.s=src;img.style.transform='';img.style.transformOrigin='';if(u.sz>1&&src.startsWith('data:'))fillBox(img,src,u.team==='e')}img.classList.toggle('hi',isHi(u.cls,u.sz));
     el.querySelector('.hpb i').style.width=(u.hp/u.maxhp*100)+'%';
   }
   for(const id in uEls)if(!live.has(id)){uEls[id].remove();delete uEls[id]}

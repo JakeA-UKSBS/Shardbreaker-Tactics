@@ -2,7 +2,7 @@
 /* ================= PIXEL ART ================= */
 const OUT='#1a1420',SKIN='#f3cfa6',SKIN2='#d6a07a',METAL='#c3cad6',METAL2='#7f889b',BROWN='#7a5230',BROWN2='#4f331d',GOLD='#e2b553',CREAM='#efe6cf',JADE='#5fc2a0',RED='#c8322e',INK='#2a2230';
 const TEAMC={p:{a:'#3a7cc0',A:'#22507f',s:'#ece6d4'},e:{a:'#4a3d66',A:'#2a2140',s:'#1c1826'},g:{a:'#3f8f5a',A:'#25603a',s:'#e6efd8'}};
-const ELC={dark:'#9a6ad8',nature:'#7fd36a',light:'#fff2b0',fire:'#ff8a3c',water:'#4fb2ff',wind:'#7fe0a8',earth:'#c9a060',lightning:'#ffe14a',illusion:'#c58aff',spirit:'#bff5e0'};
+const ELC={dark:'#9a6ad8',nature:'#7fd36a',light:'#fff2b0',fire:'#ff8a3c',water:'#4fb2ff',wind:'#7fe0a8',earth:'#c9a060',lightning:'#ffe14a',illusion:'#c58aff',spirit:'#bff5e0',crystal:'#ff5a6a'};
 function shade(h,f){const n=parseInt(h.slice(1),16);const c=[n>>16,(n>>8)&255,n&255].map(v=>clamp(Math.round(v*f),0,255));return'#'+c.map(v=>v.toString(16).padStart(2,'0')).join('')}
 let pxHook=null,pxScale=1,pxMini=false;
 function Px(w,h){const g=new Array(w*h).fill(null);const P={w,h,g,
@@ -142,7 +142,7 @@ function crystallise(P,cls,big,small,sc){if(small){const W=32,g=P.g;let h=0;for(
 }
 function fig(L,cls,team,pose,wk,sz){
   if(typeof isHi==='function'&&isHi(cls,sz))return hiFig(L||{},cls,team,pose,wk);
-  if(sz===2){const B=BIG[CLS[cls].body+(L.bones?'_bones':'')];if(B)return B(L,pose==='strike');pxScale=2}
+  if(sz>=2){const B=BIG[CLS[cls].body+(L.bones?'_bones':'')];if(B)return B(L,pose==='strike');pxScale=2}
   if(team==='e'&&!CLS[cls].tier&&!String(cls).startsWith('G.')&&!L.blight){pxHook=P=>L.crys===false?0:L.crysAt?crysAt(P,L.crysAt):crystallise(P,cls,!!L.big||/Wyrm|Dragon|Colossus|Turtle|King|Stag|Krondis|Tempest|Roc/.test(cls),L.crysSmall,L.crysCol)}
   pxMini=!!L.mini;try{return fig0(L,cls,team,pose,wk)}finally{pxHook=null;pxScale=1;pxMini=false}
 }
@@ -150,6 +150,16 @@ function fig(L,cls,team,pose,wk,sz){
    64px BOSS ART: hand-drawn big bodies for 2x2 bosses (BIG[body])
    ================================================================== */
 const BIG={};
+/* the Crystal Heart (act 3 boss, 3x3): the title-screen crystal at 96px, a ring of gem shards round its base. Strike: it flares */
+BIG.crystal=(L,strike)=>art('bosses/crystal-heart'+(strike?'-strike':''),()=>{const W=96,k=W/120,p=Px(W,W),f=strike?1.25:1,D='#4a0614',M=shade('#8a1224',f),Rd=shade('#c8283a',f),Li=shade('#ff5a6a',f),H='#ffb0b8';
+  const spire=(x,base,top,w,lean)=>{[x,base,top,w,lean]=[x,base,top,w,lean].map(v=>v*k);const t=[x+lean,top],bl=[x-w,base],br=[x+w,base],ml=[x-w*.8+lean*.3,top+(base-top)*.25],mr=[x+w*.8+lean*.3,top+(base-top)*.25];
+    p.poly([t,mr,br,bl,ml],Rd);p.poly([t,ml,bl,[x+lean*.2,base]],M);p.poly([t,[x+lean*.2,base],br,mr],Li);p.line(Math.round(t[0]),Math.round(t[1]),Math.round(x+lean*.2),Math.round(base),H);
+    for(let j=0;j<3;j++){const y=top+(base-top)*(.35+j*.2);p.line(Math.round(x-w*.6),Math.round(y),Math.round(x+lean*.1),Math.round(y+5),D)}};
+  spire(30,104,62,9,-10);spire(92,104,56,10,9);spire(44,106,40,10,-5);spire(78,106,36,11,5);spire(60,108,6,16,0);
+  p.poly([[6,94],[20,84],[36,89],[48,86],[62,89],[78,83],[90,94],[90,96],[6,96]],'#1a0c14');p.line(16,90,42,95,D,2);p.line(56,95,82,89,D,2);
+  for(const[x,y,c]of[[10,90,'#3fd38a'],[86,88,'#4a7aff'],[22,93,'#b46aff'],[74,93,'#ffd23f']]){p.poly([[x-2,y+3],[x,y-3],[x+2,y+3]],c);p.set(x,y-1,'#ffffff')}
+  for(const[x,y]of[[46,24],[51,42],[45,58],[37,48],[64,50]])p.set(x,y,'#fff0f2');
+  p.outline('#14060c');return p.url()});
 /* a clean gem crystal for 64px art: dark rim, face, lit edge, shaded side */
 function gem64(p,x,y,h,w,col,lean=0){const hi=shade(col,1.5),lo=shade(col,.62),tx=x+lean;
   p.poly([[x-w-1,y+1],[tx,y-h-1],[x+w+1,y+1]],OUT);p.poly([[x-w,y],[tx,y-h],[x+w,y]],col);p.poly([[tx,y-h],[x+w,y],[x+1,y]],lo);p.line(tx-1,y-h+2,x-w+1,y-1,hi)}

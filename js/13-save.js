@@ -1,6 +1,6 @@
 /* Save/load and chapter setup */
 /* ================= CHAPTERS / SAVE ================= */
-const SAVE='sbtactics.save.v1',OPTS='sbtactics.opts';
+const SAVE='embermarch2.save.v1',OPTS='embermarch2.opts';
 function saveGame(){if(!run)return;const map=run.phase==='map';try{localStorage.setItem(SAVE,JSON.stringify({state:map?null:state,rewinds,chStart:map?null:chStart,run,def:map?null:CH[0],rng:rngS}))}catch(_){}}
 function loadGame(){try{return JSON.parse(localStorage.getItem(SAVE))}catch(_){return null}}
 function setMap(){MAP=CH[state.ch].map;MW=MAP[0].length;MH=MAP.length}
@@ -22,7 +22,7 @@ function npc(id,x,y,o){return Object.assign(mkHero(heroDef(id)),{team:'g',x,y,ho
 function enterMap(){setMap();over=null;phase='player';busy=false;ui='idle';clearSel();buildBoard();render();requestAnimationFrame(()=>initCam())}
 async function chapterIntro(){
   const c=CH[state.ch];
-  await modal(`<div class="eyebrow">Act ${run.act||1} · Floor ${run.n} of ${RUN_LEN} · ${NODE_N[run.kind]||'Battle'}</div><h2>${c.title}</h2><p>${c.intro.replaceAll('{lord}',lordName())}</p><div class="lvl" style="grid-template-columns:1fr"><div><span style="color:var(--gold)">Goal</span><span>${goalText().replace(/<[^>]+>/g,' ').trim()}</span></div><div><span style="color:var(--red)">Lose</span><span>${loseText()}</span></div></div><div class="mbtns"><button class="go" type="button" data-m="go">Begin</button></div>`);
+  await modal(`<div class="eyebrow">Act ${run.act||1} · Floor ${run.n} of ${actLen()} · ${NODE_N[run.kind]||'Battle'}</div><h2>${c.title}</h2><p>${c.intro.replaceAll('{lord}',lordName())}</p><div class="lvl" style="grid-template-columns:1fr"><div><span style="color:var(--gold)">Goal</span><span>${goalText().replace(/<[^>]+>/g,' ').trim()}</span></div><div><span style="color:var(--red)">Lose</span><span>${loseText()}</span></div></div><div class="mbtns"><button class="go" type="button" data-m="go">Begin</button></div>`);
   banner('Player Phase','p');saveGame();
   {const B=BIOMES[c.biome];if(B&&B.tip)tip(...B.tip)}
   if(state.ch===0)tip('basics','Moving your units','Tap a blue unit to see where it can go: blue tiles are moves, red tiles are what it can hit. Tap a tile to move there, or tap a red enemy to attack it straight away. Dead woods give +20 Avoid and +1 Def, so fight from the trees when you can.');

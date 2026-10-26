@@ -28,7 +28,7 @@ async function strikeAnim(X,Y,e,w,dist){
   if(!ranged)await xw.animate([{transform:'translateX(0)'},{transform:`translateX(${dir*gap}px)`}],{duration:D(190),easing:'cubic-bezier(.6,0,.9,.7)',fill:'forwards'}).finished;
   else await xw.animate([{transform:'translateX(0)'},{transform:`translateX(${-dir*10}px)`}],{duration:D(140),fill:'forwards'}).finished;
   if(xr)rigShow(xs,'swing');else xi.src=sprite(X,'strike',w.key);
-  sfx(w.kind==='staff'&&!ranged?'swing':w.t==='art'?({fire:'fire',water:'water',wind:'wind',earth:'earth',lightning:'thunder',illusion:'dark',light:'heal'}[w.el]||'fire'):w.t==='bow'?'arrow':ranged?'throw':w.kind==='whip'?'whip':w.kind==='chain'?'chain':w.kind==='fan'||w.kind==='umbrella'?'wind':'swing');
+  sfx(w.kind==='staff'&&!ranged?'swing':w.t==='art'?({fire:'fire',water:'water',wind:'wind',earth:'earth',lightning:'thunder',illusion:'dark',light:'heal',crystal:'broke'}[w.el]||'fire'):w.t==='bow'?'arrow':ranged?'throw':w.kind==='whip'?'whip':w.kind==='chain'?'chain':w.kind==='fan'||w.kind==='umbrella'?'wind':'swing');
   const yc=centerOf(ys);
   if(ranged){
     const xc=centerOf(xs);
@@ -40,6 +40,7 @@ async function strikeAnim(X,Y,e,w,dist){
   const yHp=Y===sc.a?e.hpA:e.hpD,xHp=X===sc.a?e.hpA:e.hpD;
   if(e.hit){
     if(e.guard)skillBanner(ys,e.guard);
+    if(w.el==='crystal')shatterFx(yc.x,yc.y);
     if(yr)rigShow(ys,'hit');yi.animate([{filter:'brightness(4)'},{filter:'none'}],{duration:D(200)});if(xr)setTimeout(()=>rigShow(xs,'follow'),D(90));
     sfx(e.crit?'crit':'hit');bnum(ys,e.crit?'CRIT '+e.dmg:String(e.dmg),e.crit?'crit':'');
     /* crits shake the whole scene */if(e.crit)stage.animate([{transform:'translate(0,0)'},{transform:'translate(-8px,4px)'},{transform:'translate(7px,-3px)'},{transform:'translate(-5px,2px)'},{transform:'translate(3px,-1px)'},{transform:'translate(0,0)'}],{duration:D(380)});
@@ -88,6 +89,10 @@ function battleBgArt_draw(id){const c='BG|'+id;if(sprCache[c])return sprCache[c]
   else if(id==='cavern'){p.rect(0,0,W,G,'#1a1622');for(let x=0;x<W;x+=12){const h=6+(x*7)%14;p.poly([[x,0],[x+12,0],[x+6,h]],'#241e2c')}
     for(const[x,col]of[[20,'#9a5ac8'],[58,'#3aa86a'],[104,'#c8323a'],[140,'#3a5ac8']]){p.ell(x+2,G-10,15,13,shade(col,.28));p.ell(x+2,G-8,9,8,shade(col,.4));p.poly([[x-6,G],[x-3,G-16],[x,G]],col);p.poly([[x-1,G],[x+3,G-22],[x+7,G]],shade(col,1.2));p.line(x+3,G-20,x+3,G-2,shade(col,1.6))}
     ground('#3a3444','#4a4456',['#2e2838','#9a5ac8'])}
+  /* the Heart of the Blight: a blood-red dark, far spires, scorched ground with gem-lit cracks */
+  else if(id==='heart'){sky(['#0e0408','#1e0810','#2e0c16','#3e1020']);for(const[x,h,w]of[[18,30,6],[46,44,8],[122,40,7],[148,26,5]]){p.poly([[x-w,G],[x,G-h],[x+w,G]],'#4a0c18');p.line(x,G-h+2,x,G-2,'#7a1424')}
+    p.poly([[64,G],[80,8],[96,G]],'#5a0e1c');p.poly([[80,8],[96,G],[80,G]],'#7a1224');p.line(80,10,80,G-2,'#c8283a');
+    ground('#1e1416','#2c1e20',['#140c0e','#261a1c']);for(const[x,c]of[[24,'#3fd38a'],[70,'#ff3a4a'],[112,'#b46aff'],[140,'#4a7aff']]){p.line(x-8,G+8,x,G+12,'#3a0c14');p.line(x,G+12,x+9,G+9,'#3a0c14');p.set(x,G+12,c);p.set(x-4,G+10,shade(c,.7))}}
   else{sky(['#121522','#1e2436','#2a3146','#3a4258']);ground('#363b33','#454a40',['#2a2e28'])}
   return sprCache[c]=p.url()}
 async function scenePlay(a,d,res){
@@ -107,6 +112,10 @@ async function scenePlay(a,d,res){
     await dieFx(fw,stage,fb.left-sb.left+fb.width/2,fb.top-sb.top+fb.height*.55,u,2)}
   await sleep(D(200));
 }
+/* the Crystal Heart's Shatter: red crystal shards burst off the target */
+function shatterFx(cx,cy){sfx('broke');for(let i=0;i<14;i++){const sh=document.createElement('i'),a=i/14*6.283,r=24+Math.random()*26,sz=4+Math.random()*5;sh.className='shard';
+  Object.assign(sh.style,{left:cx+'px',top:(cy-20)+'px',width:sz+'px',height:sz*1.8+'px',background:['#ff5a6a','#c8283a','#ffb0b8','#8a1224'][i%4]});stage.appendChild(sh);
+  sh.animate([{transform:'translate(-50%,-50%) scale(.4)',opacity:1},{transform:`translate(calc(-50% + ${Math.cos(a)*r}px),calc(-50% + ${Math.sin(a)*r}px)) rotate(${Math.random()*360}deg)`,opacity:0}],{duration:D(520),easing:'cubic-bezier(.2,.7,.4,1)',fill:'forwards'}).finished.then(()=>sh.remove())}}
 /* death: the unit flashes white, staggers, then shatters into crystal shards (k scales the shards up for the battle scene) */
 function dieFx(el,host,cx,cy,u,k=1,quiet){if(!quiet){sfx('death');setTimeout(()=>sfx('broke'),D(260))}
   const cols=u.team==='e'?['#c58aff','#9fd8ff','#efe0ff','#7a5ac8']:['#f3f0e8','#ffd27a','#bfe8ff','#d8d0bc'];

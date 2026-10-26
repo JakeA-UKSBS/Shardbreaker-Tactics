@@ -10,7 +10,7 @@ Open `index.html` in a browser (or serve the folder, e.g. VS Code's Live Server)
 The fixed art (tiles, icons, relics, scenes, backdrops) loads from PNGs in `art/`: edit them in any pixel editor and refresh. See [art/README.md](art/README.md) for sizes and the export tool.
 
 ## Music
-Drop mp3 files into a `music/` folder next to `index.html`: `title.mp3`, `tavern.mp3`, `mushroom.mp3`, `shadow.mp3`, `swamp.mp3`, `forest.mp3`, `mountain.mp3`, `ship.mp3`, `labyrinth.mp3`, `desert.mp3`, `snow.mp3`, `cavern.mp3`. Each loops while you're in that region (map and battles). Missing files are skipped. "Sound and music" in Options turns it off.
+Drop mp3 files into a `music/` folder next to `index.html`: `title.mp3`, `tavern.mp3`, `mushroom.mp3`, `shadow.mp3`, `swamp.mp3`, `forest.mp3`, `mountain.mp3`, `ship.mp3`, `labyrinth.mp3`, `desert.mp3`, `snow.mp3`, `cavern.mp3`, `heart.mp3` (Act 3). Each loops while you're in that region (map and battles). Missing files are skipped. "Sound and music" in Options turns it off.
 
 ## Regions
 Each run picks 2 of these 10 as its acts (`BIOMES`, `ACTS`). Each has 2-3 battle maps, a boss map, a monster pool and a rule.

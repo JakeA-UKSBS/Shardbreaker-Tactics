@@ -25,6 +25,8 @@ function pathsOk(rows){
   return rows[0].every((_,i)=>walk(0,i,{}));
 }
 function genMap(){
+  /* act 3 is a straight road: tavern, elite, an act-3 event, camp, then the Crystal Heart */
+  if((run&&run.act||1)>=3){const rows=['tavern','elite','event','rest','boss'].map((t,r,a)=>[{t,x:50,next:r<a.length-1?[0]:[]}]);return{rows}}
   const lanes=[0,1,2].map(()=>{for(;;){const l=laneFrom(),c={};l.forEach(t=>c[t]=(c[t]||0)+1);if(pathOk(c))return l}}),rows=[];
   for(let r=0;r<ROWS;r++)rows.push(lanes.map(l=>({t:l[r],next:[]})));
   for(let r=0;r<ROWS-1;r++)rows[r].forEach((n,i)=>n.next=[i]);
@@ -45,6 +47,8 @@ function campArt_draw(){const p=Px(16,16);p.line(2,14,13,10,BROWN,2);p.line(2,10
 function chestArt_draw(){const p=Px(16,16);p.rect(2,6,12,8,BROWN);p.ell(8,6,6,3,BROWN2,(x,y)=>y<=6);p.rect(2,8,12,1,GOLD);p.rect(7,8,2,3,GOLD);p.rect(2,6,1,8,BROWN2);p.rect(13,6,1,8,BROWN2);p.set(8,9,INK);p.outline(OUT);return p.url()}
 function eventArt_draw(){const p=Px(16,16);p.ell(8,8,6.5,6.5,'#6a4a8a');p.line(6,5,8,4,'#f3dc9a',2);p.line(9,4,10,6,'#f3dc9a',2);p.line(10,7,8,9,'#f3dc9a',2);p.rect(7,10,2,1,'#f3dc9a');p.rect(7,12,2,2,'#f3dc9a');p.outline(OUT);return p.url()}
 const RUN_LEN=ROWS+2;
+/* floors in the current act's map (act 3 is shorter) */
+const actLen=()=>run&&run.map&&run.map.rows?run.map.rows.length:RUN_LEN;
 /* difficulty runs on a 10-floor scale whatever the map length */
 const flScale=n=>Math.round((n||1)*10/RUN_LEN);
 const NODE_IC={};
