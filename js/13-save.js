@@ -1,6 +1,6 @@
 /* Save/load and chapter setup */
 /* ================= CHAPTERS / SAVE ================= */
-const SAVE='embermarch2.save.v1',OPTS='embermarch2.opts';
+const SAVE='sbtactics.save.v1',OPTS='sbtactics.opts';
 function saveGame(){if(!run)return;const map=run.phase==='map';try{localStorage.setItem(SAVE,JSON.stringify({state:map?null:state,rewinds,chStart:map?null:chStart,run,def:map?null:CH[0],rng:rngS}))}catch(_){}}
 function loadGame(){try{return JSON.parse(localStorage.getItem(SAVE))}catch(_){return null}}
 function setMap(){MAP=CH[state.ch].map;MW=MAP[0].length;MH=MAP.length}

@@ -1,6 +1,6 @@
 /* Profile, achievements, unlocks, Ascension, Records */
 /* ---- profile: what carries over between runs (runs played, wins, ascension, achievements, unlocks) ---- */
-const PROF='embermarch2.profile';
+const PROF='sbtactics.profile';
 let prof={un:[],runs:0,wins:0,asc:0,ach:[],bosses:[]};
 function loadProf(){try{const p=JSON.parse(localStorage.getItem(PROF));if(p)prof=Object.assign(prof,p)}catch(_){}}
 function saveProf(){try{localStorage.setItem(PROF,JSON.stringify(prof))}catch(_){}}
