@@ -7,7 +7,7 @@ const endless=k=>isWpn(k)&&IT[k].uses>5;
 function mcost(u,x,y){const t=ter(x,y);if(CLS[u.cls].phase)return 1;if(t.k==='lava'&&CLS[u.cls].lava)return 1;if(CLS[u.cls].fly)return['wall','mast','cliff','cavewall'].includes(t.k)?99:1;if(CLS[u.cls].mnt&&(t.k==='forest'||t.k==='hill'))return t.c+1;return t.c}
 /* Teams: p = player, e = enemy, g = green 'other' units that fight the enemy and can be recruited. */
 const hostile=(a,b)=>(a.team==='e')!==(b.team==='e');
-/* Skills: u.skill is the personal skill (free). u.skills holds extras: {id,src:'lv10'} (free) or {id,src:'scroll'} (costs capacity). */
+/* Skills: u.skill is the personal skill (takes PERSONAL_CAP). u.skills holds extras: {id,src:"lv10"} (free) or {id,src:"scroll"} (costs capacity). */
 const has=(u,id)=>u.skill===id||!!(u.skills&&u.skills.some(x=>x.id===id));
 /* skill capacity used: the personal skill always takes PERSONAL_CAP, scroll-learned skills take their cost */
 const PERSONAL_CAP=5;
