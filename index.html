@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shardbreaker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya+SC:wght@500;700&family=Alegreya+Sans:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="wrap">
+  <div class="top"><h1>Shardbreaker</h1><span class="turn" id="turn"></span></div>
+  <div class="bar">
+    <button id="btnDanger" type="button">Danger</button>
+    <button id="btnRewind" type="button">Rewind 3</button>
+    <button id="btnDev" type="button" hidden>Dev</button>
+    <div class="obj" id="obj"></div>
+    <button id="btnEnd" type="button" class="go">End Turn</button>
+  </div>
+  <div class="vp" id="vp"><div class="board" id="board"></div></div>
+  <div class="panel" id="panel"></div>
+</div>
+
+<div class="bs" id="bs" hidden>
+  <div class="stage" id="stage">
+    <div class="ground"></div>
+    <div class="plat l"></div><div class="plat r"></div>
+    <div class="fw l" id="fwl"><img id="figl" alt=""></div>
+    <div class="fw r" id="fwr"><img id="figr" alt=""></div>
+    <div class="skb l" id="skl"></div><div class="skb r" id="skr"></div>
+    <div class="flashv" id="flashv"></div>
+  </div>
+  <div class="hud"><div class="side l" id="sidel"></div><div class="side r" id="sider"></div></div>
+  <p class="bstip">Tap to speed up</p>
+</div>
+<div class="modal" id="modal" hidden></div>
+
+<script>
+/* Hero registry. Each file in heroes/ adds itself here; the game script below reads them. */
+const HEROES=[],LORDS={},TALKS={};
+</script>
+<button id="cog" type="button" aria-label="Options" title="Options">⚙</button>
+<script src="js/01-data.js"></script>
+<script src="js/02-rng-units.js"></script>
+<script src="js/03-pixel-art.js"></script>
+<script src="js/04-ship-art.js"></script>
+<script src="js/05-sound.js"></script>
+<script src="js/06-rules.js"></script>
+<script src="js/07-reach-camera.js"></script>
+<script src="js/08-render.js"></script>
+<script src="js/09-battle-scene.js"></script>
+<script src="js/09b-battle-rig.js"></script>
+<script src="js/10-cutscenes.js"></script>
+<script src="js/11-modals.js"></script>
+<script src="js/12-turns.js"></script>
+<script src="js/13-save.js"></script>
+<script src="js/14-units.js"></script>
+<script src="js/15-regions-monsters.js"></script>
+<script src="js/16-maps-battles.js"></script>
+<script src="js/17-ui-cards.js"></script>
+<script src="js/18-node-map.js"></script>
+<script src="js/19-items-treasure.js"></script>
+<script src="js/20-events.js"></script>
+<script src="js/21-progress.js"></script>
+<script src="js/22-relics.js"></script>
+<script src="js/23-promotion.js"></script>
+<script src="js/24-tavern.js"></script>
+<script src="js/25-crossroads-sage.js"></script>
+<script src="js/26-gear-skills-summons.js"></script>
+<script src="js/27-run-flow.js"></script>
+<script src="js/28-startup.js"></script>
+</body>
+</html>
