@@ -59,8 +59,8 @@ function eventScene(prop){
     S(70,34,2,16,WD2);S(88,34,2,16,WD2);S(70,34,20,2,WD);S(76,38,8,8,'#5a4a5a');p.ell(80,35,3,3,'#d8a070');S(92,40,6,8,'#4a3a3a');p.ell(95,38,2.5,2.5,'#c9906a');p.line(99,36,99,48,M2);p.poly([[98,36],[100,36],[99,32]],M)}
   if(prop==='witch'){S(14,30,34,2,WD2);S(14,44,34,2,WD2);for(const[x,y,c]of[[16,24,'#7fd36a'],[24,25,'#c8322e'],[32,24,'#9a6ad8'],[40,25,'#c9a070'],[18,38,'#5fb2d8'],[28,38,'#7fd36a'],[38,38,'#e8a23a']]){S(x,y,5,6,c);S(x+1,y-1,3,1,WD2)}
     for(const x of[60,70,80,90])p.line(x,0,x+1,10,'#5a7a3a');for(const x of[60,70,80,90])p.ell(x+1,11,2,3,'#6a8a3a');
-    p.ell(84,66,16,7,'#2a2630');p.ell(84,61,13,4,'#7fd36a');for(const[x,y]of[[78,55],[88,52],[83,48]])p.ell(x,y,2,2,'#a8f08a');S(70,70,4,6,INK);S(94,70,4,6,INK);
-    S(118,38,12,26,'#3a2a4a');p.poly([[114,38],[134,38],[124,22]],'#3a2a4a');p.ell(124,40,4,4,'#c9a080');p.set(122,40,INK);p.set(126,40,INK);p.line(112,50,104,58,'#3a2a4a',2);S(130,46,3,18,WD)}
+    p.ell(84,66,16,7,'#2a2630');p.ell(84,61,13,4,'#7fd36a');for(const[x,y]of[[78,55],[88,52],[83,48]])p.ell(x,y,2,2,'#a8f08a');S(70,70,4,6,INK);S(94,70,4,6,INK);}
+    /* the witch herself is a hand-drawn PNG laid over the scene (art/scenes/witch.png, see EV_FIG) */
   if(prop==='fog'){S(76,30,2,30,WD);p.poly([[78,30],[90,33],[78,36]],'#efe6cf');p.line(40,62,60,40,'#5a4a3a');p.line(120,64,100,42,'#5a4a3a')}
   if(prop==='chest'){S(64,52,32,16,WD);p.ell(80,52,16,6,WD,(x,y)=>y<=52);S(64,56,32,2,G);S(78,54,4,6,G);for(const[x,y]of[[40,40],[120,36],[132,46],[28,48]]){p.set(x,y,'#ff3a3a');p.set(x+3,y,'#ff3a3a')}}
   if(prop==='library'){for(const x of[24,68,112]){S(x,22,26,46,WD2);for(let r=0;r<4;r++){S(x+1,25+r*10,24,1,WD);for(let b=0;b<8;b++)S(x+2+b*3,26+r*10,2,8,['#c8322e','#3a6a9a','#7fd36a','#c9a050','#8a4ab0'][(b+r+x)%5])}}
@@ -91,7 +91,7 @@ const evEl=document.createElement('div');evEl.className='tav ev';evEl.hidden=tru
 /* the cage's bars, drawn over the traveller inside */
 function cageBarsArt_draw(){if(sprCache.CAGEBARS)return sprCache.CAGEBARS;const p=Px(160,90);for(let x=60;x<=100;x+=8){p.rect(x,33,1,34,METAL);p.rect(x+1,33,1,34,'#5a6070')}p.rect(58,30,44,3,METAL2);p.rect(58,30,44,1,METAL);p.rect(58,67,44,3,METAL2);p.ring(93,42,2.5,GOLD);p.set(93,45,GOLD);return sprCache.CAGEBARS=p.url()}
 function evShow(E,text,opts){
-  evEl.innerHTML=`<div class="tv-scene"><img class="tv-bg" src="${eventScene(E.art)}" alt="">${E.ov&&E.card?E.ov:''}<span class="tv-gold">${gold()} gold</span></div>
+  evEl.innerHTML=`<div class="tv-scene"><img class="tv-bg" src="${eventScene(E.art)}" alt="">${E.fig&&ART_PNG.has('scenes/'+E.fig)?`<img class="ev-fig ev-${E.fig}" src="art/scenes/${E.fig}.png" alt="">`:''}${E.ov&&E.card?E.ov:''}<span class="tv-gold">${gold()} gold</span></div>
     <div class="tv-box"><div class="tv-name">${E.t}</div><p class="tv-text">${text}</p>${E.card&&opts.length>1?E.card:''}<div class="tv-opts">${opts.map(([k,l,sub,dis])=>`<button type="button" class="tv-o" data-t="${k}"${dis?' disabled':''}>${l}${sub?`<span>${sub}</span>`:''}</button>`).join('')}</div></div>`;
   evEl.hidden=false;
   return new Promise(res=>{evEl.onclick=e=>{const b=e.target.closest('[data-t]');if(!b||b.disabled)return;sfx('tick');res(b.dataset.t)}});
@@ -205,7 +205,7 @@ Object.assign(EVENTS,{
   toll:{t:'The Toll Bridge',art:'bridge',d:'Armed thugs block the only bridge. “Forty gold a head. Well, forty gold for the lot of you.”',o:[
     {l:'Pay the toll',sub:'40 gold',cost:40,go:async()=>{spend(40);return'They step aside, grinning.'}},
     {l:'Fight through',sub:'Every unit gains 30 EXP; Ambushed next fight (−5 HP)',go:async()=>{await expAll(run.roster,30);addWoe('wound',1);return'You clear the bridge. Everyone gains 30 EXP, but the squad is still bruised for the next fight.'}}]},
-  witch:{t:'The Bog Witch',art:'witch',d:'A crooked hut, a bubbling pot, and a woman who already knows your names. “Coin for you, or a brew? Everything has a price.”',o:[
+  witch:{t:'The Bog Witch',art:'witch',fig:'witch',d:'A crooked hut, a bubbling pot, and a woman who already knows your names. “Coin for you, or a brew? Everything has a price.”',o:[
     {l:'Take her gold',sub:'+60 gold; a random unit is Marked for 2 fights',go:async()=>{run.gold=gold()+60;const v=pick(run.roster);addWoe('marked',2,v);sfx('dark');return`She counts out 60 gold and points a bony finger at <b>${v.name}</b>. Enemies will go for them for the next 2 fights.`}},
     {l:'Buy a brew',sub:'One unit +2 Res and +2 max HP for good',cost:25,go:async()=>{const u=await pickUnit('Who drinks?','+2 Res and +2 max HP for good.');if(!u)return null;spend(25);bump(u,'res',2);bump(u,'hp',2);sfx('heal');return`${u.name} gags it down. +2 Res, +2 max HP.`}},
     {l:'Back away',go:async()=>'“Another time, then.”'}]},

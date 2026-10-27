@@ -654,3 +654,6 @@ button.it.sel{border-color:var(--gold)}
 /* docked command menu / forecast: bottom-left or bottom-right of the map view */
 .vp>.umenu{top:auto;bottom:10px;left:auto;right:auto;z-index:40}
 .vp>.umenu.dl{left:10px}.vp>.umenu.dr{right:10px}
+/* hand-drawn event figures laid over the event scene: sizes are fractions of the 160x90 scene, so pixels match it */
+.ev-fig{position:absolute;bottom:0;image-rendering:pixelated;pointer-events:none}
+.ev-witch{left:5%;width:38.125%}
