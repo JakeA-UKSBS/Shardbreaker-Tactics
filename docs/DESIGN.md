@@ -7,7 +7,7 @@ Inspiration to look at: Final Fantasy Tactics Advance, Tactics Ogre, Fell Seal: 
 ## Decided
 
 - **Separate repo.** Shardbreaker stays as it is, and the big changes are tried here.
-- **Fixed roster.** There is a pool of named characters instead of random recruits, so players can have favourites. 5 are available from the start (pick 3 per run), and 5 or more join through events and the tavern. The longlist is in [CHARACTERS.md](CHARACTERS.md).
+- **Fixed roster.** There is a pool of named characters instead of random recruits, so players can have favourites. The opening squad is picked from a starting roster of base classes. Advanced-class characters join after Act 1, one is event-only, and everyone else is found during the run. The longlist is in [CHARACTERS.md](CHARACTERS.md).
 - **Height maps.** Maps use Ogre-style height levels. Height should matter for range, damage or hit, and movement (jump/climb). *Built as a greybox, see below.*
 - **Roguelike runs with a named cast.** Runs stay, but the units are named characters rather than random recruits. The story comes out between runs (Hades-style): breaking bigger crystals unlocks scenes and new characters.
 - **No side-on battle scenes.** Attacks play on the map, FFTA-style. Side-on scenes fight with height, and every named character would need a second full sprite set. *Built.*
