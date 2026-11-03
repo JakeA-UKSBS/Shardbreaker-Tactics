@@ -194,6 +194,9 @@ Recruited from events, the tavern and regions. This pool is also where starting-
 | Kaya | Horse Archer |
 | Holt | Crossbowman |
 | Ashe | Pyromancer |
+| Kane | Lance knight |
+| Abel | Lance knight |
+| Bryony | Mender (tavern) |
 | Sigrun | Drake Rider |
 
 ### Kaya: Horse Archer
@@ -217,6 +220,31 @@ Expelled from the academy for setting fire to the academy. Overconfident and sec
 - **Firebolt** (single, range 1–4 · 3 MP): 1.2× Mag, 30% chance to Burn.
 - **Flame Line** (line 4 · 7 MP): 1.0× Mag to everything in the line.
 - **Wildfire** (area r1 at range 3 · 12 MP): 1.3× Mag and Burn. Grass and forest tiles in the area burn for 2 turns, hurting anyone who stands there.
+
+### Kane and Abel: Lance knights
+Brothers from a border garrison, recruited together (taking one brings the other if there's room). Kane is all charge, Abel holds the line behind him.
+- **Ascend into:** Paladin or Warlord.
+- **Shared passive: Brothers.** While adjacent to each other, both get +10 Hit and +2 Def.
+
+**Kane** (hot-headed, rides first and asks later)
+- **Mounted.** +2 Move, but can only climb 1 level at a time.
+- **Charge** (line, up to 4 tiles, stops at the first enemy · CD 3): 0.8× Str plus 0.2× for every tile travelled, then push 1.
+- **Lance Sweep** (arc · CD 2): 0.9× Str.
+- **Run Through** (pierce 2 · CD 3): 1.1× Str to both tiles.
+
+**Abel** (calm, the one who remembers the plan)
+- **Mounted.** +2 Move, but can only climb 1 level at a time.
+- **Brace Lance** (self · CD 3): Guard, and he strikes the first enemy that moves next to him.
+- **Shield Escort** (single ally, adjacent · CD 3): that ally takes 30% less damage until his next turn.
+- **Pinning Thrust** (single, adjacent · CD 2): 0.9× Str and Root.
+
+### Bryony: Mender
+A tavern herbalist who patches up brawlers for the price of a drink. Joins from the tavern. Warm and nosy, and knows everyone's business.
+- **Ascends into:** Saint or Crusader.
+- **Passive: Bedside Manner.** Allies she heals also get +1 Def until their next turn.
+- **Poultice** (single ally, range 2 · 4 MP): heals 5 HP a turn for 3 turns.
+- **Smelling Salts** (single ally, adjacent · 5 MP): cures all statuses and heals 0.6× Mag.
+- **Strong Brew** (area r1 at range 2 · 9 MP): heals 0.7× Mag to every ally in the area.
 
 ### Sigrun: Drake Rider
 A dragon-knight from the northern peaks, riding a young drake that hatched from a crystal-tainted egg. Fierce, and protective of her mount. (Could be a qilin rider instead for a more eastern feel.)
