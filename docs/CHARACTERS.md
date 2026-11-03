@@ -49,17 +49,17 @@ Each base class ascends into one of two advanced classes.
 
 | Name | Class | Ascends into |
 |---|---|---|
-| Brenna | Shieldmaiden | Valkyrie or Aegis |
+| Brynhildr | Shieldmaiden | Valkyrie or Aegis |
 | Aldric | Knight | Juggernaut or Paladin |
 | Maelis | Mender | Saint or Crusader |
-| Wren | Archer | Sniper or Bow Cavalry |
+| Jun | Archer | Sniper or Bow Cavalry |
 | Corvin | Elemental Mage | Archmage or Stormlord |
 | Rook | Rogue | Duelist or Assassin |
 | Morrigan | Cultist | Warlock or Shaman |
-| Bram | Brawler | Berserker or Fighter |
+| Vaar | Brawler | Berserker or Fighter |
 | Kane | Cavalry | Paladin or Warlord |
 
-### Brenna: Shieldmaiden
+### Brynhildr: Shieldmaiden
 A city guardswoman who deserted rather than march on the neighbouring kingdom. Steady, dry and protective.
 - **Ascends into:** Valkyrie or Aegis.
 - **Passive: Bulwark.** Allies directly behind her take 30% less damage from ranged attacks.
@@ -83,8 +83,8 @@ A hospice nun who has sat with too many dying soldiers. Calm, with gallows humou
 - **Circle of Rest** (cross · 8 MP): heals 0.8× Mag and cures statuses.
 - **Sanctuary** (area r1 · 10 MP): Guard on all allies in the area.
 
-### Wren: Archer
-A poacher's daughter who has never missed a meal or a deer. Cheeky, and the one who climbs everything.
+### Jun: Archer
+A poacher's son who has never missed a meal or a deer. Cheeky, and the one who climbs everything.
 - **Ascends into:** Sniper or Bow Cavalry.
 - **Passive: Eagle Eye.** +1 range on every shot, on top of the height bonus.
 - **Aimed Shot** (single, range 2–5 · CD 2): 1.5× Str, +20 Hit.
@@ -115,7 +115,7 @@ A witch-hunter's daughter who took up the dark arts to hunt the blight instead. 
 - **Hex** (single, range 3 · 5 MP): Weak for 2 turns.
 - **Dark Pulse** (burst r1 · 10 MP): 1.0× Mag to every adjacent enemy.
 
-### Bram: Brawler
+### Vaar: Brawler
 A village blacksmith who fights barehanded because he won't take a weapon to war. Gentle giant.
 - **Ascends into:** Berserker or Fighter.
 - **Passive: Iron Body.** Can't be pushed or pulled.
@@ -194,7 +194,7 @@ Recruited from events, the tavern and regions. This pool is also where starting-
 |---|---|
 | Kaya | Horse Archer |
 | Holt | Crossbowman |
-| Ashe | Pyromancer |
+| Ash | Pyromancer |
 | Abel | Cavalry |
 | Bryony | Mender (tavern) |
 | Sigrun | Drake Rider |
@@ -213,10 +213,10 @@ A watchtower sentry who never left his post until the post burned. Patient and l
 - **Piercing Bolt** (line 4 · CD 3): 1.0× Str to everything in the line.
 - **Hold Position** (self · CD 3): until his next turn he shoots the first enemy that moves within range.
 
-### Ashe: Pyromancer
-Expelled from the academy for setting fire to the academy. Overconfident and secretly brilliant. Where Corvin spreads across elements, Ashe only cares about fire.
+### Ash: Pyromancer
+Expelled from the academy for setting fire to the academy. Overconfident and secretly brilliant. Where Corvin spreads across elements, Ash only cares about fire.
 - **Ascends into:** Pyrolord or Archmage.
-- **Passive: Kindling.** Burns she causes last 1 turn longer.
+- **Passive: Kindling.** Burns he causes last 1 turn longer.
 - **Firebolt** (single, range 1–4 · 3 MP): 1.2× Mag, 30% chance to Burn.
 - **Flame Line** (line 4 · 7 MP): 1.0× Mag to everything in the line.
 - **Wildfire** (area r1 at range 3 · 12 MP): 1.3× Mag and Burn. Grass and forest tiles in the area burn for 2 turns, hurting anyone who stands there.
