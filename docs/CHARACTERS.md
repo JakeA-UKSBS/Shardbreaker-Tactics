@@ -57,7 +57,6 @@ Each base class ascends into one of two advanced classes.
 | Rook | Rogue | Duelist or Assassin |
 | Morrigan | Cultist | Warlock or Shaman |
 | Bram | Brawler | Berserker or Fighter |
-| Edric | Lance knight | Paladin or Warlord |
 
 ### Brenna: Shieldmaiden
 A city guardswoman who deserted rather than march on the neighbouring kingdom. Steady, dry and protective.
@@ -123,14 +122,6 @@ A village blacksmith who fights barehanded because he won't take a weapon to war
 - **Flurry** (single, adjacent · CD 3): 3 hits of 0.5× Str.
 - **Leap** (tile, range 3, ignores height · CD 4): lands with 1.2× Str in area r1.
 
-### Edric: Lance knight
-A knight from a kingdom already at war, sent to find the cause. Honourable to a fault.
-- **Ascends into:** Paladin or Warlord.
-- **Passive: Mounted.** +2 Move, but can only climb 1 level at a time.
-- **Charge** (line, up to 4 tiles, stops at the first enemy · CD 3): 0.8× Str plus 0.2× for every tile travelled, then push 1.
-- **Rally** (burst r2 · CD 4): allies get +1 Move next turn.
-- **Lance Sweep** (arc · CD 2): 0.9× Str.
-
 ## Joins after Act 1 (already advanced)
 
 | Name | Class |
@@ -194,8 +185,8 @@ Recruited from events, the tavern and regions. This pool is also where starting-
 | Kaya | Horse Archer |
 | Holt | Crossbowman |
 | Ashe | Pyromancer |
-| Kane | Lance knight |
-| Abel | Lance knight |
+| Kane | Cavalry |
+| Abel | Cavalry |
 | Bryony | Mender (tavern) |
 | Sigrun | Drake Rider |
 
@@ -221,7 +212,7 @@ Expelled from the academy for setting fire to the academy. Overconfident and sec
 - **Flame Line** (line 4 · 7 MP): 1.0× Mag to everything in the line.
 - **Wildfire** (area r1 at range 3 · 12 MP): 1.3× Mag and Burn. Grass and forest tiles in the area burn for 2 turns, hurting anyone who stands there.
 
-### Kane and Abel: Lance knights
+### Kane and Abel: Cavalry
 Brothers from a border garrison, separated when it fell. Each is found on his own during a run. Kane is all charge, Abel holds the line behind him.
 - **Ascend into:** Paladin or Warlord.
 - **Shared passive: Brothers.** If you've found both, they get +10 Hit and +2 Def while adjacent to each other.
