@@ -1,11 +1,11 @@
-# Shardbreaker Tactics: character longlist
+# Shardbreaker Tactics: characters
 
 The cast, by when they can join. First names only for now. Kits are first drafts to react to.
 
 - **Starting roster:** base classes you pick your opening squad from. Whoever you don't pick can still turn up later in the run.
 - **After Act 1:** characters who join already in an advanced class.
 - **Event only:** joins through one specific event.
-- **Found during the run:** recruited from events, the tavern and regions.
+- **Found during the run:** recruited from events, the tavern and regions, plus any starting-roster characters you didn't pick.
 
 ## How kits work
 
@@ -177,144 +177,34 @@ A travelling bard who joined for the songs he'll write about it. Vain, charming,
 
 ## Found during the run
 
+Recruited from events, the tavern and regions. This pool is also where starting-roster characters you didn't pick turn up, and classes can repeat (more than one archer or rider is fine).
+
 | Name | Class |
 |---|---|
-| Garrick | Pikeman |
-| Odda | Gemcutter |
-| Fen | Beastcaller |
-| Pip | Alchemist |
-| Ysolde | Geomancer |
-| Aurelio | Windcaller |
-| Hilde | Rime Witch |
-| Kestrel | Stormcaller |
-| Nessa | Sapper |
-| Ulrik | Shaman |
-| Elowen | Falconer |
-| Iskra | The Cracked |
-| Ottilie | Gravedigger |
-| Moss | Sporewalker |
-| Zahir | Sandmage |
-| Gil | Harpooner |
-| Juniper | Lamplighter |
+| Kaya | Horse Archer |
+| Ash | Crossbowman |
+| Sigrun | Drake Rider |
 
-### Garrick: Pikeman
-A veteran of three wars who wants this to be his last. Gruff, and a father figure to the young ones.
-- **Passive: Set Spear.** Strikes the first enemy that moves next to him each turn, before it acts.
-- **Pierce** (pierce 2 · CD 1): 1.1× Str to both tiles.
-- **Impale** (single, adjacent · CD 3): 1.4× Str and Root.
-- **Brace** (self · CD 3): Guard, and his counters deal 1.5×.
+### Kaya: Horse Archer
+A steppe rider whose clan was scattered by the war. Restless and quick to laugh.
+- **Passive: Mounted.** +2 Move, but can only climb 1 level at a time.
+- **Ride-by Shot** (single, range 2–3 · CD 2): 1.0× Str, then she can move up to 2 more tiles.
+- **Scatter Shot** (cone 3 · CD 3): 0.6× Str to everything in it.
+- **Hunt** (single · CD 4): 1.3× Str, doubled against a target that moved this turn.
 
-### Odda: Gemcutter
-A miner who lost her brother to the blight and knows crystal better than anyone alive. Blunt and driven.
-- **Passive: Gemsense.** Sees every creature's gem HP from anywhere on the map.
-- **Shatter** ◆ (single, adjacent · CD 2): 1.0× Str and triple gem damage.
-- **Quake** ◆ (cross around herself · CD 4): 0.8× Str; crystallised creatures in it may be Stunned.
-- **Chisel** ◆ (single, adjacent · CD 1): 0.5× Str and strips one status immunity.
+### Ash: Crossbowman
+A watchtower sentry who never left his post until the post burned. Patient and literal.
+- **Passive: Steady.** +20 Hit if he didn't move this turn.
+- **Bolt** (single, range 2–4 · CD 1): 1.2× Str, ignores 3 Def.
+- **Piercing Bolt** (line 4 · CD 3): 1.0× Str to everything in the line.
+- **Hold Position** (self · CD 3): until his next turn he shoots the first enemy that moves within range.
 
-### Fen: Beastcaller
-Raised by the wolves of the Cursed Woodland, and barely speaks. Joins after you save her pack.
-- **Passive: Pack.** Her wolf Kael fights beside her and levels with her.
-- **Call Kael** (summon · CD 5): brings Kael back if he falls.
-- **Sic** (single ally beast · CD 2): Kael acts again.
-- **Soothe** (single · CD 4): a creature whose gem is broken becomes a green ally for the rest of the fight.
-
-### Pip: Alchemist
-A nervous apprentice apothecary carrying far too many flasks. Comic relief, and useful in every fight.
-- **Passive: Lob.** Flasks arc, so walls and height don't block them.
-- **Fire Flask** (area r1 at range 4 · CD 2): 0.8× Mag and Burn.
-- **Healing Draught** (single ally, range 3 · CD 2): heals a flat 12 HP.
-- **Tar Bomb** (area r1 at range 3 · CD 3): Chill, and Root for 1 turn.
-
-### Ysolde: Geomancer
-A hermit who talks to stones and swears they answer. Strange and serene.
-- **Passive: Stonefoot.** +1 Jump.
-- **Raise Earth** (tile, range 3 · 6 MP): raises a tile 1 level for the rest of the fight, lifting anyone standing on it.
-- **Sink** (tile, range 3 · 6 MP): lowers a tile 1 level.
-- **Stone Spikes** ◆ (line 3 · 8 MP): 1.1× Mag.
-
-### Aurelio: Windcaller
-A sky-sailor stranded when his ship went down. Theatrical and restless.
-- **Passive: Tailwind.** +1 Move.
-- **Gust** (cone 3 · 5 MP): 0.6× Mag, pushes everything hit 1 tile away from him.
-- **Updraft** (single ally · 6 MP): that ally's next move ignores Jump.
-- **Cyclone** (area r1 at range 3 · 12 MP): 0.9× Mag and pulls everything 1 tile towards the centre.
-
-### Hilde: Rime Witch
-A recluse from the Agate Peaks who wants the crystals gone from her mountain. Severe.
-- **Passive: Cold Blood.** Immune to Chill; Chill she causes lasts 1 turn longer.
-- **Ice Shard** (single, range 1–3 · 3 MP): 1.1× Mag and Chill.
-- **Frost Path** (line 4 · 6 MP): freezes water into walkable ice and Chills enemies on the line.
-- **Glacial Prison** (single · 12 MP): Stun, and the target takes 50% less damage while frozen (for lockdown, not damage).
-
-### Kestrel: Stormcaller
-A disgraced weather-mage who caused a flood. Wry and guilt-ridden.
-- **Passive: Static.** +50% damage to units standing in water.
-- **Chain Lightning** (single, range 4 · 7 MP): 1.0× Mag, then jumps to up to 2 nearby enemies at 0.6×.
-- **Thunderclap** (cross around herself · 8 MP): 0.8× Mag, 30% chance to Stun.
-- **Lightning Rod** (tile · 6 MP): for 2 turns, lightning spells cast near the rod chain through it.
-
-### Nessa: Sapper
-An engineer who blows things up for a living. Cheerful, and has lost two fingers.
-- **Passive: Demolitions.** Her attacks can destroy boulders and barricades.
-- **Barricade** (tile, adjacent · CD 3): places a 2-level wall for 3 turns.
-- **Snare** (tile, range 2 · CD 2): a hidden trap that Roots the first enemy to step on it.
-- **Blast Charge** ◆ (area r1, adjacent · CD 4): goes off at the start of her next turn for 1.6× Str.
-
-### Ulrik: Shaman
-A northern shaman who reads the future in bones and has seen this war. Fatalistic.
-- **Passive: Ancestors.** Each of his totems has +5 HP.
-- **Totem of Thorns** (tile, range 2 · 6 MP): enemies next to it take 4 damage a turn.
-- **Totem of Mending** (tile, range 2 · 8 MP): allies next to it heal 4 HP a turn.
-- **Spirit Link** (2 allies · 10 MP): damage to either is split between them for 2 turns.
-
-### Elowen: Falconer
-A royal huntress who left court to follow her hawk. Quiet and observant.
-- **Passive: Hawk.** Her hawk Talon ignores height and walls.
-- **Talon Strike** (single, range 6 · CD 2): 0.7× Str from the hawk.
-- **Scout** (area r2 · CD 3): reveals hidden traps and shows enemy intents for 1 turn.
-- **Dive** (single, range 4 · CD 3): 0.6× Str and Blind.
-
-### Iskra: The Cracked
-A girl half-turned to crystal who somehow kept her mind. She can feel the Heart, and is key to the story.
-- **Passive: Resonance.** Immune to crystal effects. Her abilities cost **HP** instead of MP.
-- **Crystal Lance** ◆ (line 3 · 6 HP): 1.4× Mag.
-- **Refract** (single ally · 8 HP): reflects the next spell that hits that ally.
-- **Shard Storm** ◆ (area r1 at range 3 · 12 HP): 1.5× Mag.
-
-### Ottilie: Gravedigger
-The last living person on the Sunless Isle. Cheerful about death in a way that unsettles everyone.
-- **Passive: Undertaker.** +50% damage against spectral and undead creatures.
-- **Last Rites** (single, adjacent · CD 3): 2.0× Str against spectral creatures, 1.0× otherwise.
-- **Dig In** (self · CD 3): lowers her own tile 1 level and gives her Guard.
-- **Open Grave** (tile, range 2 · CD 4): digs a pit; anyone pushed into it is Rooted.
-
-### Moss: Sporewalker
-Part person, part fungus, from Mycelia. Speaks in plurals.
-- **Passive: Symbiosis.** Immune to Poison; heals 2 HP a turn on grass or forest tiles.
-- **Spore Cloud** (cone 3 · 6 MP): Poison.
-- **Mycelial Net** (area r2 at range 3 · 10 MP): Root.
-- **Regrowth** (single ally, range 2 · 5 MP): heals 5 HP a turn for 3 turns.
-
-### Zahir: Sandmage
-A desert nomad whose caravan was scattered by crystallised jackals. Proud and hospitable.
-- **Passive: Sandborn.** Ignores quicksand and the −1 Move tiles.
-- **Sandblast** (cone 3 · 5 MP): 0.7× Mag and Blind.
-- **Quicksand** (area r1 at range 3 · 8 MP): Chill; the tiles slow anyone on them for 3 turns.
-- **Dune Wall** (line of 3 tiles at range 2 · 8 MP): raises them 1 level for 2 turns.
-
-### Gil: Harpooner
-A swamp fisherman who has been hunting Krondis for twenty years. Salty and stubborn.
-- **Passive: Sea Legs.** Moves through shallow water at no extra cost.
-- **Harpoon** (single, range 1–4 · CD 2): 0.9× Str and pulls the target next to him.
-- **Net** (single, range 2 · CD 3): Root.
-- **Gutting Knife** (single, adjacent · CD 1): 1.0× Str and Poison.
-
-### Juniper: Lamplighter
-A lamplighter from a village plunged into darkness. Hopeful in a way the others find contagious.
-- **Passive: Lantern.** Spectral creatures avoid the tiles next to her.
-- **Flare** (area r1 at range 3 · 4 MP): Blind, and reveals hidden things.
-- **Lantern Ward** (burst r1 · 6 MP): spectral creatures can't enter these tiles for 2 turns.
-- **Guiding Light** (single ally · 5 MP): +20 Hit for 2 turns.
+### Sigrun: Drake Rider
+A dragon-knight from the northern peaks, riding a young drake that hatched from a crystal-tainted egg. Fierce, and protective of her mount. (Could be a qilin rider instead for a more eastern feel.)
+- **Passive: Flier.** Ignores Jump and terrain costs, but bows deal effective (double) damage to her.
+- **Dive** (line up to 3, stops at the first enemy · CD 3): 1.2× Str, plus 0.2× per level she drops onto the target.
+- **Wing Buffet** (cone 3 · CD 3): 0.5× Str and pushes everything hit 1 tile away.
+- **Drake Breath** (cone 3 · 8 MP): 0.9× Mag and Burn.
 
 ## Breaking the gem
 
