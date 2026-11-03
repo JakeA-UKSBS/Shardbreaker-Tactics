@@ -28,12 +28,11 @@ A first pass to test whether height makes fights more interesting before any art
 
 In Shardbreaker you just kill crystallised monsters. There's no reason to defend places or people. The idea for this fork:
 
-- **Break the gems to stop the spread.** The crystals spread, so the goal is to shatter the gems growing on creatures before they spread further. That could make "break the gem" its own action or objective, separate from killing.
 - Things the crystals could corrupt, each giving an objective type:
   - **The land itself.** Tiles slowly turn to crystal. A cleansing NPC has to channel at a shrine for N turns while you protect them.
   - **People.** Infected villagers turn into crystal zombies if you don't reach them in time. That's a rescue objective.
-  - **Creatures.** Crystals zombify animals and monsters. Breaking the gem might free some instead of killing them.
-- Objective mix to aim for: rout, break the gems (all or N), defend or escort a cleanser, rescue, survive N turns, and reach the exit.
+  - **Creatures.** Crystals zombify animals and monsters. Fought with normal attacks: no separate gem-breaking.
+- Objective mix to aim for: rout, defend or escort a cleanser, rescue, survive N turns, and reach the exit.
 
 ## Classes and abilities (FFTA / Fell Seal style)
 

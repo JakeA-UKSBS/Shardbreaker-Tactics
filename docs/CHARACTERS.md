@@ -13,7 +13,6 @@ The cast, by when they can join. First names only for now. Kits are first drafts
 - **Free slots:** 1–2 slots per character for customising, filled from scrolls or skills found during the run (the Shardbreaker scroll skills are the starting pool).
 - **Costs:** spells cost **MP**, physical skills have a **cooldown (CD)** in turns. MP starts full and refills slowly (starting numbers: casters 20–30 MP, everyone else 0–10, +2 MP a turn).
 - **Damage:** shown as a multiplier of Str or Mag in the forecast, e.g. "1.5× Mag". Defence or Resistance is subtracted afterwards, as now.
-- **◆ Gem damage:** abilities marked ◆ also crack the crystal on a creature (see "Breaking the gem" at the bottom).
 
 ### Shapes
 
@@ -206,20 +205,11 @@ A dragon-knight from the northern peaks, riding a young drake that hatched from 
 - **Wing Buffet** (cone 3 · CD 3): 0.5× Str and pushes everything hit 1 tile away.
 - **Drake Breath** (cone 3 · 8 MP): 0.9× Mag and Burn.
 
-## Breaking the gem
-
-Every crystallised creature carries a gem with its own small **gem HP**, shown as a second bar under its health.
-
-- **How gems break:** any hit chips the gem a little. ◆ abilities crack it much faster.
-- **What breaking does:** the creature is **Shattered**: it loses its crystal buffs and immunities and is Stunned for 1 turn. Normal beasts (wolves, deer, boars) are freed instead and flee or turn green. Monsters stay hostile, but weaker.
-- **Why it matters:** gems are what spread the blight. Breaking them, rather than just killing, is what the story rewards. Bosses could be beatable only once their gems are broken.
-
-### Objective types
+## Objective types
 
 | Objective | Description |
 |---|---|
 | Rout | Defeat every enemy, as now. |
-| Break the gems | Shatter N gems (or all of them) before the time limit. Killing a creature before its gem breaks doesn't count. |
 | Cleanse | A cleanser NPC channels at a shrine for N turns while crystal creeps across the tiles. Protect them. |
 | Rescue | Villagers caught in the crystal turn into crystal husks after N turns unless a unit reaches them first. |
 | Survive | Hold out for N turns. |
