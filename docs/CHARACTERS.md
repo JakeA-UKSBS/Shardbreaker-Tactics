@@ -45,20 +45,23 @@ Creatures can be immune to some of these, shown on their info panel.
 
 ## Starting roster
 
-| Name | Class |
-|---|---|
-| Brenna | Shieldmaiden |
-| Aldric | Knight |
-| Maelis | Mender |
-| Wren | Archer |
-| Corvin | Elemental Mage |
-| Tamsin | Rogue |
-| Morrigan | Warlock |
-| Bram | Brawler |
-| Edric | Lance knight |
+Each base class ascends into one of two advanced classes.
+
+| Name | Class | Ascends into |
+|---|---|---|
+| Brenna | Shieldmaiden | Valkyrie or Aegis |
+| Aldric | Knight | Juggernaut or Paladin |
+| Maelis | Mender | Saint or Crusader |
+| Wren | Archer | Sniper or Bow Cavalry |
+| Corvin | Elemental Mage | Archmage or (second option TBD) |
+| Tamsin (name TBD) | Rogue | Duelist or Assassin |
+| Morrigan | Cultist | Warlock or Shaman |
+| Bram | Brawler | Berserker or Fighter |
+| Edric | Lance knight | Paladin or Warlord |
 
 ### Brenna: Shieldmaiden
 A city guardswoman who deserted rather than march on the neighbouring kingdom. Steady, dry and protective.
+- **Ascends into:** Valkyrie or Aegis.
 - **Passive: Bulwark.** Allies directly behind her take 30% less damage from ranged attacks.
 - **Shield Bash** (single, adjacent · CD 2): 1.0× Str, push 1.
 - **Challenge** (burst r2 · CD 3): enemies in range must target her next turn.
@@ -66,6 +69,7 @@ A city guardswoman who deserted rather than march on the neighbouring kingdom. S
 
 ### Aldric: Knight
 A landless knight whose lord sold his oath to the war. Earnest, and still believes in chivalry.
+- **Ascends into:** Juggernaut or Paladin.
 - **Passive: Plate.** Physical hits deal 2 less damage to him; −1 Jump.
 - **Sunder** (single, adjacent · CD 2): 1.2× Str, and the target has −3 Def for 2 turns.
 - **Valiant Thrust** (pierce 2 · CD 3): 1.0× Str to both tiles.
@@ -73,6 +77,7 @@ A landless knight whose lord sold his oath to the war. Earnest, and still believ
 
 ### Maelis: Mender
 A hospice nun who has sat with too many dying soldiers. Calm, with gallows humour.
+- **Ascends into:** Saint or Crusader.
 - **Passive: Last Light.** Her heals restore 50% more on allies below half HP.
 - **Mend** (single ally, range 3 · 4 MP): heals 1.2× Mag.
 - **Circle of Rest** (cross · 8 MP): heals 0.8× Mag and cures statuses.
@@ -80,6 +85,7 @@ A hospice nun who has sat with too many dying soldiers. Calm, with gallows humou
 
 ### Wren: Archer
 A poacher's daughter who has never missed a meal or a deer. Cheeky, and the one who climbs everything.
+- **Ascends into:** Sniper or Bow Cavalry.
 - **Passive: Eagle Eye.** +1 range on every shot, on top of the height bonus.
 - **Aimed Shot** (single, range 2–5 · CD 2): 1.5× Str, +20 Hit.
 - **Pinning Arrow** (single · CD 3): 0.8× Str and Root.
@@ -87,6 +93,7 @@ A poacher's daughter who has never missed a meal or a deer. Cheeky, and the one 
 
 ### Corvin: Elemental Mage
 Expelled from the academy for setting fire to the academy. Overconfident and secretly brilliant. Works in fire, frost and lightning.
+- **Ascends into:** Archmage or (second option TBD).
 - **Passive: Attunement.** A spell of a different element from his last one costs 2 less MP.
 - **Firebolt** (single, range 1–4 · 3 MP): 1.2× Mag, 30% chance to Burn.
 - **Frost Wave** (cone 3 · 7 MP): 0.9× Mag and Chill.
@@ -94,13 +101,15 @@ Expelled from the academy for setting fire to the academy. Overconfident and sec
 
 ### Tamsin: Rogue
 A street thief working off a debt to Ithren. Quick-mouthed and not as selfish as she pretends.
+- **Ascends into:** Duelist or Assassin.
 - **Passive: Slippery.** Can move through enemy tiles.
 - **Backstab** (single, adjacent · CD 2): 1.0× Str, doubled when striking from behind or from higher ground.
 - **Smoke Bomb** (burst r1 · CD 4): Blinds enemies in the area; allies in it get +30 Avoid for 1 turn.
 - **Tumble** (self · CD 2): after acting, move up to 2 more tiles, ignoring Jump.
 
-### Morrigan: Warlock
+### Morrigan: Cultist
 A witch-hunter's daughter who took up the dark arts to hunt the blight instead. Cold, and fiercely loyal once won over.
+- **Ascends into:** Warlock or Shaman.
 - **Passive: Siphon.** Her dark spells heal her for 25% of the damage they deal.
 - **Drain Touch** (single, adjacent · 4 MP): 1.2× Mag.
 - **Hex** (single, range 3 · 5 MP): Weak for 2 turns.
@@ -108,6 +117,7 @@ A witch-hunter's daughter who took up the dark arts to hunt the blight instead. 
 
 ### Bram: Brawler
 A village blacksmith who fights barehanded because he won't take a weapon to war. Gentle giant.
+- **Ascends into:** Berserker or Fighter.
 - **Passive: Iron Body.** Can't be pushed or pulled.
 - **Palm Strike** (single, adjacent · CD 1): 1.0× Str, push 2. Hitting a wall or unit deals extra damage, and falling off a ledge deals damage per level fallen.
 - **Flurry** (single, adjacent · CD 3): 3 hits of 0.5× Str.
@@ -115,6 +125,7 @@ A village blacksmith who fights barehanded because he won't take a weapon to war
 
 ### Edric: Lance knight
 A knight from a kingdom already at war, sent to find the cause. Honourable to a fault.
+- **Ascends into:** Paladin or Warlord.
 - **Passive: Mounted.** +2 Move, but can only climb 1 level at a time.
 - **Charge** (line, up to 4 tiles, stops at the first enemy · CD 3): 0.8× Str plus 0.2× for every tile travelled, then push 1.
 - **Rally** (burst r2 · CD 4): allies get +1 Move next turn.
@@ -126,7 +137,7 @@ A knight from a kingdom already at war, sent to find the cause. Honourable to a 
 |---|---|
 | Valen | Duelist |
 | Celestine | Paladin |
-| Shade | Assassin |
+| Shade (name TBD) | Assassin |
 | Rurik | Berserker |
 | Seren | Summoner |
 
