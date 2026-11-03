@@ -54,7 +54,7 @@ Each base class ascends into one of two advanced classes.
 | Maelis | Mender | Saint or Crusader |
 | Wren | Archer | Sniper or Bow Cavalry |
 | Corvin | Elemental Mage | Archmage or Stormlord |
-| Tamsin (name TBD) | Rogue | Duelist or Assassin |
+| Rook | Rogue | Duelist or Assassin |
 | Morrigan | Cultist | Warlock or Shaman |
 | Bram | Brawler | Berserker or Fighter |
 | Edric | Lance knight | Paladin or Warlord |
@@ -99,7 +99,7 @@ A court magician's apprentice who walked out when his master started making weap
 - **Frost Wave** (cone 3 · 7 MP): 0.9× Mag and Chill.
 - **Chain Lightning** (single, range 4 · 9 MP): 1.0× Mag, then jumps to up to 2 nearby enemies at 0.6×.
 
-### Tamsin: Rogue
+### Rook: Rogue
 A street thief working off a debt to Ithren. Quick-mouthed and not as selfish as she pretends.
 - **Ascends into:** Duelist or Assassin.
 - **Passive: Slippery.** Can move through enemy tiles.
@@ -137,7 +137,7 @@ A knight from a kingdom already at war, sent to find the cause. Honourable to a 
 |---|---|
 | Valen | Duelist |
 | Celestine | Paladin |
-| Shade (name TBD) | Assassin |
+| Nyx | Assassin |
 | Rurik | Berserker |
 | Seren | Summoner |
 
@@ -155,7 +155,7 @@ A templar whose order is preaching holy war. She came to prove them wrong.
 - **Lay on Hands** (single ally, adjacent · 8 MP): heals 1.5× Mag.
 - **Consecrate** (burst r1 · 10 MP): for 3 turns these tiles heal allies 10% a turn and hurt spectral creatures.
 
-### Shade: Assassin
+### Nyx: Assassin
 No name, no past, and a contract on Ithren that she has chosen not to fulfil. Yet.
 - **Passive: Unseen.** Enemies won't target her if another unit is in reach.
 - **Mark for Death** (single, range 4 · CD 4): the target takes 30% more damage from everyone for 2 turns.
