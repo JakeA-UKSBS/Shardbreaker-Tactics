@@ -7,7 +7,7 @@ Inspiration to look at: Final Fantasy Tactics Advance, Tactics Ogre, Fell Seal: 
 ## Decided
 
 - **Separate repo.** Shardbreaker stays as it is, and the big changes are tried here.
-- **Fixed roster.** There is a pool of named characters instead of random recruits, so players can have favourites. Some characters only join through events. Jake is still working out the details.
+- **Fixed roster.** There is a pool of named characters instead of random recruits, so players can have favourites. 5 are available from the start (pick 3 per run), and 5 or more join through events and the tavern. The longlist is in [CHARACTERS.md](CHARACTERS.md).
 - **Height maps.** Maps use Ogre-style height levels. Height should matter for range, damage or hit, and movement (jump/climb). *Built as a greybox, see below.*
 - **Roguelike runs with a named cast.** Runs stay, but the units are named characters rather than random recruits. The story comes out between runs (Hades-style): breaking bigger crystals unlocks scenes and new characters.
 - **No side-on battle scenes.** Attacks play on the map, FFTA-style. Side-on scenes fight with height, and every named character would need a second full sprite set. *Built.*
@@ -37,9 +37,15 @@ In Shardbreaker you just kill crystallised monsters. There's no reason to defend
 
 ## Classes and abilities (FFTA / Fell Seal style)
 
-- Jobs instead of fixed classes. Each unit has a main job plus a secondary job's ability set.
-- Abilities are learned through jobs (JP-style) or through weapons (FFTA-style). The skill-capacity pie from Shardbreaker could become the passive/reaction budget.
-- Give the named NPCs and characters fun signature abilities.
+Decided:
+
+- **Signature kits.** Each character has their own kit (a passive and 3 abilities) plus 1–2 slots to customise.
+- **Costs.** Spells cost MP and physical skills have cooldowns. MP starts full and slowly refills.
+- **Forecast.** Skill multipliers (for example 1.5× Mag) are shown in the forecast.
+- **Statuses.** Status effects and immunities are kept light.
+- **Ability shapes.** Line, pierce, cross, area, cone, arc and burst.
+
+Still to flesh out: the story scenes, and narrowing the longlist into roles that make sense together.
 
 ## Maps
 
@@ -49,7 +55,7 @@ In Shardbreaker you just kill crystallised monsters. There's no reason to defend
 
 ## Open questions
 
-- What do jobs replace? The current tier 1 to tier 2 promotion, the evolve-at-PROMO_LV system, or both?
+- Does level-5 promotion stay alongside signature kits, or go?
 - With a fixed roster, does permadeath stay? One option: a fallen character is out for the rest of the run but back for the next one.
 - Sprites need two facings (front-diagonal and back-diagonal, mirrored) to read properly in isometric. Units still use the front-facing map sprites.
 
