@@ -53,7 +53,7 @@ Each base class ascends into one of two advanced classes.
 | Aldric | Knight | Juggernaut or Paladin |
 | Maelis | Mender | Saint or Crusader |
 | Wren | Archer | Sniper or Bow Cavalry |
-| Corvin | Elemental Mage | Archmage or (second option TBD) |
+| Corvin | Elemental Mage | Archmage or Stormlord |
 | Tamsin (name TBD) | Rogue | Duelist or Assassin |
 | Morrigan | Cultist | Warlock or Shaman |
 | Bram | Brawler | Berserker or Fighter |
@@ -92,8 +92,8 @@ A poacher's daughter who has never missed a meal or a deer. Cheeky, and the one 
 - **Volley** (area r1 at range 3–5 · CD 4): 0.7× Str to everything in the area.
 
 ### Corvin: Elemental Mage
-Expelled from the academy for setting fire to the academy. Overconfident and secretly brilliant. Works in fire, frost and lightning.
-- **Ascends into:** Archmage or (second option TBD).
+A court magician's apprentice who walked out when his master started making weapons for the war. Curious and methodical. Works in fire, frost and lightning.
+- **Ascends into:** Archmage or Stormlord.
 - **Passive: Attunement.** A spell of a different element from his last one costs 2 less MP.
 - **Firebolt** (single, range 1–4 · 3 MP): 1.2× Mag, 30% chance to Burn.
 - **Frost Wave** (cone 3 · 7 MP): 0.9× Mag and Chill.
@@ -192,7 +192,8 @@ Recruited from events, the tavern and regions. This pool is also where starting-
 | Name | Class |
 |---|---|
 | Kaya | Horse Archer |
-| Ash | Crossbowman |
+| Holt | Crossbowman |
+| Ashe | Pyromancer |
 | Sigrun | Drake Rider |
 
 ### Kaya: Horse Archer
@@ -202,12 +203,20 @@ A steppe rider whose clan was scattered by the war. Restless and quick to laugh.
 - **Scatter Shot** (cone 3 · CD 3): 0.6× Str to everything in it.
 - **Hunt** (single · CD 4): 1.3× Str, doubled against a target that moved this turn.
 
-### Ash: Crossbowman
+### Holt: Crossbowman
 A watchtower sentry who never left his post until the post burned. Patient and literal.
 - **Passive: Steady.** +20 Hit if he didn't move this turn.
 - **Bolt** (single, range 2–4 · CD 1): 1.2× Str, ignores 3 Def.
 - **Piercing Bolt** (line 4 · CD 3): 1.0× Str to everything in the line.
 - **Hold Position** (self · CD 3): until his next turn he shoots the first enemy that moves within range.
+
+### Ashe: Pyromancer
+Expelled from the academy for setting fire to the academy. Overconfident and secretly brilliant. Where Corvin spreads across elements, Ashe only cares about fire.
+- **Ascends into:** Pyrolord or Archmage.
+- **Passive: Kindling.** Burns she causes last 1 turn longer.
+- **Firebolt** (single, range 1–4 · 3 MP): 1.2× Mag, 30% chance to Burn.
+- **Flame Line** (line 4 · 7 MP): 1.0× Mag to everything in the line.
+- **Wildfire** (area r1 at range 3 · 12 MP): 1.3× Mag and Burn. Grass and forest tiles in the area burn for 2 turns, hurting anyone who stands there.
 
 ### Sigrun: Drake Rider
 A dragon-knight from the northern peaks, riding a young drake that hatched from a crystal-tainted egg. Fierce, and protective of her mount. (Could be a qilin rider instead for a more eastern feel.)
