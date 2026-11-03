@@ -100,7 +100,7 @@ A court magician's apprentice who walked out when his master started making weap
 - **Chain Lightning** (single, range 4 · 9 MP): 1.0× Mag, then jumps to up to 2 nearby enemies at 0.6×.
 
 ### Rook: Rogue
-A street thief working off a debt to Ithren. Quick-mouthed and not as selfish as she pretends.
+A street thief working off a debt to Ithren. Quick-mouthed and not as selfish as he pretends.
 - **Ascends into:** Duelist or Assassin.
 - **Passive: Slippery.** Can move through enemy tiles.
 - **Backstab** (single, adjacent · CD 2): 1.0× Str, doubled when striking from behind or from higher ground.
@@ -156,7 +156,7 @@ A templar whose order is preaching holy war. She came to prove them wrong.
 - **Consecrate** (burst r1 · 10 MP): for 3 turns these tiles heal allies 10% a turn and hurt spectral creatures.
 
 ### Nyx: Assassin
-No name, no past, and a contract on Ithren that she has chosen not to fulfil. Yet.
+Nyx isn't her real name. No past, and a contract on Ithren that she has chosen not to fulfil. Yet.
 - **Passive: Unseen.** Enemies won't target her if another unit is in reach.
 - **Mark for Death** (single, range 4 · CD 4): the target takes 30% more damage from everyone for 2 turns.
 - **Shadowstep** (tile behind an enemy within 4 · CD 3): teleports there.
