@@ -222,9 +222,9 @@ Expelled from the academy for setting fire to the academy. Overconfident and sec
 - **Wildfire** (area r1 at range 3 · 12 MP): 1.3× Mag and Burn. Grass and forest tiles in the area burn for 2 turns, hurting anyone who stands there.
 
 ### Kane and Abel: Lance knights
-Brothers from a border garrison, recruited together (taking one brings the other if there's room). Kane is all charge, Abel holds the line behind him.
+Brothers from a border garrison, separated when it fell. Each is found on his own during a run. Kane is all charge, Abel holds the line behind him.
 - **Ascend into:** Paladin or Warlord.
-- **Shared passive: Brothers.** While adjacent to each other, both get +10 Hit and +2 Def.
+- **Shared passive: Brothers.** If you've found both, they get +10 Hit and +2 Def while adjacent to each other.
 
 **Kane** (hot-headed, rides first and asks later)
 - **Mounted.** +2 Move, but can only climb 1 level at a time.
