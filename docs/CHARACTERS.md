@@ -57,7 +57,7 @@ Each base class ascends into one of two advanced classes.
 | Rook | Rogue | Duelist or Assassin |
 | Morrigan | Cultist | Warlock or Shaman |
 | Vaar | Brawler | Berserker or Fighter |
-| Kane | Cavalry | Paladin or Warlord |
+| Trent | Cavalry | Paladin or Warlord |
 
 ### Brynhildr: Shieldmaiden
 A city guardswoman who deserted rather than march on the neighbouring kingdom. Steady, dry and protective.
@@ -95,7 +95,7 @@ A poacher's son who has never missed a meal or a deer. Cheeky, and the one who c
 A court magician's apprentice who walked out when his master started making weapons for the war. Curious and methodical. Works in fire, frost and lightning.
 - **Ascends into:** Archmage or Stormlord.
 - **Passive: Attunement.** A spell of a different element from his last one costs 2 less MP.
-- **Firebolt** (single, range 1–4 · 3 MP): 1.2× Mag, 30% chance to Burn.
+- **Flame Burst** (cross at range 3 · 5 MP): 0.9× Mag, 30% chance to Burn.
 - **Frost Wave** (cone 3 · 7 MP): 0.9× Mag and Chill.
 - **Chain Lightning** (single, range 4 · 9 MP): 1.0× Mag, then jumps to up to 2 nearby enemies at 0.6×.
 
@@ -123,11 +123,10 @@ A village blacksmith who fights barehanded because he won't take a weapon to war
 - **Flurry** (single, adjacent · CD 3): 3 hits of 0.5× Str.
 - **Leap** (tile, range 3, ignores height · CD 4): lands with 1.2× Str in area r1.
 
-### Kane: Cavalry
-A hot-headed rider from a border garrison, separated from his brother Abel when it fell. Rides first and asks later.
+### Trent: Cavalry
+A hot-headed rider from a border garrison that fell to crystallised beasts. Rides first and asks later.
 - **Ascends into:** Paladin or Warlord.
 - **Passive: Mounted.** +2 Move, but can only climb 1 level at a time.
-- **Brothers:** if Abel joins, they get +10 Hit and +2 Def while adjacent to each other.
 - **Charge** (line, up to 4 tiles, stops at the first enemy · CD 3): 0.8× Str plus 0.2× for every tile travelled, then push 1.
 - **Lance Sweep** (arc · CD 2): 0.9× Str.
 - **Run Through** (pierce 2 · CD 3): 1.1× Str to both tiles.
@@ -139,7 +138,7 @@ A hot-headed rider from a border garrison, separated from his brother Abel when 
 | Valen | Duelist |
 | Celestine | Paladin |
 | Nyx | Assassin |
-| Rurik | Berserker |
+| Roark | Berserker |
 | Seren | Summoner |
 
 ### Valen: Duelist
@@ -163,7 +162,7 @@ Nyx isn't her real name. No past, and a contract on Ithren that she has chosen n
 - **Shadowstep** (tile behind an enemy within 4 · CD 3): teleports there.
 - **Execute** (single, adjacent · CD 4): 1.0× Str, or 3.0× if the target is below 30% HP.
 
-### Rurik: Berserker
+### Roark: Berserker
 A mercenary who drinks too much and fights better for it. Loud, and the tavern regulars love him.
 - **Passive: Fury.** +15 Crit while below half HP.
 - **Cleave** (arc · CD 2): 1.0× Str.
@@ -173,7 +172,7 @@ A mercenary who drinks too much and fights better for it. Loud, and the tavern r
 ### Seren: Summoner
 A spirit-speaker who bargained with something old to save her village. Gentle, but what follows her isn't.
 - **Passive: Bond.** Her familiar levels with her and returns at full HP each fight.
-- **Summon Familiar** (summon, adjacent · CD 5): calls her spirit drake.
+- **Summon Familiar** (summon, adjacent · 10 MP): calls her spirit drake.
 - **Empower** (familiar · 6 MP): the familiar's next attack deals double damage.
 - **Soul Swap** (familiar · 4 MP): she and the familiar swap places.
 
@@ -195,8 +194,7 @@ Recruited from events, the tavern and regions. This pool is also where starting-
 | Kaya | Horse Archer |
 | Holt | Crossbowman |
 | Ash | Pyromancer |
-| Abel | Cavalry |
-| Bryony | Mender (tavern) |
+| Aletta | Mender (tavern) |
 | Sigrun | Drake Rider |
 
 ### Kaya: Horse Archer
@@ -221,16 +219,7 @@ Expelled from the academy for setting fire to the academy. Overconfident and sec
 - **Flame Line** (line 4 · 7 MP): 1.0× Mag to everything in the line.
 - **Wildfire** (area r1 at range 3 · 12 MP): 1.3× Mag and Burn. Grass and forest tiles in the area burn for 2 turns, hurting anyone who stands there.
 
-### Abel: Cavalry
-Kane's calmer brother, the one who remembers the plan. Found during a run.
-- **Ascends into:** Paladin or Warlord.
-- **Passive: Mounted.** +2 Move, but can only climb 1 level at a time.
-- **Brothers:** if Kane is in the squad, they get +10 Hit and +2 Def while adjacent to each other.
-- **Brace Lance** (self · CD 3): Guard, and he strikes the first enemy that moves next to him.
-- **Shield Escort** (single ally, adjacent · CD 3): that ally takes 30% less damage until his next turn.
-- **Pinning Thrust** (single, adjacent · CD 2): 0.9× Str and Root.
-
-### Bryony: Mender
+### Aletta: Mender
 A tavern herbalist who patches up brawlers for the price of a drink. Joins from the tavern. Warm and nosy, and knows everyone's business.
 - **Ascends into:** Saint or Crusader.
 - **Passive: Bedside Manner.** Allies she heals also get +1 Def until their next turn.
@@ -243,7 +232,7 @@ A dragon-knight from the northern peaks, riding a young drake that hatched from 
 - **Passive: Flier.** Ignores Jump and terrain costs, but bows deal effective (double) damage to her.
 - **Dive** (line up to 3, stops at the first enemy · CD 3): 1.2× Str, plus 0.2× per level she drops onto the target.
 - **Wing Buffet** (cone 3 · CD 3): 0.5× Str and pushes everything hit 1 tile away.
-- **Drake Breath** (cone 3 · 8 MP): 0.9× Mag and Burn.
+- **Drake Breath** (cone 3 · CD 4): 0.9× Str and Burn.
 
 ## Objective types
 
