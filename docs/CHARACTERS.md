@@ -14,7 +14,7 @@ The cast, by when they can join. First names only for now. Kits are first drafts
 - **Lysander:** joins only through his event, The Wandering Minstrel.
 - **Act 2:** as it begins, two of the advanced characters offer to join (take one). From then on they're in the recruit and tavern pools too.
 - **Once a run:** each character joins at most once a run.
-- **Ascending:** characters keep their weapon when they ascend. The one exception is Holt, whose crossbow becomes a longbow when he ascends to Sniper.
+- **Weapons:** each character only ever wields the weapon type they start with (Menders: charms and arts), including after they ascend. They keep their weapon when they ascend, with two exceptions: Holt's crossbow becomes a longbow when he ascends to Sniper, and Crusaders are given a holy sword alongside their staff or charm.
 - **Sprites:** every character and ascension is drawn by the unit rig; see the Named cast section of `VISUALS.md`. Their looks are set in `js/14b-cast.js`.
 
 

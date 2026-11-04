@@ -143,6 +143,18 @@ const EVENTS={
         if(d==='skip')return null;run.roster.splice(+d.slice(1),1)}
       run.roster.push(nu);castJoined(nu);sfx('item');return`The lock gives. <b>${nu.name}</b>, a ${CLS[nu.cls].n}, joins the squad.`}},
     {l:'Leave them',go:async()=>'You walk on. The traveller’s shouts follow you a long way.'}]}},
+  /* weapon upgrades */
+  forge:{t:'The Old King’s Forge',art:'smith',d:'A dwarven forge, cold for a century, roars back to life as you approach. The anvil is warm to the touch.',o:[
+    {l:'Temper every weapon',sub:'Each unit’s weapon +1 (up to +3); Weary Legs next fight',go:async()=>{const n=run.roster.filter(u=>{const w=weaponOf(u);return w&&forgeLv(w)<FORGE_MAX&&forge(w)}).length;addWoe('weary',1);sfx('item');
+      return n?`You work through the night. ${n} weapon${n>1?'s are':' is'} tempered (+1), and everyone is worn out for the next fight.`:'Nothing here can be tempered any further.'}},
+    {l:'Masterwork one weapon',sub:'+2 to one weapon (up to +3)',go:async()=>{
+      const u=await pickUnit('Whose weapon?','It gains two reforges.',u=>{const w=weaponOf(u);return!w?'No weapon':forgeLv(w)>=FORGE_MAX?'Already +3':null});
+      if(!u)return null;const w=weaponOf(u);forge(w);forge(w);sfx('item');return`The anvil sings. ${u.name}’s weapon comes back as the <b>${IT[w.k].n}</b>: Mt ${IT[w.k].mt}, Hit ${IT[w.k].hit}.`}}]},
+  weaponmaster:{t:'The Weaponmaster',art:'armoury',d:'A scarred weaponmaster sits behind a table of fine arms. “Your blades are a disgrace. Give me one, and coin, and I’ll give you something worthy.”',o:[
+    {l:'Trade up a weapon',sub:'35 gold: a better weapon of the same kind',cost:35,need:()=>run.roster.some(u=>{const w=weaponOf(u);return w&&tierUp(u,w)}),go:async()=>{
+      const u=await pickUnit('Whose weapon?','They get the next tier of the same weapon, keeping any reforging.',u=>{const w=weaponOf(u);return!w?'No weapon':tierUp(u,w)?null:'Nothing better for them'});
+      if(!u)return null;const w=weaponOf(u),old=IT[w.k].n,up=tierUp(u,w);w.k=up;w.u=IT[up].uses;spend(35);return`The weaponmaster weighs your ${old}, snorts, and hands over the <b>${IT[up].n}</b>: Mt ${IT[up].mt}, Hit ${IT[up].hit}.`}},
+    {l:'Ask for a lesson',sub:'One unit gains 60 EXP',go:async()=>{const u=await pickUnit('Who takes the lesson?','They gain 60 EXP.');if(!u)return null;await expAll([u],60);return`An hour of drills and bruises. ${u.name} gains 60 EXP.`}}]},
   /* Lysander joins only through this event */
   minstrel:{t:'The Wandering Minstrel',art:'veteran',ok:()=>!(run.castUsed||[]).includes('lysander')&&!run.roster.some(u=>u.cast==='lysander'),
     d:'A man in a feathered cap sits by the road, tuning a lyre. “Monster hunters! Every ballad needs heroes. Mind if I come along and write yours?”',o:null,make:()=>{const nu=castUnit('lysander',lvAvg());EVENTS.minstrel.card=`<div class="dcard on ev-card">${unitCard(nu)}</div>`;return[
