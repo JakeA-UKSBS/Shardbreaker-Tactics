@@ -62,6 +62,8 @@ Still to flesh out: the story scenes, and narrowing the longlist into roles that
 
 - Weapons should look a little different depending on what they are and whether they're upgraded: iron, steel, jade and reforged (+1 to +3) versions of each weapon drawn differently on the unit sprites and icons (blade colour, size, trim, a glow at +3).
 
+- Maps: battle maps are hand-made per region already (only enemies and loot are rolled each fight). The aim is a set of hand-made maps for every fight type, with height maps; the defend maps are now one per region (TOWNS in js/16-maps-battles.js), and only the Cursed Woodland maps have hand-made heights so far.
+
 ## Carried over from Shardbreaker
 
 Everything in the copy works as it did at the fork point: body tags and effectiveness, relics, the tavern, events, Ascension and the hi-res unit sprites. docs/VISUALS.md and docs/INFO.md describe that starting point.
