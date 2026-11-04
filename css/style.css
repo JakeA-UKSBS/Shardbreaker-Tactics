@@ -671,3 +671,6 @@ button.it.sel{border-color:var(--gold)}
 .ab{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:1px;padding:6px 9px}.ab .abn{display:flex;justify-content:space-between;width:100%;font-weight:700}.ab .abn i{font-style:normal;font-size:12px;color:#9fb4ff}
 .ab .abr{font-size:11px;color:var(--gold)}.ab .abd{font-size:12px;color:var(--muted);font-weight:400;line-height:1.3}.ab.off{opacity:.55}.ab .abd em{color:#f0a08a;font-style:normal}
 .abf-r{font-size:13px;padding:3px 0;border-top:1px solid rgba(255,255,255,.06)}.abf-r .ec,.abf-r .pc{font-weight:700;margin-right:6px}.abfn{color:var(--gold)}.abfc{margin-left:auto;font-size:12px;color:#9fb4ff}
+
+/* the unit card's equipment list in the side panel */
+.ueq{margin-top:8px}.ueq-h{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}.ueq .inv{margin:0}
