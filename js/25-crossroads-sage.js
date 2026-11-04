@@ -47,7 +47,8 @@ async function sageScene(){
   for(let i=0;i<lines.length;i++){const last=i===lines.length-1,m=await show(lines[i],[['next',last?'To the Crossroads':'Continue'],...(prof.sageSeen&&!last?[['skip','Skip']]:[])]);
     if(m==='skip'){if(prof.asc)await show('Then you know the road. How deep into the blight will you go?',[['next','To the Crossroads']]);break}}
   if(!prof.sageSeen){prof.sageSeen=1;saveProf()}
-  sgEl.hidden=true;sgEl.onclick=null;return asc;
+  /* the tent stays up behind Ithren's gift until the Crossroads replaces it, so the title's throwaway battle never shows through */
+  sgEl.onclick=null;return asc;
 }
 function sageArt(){return sprCache.SAGE||(sprCache.SAGE=fig({style:'long',beard:true,hair:'#e8e2d0',gear:'hood',cloth:'#3a4a8a',skin:'#e0b090',sash:GOLD},'Sage','p','idle','crystalBall'))}
 async function musterScene(opts,need){
@@ -61,7 +62,7 @@ async function musterScene(opts,need){
     <div class="tv-box"><div class="ms-head"><b class="ms-count"></b><button type="button" class="mini ms-info" data-g="info" aria-expanded="false">ⓘ What do stats do?</button></div>${statHelpHTML()}
       <div class="ms-cards"></div>
       <div class="mbtns"><button type="button" data-g="back">Back</button><button type="button" class="go" data-g="go" disabled>Set out</button></div></div>`;
-  musEl.hidden=false;
+  musEl.hidden=false;sgEl.hidden=true;
   tip('muster','Choose your squad','Tap 3 travellers to bring them along. Their cards show stats, weapon and skill, and “What do stats do?” explains the numbers. Every Crossroads has at least one Mender to heal. Units who fall are gone for the rest of the run.');
   const draw=()=>{musEl.querySelectorAll('.mu').forEach(b=>b.classList.toggle('on',chosen.includes(+b.dataset.u)));
     const g=musEl.querySelector('[data-g="go"]');g.disabled=chosen.length!==need;g.textContent=`Set out (${chosen.length}/${need})`;

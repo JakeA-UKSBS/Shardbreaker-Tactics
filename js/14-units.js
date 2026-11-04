@@ -42,7 +42,7 @@ const KIT={blade:['ironJian','needle','ironDao'],heavy:['ironAxe','ironJi'],pole
 function ensureCls(k){
   if(CLS[k]||!k.startsWith('G.'))return k;
   const[,r,m,w,t]=k.split('.'),R=ROLES[r],M=MOVES[m],t2=t==='2';
-  const ws=w==='spirit'?['spirit','art']:(r==='shield'||r==='knight')?['blade','pole']:[w];if(t2&&SEC[w]&&!ws.includes(SEC[w])&&!['shield','knight','sword','rogue'].includes(r))ws.push(SEC[w]);
+  const ws=w==='spirit'?['spirit']:(r==='shield'||r==='knight')?['blade','pole']:[w];if(t2&&SEC[w]&&!ws.includes(SEC[w])&&!['shield','knight','sword','rogue'].includes(r))ws.push(SEC[w]);
   CLS[k]={n:(M.pre&&r!=='knight'?M.pre+' ':'')+(WN[w]&&!['rogue','shield','knight','sword','bruiser'].includes(r)?WN[w]+' ':'')+(M.names?M.names[r][t2?1:0]:R.nw&&R.nw[w]?R.nw[w][t2?1:0]:t2?R.n2:R.n),w:ws,body:m==='armour'?'armor':R.body,mov:M.mov+(t2?1:0),crit:R.crit||0,mnt:!!M.mnt,fly:!!M.fly};
   if(t2)Object.assign(CLS[k],{tier:2,bonus:R.bonus});else{CLS[k].promo=`G.${r}.${m}.${w}.2`;ensureCls(CLS[k].promo)}
   return k;
@@ -78,7 +78,7 @@ function genLook(role,mv,w){
 
 /* ---- units ---- */
 function startItems(role,w){
-  if(role==='support')return[{k:'spiritMend',u:IT.spiritMend.uses},{k:'lightT',u:IT.lightT.uses}];
+  if(role==='support')return[{k:'spiritMend',u:IT.spiritMend.uses},{k:'qiPill',u:IT.qiPill.uses}];
   if(role==='summoner'){const k=pick(['crookStaff','runeStaff']);return[{k,u:IT[k].uses},{k:'qiPill',u:IT.qiPill.uses}]}
   if(role==='rogue'){const k=pick(['dirk','dirk','twinBlades','stiletto']);return[{k,u:IT[k].uses},{k:'qiPill',u:IT.qiPill.uses}]}
   const kit=(role==='shield'||role==='knight')?KIT[w].filter(k=>!['twin','rapier'].includes(IT[k].kind)&&k!=='needle'):KIT[w],k=pick(kit.length?kit:KIT[w]);return[{k,u:IT[k].uses},{k:'qiPill',u:IT.qiPill.uses}];

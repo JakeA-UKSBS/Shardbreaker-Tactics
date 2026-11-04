@@ -32,5 +32,5 @@ async function chapterIntro(){
   if(state.ch===1)tip('defend','Hold the camp','You win by surviving: the goal counts the turns. Plug the gaps in the palisade, and expect new enemies every turn.');
   if(state.ch===2)tip('traps','Traps and gremlins','Some labyrinth tiles hide traps that hurt whoever steps on them. Sprung traps stay marked.');
   if(state.ch===6)tip('fliers','Fliers','Fliers cross open sky and ignore terrain bonuses. Bows deal double damage to them.');
-  if(state.ch===1)tip('items','Villages, chests and recruits','Move any unit onto a village or chest and choose Visit or Open to collect an item. Under Items you can equip weapons, use Salves and learn skills from scrolls. Some enemies can be recruited: put your lord next to them and choose Talk.');
+  if(state.ch===1)tip('items','Chests and recruits','Move any unit onto a chest and choose Open to collect what’s inside. Under Items you can equip weapons, use Salves and learn skills from scrolls. Some enemies can be recruited: put your lord next to them and choose Talk.');
 }

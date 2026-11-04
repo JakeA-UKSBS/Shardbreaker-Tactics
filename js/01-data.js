@@ -57,8 +57,8 @@ const IT={
   crookStaff:{n:'Crook Staff',t:'art',kind:'staff',mt:6,hit:85,crit:0,r:[1,1],uses:45,mag:true},
   runeStaff:{n:'Rune Staff',t:'art',kind:'staff',mt:4,hit:85,crit:0,r:[1,2],uses:40,mag:true},
   glimmer:{n:'Glimmer',t:'art',kind:'talisman',el:'light',mt:2,hit:85,crit:0,r:[1,2],uses:45,mag:true},
-  spiritMend:{n:'Mending Charm',t:'spirit',kind:'spirit',amt:10,r:[1,1],uses:30},
-  greaterMend:{n:'Dawn Charm',t:'spirit',kind:'spirit',amt:20,r:[1,1],uses:20,tint:'mend'},
+  spiritMend:{n:'Mending Staff',t:'spirit',kind:'staff',amt:10,r:[1,1],uses:30},
+  greaterMend:{n:'Dawn Staff',t:'spirit',kind:'staff',amt:20,r:[1,1],uses:20,tint:'mend'},
   greatsword:{n:'Greatsword',t:'blade',kind:'greatsword',mt:11,hit:70,crit:5,r:[1,1],uses:30,tint:'steel'},
   claws:{n:'Claws',t:'blade',kind:'twin',mt:4,hit:85,crit:10,r:[1,1],uses:99},
   labrys:{n:'Labrys',t:'heavy',kind:'axe',mt:12,hit:75,crit:10,r:[1,1],uses:30,tint:'steel'},
@@ -105,7 +105,11 @@ Object.assign(IT,{
   huntSpear:{n:'Hunting Spear',t:'pole',kind:'spear',mt:7,hit:80,crit:0,r:[1,1],uses:30,wt:6,eff:['beast']},
   holySword:{n:'Holy Sword',t:'blade',kind:'sword',mt:8,hit:80,crit:5,r:[1,1],uses:25,wt:6,eff:['spectral'],tint:'holy'},
   giantslayer:{n:'Giantslayer',t:'blade',kind:'greatsword',mt:9,hit:70,crit:0,r:[1,1],uses:25,wt:10,eff:['colossal'],tint:'steel'},
-  farMend:{n:'Far Charm',t:'spirit',kind:'spirit',amt:10,r:[1,10],uses:15,tint:'mend'}
+  farMend:{n:'Far Staff',t:'spirit',kind:'staff',amt:10,r:[1,10],uses:15,tint:'mend'},
+  /* two-handed swords (kind greatsword): heavy, hard-hitting blades. Zwei wields only these */
+  claymore:{n:'Claymore',t:'blade',kind:'greatsword',mt:9,hit:75,crit:0,r:[1,1],uses:40,wt:10},
+  zweihander:{n:'Zweihänder',t:'blade',kind:'greatsword',mt:14,hit:65,crit:5,r:[1,1],uses:30,wt:14,tint:'steel'},
+  flamberge:{n:'Flamberge',t:'blade',kind:'greatsword',mt:12,hit:70,crit:20,r:[1,1],uses:25,wt:12,tint:'killer'}
 });
 for(const k in IT)IT[k].key=k;
 
@@ -152,15 +156,15 @@ const SKILLS={
   renewal:{n:'Renewal',cost:10,d:'Adjacent allies recover 5 HP at the start of each of your turns.'},
   sunder:{n:'Pierce',cost:15,d:'Luck×1.5% chance: the strike ignores half the target\'s Def.'},
   shieldwall:{n:'Bulwark',cost:15,d:'Luck×2% chance: halves damage from an incoming strike.'},
-  stone:{n:'Stone Gaze',cost:20,d:'Luck% chance on a hit: the target turns to stone, loses its next turn and can\'t counter. Bosses are immune.'},
-  siphon:{n:'Lifetaker',cost:20,d:'Luck×2% chance: restores HP equal to the damage dealt.'}
+  stone:{n:'Stone Gaze',cost:15,d:'Luck% chance on a hit: the target turns to stone, loses its next turn and can\'t counter. Bosses are immune.'},
+  siphon:{n:'Lifetaker',cost:15,d:'Luck×2% chance: restores HP equal to the damage dealt.'}
 };
 /* Skill scrolls (one per skill except Command) and the class-change item. */
 Object.assign(SKILLS,{
   hitrun:{n:'Hit and Run',cost:10,d:'After attacking in melee, steps back one tile if there is room.'},
   quickdraw:{n:'Quick Draw',cost:15,d:'When attacked at half HP or less, strikes first.'},
   flurry:{n:'Flurry',cost:15,d:'Spd% chance of an extra strike in each fight.'},
-  whirlwind:{n:'Whirlwind',cost:20,d:'Luck÷2% chance: one strike becomes five hits at half damage.'},
+  whirlwind:{n:'Whirlwind',cost:15,d:'Luck÷2% chance: one strike becomes five hits at half damage.'},
   retaliate:{n:'Retaliate',cost:15,d:'Luck% chance, when hit in melee, to deal the same damage back.'},
   ironskin:{n:'Iron Skin',cost:10,d:'Luck×2% chance to halve physical damage taken.'},
   spellward:{n:'Spell Ward',cost:10,d:'Luck×2% chance to halve magic damage taken.'},

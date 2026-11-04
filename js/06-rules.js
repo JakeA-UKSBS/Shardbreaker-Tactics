@@ -16,7 +16,9 @@ const capOf=u=>u.cap||BASE_CAP;
 function learnBlock(u,k){if(has(u,k))return`${u.name} already knows ${SKILLS[k].n}.`;const c=SKILLS[k].cost;if(capUsed(u)+c>capOf(u))return`Needs ${c} capacity; ${u.name} has ${capOf(u)-capUsed(u)} free.`;return null}
 function promoBlock(u){if(u.team!=='p')return'Only allies can ascend.';if(!CLS[u.cls].promo)return`${u.name} has already ascended.`;if(u.lv<PROMO_LV)return`${u.name} needs Lv ${PROMO_LV} to ascend.`;return null}
 const elv=u=>u.lv+(CLS[u.cls].tier===2?15:0);
-const canUse=(u,k)=>CLS[u.cls].w.includes(IT[k].t);
+/* a few characters wield only certain kinds within their class's weapon types (Zwei: two-handed swords) */
+const ONLY_KIND={zwei:['greatsword']};
+const canUse=(u,k)=>CLS[u.cls].w.includes(IT[k].t)&&(!u.cast||!ONLY_KIND[u.cast]||!WTYPES.includes(IT[k].t)||ONLY_KIND[u.cast].includes(IT[k].kind));
 /* ---- height (Ogre/FFTA style) ----
    Each tile has a height level (hOf). A unit can only step up or down JUMP levels at a time (fliers and ghosts ignore it).
    Attacking from above: +10 Hit and +1 damage per level (max 3); from below: -10 Hit per level.

@@ -30,7 +30,7 @@ function talkTarget(u){if(!u.lord)return null;return state.units.find(o=>o.recru
 /* Tiles are drawn as diamonds TW wide and TH tall; each height level lifts a tile HS px. BW/BH/OX/OY are set in buildBoard(). */
 const TW=68,TH=34,HS=16;let BW=0,BH=0,OX=0,OY=0;
 /* walls and other solid blocks stand taller than the ground they're on (looks only: they can't be entered) */
-function vhOf(x,y){const t=ter(x,y),h=hOf(x,y);if(t.c<99||['water','lava','sky'].includes(t.k))return h;return h+(['wall','cavewall','mast','hull'].includes(t.k)?2:1)}
+function vhOf(x,y){const t=ter(x,y),h=hOf(x,y);if(t.c<99||PROPS[t.k]||['water','lava','sky'].includes(t.k))return h;return h+(['wall','cavewall','mast','hull'].includes(t.k)?2:1)}
 /* top corner of a tile's top face at height h */
 const tileTop=(x,y,h)=>({x:OX+(x-y)*TW/2,y:OY+(x+y)*TH/2-h*HS});
 const hOfU=(x,y,sz)=>Math.max(...cellsOf(x,y,sz||1).map(([cx,cy])=>hOf(cx,cy)));
@@ -39,17 +39,21 @@ function scrC(x,y,sz){sz=sz||1;return{x:OX+(x-y)*TW/2,y:OY+(x+y+sz)*TH/2-hOfU(x,
 /* a unit's sprite box on the board */
 function uBox(o){const c=scrC(o.x,o.y,o.sz),w=(o.sz||1)*T;return{l:c.x-w/2,t:c.y-w+6,w,h:w}}
 /* painter's order: further back first. A unit draws over the row in front of it unless that row is taller */
-function unitZ(u){const sz=u.sz||1,d=u.x+u.y+(sz-1)*2,h=hOfU(u.x,u.y,sz);let z=d*4+2;
-  if(sz===1&&[[u.x+1,u.y],[u.x,u.y+1],[u.x+1,u.y+1]].every(([x,y])=>x>=MW||y>=MH||vhOf(x,y)<=h))z+=4;return z}
-/* board px -> the tile under it (units first, then the front-most tile face) */
+/* depth order: tile faces (x+y)*4+1, props +3, units +4, or +6 when nothing in front is taller. A unit stands in front of
+   its own tile's tree but behind the trees a row nearer the camera */
+function unitZ(u){const sz=u.sz||1,d=u.x+u.y+(sz-1)*2,h=hOfU(u.x,u.y,sz);let z=d*4+4;
+  if(sz===1&&[[u.x+1,u.y],[u.x,u.y+1],[u.x+1,u.y+1]].every(([x,y])=>x>=MW||y>=MH||vhOf(x,y)<=h))z+=2;return z}
+/* board px -> the tile under it: units first, then top faces (the front-most one), and only then side faces.
+   Top faces win over the cliff in front of them, so a ledge half-hidden behind a taller block can still be tapped. */
 function pickAt(cx,cy){const b=vb(),px=(cx-b.l-cam.x)/cam.s,py=(cy-b.t-cam.y)/cam.s;
   const us=state.units.filter(u=>u.hp>0).sort((a,b)=>unitZ(b)-unitZ(a));
-  for(const u of us){const r=uBox(u);if(px>=r.l+r.w*.2&&px<=r.l+r.w*.8&&py>=r.t+r.h*.15&&py<=r.t+r.h)return[u.x,u.y]}
-  let best=null,bd=-1;
-  for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){if(ter(x,y).k==='sky')continue;const d=x+y;if(d<=bd)continue;
+  for(const u of us){const r=uBox(u);if(px>=r.l+r.w*.25&&px<=r.l+r.w*.75&&py>=r.t+r.h*.2&&py<=r.t+r.h-4)return[u.x,u.y]}
+  let top=null,td=-1,side=null,sd=-1;
+  for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){if(ter(x,y).k==='sky')continue;const d=x+y;
     const vh=vhOf(x,y),p=tileTop(x,y,vh),dx=Math.abs(px-p.x);if(dx>TW/2)continue;const e=dx/(TW/2)*TH/2;
-    if(py>=p.y+e&&py<=p.y+TH-e+(vh+1)*HS){best=[x,y];bd=d}}
-  return best}
+    if(py>=p.y+e&&py<=p.y+TH-e){if(d>td){top=[x,y];td=d}}
+    else if(py>p.y+TH-e&&py<=p.y+TH-e+(vh+1)*HS&&d>sd){side=[x,y];sd=d}}
+  return top||side}
 
 /* ================= CAMERA ================= */
 let cam={x:0,y:0,s:1};

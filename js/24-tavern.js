@@ -63,7 +63,7 @@ async function tavernNode(){
   const price=u=>40+15*u.lv;
   tavEl.innerHTML=`<div class="tv-scene"><img class="tv-bg" src="${tavernArt()}" alt=""><img class="tv-keeper" src="${keeper}" alt="${KEEPER.name}"><img class="tv-counter" src="${counterArt()}" alt=""><span class="tv-gold"></span></div>
     <div class="tv-box"><div class="tv-name">${KEEPER.name}, the innkeeper</div><p class="tv-text"></p><div class="tv-opts"></div></div>`;
-  tavEl.hidden=false;music('tavern');run.roster.forEach(u=>u.hp=u.maxhp);
+  tavEl.hidden=false;music('tavern');
   tip('tavern','The tavern','Spend the gold you earn from fights: one drink, one meal and one hire per visit. Food lasts a few fights; drink boosts are permanent.');
   let text=pick(GREET)+' (A night’s rest here heals everyone fully.)';
   for(;;){
