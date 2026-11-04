@@ -20,6 +20,12 @@ async function pickUnit(title,text,ok,skipLabel='Cancel',add){
 }
 const evDone=(t,html)=>modal(`<h2>${t}</h2><p>${html}</p><div class="mbtns"><button class="go" type="button" data-m="ok">Continue</button></div>`);
 const full=u=>u.items.length>=5?'Inventory full':null;
+/* put item k in u's bag; if it's full, ask which item to swap out (that one is left behind). false if they cancel */
+async function stow(u,k){if(u.items.length<5){u.items.push({k,u:IT[k].uses});return true}
+  const m=await modal(`<h2>${u.name}’s bag is full</h2><p>Swap something out for the <b>${IT[k].n}</b>? The item you swap out is left behind.</p><div class="draft">${u.items.map((it,i)=>`<button type="button" class="dcard" data-m="s${i}"><div class="dimg"><img src="${icon(it.k)}" alt=""></div><div class="dtxt"><span>${itemText(it.k)}${IT[it.k].t==='item'?` (${it.u} left)`:''}</span></div></button>`).join('')}</div><div class="mbtns"><button type="button" data-m="skip">Don’t swap</button></div>`);
+  if(m==='skip')return false;const out=u.items[+m.slice(1)];u.items.splice(+m.slice(1),1,{k,u:IT[k].uses});toast(`${u.name} leaves the ${IT[out.k].n} behind`);return true}
+/* the best steel weapon for a unit's weapon type (the elite's reward) */
+const steelFor=u=>{for(const t of CLS[u.cls].w)if(STEEL[t])return STEEL[t];return null};
 const weaponOf=u=>u.items.find(it=>(isWpn(it.k)||IT[it.k].t==='spirit')&&canUse(u,it.k));
 
 /* ---- treasure: the vault holds one thing (an item, a skill or a relic), then who takes it ---- */
@@ -33,8 +39,8 @@ async function treasureNode(){
     if(m==='reroll'){run.rr[run.act||1]=1;k=mk();sfx('tick');continue}
     if(k.startsWith('skill:')){if(await allocSkill(k.slice(6)))return;continue}
     if(k.startsWith('relic:')){const r=k.slice(6);(run.relics=run.relics||[]).push(r);sfx('fanfare');toast(`${RELICS[r].n} obtained`);return}
-    const u=await pickUnit(`Who carries the ${IT[k].n}?`,'Units with full inventories can’t take it.',u=>full(u)||(isWpn(k)&&!canUse(u,k)?'Can’t wield it':null),'Leave it');
-    if(!u)return;u.items.push({k,u:IT[k].uses});sfx('item');toast(`${u.name} takes the ${IT[k].n}`);return;
+    const u=await pickUnit(`Who carries the ${IT[k].n}?`,'If their bag is full, you can swap something out.',u=>isWpn(k)&&!canUse(u,k)?'Can’t wield it':null,'Leave it');
+    if(!u)return;if(!await stow(u,k))continue;sfx('item');toast(`${u.name} takes the ${IT[k].n}`);return;
   }
 }
 
