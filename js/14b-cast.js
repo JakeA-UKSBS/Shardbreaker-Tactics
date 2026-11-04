@@ -30,7 +30,8 @@ for(const n in CAST_CLASSES){const base=ensureCls('G.'+CAST_CLASSES[n]);const C=
 
 /* ---- the characters ----
    cls: their class, wk: the weapon they hold, look: their look.
-   asc: one entry per ascension; its look is laid over the base look (wk swaps the weapon). */
+   asc: one entry per ascension; its look is laid over the base look (wk is the weapon drawn in the previews).
+   swap: on ascending, this weapon in their bag becomes wk (only Holt: crossbow to longbow as a Sniper). */
 const CAST=[
   /* ---- starting roster ---- */
   {id:'kili',name:'Kili',cls:'Archer',wk:'longbow',joins:'start',look:{style:'tail',hair:'#4a3426',skin:'#e8b98f',cloth:'#4a6a3a',pants:'#5a4a32',sash:'#7a5230',feather:['#efe6cf','#c8322e','#efe6cf'],eye:'#3a6a3a'},
@@ -66,7 +67,7 @@ const CAST=[
     asc:{'Paladin':{look:{capeC:'#3f7a4a',metal:'#c4dcbc',shield:'kite',shieldC:'#3f7a4a'}},
          'Warlord':{look:{capeC:'#25603a',metal:'#7a9a72',beard:true,barding:'#1e3a24',joust:true,lanceC:'#e8e2d0'}}}},
   {id:'holt',name:'Holt',cls:'Crossbowman',wk:'crossbow',joins:'run',look:{style:'short',hair:'#e8e2d0',skin:'#e8b98f',cloth:'#3a5a8a',pants:'#3a3a4a',sash:'#c9c3b8',eye:'#3a5a8a'},
-    asc:{'Sniper':{wk:'longbow',look:{gear:'hood',capeC:'#2a3a5a'}},
+    asc:{'Sniper':{wk:'longbow',swap:'crossbow',look:{gear:'hood',capeC:'#2a3a5a'}},
          'Artillery':{look:{metal:'#9aa8c0',capeC:'#2a3a5a',beard:true}}}},
   {id:'sigrun',name:'Sigrun',cls:'Drake Rider',wk:'ironSpear',joins:'run',look:{body:'tunic',fem:true,style:'tail',hair:'#4a3a30',skin:'#f6dcc4',cloth:'#2a2630',pants:'#3a2430',sash:'#c8322e',shawl:'#a8322e',cape:true,capeC:'#6a2a5a',mount:'wyvern',horse:'#4f8a4a',eye:'#5a4a7a'}},
   {id:'kaya',name:'Kaya',cls:'Horse Archer',wk:'shortBow',joins:'run',look:{fem:true,style:'long',hair:'#d8c8ec',skin:'#e8b98f',cloth:'#8a6a4a',pants:'#5a4a32',sash:'#8a5a9a',horse:'#8a8f9a',eye:'#5a4a7a'}},
@@ -91,7 +92,7 @@ CAST.forEach(c=>{const base=castCls(c.cls);c.cls=base;
   if(c.asc){const asc={};for(const n in c.asc){const a=c.asc[n],look=Object.assign({},c.look,a.look);
     for(const k in look)if(look[k]==null)delete look[k];
     if(CAST_CLASSES[n].split('.')[1]!=='flying')delete look.mount;else if(!look.mount)look.mount='pegasus';
-    asc[castCls(n)]={n,wk:a.wk===undefined?c.wk:a.wk,look}}
+    asc[castCls(n)]={n,wk:a.wk===undefined?c.wk:a.wk,swap:a.swap,look}}
   c.asc=asc;CLS[base].asc=[...new Set([...(CLS[base].asc||[]),...Object.keys(asc)])];CLS[base].promo=CLS[base].asc[0]}});
 const castDef=id=>CAST.find(c=>c.id===id);
 
@@ -123,3 +124,5 @@ function castOffer(n,lv,where){const out=shuffle(castPool(where).slice()).slice(
 function castJoined(u){if(u&&u.cast)(run.castUsed=run.castUsed||[]).push(u.cast)}
 /* the look a cast unit takes on ascending into class k */
 function castLook(u,k){const c=u.cast&&castDef(u.cast),a=c&&c.asc[k];return a?clone(a.look):null}
+/* on ascending: swap the listed weapon for the ascension's one (keeps the slot) */
+function castSwap(u,to){const c=u.cast&&castDef(u.cast),a=c&&c.asc[to];if(!a||!a.swap)return;const it=u.items.find(i=>i.k===a.swap);if(it){it.k=a.wk;it.u=IT[a.wk].uses}}

@@ -64,12 +64,13 @@ function promote(u,to){
   const old={lv:u.lv,cap:capOf(u)};ST.forEach(s=>old[s]=s==='hp'?u.maxhp:u[s]);
   const gift=CLS[to].gift&&u.items.length<5?CLS[to].gift:null;if(gift)u.items.push({k:gift,u:IT[gift].uses});
   if(u._nl){u.look=u._nl;delete u._nl}
+  castSwap(u,to);
   u.cls=to;u.lv=1;u.exp=0;u.cap=capOf(u)+PROMO_CAP;u.mov=CLS[to].mov;
   ST.forEach((s,i)=>{if(s==='hp'){u.maxhp+=b[i];u.hp+=b[i]}else u[s]+=b[i]});u.lck+=b[3];
   return{from,to,old,b,gift};
 }
 async function ascend(u,to){
-  const wk=mapWk(u),before=fig(u.look,u.cls,'p','idle',wk),r=promote(u,to),after=fig(u.look,u.cls,'p','idle',wk),still=!settings.anim||matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const wk=mapWk(u),before=fig(u.look,u.cls,'p','idle',wk),r=promote(u,to),after=fig(u.look,u.cls,'p','idle',mapWk(u)),still=!settings.anim||matchMedia('(prefers-reduced-motion: reduce)').matches;
   const el=document.createElement('div');el.className='asc';
   const parts=Array.from({length:36},()=>`<i class="asc-p" style="left:${10+Math.random()*80}%;--x:${(Math.random()*60-30).toFixed(0)}px;--d:${(1.6+Math.random()*1.8).toFixed(2)}s;--dl:${(Math.random()*2).toFixed(2)}s"></i>`).join('');
   el.innerHTML=`<div class="asc-stage"><div class="asc-pillar"></div><div class="asc-ring"></div><div class="asc-ring r2"></div>${parts}<div class="asc-wave"></div><img class="asc-spr" src="${before}" alt=""></div>
