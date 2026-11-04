@@ -252,10 +252,22 @@ async function enemyPhase(){
   const l=state.units.find(u=>u.lord);if(l)ensureVisible(l.x,l.y);saveGame();
   if(state.ch===0)tip('enemy','Plan around the enemy','Press Danger to shade every tile an enemy can reach next turn.');
 }
+/* the Crystal Heart, on even turns: a 3×3 blast of crystal on your tankiest unit (highest max HP + Def) and whoever
+   stands next to them. It can't miss; Res is taken off as usual. */
+async function crystalStorm(e){
+  const ps=state.units.filter(u=>u.hp>0&&hostile(u,e));if(!ps.length)return;
+  const t=ps.reduce((a,b)=>b.maxhp+b.def>a.maxhp+a.def?b:a),w=IT.shatter,hit=ps.filter(u=>Math.abs(u.x-t.x)<=1&&Math.abs(u.y-t.y)<=1);
+  if(ensureVisible(t.x,t.y))await sleep(300);toast('The Crystal Heart unleashes a Crystal Storm!');sfx('critcharge');await sleep(D(500));shake();
+  for(const u of hit){const c=calc(e,w,u,null,{init:e,phase}),d=Math.min(u.hp,dmgMods(e,u,{init:e},Math.max(0,c.pow-c.df)));u.hp-=d;sfx('broke');shatterFx(u);pop(u,'-'+d,'crit');flash(u)}
+  render();await sleep(D(700));
+  for(const u of hit)if(u.hp<=0&&R('phoenix')&&!run.phx){u.hp=1;run.phx=1;pop(u,'Phoenix!','heal');toast(`The Phoenix Feather saves ${u.name}`)}
+  state.units=state.units.filter(u=>u.hp>0);render();checkEnd();
+}
 async function runAI(team){
   if(team==='g'){banner('Other Phase','g');await sleep(950)}
   for(const e of state.units.filter(u=>u.team===team)){
-    if(e.hp<=0||over)continue;if(e.stone){e.stone=0;render();continue}if(hasSt(e,'stun')){pop(e,'Stunned','miss');await sleep(300);continue}const plan=aiPlan(e);
+    if(e.hp<=0||over)continue;if(e.stone){e.stone=0;render();continue}if(hasSt(e,'stun')){pop(e,'Stunned','miss');await sleep(300);continue}
+    if(e.boss&&e.cls==='CrystalHeart'&&state.turn%2===0){await crystalStorm(e);if(over)break;continue}const plan=aiPlan(e);
     if(plan.tile&&(plan.tile.x!==e.x||plan.tile.y!==e.y)){if(ensureVisible(plan.tile.x,plan.tile.y))await sleep(300);stepSfx(e);e.x=plan.tile.x;e.y=plan.tile.y;render();await sleep(330)}
     /* Cover: the protector takes the hit instead, if the attacker can reach them from here */
     if(plan.target&&hasSt(plan.target,'cover')){const cv=byId(plan.target.st.cover.by);if(cv&&cv.hp>0&&cv!==plan.target){const wl=wpnsAt(e,man(e,cv),cv);if(wl.length){pop(cv,'Cover!','heal');plan.target=cv;plan.wi=wl[0];await sleep(250)}}}

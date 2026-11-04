@@ -130,7 +130,7 @@ const BIOMES={
     boss:{name:'',cls:'MinotaurM',s:[34,12,0,6,4,2,9,2],items:['steelAxe'],skill:'fury',look:{style:'bald',horns:true,beard:true,hair:'#2a1a14',skin:'#7a4e32',cloth:'#4a3a2a',eye:'#ff5a3a',hornGem:'#d8323a',crysAt:[{core:[15,19],col:'#d8323a'}]}}},
   /* Act 3, the end of every run: not in the region draw (biomeIds). Its monsters are the Heart's own crystal creatures */
   heart:{n:'The Heart of the Blight',noThe:1,bg:'#3a1018',d:'Scorched ground split by veins of glowing gem. Every crystal in these lands grew from what waits here.',
-    tip:['heart','The Crystal Heart','The Heart never moves, but it strikes from 2 to 6 tiles away. Get next to it: it can’t hit what’s beside it. It calls more blighted monsters every other turn.'],
+    tip:['heart','The Crystal Heart','The Heart never moves, but it strikes from 2 to 6 tiles away. Get next to it: it can’t hit what’s beside it. On even turns it hurls a Crystal Storm at your toughest unit and everyone next to them, so spread out. It calls more blighted monsters on turns 3, 5 and 7.'],
     maps:['heartHall'],bossMap:'heartCore',pool:[['Shardling',4],['Prism',3],['Sentinel',2]],elitePool:[['Sentinel',3],['Shardling',2],['Prism',2]],
     boss:{name:'The Crystal Heart',cls:'CrystalHeart',sz:3,mov:0,s:[56,0,8,8,0,0,8,8],items:['shatter'],skill:'focus',summon:'*',summonTxt:'The Crystal Heart calls the blighted!',intro:'The Crystal Heart beats at the centre of the chamber, and every crystal in these lands beats with it. Shatter it to end the blight.',look:{crys:false}}}
 };
