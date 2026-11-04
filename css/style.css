@@ -692,5 +692,18 @@ button.it.sel{border-color:var(--gold)}
 .nmap .nm-scroll .nd:not(.ok):not(.cur):not(.vis):not(.n-boss):not(.n-start){opacity:.8;filter:saturate(.6) sepia(.25)}
 .nmap .nm-scroll .nd.n-boss{opacity:1;filter:none;width:136px;height:136px;margin:-68px 0 0 -68px;border:4px solid #e8b04a;background:radial-gradient(circle at 50% 45%,#b8442e,#5a1410 80%);box-shadow:0 0 0 3px #5a1410,0 0 26px rgba(200,50,30,.65),0 4px 10px rgba(50,28,8,.5)}
 .nmap .nm-scroll .nd.n-boss img{width:116px;height:116px}
-.nmap .nm-scroll .nd.n-elite img{width:32px;height:32px}
-@media (min-width:960px){.nmap .nm-scroll .nd.n-elite img{width:48px;height:48px}}
+.nmap .nm-scroll .nd.n-elite img{width:48px;height:48px}
+/* node outlines by type */
+.nmap .nm-scroll .nd{border-width:3px}
+.nmap .nm-scroll .nd.n-battle{border-color:#9a9aa4}
+.nmap .nm-scroll .nd.n-elite{border-color:#e8402e}
+.nmap .nm-scroll .nd.n-tavern{border-color:#a06a3a}
+.nmap .nm-scroll .nd.n-rest{border-color:#f08a2a}
+.nmap .nm-scroll .nd.n-treasure{border-color:#4a8ae0}
+.nmap .nm-scroll .nd.n-event{border-color:#a06ad8}
+.nmap .nm-scroll .nd.n-recruit{border-color:#4aaa6a}
+.nmap .nm-scroll .nd.pick{border-color:var(--gold)}
+/* campfire is a 52px hand-drawn sprite (by Rhi): scale it down smoothly */
+.nmap .nm-scroll .nd.n-rest img{width:32px;height:32px;image-rendering:auto}
+@media (min-width:960px){.nmap .nm-scroll .nd.n-rest img{width:44px;height:44px}}
+.nmap .nm-scroll .nd.n-event img{width:32px;height:32px}
