@@ -145,6 +145,7 @@ function hiArt(L,cls,team,wk,name,i,W){
   if(L.tails){const fl=P.flap?2:0;limb([hx-5,hy-2],[hx-13,hy+5+fl],L.tails,2);limb([hx-13,hy+5+fl],[hx-15,hy+11],L.tails,2);limb([hx-5,hy-1],[hx-10,hy+11-fl],shade(L.tails,.8),1)}
   if(L.cape||t2){const cc=L.capeC||TC.A,cc2=shade(cc,.8);p.poly([[nx-8,ny+1],[nx+1,ny+1],[hx-2,seat?hy+4:hy+14],[hx-12+P.bx*-.3,seat?hy+6:hy+19],[nx-12,ny+12]],cc);p.line(nx-6,ny+3,hx-9,seat?hy+5:hy+17,cc2)}
   if(L.gear!=='helm'&&L.gear!=='hood'&&L.gear!=='veil'){
+    if(L.style==='mane')p.poly([[head[0]-7,head[1]-4],[head[0]-1,head[1]-4],[head[0]-1,head[1]+15],[head[0]-6,head[1]+18],[head[0]-10,head[1]+14]],hair2);
     if(L.style==='long')p.poly([[head[0]-7,head[1]-3],[head[0]-2,head[1]-3],[head[0]-2,head[1]+10],[head[0]-8,head[1]+12]],hair2);
     if(L.style==='tail'){limb([head[0]-5,head[1]-4],[head[0]-10,head[1]+2],hair2,3);limb([head[0]-10,head[1]+2],[head[0]-10,head[1]+9],hair2,2)}}
   /* ---- legs ---- */
@@ -156,12 +157,14 @@ function hiArt(L,cls,team,wk,name,i,W){
   else{const bf=[hx-P.spread+P.bx*.3,FT],ff=[hx+P.spread+P.step,FT],bk=[(hx+bf[0])/2-2,hy+11],fk=[(hx+ff[0])/2+2,hy+11],bt=body==='armor'?MT2:boot;
     limb([hx-2,hy],bk,shade(pants,.8),5);limb(bk,bf,shade(pants,.8),4);p.rect(Math.round(bf[0])-3,FT-2,7,3,bt);
     limb([hx+1,hy],fk,pants,5);limb(fk,ff,pants,4);p.rect(Math.round(ff[0])-2,FT-2,8,3,bt);
+    if(L.boots){const mid=(k,f)=>[k[0]+(f[0]-k[0])*.3,k[1]+(f[1]-k[1])*.3];limb(mid(bk,bf),bf,shade(L.boots,.8),4);limb(mid(fk,ff),ff,L.boots,4);p.rect(Math.round(bf[0])-3,FT-2,7,3,shade(L.boots,.8));p.rect(Math.round(ff[0])-2,FT-2,8,3,L.boots);p.line(...mid(fk,ff).map(Math.round),Math.round(mid(fk,ff)[0])+3,Math.round(mid(fk,ff)[1]),shade(L.boots,1.3))}
     if(body==='armor'){limb(fk,[fk[0]+1,fk[1]+8],MT,3);p.ell(fk[0],fk[1],2.4,2,MT)}}
   /* ---- back arm (behind the torso), with a shield or a second weapon ---- */
   const onShoulder=name==='idle'&&L.stance==='shoulder';
   if(onShoulder){const s0=[nx+5,ny+3],e0=pt(...s0,P.arm,9),h0=pt(...e0,P.fore,8);drawHiWeapon(p,kind,w,c,h0,P.wpn,P,null,pt,limb,L)}
   const sb=[nx-5,ny+3],eb=pt(...sb,P.back,8),hb=pt(...eb,P.backFore,7),sleeve=body==='vest'?sk2:body==='armor'?MT2:cl2;
   limb(sb,eb,sleeve,4);limb(eb,hb,body==='armor'?MT2:sk2,3);p.ell(hb[0],hb[1],2,2,sk2);
+  if(L.bracers)limb(pt(...eb,P.backFore,2),pt(...eb,P.backFore,6),shade(L.bracers,.75),3);
   if(kind==='twin'||kind==='twindagger'){const a=P.backFore-30;limb(hb,pt(...hb,a,kind==='twin'?14:L.jag?13:8),c.blade,2);if(L.jag)for(let k=4;k<12;k+=3)p.set(...pt(...pt(...hb,a,k),a+90,2),c.blade);limb(pt(...hb,a+90,2),pt(...hb,a-90,2),c.hilt,1)}
   /* ---- torso ---- */
   const sh=fem?8:9;
@@ -178,6 +181,7 @@ function hiArt(L,cls,team,wk,name,i,W){
   if(L.apron){p.rect(hx-5,ny+7,10,hy-ny+3,'#e8e2d0');p.rect(hx-5,ny+7,10,1,'#c9c3b8')}
   /* shawl: a drape over both shoulders that dips to a point at the front; collar: a broad striped neck-piece */
   if(L.shawl){const s2=shade(L.shawl,.8);p.poly([[nx-sh-1,ny],[nx+sh+1,ny],[nx+sh,ny+4],[nx+2,ny+8],[nx-sh,ny+5]],L.shawl);p.line(nx-sh,ny+5,nx+2,ny+8,s2);p.line(nx+2,ny+8,nx+sh,ny+4,s2)}
+  if(L.lapels){const l2=shade(L.lapels,.75);p.poly([[nx-3,ny+1],[nx+1,ny+1],[nx-1,ny+7]],L.lapels);p.poly([[nx+1,ny+1],[nx+6,ny+1],[nx+2,ny+7]],L.lapels);p.line(nx+1,ny+1,nx+1,ny+6,l2);p.line(nx-3,ny+1,nx-1,ny+7,l2)}
   if(L.collar){for(let k=0;k<3;k++)p.line(nx-sh+k,ny+1+k*2,nx+sh-k,ny+1+k*2,k%2?L.collar:GOLD,2)}
   p.rect(hx-7,hy-3,14,3,body==='armor'?BROWN2:sash);p.rect(hx-1,hy-3,3,3,t2?GOLD:shade(sash,.7));
   /* ---- shield on the back arm, in front of the body ---- */
@@ -201,6 +205,8 @@ function hiArt(L,cls,team,wk,name,i,W){
   if(bare&&L.style!=='bald'){p.ell(cx-1,cy-3,6.8,5,hair,(x,y)=>y<=cy-2||x<cx-3);p.poly([[cx+1,cy-5],[cx+6,cy-4],[cx+5,cy-2],[cx+2,cy-3]],hair);p.line(cx-3,cy-7,cx+2,cy-7,hair3);
     if(L.style==='topknot'){p.ell(cx-1,cy-9,2.6,2.4,hair);p.rect(cx-2,cy-8,3,1,GOLD)}
     if(L.style==='bun')p.ell(cx-5,cy-6,2.8,2.6,hair);
+    if(L.style==='bunback'){p.ell(cx-8,cy-4,2.8,2.6,hair);p.set(cx-8,cy-5,hair3)}
+    if(L.style==='mane')p.rect(cx-6,cy-2,2,7,hair);
     if(L.style==='tail')p.ell(cx-6,cy-4,2,2,hair);
     if(L.style==='wild'){p.poly([[cx-6,cy-4],[cx-10,cy-9],[cx-3,cy-6]],hair);p.poly([[cx-2,cy-7],[cx,cy-12],[cx+2,cy-7]],hair);p.poly([[cx+2,cy-6],[cx+6,cy-9],[cx+4,cy-4]],hair)}
     if(L.style==='long'||fem)p.rect(cx-6,cy-2,2,6,hair)}
@@ -224,10 +230,11 @@ function hiArt(L,cls,team,wk,name,i,W){
   if(g==='nursecap'){p.poly([[cx-5,cy-5],[cx+4,cy-5],[cx+3,cy-10],[cx-4,cy-10]],'#f4f2ea');p.line(cx-5,cy-6,cx+4,cy-6,'#5a8a5a');p.rect(cx-1,cy-9,2,2,'#5a8a5a')}
   if(g==='cap'){const cc=shade(cl,.8);p.ell(cx,cy-4,7,4,cc,(x,y)=>y<=cy-3);p.rect(cx-6,cy-3,15,2,shade(cc,.8));limb([cx-2,cy-7],[cx-10,cy-13],CREAM,1);limb([cx-3,cy-7],[cx-11,cy-12],'#d8d0bc',1);p.set(cx-10,cy-13,RED)}
   if(g==='douli'){p.poly([[cx-12,cy-2],[cx+12,cy-2],[cx,cy-12]],'#c9a46a');limb([cx-8,cy-3],[cx,cy-11],'#a8844c',1);limb([cx+8,cy-3],[cx,cy-11],'#a8844c',1);p.rect(cx-11,cy-2,22,1,'#8a6a3c')}
-  if(t2&&g!=='helm'&&g!=='douli'){p.rect(cx-3,cy-8,6,1,GOLD);p.set(cx,cy-9,'#9fd8ff')}
+  if(t2&&!L.noCrown&&g!=='helm'&&g!=='douli'){p.rect(cx-3,cy-8,6,1,GOLD);p.set(cx,cy-9,'#9fd8ff')}
   /* ---- weapon arm and weapon ---- */
   const sf=[nx+5,ny+3],ef=pt(...sf,P.arm,9),hf=pt(...ef,P.fore,8),a=P.wpn;
   limb(sf,ef,body==='vest'?sk:body==='armor'?MT:cl,5);limb(ef,hf,body==='armor'?MT2:sk,4);
+  if(L.bracers){limb(pt(...ef,P.fore,2),pt(...ef,P.fore,7),L.bracers,4);p.ell(sf[0],sf[1],3.6,2.8,L.bracers);p.line(sf[0]-3,sf[1]+1,sf[0]+3,sf[1]+1,shade(L.bracers,.7))}
   if(L.tattoo&&body==='vest'){const m=pt(...sf,P.arm,5);p.line(Math.round(m[0])-1,Math.round(m[1]),Math.round(m[0])+2,Math.round(m[1])+1,L.tattoo);p.set(Math.round(ef[0]),Math.round(ef[1])+2,L.tattoo)}
   if(L.scar){p.line(nx+4,ny,nx+9,ny+5,'#c97a6a');p.set(nx+6,ny+1,'#e8a090')}
   if(L.wraps)limb(pt(...ef,P.fore,4),hf,L.wraps,4);

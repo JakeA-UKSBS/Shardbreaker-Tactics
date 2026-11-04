@@ -4,7 +4,8 @@
    tattoo, scar, wraps (hand wraps), mask, voidFace, mist (dark mist round the hand), hand (casts from the open hand), el (spell glow colour),
    staff/orb (staff colours), nature (branch staff), jag (jagged daggers), dblAxe (two-headed axe), joust + lanceC (jousting lance),
    barding (horse armour), bolt / hem (robe trims), tails (sash ribbons), stance (idle: shoulder/low/guard/draw/high),
-   shield (round/kite/tower/aegis), gear also takes 'nursecap', prop ('lyre': held instead of a weapon).
+   bracers (wristguards + shoulder plate), lapels, boots (tall boots), noCrown (no gold band when ascended),
+   style also takes 'mane' (longer hair) and 'bunback', shield (round/kite/tower/aegis), gear also takes 'nursecap', prop ('lyre': held instead of a weapon).
    Preview them all: node tools/export-cast.mjs (writes docs/visuals/cast/). */
 
 /* ---- the cast's classes ----
@@ -69,8 +70,8 @@ const CAST=[
          'Artillery':{look:{metal:'#9aa8c0',capeC:'#2a3a5a',beard:true}}}},
   {id:'sigrun',name:'Sigrun',cls:'Drake Rider',wk:'ironSpear',joins:'run',look:{body:'tunic',fem:true,style:'tail',hair:'#4a3a30',skin:'#f6dcc4',cloth:'#2a2630',pants:'#3a2430',sash:'#c8322e',shawl:'#a8322e',cape:true,capeC:'#6a2a5a',mount:'wyvern',horse:'#4f8a4a',eye:'#5a4a7a'}},
   {id:'kaya',name:'Kaya',cls:'Horse Archer',wk:'shortBow',joins:'run',look:{fem:true,style:'long',hair:'#d8c8ec',skin:'#e8b98f',cloth:'#8a6a4a',pants:'#5a4a32',sash:'#8a5a9a',horse:'#8a8f9a',eye:'#5a4a7a'}},
-  {id:'jun',name:'Jun',cls:'Swordsman',wk:'ironJian',joins:'run',look:{body:'robe',style:'topknot',hair:'#1d1a24',skin:'#f3cfa6',cloth:'#2f4f8f',sash:'#efe6cf',stance:'low',eye:'#2a2230'},
-    asc:{'Swordmaster':{wk:'moonDao',look:{capeC:'#1e2f5a',gear:'guan',stance:'draw',tails:'#efe6cf'}}}},
+  {id:'jun',name:'Jun',cls:'Swordsman',wk:'ironJian',joins:'run',look:{body:'robe',style:'topknot',hair:'#1d1a24',skin:'#f3cfa6',cloth:'#2f4f8f',sash:'#efe6cf',stance:'low',style:'bunback',eye:'#2a2230'},
+    asc:{'Swordmaster':{wk:'moonDao',look:{capeC:'#1e2f5a',stance:'draw',tails:'#efe6cf',bracers:'#a8b4c8',lapels:'#efe6cf',noCrown:true}}}},
   {id:'ash',name:'Ash',cls:'Pyromancer',wk:'flameT',joins:'run',look:{style:'short',hair:'#3a2a20',skin:'#e8b98f',cloth:'#a8322a',sash:'#e2b553',collar:'#a8322a',gear:'circlet',hand:true,eye:'#6a3a2a'},
     asc:{'Pyrolord':{look:{capeC:'#5a1a1a',el:'#ffb03c',style:'wild',hair:'#8a2a22',body:'robe',hem:'#ff8a3c'}},
          'Archmage':{wk:'meteorT',look:{capeC:'#3a1a3a',cloth:'#7a2a4a',collar:'#7a2a4a'}}}},
@@ -78,8 +79,8 @@ const CAST=[
   /* ---- join after Act 1, already advanced ---- */
   {id:'nyx',name:'Nyx',cls:'Assassin',wk:'dirk',joins:'act1',look:{fem:true,style:'long',hair:'#1d1a24',skin:'#e8b98f',cloth:'#1e1a22',pants:'#141018',sash:'#5a4a7a',gear:'hood',mask:'#4a4656',capeC:'#1e1a22',jag:true,eye:'#9a6ad8'}},
   {id:'roark',name:'Roark',cls:'Berserker',wk:'reaverAxe',joins:'act1',look:{style:'wild',beard:true,hair:'#9a9aa2',skin:'#e8b98f',cloth:'#6a6a72',pants:'#3a3a40',sash:'#a8322a',capeC:'#8a2a22',scar:true,dblAxe:true,stance:'shoulder',eye:'#6a3a2a'}},
-  {id:'valen',name:'Valen',cls:'Swordsman',wk:'steelJian',joins:'act1',look:{style:'long',hair:'#2a2230',skin:'#f3cfa6',cloth:'#6a1e2a',pants:'#3a2228',sash:'#c9c3b8',stance:'guard',eye:'#2a2230'},
-    asc:{'Swordmaster':{wk:'ironDao',look:{capeC:'#4a1420',gear:'headband',stance:'high',tails:'#c9c3b8'}}}},
+  {id:'valen',name:'Valen',cls:'Swordsman',wk:'steelJian',joins:'act1',look:{style:'mane',hair:'#d9b25a',skin:'#f3cfa6',cloth:'#6a1e2a',pants:'#3a2228',sash:'#c9c3b8',stance:'guard',boots:'#4a3426',eye:'#3a5a8a'},
+    asc:{'Swordmaster':{wk:'ironDao',look:{capeC:'#4a1420',stance:'high',tails:'#c9c3b8',bracers:'#a8b4c8',lapels:'#c9c3b8',noCrown:true}}}},
   {id:'celestine',name:'Celestine',cls:'Paladin',wk:'ironSpear',joins:'act1',look:{fem:true,style:'long',hair:'#d9b25a',skin:'#f6dcc4',cloth:'#3a6ab0',metal:'#e4ecf6',shield:'kite',shieldC:'#3a6ab0',capeC:'#2a4a8a',horse:'#f3f0e8',eye:'#3a5a8a'}},
   {id:'seren',name:'Seren',cls:'Summoner',wk:'runeStaff',joins:'act1',look:{fem:true,style:'long',hair:'#1d1a24',skin:'#f3cfa6',cloth:'#4a8a9a',sash:'#cfe8f0',shawl:'#cfe8f0',capeC:'#2f6a7a',orb:'#9fe8ff',nature:true,eye:'#3a6a7a'}},
   {id:'zwei',name:'Zwei',cls:'Mercenary',wk:'greatsword',joins:'act1',look:{fem:true,style:'bun',hair:'#1d1a24',skin:'#a8714a',cloth:'#efe6cf',pants:'#c9bfa0',sash:'#e2b553',collar:'#2a5aa8',capeC:'#2a5aa8',stance:'shoulder',eye:'#2a2230'}},
