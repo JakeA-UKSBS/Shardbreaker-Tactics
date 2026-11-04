@@ -58,8 +58,8 @@ const CAST=[
          'Aegis':{look:{metal:'#b8c0a8',shield:'aegis',capeC:'#3f4a2a'}}}},
   {id:'brin',name:'Brin',cls:'Adventurer',wk:'ironJian',joins:'start',look:{style:'short',hair:'#6b4226',skin:'#f3cfa6',cloth:'#c8682a',pants:'#5a4a3a',sash:'#7a5230',shield:'round',shieldC:'#c8682a',eye:'#3a6a3a'},
     asc:{'Hero':{wk:'steelJian',look:{capeC:'#c8682a',shield:'kite',shieldC:'#a8501e',gear:'headband'}}}},
-  /* ---- found during the run ---- */
-  {id:'aletta',name:'Aletta',cls:'Mender',wk:'spiritMend',joins:'run',look:{fem:true,style:'bun',hair:'#a8743a',skin:'#f3cfa6',cloth:'#5a8a5a',sash:'#efe6cf',shawl:'#dfe8d0',gear:'nursecap',eye:'#3a6a3a'},
+  /* ---- found during the run (joins:'tavern' only at the tavern, 'event' only through their own event) ---- */
+  {id:'aletta',name:'Aletta',cls:'Mender',wk:'spiritMend',joins:'tavern',look:{fem:true,style:'bun',hair:'#a8743a',skin:'#f3cfa6',cloth:'#5a8a5a',sash:'#efe6cf',shawl:'#dfe8d0',gear:'nursecap',eye:'#3a6a3a'},
     asc:{'Saint':{wk:'runeStaff',look:{gear:'circlet',capeC:'#dfe8d0',staff:'#e2b553',orb:'#9fe8c0'}},
          'Crusader':{wk:'holySword',look:{gear:null,metal:'#b8d0b0',shield:'kite',shieldC:'#5a8a5a',capeC:'#3f6a3f',shawl:null}}}},
   {id:'trent',name:'Trent',cls:'Cavalier',wk:'ironSpear',joins:'run',look:{style:'short',hair:'#3a2a20',skin:'#e8b98f',cloth:'#3f7a4a',metal:'#a9c4a2',horse:'#4a3426',eye:'#3a6a3a'},
@@ -70,7 +70,7 @@ const CAST=[
          'Artillery':{look:{metal:'#9aa8c0',capeC:'#2a3a5a',beard:true}}}},
   {id:'sigrun',name:'Sigrun',cls:'Drake Rider',wk:'ironSpear',joins:'run',look:{body:'tunic',fem:true,style:'tail',hair:'#4a3a30',skin:'#f6dcc4',cloth:'#2a2630',pants:'#3a2430',sash:'#c8322e',shawl:'#a8322e',cape:true,capeC:'#6a2a5a',mount:'wyvern',horse:'#4f8a4a',eye:'#5a4a7a'}},
   {id:'kaya',name:'Kaya',cls:'Horse Archer',wk:'shortBow',joins:'run',look:{fem:true,style:'long',hair:'#d8c8ec',skin:'#e8b98f',cloth:'#8a6a4a',pants:'#5a4a32',sash:'#8a5a9a',horse:'#8a8f9a',eye:'#5a4a7a'}},
-  {id:'jun',name:'Jun',cls:'Swordsman',wk:'ironJian',joins:'run',look:{body:'robe',style:'topknot',hair:'#1d1a24',skin:'#f3cfa6',cloth:'#2f4f8f',sash:'#efe6cf',stance:'low',style:'bunback',eye:'#2a2230'},
+  {id:'jun',name:'Jun',cls:'Swordsman',wk:'ironJian',joins:'tavern',look:{body:'robe',style:'topknot',hair:'#1d1a24',skin:'#f3cfa6',cloth:'#2f4f8f',sash:'#efe6cf',stance:'low',style:'bunback',eye:'#2a2230'},
     asc:{'Swordmaster':{wk:'moonDao',look:{capeC:'#1e2f5a',tails:'#efe6cf',bracers:'#a8b4c8',lapels:'#efe6cf',noCrown:true}}}},
   {id:'ash',name:'Ash',cls:'Pyromancer',wk:'flameT',joins:'run',look:{style:'short',hair:'#3a2a20',skin:'#e8b98f',cloth:'#a8322a',sash:'#e2b553',collar:'#a8322a',gear:'circlet',hand:true,eye:'#6a3a2a'},
     asc:{'Pyrolord':{look:{capeC:'#5a1a1a',el:'#ffb03c',style:'wild',hair:'#8a2a22',body:'robe',hem:'#ff8a3c'}},
@@ -92,5 +92,34 @@ CAST.forEach(c=>{const base=castCls(c.cls);c.cls=base;
     for(const k in look)if(look[k]==null)delete look[k];
     if(CAST_CLASSES[n].split('.')[1]!=='flying')delete look.mount;else if(!look.mount)look.mount='pegasus';
     asc[castCls(n)]={n,wk:a.wk===undefined?c.wk:a.wk,look}}
-  c.asc=asc;CLS[base].asc=[...new Set([...(CLS[base].asc||[]),...Object.keys(asc)])]}});
+  c.asc=asc;CLS[base].asc=[...new Set([...(CLS[base].asc||[]),...Object.keys(asc)])];CLS[base].promo=CLS[base].asc[0]}});
 const castDef=id=>CAST.find(c=>c.id===id);
+
+/* ---- making cast units and offering them during a run ----
+   The Crossroads offers starting-roster characters; whoever you don't take can turn up later.
+   Recruits, the caged traveller and the tavern draw from those plus the 'run' characters (the tavern also has its own);
+   from Act 2 the 'act1' characters (already advanced) join the pool. Each character joins at most once a run (run.castUsed). */
+function castUnit(id,lv){
+  const c=castDef(id),[,role,mv,,t]=c.cls.split('.'),R=ROLES[role],M=MOVES[mv];
+  const s=R.b.slice();if(M.st)M.st.forEach((d,i)=>s[i]=Math.max(0,s[i]+d));if(t==='2'&&R.bonus)R.bonus.forEach((d,i)=>s[i]+=d);
+  const g=R.gr.map(([a,b])=>Math.round((a+b)/2)),items=[];
+  if(c.wk)items.push({k:c.wk,u:IT[c.wk].uses});
+  if(role==='support'&&c.wk!=='spiritMend')items.push({k:'spiritMend',u:IT.spiritMend.uses});
+  items.push({k:'qiPill',u:IT.qiPill.uses});
+  const u={id:'c'+(run.uid++),cast:id,name:c.name,cls:c.cls,team:'p',lv:1,exp:0,skill:pick(R.skills),skills:[],cap:BASE_CAP,look:clone(c.look),g,mov:CLS[c.cls].mov,items,acted:false,x:0,y:0};
+  ST.forEach((k,i)=>u[k]=s[i]);u.maxhp=u.hp;
+  for(;u.lv<lv;u.lv++)ST.forEach((k,i)=>{if(rand()*100<g[i]){if(k==='hp')u.maxhp++;else u[k]++}});
+  if(role==='summoner')u.familiar=pick(Object.keys(FAMILIARS));
+  u.hp=u.maxhp;return foldLuck(u);
+}
+/* who can turn up: where = 'recruit' (recruit node, cage), 'tavern' or 'act1' (the offer as Act 2 begins) */
+function castPool(where){
+  const used=new Set([...(run.castUsed||[]),...run.roster.map(u=>u.cast)]),act=run.act||1;
+  return CAST.filter(c=>!used.has(c.id)&&(where==='act1'?c.joins==='act1':c.joins==='start'||c.joins==='run'||(where==='tavern'&&c.joins==='tavern')||(act>=2&&c.joins==='act1')));
+}
+/* n cast units for an offer; random units fill in only once the cast has run out */
+function castOffer(n,lv,where){const out=shuffle(castPool(where).slice()).slice(0,n).map(c=>castUnit(c.id,lv));while(out.length<n&&where!=='act1')out.push(genUnit(lv));return out}
+/* call when a unit joins the squad, so that character isn't offered again this run */
+function castJoined(u){if(u&&u.cast)(run.castUsed=run.castUsed||[]).push(u.cast)}
+/* the look a cast unit takes on ascending into class k */
+function castLook(u,k){const c=u.cast&&castDef(u.cast),a=c&&c.asc[k];return a?clone(a.look):null}

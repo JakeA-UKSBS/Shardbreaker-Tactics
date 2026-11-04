@@ -11,19 +11,19 @@ function unitCard(u,on,add){
   <span class="dsk">${SKILLS[u.skill].n}${ls.length?', '+ls.join(', '):''} · ${w.map(i=>`<img src="${icon(i.key)}" alt="">${i.n}${i.r?` (Rng ${rngTxt(i.r)})`:''}`).join(' ')}</span></div><div class="dcap">${capPie(u,add)}</div>${on?'<span class="dtick">✓</span>':''}`;
 }
 const canReroll=()=>unl('reroll')&&!(run.rr=run.rr||{})[run.act||1];
-async function recruitNode(){
-  const lv=Math.max(1,Math.round(run.roster.reduce((a,u)=>a+u.lv,0)/run.roster.length))+(R('lantern')?1:0),mk=()=>Array.from({length:R('lantern')?4:3},()=>genUnit(lv));
+async function recruitNode(where='recruit'){
+  const lv=Math.max(1,Math.round(run.roster.reduce((a,u)=>a+u.lv,0)/run.roster.length))+(R('lantern')?1:0),mk=()=>castOffer(where==='act1'?2:R('lantern')?4:3,lv,where);if(where==='act1'&&!castPool('act1').length)return;
   let opts=mk();const full=run.roster.length>=TEAM_CAP;
   for(;;){
-    const m=await modal(`<div class="eyebrow">Recruit</div><h2>Someone wants to join</h2><p>${full?`Your squad is full (${TEAM_CAP}). Recruiting means letting someone go.`:'Pick one, or press on without them.'}</p>
+    const m=await modal(`<div class="eyebrow">${where==='act1'?`Act ${run.act||1}`:'Recruit'}</div><h2>${where==='act1'?'Veterans of the road want to join':'Someone wants to join'}</h2><p>${full?`Your squad is full (${TEAM_CAP}). Recruiting means letting someone go.`:'Pick one, or press on without them.'}</p>
       <div class="draft">${opts.map((u,i)=>`<button type="button" class="dcard" data-m="r${i}">${unitCard(u)}</button>`).join('')}</div>
-      <div class="mbtns"><button type="button" data-m="skip">Skip</button>${canReroll()?'<button type="button" data-m="reroll">Reroll (once this act)</button>':''}</div>`);
+      <div class="mbtns"><button type="button" data-m="skip">Skip</button>${where!=='act1'&&canReroll()?'<button type="button" data-m="reroll">Reroll (once this act)</button>':''}</div>`);
     if(m==='skip')return;
     if(m==='reroll'){run.rr[run.act||1]=1;opts=mk();sfx('tick');continue}
     const nu=opts[+m.slice(1)];
     if(full){const d=await modal(`<h2>Who leaves?</h2><p>${nu.name} takes their place.</p><div class="draft">${run.roster.map((u,i)=>`<button type="button" class="dcard" data-m="d${i}">${unitCard(u)}</button>`).join('')}</div><div class="mbtns"><button type="button" data-m="skip">Keep my squad</button></div>`);
       if(d==='skip')return;run.roster.splice(+d.slice(1),1)}
-    run.roster.push(nu);sfx('item');toast(`${nu.name} joins the squad`);return;
+    run.roster.push(nu);castJoined(nu);sfx('item');toast(`${nu.name} joins the squad`);return;
   }
 }
 /* slayer loot follows the region: the body tags of its monsters pick which slayer weapon or skill can drop */

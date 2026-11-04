@@ -59,7 +59,7 @@ function tavShow(text,opts){
 function spend(n){run.gold=gold()-n;sfx('item')}
 async function tavernNode(){
   const look={...KEEPER.look},keeper=fig(look,'Heir','g','idle',null),bought=new Set(),done={},B=actBiome();
-  const hires=Array.from({length:3},()=>{const lv=Math.max(1,Math.round(run.roster.reduce((a,u)=>a+u.lv,0)/run.roster.length)+ri(-1,1));return genUnit(lv)});
+  const hires=castOffer(3,Math.max(1,Math.round(run.roster.reduce((a,u)=>a+u.lv,0)/run.roster.length)),'tavern');
   const price=u=>40+15*u.lv;
   tavEl.innerHTML=`<div class="tv-scene"><img class="tv-bg" src="${tavernArt()}" alt=""><img class="tv-keeper" src="${keeper}" alt="${KEEPER.name}"><img class="tv-counter" src="${counterArt()}" alt=""><span class="tv-gold"></span></div>
     <div class="tv-box"><div class="tv-name">${KEEPER.name}, the innkeeper</div><p class="tv-text"></p><div class="tv-opts"></div></div>`;
@@ -90,7 +90,7 @@ async function tavernNode(){
       if(h==='back')continue;const nu=hires[+h.slice(1)];
       if(full){tavEl.hidden=true;const d=await modal(`<h2>Who stays behind?</h2><p>${nu.name} takes their place.</p><div class="draft">${run.roster.map((u,i)=>`<button type="button" class="dcard" data-m="d${i}">${unitCard(u)}</button>`).join('')}</div><div class="mbtns"><button type="button" data-m="skip">Keep my squad</button></div>`);tavEl.hidden=false;
         if(d==='skip')continue;run.roster.splice(+d.slice(1),1)}
-      spend(price(nu));done.hire=1;run.roster.push(nu);hires.splice(hires.indexOf(nu),1);text=`${nu.name} finishes their drink and picks up their gear. “When do we leave?”`;continue}
+      spend(price(nu));done.hire=1;run.roster.push(nu);castJoined(nu);hires.splice(hires.indexOf(nu),1);text=`${nu.name} finishes their drink and picks up their gear. “When do we leave?”`;continue}
   }
 }
 
