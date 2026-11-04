@@ -5,6 +5,11 @@ function ensureIt(k){if(IT[k]||!k.includes('~'))return k;const[b,n]=k.split('~')
 function forgeLv(it){return IT[it.k].forge||0}
 function forge(it){const B=IT[it.k],n=(B.forge||0)+1;if(n>FORGE_MAX)return false;it.k=ensureIt((B.base||it.k)+'~'+n);return true}
 const STEEL={blade:'steelJian',heavy:'steelAxe',pole:'steelSpear',bow:'steelBow'};
+/* the Weaponmaster's trade-ups: each weapon line goes to its next tier, keeping the kind of weapon */
+const UPGRADE={ironJian:'steelJian',steelJian:'jadeJian',ironSpear:'steelSpear',steelSpear:'jadeSpear',ironAxe:'steelAxe',steelAxe:'jadeAxe',
+  shortBow:'steelBow',steelBow:'jadeBow',longbow:'greatbow',ironDao:'moonDao',dirk:'jadeFang',twinBlades:'jadeFang',stiletto:'jadeFang'};
+/* the next tier of a unit's weapon (keeps any reforging); null if there's nothing better */
+function tierUp(u,it){const B=IT[it.k],up=UPGRADE[B.base||it.k],f=B.forge||0;return up&&canUse(u,up)?(f?ensureIt(up+'~'+f):up):null}
 
 /* ---- shared pickers ---- */
 function itemText(k){return itemInfo({cls:'Heir',name:''},k).replace(/ · [^·]*can't (wield|use) this\./,'')}

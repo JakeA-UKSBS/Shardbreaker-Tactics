@@ -286,9 +286,10 @@ function drawHiWeapon(p,kind,w,c,h,a,P,hb,pt,limb,L={}){
   else if(kind==='spear'||kind==='javelin'){const f=kind==="javelin"?15:20,tip=pt(...h,a,f),bt=pt(...h,a+180,kind==='javelin'?6:10);limb(bt,tip,BROWN,2);
     p.poly([pt(...tip,a,7),pt(...tip,a+90,2.6),pt(...tip,a-90,2.6)],c.blade);limb(tip,pt(...tip,a,6),c.edge,1);if(kind==='spear')p.ell(...pt(...tip,a+180,1),1.6,1.6,RED)}
   /* bow / crossbow: limbs across the aim line; when drawn, the string goes to the back hand with an arrow */
-  else if(kind==='bow'||kind==='crossbow'){const b=a+90,tipA=pt(...pt(...h,b,12),a+180,5),tipB=pt(...pt(...h,b+180,12),a+180,5);
+  else if(kind==='bow'||kind==='crossbow'){const b=a+90,bs=L.bigBow?17:12,bc=L.bigBow?7:5,tipA=pt(...pt(...h,b,bs),a+180,bc),tipB=pt(...pt(...h,b+180,bs),a+180,bc);
     if(kind==='crossbow'){limb(pt(...h,a+180,8),pt(...h,a,6),BROWN,3);const f=pt(...h,a,5);limb(pt(...f,b,8),f,METAL2,2);limb(pt(...f,b+180,8),f,METAL2,2);limb(pt(...f,b,8),pt(...h,a+180,2),CREAM,1);limb(pt(...f,b+180,8),pt(...h,a+180,2),CREAM,1)}
-    else{let prev=tipA;for(let k=1;k<=8;k++){const t=-1+k/4,q=pt(...pt(...h,b,-12*t),a+180,5*t*t);limb(prev,q,c.hilt===RED?RED:BROWN,2);prev=q}
+    else{let prev=tipA;for(let k=1;k<=8;k++){const t=-1+k/4,q=pt(...pt(...h,b,-bs*t),a+180,bc*t*t);limb(prev,q,c.hilt===RED?RED:BROWN,L.bigBow&&Math.abs(t)<.6?3:2);prev=q}
+      if(L.bigBow){p.set(...tipA.map(Math.round),GOLD);p.set(...tipB.map(Math.round),GOLD)}
       const pull=P.draw?hb:null;if(pull){limb(tipA,pull,CREAM,1);limb(pull,tipB,CREAM,1);limb(pull,pt(...h,a,5),'#e8dfc6',1);p.poly([pt(...h,a,8),pt(...pt(...h,a,5),a+90,1.5),pt(...pt(...h,a,5),a-90,1.5)],METAL)}else limb(tipA,tipB,CREAM,1)}}
   /* staff: long shaft with an orb (ranged) or a crook (melee); glows when casting */
   else if(kind==='staff'&&L.nature){/* a tall gnarled branch staff with leaves around a glowing orb */const tip=pt(...h,a,22),bt=pt(...h,a+180,12),wd='#6a5232',o=L.orb||'#9fe8ff';limb(bt,tip,wd,2);p.set(...pt(...h,a,9),'#4a3a22');p.set(...pt(...h,a+180,5),'#4a3a22');

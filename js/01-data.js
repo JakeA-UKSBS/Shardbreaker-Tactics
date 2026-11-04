@@ -88,6 +88,7 @@ Object.assign(IT,{
   jadeAxe:{n:'Jade Axe',t:'heavy',kind:'axe',mt:11,hit:65,crit:30,r:[1,1],uses:25,tint:'jade',wt:10},
   jadeBow:{n:'Jade Bow',t:'bow',kind:'bow',mt:8,hit:75,crit:30,r:[2,2],uses:25,tint:'jade',wt:5},
   longbow:{n:'Longbow',t:'bow',kind:'bow',mt:6,hit:70,crit:0,r:[2,3],uses:30,wt:6},
+  greatbow:{n:'Yew Greatbow',t:'bow',kind:'bow',mt:9,hit:75,crit:0,r:[2,3],uses:30,wt:8,tint:'steel'},
   throwKnives:{n:'Throwing Knives',t:'blade',kind:'dagger',mt:3,hit:90,crit:10,r:[1,2],uses:30,thrown:true,wt:1},
   sparkT:{n:'Spark Sigil',t:'art',kind:'talisman',el:'lightning',mt:4,hit:95,crit:15,r:[1,2],uses:40,mag:true,wt:2},
   thunderhead:{n:'Thunderhead Sigil',t:'art',kind:'talisman',el:'lightning',mt:8,hit:75,crit:30,r:[1,2],uses:25,mag:true,wt:6},
