@@ -700,3 +700,5 @@ button.it.sel{border-color:var(--gold)}
 .nmap .nm-scroll .nd.n-recruit{background:radial-gradient(circle at 40% 35%,#3a8a52,#17442a);border-color:#78d090}
 .nmap .nm-scroll .nd.vis{filter:saturate(.35) brightness(.8)}
 .nmap .nm-scroll .nd.pick{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold),0 2px 4px rgba(50,28,8,.45)}
+.nmap .nm-scroll .nd.n-boss{opacity:1;filter:none;width:136px;height:136px;margin:-68px 0 0 -68px;border:4px solid #e8b04a;background:radial-gradient(circle at 50% 45%,#b8442e,#5a1410 80%);box-shadow:0 0 0 3px #5a1410,0 0 26px rgba(200,50,30,.65),0 4px 10px rgba(50,28,8,.5)}
+.nmap .nm-scroll .nd.n-boss img{width:116px;height:116px}
