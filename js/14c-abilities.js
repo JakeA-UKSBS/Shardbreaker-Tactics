@@ -1,7 +1,7 @@
 /* Character abilities: each named character has a signature kit, a passive and 3 abilities (docs/CHARACTERS.md).
    Spells cost MP (full at the start of each fight, +2 at the start of each of your turns); physical skills have a
    cooldown in turns. Ability damage is a multiple of the unit's normal attack power (Str or Mag + weapon Mt, with
-   height, effectiveness and relics), and the target's Def or Res is taken off afterwards. Abilities aren't countered.
+   height, effectiveness and relics), and the target's Def or Res is taken off afterwards. Abilities aren't countered, and hit 10 less often than a normal attack (ABIL_HIT).
    So far the 9 starting-roster characters have kits; the rest still have a random personal skill. */
 
 /* ---- statuses ----
@@ -53,7 +53,7 @@ Object.assign(SKILLS,{
    st: [status, turns, chance] on the enemies hit; give: [status, turns] on the allies in the shape; self: statuses on the user.
    heal: × (Mag + 5); cure: removes bad statuses; push: tiles pushed back. */
 const ABIL={
-  aimedShot:{n:'Aimed Shot',cd:2,side:'foe',r:[2,5],dmg:1.5,hit:20,d:'A careful shot from range 2–5: 1.5× damage, +20 Hit.'},
+  aimedShot:{n:'Aimed Shot',cd:2,side:'foe',r:[2,5],dmg:1.5,hit:10,d:'A careful shot from range 2–5: 1.5× damage, as accurate as a normal attack.'},
   pinningArrow:{n:'Pinning Arrow',cd:3,side:'foe',r:'wpn',dmg:.8,st:['root',1],d:'0.8× damage, and the target is Rooted (can’t move) next turn.'},
   volley:{n:'Volley',cd:4,side:'foe',r:[3,5],shape:'area',aim:'any',dmg:.7,d:'Arrows rain on a 3×3 area 3–5 tiles away: 0.7× damage to every enemy in it.'},
   palmStrike:{n:'Palm Strike',cd:1,side:'foe',r:[1,1],dmg:1,push:2,d:'1.0× damage and push 2. Slamming into a wall or unit hurts more; falling off a ledge hurts too.'},
@@ -78,7 +78,7 @@ const ABIL={
   challenge:{n:'Challenge',cd:3,side:'self',shape:'burst2',st:['challenged',1],d:'Enemies within 2 tiles must attack her next turn, if they can reach her.'},
   holdTheLine:{n:'Hold the Line',cd:4,side:'self',self:[['guard',1],['steady',1]],d:'Guard (30% less damage), and she can’t be pushed, until your next turn.'},
   rally:{n:'Rally',cd:3,side:'self',shape:'burst1',give:['rally',2],others:1,d:'Allies around him get +2 Str and +2 Def for 2 turns.'},
-  cleanCut:{n:'Clean Cut',cd:2,side:'foe',r:[1,1],dmg:1.2,hit:15,d:'1.2× damage, +15 Hit.'},
+  cleanCut:{n:'Clean Cut',cd:2,side:'foe',r:[1,1],dmg:1.2,hit:10,d:'1.2× damage, as accurate as a normal attack.'},
   shieldUp:{n:'Shield Up',cd:3,side:'self',self:[['guard',1],['shieldUp',1]],d:'Guard, and his counterattacks deal 1.3×, until your next turn.'}
 };
 /* the kits: passive, MP pool (spellcasters) and abilities */
@@ -97,6 +97,8 @@ const kitOf=u=>u&&u.cast&&KITS[u.cast]||null;
 const abilOf=u=>(kitOf(u)||{abil:[]}).abil;
 const mpMax=u=>(kitOf(u)||{mp:0}).mp;
 const MP_REGEN=2;
+/* abilities are a little less accurate than a basic attack */
+const ABIL_HIT=-10;
 /* MP cost after Attunement */
 function abCost(u,id){const a=ABIL[id];if(!a.mp)return 0;return Math.max(0,a.mp-(has(u,'attunement')&&u.lastEl&&a.el&&u.lastEl!==a.el?2:0))}
 /* why an ability can't be used right now (null if it can) */
@@ -163,7 +165,7 @@ function abBackstab(u,t){return hDiff(u,t)>0||state.units.some(o=>o!==u&&o.team=
 /* expected numbers against one target: {dmg (per strike), hit, n (strikes)} */
 function abVs(u,id,t,mult){
   const a=ABIL[id],w=abWeapon(u,a),c=calc(u,w,t,null,{init:u,phase});let m=(mult||a.dmg||0);if(a.backstab&&abBackstab(u,t))m*=2;
-  return{dmg:dmgMods(u,t,{init:u},Math.max(0,Math.round(c.pow*m)-c.df)),hit:clamp(c.hit+(a.hit||0),0,100),n:a.hits||1,eff:c.eff};
+  return{dmg:dmgMods(u,t,{init:u},Math.max(0,Math.round(c.pow*m)-c.df)),hit:clamp(c.hit+(a.hit||0)+ABIL_HIT,0,100),n:a.hits||1,eff:c.eff};
 }
 function healAmt(u,id,t){const a=ABIL[id];let h=Math.round((u.mag+5)*a.heal);if(has(u,'lastLight')&&t.hp*2<t.maxhp)h=Math.round(h*1.5);return Math.min(h,t.maxhp-t.hp)}
 /* who Chain Lightning jumps to */
@@ -189,18 +191,19 @@ async function useAbility(u,id,tx,ty){
   const{foes,allies}=abHits(u,id,tx,ty),w=abWeapon(u,a),killed=[];let exp=0;
   /* damage */
   for(const t of foes){
-    const ranged=a.mag||man(u,t)>1;if(!a.dmg){/* status only */}
+    const ranged=a.mag||man(u,t)>1;let landed=true;if(!a.dmg){/* status only: still has to hit */if(a.st){landed=(rn()+rn())/2<abVs(u,id,t).hit;if(!landed){sfx('miss');pop(t,'Miss','miss');mapPose(t,'dodge',u);await sleep(D(220));mapPose(t,'idle')}}}
     else{const n=a.hits||1,V=abVs(u,id,t);let total=0;
       for(let k=0;k<n&&t.hp>0;k++){sfx(ranged?(a.mag?hitSfx(w,true):'arrow'):'swing');if(ranged&&(a.shape||'one')==='one'||!ranged)await swingAt(u,t,w,false,ranged);else mapPose(u,'swing',t);
         if((rn()+rn())/2<V.hit){const d=Math.min(V.dmg,t.hp);t.hp-=d;total+=d;sfx('hit');pop(t,'-'+d,'dmg');flash(t);mapPose(t,'hit',u);if(a.mag)burst(t,EL_COL[a.el]||'#c8b8ff')}else{sfx('miss');pop(t,'Miss','miss');mapPose(t,'dodge',u)}
         await sleep(D(n>1?160:220));mapPose(u,'idle');mapPose(t,'idle');render();await sleep(D(n>1?60:110))}
+      landed=total>0;
       if(total&&has(u,'darkSiphon')&&a.el==='dark'){const h=Math.min(Math.ceil(total/4),u.maxhp-u.hp);if(h){u.hp+=h;pop(u,'+'+h,'heal')}}
       exp+=expFor(u,t,total>0,t.hp<=0);
       if(t.hp>0&&total&&a.push){pushUnit(u,t,a.push);render();await sleep(D(250))}
       if(a.chain&&t.hp>0||a.chain)for(const c of chainTo(u,id,t)){const V2=abVs(u,id,c,a.chain[1]);sfx('thunder');burst(c,EL_COL.lightning);
         if((rn()+rn())/2<V2.hit){const d=Math.min(V2.dmg,c.hp);c.hp-=d;pop(c,'-'+d,'dmg');flash(c);exp+=expFor(u,c,true,c.hp<=0);if(c.hp<=0)killed.push(c)}else pop(c,'Miss','miss');render();await sleep(D(260))}
       if(t.hp<=0){killed.push(t);continue}}
-    if(a.st&&t.hp>0&&(!a.st[2]||rn()<a.st[2]*100)){addSt(t,a.st[0],a.st[1],u);pop(t,STATUS[a.st[0]].n,'crit');await sleep(D(200))}
+    if(a.st&&landed&&t.hp>0&&(!a.st[2]||rn()<a.st[2]*100)){addSt(t,a.st[0],a.st[1],u);pop(t,STATUS[a.st[0]].n,'crit');await sleep(D(200))}
     if(!a.dmg)exp+=10;
   }
   /* healing, buffs, cures */
@@ -247,7 +250,7 @@ function abForecast(u,id,tx,ty){
   const a=ABIL[id],{foes,allies}=abHits(u,id,tx,ty),rows=[];
   for(const t of foes){let txt='';if(a.dmg){const V=abVs(u,id,t),tot=V.dmg*V.n;txt=`<b>${V.dmg}${V.n>1?' ×'+V.n:''}</b> dmg · <b>${V.hit}%</b> · ${t.hp}→${Math.max(0,t.hp-tot)} HP${V.eff?' · <span class="effv">Effective</span>':''}`;
       if(a.chain)txt+=` · jumps to ${chainTo(u,id,t).map(c=>`${c.name} (${abVs(u,id,c,a.chain[1]).dmg})`).join(', ')||'nobody'}`;if(a.push)txt+=canPush(t)?` · push ${a.push}`:' · can’t be pushed'}
-    if(a.st)txt+=`${txt?' · ':''}${STATUS[a.st[0]].n}${a.st[2]?` (${a.st[2]*100}%)`:''}`;if(!txt)continue;rows.push(`<div class="abf-r"><span class="ec">${t.name}</span>${txt}</div>`)}
+    if(a.st)txt+=`${txt?' · ':''}${STATUS[a.st[0]].n}${a.st[2]?` (${a.st[2]*100}%)`:''}${a.dmg?'':` · <b>${abVs(u,id,t).hit}%</b>`}`;if(!txt)continue;rows.push(`<div class="abf-r"><span class="ec">${t.name}</span>${txt}</div>`)}
   for(const t of allies){let txt='';if(a.heal)txt=`+<b>${healAmt(u,id,t)}</b> HP → ${t.hp+healAmt(u,id,t)}/${t.maxhp}`;if(a.cure&&stList(t).some(k=>STATUS[k].bad))txt+=`${txt?' · ':''}cures ${stList(t).filter(k=>STATUS[k].bad).map(k=>STATUS[k].n).join(', ')}`;if(a.give)txt+=`${txt?' · ':''}${STATUS[a.give[0]].n}`;if(!txt&&!a.heal)continue;rows.push(`<div class="abf-r"><span class="pc">${t.name}</span>${txt||'–'}</div>`)}
   for(const[k]of a.self||[])rows.push(`<div class="abf-r"><span class="pc">${u.name}</span>${STATUS[k].n}: ${STATUS[k].d}</div>`);
   if(a.side==='tile')rows.unshift(`<div class="abf-r"><span class="pc">${u.name}</span>leaps here</div>`);

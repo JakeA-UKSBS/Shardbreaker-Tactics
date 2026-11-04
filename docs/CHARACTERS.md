@@ -79,7 +79,7 @@ A poacher's son who has never missed a meal or a deer. Cheeky, and the one who c
 - **Ascends into:** Sniper or Bow Cavalry.
 - **Look:** green leathers, feather headdress, longbow.
 - **Passive: Eagle Eye.** +1 range on every shot, on top of the height bonus.
-- **Aimed Shot** (single, range 2–5 · CD 2): 1.5× Str, +20 Hit.
+- **Aimed Shot** (single, range 2–5 · CD 2): 1.5× Str, as accurate as a normal attack.
 - **Pinning Arrow** (single · CD 3): 0.8× Str and Root.
 - **Volley** (area r1 at range 3–5 · CD 4): 0.7× Str to everything in the area.
 
@@ -168,7 +168,7 @@ A farm boy who left home with a borrowed sword the day the beasts came. Eager, l
 - **Look:** light armour in orange, sword and round shield.
 - **Passive: Beginner’s Luck.** +10 Crit and +10 Avoid while at full HP.
 - **Rally** (burst r1 · CD 3): adjacent allies get +2 Str and +2 Def for 2 turns.
-- **Clean Cut** (single, adjacent · CD 2): 1.2× Str, +15 Hit.
+- **Clean Cut** (single, adjacent · CD 2): 1.2× Str, as accurate as a normal attack.
 - **Shield Up** (self · CD 3): Guard, and his counters deal 1.3× until your next turn.
 
 ## Joins after Act 1
