@@ -201,7 +201,7 @@ function genBattle(n,kind){
   def.foes=()=>{const tiles=spawnTiles(m),out=[];
     list.forEach((c,i)=>{const lv=Math.max(1,lvBase+(rand()<.3?1:0)-(c==='Wolf'?1:0)+(elite?2:0)),u=mkMon(c,lv),t=tiles[i%tiles.length];u.x=t.x;u.y=t.y;
       if(elite&&i===0){u.name='Elder '+u.name;u.boss=true;const eb=A(2)?2:1;ST.forEach(k=>{if(k==='hp'){u.maxhp+=6*eb;u.hp+=6*eb}else u[k]+=2*eb});u.skill=u.skill||pick(['fury','brace','swift','shieldwall'])}
-      if(rand()<.2){const k=pick(['qiPill','qiPill','steelJian','steelAxe','steelSpear','steelBow','leather','cloak','boots']);u.items.push({k,u:IT[k].uses,d:true})}out.push(u)});
+      if(rand()<.2){const k=pick(['qiPill','qiPill','steelJian','steelAxe','steelSpear','steelBow','javelin','throwAxe','throwKnives','leather','cloak','boots']);u.items.push({k,u:IT[k].uses,d:true})}out.push(u)});
     if(bossFight){let bx=6,by=3;MAPS[mk].map.forEach((r,y)=>{const x=r.indexOf('T');if(x>=0){bx=x;by=y}});/* the altar marks where the boss stands */
       const b=B.boss,up=[10,3,3,3,2,2,3,3].map((v,i)=>v*(act-1)+(A(2)?[8,2,2,1,1,0,2,2][i]:0));
       const bsz=b.sz||2,fits=(x,y)=>cellsOf(x,y,bsz).every(([cx,cy])=>cy>=0&&cx>=0&&cy<m.map.length&&cx<m.map[0].length&&TER[m.map[cy][cx]].c<99);

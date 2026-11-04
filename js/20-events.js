@@ -127,7 +127,7 @@ const EVENTS={
     {l:'Everyone spars',sub:'All units gain 50 EXP',go:async()=>{evEl.hidden=true;for(const u of run.roster){const g=gainExp(u,50);if(g&&g.gains)await levelUp(u,g)}return'A good, hard session. Every unit gains 50 EXP.'}},
     {l:'Move on',go:async()=>'No time to train today.'}]},
   merchant:{t:'Travelling Merchant',art:'merchant',d:'A covered wagon, a tired mule and a merchant who is very pleased to see paying customers.',o:null,
-    make:()=>{const stock=shuffle(['warHammer','huntSpear','giantslayer','holySword','steelJian','steelSpear','steelAxe','steelBow','leather','cloak','boots','gauntlet','greaterMend','stiletto']).slice(0,3),price=k=>IT[k].t==='gear'?40:IT[k].brk||IT[k].crit>=20?55:45;
+    make:()=>{const stock=shuffle(['warHammer','huntSpear','giantslayer','holySword','steelJian','steelSpear','steelAxe','steelBow','javelin','throwAxe','throwKnives','galeSword','arbalest','leather','cloak','boots','gauntlet','greaterMend','stiletto']).slice(0,3),price=k=>IT[k].t==='gear'?40:IT[k].brk||IT[k].crit>=20?55:45;
       return[...stock.map(k=>({l:`${IT[k].n} · ${price(k)}g`,sub:itemText(k),cost:price(k),go:async()=>{
         const u=await pickUnit(`Who takes the ${IT[k].n}?`,'If their bag is full, you can swap something out.',u=>isWpn(k)&&!canUse(u,k)?'Can’t wield it':null);if(!u)return null;
         if(!await stow(u,k))return null;spend(price(k));return`${u.name} takes the <b>${IT[k].n}</b>. “Pleasure doing business.”`}})),{l:'Just looking',go:async()=>'The merchant shrugs and waves you on.'}]}},

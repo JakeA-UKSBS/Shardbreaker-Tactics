@@ -7,7 +7,7 @@ function forge(it){const B=IT[it.k],n=(B.forge||0)+1;if(n>FORGE_MAX)return false
 const STEEL={blade:'steelJian',heavy:'steelAxe',pole:'steelSpear',bow:'steelBow'};
 /* the Weaponmaster's trade-ups: each weapon line goes to its next tier, keeping the kind of weapon */
 const UPGRADE={ironJian:'steelJian',steelJian:'jadeJian',ironSpear:'steelSpear',steelSpear:'jadeSpear',ironAxe:'steelAxe',steelAxe:'jadeAxe',
-  shortBow:'steelBow',steelBow:'jadeBow',longbow:'greatbow',ironDao:'moonDao',dirk:'jadeFang',twinBlades:'jadeFang',stiletto:'jadeFang'};
+  shortBow:'steelBow',steelBow:'jadeBow',longbow:'greatbow',ironDao:'moonDao',javelin:'pilum',throwAxe:'tomahawk',throwKnives:'steelKnives',crossbow:'arbalest',dirk:'jadeFang',twinBlades:'jadeFang',stiletto:'jadeFang'};
 /* the next tier of a unit's weapon (keeps any reforging); null if there's nothing better */
 function tierUp(u,it){const B=IT[it.k],up=UPGRADE[B.base||it.k],f=B.forge||0;return up&&canUse(u,up)?(f?ensureIt(up+'~'+f):up):null}
 
@@ -30,7 +30,7 @@ const weaponOf=u=>u.items.find(it=>(isWpn(it.k)||IT[it.k].t==='spirit')&&canUse(
 
 /* ---- treasure: the vault holds one thing (an item, a skill or a relic), then who takes it ---- */
 async function treasureNode(){
-  const pool=['steelJian','steelAxe','steelSpear','steelBow','moonDao','greatsword','javelin','throwAxe','crossbow','thunderT','crookStaff','runeStaff','greaterMend','qiPill','barbedSpear','reaverAxe','hawkeyeBow','warHammer','huntSpear','giantslayer','holySword','stiletto','leather','chain','cloak','boots','gauntlet'];
+  const pool=['steelJian','steelAxe','steelSpear','steelBow','moonDao','greatsword','javelin','throwAxe','crossbow','thunderT','crookStaff','runeStaff','greaterMend','qiPill','barbedSpear','reaverAxe','hawkeyeBow','warHammer','huntSpear','giantslayer','holySword','stiletto','pilum','tomahawk','steelKnives','galeSword','arbalest','leather','chain','cloak','boots','gauntlet'];
   const mk=()=>{const r=rand(),rp=relicPool(['c','u']);if(rp.length&&r<.2)return'relic:'+pick(rp);if(r<.5)return'skill:'+pick(SKILL_POOL());return pick(pool.filter(k=>!isWpn(k)&&IT[k].t!=='spirit'||run.roster.some(u=>canUse(u,k))))};
   let k=mk();
   for(;;){
