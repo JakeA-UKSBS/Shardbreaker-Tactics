@@ -690,7 +690,14 @@ button.it.sel{border-color:var(--gold)}
 .nmap .nm-scroll .nd{box-shadow:0 2px 4px rgba(50,28,8,.45)}
 .nmap .nm-scroll .nd.cur{box-shadow:0 0 0 3px var(--gold),0 2px 4px rgba(50,28,8,.45)}
 .nmap .nm-scroll .nd:not(.ok):not(.cur):not(.vis):not(.n-boss):not(.n-start){opacity:.8;filter:saturate(.6) sepia(.25)}
-.nmap .nm-scroll .nd.n-boss{opacity:1;filter:none;width:136px;height:136px;margin:-68px 0 0 -68px;border:4px solid #e8b04a;background:radial-gradient(circle at 50% 45%,#b8442e,#5a1410 80%);box-shadow:0 0 0 3px #5a1410,0 0 26px rgba(200,50,30,.65),0 4px 10px rgba(50,28,8,.5)}
+.nmap .nm-scroll .nd.n-boss{opacity:1;width:136px;height:136px;margin:-68px 0 0 -68px;border:0;background:none;box-shadow:none;border-radius:0;z-index:1;isolation:isolate;animation:blight 3.2s ease-in-out infinite}
+/* boss: a corrupted crystal behind the creature (every act) */
+.nmap .nm-scroll .nd.n-boss::before,.nmap .nm-scroll .nd.n-boss::after{content:'';position:absolute;z-index:-1;pointer-events:none}
+.nmap .nm-scroll .nd.n-boss::before{inset:-8px;background:radial-gradient(circle,#4a0e5a 40%,#14031a 75%);clip-path:polygon(50% 0,56% 8%,66% 3%,68% 12%,80% 10%,79% 20%,92% 22%,86% 32%,98% 40%,89% 48%,99% 58%,88% 63%,94% 76%,81% 76%,80% 89%,68% 84%,62% 97%,54% 88%,46% 100%,40% 88%,30% 95%,30% 83%,17% 86%,19% 74%,5% 72%,12% 62%,1% 54%,11% 46%,2% 36%,14% 31%,9% 19%,22% 19%,23% 8%,35% 12%,40% 2%,46% 9%);animation:blightspin 2.6s ease-in-out infinite;opacity:.85}
+.nmap .nm-scroll .nd.n-boss::after{inset:0;clip-path:polygon(50% 0,93% 24%,93% 76%,50% 100%,7% 76%,7% 24%);
+  background:linear-gradient(160deg,rgba(255,255,255,.28) 0 18%,transparent 18% 100%),conic-gradient(from 30deg at 50% 50%,#c25ab0 0 60deg,#5e1a5a 60deg 120deg,#e07ad0 120deg 180deg,#7a2474 180deg 240deg,#3e0e3c 240deg 300deg,#9a3a8e 300deg 360deg)}
+@keyframes blight{0%,100%{filter:drop-shadow(0 0 6px rgba(160,40,200,.7)) drop-shadow(0 3px 4px rgba(40,10,40,.5))}50%{filter:drop-shadow(0 0 14px rgba(190,60,230,.9)) drop-shadow(0 3px 4px rgba(40,10,40,.5))}}
+@keyframes blightspin{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.05) rotate(4deg)}}
 .nmap .nm-scroll .nd.n-boss img{width:116px;height:116px}
 .nmap .nm-scroll .nd.n-elite img{width:48px;height:48px}
 /* node outlines by type */
