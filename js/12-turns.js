@@ -154,6 +154,7 @@ async function fight(a,ai,d){
   if(p&&o.hp<=0&&p.hp>0&&R('fang')){const h=Math.min(5,p.maxhp-p.hp);if(h){p.hp+=h;pop(p,'+'+h,'heal')}}
   if(p&&o.hp<=0&&p.hp>0)/* enemy drops go to the spoils: after the win the Found picker asks who takes each one */
     for(const it of o.items.filter(i=>i.d)){(state.loot=state.loot||[]).push(it.k);sfx('item');notify(`${IT[it.k].n} dropped`,'Added to the spoils: choose who takes it after the fight.',icon(it.k))}
+  if(p&&o.hp<=0&&p.hp>0&&o.team==='e'&&!o.summon)dropGold();
   if(a.hp>0&&d.hp<=0&&a.team==='p'&&phase==='player'&&has(a,'momentum')&&a.gf!==state.turn){a.gf=state.turn;a.acted=false;pop(a,'Momentum!','heal')}
   if(a.hp>0&&has(a,'hitrun')&&man(a,d)===1){let best=null,bd=-1;for(const[dx,dy]of DIRS){const x=a.x+dx,y=a.y+dy;if(x<0||y<0||x>=MW||y>=MH||unitAt(x,y)||mcost(a,x,y)>=99||!canStep(a,a.x,a.y,x,y))continue;
     const dd=Math.min(99,...state.units.filter(o=>hostile(o,a)&&o.hp>0).map(o=>man(o,{x,y})));if(dd>bd){bd=dd;best={x,y}}}if(best&&bd>1){a.x=best.x;a.y=best.y}}
