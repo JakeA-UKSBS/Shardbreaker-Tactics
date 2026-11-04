@@ -431,3 +431,159 @@ The ship isn't a tile set: it's drawn on the fly from the map letters (d deck, h
 The side-on fight scene uses a backdrop for the current region (`battleBgArt` in js/09-battle-scene.js, 160×90, horizon at y 63). Regions without one fall back to the old terrain gradients. `heart` is Act 3.
 
 ![Battle backdrops](visuals/scenes/battle_backdrops.png)
+
+## Named cast
+
+The 24 named characters (see `Units.md`), with every ascension they can take, drawn by the same unit rig as every other unit. Classes, weapons and looks live in `js/14b-cast.js`. Regenerate these images with `node tools/export-cast.mjs`.
+
+![The named cast](visuals/cast/cast_sheet.png)
+
+Battle frames for each form (idle, wind-up, strike, follow-through, hit); the base class comes first, then its ascensions.
+
+### Kili
+
+![kili](visuals/cast/kili_poses.png)
+
+![kili_bowcavalry](visuals/cast/kili_bowcavalry_poses.png)
+
+![kili_sniper](visuals/cast/kili_sniper_poses.png)
+
+### Vaar
+
+![vaar](visuals/cast/vaar_poses.png)
+
+![vaar_berserker](visuals/cast/vaar_berserker_poses.png)
+
+### Morrigan
+
+![morrigan](visuals/cast/morrigan_poses.png)
+
+![morrigan_shaman](visuals/cast/morrigan_shaman_poses.png)
+
+![morrigan_witch](visuals/cast/morrigan_witch_poses.png)
+
+### Corvin
+
+![corvin](visuals/cast/corvin_poses.png)
+
+![corvin_archmage](visuals/cast/corvin_archmage_poses.png)
+
+![corvin_stormlord](visuals/cast/corvin_stormlord_poses.png)
+
+### Aldric
+
+![aldric](visuals/cast/aldric_poses.png)
+
+![aldric_juggernaut](visuals/cast/aldric_juggernaut_poses.png)
+
+![aldric_paladin](visuals/cast/aldric_paladin_poses.png)
+
+### Maelis
+
+![maelis](visuals/cast/maelis_poses.png)
+
+![maelis_crusader](visuals/cast/maelis_crusader_poses.png)
+
+![maelis_saint](visuals/cast/maelis_saint_poses.png)
+
+### Rook
+
+![rook](visuals/cast/rook_poses.png)
+
+![rook_assassin](visuals/cast/rook_assassin_poses.png)
+
+![rook_duelist](visuals/cast/rook_duelist_poses.png)
+
+### Brynhildr
+
+![brynhildr](visuals/cast/brynhildr_poses.png)
+
+![brynhildr_aegis](visuals/cast/brynhildr_aegis_poses.png)
+
+![brynhildr_valkyrie](visuals/cast/brynhildr_valkyrie_poses.png)
+
+### Brin
+
+![brin](visuals/cast/brin_poses.png)
+
+![brin_hero](visuals/cast/brin_hero_poses.png)
+
+### Aletta
+
+![aletta](visuals/cast/aletta_poses.png)
+
+![aletta_crusader](visuals/cast/aletta_crusader_poses.png)
+
+![aletta_saint](visuals/cast/aletta_saint_poses.png)
+
+### Trent
+
+![trent](visuals/cast/trent_poses.png)
+
+![trent_paladin](visuals/cast/trent_paladin_poses.png)
+
+![trent_warlord](visuals/cast/trent_warlord_poses.png)
+
+### Holt
+
+![holt](visuals/cast/holt_poses.png)
+
+![holt_artillery](visuals/cast/holt_artillery_poses.png)
+
+![holt_sniper](visuals/cast/holt_sniper_poses.png)
+
+### Sigrun
+
+![sigrun](visuals/cast/sigrun_poses.png)
+
+### Kaya
+
+![kaya](visuals/cast/kaya_poses.png)
+
+### Jun
+
+![jun](visuals/cast/jun_poses.png)
+
+![jun_swordmaster](visuals/cast/jun_swordmaster_poses.png)
+
+### Ash
+
+![ash](visuals/cast/ash_poses.png)
+
+![ash_archmage](visuals/cast/ash_archmage_poses.png)
+
+![ash_pyrolord](visuals/cast/ash_pyrolord_poses.png)
+
+### Lysander
+
+![lysander](visuals/cast/lysander_poses.png)
+
+### Nyx
+
+![nyx](visuals/cast/nyx_poses.png)
+
+### Roark
+
+![roark](visuals/cast/roark_poses.png)
+
+### Valen
+
+![valen](visuals/cast/valen_poses.png)
+
+![valen_swordmaster](visuals/cast/valen_swordmaster_poses.png)
+
+### Celestine
+
+![celestine](visuals/cast/celestine_poses.png)
+
+### Seren
+
+![seren](visuals/cast/seren_poses.png)
+
+### Zwei
+
+![zwei](visuals/cast/zwei_poses.png)
+
+### Kyul
+
+![kyul](visuals/cast/kyul_poses.png)
