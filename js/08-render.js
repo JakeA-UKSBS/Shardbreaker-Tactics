@@ -52,6 +52,7 @@ function render(){
     t.classList.toggle('trap',!!(state.sprung&&state.sprung.includes(k)));
     if((ui==='move'||(ui==='idle'&&inspect))&&moveSet){if(moveSet.has(k))t.classList.add('mv');else if(fringe.has(k))t.classList.add(healer?'hl':'atk')}
     if((ui==='target'||ui==='confirm')&&tset.has(k))t.classList.add(tmode==='heal'?'hl':'atk','tg');
+    {const ac=abTileCls(k);if(ac&&ac.length)t.classList.add(...ac)}
     if(pending&&cellsOf(pending.x,pending.y,pending.sz||1).some(c=>key(...c)===k))t.classList.add('cur');
     if(ui==='terrain'&&k===threatTile)t.classList.add('cur');
   });
@@ -93,7 +94,7 @@ function card(u){
   let h=`<div class="uc ${u.team}"><img class="por" src="${portrait(u)}" alt=""><div class="uci">
    <div class="ch"><b>${u.name}</b><span>${CLS[u.cls].n} · Lv ${u.lv}</span></div>
    <div class="hp"><span class="bar"><i style="width:${u.hp/u.maxhp*100}%"></i></span><span>${u.hp}/${u.maxhp} HP</span></div>
-   ${u.team==='p'?`<div class="xp"><span class="bar"><i style="width:${u.exp}%"></i></span><span>${u.exp} EXP</span></div>`:''}
+   ${u.team==='p'?`<div class="xp"><span class="bar"><i style="width:${u.exp}%"></i></span><span>${u.exp} EXP</span></div>`:''}${mpLine(u)}${stChips(u)}
    <div class="eq">${w?`<img src="${icon(w.key)}" alt="">${w.n} (Rng ${rngTxt(w.r)})`:'Unarmed'}${sk?` · <b class="sk">${sk.n}</b>`:''} · ${terrText(t)} · H${hOf(u.x,u.y)}${u.psn?` · <b class="psnt">Poisoned (${u.psn})</b>`:''}${(()=>{const g=gearOf(u),t=Object.entries(g).filter(([,v])=>v).map(([k,v])=>`${v>0?'+':''}${v} ${GEAR_N[k]}`);return t.length?` · Gear ${t.join(', ')}`:''})()}</div>
    ${u.recruit?`<div class="eq sk">Can be recruited: move ${lordName()} next to ${u.name} and Talk.</div>`:''}
   </div><button class="mini" type="button" data-act="sheet:${u.id}">Details</button></div>`;
@@ -183,8 +184,9 @@ function renderPanel(){
   else if(ui==='move')h=card(u)+`<p class="hint">Tap a blue tile to move, or a red enemy to attack it from the best tile. Tap ${u.name} to act in place.</p><div class="acts"><button type="button" data-act="cancel">Cancel</button></div>`;
   else if(ui==='menu'){
     const at=atkTargets(u).length,ht=healTargets(u).length,gf=giftHere(u),tk=talkTarget(u);
-    h=card(u)+threatLine(key(u.x,u.y));fm=`<div class="acts">${tk?'<button class="go" type="button" data-act="talk">Talk</button>':''}${at?'<button class="go" type="button" data-act="attack">Attack</button>':''}${ht?'<button class="go" type="button" data-act="heal">Heal</button>':''}${gf?`<button class="go" type="button" data-act="gift">${gf.kind}</button>`:''}${canSummon(u)?`<button class="go" type="button" data-act="summon">Summon ${famOf(u).n}</button>`:''}<button type="button" data-act="items">Items</button>${tradeMates(u).length?'<button type="button" data-act="trade">Trade</button>':''}<button type="button" data-act="wait">Wait</button><button type="button" data-act="cancel">Back</button></div>`;
+    h=card(u)+threatLine(key(u.x,u.y));fm=`<div class="acts">${abilOf(u).length?'<button class="go" type="button" data-act="abil">Abilities</button>':''}${tk?'<button class="go" type="button" data-act="talk">Talk</button>':''}${at?'<button class="go" type="button" data-act="attack">Attack</button>':''}${ht?'<button class="go" type="button" data-act="heal">Heal</button>':''}${gf?`<button class="go" type="button" data-act="gift">${gf.kind}</button>`:''}${canSummon(u)?`<button class="go" type="button" data-act="summon">Summon ${famOf(u).n}</button>`:''}<button type="button" data-act="items">Items</button>${tradeMates(u).length?'<button type="button" data-act="trade">Trade</button>':''}<button type="button" data-act="wait">Wait</button><button type="button" data-act="cancel">Back</button></div>`;
   }
+  else if(ui==='abil'||ui==='aim'){const r=abPanel(u);h=r.h;fm=r.fm}
   else if(ui==='items'){
     const it=itemSel!=null?u.items[itemSel]:null;let ops='';
     if(it){if(isWpn(it.k)&&canUse(u,it.k)&&itemSel!==eqIdx(u))ops+='<button class="go" type="button" data-act="equip">Equip</button>';if(IT[it.k].t==='item'&&(u.hp<u.maxhp||u.psn))ops+='<button class="go" type="button" data-act="use">Use</button>';if(IT[it.k].t==='scroll'){const r=learnBlock(u,IT[it.k].skill);ops+=r?`<span class="hint">${r}</span>`:`<button class="go" type="button" data-act="learn">Learn ${SKILLS[IT[it.k].skill].n} (${SKILLS[IT[it.k].skill].cost})</button>`}if(IT[it.k].t==='crest'){const r=promoBlock(u);ops+=r?`<span class="hint">${r}</span>`:`<button class="go" type="button" data-act="ascend">Ascend…</button>`}if(isWpn(it.k)&&!canUse(u,it.k))ops+=`<span class="hint">${u.name} can't wield this.</span>`}
@@ -214,7 +216,7 @@ function renderPanel(){
   /* the command menu and the forecast dock in a bottom corner of the map view, on the side away from the fight */
   let mEl=$('#umenu');if(!mEl||!mEl.isConnected){mEl=document.createElement('div');mEl.id='umenu';mEl.className='umenu';vp.appendChild(mEl);
     for(const ev of['pointerdown','pointerup','wheel'])mEl.addEventListener(ev,e=>e.stopPropagation());mEl.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||busy)return;act(b.dataset.act)})}
-  const pop=ui==='confirm'&&tmode==='atk'&&pending;mEl.classList.toggle('ufc',!!pop);
+  const pop=ui==='confirm'&&tmode==='atk'&&pending||ui==='aim'&&abT&&ABIL[abSel].side!=='self'&&unitAt(abT.x,abT.y);mEl.classList.toggle('ufc',!!pop||ui==='aim'&&!!abT);
   if(fm&&(pop||u)){mEl.innerHTML=fm;mEl.hidden=false;const xs=[u,pop?pending:null].filter(Boolean).map(o=>{const r=uBox(o);return cam.x+(r.l+r.w/2)*cam.s}),mid=xs.reduce((a,x)=>a+x,0)/xs.length;
     mEl.classList.toggle('dl',mid>vb().w/2);mEl.classList.toggle('dr',mid<=vb().w/2)}else mEl.hidden=true;
 }
