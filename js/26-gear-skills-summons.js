@@ -35,7 +35,7 @@ function gearArt(p,kd,c){
 }
 
 /* ---- skill rewards: pick who learns it; a unit without room can forget a learned skill ---- */
-const SKILL_POOL=()=>Object.keys(SKILLS).filter(k=>!['rally','spore','venom','stone'].includes(k));
+const SKILL_POOL=()=>Object.keys(SKILLS).filter(k=>!['rally','spore','venom','stone'].includes(k)&&!SKILLS[k].kit);
 async function allocSkill(k,title){
   const sk=SKILLS[k];
   for(;;){

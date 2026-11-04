@@ -166,9 +166,19 @@ MAPS.woodland.h=["4443210011", "4443210012", "4440000012", "0000000001", "000000
 MAPS.brook.h=["4433333344", "3333333333", "3333333333", "0100000010", "1111111111", "1111111111", "1122111111", "1122110000", "0000000000", "0000000000"];
 MAPS.clearing.h=["1111111111", "1111222111", "1112222211", "0112332110", "0112332100", "0011221000", "0001110000", "0000000000", "0000000000", "0000000000"];
 MAPS.heart.h=["2213333122", "2213333122", "1112222111", "0001111000", "0000000000", "0000000000", "0000000000", "0000000000", "0000000000", "0000000000"];
-/* settlements for Defend fights: 1 = the region's ground, 2 = its cover */
-const TOWN=["1111111111","2111111112","1111221111","#11111111#","#1V11A1V1#","1111111111","V11121111V","11111F1111","1111111111","1111111111"];
-for(const k in BIOMES){const B=BIOMES[k];if(B.town)MAPS['town_'+k]={n:B.townN,map:TOWN.map(r=>r.replaceAll('1',B.town[0]).replaceAll('2',B.town[1])),start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]}}
+/* settlements for Defend fights: one hand-made map per region, in its own terrain. Enemies arrive along the top two
+   rows; tents (A) and the shrine (F) heal and give cover in the middle; you start along the bottom. */
+const TOWNS={
+  swamp:["ssssnnssss","svssnnssvs","ssnnnnnnss","wsnvnnvnsw","wsnnAnnnsw","ssnnnnnnss","snvnFnnvns","ssnnnnnnss","ssnnnnnnss","sssnnnnsss"],
+  desert:["nnnnnnnnnn","nknnnnnnkn","nnnnzznnnn","knnnnnnnnk","nnAnwwnAnn","nnnnwwnnnn","knnnnnnnnk","nnnnFnnnnn","nnnnnnnnnn","nnnnnnnnnn"],
+  forest:["..........",".f......f.","...^..^...","f..y..y..f","...A..A...",".f......f.","^...F....^","..y....y..","..........",".........."],
+  mushroom:[",,,,,,,,,,",",q,,,,,,q,",",,,^,,^,,,","q,,,,,,,,q",",,A,qq,A,,",",,,,,,,,,,","^,,,F,,,,^",",,q,,,,q,,",",,,,,,,,,,",",,,,,,,,,,"],
+  shadow:[";;;;;;;;;;",";t;;;;;;t;",";;;^;;^;;;","t;;;tt;;;t",";;A;;;;A;;",";;;;;;;;;;","^;;;F;;;;^",";;t;;;;t;;",";;;;;;;;;;",";;;;;;;;;;"],
+  mountain:["bbbbbbbbbb","bmbbbbbbmb","bbbRbbRbbb","lbbbbbbbbl","bbAbmmbAbb","bbbbbbbbbb","RbbbFbbbbR","bbmbbbbmbb","bbbbbbbbbb","bbbbbbbbbb"],
+  snow:["oooooooooo","oaoojjooao","ooo^oo^ooo","jooooooooj","ooAoiioAoo","oooooooooo","^oooFoooo^","ooaooooaoo","oooooooooo","oooooooooo"],
+  cavern:["cccccccccc","cecccccccu","cccxccxccc","pccccccccp","ccAceccAcc","cccccccccc","xcccFccccx","ccuccccecc","cccccccccc","cccccccccc"]
+};
+for(const k in TOWNS)if(BIOMES[k])MAPS['town_'+k]={n:BIOMES[k].townN,map:TOWNS[k],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]};
 const ADJ=['Howling','Silent','Broken','Ashen','Bitter','Hollow','Moonlit','Drowned'];
 function spawnTiles(m){
   const out=[];for(let y=0;y<m.map.length;y++)for(let x=0;x<m.map[0].length;x++){const t=TER[m.map[y][x]];if(t.c>=99)continue;const d=Math.min(...m.start.map(([sx,sy])=>Math.abs(sx-x)+Math.abs(sy-y)));if(d>=4)out.push({x,y,d})}
@@ -181,7 +191,7 @@ function actBiome(){const a=run&&run.act||1;if(a>=3)return BIOMES.heart;
 /* bosses lumber: they move, but only a couple of tiles a turn */
 const BOSS_MOV=2;
 function genBattle(n,kind){
-  const act=run&&run.act||1,B=actBiome(),bossFight=kind==='boss',elite=kind==='elite',ship=B.id==='ship',town=!bossFight&&!elite&&!ship&&B.town&&(run&&run.n||1)>=2&&rand()<.25;
+  const act=run&&run.act||1,B=actBiome(),bossFight=kind==='boss',elite=kind==='elite',ship=B.id==='ship',town=!bossFight&&!elite&&!ship&&MAPS['town_'+B.id]&&(run&&run.n||1)>=2&&rand()<.25;
   const mk=bossFight?B.bossMap:town?'town_'+B.id:pick(B.maps);let m=MAPS[mk];
   /* at most 3 chests per map, and no altars (boss maps had them): the extras become the map's most common ground */
   {const cs=[];m.map.forEach((r,y)=>[...r].forEach((ch,x)=>{if(ch==='C')cs.push(x+','+y)}));
@@ -192,7 +202,7 @@ function genBattle(n,kind){
   const fl=flScale(run&&run.n),diff=(act-1)*10+fl,lvBase=1+Math.floor(diff*.6)+(A(1)?1:0)+(A(4)?1:0);
   const pool=(elite?B.elitePool:B.pool).filter(p=>act>=2||fl>=(p[2]||1)),tot=pool.reduce((a,p)=>a+p[1],0);
   const roll=()=>{let r=rand()*tot;for(const[c,w]of pool){if((r-=w)<0)return c}return pool[0][0]};
-  const count=bossFight?(act>=2?5:4):town?Math.min(4,1+Math.floor(fl/4)+(act-1)):Math.min(7,(ship?1:2)+Math.floor(fl/3)+(act-1)*2+(elite?1:0)+(A(4)?1:0)),list=elite?[B.elitePool[0][0]]:[];
+  const count=bossFight?(B.id==='heart'?0:act>=2?5:4):town?Math.min(4,1+Math.floor(fl/4)+(act-1)):Math.min(7,(ship?1:2)+Math.floor(fl/3)+(act-1)*2+(elite?1:0)+(A(4)?1:0)),list=elite?[B.elitePool[0][0]]:[];
   while(list.length<count){const c=roll();list.push(c);if(c==='Wolf'&&list.length<count&&rand()<.6)list.push('Wolf')}
   const bossName=B.boss.name||pick(BOSSN)+' '+pick(BOSST),turns=ship&&!bossFight?(elite?6:5):town?ri(5,7):0;
   const goal=bossFight?'boss':ship||town?'defend':'rout';
@@ -201,7 +211,7 @@ function genBattle(n,kind){
   def.foes=()=>{const tiles=spawnTiles(m),out=[];
     list.forEach((c,i)=>{const lv=Math.max(1,lvBase+(rand()<.3?1:0)-(c==='Wolf'?1:0)+(elite?2:0)),u=mkMon(c,lv),t=tiles[i%tiles.length];u.x=t.x;u.y=t.y;
       if(elite&&i===0){u.name='Elder '+u.name;u.boss=true;const eb=A(2)?2:1;ST.forEach(k=>{if(k==='hp'){u.maxhp+=6*eb;u.hp+=6*eb}else u[k]+=2*eb});u.skill=u.skill||pick(['fury','brace','swift','shieldwall'])}
-      if(rand()<.2){const k=pick(['qiPill','qiPill','steelJian','steelAxe','steelSpear','steelBow','leather','cloak','boots']);u.items.push({k,u:IT[k].uses,d:true})}out.push(u)});
+      if(rand()<.2){const k=pick(['qiPill','qiPill','steelJian','steelAxe','steelSpear','steelBow','javelin','throwAxe','throwKnives','leather','cloak','boots']);u.items.push({k,u:IT[k].uses,d:true})}out.push(u)});
     if(bossFight){let bx=6,by=3;MAPS[mk].map.forEach((r,y)=>{const x=r.indexOf('T');if(x>=0){bx=x;by=y}});/* the altar marks where the boss stands */
       const b=B.boss,up=[10,3,3,3,2,2,3,3].map((v,i)=>v*(act-1)+(A(2)?[8,2,2,1,1,0,2,2][i]:0));
       const bsz=b.sz||2,fits=(x,y)=>cellsOf(x,y,bsz).every(([cx,cy])=>cy>=0&&cx>=0&&cy<m.map.length&&cx<m.map[0].length&&TER[m.map[cy][cx]].c<99);
@@ -218,7 +228,7 @@ function genBattle(n,kind){
   if(town){const top=[];m.map.forEach((r,y)=>{if(y<=1)[...r].forEach((ch,x)=>{if(TER[ch].c<99)top.push({x,y})})});shuffle(top);let e=0;for(let t=2;t<=turns;t++)W[t]=Array.from({length:1+(t%2)+(act>=2?1:0)},()=>({c:roll(),lv:Math.max(1,lvBase-1),...top[(e++)%top.length]}))}
   m.map.forEach((r,y)=>[...r].forEach((ch,x)=>{if(ch==='C')def.gifts[key(x,y)]=rand()<.3?'pyrite':'gold:'+ri(15,30)}));
   /* summoning bosses: two more every other turn. summon:'*' picks from the region's pool */
-  if(bossFight&&B.boss.summon){const sc=()=>B.boss.summon==='*'?roll():B.boss.summon;for(const t of[3,5,7,9])W[t]=[{c:sc(),lv:lvBase,x:6,y:3,ifBoss:1},{c:sc(),lv:lvBase,x:6,y:3,ifBoss:1}];def.summonTxt=B.boss.summonTxt}
+  if(bossFight&&B.boss.summon){const sc=()=>B.boss.summon==='*'?roll():B.boss.summon;for(const t of(B.id==='heart'?[3,5,7]:[3,5,7,9]))W[t]=[{c:sc(),lv:lvBase,x:6,y:3,ifBoss:1},{c:sc(),lv:lvBase,x:6,y:3,ifBoss:1}];def.summonTxt=B.boss.summonTxt}
   if(Object.keys(W).length)def.waves=W;
   return def;
 }

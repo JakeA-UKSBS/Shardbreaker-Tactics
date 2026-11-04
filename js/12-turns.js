@@ -4,7 +4,7 @@
 /* ==================================================================
    SELECTING AND MOVING: select a unit, show its reach, tap to move
    ================================================================== */
-function clearSel(){sel=null;moveSet=null;fringe=null;targets=[];pending=null;inspect=null;itemSel=null}
+function clearSel(){sel=null;moveSet=null;fringe=null;targets=[];pending=null;inspect=null;itemSel=null;abSel=null;abT=null;aimSet=null}
 function select(u){clearSel();sel=u.id;pre=clone(state);origin={x:u.x,y:u.y};moveSet=reach(u);fringe=fringeOf(u,moveSet);ui='move';render()}
 function cancelMove(){const u=sel&&byId(sel);if(u&&origin){u.x=origin.x;u.y=origin.y}clearSel();ui='idle';render()}
 function springTrap(u){const c=CH[state.ch],k=key(u.x,u.y);if(!c.traps||!c.traps.includes(k)||(state.sprung||[]).includes(k))return;
@@ -35,12 +35,13 @@ function tap(x,y){
   const o=unitAt(x,y),k=key(x,y);
   if(ui==='move'){
     const u=byId(sel);
-    if(moveSet.has(k)){stepSfx(u);u.x=x;u.y=y;springTrap(u);afterMove(u);return}
+    if(moveSet.has(k)){stepSfx(u);u.x=x;u.y=y;springTrap(u);if(u.tumbled){u.tumbled=0;fringe=null}afterMove(u);return}
     if(o&&o.team==='e'&&fringe.has(k)){const t=bestApproach(u,o);if(t){if(t.x!==u.x||t.y!==u.y)stepSfx(u);u.x=t.x;u.y=t.y;targets=atkTargets(u);tmode='atk';openConfirm(o);return}}
     if(o&&o.team==='p'&&!o.acted&&o!==u){cancelMove();select(o);return}
     cancelMove();return;
   }
-  if(ui==='menu'||ui==='items'){cancelMove();return}
+  if(ui==='aim'){abTap(x,y);return}
+  if(ui==='menu'||ui==='items'||ui==='abil'){cancelMove();return}
   if(ui==='target'||ui==='confirm'){const t=targets.find(t=>x>=t.x&&y>=t.y&&x<t.x+(t.sz||1)&&y<t.y+(t.sz||1));/* any tile of a 2×2 boss counts */
     if(t&&ui==='confirm'&&t===pending){act(tmode==='heal'?'doheal':'attack-go');return}
     if(t){sfx('select');openConfirm(t)}else{pending=null;ui='menu';render()}return}
@@ -106,6 +107,7 @@ async function act(a){
   if(a.startsWith('sheet:')){openSheet(byId(a.slice(6)));return}
   if(a==='chart'){effChart();return}
   if(a==='cancel'){cancelMove();return}
+  if(a==='abil'||a.startsWith('ab:')||a==='abuse'){await abAct(u,a);return}
   if(a==='menu'){pending=null;targets=[];itemSel=null;ui='menu';render();return}
   if(a==='attack'){targets=atkTargets(u);tmode='atk';pending=null;ui='target';render();return}
   if(a==='heal'){targets=healTargets(u);tmode='heal';pending=null;ui='target';render();return}
@@ -153,7 +155,8 @@ async function fight(a,ai,d){
   if(p&&p.hp>0&&ep){const dealt=res.ev.some(e=>(e.by==='a')===(p===a)&&e.dmg>0);const g=gainExp(ep,Math.min(100,Math.round(expFor(ep,o,dealt,o.hp<=0)*EXP_RATE*(R('tome')?1.5:1)*(has(ep,'quickstudy')?2:1))));if(ep!==p&&g)toast(`${ep.name} gains ${g.amt} EXP`);await showExp(ep,g);if(g&&g.gains)await levelUp(ep,g)}
   if(p&&o.hp<=0&&p.hp>0&&R('fang')){const h=Math.min(5,p.maxhp-p.hp);if(h){p.hp+=h;pop(p,'+'+h,'heal')}}
   if(p&&o.hp<=0&&p.hp>0)/* enemy drops go to the spoils: after the win the Found picker asks who takes each one */
-    for(const it of o.items.filter(i=>i.d)){(state.loot=state.loot||[]).push(it.k);pop(o,IT[it.k].n+' dropped','heal');toast(`${IT[it.k].n} dropped: added to the spoils`)}
+    for(const it of o.items.filter(i=>i.d)){(state.loot=state.loot||[]).push(it.k);sfx('item');notify(`${IT[it.k].n} dropped`,'Added to the spoils: choose who takes it after the fight.',icon(it.k))}
+  if(p&&o.hp<=0&&p.hp>0&&o.team==='e'&&!o.summon)dropGold();
   if(a.hp>0&&d.hp<=0&&a.team==='p'&&phase==='player'&&has(a,'momentum')&&a.gf!==state.turn){a.gf=state.turn;a.acted=false;pop(a,'Momentum!','heal')}
   if(a.hp>0&&has(a,'hitrun')&&man(a,d)===1){let best=null,bd=-1;for(const[dx,dy]of DIRS){const x=a.x+dx,y=a.y+dy;if(x<0||y<0||x>=MW||y>=MH||unitAt(x,y)||mcost(a,x,y)>=99||!canStep(a,a.x,a.y,x,y))continue;
     const dd=Math.min(99,...state.units.filter(o=>hostile(o,a)&&o.hp>0).map(o=>man(o,{x,y})));if(dd>bd){bd=dd;best={x,y}}}if(best&&bd>1){a.x=best.x;a.y=best.y}}
@@ -223,7 +226,9 @@ function field(ts,u){
   return dist;
 }
 function aiPlan(e){
-  const tiles=[...reach(e)].map(k=>k.split(',').map(Number)),ps=state.units.filter(u=>u.hp>0&&hostile(u,e));let best=null;
+  const tiles=[...reach(e)].map(k=>k.split(',').map(Number));let ps=state.units.filter(u=>u.hp>0&&hostile(u,e)),best=null;
+  /* Challenged: only the challenger counts as a target, if it can be reached this turn */
+  if(hasSt(e,'challenged')){const ch=byId(e.st.challenged.by);if(ch&&ch.hp>0&&tiles.some(([x,y])=>wpnsAt({...e,x,y},man({x,y,sz:e.sz},ch),ch).length))ps=[ch]}
   for(const[x,y]of tiles)for(const p of ps){const d=man({x,y,sz:e.sz},p);
     for(const wi of wpnsAt({...e,x,y},d,p)){const f=forecast({...e,x,y},wi,p),A=f.A,D=f.D;
       const s=A.dmg*A.n*A.hit/100+(A.dmg*A.n>=p.hp?40:0)-(D?D.dmg*D.n*D.hit/200:0)+ter(x,y).av/10+(p.lord?3:0)+(has(p,'taunt')||markedU(p)?25:0);
@@ -233,25 +238,39 @@ function aiPlan(e){
   return{tile:bt};
 }
 async function enemyPhase(){
-  history.push(clone(state));clearSel();ui='idle';phase='enemy';busy=true;render();
+  history.push(clone(state));clearSel();ui='idle';phase='enemy';busy=true;tickSt('p','end');render();
   for(const u of state.units)if(u.team==='p')u.stone=0;
-  if(state.units.some(u=>u.team==='g')){phaseHeal('g');await runAI('g');if(over)return}
+  if(state.units.some(u=>u.team==='g')){phaseHeal('g');tickSt('g','start');burnTick('g');await runAI('g');tickSt('g','end');if(over)return}
   banner('Enemy Phase','e');await sleep(950);
-  phaseHeal('e');render();await runAI('e');
+  phaseHeal('e');tickSt('e','start');burnTick('e');render();await runAI('e');tickSt('e','end');
   busy=false;if(over)return;
   spawnWaves(state.turn+1);
-  state.turn++;state.units.forEach(u=>u.acted=false);phase='player';phaseHeal('p');
+  state.turn++;state.units.forEach(u=>u.acted=false);phase='player';phaseHeal('p');abPlayerStart();
   checkEnd();if(over)return;
   for(const u of state.units)if(u.team==='p'&&u.stone)u.acted=true;
   render();banner('Player Phase','p');
   const l=state.units.find(u=>u.lord);if(l)ensureVisible(l.x,l.y);saveGame();
   if(state.ch===0)tip('enemy','Plan around the enemy','Press Danger to shade every tile an enemy can reach next turn.');
 }
+/* the Crystal Heart, on even turns: a 3×3 blast of crystal on your tankiest unit (highest max HP + Def) and whoever
+   stands next to them. It can't miss; Res is taken off as usual. */
+async function crystalStorm(e){
+  const ps=state.units.filter(u=>u.hp>0&&hostile(u,e));if(!ps.length)return;
+  const t=ps.reduce((a,b)=>b.maxhp+b.def>a.maxhp+a.def?b:a),w=IT.shatter,hit=ps.filter(u=>Math.abs(u.x-t.x)<=1&&Math.abs(u.y-t.y)<=1);
+  if(ensureVisible(t.x,t.y))await sleep(300);toast('The Crystal Heart unleashes a Crystal Storm!');sfx('critcharge');await sleep(D(500));shake();
+  for(const u of hit){const c=calc(e,w,u,null,{init:e,phase}),d=Math.min(u.hp,dmgMods(e,u,{init:e},Math.max(0,c.pow-c.df)));u.hp-=d;sfx('broke');shatterFx(u);pop(u,'-'+d,'crit');flash(u)}
+  render();await sleep(D(700));
+  for(const u of hit)if(u.hp<=0&&R('phoenix')&&!run.phx){u.hp=1;run.phx=1;pop(u,'Phoenix!','heal');toast(`The Phoenix Feather saves ${u.name}`)}
+  state.units=state.units.filter(u=>u.hp>0);render();checkEnd();
+}
 async function runAI(team){
   if(team==='g'){banner('Other Phase','g');await sleep(950)}
   for(const e of state.units.filter(u=>u.team===team)){
-    if(e.hp<=0||over)continue;if(e.stone){e.stone=0;render();continue}const plan=aiPlan(e);
+    if(e.hp<=0||over)continue;if(e.stone){e.stone=0;render();continue}if(hasSt(e,'stun')){pop(e,'Stunned','miss');await sleep(300);continue}
+    if(e.boss&&e.cls==='CrystalHeart'&&state.turn%2===0){await crystalStorm(e);if(over)break;continue}const plan=aiPlan(e);
     if(plan.tile&&(plan.tile.x!==e.x||plan.tile.y!==e.y)){if(ensureVisible(plan.tile.x,plan.tile.y))await sleep(300);stepSfx(e);e.x=plan.tile.x;e.y=plan.tile.y;render();await sleep(330)}
+    /* Cover: the protector takes the hit instead, if the attacker can reach them from here */
+    if(plan.target&&hasSt(plan.target,'cover')){const cv=byId(plan.target.st.cover.by);if(cv&&cv.hp>0&&cv!==plan.target){const wl=wpnsAt(e,man(e,cv),cv);if(wl.length){pop(cv,'Cover!','heal');plan.target=cv;plan.wi=wl[0];await sleep(250)}}}
     if(plan.target&&plan.target.hp>0){await fight(e,plan.wi,plan.target);busy=true}
     if(over)break;
   }

@@ -3,11 +3,12 @@
 /* ankle-deep water: a unit that starts its turn in it has 1 less Move (fliers, ghosts and swamp creatures ignore it) */
 function slowOf(u){const C=CLS[u.cls];return ter(u.x,u.y).slow&&!C.fly&&!C.wade&&!C.phase?1:0}
 function reach(u){
+  if(hasSt(u,'root'))return new Set([key(u.x,u.y)]);
   const dist={[key(u.x,u.y)]:0},q=[[u.x,u.y]];
   while(q.length){
     q.sort((a,b)=>dist[key(...a)]-dist[key(...b)]);const[x,y]=q.shift(),d=dist[key(x,y)];
     for(const[dx,dy]of DIRS){const nx=x+dx,ny=y+dy,sz=u.sz||1;if(nx<0||ny<0||nx+sz>MW||ny+sz>MH||!canStep(u,x,y,nx,ny))continue;
-      const cs=cellsOf(nx,ny,sz),nd=d+Math.max(...cs.map(([cx,cy])=>mcost(u,cx,cy)));if(nd>u.mov+relicMov(u)+gearOf(u).mov+(has(u,'fleetfoot')?2:0)-slowOf(u))continue;if(cs.some(([cx,cy])=>{const o=unitAt(cx,cy);return o&&o!==u&&hostile(o,u)}))continue;
+      const cs=cellsOf(nx,ny,sz),nd=d+Math.max(...cs.map(([cx,cy])=>mcost(u,cx,cy)));if(nd>u.mov+relicMov(u)+gearOf(u).mov+(has(u,'fleetfoot')?2:0)-slowOf(u)-stMov(u))continue;if(!has(u,'slippery')&&cs.some(([cx,cy])=>{const o=unitAt(cx,cy);return o&&o!==u&&hostile(o,u)}))continue;
       const k=key(nx,ny);if(dist[k]===undefined||nd<dist[k]){dist[k]=nd;q.push([nx,ny])}}
   }
   const s=new Set();for(const k in dist){const[x,y]=k.split(',').map(Number);if(cellsOf(x,y,u.sz).every(([cx,cy])=>{const o=unitAt(cx,cy);return!o||o===u}))s.add(k)}return s;
@@ -18,7 +19,7 @@ function fringeOf(u,ms){
   return f;
 }
 /* can u, standing on (x,y), hit or heal (nx,ny) at distance d? (bows get their height bonus) */
-function hitsFrom(u,x,y,nx,ny,d){return u.items.some(it=>{const w=IT[it.k];if(!(isWpn(it.k)||w.t==='spirit')||!canUse(u,it.k))return false;return d>=w.r[0]&&d<=w.r[1]+rngBonus(w,{x,y},{x:nx,y:ny})})}
+function hitsFrom(u,x,y,nx,ny,d){return u.items.some(it=>{const w=IT[it.k];if(!(isWpn(it.k)||w.t==='spirit')||!canUse(u,it.k))return false;return d>=w.r[0]&&d<=w.r[1]+rngBonus(w,{x,y},{x:nx,y:ny})+eagle(u,w)})}
 const atkTargets=u=>state.units.filter(o=>o.hp>0&&hostile(o,u)&&wpnsAt(u,man(u,o),o).length);
 function spiritFor(u,o){const d=man(u,o);return u.items.findIndex(it=>IT[it.k].t==='spirit'&&canUse(u,it.k)&&it.u>0&&d>=IT[it.k].r[0]&&d<=IT[it.k].r[1])}
 function healTargets(u){if(staffIdx(u)<0)return[];return state.units.filter(o=>o.hp>0&&o.team===u.team&&o!==u&&o.hp<o.maxhp&&spiritFor(u,o)>=0)}
@@ -84,7 +85,7 @@ vp.addEventListener('wheel',e=>{e.preventDefault();const b=vb(),mx=e.clientX-b.l
 addEventListener('resize',()=>applyCam());
 /* keyboard and mouse: Esc backs out; right-click backs out mid-action (after moving: undo the move), and inspects a unit when nothing is selected; E ends the turn */
 function backOut(){if(busy||!modalEl.hidden||phase!=='player'||over)return;const sh=document.querySelector('.sheet');if(sh&&!sh.hidden)return;
-  if(ui==='move'||ui==='menu')act('cancel');else if(ui==='confirm')act('back');else if(ui==='target')act('menu');else if(ui==='items')act('menu');else{clearSel();ui='idle';render()}}
+  if(ui==='move'||ui==='menu')act('cancel');else if(ui==='aim')act('abil');else if(ui==='abil')act('menu');else if(ui==='confirm')act('back');else if(ui==='target')act('menu');else if(ui==='items')act('menu');else{clearSel();ui='idle';render()}}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')backOut();else if((e.key==='e'||e.key==='E')&&modalEl.hidden&&!busy)$('#btnEnd').click()});
 vp.addEventListener('contextmenu',e=>{e.preventDefault();const p=pickAt(e.clientX,e.clientY),o=p&&unitAt(...p);
   if(ui==='idle'&&o&&o.hp>0&&modalEl.hidden&&!busy)openSheet(o);else backOut()});

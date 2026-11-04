@@ -105,9 +105,9 @@ const EVENTS={
     {l:'Move on',go:async()=>'You thank the smith and keep walking.'}]},
   armoury:{t:'Abandoned Armoury',art:'armoury',d:'Racks of old weapons, most rusted through. A few are still good, and there are medicine jars on a shelf.',o:[
     {l:'Take a steel weapon',sub:'One unit gets the steel version of their weapon',go:async()=>{
-      const u=await pickUnit('Who takes a weapon?','Only fighters with blades, axes, lances or bows can use these.',u=>!STEEL[CLS[u.cls].w[0]]?'Nothing for them':full(u));
-      if(!u)return null;const st=STEEL[CLS[u.cls].w[0]];sfx('item');
-      u.items.push({k:st,u:IT[st].uses});return`${u.name} pulls a <b>${IT[st].n}</b> from the rack. Mt ${IT[st].mt}, Wt ${IT[st].wt}.`}},
+      const u=await pickUnit('Who takes a weapon?','Only fighters with blades, axes, lances or bows can use these.',u=>steelFor(u)?null:'Nothing for them');
+      if(!u)return null;const st=steelFor(u);if(!await stow(u,st))return null;sfx('item');
+      return`${u.name} pulls a <b>${IT[st].n}</b> from the rack. Mt ${IT[st].mt}, Wt ${IT[st].wt}.`}},
     {l:'Take the medicine',sub:'2 Salves',go:async()=>{evEl.hidden=true;const a=await giveTo('qiPill','The first of two Salves.',true),b=await giveTo('qiPill','The second Salve.',true);evEl.hidden=false;return[a,b].filter(Boolean).map(u=>`${u.name} takes a Salve.`).join(' ')||'You leave the medicine on the shelf.'}}]},
   /* the spellcasters' version of the armoury: a sigil or charm is enchanted (+1, like the smith) */
   enchanter:{t:'The Enchanter’s Study',art:'library',d:'A tower room full of half-finished sigils. The enchanter left in a hurry, but the inks are still wet.',o:[
@@ -127,10 +127,10 @@ const EVENTS={
     {l:'Everyone spars',sub:'All units gain 50 EXP',go:async()=>{evEl.hidden=true;for(const u of run.roster){const g=gainExp(u,50);if(g&&g.gains)await levelUp(u,g)}return'A good, hard session. Every unit gains 50 EXP.'}},
     {l:'Move on',go:async()=>'No time to train today.'}]},
   merchant:{t:'Travelling Merchant',art:'merchant',d:'A covered wagon, a tired mule and a merchant who is very pleased to see paying customers.',o:null,
-    make:()=>{const stock=shuffle(['warHammer','huntSpear','giantslayer','holySword','steelJian','steelSpear','steelAxe','steelBow','leather','cloak','boots','gauntlet','greaterMend','stiletto']).slice(0,3),price=k=>IT[k].t==='gear'?40:IT[k].brk||IT[k].crit>=20?55:45;
+    make:()=>{const stock=shuffle(['warHammer','huntSpear','giantslayer','holySword','steelJian','steelSpear','steelAxe','steelBow','javelin','throwAxe','throwKnives','galeSword','arbalest','leather','cloak','boots','gauntlet','greaterMend','stiletto']).slice(0,3),price=k=>IT[k].t==='gear'?40:IT[k].brk||IT[k].crit>=20?55:45;
       return[...stock.map(k=>({l:`${IT[k].n} · ${price(k)}g`,sub:itemText(k),cost:price(k),go:async()=>{
-        const u=await pickUnit(`Who takes the ${IT[k].n}?`,'Units with full inventories can’t carry it.',u=>full(u)||(isWpn(k)&&!canUse(u,k)?'Can’t wield it':null));if(!u)return null;
-        spend(price(k));u.items.push({k,u:IT[k].uses});return`${u.name} takes the <b>${IT[k].n}</b>. “Pleasure doing business.”`}})),{l:'Just looking',go:async()=>'The merchant shrugs and waves you on.'}]}},
+        const u=await pickUnit(`Who takes the ${IT[k].n}?`,'If their bag is full, you can swap something out.',u=>isWpn(k)&&!canUse(u,k)?'Can’t wield it':null);if(!u)return null;
+        if(!await stow(u,k))return null;spend(price(k));return`${u.name} takes the <b>${IT[k].n}</b>. “Pleasure doing business.”`}})),{l:'Just looking',go:async()=>'The merchant shrugs and waves you on.'}]}},
   gamble:{t:'Gambler’s Table',art:'gamble',d:'A grinning stranger rattles two dice in a cup. “Double or nothing, friend?”',o:[
     {l:'Bet 30 gold',sub:'Even odds to win 60',cost:30,go:async()=>{spend(30);if(rand()<.5){run.gold+=60;sfx('fanfare');return'Two sixes. The stranger laughs and pays out 60 gold.'}sfx('broke');return'Snake eyes. The stranger pockets your 30 gold.'}},
     {l:'Walk away',go:async()=>'“Suit yourself.”'}]},
@@ -143,6 +143,18 @@ const EVENTS={
         if(d==='skip')return null;run.roster.splice(+d.slice(1),1)}
       run.roster.push(nu);castJoined(nu);sfx('item');return`The lock gives. <b>${nu.name}</b>, a ${CLS[nu.cls].n}, joins the squad.`}},
     {l:'Leave them',go:async()=>'You walk on. The traveller’s shouts follow you a long way.'}]}},
+  /* weapon upgrades */
+  forge:{t:'The Old King’s Forge',art:'smith',d:'A dwarven forge, cold for a century, roars back to life as you approach. The anvil is warm to the touch.',o:[
+    {l:'Temper every weapon',sub:'Each unit’s weapon +1 (up to +3); Weary Legs next fight',go:async()=>{const n=run.roster.filter(u=>{const w=weaponOf(u);return w&&forgeLv(w)<FORGE_MAX&&forge(w)}).length;addWoe('weary',1);sfx('item');
+      return n?`You work through the night. ${n} weapon${n>1?'s are':' is'} tempered (+1), and everyone is worn out for the next fight.`:'Nothing here can be tempered any further.'}},
+    {l:'Masterwork one weapon',sub:'+2 to one weapon (up to +3)',go:async()=>{
+      const u=await pickUnit('Whose weapon?','It gains two reforges.',u=>{const w=weaponOf(u);return!w?'No weapon':forgeLv(w)>=FORGE_MAX?'Already +3':null});
+      if(!u)return null;const w=weaponOf(u);forge(w);forge(w);sfx('item');return`The anvil sings. ${u.name}’s weapon comes back as the <b>${IT[w.k].n}</b>: Mt ${IT[w.k].mt}, Hit ${IT[w.k].hit}.`}}]},
+  weaponmaster:{t:'The Weaponmaster',art:'armoury',d:'A scarred weaponmaster sits behind a table of fine arms. “Your blades are a disgrace. Give me one, and coin, and I’ll give you something worthy.”',o:[
+    {l:'Trade up a weapon',sub:'35 gold: a better weapon of the same kind',cost:35,need:()=>run.roster.some(u=>{const w=weaponOf(u);return w&&tierUp(u,w)}),go:async()=>{
+      const u=await pickUnit('Whose weapon?','They get the next tier of the same weapon, keeping any reforging.',u=>{const w=weaponOf(u);return!w?'No weapon':tierUp(u,w)?null:'Nothing better for them'});
+      if(!u)return null;const w=weaponOf(u),old=IT[w.k].n,up=tierUp(u,w);w.k=up;w.u=IT[up].uses;spend(35);return`The weaponmaster weighs your ${old}, snorts, and hands over the <b>${IT[up].n}</b>: Mt ${IT[up].mt}, Hit ${IT[up].hit}.`}},
+    {l:'Ask for a lesson',sub:'One unit gains 60 EXP',go:async()=>{const u=await pickUnit('Who takes the lesson?','They gain 60 EXP.');if(!u)return null;await expAll([u],60);return`An hour of drills and bruises. ${u.name} gains 60 EXP.`}}]},
   /* Lysander joins only through this event */
   minstrel:{t:'The Wandering Minstrel',art:'veteran',ok:()=>!(run.castUsed||[]).includes('lysander')&&!run.roster.some(u=>u.cast==='lysander'),
     d:'A man in a feathered cap sits by the road, tuning a lyre. “Monster hunters! Every ballad needs heroes. Mind if I come along and write yours?”',o:null,make:()=>{const nu=castUnit('lysander',lvAvg());EVENTS.minstrel.card=`<div class="dcard on ev-card">${unitCard(nu)}</div>`;return[
@@ -186,7 +198,7 @@ const canAny=k=>run.roster.some(u=>canUse(u,k));
 const jadePick=()=>{const ks=[...new Set(run.roster.map(jadeFor).filter(Boolean))];return ks.length?pick(ks):'jadeJian'};
 function jadeFor(u){if(isRoleU(u,'rogue'))return'jadeFang';const m={blade:'jadeJian',pole:'jadeSpear',heavy:'jadeAxe',bow:'jadeBow',art:'thunderhead'};for(const t of CLS[u.cls].w)if(m[t])return m[t];return null}
 /* every item the squad gains goes through this picker; found=true shows it as "Found: X" with a Leave it option */
-async function giveTo(k,why,found){const u=await pickUnit(found?`Found: ${IT[k].n}`:`Who takes the ${IT[k].n}?`,found?`${why?why+' ':''}${itemText(k)}`:why||itemText(k),u=>full(u)||(isWpn(k)&&!canUse(u,k)?'Can’t wield it':null),found?'Leave it':'Cancel');if(!u)return null;u.items.push({k,u:IT[k].uses});sfx('item');return u}
+async function giveTo(k,why,found){for(;;){const u=await pickUnit(found?`Found: ${IT[k].n}`:`Who takes the ${IT[k].n}?`,found?`${why?why+' ':''}${itemText(k)}`:why||itemText(k),u=>isWpn(k)&&!canUse(u,k)?'Can’t wield it':null,found?'Leave it':'Cancel');if(!u)return null;if(!await stow(u,k))continue;sfx('item');return u}}
 Object.assign(EVENTS,{
   jadetomb:{t:'The Jade Tomb',art:'tomb',d:'A warrior’s tomb, its door carved from a single slab of jade. Inside, the grave goods are still bright.',o:null,make:()=>{const k=jadePick();return[
     {l:`Take the ${IT[k].n}`,sub:itemText(k),go:async()=>{const u=await giveTo(k,'Jade weapons crit far more often.');return u&&`${u.name} lifts the <b>${IT[k].n}</b> from its rest. Mt ${IT[k].mt}, Crit ${IT[k].crit}.`}},
@@ -241,8 +253,8 @@ Object.assign(EVENTS,{
     {l:'Train with the sage',sub:'One unit gains 200 EXP',go:async()=>{const u=await pickUnit('Who climbs to him?','They gain 200 EXP.');if(!u)return null;await expAll([u],200);return`${u.name} comes down a week later, changed. 200 EXP.`}},
     {l:'Meditate below',sub:'Every unit gains 50 EXP',go:async()=>{await expAll(run.roster,50);return'Quiet, cold, and useful. Every unit gains 50 EXP.'}}]},
   hoard:{t:'The Dragon’s Hoard',act:2,art:'hoard',d:'A dragon’s hoard, the dragon long dead. Mostly. Something big still breathes somewhere below.',o:null,make:()=>{const k=jadePick();return[
-    {l:`Grab the ${IT[k].n} and run`,sub:`${IT[k].n} + 40 gold; Ambushed and someone Marked next fight`,go:async()=>{const u=await pickUnit(`Who grabs the ${IT[k].n}?`,itemText(k),u=>full(u)||(canUse(u,k)?null:'Can’t wield it'));if(!u)return null;
-      u.items.push({k,u:IT[k].uses});run.gold=gold()+40;addWoe('wound',1);addWoe('marked',1,u);sfx('fanfare');return`${u.name} grabs the <b>${IT[k].n}</b> and a fistful of gold. Something wakes. You’ll be hunted next fight, ${u.name} most of all.`}},
+    {l:`Grab the ${IT[k].n} and run`,sub:`${IT[k].n} + 40 gold; Ambushed and someone Marked next fight`,go:async()=>{const u=await pickUnit(`Who grabs the ${IT[k].n}?`,itemText(k),u=>canUse(u,k)?null:'Can’t wield it');if(!u)return null;
+      if(!await stow(u,k))return null;run.gold=gold()+40;addWoe('wound',1);addWoe('marked',1,u);sfx('fanfare');return`${u.name} grabs the <b>${IT[k].n}</b> and a fistful of gold. Something wakes. You’ll be hunted next fight, ${u.name} most of all.`}},
     {l:'Pocket some gold quietly',sub:'+40 gold',go:async()=>{run.gold=gold()+40;sfx('item');return'40 gold, and nothing stirs.'}}]}}
 });
 /* ---- act 3 events: only these appear on the road to the Crystal Heart ---- */
