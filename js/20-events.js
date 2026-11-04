@@ -62,7 +62,7 @@ function eventScene(prop){
     p.ell(84,66,16,7,'#2a2630');p.ell(84,61,13,4,'#7fd36a');for(const[x,y]of[[78,55],[88,52],[83,48]])p.ell(x,y,2,2,'#a8f08a');S(70,70,4,6,INK);S(94,70,4,6,INK);}
     /* the witch herself is a hand-drawn PNG laid over the scene (art/scenes/witch.png, see EV_FIG) */
   if(prop==='fog'){S(76,30,2,30,WD);p.poly([[78,30],[90,33],[78,36]],'#efe6cf');p.line(40,62,60,40,'#5a4a3a');p.line(120,64,100,42,'#5a4a3a')}
-  if(prop==='chest'){S(64,52,32,16,WD);p.ell(80,52,16,6,WD,(x,y)=>y<=52);S(64,56,32,2,G);S(78,54,4,6,G);for(const[x,y]of[[40,40],[120,36],[132,46],[28,48]]){p.set(x,y,'#ff3a3a');p.set(x+3,y,'#ff3a3a')}}
+  if(prop==='chest'){/* the chest itself is Rhi's PNG laid over the scene (art/scenes/chest.png, see EV_FIG) */for(const[x,y]of[[40,40],[120,36],[132,46],[28,48]]){p.set(x,y,'#ff3a3a');p.set(x+3,y,'#ff3a3a')}}
   if(prop==='library'){for(const x of[24,68,112]){S(x,22,26,46,WD2);for(let r=0;r<4;r++){S(x+1,25+r*10,24,1,WD);for(let b=0;b<8;b++)S(x+2+b*3,26+r*10,2,8,['#c8322e','#3a6a9a','#7fd36a','#c9a050','#8a4ab0'][(b+r+x)%5])}}
     p.ell(98,70,9,3,ST1);p.ell(58,72,5,2,ST2);S(54,66,10,4,'#e8dcc0');S(55,66,4,4,'#d8ccb0');p.ell(150,40,3,4,'#ffd27a')}
   if(prop==='crater'){p.line(10,4,70,48,'#ffd27a',2);p.line(14,4,72,46,'#fff2b0');p.ell(80,64,30,8,'#2a2026');p.ell(80,62,24,5,'#4a3a3a');p.ell(80,58,9,7,'#a8482a');p.ell(80,57,5,4,'#ff8a3c');p.ell(79,56,2,2,YL);
@@ -232,7 +232,7 @@ Object.assign(EVENTS,{
   fog:{t:'The Strange Fog',art:'fog',d:'A thick white fog rolls over the road. There’s a shortcut through it, if you trust your feet.',o:[
     {l:'Take the shortcut',sub:'Every unit gains 40 EXP; Weary Legs for 2 fights (−1 Move)',go:async()=>{await expAll(run.roster,40);addWoe('weary',2);return'You stumble out the far side hours later. Everyone gains 40 EXP, but the squad is footsore for 2 fights.'}},
     {l:'Wait for it to lift',go:async()=>'By noon the road is clear.'}]},
-  chest:{t:'A Suspicious Chest',art:'chest',d:'A fine chest sits alone in the middle of the road. Nobody around. Nobody at all.',o:[
+  chest:{t:'A Suspicious Chest',art:'chest',fig:'chest',d:'A fine chest sits alone in the middle of the road. Nobody around. Nobody at all.',o:[
     {l:'Open it',sub:'Gold, or an ambush',go:async()=>{if(rand()<.55){run.gold=gold()+70;sfx('fanfare');return'70 gold, and no catch. Lucky.'}const v=pick(run.roster);addWoe('wound',1);addWoe('marked',1,v);sfx('broke');return`It’s a trap. Bandits scatter, but they’ll be back next fight: everyone starts 5 HP down, and they’re after <b>${v.name}</b>.`}},
     {l:'Leave it',go:async()=>'You give it a wide berth.'}]},
   library:{t:'The Ruined Library',art:'library',d:'Half the roof is gone, but the shelves still stand. Rain has spared a few tomes.',o:[

@@ -714,3 +714,5 @@ button.it.sel{border-color:var(--gold)}
 .tv-scene .ms-fire{left:50%;bottom:10%;width:11%;transform:translateX(-50%);z-index:6;filter:drop-shadow(0 0 10px rgba(255,140,40,.55))}
 /* map squad: unit sprites at their native 64px (1x, crisp) */
 .nmap .nm-squad img{width:64px;height:64px}.nmap .nm-squad div{min-width:72px;font-size:12px}
+.ev-chest{left:41%;width:18%;bottom:12%}
+.nmap .nm-scroll .nd.n-treasure{width:66px;height:66px;margin:-33px 0 0 -33px}.nmap .nm-scroll .nd.n-treasure img{width:50px;height:50px;image-rendering:auto}
