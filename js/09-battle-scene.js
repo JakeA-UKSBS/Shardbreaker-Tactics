@@ -9,6 +9,20 @@ function banner(t,c){sfx(c==='e'?'ephase':'phase');const b=document.createElemen
 /* the attacker hops toward its target on the map (screen direction, so it reads right in isometric) */
 function lunge(a,d,k=14){const el=uEls[a.id];if(!el)return;const p=scrC(a.x,a.y,a.sz),q=scrC(d.x,d.y,d.sz),n=Math.hypot(q.x-p.x,q.y-p.y)||1;el.style.transform=`translate(${(q.x-p.x)/n*k}px,${(q.y-p.y)/n*k}px)`;setTimeout(()=>el.style.transform='',150)}
 function flash(u){const el=uEls[u.id];if(!el)return;el.classList.add('flash');setTimeout(()=>el.classList.remove('flash'),120)}
+/* swap a map sprite to one of the rig's poses (windup, critup, swing, follow, hit, dodge, idle), the same frames the
+   side-on battle in Shardbreaker uses. t: turn to face that unit. Rigged units get every pose; older sprites only swing. */
+function mapPose(u,name,t,wk){const el=uEls[u.id];if(!el||u.sz>1)return;const img=el.firstChild;wk=wk||mapWk(u);let src;
+  if(name==='idle')src=sprite(u,'idle',mapWk(u));
+  else if(isHi(u.cls,u.sz)){const k=['MP',u.cls,u.team,name,wk,JSON.stringify(u.look)].join('|');src=sprCache[k]||(sprCache[k]=hiArt(u.look,u.cls,u.team,wk,name,0,64))}
+  else if(name==='swing'||name==='follow')src=sprite(u,'strike',wk);else return;
+  img.src=src;img.dataset.s=src;
+  if(name==='idle'){img.style.transform='';return}
+  if(t){const p=scrC(u.x,u.y,u.sz),q=scrC(t.x,t.y,t.sz);if(Math.abs(q.x-p.x)>1)img.style.transform=q.x<p.x?'scaleX(-1)':'scaleX(1)'}}
+/* one weapon strike on the map: wind up, swing (the lunge lands on it), then follow through. Resolves when the blow lands */
+async function swingAt(X,Y,w,crit,ranged){const wk=w&&w.key;
+  mapPose(X,crit?'critup':'windup',Y,wk);await sleep(D(crit?120:150));
+  mapPose(X,'swing',Y,wk);if(ranged){lunge(X,Y,-6);await shoot(X,Y,w)}else{lunge(X,Y);await sleep(D(110))}
+  setTimeout(()=>mapPose(X,'follow',Y,wk),D(90))}
 
 /* ================= ON-MAP ATTACKS ================= */
 let fast=false;
@@ -46,12 +60,12 @@ async function quickPlay(a,d,res){
     if(e.proc&&e.proc!==SKILLS.siphon.n)pop(X,e.proc,'crit');
     if(e.crit){sfx('critcharge');const el=uEls[X.id];if(el)el.animate([{filter:'none'},{filter:'brightness(2.2) drop-shadow(0 0 6px #fff)'},{filter:'none'}],{duration:D(320)});await sleep(D(260))}
     sfx(hitSfx(w,ranged));
-    if(ranged){lunge(X,Y,-6);await shoot(X,Y,w)}else{lunge(X,Y);await sleep(D(140))}
-    if(e.hit){sfx(e.crit?'crit':'hit');Y.hp=Y===a?e.hpA:e.hpD;pop(Y,(e.crit?'Crit ':'')+'-'+e.dmg,e.crit?'crit':'dmg');flash(Y);lunge(Y,X,-6);
+    await swingAt(X,Y,w,e.crit,ranged);
+    if(e.hit){sfx(e.crit?'crit':'hit');Y.hp=Y===a?e.hpA:e.hpD;pop(Y,(e.crit?'Crit ':'')+'-'+e.dmg,e.crit?'crit':'dmg');flash(Y);lunge(Y,X,-6);mapPose(Y,'hit',X);
       if(w.t==='art')burst(Y,EL_COL[w.el]||'#c8b8ff');if(w.el==='crystal')shatterFx(Y);if(e.crit){shake();burst(Y,'#fff')}if(e.guard)pop(Y,e.guard,'heal');
       if(e.heal){X.hp=X===a?e.hpA:e.hpD;pop(X,'+'+e.heal,'heal')}}
-    else{sfx('miss');pop(Y,'Miss','miss');lunge(Y,X,-10)}
-    render();await sleep(D(430))}
+    else{sfx('miss');pop(Y,'Miss','miss');lunge(Y,X,-10);mapPose(Y,'dodge',X)}
+    await sleep(D(240));mapPose(X,'idle');mapPose(Y,'idle');render();await sleep(D(200))}
 }
 async function showExp(u,g){
   if(!g)return;const host=vp,box=document.createElement('div');box.className='expbox';

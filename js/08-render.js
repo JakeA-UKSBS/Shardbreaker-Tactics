@@ -12,17 +12,17 @@ function buildBoard(){
   const mx=Math.max(0,...MAP.flatMap((r,y)=>[...r].map((_,x)=>vhOf(x,y))));
   OX=MH*TW/2;OY=56+mx*HS;BW=(MW+MH)*TW/2;BH=OY+(MW+MH)*TH/2+HS+12;
   boardEl.classList.add('iso');boardEl.style.gridTemplateColumns='';boardEl.style.width=BW+'px';boardEl.style.height=BH+'px';
-  /* boulders and features (hills, chests, houses, shrines, tents, crags, trees) sit on the map's usual ground */const gc={};for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const t=ter(x,y);if(t.c<99&&!OVER_T.includes(t.k))gc[t.k]=(gc[t.k]||0)+1}const gk=Object.keys(gc).sort((a,b)=>gc[b]-gc[a])[0]||'plain';
+  /* features (trees, rocks, chests, shrines, tents, gems...) stand up as props (16b-terrain3d.js) on the map's usual ground */const gc={};for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const t=ter(x,y);if(t.c<99&&!OVER_T.includes(t.k)&&!PROPS[t.k])gc[t.k]=(gc[t.k]||0)+1}const gk=Object.keys(gc).sort((a,b)=>gc[b]-gc[a])[0]||'plain';
   const firstOf={};
   for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const t=document.createElement('div'),tk=ter(x,y).k;const vol=CH[state.ch]&&CH[state.ch].biome==='mountain',ov=tk==='hill'&&vol?'crag':tk;
-    t.className=tk==='boulder'?'tile t-'+gk+' boulder':OVER_T.includes(ov)&&gk!=='plain'?`tile t-${gk} ov ov-${ov}`:'tile t-'+tk;t.dataset.k=key(x,y);
+    t.className=PROPS[ov]?'tile '+propGround(ov,gk):'tile t-'+tk;t.dataset.k=key(x,y);
     const vh=vhOf(x,y),p=tileTop(x,y,vh),z=(x+y)*4;
     Object.assign(t.style,{left:p.x+'px',top:p.y+'px',zIndex:z+1,transform:`matrix(${TW/2/T},${TH/2/T},${-TW/2/T},${TH/2/T},0,0)`});
     if(tk==='sky'){t.style.visibility='hidden';boardEl.appendChild(t);continue}
     const D=(vh+1)*HS,sd=document.createElement('div'),sk=t.className.split(' ')[1];sd.className='blk';sd.dataset.t=sk;
     Object.assign(sd.style,{left:p.x-TW/2+'px',top:p.y+'px',width:TW+'px',height:TH+D+'px',zIndex:z});
     sd.innerHTML=`<svg width="${TW}" height="${TH+D}"><polygon points="0,${TH/2} ${TW/2},${TH} ${TW/2},${TH+D} 0,${TH/2+D}" fill="var(--c)"/><polygon points="0,${TH/2} ${TW/2},${TH} ${TW/2},${TH+D} 0,${TH/2+D}" fill="#000" opacity=".3"/><polygon points="${TW/2},${TH} ${TW},${TH/2} ${TW},${TH/2+D} ${TW/2},${TH+D}" fill="var(--c)"/><polygon points="${TW/2},${TH} ${TW},${TH/2} ${TW},${TH/2+D} ${TW/2},${TH+D}" fill="#000" opacity=".5"/><path d="M0 ${TH/2}L${TW/2} ${TH}L${TW} ${TH/2}" stroke="#fff" stroke-opacity=".32" fill="none"/></svg>`;
-    boardEl.appendChild(sd);boardEl.appendChild(t);firstOf[sk]=firstOf[sk]||t}
+    boardEl.appendChild(sd);boardEl.appendChild(t);firstOf[sk]=firstOf[sk]||t;if(PROPS[ov])placeProp(x,y,ov)}
   /* side faces take the average colour of their tile's art */
   for(const k in firstOf){const m=/url\("?(.*?)"?\)/.exec(getComputedStyle(firstOf[k]).backgroundImage);if(!m)continue;sideColor(m[1],c=>boardEl.querySelectorAll(`.blk[data-t="${k}"]`).forEach(e=>e.style.setProperty('--c',c)))}
 }
@@ -67,6 +67,7 @@ function render(){
     el.querySelector('.hpb i').style.width=(u.hp/u.maxhp*100)+'%';
   }
   for(const id in uEls)if(!live.has(id)){uEls[id].remove();delete uEls[id]}
+  propsRender();
   $('#turn').textContent=`Floor ${run?run.n:1} · Turn ${state.turn}`+(phase==='enemy'?' · Enemy':'');
   $('#obj').innerHTML=`<div><b>Goal</b>${goalShort()}</div><div><b>Lose</b>${loseText()}</div>`;
   const idle=phase==='player'&&!busy&&!over;
@@ -102,7 +103,7 @@ function card(u){
 }
 
 /* ---- unit sheet (two pages, cycles through the same team) ---- */
-const TN={blade:'Blade',heavy:'Heavy',pole:'Polearm',bow:'Bow',reach:'Reach',art:'Sigil',spirit:'Charm',item:'Item'};
+const TN={blade:'Blade',heavy:'Heavy',pole:'Polearm',bow:'Bow',reach:'Reach',art:'Sigil',spirit:'Staff',item:'Item'};
 let sheetU=null,sheetPg=0,sheetIt=null,sheetRm=null;
 
 /* ==================================================================

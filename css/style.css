@@ -674,3 +674,10 @@ button.it.sel{border-color:var(--gold)}
 
 /* the unit card's equipment list in the side panel */
 .ueq{margin-top:8px}.ueq-h{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}.ueq .inv{margin:0}
+
+/* standing props: trees, rocks, gems and the like stand on their tile (16b-terrain3d.js); they fade when a unit is behind them */
+.board.iso img.prop{position:absolute;pointer-events:none;image-rendering:pixelated;transition:opacity .2s}
+.board.iso img.prop.fade{opacity:.45}
+.asc-cap .asc-new{color:var(--gold)}
+.ns-eq{flex:none;align-self:center;font-size:11px;font-weight:700;color:var(--gold);padding:2px 6px;border:1px solid var(--gold);border-radius:9px}
+.ns-row.eqd>span b{color:var(--gold)}

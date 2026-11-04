@@ -32,7 +32,7 @@ for(const n in CAST_CLASSES){const base=ensureCls('G.'+CAST_CLASSES[n]);const C=
    cls: their class, wk: the weapon they hold, look: their look.
    asc: one entry per ascension; its look is laid over the base look (wk is the weapon drawn in the previews).
    swap: on ascending, these weapons in their bag change (only Holt as a Sniper: crossbow → longbow, arbalest → greatbow; keeps reforging).
-   gain: on ascending, they're given this weapon too (Crusaders get a holy sword alongside their staff or charm). */
+   gain: on ascending, they're given this weapon too (Crusaders get a holy sword alongside their staff). */
 const CAST=[
   /* ---- starting roster ---- */
   {id:'kili',name:'Kili',cls:'Archer',wk:'longbow',joins:'start',look:{style:'tail',hair:'#4a3426',skin:'#e8b98f',cloth:'#4a6a3a',pants:'#5a4a32',sash:'#7a5230',feather:['#efe6cf','#c8322e','#efe6cf'],eye:'#3a6a3a'},
@@ -49,7 +49,7 @@ const CAST=[
   {id:'aldric',name:'Aldric',cls:'Knight',wk:'ironSpear',joins:'start',look:{style:'short',hair:'#6b4226',skin:'#e8b98f',cloth:'#b8322e',shield:'kite',shieldC:'#b8322e',eye:'#6a3a2a'},
     asc:{'Juggernaut':{look:{metal:'#9aa2b2',capeC:'#8a2420',shield:'tower',shieldC:'#8a2420',beard:true}},
          'Paladin':{look:{capeC:'#b8322e',horse:'#e8e2d0'}}}},
-  {id:'maelis',name:'Maelis',cls:'Mender',wk:'runeStaff',joins:'start',look:{fem:true,style:'long',hair:'#6b4226',skin:'#f6dcc4',cloth:'#efe6cf',sash:'#e2b553',shawl:'#fff8e8',staff:'#e2b553',orb:'#fff2b0',eye:'#3a5a8a'},
+  {id:'maelis',name:'Maelis',cls:'Mender',wk:'spiritMend',joins:'start',look:{fem:true,style:'long',hair:'#6b4226',skin:'#f6dcc4',cloth:'#efe6cf',sash:'#e2b553',shawl:'#fff8e8',staff:'#e2b553',orb:'#fff2b0',eye:'#3a5a8a'},
     asc:{'Saint':{look:{gear:'circlet',capeC:'#fff8e8',collar:'#efe6cf'}},
          'Crusader':{wk:'holySword',gain:'holySword',look:{metal:'#e8e2d0',shield:'kite',shieldC:'#efe6cf',capeC:'#e2b553',shawl:null}}}},
   {id:'rook',name:'Rook',cls:'Rogue',wk:'twinBlades',joins:'start',look:{style:'wild',hair:'#1d1a24',skin:'#c98e62',cloth:'#3a3036',pants:'#2a2226',sash:'#5a4a3a',wraps:'#c9bfa8',jag:true,eye:'#2a2230'},
@@ -62,7 +62,7 @@ const CAST=[
     asc:{'Hero':{wk:'steelJian',look:{capeC:'#c8682a',shield:'kite',shieldC:'#a8501e',gear:'headband'}}}},
   /* ---- found during the run (joins:'tavern' only at the tavern, 'event' only through their own event) ---- */
   {id:'aletta',name:'Aletta',cls:'Mender',wk:'spiritMend',joins:'tavern',look:{fem:true,style:'bun',hair:'#a8743a',skin:'#f3cfa6',cloth:'#5a8a5a',sash:'#efe6cf',shawl:'#dfe8d0',gear:'nursecap',eye:'#3a6a3a'},
-    asc:{'Saint':{wk:'runeStaff',look:{gear:'circlet',capeC:'#dfe8d0',staff:'#e2b553',orb:'#9fe8c0'}},
+    asc:{'Saint':{wk:'greaterMend',look:{gear:'circlet',capeC:'#dfe8d0',staff:'#e2b553',orb:'#9fe8c0'}},
          'Crusader':{wk:'holySword',gain:'holySword',look:{gear:null,metal:'#b8d0b0',shield:'kite',shieldC:'#5a8a5a',capeC:'#3f6a3f',shawl:null}}}},
   {id:'trent',name:'Trent',cls:'Cavalier',wk:'ironSpear',joins:'run',look:{style:'short',hair:'#3a2a20',skin:'#e8b98f',cloth:'#3f7a4a',metal:'#a9c4a2',horse:'#4a3426',eye:'#3a6a3a'},
     asc:{'Paladin':{look:{capeC:'#3f7a4a',metal:'#c4dcbc',shield:'kite',shieldC:'#3f7a4a'}},
@@ -96,10 +96,10 @@ CAST.forEach(c=>{const base=castCls(c.cls);c.cls=base;
     asc[castCls(n)]={n,wk:a.wk===undefined?c.wk:a.wk,swap:a.swap,gain:a.gain,look}}
   c.asc=asc;CLS[base].asc=[...new Set([...(CLS[base].asc||[]),...Object.keys(asc)])];CLS[base].promo=CLS[base].asc[0]}});
 const castDef=id=>CAST.find(c=>c.id===id);
-/* weapon types: a cast class (and its ascensions) wields only the type its characters start with; Menders keep charms and
-   arts, and an ascension that gains a weapon (gain) adds that weapon's type */
+/* weapon types: a cast class (and its ascensions) wields only the type its characters start with; Menders wield staves
+   only (no sigils), and an ascension that gains a weapon (gain) adds that weapon's type (a Crusader: staves and blades) */
 {const W={},add=(k,ts)=>(W[k]=W[k]||new Set(),ts.forEach(t=>W[k].add(t)));
-  for(const c of CAST){const ts=[c.wk?IT[c.wk].t:'spirit'];if(c.cls.split('.')[1]==='support')ts.push('spirit','art');add(c.cls,ts);
+  for(const c of CAST){const ts=c.cls.split('.')[1]==='support'?['spirit']:[c.wk?IT[c.wk].t:'spirit'];add(c.cls,ts);
     for(const k in c.asc){add(k,ts);if(c.asc[k].gain)add(k,[IT[c.asc[k].gain].t])}}
   for(const k in W)CLS[k].w=[...W[k]]}
 

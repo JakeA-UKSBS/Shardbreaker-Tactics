@@ -47,7 +47,7 @@ Object.assign(SKILLS,{
 /* ---- abilities ----
    mp / cd: cost. side: foe, ally, self (centred on the user) or tile (an empty tile, for Leap).
    r: range from the user ([min,max], or 'wpn' = their weapon's range). shape: one, cross, area (3×3), burst1 (3×3 round
-   the user), burst2 (2 tiles round the user), pierce (2 tiles in a line), cone (3 deep, widening).
+   the user), burst2 (2 tiles round the user), pierce (2 tiles in a line), cone (1 tile in front, then the 3 tiles behind it).
    aim: 'any' = aim at any tile in range (area spells); 'dir' = pick a direction (an adjacent tile).
    dmg: × attack power; hit: + Hit; hits: number of strikes; mag: uses Mag (a spell); el: element (colour, Attunement).
    st: [status, turns, chance] on the enemies hit; give: [status, turns] on the allies in the shape; self: statuses on the user.
@@ -63,7 +63,7 @@ const ABIL={
   hex:{n:'Hex',mp:5,mag:1,el:'dark',side:'foe',r:[1,3],st:['weak',2],d:'The target is Weak (deals 30% less damage) for 2 turns.'},
   darkPulse:{n:'Dark Pulse',mp:10,mag:1,el:'dark',side:'self',shape:'burst1',dmg:1,d:'1.0× magic damage to every enemy around her.'},
   flameBurst:{n:'Flame Burst',mp:5,mag:1,el:'fire',side:'foe',r:[1,3],shape:'cross',aim:'any',dmg:.9,st:['burn',2,.3],d:'A cross of fire up to 3 away: 0.9× magic damage, 30% chance to Burn.'},
-  frostWave:{n:'Frost Wave',mp:7,mag:1,el:'water',side:'foe',r:[1,1],shape:'cone',aim:'dir',dmg:.9,st:['chill',1],d:'A cone of frost 3 deep: 0.9× magic damage and Chill (−2 Move).'},
+  frostWave:{n:'Frost Wave',mp:7,mag:1,el:'water',side:'foe',r:[1,1],shape:'cone',aim:'dir',dmg:.9,st:['chill',1],d:'A cone of frost (4 tiles): 0.9× magic damage and Chill (−2 Move).'},
   chainLightning:{n:'Chain Lightning',mp:9,mag:1,el:'lightning',side:'foe',r:[1,4],dmg:1,chain:[2,.6],d:'1.0× magic damage, then it jumps to up to 2 enemies near the target at 0.6×.'},
   sunder:{n:'Sunder',cd:2,side:'foe',r:[1,1],dmg:1.2,st:['sunder',2],d:'1.2× damage, and the target has −3 Def for 2 turns.'},
   valiantThrust:{n:'Valiant Thrust',cd:3,side:'foe',r:[1,1],shape:'pierce',aim:'dir',dmg:1,d:'A lunge through 2 tiles in a line: 1.0× damage to both.'},
@@ -131,7 +131,7 @@ function shapeTiles(u,id,tx,ty){
   else if(sh==='area'){for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++)add(tx+dx,ty+dy)}
   else{const dx=Math.sign(tx-u.x),dy=Math.sign(ty-u.y),px=-dy,py=dx;
     if(sh==='pierce'){add(u.x+dx,u.y+dy);add(u.x+2*dx,u.y+2*dy)}
-    if(sh==='cone')for(let d=1;d<=3;d++)for(let s=-(d-1);s<=d-1;s++)add(u.x+dx*d+px*s,u.y+dy*d+py*s)}
+    if(sh==='cone')for(let d=1;d<=2;d++)for(let s=-(d-1);s<=d-1;s++)add(u.x+dx*d+px*s,u.y+dy*d+py*s)}
   return out;
 }
 /* the units an ability hits when aimed at (tx,ty): {foes, allies} */
@@ -191,9 +191,9 @@ async function useAbility(u,id,tx,ty){
   for(const t of foes){
     const ranged=a.mag||man(u,t)>1;if(!a.dmg){/* status only */}
     else{const n=a.hits||1,V=abVs(u,id,t);let total=0;
-      for(let k=0;k<n&&t.hp>0;k++){sfx(ranged?(a.mag?hitSfx(w,true):'arrow'):'swing');if(ranged&&(a.shape||'one')==='one'){lunge(u,t,-6);await shoot(u,t,w)}else if(!ranged){lunge(u,t);await sleep(D(140))}
-        if((rn()+rn())/2<V.hit){const d=Math.min(V.dmg,t.hp);t.hp-=d;total+=d;sfx('hit');pop(t,'-'+d,'dmg');flash(t);if(a.mag)burst(t,EL_COL[a.el]||'#c8b8ff')}else{sfx('miss');pop(t,'Miss','miss')}
-        render();await sleep(D(n>1?220:330))}
+      for(let k=0;k<n&&t.hp>0;k++){sfx(ranged?(a.mag?hitSfx(w,true):'arrow'):'swing');if(ranged&&(a.shape||'one')==='one'||!ranged)await swingAt(u,t,w,false,ranged);else mapPose(u,'swing',t);
+        if((rn()+rn())/2<V.hit){const d=Math.min(V.dmg,t.hp);t.hp-=d;total+=d;sfx('hit');pop(t,'-'+d,'dmg');flash(t);mapPose(t,'hit',u);if(a.mag)burst(t,EL_COL[a.el]||'#c8b8ff')}else{sfx('miss');pop(t,'Miss','miss');mapPose(t,'dodge',u)}
+        await sleep(D(n>1?160:220));mapPose(u,'idle');mapPose(t,'idle');render();await sleep(D(n>1?60:110))}
       if(total&&has(u,'darkSiphon')&&a.el==='dark'){const h=Math.min(Math.ceil(total/4),u.maxhp-u.hp);if(h){u.hp+=h;pop(u,'+'+h,'heal')}}
       exp+=expFor(u,t,total>0,t.hp<=0);
       if(t.hp>0&&total&&a.push){pushUnit(u,t,a.push);render();await sleep(D(250))}
@@ -231,7 +231,7 @@ function abPlayerStart(){for(const u of state.units)if(u.team==='p'){if(mpMax(u)
 
 /* ---- the Abilities menu, aiming and the forecast ---- */
 let abSel=null,abT=null,aimSet=null;
-const SHAPE_N={one:'',cross:'Cross',area:'3×3 area',burst1:'Around the user',burst2:'Within 2 of the user',pierce:'2 tiles in a line',cone:'Cone, 3 deep'};
+const SHAPE_N={one:'',cross:'Cross',area:'3×3 area',burst1:'Around the user',burst2:'Within 2 of the user',pierce:'2 tiles in a line',cone:'Cone, 4 tiles'};
 function abCostTxt(u,id){const a=ABIL[id];return a.mp?`${abCost(u,id)} MP`:`CD ${a.cd}`}
 function abRangeTxt(u,id){const a=ABIL[id];if(a.side==='self')return SHAPE_N[a.shape]||'Self';const r=abRange(u,id);return`Rng ${r[0]===r[1]?r[0]:r[0]+'–'+r[1]}${a.shape&&a.shape!=='one'?' · '+SHAPE_N[a.shape]:''}`}
 function mpLine(u){const m=mpMax(u);return m?`<div class="mpl"><span class="bar"><i style="width:${(u.mp||0)/m*100}%"></i></span><span>${u.mp||0}/${m} MP</span></div>`:''}
