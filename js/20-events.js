@@ -105,9 +105,9 @@ const EVENTS={
     {l:'Move on',go:async()=>'You thank the smith and keep walking.'}]},
   armoury:{t:'Abandoned Armoury',art:'armoury',d:'Racks of old weapons, most rusted through. A few are still good, and there are medicine jars on a shelf.',o:[
     {l:'Take a steel weapon',sub:'One unit gets the steel version of their weapon',go:async()=>{
-      const u=await pickUnit('Who takes a weapon?','Only fighters with blades, axes, lances or bows can use these.',u=>!STEEL[CLS[u.cls].w[0]]?'Nothing for them':full(u));
-      if(!u)return null;const st=STEEL[CLS[u.cls].w[0]];sfx('item');
-      u.items.push({k:st,u:IT[st].uses});return`${u.name} pulls a <b>${IT[st].n}</b> from the rack. Mt ${IT[st].mt}, Wt ${IT[st].wt}.`}},
+      const u=await pickUnit('Who takes a weapon?','Only fighters with blades, axes, lances or bows can use these.',u=>steelFor(u)?null:'Nothing for them');
+      if(!u)return null;const st=steelFor(u);if(!await stow(u,st))return null;sfx('item');
+      return`${u.name} pulls a <b>${IT[st].n}</b> from the rack. Mt ${IT[st].mt}, Wt ${IT[st].wt}.`}},
     {l:'Take the medicine',sub:'2 Salves',go:async()=>{evEl.hidden=true;const a=await giveTo('qiPill','The first of two Salves.',true),b=await giveTo('qiPill','The second Salve.',true);evEl.hidden=false;return[a,b].filter(Boolean).map(u=>`${u.name} takes a Salve.`).join(' ')||'You leave the medicine on the shelf.'}}]},
   /* the spellcasters' version of the armoury: a sigil or charm is enchanted (+1, like the smith) */
   enchanter:{t:'The Enchanter’s Study',art:'library',d:'A tower room full of half-finished sigils. The enchanter left in a hurry, but the inks are still wet.',o:[
@@ -129,8 +129,8 @@ const EVENTS={
   merchant:{t:'Travelling Merchant',art:'merchant',d:'A covered wagon, a tired mule and a merchant who is very pleased to see paying customers.',o:null,
     make:()=>{const stock=shuffle(['warHammer','huntSpear','giantslayer','holySword','steelJian','steelSpear','steelAxe','steelBow','leather','cloak','boots','gauntlet','greaterMend','stiletto']).slice(0,3),price=k=>IT[k].t==='gear'?40:IT[k].brk||IT[k].crit>=20?55:45;
       return[...stock.map(k=>({l:`${IT[k].n} · ${price(k)}g`,sub:itemText(k),cost:price(k),go:async()=>{
-        const u=await pickUnit(`Who takes the ${IT[k].n}?`,'Units with full inventories can’t carry it.',u=>full(u)||(isWpn(k)&&!canUse(u,k)?'Can’t wield it':null));if(!u)return null;
-        spend(price(k));u.items.push({k,u:IT[k].uses});return`${u.name} takes the <b>${IT[k].n}</b>. “Pleasure doing business.”`}})),{l:'Just looking',go:async()=>'The merchant shrugs and waves you on.'}]}},
+        const u=await pickUnit(`Who takes the ${IT[k].n}?`,'If their bag is full, you can swap something out.',u=>isWpn(k)&&!canUse(u,k)?'Can’t wield it':null);if(!u)return null;
+        if(!await stow(u,k))return null;spend(price(k));return`${u.name} takes the <b>${IT[k].n}</b>. “Pleasure doing business.”`}})),{l:'Just looking',go:async()=>'The merchant shrugs and waves you on.'}]}},
   gamble:{t:'Gambler’s Table',art:'gamble',d:'A grinning stranger rattles two dice in a cup. “Double or nothing, friend?”',o:[
     {l:'Bet 30 gold',sub:'Even odds to win 60',cost:30,go:async()=>{spend(30);if(rand()<.5){run.gold+=60;sfx('fanfare');return'Two sixes. The stranger laughs and pays out 60 gold.'}sfx('broke');return'Snake eyes. The stranger pockets your 30 gold.'}},
     {l:'Walk away',go:async()=>'“Suit yourself.”'}]},
@@ -198,7 +198,7 @@ const canAny=k=>run.roster.some(u=>canUse(u,k));
 const jadePick=()=>{const ks=[...new Set(run.roster.map(jadeFor).filter(Boolean))];return ks.length?pick(ks):'jadeJian'};
 function jadeFor(u){if(isRoleU(u,'rogue'))return'jadeFang';const m={blade:'jadeJian',pole:'jadeSpear',heavy:'jadeAxe',bow:'jadeBow',art:'thunderhead'};for(const t of CLS[u.cls].w)if(m[t])return m[t];return null}
 /* every item the squad gains goes through this picker; found=true shows it as "Found: X" with a Leave it option */
-async function giveTo(k,why,found){const u=await pickUnit(found?`Found: ${IT[k].n}`:`Who takes the ${IT[k].n}?`,found?`${why?why+' ':''}${itemText(k)}`:why||itemText(k),u=>full(u)||(isWpn(k)&&!canUse(u,k)?'Can’t wield it':null),found?'Leave it':'Cancel');if(!u)return null;u.items.push({k,u:IT[k].uses});sfx('item');return u}
+async function giveTo(k,why,found){for(;;){const u=await pickUnit(found?`Found: ${IT[k].n}`:`Who takes the ${IT[k].n}?`,found?`${why?why+' ':''}${itemText(k)}`:why||itemText(k),u=>isWpn(k)&&!canUse(u,k)?'Can’t wield it':null,found?'Leave it':'Cancel');if(!u)return null;if(!await stow(u,k))continue;sfx('item');return u}}
 Object.assign(EVENTS,{
   jadetomb:{t:'The Jade Tomb',art:'tomb',d:'A warrior’s tomb, its door carved from a single slab of jade. Inside, the grave goods are still bright.',o:null,make:()=>{const k=jadePick();return[
     {l:`Take the ${IT[k].n}`,sub:itemText(k),go:async()=>{const u=await giveTo(k,'Jade weapons crit far more often.');return u&&`${u.name} lifts the <b>${IT[k].n}</b> from its rest. Mt ${IT[k].mt}, Crit ${IT[k].crit}.`}},
@@ -253,8 +253,8 @@ Object.assign(EVENTS,{
     {l:'Train with the sage',sub:'One unit gains 200 EXP',go:async()=>{const u=await pickUnit('Who climbs to him?','They gain 200 EXP.');if(!u)return null;await expAll([u],200);return`${u.name} comes down a week later, changed. 200 EXP.`}},
     {l:'Meditate below',sub:'Every unit gains 50 EXP',go:async()=>{await expAll(run.roster,50);return'Quiet, cold, and useful. Every unit gains 50 EXP.'}}]},
   hoard:{t:'The Dragon’s Hoard',act:2,art:'hoard',d:'A dragon’s hoard, the dragon long dead. Mostly. Something big still breathes somewhere below.',o:null,make:()=>{const k=jadePick();return[
-    {l:`Grab the ${IT[k].n} and run`,sub:`${IT[k].n} + 40 gold; Ambushed and someone Marked next fight`,go:async()=>{const u=await pickUnit(`Who grabs the ${IT[k].n}?`,itemText(k),u=>full(u)||(canUse(u,k)?null:'Can’t wield it'));if(!u)return null;
-      u.items.push({k,u:IT[k].uses});run.gold=gold()+40;addWoe('wound',1);addWoe('marked',1,u);sfx('fanfare');return`${u.name} grabs the <b>${IT[k].n}</b> and a fistful of gold. Something wakes. You’ll be hunted next fight, ${u.name} most of all.`}},
+    {l:`Grab the ${IT[k].n} and run`,sub:`${IT[k].n} + 40 gold; Ambushed and someone Marked next fight`,go:async()=>{const u=await pickUnit(`Who grabs the ${IT[k].n}?`,itemText(k),u=>canUse(u,k)?null:'Can’t wield it');if(!u)return null;
+      if(!await stow(u,k))return null;run.gold=gold()+40;addWoe('wound',1);addWoe('marked',1,u);sfx('fanfare');return`${u.name} grabs the <b>${IT[k].n}</b> and a fistful of gold. Something wakes. You’ll be hunted next fight, ${u.name} most of all.`}},
     {l:'Pocket some gold quietly',sub:'+40 gold',go:async()=>{run.gold=gold()+40;sfx('item');return'40 gold, and nothing stirs.'}}]}}
 });
 /* ---- act 3 events: only these appear on the road to the Crystal Heart ---- */

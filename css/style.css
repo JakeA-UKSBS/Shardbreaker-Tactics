@@ -278,6 +278,7 @@ button.it.sel{border-color:var(--gold)}
 
 /* skills list on the unit sheet */
 .skh{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.ns-drop{margin-left:auto;opacity:.75}.ns-drop:hover{opacity:1}
 .capn{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
 .capbar{height:6px;background:#0d0f15;border-radius:3px;overflow:hidden;margin:2px 0 4px}
 .capbar i{display:block;height:100%;background:linear-gradient(90deg,#4f8fd8,#9fd8ff)}
