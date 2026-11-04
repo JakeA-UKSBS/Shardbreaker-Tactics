@@ -37,8 +37,8 @@ function battleRewards(){
   const elite=run.kind==='elite',rt=regionTags(elite);
   /* slayer weapon: 15% after a battle, 35% after an elite */
   if(rand()<(elite?.35:.15)){const ws=rt.filter(t=>SLAYER_WPN[t]);if(ws.length)add(SLAYER_WPN[pick(ws)])}
-  /* skills: 40%; half the time it's the slayer skill for this region's monsters */
-  if(rand()<.4){const ss=rt.filter(t=>SLAYER_SKILL[t]).map(t=>SLAYER_SKILL[t]).filter(k=>!run.roster.every(u=>has(u,k)));run.pendSkill=ss.length&&rand()<.5?pick(ss):pick(SKILL_POOL())}
+  /* skills are rare: 10% after a battle, 40% after an elite; half the time it's the slayer skill for this region's monsters */
+  if(rand()<(elite?.4:.1)){const ss=rt.filter(t=>SLAYER_SKILL[t]).map(t=>SLAYER_SKILL[t]).filter(k=>!run.roster.every(u=>has(u,k)));run.pendSkill=ss.length&&rand()<.5?pick(ss):pick(SKILL_POOL())}
   if(rand()<.5)add('qiPill');
   return out;
 }
