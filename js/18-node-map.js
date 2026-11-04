@@ -64,8 +64,8 @@ function mapScreen(preview){
   const M=run.map.rows,RH=74,H=(M.length+1)*RH+70,ok=preview?[]:reachable(),isOk=(r,i)=>ok.some(o=>o.r===r&&o.i===i);
   const Y=r=>H-36-(r+1)*RH-(r===M.length-1?26:0),vis=new Set((run.path||[]).map(p=>p.r+','+p.i));
   let lines='';M.forEach((row,r)=>row.forEach((n,i)=>n.next.forEach(j=>{const m=M[r+1]&&M[r+1][j];if(!m)return;const walked=vis.has(r+','+i)&&vis.has((r+1)+','+j);
-    lines+=`<line x1="${n.x}" y1="${Y(r)}" x2="${m.x}" y2="${Y(r+1)}" stroke="${walked?'#d8b15a':'#5a5466'}" stroke-width="${walked?2.5:1.5}" stroke-dasharray="${walked?'':'3 4'}" vector-effect="non-scaling-stroke"/>`})));
-  M[0].forEach((n,i)=>{const walked=vis.has('0,'+i);lines+=`<line x1="50" y1="${Y(-1)}" x2="${n.x}" y2="${Y(0)}" stroke="${walked?'#d8b15a':'#5a5466'}" stroke-width="${walked?2.5:1.5}" stroke-dasharray="${walked?'':'3 4'}" vector-effect="non-scaling-stroke"/>`});
+    lines+=`<line x1="${n.x}" y1="${Y(r)}" x2="${m.x}" y2="${Y(r+1)}" stroke="${walked?'#8b2e16':'#5b3d20'}" stroke-width="${walked?2.5:1.5}" stroke-dasharray="${walked?'':'3 4'}" vector-effect="non-scaling-stroke"/>`})));
+  M[0].forEach((n,i)=>{const walked=vis.has('0,'+i);lines+=`<line x1="50" y1="${Y(-1)}" x2="${n.x}" y2="${Y(0)}" stroke="${walked?'#8b2e16':'#5b3d20'}" stroke-width="${walked?2.5:1.5}" stroke-dasharray="${walked?'':'3 4'}" vector-effect="non-scaling-stroke"/>`});
   const nodes=M.map((row,r)=>row.map((n,i)=>{const cur=run.pos&&run.pos.r===r&&run.pos.i===i,c=['nd','n-'+n.t,isOk(r,i)?'ok':'',vis.has(r+','+i)?'vis':'',cur?'cur':''].join(' ');
     return`<button type="button" class="${c}" style="left:${n.x}%;top:${Y(r)}px" data-n="${r},${i}" ${isOk(r,i)?'':'tabindex="-1"'} aria-label="${NODE_N[n.t]}"><img src="${nodeIcon(n.t)}" alt=""></button>`}).join('')).join('')
     +`<button type="button" class="nd n-start ${run.pos?'vis':'cur'}" style="left:50%;top:${Y(-1)}px" data-start="1" aria-label="Start"><img src="${flagArt()}" alt=""></button>`;
