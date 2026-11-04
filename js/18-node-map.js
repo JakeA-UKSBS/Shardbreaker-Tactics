@@ -118,8 +118,8 @@ async function restNode(){
   run.roster.forEach(u=>u.hp=u.maxhp);sfx('heal');
   const train=R('bedroll')?100:50;
   if(R('kettle')){await expAll(run.roster,20);toast('Camp Kettle: everyone gains 20 EXP')}
-  const m=await modal(`<div class="eyebrow">Rest</div><h2>A quiet camp</h2><p>Everyone rests and heals fully. You can also train one unit: they gain ${train} EXP.</p><div class="draft">${run.roster.map((u,i)=>`<button type="button" class="dcard" data-m="t${i}">${unitCard(u,false,0,true)}</button>`).join('')}</div><div class="mbtns"><button type="button" data-m="skip">Move on</button></div>`);
-  if(m==='skip')return;await expAll([run.roster[+m.slice(1)]],train);
+  const m=await modal(`<div class="eyebrow">Rest</div><h2>A quiet camp</h2><p>Everyone rests and heals fully. Choose one unit to train: they gain ${train} EXP.</p><div class="draft">${run.roster.map((u,i)=>`<button type="button" class="dcard" data-m="t${i}">${unitCard(u,false,0,true)}</button>`).join('')}</div>`);
+  await expAll([run.roster[+m.slice(1)]],train);
 }
 async function mapStep(){
   run.phase='map';saveGame();music(actBiome().id);
