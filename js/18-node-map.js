@@ -64,8 +64,8 @@ function reachable(){const M=run.map.rows;if(!run.pos)return M[0].map((_,i)=>({r
 const mapEl=document.createElement('div');mapEl.className='nmap';mapEl.hidden=true;document.body.appendChild(mapEl);
 /* preview: look at the act's map from the Crossroads before choosing a squad (nothing can be picked) */
 function mapScreen(preview){
-  const M=run.map.rows,RH=74,H=(M.length+1)*RH+70,ok=preview?[]:reachable(),isOk=(r,i)=>ok.some(o=>o.r===r&&o.i===i);
-  const Y=r=>H-36-(r+1)*RH-(r===M.length-1?26:0),vis=new Set((run.path||[]).map(p=>p.r+','+p.i));
+  const M=run.map.rows,RH=74,H=(M.length+1)*RH+124,ok=preview?[]:reachable(),isOk=(r,i)=>ok.some(o=>o.r===r&&o.i===i);
+  const Y=r=>H-36-(r+1)*RH-(r===M.length-1?50:0),vis=new Set((run.path||[]).map(p=>p.r+','+p.i));
   let lines='';M.forEach((row,r)=>row.forEach((n,i)=>n.next.forEach(j=>{const m=M[r+1]&&M[r+1][j];if(!m)return;const walked=vis.has(r+','+i)&&vis.has((r+1)+','+j);
     lines+=`<line x1="${n.x}" y1="${Y(r)}" x2="${m.x}" y2="${Y(r+1)}" stroke="${walked?'#8b2e16':'#5b3d20'}" stroke-width="${walked?2.5:1.5}" stroke-dasharray="${walked?'':'3 4'}" vector-effect="non-scaling-stroke"/>`})));
   M[0].forEach((n,i)=>{const walked=vis.has('0,'+i);lines+=`<line x1="50" y1="${Y(-1)}" x2="${n.x}" y2="${Y(0)}" stroke="${walked?'#8b2e16':'#5b3d20'}" stroke-width="${walked?2.5:1.5}" stroke-dasharray="${walked?'':'3 4'}" vector-effect="non-scaling-stroke"/>`});

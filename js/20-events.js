@@ -177,7 +177,7 @@ const EVENTS={
     {l:'Pay respects',sub:'Every unit gains 20 EXP',go:async()=>{evEl.hidden=true;for(const u of run.roster){const g=gainExp(u,20);if(g&&g.gains)await levelUp(u,g)}return'You bury what you can. The squad marches on quieter, and wiser (+20 EXP).'}}]}
 };
 /* ---- woes: bad luck from events that lasts a fight or two (shown on the map in red) ---- */
-const WOES={wound:{n:'Ambushed',d:'Every unit starts the next fight 5 HP down'},weary:{n:'Weary Legs',d:'Every unit has −1 Move'},marked:{n:'Marked',d:'Enemies would rather attack this unit'}};
+const WOES={wound:{n:'Wounded',d:'Every unit starts the next fight 5 HP down'},weary:{n:'Weary Legs',d:'Every unit has −1 Move'},marked:{n:'Marked',d:'Enemies would rather attack this unit'}};
 const Wo=id=>!!(run&&run.woes&&run.woes.some(w=>w.id===id&&w.n>0));
 const markedU=u=>u.team==='p'&&!!(run&&run.woes&&run.woes.some(w=>w.id==='marked'&&w.u===u.id));
 function addWoe(id,n,u){(run.woes=run.woes||[]).push({id,n,u:u&&u.id,nm:u&&u.name})}
@@ -207,7 +207,7 @@ Object.assign(EVENTS,{
   stormaltar:{t:'The Storm Altar',art:'stormaltar',d:'Lightning strikes the same black altar again and again. A sigil sits in the scorch mark, crackling.',o:[
     {l:'Take the Thunderhead Sigil',sub:'A high-crit lightning sigil',need:()=>canAny('thunderhead'),go:async()=>{const u=await giveTo('thunderhead');return u&&`${u.name} snatches the <b>Thunderhead Sigil</b> between strikes.`}},
     {l:'Take the Spark Sigil',sub:'A light, quick lightning sigil',need:()=>canAny('sparkT'),go:async()=>{const u=await giveTo('sparkT');return u&&`${u.name} takes the <b>Spark Sigil</b>. Their hair stands on end.`}},
-    {l:'Everyone touches the stone',sub:'Every unit +1 Spd; Ambushed next fight (−5 HP)',go:async()=>{run.roster.forEach(u=>u.spd++);addWoe('wound',1);sfx('thunder');return'The jolt knocks everyone flat. Faster for it (+1 Spd), but still singed for the next fight.'}}]},
+    {l:'Everyone touches the stone',sub:'Every unit +1 Spd; Wounded next fight (−5 HP)',go:async()=>{run.roster.forEach(u=>u.spd++);addWoe('wound',1);sfx('thunder');return'The jolt knocks everyone flat. Faster for it (+1 Spd), but still singed for the next fight.'}}]},
   cache:{t:'The Specialist’s Cache',art:'cache',d:'A sealed quartermaster’s cache. Each crate is stencilled for a different trade.',o:null,
     make:()=>{const has=f=>run.roster.some(f),o=[];
       if(has(u=>CLS[u.cls].w.includes('bow')))o.push('longbow');if(has(u=>isRoleU(u,'rogue')))o.push('throwKnives');if(has(u=>isRoleU(u,'support')))o.push('farMend');
@@ -224,7 +224,7 @@ Object.assign(EVENTS,{
     {l:'Join the free drill',sub:'Every unit +1 Spd; Weary Legs next fight (−1 Move)',go:async()=>{run.roster.forEach(u=>u.spd++);addWoe('weary',1);sfx('ding');return'Laps until everyone drops. Every unit gains 1 Spd, but legs will be heavy next fight.'}}]},
   toll:{t:'The Toll Bridge',art:'bridge',d:'Armed thugs block the only bridge. “Forty gold a head. Well, forty gold for the lot of you.”',o:[
     {l:'Pay the toll',sub:'40 gold',cost:40,go:async()=>{spend(40);return'They step aside, grinning.'}},
-    {l:'Fight through',sub:'Every unit gains 30 EXP; Ambushed next fight (−5 HP)',go:async()=>{await expAll(run.roster,30);addWoe('wound',1);return'You clear the bridge. Everyone gains 30 EXP, but the squad is still bruised for the next fight.'}}]},
+    {l:'Fight through',sub:'Every unit gains 30 EXP; Wounded next fight (−5 HP)',go:async()=>{await expAll(run.roster,30);addWoe('wound',1);return'You clear the bridge. Everyone gains 30 EXP, but the squad is still bruised for the next fight.'}}]},
   witch:{t:'The Bog Witch',art:'witch',fig:'witch',d:'A crooked hut, a bubbling pot, and a woman who already knows your names. “Coin for you, or a brew? Everything has a price.”',o:[
     {l:'Take her gold',sub:'+60 gold; a random unit is Marked for 2 fights',go:async()=>{run.gold=gold()+60;const v=pick(run.roster);addWoe('marked',2,v);sfx('dark');return`She counts out 60 gold and points a bony finger at <b>${v.name}</b>. Enemies will go for them for the next 2 fights.`}},
     {l:'Buy a brew',sub:'One unit +2 Res and +2 max HP for good',cost:25,go:async()=>{const u=await pickUnit('Who drinks?','+2 Res and +2 max HP for good.');if(!u)return null;spend(25);bump(u,'res',2);bump(u,'hp',2);sfx('heal');return`${u.name} gags it down. +2 Res, +2 max HP.`}},
@@ -245,7 +245,7 @@ Object.assign(EVENTS,{
   spire:{t:'The Storm Spire',act:2,art:'spire',d:'A tower that drinks lightning. At the top, a sigil and a staff hang in the air, waiting.',o:[
     {l:'Take Heaven’s Bolt',sub:'Lightning sigil, Rng 3–10, 5 uses',need:()=>canAny('boltT'),go:async()=>{const u=await giveTo('boltT');return u&&`${u.name} takes <b>Heaven’s Bolt</b>. The sky rumbles.`}},
     {l:'Take the Far Charm',sub:'Heals at Rng 1–10',need:()=>canAny('farMend'),go:async()=>{const u=await giveTo('farMend');return u&&`${u.name} takes the <b>Far Charm</b>.`}},
-    {l:'Climb to the top',sub:'Every unit +1 Spd and +1 Luck; Ambushed next fight',go:async()=>{run.roster.forEach(u=>{u.spd++;u.lck++});addWoe('wound',1);sfx('thunder');return'Struck, all of you. Every unit gains 1 Spd and 1 Luck, and starts the next fight singed.'}}]},
+    {l:'Climb to the top',sub:'Every unit +1 Spd and +1 Luck; Wounded next fight',go:async()=>{run.roster.forEach(u=>{u.spd++;u.lck++});addWoe('wound',1);sfx('thunder');return'Struck, all of you. Every unit gains 1 Spd and 1 Luck, and starts the next fight singed.'}}]},
   oracle:{t:'The Oracle',act:2,art:'oracle',d:'A blindfolded oracle turns a crystal in her hands. “I see what each of you lacks.”',o:[
     {l:'Hear your weakness',sub:'Every unit +1 to their lowest stat',go:async()=>{const t=run.roster.map(u=>{const s=shown(u).filter(k=>k!=='hp').sort((a,b)=>u[a]-u[b])[0];bump(u,s,1);return`${u.name} +1 ${SN[s]}`});sfx('ding');return t.join(', ')+'.'}},
     {l:'A full reading',sub:'One unit +1 to every stat',cost:50,go:async()=>{const u=await pickUnit('Whose fortune?','+1 to every stat for good.');if(!u)return null;spend(50);shown(u).forEach(s=>bump(u,s,1));sfx('fanfare');return`The oracle smiles at ${u.name}. +1 to everything.`}}]},
@@ -253,7 +253,7 @@ Object.assign(EVENTS,{
     {l:'Train with the sage',sub:'One unit gains 200 EXP',go:async()=>{const u=await pickUnit('Who climbs to him?','They gain 200 EXP.');if(!u)return null;await expAll([u],200);return`${u.name} comes down a week later, changed. 200 EXP.`}},
     {l:'Meditate below',sub:'Every unit gains 50 EXP',go:async()=>{await expAll(run.roster,50);return'Quiet, cold, and useful. Every unit gains 50 EXP.'}}]},
   hoard:{t:'The Dragon’s Hoard',act:2,art:'hoard',d:'A dragon’s hoard, the dragon long dead. Mostly. Something big still breathes somewhere below.',o:null,make:()=>{const k=jadePick();return[
-    {l:`Grab the ${IT[k].n} and run`,sub:`${IT[k].n} + 40 gold; Ambushed and someone Marked next fight`,go:async()=>{const u=await pickUnit(`Who grabs the ${IT[k].n}?`,itemText(k),u=>canUse(u,k)?null:'Can’t wield it');if(!u)return null;
+    {l:`Grab the ${IT[k].n} and run`,sub:`${IT[k].n} + 40 gold; Wounded and someone Marked next fight`,go:async()=>{const u=await pickUnit(`Who grabs the ${IT[k].n}?`,itemText(k),u=>canUse(u,k)?null:'Can’t wield it');if(!u)return null;
       if(!await stow(u,k))return null;run.gold=gold()+40;addWoe('wound',1);addWoe('marked',1,u);sfx('fanfare');return`${u.name} grabs the <b>${IT[k].n}</b> and a fistful of gold. Something wakes. You’ll be hunted next fight, ${u.name} most of all.`}},
     {l:'Pocket some gold quietly',sub:'+40 gold',go:async()=>{run.gold=gold()+40;sfx('item');return'40 gold, and nothing stirs.'}}]}}
 });
