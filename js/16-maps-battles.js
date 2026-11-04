@@ -166,9 +166,19 @@ MAPS.woodland.h=["4443210011", "4443210012", "4440000012", "0000000001", "000000
 MAPS.brook.h=["4433333344", "3333333333", "3333333333", "0100000010", "1111111111", "1111111111", "1122111111", "1122110000", "0000000000", "0000000000"];
 MAPS.clearing.h=["1111111111", "1111222111", "1112222211", "0112332110", "0112332100", "0011221000", "0001110000", "0000000000", "0000000000", "0000000000"];
 MAPS.heart.h=["2213333122", "2213333122", "1112222111", "0001111000", "0000000000", "0000000000", "0000000000", "0000000000", "0000000000", "0000000000"];
-/* settlements for Defend fights: 1 = the region's ground, 2 = its cover */
-const TOWN=["1111111111","2111111112","1111221111","#11111111#","#1V11A1V1#","1111111111","V11121111V","11111F1111","1111111111","1111111111"];
-for(const k in BIOMES){const B=BIOMES[k];if(B.town)MAPS['town_'+k]={n:B.townN,map:TOWN.map(r=>r.replaceAll('1',B.town[0]).replaceAll('2',B.town[1])),start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]}}
+/* settlements for Defend fights: one hand-made map per region, in its own terrain. Enemies arrive along the top two
+   rows; tents (A) and the shrine (F) heal and give cover in the middle; you start along the bottom. */
+const TOWNS={
+  swamp:["ssssnnssss","svssnnssvs","ssnnnnnnss","wsnvnnvnsw","wsnnAnnnsw","ssnnnnnnss","snvnFnnvns","ssnnnnnnss","ssnnnnnnss","sssnnnnsss"],
+  desert:["nnnnnnnnnn","nknnnnnnkn","nnnnzznnnn","knnnnnnnnk","nnAnwwnAnn","nnnnwwnnnn","knnnnnnnnk","nnnnFnnnnn","nnnnnnnnnn","nnnnnnnnnn"],
+  forest:["..........",".f......f.","...^..^...","f..y..y..f","...A..A...",".f......f.","^...F....^","..y....y..","..........",".........."],
+  mushroom:[",,,,,,,,,,",",q,,,,,,q,",",,,^,,^,,,","q,,,,,,,,q",",,A,qq,A,,",",,,,,,,,,,","^,,,F,,,,^",",,q,,,,q,,",",,,,,,,,,,",",,,,,,,,,,"],
+  shadow:[";;;;;;;;;;",";t;;;;;;t;",";;;^;;^;;;","t;;;tt;;;t",";;A;;;;A;;",";;;;;;;;;;","^;;;F;;;;^",";;t;;;;t;;",";;;;;;;;;;",";;;;;;;;;;"],
+  mountain:["bbbbbbbbbb","bmbbbbbbmb","bbbRbbRbbb","lbbbbbbbbl","bbAbmmbAbb","bbbbbbbbbb","RbbbFbbbbR","bbmbbbbmbb","bbbbbbbbbb","bbbbbbbbbb"],
+  snow:["oooooooooo","oaoojjooao","ooo^oo^ooo","jooooooooj","ooAoiioAoo","oooooooooo","^oooFoooo^","ooaooooaoo","oooooooooo","oooooooooo"],
+  cavern:["cccccccccc","cecccccccu","cccxccxccc","pccccccccp","ccAceccAcc","cccccccccc","xcccFccccx","ccuccccecc","cccccccccc","cccccccccc"]
+};
+for(const k in TOWNS)if(BIOMES[k])MAPS['town_'+k]={n:BIOMES[k].townN,map:TOWNS[k],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]};
 const ADJ=['Howling','Silent','Broken','Ashen','Bitter','Hollow','Moonlit','Drowned'];
 function spawnTiles(m){
   const out=[];for(let y=0;y<m.map.length;y++)for(let x=0;x<m.map[0].length;x++){const t=TER[m.map[y][x]];if(t.c>=99)continue;const d=Math.min(...m.start.map(([sx,sy])=>Math.abs(sx-x)+Math.abs(sy-y)));if(d>=4)out.push({x,y,d})}
@@ -181,7 +191,7 @@ function actBiome(){const a=run&&run.act||1;if(a>=3)return BIOMES.heart;
 /* bosses lumber: they move, but only a couple of tiles a turn */
 const BOSS_MOV=2;
 function genBattle(n,kind){
-  const act=run&&run.act||1,B=actBiome(),bossFight=kind==='boss',elite=kind==='elite',ship=B.id==='ship',town=!bossFight&&!elite&&!ship&&B.town&&(run&&run.n||1)>=2&&rand()<.25;
+  const act=run&&run.act||1,B=actBiome(),bossFight=kind==='boss',elite=kind==='elite',ship=B.id==='ship',town=!bossFight&&!elite&&!ship&&MAPS['town_'+B.id]&&(run&&run.n||1)>=2&&rand()<.25;
   const mk=bossFight?B.bossMap:town?'town_'+B.id:pick(B.maps);let m=MAPS[mk];
   /* at most 3 chests per map, and no altars (boss maps had them): the extras become the map's most common ground */
   {const cs=[];m.map.forEach((r,y)=>[...r].forEach((ch,x)=>{if(ch==='C')cs.push(x+','+y)}));

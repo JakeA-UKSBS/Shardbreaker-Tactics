@@ -109,6 +109,7 @@ const castDef=id=>CAST.find(c=>c.id===id);
    from Act 2 the 'act1' characters (already advanced) join the pool. Each character joins at most once a run (run.castUsed). */
 function castUnit(id,lv){
   const c=castDef(id),[,role,mv,,t]=c.cls.split('.'),R=ROLES[role],M=MOVES[mv];
+  if(t==='2')lv=1; /* already-advanced characters always join at Lv 1 */
   const s=R.b.slice();if(M.st)M.st.forEach((d,i)=>s[i]=Math.max(0,s[i]+d));if(t==='2'&&R.bonus)R.bonus.forEach((d,i)=>s[i]+=d);
   const g=R.gr.map(([a,b])=>Math.round((a+b)/2)),items=[];
   if(c.wk)items.push({k:c.wk,u:IT[c.wk].uses});
