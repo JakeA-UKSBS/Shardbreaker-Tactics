@@ -137,12 +137,20 @@ const EVENTS={
   idol:{t:'The Golden Idol',art:'idol',d:'A golden idol with ruby eyes sits on a plinth. It hums. Everyone feels it watching.',o:[
     {l:'Take it',sub:'Gain a rare relic; every unit loses 2 max HP for good',go:async()=>{const k=pick(relicPool(['r']));if(!k)return'The plinth is empty.';run.relics.push(k);run.roster.forEach(u=>{u.maxhp=Math.max(10,u.maxhp-2);u.hp=Math.min(u.hp,u.maxhp)});sfx('earth');return`The eyes go dark. You carry away the <b>${RELICS[k].n}</b>: ${RELICS[k].d} Everyone feels a little weaker (−2 max HP).`}},
     {l:'Leave it',go:async()=>'You back away slowly. The humming stops when it’s out of sight.'}]},
-  cage:{t:'The Caged Traveller',art:'cage',d:'A traveller sits in a monster’s cage, half starved. “Get me out of here and I’ll fight for you.”',o:null,make:()=>{const nu=genUnit(lvAvg());EVENTS.cage.card=`<div class="dcard on ev-card">${unitCard(nu)}</div>`;EVENTS.cage.ov=`<img class="ev-ov" src="${uSpr(nu)}" alt=""><img class="tv-bg" src="${cageBarsArt()}" alt="">`;return[
+  cage:{t:'The Caged Traveller',art:'cage',d:'A traveller sits in a monster’s cage, half starved. “Get me out of here and I’ll fight for you.”',o:null,make:()=>{const nu=castOffer(1,lvAvg(),'recruit')[0];EVENTS.cage.card=`<div class="dcard on ev-card">${unitCard(nu)}</div>`;EVENTS.cage.ov=`<img class="ev-ov" src="${uSpr(nu)}" alt=""><img class="tv-bg" src="${cageBarsArt()}" alt="">`;return[
     {l:'Break the lock',sub:`${nu.name} joins your squad`,go:async()=>{
       if(run.roster.length>=TEAM_CAP){const d=await modal(`<h2>Who stays behind?</h2><p>${nu.name} (${CLS[nu.cls].n}) takes their place.</p><div class="draft">${run.roster.map((u,i)=>`<button type="button" class="dcard" data-m="d${i}">${unitCard(u)}</button>`).join('')}</div><div class="mbtns"><button type="button" data-m="skip">Keep my squad</button></div>`);
         if(d==='skip')return null;run.roster.splice(+d.slice(1),1)}
-      run.roster.push(nu);sfx('item');return`The lock gives. <b>${nu.name}</b>, a ${CLS[nu.cls].n}, joins the squad.`}},
+      run.roster.push(nu);castJoined(nu);sfx('item');return`The lock gives. <b>${nu.name}</b>, a ${CLS[nu.cls].n}, joins the squad.`}},
     {l:'Leave them',go:async()=>'You walk on. The traveller’s shouts follow you a long way.'}]}},
+  /* Lysander joins only through this event */
+  minstrel:{t:'The Wandering Minstrel',art:'veteran',ok:()=>!(run.castUsed||[]).includes('lysander')&&!run.roster.some(u=>u.cast==='lysander'),
+    d:'A man in a feathered cap sits by the road, tuning a lyre. “Monster hunters! Every ballad needs heroes. Mind if I come along and write yours?”',o:null,make:()=>{const nu=castUnit('lysander',lvAvg());EVENTS.minstrel.card=`<div class="dcard on ev-card">${unitCard(nu)}</div>`;return[
+    {l:'Let him come',sub:`${nu.name} joins your squad`,go:async()=>{
+      if(run.roster.length>=TEAM_CAP){const d=await modal(`<h2>Who stays behind?</h2><p>${nu.name} (${CLS[nu.cls].n}) takes their place.</p><div class="draft">${run.roster.map((u,i)=>`<button type="button" class="dcard" data-m="d${i}">${unitCard(u)}</button>`).join('')}</div><div class="mbtns"><button type="button" data-m="skip">Keep my squad</button></div>`);
+        if(d==='skip')return null;run.roster.splice(+d.slice(1),1)}
+      run.roster.push(nu);castJoined(nu);sfx('item');return`<b>${nu.name}</b> slings his lyre over his shoulder. “I’ll make you all sound taller.”`}},
+    {l:'Ask for a song and move on',sub:'Every unit gains 20 EXP',go:async()=>{await expAll(run.roster,20);return'He plays something rousing about a dragon. Every unit gains 20 EXP.'}}]}},
   spring:{t:'Healing Spring',art:'spring',d:'A clear spring bubbles up between the rocks. The water glows faintly.',o:[
     {l:'One unit bathes',sub:'+3 max HP for good',go:async()=>{const u=await pickUnit('Who bathes in the spring?','They gain 3 max HP for good.');if(!u)return null;u.maxhp+=3;u.hp+=3;sfx('heal');return`${u.name} climbs out feeling years younger. Max HP ${u.maxhp}.`}},
     {l:'Everyone drinks',sub:'Every unit gains +1 Res',go:async()=>{run.roster.forEach(u=>u.res++);sfx('heal');return'The water tastes of rain. Every unit gains 1 Res.'}}]},
@@ -254,7 +262,7 @@ Object.assign(EVENTS,{
 });
 async function eventNode(){
   /* act 3 only draws act-3 events; acts 1 and 2 never do */
-  const A3=(run.act||1)>=3,ks=Object.keys(EVENTS).filter(k=>A3?EVENTS[k].act===3:!EVENTS[k].act||EVENTS[k].act===(run.act||1)),seen=run.seenEv=run.seenEv||[],fresh=ks.filter(k=>!seen.includes(k)),ek=pick(fresh.length?fresh:ks),E=EVENTS[ek],opts=(E.card=null,E.o||E.make());seen.push(ek);
+  const A3=(run.act||1)>=3,ks=Object.keys(EVENTS).filter(k=>(A3?EVENTS[k].act===3:!EVENTS[k].act||EVENTS[k].act===(run.act||1))&&(!EVENTS[k].ok||EVENTS[k].ok())),seen=run.seenEv=run.seenEv||[],fresh=ks.filter(k=>!seen.includes(k)),ek=pick(fresh.length?fresh:ks),E=EVENTS[ek],opts=(E.card=null,E.o||E.make());seen.push(ek);
   music(actBiome().id);
   for(;;){
     const m=await evShow(E,E.d,opts.map((x,i)=>{const poor=x.cost&&gold()<x.cost,none=x.need&&!x.need();return[String(i),x.l,(x.sub||'')+(poor?' (not enough gold)':none?' (nobody can use it)':''),poor||none]}));
