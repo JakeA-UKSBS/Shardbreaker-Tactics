@@ -31,7 +31,7 @@ const weaponOf=u=>u.items.find(it=>(isWpn(it.k)||IT[it.k].t==='spirit')&&canUse(
 /* ---- treasure: the vault holds one thing (an item, a skill or a relic), then who takes it ---- */
 async function treasureNode(){
   const pool=['steelJian','steelAxe','steelSpear','steelBow','moonDao','greatsword','javelin','throwAxe','crossbow','thunderT','crookStaff','runeStaff','greaterMend','qiPill','barbedSpear','reaverAxe','hawkeyeBow','warHammer','huntSpear','giantslayer','holySword','stiletto','pilum','tomahawk','steelKnives','galeSword','arbalest','leather','chain','cloak','boots','gauntlet'];
-  const mk=()=>{const r=rand(),rp=relicPool(['c','u']);if(rp.length&&r<.2)return'relic:'+pick(rp);if(r<.5)return'skill:'+pick(SKILL_POOL());return pick(pool.filter(k=>!isWpn(k)&&IT[k].t!=='spirit'||run.roster.some(u=>canUse(u,k))))};
+  const mk=()=>{const r=rand(),rp=relicPool(['c','u']);if(rp.length&&r<.2)return'relic:'+pick(rp);if(r<.3)return'skill:'+pick(SKILL_POOL());return pick(pool.filter(k=>!isWpn(k)&&IT[k].t!=='spirit'||run.roster.some(u=>canUse(u,k))))};
   let k=mk();
   for(;;){
     const row=k.startsWith('skill:')?`<img src="${icon('crest')}" alt=""><span><b>${SKILLS[k.slice(6)].n}</b> · Skill · ${SKILLS[k.slice(6)].d}</span>`:k.startsWith('relic:')?`<img src="${relicArt(k.slice(6))}" alt=""><span><b>${RELICS[k.slice(6)].n}</b> · Relic · ${RELICS[k.slice(6)].d}</span>`:`<img src="${icon(k)}" alt=""><span>${itemText(k)}</span>`;
