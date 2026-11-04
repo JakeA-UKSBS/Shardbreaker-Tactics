@@ -14,6 +14,7 @@ function setupChapter(ci,roster){
     else fs.push(...c.horde())}
   const taken=new Set([...fs,...extra].flatMap(u=>cellsOf(u.x,u.y,u.sz).map(c=>key(...c))));
   heroes.forEach((h,i)=>{const st=c.start[i]||c.start.at(-1),p=freeNear(st[0],st[1],taken,h);h.x=p.x;h.y=p.y;taken.add(key(p.x,p.y))});
+  abReset(heroes);
   state={ch:ci,turn:1,units:[...heroes,...extra,...fs],visited:[],sprung:[],stage,reserve};
   history=[];rewinds=3;chStart=clone(state);enterMap();
 }

@@ -3,10 +3,10 @@
 const uSpr=u=>sprite(u,'idle',mapWk(u));
 /* skill capacity as a small pie: gold = used by learned skills, pale = what a skill on offer would take */
 function capPie(u,add=0){const c=capOf(u),n=capUsed(u),a=Math.min(add,Math.max(0,c-n)),over=n+add>c;
-  return`<span class="cap${over?' over':''}" title="Skill capacity: ${n} of ${c} used" style="--u:${n/c*100}%;--a:${(n+a)/c*100}%"></span><span class="capn">${n}${add?`+${add}`:''}/${c}</span>`}
-function unitCard(u,on,add){
+  return`<span class="cap${over?' over':''}" title="Skill capacity: ${n} of ${c} used${add?`, this skill takes ${add}`:''}" style="--u:${n/c*100}%;--a:${(n+a)/c*100}%"></span><span class="capn">${n}${add?`+${add}`:''}/${c}</span>`}
+function unitCard(u,on,add,exp){
   const S=shown(u),w=u.items.map(i=>IT[i.k]).filter(i=>i.t!=='item'),ls=(u.skills||[]).map(x=>SKILLS[x.id].n);
-  return`<div class="dimg"><img src="${uSpr(u)}" alt=""></div><div class="dtxt"><b>${u.name}</b><span class="dcls">${CLS[u.cls].n} · Lv ${u.lv}</span>
+  return`<div class="dimg"><img src="${uSpr(u)}" alt=""></div><div class="dtxt"><b>${u.name}</b><span class="dcls">${CLS[u.cls].n} · Lv ${u.lv}${exp?`<span class="dexp"><i style="width:${u.exp||0}%"></i></span>${u.exp||0}/100 EXP`:''}</span>
   <span class="dst">${S.map(k=>`${SL[k]} <b>${k==='hp'?(u.hp!=null&&u.hp<u.maxhp?`${u.hp}/${u.maxhp}`:u.maxhp):u[k]}</b>`).join(' ')}</span>
   <span class="dsk">${SKILLS[u.skill].n}${ls.length?', '+ls.join(', '):''} · ${w.map(i=>`<img src="${icon(i.key)}" alt="">${i.n}${i.r?` (Rng ${rngTxt(i.r)})`:''}`).join(' ')}</span></div><div class="dcap">${capPie(u,add)}</div>${on?'<span class="dtick">✓</span>':''}`;
 }
@@ -32,13 +32,13 @@ function regionTags(withBoss){const B=actBiome(),t=[];for(const[c,w]of[...B.pool
 /* returns the item keys found after a win; winScreen offers each one with the Found picker.
    Includes chests nobody opened and anything that was left behind because a unit's bag was full (state.loot) */
 function battleRewards(){
-  const out=(state.loot||[]).slice(),add=k=>{if(!isWpn(k)||run.roster.some(u=>canUse(u,k)))out.push(k)};
+  const out=(state.loot||[]).slice();if(state.gold)out.gold=state.gold;const add=k=>{if(!isWpn(k)||run.roster.some(u=>canUse(u,k)))out.push(k)};
   for(const[k,it]of Object.entries(CH[state.ch].gifts||{})){const[x,y]=k.split(',').map(Number);if(MAP[y]&&MAP[y][x]==='C'&&!state.visited.includes(k)){if(/^gold:/.test(it))out.gold=(out.gold||0)+ +it.slice(5);else if(it!=='pyrite')add(it)}}
   const elite=run.kind==='elite',rt=regionTags(elite);
   /* slayer weapon: 15% after a battle, 35% after an elite */
   if(rand()<(elite?.35:.15)){const ws=rt.filter(t=>SLAYER_WPN[t]);if(ws.length)add(SLAYER_WPN[pick(ws)])}
-  /* skills: 40%; half the time it's the slayer skill for this region's monsters */
-  if(rand()<.4){const ss=rt.filter(t=>SLAYER_SKILL[t]).map(t=>SLAYER_SKILL[t]).filter(k=>!run.roster.every(u=>has(u,k)));run.pendSkill=ss.length&&rand()<.5?pick(ss):pick(SKILL_POOL())}
+  /* skills are rare: 10% after a battle, 40% after an elite; half the time it's the slayer skill for this region's monsters */
+  if(rand()<(elite?.4:.1)){const ss=rt.filter(t=>SLAYER_SKILL[t]).map(t=>SLAYER_SKILL[t]).filter(k=>!run.roster.every(u=>has(u,k)));run.pendSkill=ss.length&&rand()<.5?pick(ss):pick(SKILL_POOL())}
   if(rand()<.5)add('qiPill');
   return out;
 }

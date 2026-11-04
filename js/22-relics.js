@@ -23,6 +23,8 @@ const RELICS={
   ironrose:{n:'Iron Rose',r:'u',d:'Units below half HP take 3 less damage.'},
   aventurine:{n:'Aventurine',r:'c',d:'All units gain +10 Avoid and +5 Crit.'},
   trophies:{n:'Hunter’s Trophies',r:'u',d:'Effective hits deal 2 more damage.'},
+  bedroll:{n:'Traveller’s Bedroll',r:'c',d:'Training at a camp gives 100 EXP instead of 50.'},
+  kettle:{n:'Camp Kettle',r:'u',d:'At every camp, all units gain 20 EXP.'},
   plenty:{n:'Horn of Plenty',r:'u',d:'+15 gold after every won fight, and tavern meals last 1 fight longer.'},
   /* starter relics: Ithren offers 3 of the r:'s' ones before you pick a squad; r:'h' ones join the Heirloom pick (unlocked by Field Hospital). Neither drops anywhere else */
   poultice:{n:'Herbal Poultice',r:'s',d:'Salves heal 2 more HP.'},
@@ -37,6 +39,14 @@ const salveAmt=k=>IT[k].amt+(R('poultice')?2:0);
 const R=id=>!!(run&&run.relics&&run.relics.includes(id));
 function relicArt_draw(k){const c='R|'+k;if(sprCache[c])return sprCache[c];const p=Px(16,16),col=RC[RELICS[k].r];
   p.line(4,1,8,6,GOLD);p.line(12,1,8,6,GOLD);p.poly([[8,5],[13,9],[8,15],[3,9]],col);p.poly([[8,5],[13,9],[8,9]],shade(col,1.25));p.set(7,8,'#ffffff');p.outline(OUT);return sprCache[c]=p.url()}
+/* gold dropped by defeated enemies: about 15g a battle (10g from Ascension 3), handed out over the kills, with
+   whatever is left dropping from the last enemy. It goes to state.gold and is paid out with the win, so a rewind takes it back. */
+const GOLD_DROPS=()=>A(3)?10:15;
+function dropGold(){
+  if(state.goldLeft==null)state.goldLeft=GOLD_DROPS();if(state.goldLeft<=0)return;
+  const last=!state.units.some(u=>u.team==='e'&&u.hp>0&&!u.summon),g=last?state.goldLeft:rand()<.5?Math.min(state.goldLeft,ri(3,6)):0;if(!g)return;
+  state.goldLeft-=g;state.gold=(state.gold||0)+g;sfx('item');notify(`${g} gold dropped`,'Collected when the fight is won.',coinArt());
+}
 function relicPool(rs){return Object.keys(RELICS).filter(k=>!R(k)&&rs.includes(RELICS[k].r)&&relicOpen(k))}
 async function relicPick(n,rs,title,text,first){
   /* first: relics that are always offered (the Heirloom pick always has one heirloom relic) */

@@ -6,7 +6,7 @@
 const CORE={battle:3,elite:1,tavern:1,rest:1,event:1,treasure:1},FLEX=['recruit','recruit','event','elite','battle'],FLEX_N=2;
 const ROWS=Object.values(CORE).reduce((a,b)=>a+b,0)+FLEX_N;
 const NODE_N={tavern:'Tavern',battle:'Battle',elite:'Elite',recruit:'Recruit',rest:'Rest',event:'Event',treasure:'Treasure',boss:'Boss'};
-const NODE_D={tavern:'Heal fully, and spend gold on a drink, a meal and a sellsword.',battle:'Fight monsters for EXP and loot.',elite:'Elite fight: a stronger pack led by an Elder monster. Drops a relic and a jade weapon.',recruit:'Pick 1 of 3 new units.',rest:'Heal fully, and train one unit: it gains a level.',
+const NODE_D={tavern:'Heal fully, and spend gold on a drink, a meal and a sellsword.',battle:'Fight monsters for EXP and loot.',elite:'Elite fight: a stronger pack led by an Elder monster. Drops a relic and a steel weapon.',recruit:'Pick 1 of 3 new units.',rest:'Heal fully, and train one unit: it gains a level.',
   event:'Something unexpected: a smith, a shrine, an old armoury…',treasure:'A treasure room. Pick 1 of 3 items.',boss:'The act boss.'};
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(rand()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function laneOk(a){
@@ -88,6 +88,9 @@ function mapScreen(preview){
     if(e.target.closest('[data-ux]')){closeUnit();return}
     if(!e.target.closest('.nm-unit,[data-u]'))closeUnit();
     if(e.target.closest('[data-close]')){mapEl.onclick=null;mapEl.hidden=true;sfx('select');return res(null)}
+    const dr=e.target.closest('[data-drop]');if(dr){const u=run.roster[+dr.dataset.uu],i=+dr.dataset.drop,it=u.items[i],side=dr.closest('.nm-side,.nm-info');
+      modal(`<h2>Drop the ${IT[it.k].n}?</h2><p>${u.name} leaves it behind. It’s gone for good.</p><div class="mbtns"><button type="button" data-m="no">Keep it</button><button type="button" class="go" data-m="yes">Drop it</button></div>`).then(m=>{
+        if(m!=='yes'||u.items[i]!==it)return;u.items.splice(i,1);sfx('tick');saveGame();if(side&&side.isConnected)side.innerHTML=unitBox(u);toast(`${u.name} drops the ${IT[it.k].n}`)});return}
     const sv=e.target.closest('[data-salve]');if(sv){const u=run.roster[+sv.dataset.uu],it=u.items[+sv.dataset.salve],amt=Math.min(salveAmt(it.k),u.maxhp-u.hp);u.hp+=amt;it.u--;if(it.u<=0)u.items.splice(+sv.dataset.salve,1);sfx('heal');saveGame();
       sv.closest('.nm-side,.nm-info').innerHTML=unitBox(u);const sm=mapEl.querySelector(`.nm-squad [data-u="${+sv.dataset.uu}"] .sq-hp`);if(sm)sm.outerHTML=squadHp(u);toast(`${u.name} recovers ${amt} HP`);return}
     const su=e.target.closest('[data-u]');if(su){const u=run.roster[+su.dataset.u],box=mapEl.querySelector('.nm-unit');sfx('select');
@@ -112,12 +115,14 @@ function unitDetail(u){const C=CLS[u.cls],sk=[u.skill,...(u.skills||[]).map(x=>x
   return`<div class="nu-head"><img src="${portrait(u)}" alt=""><div><b>${u.name}</b><span>${C.n} · Lv ${u.lv} · ${u.exp} EXP</span><span>HP ${u.hp}/${u.maxhp} · Move ${u.mov}</span></div></div>
   <div class="nu-stats">${shown(u).filter(k=>k!=='hp').map(k=>`<div><span>${SL[k]}</span><b>${u[k]}</b></div>`).join('')}</div>
   <div class="ns-h">Skills <small>${capPie(u)}</small></div>${sk.map((id,i)=>`<div class="ns-row"><span><b>${SKILLS[id].n}${i===0?' (personal)':''}</b>${SKILLS[id].d}</span></div>`).join('')}
-  <div class="ns-h">Items</div>${u.items.map((it,ii)=>`<div class="ns-row"><img src="${icon(it.k)}" alt=""><span>${itemText(it.k).replace('</b> · ','</b>')}${IT[it.k].t==='item'?` (${it.u} left)`:''}</span>${IT[it.k].t==='item'&&u.hp<u.maxhp?`<button type="button" class="mini go" data-salve="${ii}" data-uu="${run.roster.indexOf(u)}">Use</button>`:''}</div>`).join('')||'<p class="ns-none">No items.</p>'}
+  <div class="ns-h">Items</div>${u.items.map((it,ii)=>`<div class="ns-row"><img src="${icon(it.k)}" alt=""><span>${itemText(it.k).replace('</b> · ','</b>')}${IT[it.k].t==='item'?` (${it.u} left)`:''}</span>${IT[it.k].t==='item'&&u.hp<u.maxhp?`<button type="button" class="mini go" data-salve="${ii}" data-uu="${run.roster.indexOf(u)}">Use</button>`:''}<button type="button" class="mini ns-drop" data-drop="${ii}" data-uu="${run.roster.indexOf(u)}" aria-label="Drop ${IT[it.k].n}">Drop</button></div>`).join('')||'<p class="ns-none">No items.</p>'}
   <div class="ns-h">Wields</div><p class="ns-none">${C.w.map(t=>TN[t]).join(', ')}</p>`}
 async function restNode(){
   run.roster.forEach(u=>u.hp=u.maxhp);sfx('heal');
-  const m=await modal(`<div class="eyebrow">Rest</div><h2>A quiet camp</h2><p>Everyone rests and heals fully. You can also train one unit: they gain a level.</p><div class="draft">${run.roster.map((u,i)=>`<button type="button" class="dcard" data-m="t${i}">${unitCard(u)}</button>`).join('')}</div><div class="mbtns"><button type="button" data-m="skip">Move on</button></div>`);
-  if(m==='skip')return;const u=run.roster[+m.slice(1)],g=gainExp(u,100);if(g&&g.gains)await levelUp(u,g);
+  const train=R('bedroll')?100:50;
+  if(R('kettle')){await expAll(run.roster,20);toast('Camp Kettle: everyone gains 20 EXP')}
+  const m=await modal(`<div class="eyebrow">Rest</div><h2>A quiet camp</h2><p>Everyone rests and heals fully. Choose one unit to train: they gain ${train} EXP.</p><div class="draft">${run.roster.map((u,i)=>`<button type="button" class="dcard" data-m="t${i}">${unitCard(u,false,0,true)}</button>`).join('')}</div>`);
+  await expAll([run.roster[+m.slice(1)]],train);
 }
 async function mapStep(){
   run.phase='map';saveGame();music(actBiome().id);

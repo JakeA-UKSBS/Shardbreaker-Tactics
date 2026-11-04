@@ -55,7 +55,7 @@ async function musterScene(opts,need){
   /* stand the travellers in an arc around the campfire: the far ones behind it, smaller */
   const ang=i=>Math.PI*(1-i/(n-1)),pos=i=>50+38*Math.cos(ang(i)),up=i=>8+24*Math.sin(ang(i)),sc=i=>1-.22*Math.sin(ang(i));
   musEl.innerHTML=`<div class="tv-scene"><img class="tv-bg" src="${musterArt()}" alt="">
-      <div class="ms-post" aria-label="Signpost"><span class="ms-sign"><small>Act 1</small>${B1.n}</span><span class="ms-sign"><small>Act 2</small>${B2.n}</span><span class="ms-sign"><small>Act 3</small>${BIOMES.heart.n}</span></div>
+      <div class="ms-post" aria-label="Signpost"><span class="ms-sign"><small>Act 1</small>${B1.n}</span><span class="ms-sign"><small>Act 2</small>${B2.n}</span></div>
       ${opts.map((u,i)=>`<button type="button" class="mu" data-u="${i}" style="left:${pos(i)}%;bottom:${up(i)}%;--s:${sc(i)};z-index:${10-Math.round(Math.sin(ang(i))*5)}" aria-label="${u.name}"><img src="${uSpr(u)}" alt=""${pos(i)>50?' class="fl"':''}><span>${u.name}</span></button>`).join('')}
       <button type="button" class="ms-map" data-g="map" aria-label="Look at the map" title="Look at the map"><img src="${mapIconArt()}" alt="">Map</button><span class="tv-gold">Seed ${run.seed}</span></div>
     <div class="tv-box"><div class="ms-head"><b class="ms-count"></b><button type="button" class="mini ms-info" data-g="info" aria-expanded="false">ⓘ What do stats do?</button></div>${statHelpHTML()}

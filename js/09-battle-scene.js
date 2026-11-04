@@ -2,6 +2,9 @@
 /* ================= FX ================= */
 function pop(u,txt,cls){const p=document.createElement('div'),b=uBox(u);p.className='pop '+cls;p.textContent=txt;p.style.left=b.l+b.w/2-24+'px';p.style.top=b.t+'px';boardEl.appendChild(p);setTimeout(()=>p.remove(),950)}
 function toast(t){const d=document.createElement('div');d.className='toast';d.textContent=t;vp.appendChild(d);setTimeout(()=>d.remove(),1900)}
+/* a notification card in the corner of the board: stays a few seconds, stacks if several arrive at once */
+function notify(title,sub,img,ms=4000){let box=vp.querySelector('.notes');if(!box){box=document.createElement('div');box.className='notes';vp.appendChild(box)}
+  const d=document.createElement('div');d.className='note';d.innerHTML=`${img?`<img src="${img}" alt="">`:''}<div><b>${title}</b>${sub?`<span>${sub}</span>`:''}</div>`;d.style.setProperty('--t',ms+'ms');box.appendChild(d);setTimeout(()=>d.remove(),ms)}
 function banner(t,c){sfx(c==='e'?'ephase':'phase');const b=document.createElement('div');b.className='banner '+c;b.textContent=t;vp.appendChild(b);setTimeout(()=>b.remove(),1150)}
 /* the attacker hops toward its target on the map (screen direction, so it reads right in isometric) */
 function lunge(a,d,k=14){const el=uEls[a.id];if(!el)return;const p=scrC(a.x,a.y,a.sz),q=scrC(d.x,d.y,d.sz),n=Math.hypot(q.x-p.x,q.y-p.y)||1;el.style.transform=`translate(${(q.x-p.x)/n*k}px,${(q.y-p.y)/n*k}px)`;setTimeout(()=>el.style.transform='',150)}

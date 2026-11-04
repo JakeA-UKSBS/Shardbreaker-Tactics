@@ -62,6 +62,10 @@ button.mini{padding:4px 8px;font-size:12px}
 .banner{position:absolute;left:0;right:0;top:42%;text-align:center;font-family:var(--display);font-size:26px;letter-spacing:.08em;padding:8px;background:rgba(10,11,16,.8);pointer-events:none;animation:ban 1.1s forwards;z-index:6}
 .banner.p{color:var(--blue)}.banner.e{color:var(--red)}.banner.g{color:var(--green)}
 @keyframes ban{0%{opacity:0}20%,75%{opacity:1}100%{opacity:0}}
+.notes{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:6px;z-index:9;pointer-events:none;max-width:min(320px,80%)}
+.note{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--gold);border-radius:8px;padding:8px 12px;box-shadow:0 4px 14px rgba(0,0,0,.5);animation:notein .25s ease-out,noteout .4s ease-in calc(var(--t) - .4s) forwards}
+.note img{width:32px;height:32px;image-rendering:pixelated;flex:none}.note b{display:block;color:var(--gold);font-size:14px}.note span{display:block;color:var(--muted);font-size:12px}
+@keyframes notein{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}@keyframes noteout{to{opacity:0;transform:translateX(24px)}}
 .toast{position:absolute;left:50%;top:10px;transform:translateX(-50%);background:var(--panel);border:1px solid var(--gold);color:var(--fg);padding:6px 12px;border-radius:6px;font-weight:700;font-size:14px;z-index:8;white-space:nowrap;animation:ban 1.8s forwards;pointer-events:none}
 
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px;min-height:120px;display:flex;flex-direction:column;gap:8px}
@@ -274,6 +278,7 @@ button.it.sel{border-color:var(--gold)}
 
 /* skills list on the unit sheet */
 .skh{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.ns-drop{margin-left:auto;opacity:.75}.ns-drop:hover{opacity:1}
 .capn{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
 .capbar{height:6px;background:#0d0f15;border-radius:3px;overflow:hidden;margin:2px 0 4px}
 .capbar i{display:block;height:100%;background:linear-gradient(90deg,#4f8fd8,#9fd8ff)}
@@ -468,6 +473,7 @@ button.it.sel{border-color:var(--gold)}
 .dimg{flex:none;width:56px;height:56px;background:var(--panel2);border-radius:6px;display:grid;place-items:center}
 .dimg img{width:56px;height:56px;image-rendering:pixelated}
 .dtxt{display:flex;flex-direction:column;gap:1px;min-width:0;font-size:12px}
+.dexp{display:inline-block;width:46px;height:6px;margin:0 4px 0 6px;vertical-align:1px;border-radius:3px;background:#3a3448;overflow:hidden}.dexp i{display:block;height:100%;background:#7ad6ff}
 .dtxt>b{font-size:15px}.dcls{color:var(--gold)}.dst{color:var(--muted)}.dst b{color:var(--fg)}
 .dsk{color:var(--muted)}.dsk img{width:14px;height:14px;image-rendering:pixelated;vertical-align:-2px;margin-right:2px}
 .dtick{position:absolute;right:8px;top:6px;color:var(--gold);font-weight:700}
@@ -494,7 +500,7 @@ button.it.sel{border-color:var(--gold)}
 .titlebig{font-family:var(--display);font-size:40px;color:var(--gold);margin:0;letter-spacing:.06em}
 .heroes{display:flex;gap:4px;justify-content:center}
 .heroes{flex-wrap:wrap}.heroes img{width:44px;height:44px;object-fit:cover;border-radius:6px}
-@media (prefers-reduced-motion:reduce){.unit,.hpb i{transition:none}.pop,.banner,.toast,button.pulse,.tg::after{animation-duration:.01s}}
+@media (prefers-reduced-motion:reduce){.unit,.hpb i{transition:none}.note{animation:none}.pop,.banner,.toast,button.pulse,.tg::after{animation-duration:.01s}}
 #cog{position:fixed;right:max(12px,env(safe-area-inset-right,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:59;width:44px;height:44px;border-radius:50%;padding:0;font-size:24px;line-height:1;display:grid;place-items:center;background:rgba(20,16,24,.85);border:1px solid #5a4a6a;color:#e8dcc0;box-shadow:0 2px 8px rgba(0,0,0,.5)}
 #cog:hover{color:#f0c850;border-color:#c9a23a}
 .unit.spirit img{opacity:.88;filter:drop-shadow(0 0 3px #8ad8ff) drop-shadow(0 0 6px rgba(138,216,255,.6));animation:spiritbob 2.2s ease-in-out infinite}@keyframes spiritbob{50%{transform:translateY(-2px)}}
@@ -503,8 +509,8 @@ button.it.sel{border-color:var(--gold)}
 .ev-card{margin:0;cursor:default}
 .tv-scene .ev-ov{left:50%;bottom:24%;width:20%;transform:translateX(-50%);image-rendering:pixelated;filter:brightness(.8)}
 .shard{position:absolute;pointer-events:none;z-index:6;clip-path:polygon(50% 0,100% 40%,60% 100%,0 60%);box-shadow:0 0 4px rgba(255,255,255,.6)}
-.cap{display:inline-block;width:13px;height:13px;border-radius:50%;vertical-align:-2px;background:conic-gradient(var(--gold) 0 var(--u),#e8dfc0 var(--u) var(--a),#3a3448 var(--a) 100%);box-shadow:0 0 0 1px rgba(0,0,0,.5)}
-.cap.over{box-shadow:0 0 0 1.5px #e05a4a}.capn{font-size:11px;color:var(--muted);margin-right:4px;font-variant-numeric:tabular-nums}
+.cap{--n:#5fc2a0;display:inline-block;width:13px;height:13px;border-radius:50%;vertical-align:-2px;background:conic-gradient(var(--gold) 0 var(--u),var(--n) var(--u) var(--a),#3a3448 var(--a) 100%);box-shadow:0 0 0 1px rgba(0,0,0,.5)}
+.cap.over{--n:#e05a4a;box-shadow:0 0 0 1.5px #e05a4a}.capn{font-size:11px;color:var(--muted);margin-right:4px;font-variant-numeric:tabular-nums}
 /* high-res units: 64px art, feet on the tile's bottom edge, overflowing upward like FE map sprites */
 .unit img.hi{width:64px!important;height:64px!important;margin:-15px 0 0 -8px;max-width:none}
 /* run panel on the node map (PC): gold, relics with what they do, meals and woes */
@@ -593,7 +599,7 @@ button.it.sel{border-color:var(--gold)}
 .umenu{background:rgba(14,20,17,.95);border-color:#3f5a4c}
 /* skill capacity pie on the right of unit cards */
 .dcap{margin-left:auto;display:flex;flex-direction:column;align-items:center;gap:2px;padding-left:8px;flex:none}
-.dcap .cap{width:24px;height:24px;vertical-align:0}.dcap .capn{margin:0;font-size:11px}
+.dcap .cap{width:30px;height:30px;vertical-align:0}.dcap .capn{margin:0;font-size:11px}
 .ms-cards .dcap{display:none}
 /* unlocks screen */
 .a2list{display:flex;flex-direction:column;gap:6px;max-height:62vh;overflow:auto;margin:4px 0}
@@ -657,3 +663,14 @@ button.it.sel{border-color:var(--gold)}
 /* hand-drawn event figures laid over the event scene: sizes are fractions of the 160x90 scene, so pixels match it */
 .ev-fig{position:absolute;bottom:0;image-rendering:pixelated;pointer-events:none}
 .ev-witch{left:5%;width:38.125%}
+
+/* abilities: MP bar, status chips, the ability list and its forecast */
+.mpl{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}.mpl .bar{flex:1;height:5px;border-radius:3px;background:#2a2638;overflow:hidden}.mpl .bar i{display:block;height:100%;background:#6a8cff}
+.stc{display:flex;flex-wrap:wrap;gap:4px;margin-top:3px}.st{font-size:11px;padding:1px 6px;border-radius:9px;font-weight:700}.st.bad{background:#5a2430;color:#ffb3b3}.st.good{background:#24503a;color:#b8f0c8}
+.abl{display:flex;flex-direction:column;gap:5px;min-width:250px;max-width:330px}.abl-h{display:flex;justify-content:space-between;align-items:baseline;color:var(--gold)}.abl-h span{font-size:12px;color:#9fb4ff}
+.ab{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:1px;padding:6px 9px}.ab .abn{display:flex;justify-content:space-between;width:100%;font-weight:700}.ab .abn i{font-style:normal;font-size:12px;color:#9fb4ff}
+.ab .abr{font-size:11px;color:var(--gold)}.ab .abd{font-size:12px;color:var(--muted);font-weight:400;line-height:1.3}.ab.off{opacity:.55}.ab .abd em{color:#f0a08a;font-style:normal}
+.abf-r{font-size:13px;padding:3px 0;border-top:1px solid rgba(255,255,255,.06)}.abf-r .ec,.abf-r .pc{font-weight:700;margin-right:6px}.abfn{color:var(--gold)}.abfc{margin-left:auto;font-size:12px;color:#9fb4ff}
+
+/* the unit card's equipment list in the side panel */
+.ueq{margin-top:8px}.ueq-h{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}.ueq .inv{margin:0}
