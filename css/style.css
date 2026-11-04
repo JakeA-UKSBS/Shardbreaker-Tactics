@@ -689,17 +689,7 @@ button.it.sel{border-color:var(--gold)}
   background-attachment:local;border:2px solid #6e4a26;box-shadow:inset 0 0 50px rgba(92,56,20,.55),inset 0 0 8px rgba(60,34,10,.6),0 6px 22px rgba(0,0,0,.5)}
 .nmap .nm-scroll .nd{box-shadow:0 2px 4px rgba(50,28,8,.45)}
 .nmap .nm-scroll .nd.cur{box-shadow:0 0 0 3px var(--gold),0 2px 4px rgba(50,28,8,.45)}
-.nmap .nm-scroll .nd:not(.ok):not(.cur):not(.vis):not(.n-boss):not(.n-start){opacity:.85}
-/* node colours by type */
-.nmap .nm-scroll .nd.n-battle{background:radial-gradient(circle at 40% 35%,#6a6a72,#34343a);border-color:#9a9aa4}
-.nmap .nm-scroll .nd.n-elite{background:radial-gradient(circle at 40% 35%,#b0302a,#5a1210);border-color:#ff6a50}
-.nmap .nm-scroll .nd.n-tavern{background:radial-gradient(circle at 40% 35%,#8a5a32,#4a2c14);border-color:#c08a52}
-.nmap .nm-scroll .nd.n-rest{background:radial-gradient(circle at 40% 35%,#d0701e,#7a3608);border-color:#ffa040}
-.nmap .nm-scroll .nd.n-treasure{background:radial-gradient(circle at 40% 35%,#3a6ec0,#16305e);border-color:#7ab0ff}
-.nmap .nm-scroll .nd.n-event{background:radial-gradient(circle at 40% 35%,#7a4aa8,#3a1c5a);border-color:#b88ae0}
-.nmap .nm-scroll .nd.n-recruit{background:radial-gradient(circle at 40% 35%,#3a8a52,#17442a);border-color:#78d090}
-.nmap .nm-scroll .nd.vis{filter:saturate(.35) brightness(.8)}
-.nmap .nm-scroll .nd.pick{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold),0 2px 4px rgba(50,28,8,.45)}
+.nmap .nm-scroll .nd:not(.ok):not(.cur):not(.vis):not(.n-boss):not(.n-start){opacity:.8;filter:saturate(.6) sepia(.25)}
 .nmap .nm-scroll .nd.n-boss{opacity:1;filter:none;width:136px;height:136px;margin:-68px 0 0 -68px;border:4px solid #e8b04a;background:radial-gradient(circle at 50% 45%,#b8442e,#5a1410 80%);box-shadow:0 0 0 3px #5a1410,0 0 26px rgba(200,50,30,.65),0 4px 10px rgba(50,28,8,.5)}
 .nmap .nm-scroll .nd.n-boss img{width:116px;height:116px}
 .nmap .nm-scroll .nd.n-elite img{width:32px;height:32px}
