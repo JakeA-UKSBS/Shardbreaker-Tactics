@@ -3,7 +3,7 @@
 /* ---- standing props ----
    tile kind -> size of its upright sprite (× a tile). The feature stands on the tile's ground like a unit does,
    instead of being painted flat onto the diamond. Solid ones (boulders, rocks, spires) no longer raise a block. */
-const PROPS={forest:1.3,hill:1,village:1,fort:1.1,chest:.75,tent:1.1,cliff:1.25,crag:1.25,boulder:1,
+const PROPS={forest:1.3,hill:1,village:1,fort:1.1,chest:.75,tent:1.1,cliff:1.25,crag:1.25,boulder:4/3,
   shroom:1.15,tomb:.85,mangrove:1.25,curse:1.15,sandstone:1.1,agate:1,emerald:1,ruby:1,sapphire:1,malachite:.9,
   'bgem-g':1,'bgem-r':1,'bgem-b':1,'bgem-v':1,spire:1.45};
 const PROP_BIO1=['shroom','tomb','mangrove','curse'];
