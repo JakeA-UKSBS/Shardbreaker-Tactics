@@ -228,7 +228,7 @@ function genBattle(n,kind){
   if(town){const top=[];m.map.forEach((r,y)=>{if(y<=1)[...r].forEach((ch,x)=>{if(TER[ch].c<99)top.push({x,y})})});shuffle(top);let e=0;for(let t=2;t<=turns;t++)W[t]=Array.from({length:1+(t%2)+(act>=2?1:0)},()=>({c:roll(),lv:Math.max(1,lvBase-1),...top[(e++)%top.length]}))}
   m.map.forEach((r,y)=>[...r].forEach((ch,x)=>{if(ch==='C')def.gifts[key(x,y)]=rand()<.3?'pyrite':'gold:'+ri(15,30)}));
   /* summoning bosses: two more every other turn. summon:'*' picks from the region's pool */
-  if(bossFight&&B.boss.summon){const sc=()=>B.boss.summon==='*'?roll():B.boss.summon;for(const t of[3,5,7,9])W[t]=[{c:sc(),lv:lvBase,x:6,y:3,ifBoss:1},{c:sc(),lv:lvBase,x:6,y:3,ifBoss:1}];def.summonTxt=B.boss.summonTxt}
+  if(bossFight&&B.boss.summon){const sc=()=>B.boss.summon==='*'?roll():B.boss.summon;for(const t of(B.id==='heart'?[3,5,7]:[3,5,7,9]))W[t]=[{c:sc(),lv:lvBase,x:6,y:3,ifBoss:1},{c:sc(),lv:lvBase,x:6,y:3,ifBoss:1}];def.summonTxt=B.boss.summonTxt}
   if(Object.keys(W).length)def.waves=W;
   return def;
 }
