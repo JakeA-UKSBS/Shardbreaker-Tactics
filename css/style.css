@@ -703,7 +703,7 @@ button.it.sel{border-color:var(--gold)}
 .nmap .nm-scroll .nd.n-event{border-color:#a06ad8}
 .nmap .nm-scroll .nd.n-recruit{border-color:#4aaa6a}
 .nmap .nm-scroll .nd.pick{border-color:var(--gold)}
-/* campfire is a 52px hand-drawn sprite (by Rhi): scale it down smoothly */
-.nmap .nm-scroll .nd.n-rest img{width:32px;height:32px;image-rendering:auto}
-@media (min-width:960px){.nmap .nm-scroll .nd.n-rest img{width:44px;height:44px}}
+/* campfire is a 52px hand-drawn sprite (by Rhi), shown at 1x */
+.nmap .nm-scroll .nd.n-rest{width:72px;height:72px;margin:-36px 0 0 -36px}.nmap .nm-scroll .nd.n-rest img{width:52px;height:52px}
 .nmap .nm-scroll .nd.n-event img{width:32px;height:32px}
+.tv-scene .ms-fire{left:50%;bottom:10%;width:11%;transform:translateX(-50%);z-index:6;filter:drop-shadow(0 0 10px rgba(255,140,40,.55))}

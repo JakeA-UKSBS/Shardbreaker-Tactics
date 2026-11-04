@@ -6,7 +6,7 @@ function musterArt_draw(){const c='MUS';if(sprCache[c])return sprCache[c];const 
   p.poly([[0,58],[24,46],[50,56],[80,44],[110,56],[136,46],[160,54],[160,64],[0,64]],'#2a2436');
   p.rect(0,60,W,30,'#3e4a2e');for(let i=0;i<60;i++)p.set((i*37)%W,62+(i*13)%28,i%2?'#4e5a3a':'#34402a');
   p.poly([[66,90],[94,90],[86,60],[74,60]],'#6a5a3e');p.poly([[74,60],[86,60],[83,52],[77,52]],'#5a4a34');
-  p.line(80,74,72,80,'#5a3a22',2);p.line(72,74,88,80,'#4a2e1a',2);p.poly([[80,62],[85,72],[80,75],[75,72]],'#ff8a3c');p.poly([[80,66],[82,72],[80,74],[78,72]],'#ffe14a');
+  /* the campfire itself is Rhi's sprite (nodes/rest), laid over the path in musterScene */
   p.rect(18,66,10,7,'#7a5a3a');p.rect(16,64,14,3,'#5a3a22');p.rect(112,70,12,6,'#5a4a3a');
   return sprCache[c]=p.url()}
 function flagArt_draw(){const c='FLAG';if(sprCache[c])return sprCache[c];const p=Px(16,16);p.rect(4,1,1,14,'#8a6040');p.poly([[5,2],[14,4],[5,8]],'#d8483a');p.line(5,3,11,4,'#f0c850');p.rect(2,14,5,1,'#5a3a22');p.outline(OUT);return sprCache[c]=p.url()}
@@ -55,7 +55,7 @@ async function musterScene(opts,need){
   const chosen=[],B1=BIOMES[run.biomes[0]],B2=BIOMES[run.biomes[1]],n=opts.length;
   /* stand the travellers in an arc around the campfire: the far ones behind it, smaller */
   const ang=i=>Math.PI*(1-i/(n-1)),pos=i=>50+38*Math.cos(ang(i)),up=i=>8+24*Math.sin(ang(i)),sc=i=>1-.22*Math.sin(ang(i));
-  musEl.innerHTML=`<div class="tv-scene"><img class="tv-bg" src="${musterArt()}" alt="">
+  musEl.innerHTML=`<div class="tv-scene"><img class="tv-bg" src="${musterArt()}" alt=""><img class="ms-fire" src="${campArt()}" alt="">
       <div class="ms-post" aria-label="Signpost"><span class="ms-sign"><small>Act 1</small>${B1.n}</span><span class="ms-sign"><small>Act 2</small>${B2.n}</span></div>
       ${opts.map((u,i)=>`<button type="button" class="mu" data-u="${i}" style="left:${pos(i)}%;bottom:${up(i)}%;--s:${sc(i)};z-index:${10-Math.round(Math.sin(ang(i))*5)}" aria-label="${u.name}"><img src="${uSpr(u)}" alt=""${pos(i)>50?' class="fl"':''}><span>${u.name}</span></button>`).join('')}
       <button type="button" class="ms-map" data-g="map" aria-label="Look at the map" title="Look at the map"><img src="${mapIconArt()}" alt="">Map</button><span class="tv-gold">Seed ${run.seed}</span></div>
