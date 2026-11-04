@@ -48,7 +48,7 @@ Object.assign(TER,{
   'S':{n:'Scorched Ground',k:'scorch',c:1,av:0,df:0},'G':{n:'Blighted Emerald',k:'bgem-g',c:2,av:20,df:2},'U':{n:'Blighted Ruby',k:'bgem-r',c:2,av:20,df:2},
   'P':{n:'Blighted Sapphire',k:'bgem-b',c:2,av:20,df:2},'Y':{n:'Blighted Amethyst',k:'bgem-v',c:2,av:20,df:2},'K':{n:'Crystal Spire',k:'spire',c:99,av:0,df:0}
 });
-function bioTile2_draw(k){
+function bioTile2_draw(k,part){
   const p=Px(16,16),o=Px(16,16),dots=(c,pts)=>pts.forEach(([x,y])=>p.set(x,y,c)),S=[[2,3],[9,2],[13,6],[4,12],[11,13],[7,8],[14,11]];
   const gem=(c)=>{o.poly([[3,14],[5,6],[7,14]],c);o.poly([[6,14],[9,2],[12,14]],c);o.poly([[10,14],[13,7],[14,14]],shade(c,.8));o.line(9,4,9,12,shade(c,1.4));o.set(5,8,shade(c,1.5))};
   if(k==='sandstone'||k==='quicksand'){p.rect(0,0,16,16,'#b8a070');dots('#a08858',S)}
@@ -76,7 +76,8 @@ function bioTile2_draw(k){
     p.line(0,11,7,8,'#141020');p.line(7,8,16,10,'#141020')}
   if(k==='malachite'){p.rect(0,0,16,16,'#3a3444');S.forEach(([x,y])=>{p.set(x,y,'#2e2838');p.set(x+1,y-1,'#4a4456')});
     const MB=['#14503a','#2f9a6a','#1f6a4a','#5fd3a0','#14503a','#2f9a6a','#7fe0b8'];MB.forEach((c,i)=>o.ell(8.5-i*.25,9+i*.2,7-i,5.5-i*.8,c));o.set(6,7,'#c8f8e0');o.set(5,8,'#c8f8e0')}
-  o.outline('#1a1414');for(let i=0;i<256;i++)if(o.g[i])p.g[i]=o.g[i];
+  /* part 'g': the ground alone; 'f': the feature alone (a standing prop, see 16b-terrain3d.js) */
+  o.outline('#1a1414');if(part==='f')return o.url();if(part!=='g')for(let i=0;i<256;i++)if(o.g[i])p.g[i]=o.g[i];
   return p.url();
 }
 texStyle.textContent+=['sandstone','quicksand','snow','deepsnow','agate','ice','cave','cavewall','emerald','ruby','sapphire','scorch','bgem-g','bgem-r','bgem-b','bgem-v','spire'].map(k=>`.t-${k}{background:url(${bioTile2(k)}) 0 0/100% 100%}`).join('');
@@ -115,7 +116,7 @@ const MAPS={
   /* Sunless Isle */
   graveyard:{n:'Graveyard',map:[";t;;;;;;t;",";;;;t;;;;;","t;;;;;;^^t",";;^t;;t;;;",";;^;;;;;;^","t;;;;;;;;t",";;;t;;t;;^",";;;;;;;;;^",";;;;;;;;;;",";;;;;;;;;;"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   crypt:{n:'Crypt',map:["__#____#__","__________","##_####_##","____##____","_t______t_","____F_____","##_####_##","__________","__________","##########"],start:[[4,8],[5,8],[3,8],[6,8],[4,7],[5,7]]},
-  village:{n:'Haunted Village',map:["V;;;;;;V;;",";;;t^;;;;;",";f;;^;;;f;",";;;;__;;;^","V;;__F__;V",";;;;__^^;;",";f;;;;;;f;",";;;t;;t;;;",";;;;;;;;;;",";;;;;;;;;;"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
+  village:{n:'Haunted Churchyard',map:["C;;;;;;t;;",";;;t^;;;;;",";f;;^;;;f;",";;;;__;;;^","t;;__F__;C",";;;;__^^;;",";f;;;;;;f;",";;;t;;t;;;",";;;;;;;;;;",";;;;;;;;;;"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   chapel:{n:'Bone Chapel',map:["#############","#L___rTr___L#","#_t__rrr__t_#","#____rrr____#","#_#__rrr__#_#","#____rrr____#","#_t__rrr__t_#","#____rrr____#","#_#__rrr__#_#","#____rrr____#","#L___rrr___L#","#####___#####"],start:[[5,11],[6,11],[7,11],[5,10],[6,10],[7,10]]},
   /* Swamp */
   flats:{n:'Mangrove Flats',map:["sssnnssssv","vssnnsswws","ssssssswws","ssvsssssss","nssssvsssn","nssssssssn","ssswwsssss","vsswwssvss","sssssnnsss","ssssnnnsss"],start:[[4,9],[5,9],[6,9],[5,8],[6,8],[3,9]]},
@@ -208,10 +209,11 @@ function genBattle(n,kind){
   const goal=bossFight?'boss':ship||town?'defend':'rout';
   const def={biome:B.id,title:bossFight?m.n:town?`Defend the ${m.n}`:m.n+(elite?' (Elite)':''),goal,turns,map:m.map,h:m.h,start:m.start,gifts:{},
     intro:bossFight&&B.boss.intro?B.boss.intro:bossFight?`${bossName} waits for you in the ${m.n}. Defeat it to clear ${theN(B)}.`:ship?`Fliers are diving on the ship. Hold the deck for ${turns} turns.`:town?`Crystallised beasts are closing on the ${m.n.toLowerCase()}. Hold them off for ${turns} turns.`:elite?`A pack led by something old and strong holds the ${m.n.toLowerCase()}. Rout them all.`:`${count} monsters wait in the ${m.n.toLowerCase()}. Rout them.`};
-  def.foes=()=>{const tiles=spawnTiles(m),out=[];
+  /* drops: 12% of enemies carry something, at most one weapon a battle, and never a weapon the squad already has */
+  def.foes=()=>{const tiles=spawnTiles(m),out=[];let wDrop=0;
     list.forEach((c,i)=>{const lv=Math.max(1,lvBase+(rand()<.3?1:0)-(c==='Wolf'?1:0)+(elite?2:0)),u=mkMon(c,lv),t=tiles[i%tiles.length];u.x=t.x;u.y=t.y;
       if(elite&&i===0){u.name='Elder '+u.name;u.boss=true;const eb=A(2)?2:1;ST.forEach(k=>{if(k==='hp'){u.maxhp+=6*eb;u.hp+=6*eb}else u[k]+=2*eb});u.skill=u.skill||pick(['fury','brace','swift','shieldwall'])}
-      if(rand()<.2){const k=pick(['qiPill','qiPill','steelJian','steelAxe','steelSpear','steelBow','javelin','throwAxe','throwKnives','leather','cloak','boots']);u.items.push({k,u:IT[k].uses,d:true})}out.push(u)});
+      if(rand()<.12){const k=pick(['qiPill','qiPill','qiPill','steelJian','steelAxe','steelSpear','steelBow','javelin','throwAxe','throwKnives','leather','cloak','boots'].filter(k=>!isWpn(k)||!wDrop&&!squadHas(k)));if(isWpn(k))wDrop=1;u.items.push({k,u:IT[k].uses,d:true})}out.push(u)});
     if(bossFight){let bx=6,by=3;MAPS[mk].map.forEach((r,y)=>{const x=r.indexOf('T');if(x>=0){bx=x;by=y}});/* the altar marks where the boss stands */
       const b=B.boss,up=[10,3,3,3,2,2,3,3].map((v,i)=>v*(act-1)+(A(2)?[8,2,2,1,1,0,2,2][i]:0));
       const bsz=b.sz||2,fits=(x,y)=>cellsOf(x,y,bsz).every(([cx,cy])=>cy>=0&&cx>=0&&cy<m.map.length&&cx<m.map[0].length&&TER[m.map[cy][cx]].c<99);

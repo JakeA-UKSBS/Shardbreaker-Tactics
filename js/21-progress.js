@@ -32,6 +32,7 @@ const ACH=[
   {id:'mage',n:'Apprentice',d:'Finish a run with a Sigilist (mage) in the squad.',win:1,ok:sq=>sq.some(u=>isRole(u,'caster')),rw:'summoner'},
   {id:'arcane',n:'Arcane Circle',d:'Finish a run with 3 or more sigil casters in the squad.',win:1,ok:sq=>sq.filter(u=>wields(u,'art')&&!isRole(u,'support')).length>=3,cnt:sq=>sq.filter(u=>wields(u,'art')&&!isRole(u,'support')).length,need:3,rw:null},
   {id:'skyfleet',n:'Sky Fleet',d:'Finish a run with 3 or more fliers in the squad.',win:1,ok:sq=>sq.filter(u=>CLS[u.cls].fly).length>=3,cnt:sq=>sq.filter(u=>CLS[u.cls].fly).length,need:3,rw:null},
+  {id:'lone',n:'Lone Survivor',d:'Defeat the Crystal Heart with only 1 unit left standing.',win:1,ok:sq=>sq.length===1,rw:null},
   {id:'feast',n:'Feast',d:'Eat a meal at 2 taverns in one run.',ok:()=>(run.ate||0)>=2,cnt:()=>run.ate||0,need:2,rw:'gourmet'},
   {id:'explorer',n:'Cartographer',d:'Defeat the boss of every region, across any number of runs.',ok:()=>biomeIds().every(b=>prof.bosses.includes(b)),prog:()=>prof.bosses.filter(b=>biomeIds().includes(b)).length,need:biomeIds().length,rw:null}
 ];

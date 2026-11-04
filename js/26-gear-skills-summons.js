@@ -67,7 +67,11 @@ function summonTile(u){const probe={cls:famOf(u).cls};let best=null,bd=1e9;
   for(const[dx,dy]of DIRS){const x=u.x+dx,y=u.y+dy;if(x<0||y<0||x>=MW||y>=MH||unitAt(x,y)||mcost(probe,x,y)>=99)continue;
     const d=Math.min(99,...state.units.filter(o=>o.team==='e').map(o=>Math.abs(o.x-x)+Math.abs(o.y-y)));if(d<bd){bd=d;best={x,y}}}return best}
 function allyMon(c,lv,name,id){const m=mkMon(c,lv);Object.assign(m,{team:'p',summon:true,id,name,acted:false});m.items.forEach(i=>delete i.d);return m}
-function doSummon(u){const F=famOf(u),t=summonTile(u);if(!t)return;u.sumLeft--;const m=allyMon(F.cls,Math.max(1,u.lv+(CLS[u.cls].tier===2?3:0)-1),`${u.name}’s ${F.n}`,'sum'+(run.uid++));m.x=t.x;m.y=t.y;m.acted=true;m.owner=u.id;state.units.push(m);sfx('rise');pop(m,'Summoned','heal')}
+/* a familiar's level: the summoner's (−1, +3 once ascended), but never below the enemies on this floor, so it keeps up
+   late in the run. From Act 2 it is tougher on top: +4 HP and +1 Str, Mag, Def and Res for each act past the first */
+function sumLv(u){const act=run.act||1,foeLv=1+Math.floor(((act-1)*10+flScale(run.n))*.6);return Math.max(1,u.lv+(CLS[u.cls].tier===2?3:0)-1,foeLv)}
+function sumBoost(m){const k=(run.act||1)-1;if(k<=0)return m;m.maxhp+=4*k;m.hp=m.maxhp;for(const s of['str','mag','def','res'])m[s]+=k;return m}
+function doSummon(u){const F=famOf(u),t=summonTile(u);if(!t)return;u.sumLeft--;const m=sumBoost(allyMon(F.cls,sumLv(u),`${u.name}’s ${F.n}`,'sum'+(run.uid++)));m.x=t.x;m.y=t.y;m.acted=true;m.owner=u.id;state.units.push(m);sfx('rise');pop(m,'Summoned','heal')}
 function battleAllies(){
   for(const u of state.units)if(u.team==='p'&&isSummoner(u))u.sumLeft=CLS[u.cls].tier===2?2:1;
   if(R('hawk')){const a=state.units.find(u=>u.team==='p'),taken=new Set(state.units.map(u=>key(u.x,u.y))),h=allyMon('Hawk',Math.max(1,(run.n||1)+((run.act||1)-1)*8),'Hawk','hawk');const t=freeNear(a.x,a.y,taken,h);h.x=t.x;h.y=t.y;state.units.push(h)}

@@ -64,7 +64,7 @@ function drawWeapon(p,w,ax,ay,strike,back){
   if(k==='umbrella'){const pk='#e58fb0';if(strike){p.line(ax,ay,ax+4,ay-8,BROWN);p.ell(ax+4,ay-9,7,4,pk,(x,y)=>y<=ay-9);p.line(ax-3,ay-9,ax+11,ay-9,shade(pk,.7))}else{p.line(ax-3,ay+8,ax+3,ay-14,pk,2);p.rect(ax-4,ay+8,2,2,BROWN)}}
   if(k==='talisman'){p.rect(ax-1,ay-5,3,6,'#f1d97a');p.set(ax,ay-4,RED);p.set(ax,ay-2,RED);
     if(strike){p.ell(ax+6,ay-3,3,3,c.el);p.ell(ax+6,ay-3,1.3,1.3,'#ffffff')}else p.ell(ax+3,ay-7,1.6,1.6,c.el)}
-  if(k==='staff'){const o='#c58aff';if(strike){p.line(ax-3,ay-2,ax+6,ay+4,BROWN,2);p.ell(ax+7,ay+5,2.2,2.2,o);p.set(ax+7,ay+4,'#ffffff')}else{p.line(ax-3,ay+9,ax+3,ay-15,BROWN,2);p.ell(ax+3,ay-16,2.2,2.2,o);p.set(ax+3,ay-17,'#ffffff')}}
+  if(k==='staff'){const o=w&&w.t==='spirit'?'#7ad6ff':'#c58aff';if(strike){p.line(ax-3,ay-2,ax+6,ay+4,BROWN,2);p.ell(ax+7,ay+5,2.2,2.2,o);p.set(ax+7,ay+4,'#ffffff')}else{p.line(ax-3,ay+9,ax+3,ay-15,BROWN,2);p.ell(ax+3,ay-16,2.2,2.2,o);p.set(ax+3,ay-17,'#ffffff')}}
   if(k==='spirit'){p.ell(ax+2,ay-3,2.4,2.4,w.tint==='mend'?'#7ad6ff':JADE);p.set(ax+1,ay-4,'#ffffff');if(strike){p.set(ax+6,ay-8,'#e9fff5');p.set(ax-1,ay-9,'#e9fff5');p.set(ax+7,ay-2,'#e9fff5')}}
 }
 function hairFront(p,L,hair,hair2,TC,cloth){
@@ -549,7 +549,7 @@ function iconArt_draw(k){
   if(kd==='fan'){p.poly([[3,13],[2,4],[8,1],[14,4],[13,13]],CREAM);for(let i=0;i<5;i++)p.line(8,14,2+i*3,3+(i%4===0?1:0),INK);p.rect(7,13,2,2,RED)}
   if(kd==='umbrella'){p.ell(8,7,7,4,'#e58fb0',(x,y)=>y<=7);p.line(8,7,8,14,BROWN);p.set(7,14,BROWN)}
   if(kd==='talisman'){p.rect(4,1,7,14,'#f1d97a');p.line(7,3,7,11,RED);p.rect(6,5,3,1,RED);p.ell(12,12,2.6,2.6,c.el)}
-  if(kd==='staff'){if(w.r[1]>1){p.line(3,14,11,4,BROWN,2);p.ell(12,3,2.6,2.6,'#c58aff');p.set(12,2,'#ffffff')}else{p.line(3,14,10,5,BROWN,2);p.ring(11,4,2.6,BROWN);p.set(13,6,BROWN);p.ell(10,5,1.2,1.2,'#c58aff')}}
+  if(kd==='staff'){if(w.r[1]>1||w.t==='spirit'){const mo=w.t==='spirit'?(w.tint==='mend'?'#ffe9a0':'#7ad6ff'):'#c58aff';p.line(3,14,11,4,w.t==='spirit'?'#c9a46a':BROWN,2);p.ell(12,3,2.6,2.6,mo);p.set(12,2,'#ffffff')}else{p.line(3,14,10,5,BROWN,2);p.ring(11,4,2.6,BROWN);p.set(13,6,BROWN);p.ell(10,5,1.2,1.2,'#c58aff')}}
   if(kd==='spirit'){p.ell(8,8,5,5,w.tint==='mend'?'#7ad6ff':JADE);p.ell(6.5,6.5,1.5,1.5,'#e9fff5')}
   if(kd==='scroll'){p.rect(3,4,10,8,'#e9dcb4');p.rect(3,4,10,1,'#cbb98a');p.ell(3,8,1.6,4.2,'#b89f68');p.ell(13,8,1.6,4.2,'#b89f68');p.line(5,7,11,7,'#8a7a5a');p.line(5,9,10,9,'#8a7a5a');p.rect(7,11,2,3,RED)}
   if(kd==='crest'){p.poly([[8,1],[12,5],[13,11],[3,11],[4,5]],GOLD);p.poly([[8,2],[10,5],[11,10],[8,10]],'#f3dc9a');p.rect(2,11,12,2,'#b8912f');p.ell(8,14,1.6,1.4,'#9fd8ff')}

@@ -296,7 +296,7 @@ function drawHiWeapon(p,kind,w,c,h,a,P,hb,pt,limb,L={}){
     const g=pt(...tip,a,4);limb(tip,pt(...pt(...g,a,3),a+90,4),wd,1);limb(tip,pt(...pt(...g,a,3),a-90,4),wd,1);p.ell(g[0],g[1],2.6,2.6,o);p.set(g[0]-1,g[1]-1,'#ffffff');
     for(const[an,d]of[[a+70,6],[a-70,6],[a+130,4],[a-130,4],[a+20,8],[a-25,8]])p.ell(...pt(...g,an,d),1.7,1.2,an===a+130||an===a-25?'#3f8a3a':'#6fbf5a');
     if(P.glow)p.ell(g[0],g[1],3+P.glow*1.5,3+P.glow*1.5,c.el||o,(x,y)=>(x+y)%2===0)}
-  else if(kind==='staff'){const tip=pt(...h,a,18),bt=pt(...h,a+180,10);limb(bt,tip,L.staff||BROWN,2);const o=L.orb||'#c58aff';
+  else if(kind==='staff'){const tip=pt(...h,a,18),bt=pt(...h,a+180,10);limb(bt,tip,L.staff||BROWN,2);const o=L.orb||(w&&w.t==='spirit'?'#7ad6ff':'#c58aff');
     if(w.r&&w.r[1]>1){p.ell(tip[0],tip[1],3,3,o);p.set(tip[0]-1,tip[1]-1,'#ffffff')}else{p.ring(tip[0]+1,tip[1]-1,3,L.staff||BROWN);p.ell(tip[0],tip[1],1.6,1.6,o)}
     if(P.glow)p.ell(tip[0],tip[1],3+P.glow*1.5,3+P.glow*1.5,c.el||o,(x,y)=>(x+y)%2===0)}
   /* talisman (sigil): a paper charm; on a cast an element-coloured glow appears ahead of it */

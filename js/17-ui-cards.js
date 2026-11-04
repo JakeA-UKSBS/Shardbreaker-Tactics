@@ -32,7 +32,7 @@ function regionTags(withBoss){const B=actBiome(),t=[];for(const[c,w]of[...B.pool
 /* returns the item keys found after a win; winScreen offers each one with the Found picker.
    Includes chests nobody opened and anything that was left behind because a unit's bag was full (state.loot) */
 function battleRewards(){
-  const out=(state.loot||[]).slice();if(state.gold)out.gold=state.gold;const add=k=>{if(!isWpn(k)||run.roster.some(u=>canUse(u,k)))out.push(k)};
+  const out=(state.loot||[]).slice();if(state.gold)out.gold=state.gold;const add=k=>{if(!isWpn(k)||run.roster.some(u=>canUse(u,k))&&!squadHas(k)&&!out.includes(k))out.push(k)};
   for(const[k,it]of Object.entries(CH[state.ch].gifts||{})){const[x,y]=k.split(',').map(Number);if(MAP[y]&&MAP[y][x]==='C'&&!state.visited.includes(k)){if(/^gold:/.test(it))out.gold=(out.gold||0)+ +it.slice(5);else if(it!=='pyrite')add(it)}}
   const elite=run.kind==='elite',rt=regionTags(elite);
   /* slayer weapon: 15% after a battle, 35% after an elite */

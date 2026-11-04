@@ -99,20 +99,20 @@ function evShow(E,text,opts){
 const lvAvg=()=>Math.max(1,Math.round(run.roster.reduce((a,u)=>a+u.lv,0)/run.roster.length));
 const EVENTS={
   smith:{t:'The Wandering Smith',art:'smith',d:'A smith with a cart-mounted forge waves you over. “One weapon, no charge. I like the look of you.”',o:[
-    {l:'Reforge a weapon',sub:'+2 Mt and +5 Hit (charms heal +5), up to +3',go:async()=>{
+    {l:'Reforge a weapon',sub:'+2 Mt and +5 Hit (staves heal +5), up to +3',go:async()=>{
       const u=await pickUnit('Whose weapon?','Choose a weapon to reforge.',u=>{const w=weaponOf(u);return!w?'No weapon':forgeLv(w)>=FORGE_MAX?'Already +3':null});
       if(!u)return null;const w=weaponOf(u),old=IT[w.k].n;forge(w);if(R('anvil'))forge(w);sfx('item');return`Sparks fly. ${u.name}’s ${old} comes back as the <b>${IT[w.k].n}</b>: Mt ${IT[w.k].mt}, Hit ${IT[w.k].hit}.`}},
     {l:'Move on',go:async()=>'You thank the smith and keep walking.'}]},
   armoury:{t:'Abandoned Armoury',art:'armoury',d:'Racks of old weapons, most rusted through. A few are still good, and there are medicine jars on a shelf.',o:[
-    {l:'Take a steel weapon',sub:'One unit gets the steel version of their weapon',go:async()=>{
-      const u=await pickUnit('Who takes a weapon?','Only fighters with blades, axes, lances or bows can use these.',u=>steelFor(u)?null:'Nothing for them');
+    {l:'Take a better weapon',sub:'One unit gets a stronger weapon of their kind',go:async()=>{
+      const u=await pickUnit('Who takes a weapon?',`They get the one that suits them: ${steelList()}.`,u=>steelFor(u)?null:'Nothing for them');
       if(!u)return null;const st=steelFor(u);if(!await stow(u,st))return null;sfx('item');
       return`${u.name} pulls a <b>${IT[st].n}</b> from the rack. Mt ${IT[st].mt}, Wt ${IT[st].wt}.`}},
     {l:'Take the medicine',sub:'2 Salves',go:async()=>{evEl.hidden=true;const a=await giveTo('qiPill','The first of two Salves.',true),b=await giveTo('qiPill','The second Salve.',true);evEl.hidden=false;return[a,b].filter(Boolean).map(u=>`${u.name} takes a Salve.`).join(' ')||'You leave the medicine on the shelf.'}}]},
-  /* the spellcasters' version of the armoury: a sigil or charm is enchanted (+1, like the smith) */
+  /* the spellcasters' version of the armoury: a sigil or staff is enchanted (+1, like the smith) */
   enchanter:{t:'The Enchanter’s Study',art:'library',d:'A tower room full of half-finished sigils. The enchanter left in a hurry, but the inks are still wet.',o:[
-    {l:'Enchant a sigil or charm',sub:'+2 Mt and +5 Hit (charms heal +5), up to +3',need:()=>run.roster.some(u=>{const w=weaponOf(u);return w&&['art','spirit'].includes(IT[w.k].t)}),go:async()=>{
-      const u=await pickUnit('Whose sigil or charm?','Sigils hit harder; charms heal more.',u=>{const w=weaponOf(u);return!w||!['art','spirit'].includes(IT[w.k].t)?'No sigil or charm':forgeLv(w)>=FORGE_MAX?'Already +3':null});
+    {l:'Enchant a sigil or staff',sub:'+2 Mt and +5 Hit (staves heal +5), up to +3',need:()=>run.roster.some(u=>{const w=weaponOf(u);return w&&['art','spirit'].includes(IT[w.k].t)}),go:async()=>{
+      const u=await pickUnit('Whose sigil or staff?','Sigils hit harder; staves heal more.',u=>{const w=weaponOf(u);return!w||!['art','spirit'].includes(IT[w.k].t)?'No sigil or staff':forgeLv(w)>=FORGE_MAX?'Already +3':null});
       if(!u)return null;const w=weaponOf(u),old=IT[w.k].n;forge(w);sfx('item');return`${u.name} copies the enchanter’s runes onto their ${old}. It is now the <b>${IT[w.k].n}</b>.`}},
     {l:'Read the notes',sub:'Casters, Menders and Summoners gain 40 EXP',go:async()=>{await expAll(run.roster.filter(u=>CLS[u.cls].w.includes('art')||CLS[u.cls].w.includes('spirit')),40);return'Dense, but worth it. The spellcasters gain 40 EXP.'}}]},
   shrine:{t:'Shrine of Trial',art:'shrine',d:'A cracked altar, still warm. Words cut into the stone: <i>give blood, and be taught</i>.',o:[
@@ -127,7 +127,7 @@ const EVENTS={
     {l:'Everyone spars',sub:'All units gain 50 EXP',go:async()=>{evEl.hidden=true;for(const u of run.roster){const g=gainExp(u,50);if(g&&g.gains)await levelUp(u,g)}return'A good, hard session. Every unit gains 50 EXP.'}},
     {l:'Move on',go:async()=>'No time to train today.'}]},
   merchant:{t:'Travelling Merchant',art:'merchant',d:'A covered wagon, a tired mule and a merchant who is very pleased to see paying customers.',o:null,
-    make:()=>{const stock=shuffle(['warHammer','huntSpear','giantslayer','holySword','steelJian','steelSpear','steelAxe','steelBow','javelin','throwAxe','throwKnives','galeSword','arbalest','leather','cloak','boots','gauntlet','greaterMend','stiletto']).slice(0,3),price=k=>IT[k].t==='gear'?40:IT[k].brk||IT[k].crit>=20?55:45;
+    make:()=>{const stock=shuffle(['warHammer','huntSpear','giantslayer','holySword','claymore','flamberge','steelJian','steelSpear','steelAxe','steelBow','javelin','throwAxe','throwKnives','galeSword','arbalest','leather','cloak','boots','gauntlet','greaterMend','stiletto']).slice(0,3),price=k=>IT[k].t==='gear'?40:IT[k].brk||IT[k].crit>=20?55:45;
       return[...stock.map(k=>({l:`${IT[k].n} · ${price(k)}g`,sub:itemText(k),cost:price(k),go:async()=>{
         const u=await pickUnit(`Who takes the ${IT[k].n}?`,'If their bag is full, you can swap something out.',u=>isWpn(k)&&!canUse(u,k)?'Can’t wield it':null);if(!u)return null;
         if(!await stow(u,k))return null;spend(price(k));return`${u.name} takes the <b>${IT[k].n}</b>. “Pleasure doing business.”`}})),{l:'Just looking',go:async()=>'The merchant shrugs and waves you on.'}]}},
@@ -242,7 +242,7 @@ Object.assign(EVENTS,{
   star:{t:'The Fallen Star',act:2,art:'crater',d:'A crater, still smoking. At its heart a sigil has burned itself into the star-iron.',o:[
     {l:'Take the Meteor Sigil',sub:'Rng 3–10, 5 uses, huge damage',need:()=>canAny('meteorT'),go:async()=>{const u=await giveTo('meteorT');return u&&`${u.name} pries the <b>Meteor Sigil</b> free. It’s warm to the touch.`}},
     {l:'Sell the star-iron',sub:'+80 gold',go:async()=>{run.gold=gold()+80;sfx('item');return'The iron fetches 80 gold in the next town.'}}]},
-  spire:{t:'The Storm Spire',act:2,art:'spire',d:'A tower that drinks lightning. At the top, a sigil and a charm hang in the air, waiting.',o:[
+  spire:{t:'The Storm Spire',act:2,art:'spire',d:'A tower that drinks lightning. At the top, a sigil and a staff hang in the air, waiting.',o:[
     {l:'Take Heaven’s Bolt',sub:'Lightning sigil, Rng 3–10, 5 uses',need:()=>canAny('boltT'),go:async()=>{const u=await giveTo('boltT');return u&&`${u.name} takes <b>Heaven’s Bolt</b>. The sky rumbles.`}},
     {l:'Take the Far Charm',sub:'Heals at Rng 1–10',need:()=>canAny('farMend'),go:async()=>{const u=await giveTo('farMend');return u&&`${u.name} takes the <b>Far Charm</b>.`}},
     {l:'Climb to the top',sub:'Every unit +1 Spd and +1 Luck; Ambushed next fight',go:async()=>{run.roster.forEach(u=>{u.spd++;u.lck++});addWoe('wound',1);sfx('thunder');return'Struck, all of you. Every unit gains 1 Spd and 1 Luck, and starts the next fight singed.'}}]},
