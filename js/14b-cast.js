@@ -114,7 +114,7 @@ function castUnit(id,lv){
   if(c.wk)items.push({k:c.wk,u:IT[c.wk].uses});
   if(role==='support'&&c.wk!=='spiritMend')items.push({k:'spiritMend',u:IT.spiritMend.uses});
   items.push({k:'qiPill',u:IT.qiPill.uses});
-  const u={id:'c'+(run.uid++),cast:id,name:c.name,cls:c.cls,team:'p',lv:1,exp:0,skill:pick(R.skills),skills:[],cap:BASE_CAP,look:clone(c.look),g,mov:CLS[c.cls].mov,items,acted:false,x:0,y:0};
+  const u={id:'c'+(run.uid++),cast:id,name:c.name,cls:c.cls,team:'p',lv:1,exp:0,skill:KITS[id]?KITS[id].passive:pick(R.skills),skills:[],cap:BASE_CAP,look:clone(c.look),g,mov:CLS[c.cls].mov,items,acted:false,x:0,y:0};
   ST.forEach((k,i)=>u[k]=s[i]);u.maxhp=u.hp;
   for(;u.lv<lv;u.lv++)ST.forEach((k,i)=>{if(rand()*100<g[i]){if(k==='hp')u.maxhp++;else u[k]++}});
   if(role==='summoner')u.familiar=pick(Object.keys(FAMILIARS));

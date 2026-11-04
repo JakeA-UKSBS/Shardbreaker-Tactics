@@ -663,3 +663,11 @@ button.it.sel{border-color:var(--gold)}
 /* hand-drawn event figures laid over the event scene: sizes are fractions of the 160x90 scene, so pixels match it */
 .ev-fig{position:absolute;bottom:0;image-rendering:pixelated;pointer-events:none}
 .ev-witch{left:5%;width:38.125%}
+
+/* abilities: MP bar, status chips, the ability list and its forecast */
+.mpl{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}.mpl .bar{flex:1;height:5px;border-radius:3px;background:#2a2638;overflow:hidden}.mpl .bar i{display:block;height:100%;background:#6a8cff}
+.stc{display:flex;flex-wrap:wrap;gap:4px;margin-top:3px}.st{font-size:11px;padding:1px 6px;border-radius:9px;font-weight:700}.st.bad{background:#5a2430;color:#ffb3b3}.st.good{background:#24503a;color:#b8f0c8}
+.abl{display:flex;flex-direction:column;gap:5px;min-width:250px;max-width:330px}.abl-h{display:flex;justify-content:space-between;align-items:baseline;color:var(--gold)}.abl-h span{font-size:12px;color:#9fb4ff}
+.ab{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:1px;padding:6px 9px}.ab .abn{display:flex;justify-content:space-between;width:100%;font-weight:700}.ab .abn i{font-style:normal;font-size:12px;color:#9fb4ff}
+.ab .abr{font-size:11px;color:var(--gold)}.ab .abd{font-size:12px;color:var(--muted);font-weight:400;line-height:1.3}.ab.off{opacity:.55}.ab .abd em{color:#f0a08a;font-style:normal}
+.abf-r{font-size:13px;padding:3px 0;border-top:1px solid rgba(255,255,255,.06)}.abf-r .ec,.abf-r .pc{font-weight:700;margin-right:6px}.abfn{color:var(--gold)}.abfc{margin-left:auto;font-size:12px;color:#9fb4ff}

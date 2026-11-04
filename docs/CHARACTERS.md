@@ -24,7 +24,8 @@ The cast, by when they can join. First names only for now. Kits are first drafts
 - **Signature kit:** each character has 1 passive and 3 abilities that belong to them alone.
 - **Free slots:** 1–2 slots per character for customising, filled from scrolls or skills found during the run (the Shardbreaker scroll skills are the starting pool).
 - **Costs:** spells cost **MP**, physical skills have a **cooldown (CD)** in turns. MP starts full and refills slowly (starting numbers: casters 20–30 MP, everyone else 0–10, +2 MP a turn).
-- **Damage:** shown as a multiplier of Str or Mag in the forecast, e.g. "1.5× Mag". Defence or Resistance is subtracted afterwards, as now.
+- **Damage:** a multiple of the unit's normal attack power (Str or Mag + weapon Mt, with height, effectiveness and relics), e.g. "1.5×". Defence or Resistance is subtracted afterwards. Abilities aren't countered. Heals are a multiple of (Mag + 5).
+- **In the game so far:** the 9 starting-roster characters have their kits (the Abilities button in the command menu). Their passive replaces the random personal skill. The others still have a random personal skill for now.
 
 ### Shapes
 
@@ -144,9 +145,9 @@ A street thief working off a debt to Ithren. Quick-mouthed and not as selfish as
 - **Ascends into:** Duelist or Assassin.
 - **Look:** dark leathers, wrapped hands, jagged twin daggers.
 - **Passive: Slippery.** Can move through enemy tiles.
-- **Backstab** (single, adjacent · CD 2): 1.0× Str, doubled when striking from behind or from higher ground.
+- **Backstab** (single, adjacent · CD 2): 1.0× Str, doubled from higher ground or when another ally is next to the target (flanking).
 - **Smoke Bomb** (burst r1 · CD 4): Blinds enemies in the area; allies in it get +30 Avoid for 1 turn.
-- **Tumble** (self · CD 2): after acting, move up to 2 more tiles, ignoring Jump.
+- **Tumble** (self · CD 2): move up to 2 more tiles, ignoring height; doesn't use his action.
 
 ### Brynhildr: Shieldmaiden
 ![Brynhildr](visuals/cast/brynhildr.png)
@@ -154,7 +155,7 @@ A street thief working off a debt to Ithren. Quick-mouthed and not as selfish as
 A city guardswoman who deserted rather than march on the neighbouring kingdom. Steady, dry and protective.
 - **Ascends into:** Valkyrie or Aegis.
 - **Look:** olive outfit, sword and decorated shield; a great bronze shield as Aegis, a pegasus as Valkyrie.
-- **Passive: Bulwark.** Allies directly behind her take 30% less damage from ranged attacks.
+- **Passive: Bulwark.** Allies next to her take 30% less damage from ranged attacks.
 - **Shield Bash** (single, adjacent · CD 2): 1.0× Str, push 1.
 - **Challenge** (burst r2 · CD 3): enemies in range must target her next turn.
 - **Hold the Line** (self · CD 4): Guard, and she can't be pushed until her next turn.
@@ -168,7 +169,7 @@ A farm boy who left home with a borrowed sword the day the beasts came. Eager, l
 - **Passive: Beginner’s Luck.** +10 Crit and +10 Avoid while at full HP.
 - **Rally** (burst r1 · CD 3): adjacent allies get +2 Str and +2 Def for 2 turns.
 - **Clean Cut** (single, adjacent · CD 2): 1.2× Str, +15 Hit.
-- **Shield Up** (self · CD 3): Guard, and his next counter deals 1.3×.
+- **Shield Up** (self · CD 3): Guard, and his counters deal 1.3× until your next turn.
 
 ## Joins after Act 1
 
