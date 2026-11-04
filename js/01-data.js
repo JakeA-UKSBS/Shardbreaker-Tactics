@@ -157,7 +157,7 @@ Object.assign(SKILLS,{
   retaliate:{n:'Retaliate',cost:15,d:'Luck% chance, when hit in melee, to deal the same damage back.'},
   ironskin:{n:'Iron Skin',cost:10,d:'Luck×2% chance to halve physical damage taken.'},
   spellward:{n:'Spell Ward',cost:10,d:'Luck×2% chance to halve magic damage taken.'},
-  momentum:{n:'Momentum',cost:20,d:'Once per turn, defeating an enemy on your turn lets this unit act again.'},
+  momentum:{n:'Momentum',cost:15,d:'Once per turn, defeating an enemy on your turn lets this unit act again.'},
   fleetfoot:{n:'Fleet Foot',cost:10,d:'+2 Move.'},
   taunt:{n:'Taunt',cost:5,d:'Enemies would rather attack this unit.'},
   quickstudy:{n:'Quick Study',cost:10,d:'Gains double EXP.'},

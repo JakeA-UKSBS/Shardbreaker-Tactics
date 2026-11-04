@@ -3,10 +3,10 @@
 const uSpr=u=>sprite(u,'idle',mapWk(u));
 /* skill capacity as a small pie: gold = used by learned skills, pale = what a skill on offer would take */
 function capPie(u,add=0){const c=capOf(u),n=capUsed(u),a=Math.min(add,Math.max(0,c-n)),over=n+add>c;
-  return`<span class="cap${over?' over':''}" title="Skill capacity: ${n} of ${c} used" style="--u:${n/c*100}%;--a:${(n+a)/c*100}%"></span><span class="capn">${n}${add?`+${add}`:''}/${c}</span>`}
-function unitCard(u,on,add){
+  return`<span class="cap${over?' over':''}" title="Skill capacity: ${n} of ${c} used${add?`, this skill takes ${add}`:''}" style="--u:${n/c*100}%;--a:${(n+a)/c*100}%"></span><span class="capn">${n}${add?`+${add}`:''}/${c}</span>`}
+function unitCard(u,on,add,exp){
   const S=shown(u),w=u.items.map(i=>IT[i.k]).filter(i=>i.t!=='item'),ls=(u.skills||[]).map(x=>SKILLS[x.id].n);
-  return`<div class="dimg"><img src="${uSpr(u)}" alt=""></div><div class="dtxt"><b>${u.name}</b><span class="dcls">${CLS[u.cls].n} · Lv ${u.lv}</span>
+  return`<div class="dimg"><img src="${uSpr(u)}" alt=""></div><div class="dtxt"><b>${u.name}</b><span class="dcls">${CLS[u.cls].n} · Lv ${u.lv}${exp?`<span class="dexp"><i style="width:${u.exp||0}%"></i></span>${u.exp||0}/100 EXP`:''}</span>
   <span class="dst">${S.map(k=>`${SL[k]} <b>${k==='hp'?(u.hp!=null&&u.hp<u.maxhp?`${u.hp}/${u.maxhp}`:u.maxhp):u[k]}</b>`).join(' ')}</span>
   <span class="dsk">${SKILLS[u.skill].n}${ls.length?', '+ls.join(', '):''} · ${w.map(i=>`<img src="${icon(i.key)}" alt="">${i.n}${i.r?` (Rng ${rngTxt(i.r)})`:''}`).join(' ')}</span></div><div class="dcap">${capPie(u,add)}</div>${on?'<span class="dtick">✓</span>':''}`;
 }
