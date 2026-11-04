@@ -2,6 +2,7 @@
 /* ---- promotion choices: the usual upgrade, plus a new movement type and a new role that keep the weapon ---- */
 const mvOk=(r,w,m)=>r==='knight'?m==='armour':(r==='rogue'||r==='summoner')?m==='foot':m==='armour'?false:m==='flying'?w!=='bow'&&unl('flying'):true;
 function promoOptions(u){
+  if(CLS[u.cls].asc)return CLS[u.cls].asc; /* named classes ascend into their own listed classes */
   if(!u.cls.startsWith('G.'))return[CLS[u.cls].promo];
   const[,r,m,w]=u.cls.split('.'),out=[`G.${r}.${m}.${w}.2`];
   const mvs=['foot','armour','mounted','flying'].filter(x=>x!==m&&mvOk(r,w,x));if(mvs.length)out.push(`G.${r}.${pick(mvs)}.${w}.2`);
