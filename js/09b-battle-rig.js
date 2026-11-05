@@ -88,7 +88,7 @@ const POSES={
 
 /* which pose set each weapon kind uses */
 /* idle stances a character can hold instead of their weapon set's idle (look.stance) */
-const STANCES={lowguard:{arm:70,fore:40,wpn:-20},shoulder:{arm:40,fore:-100,wpn:-150,back:105},low:{arm:85,fore:65,wpn:150},guard:{arm:15,fore:-5,wpn:-12,back:-150,backFore:-95},
+const STANCES={lowguard:{arm:70,fore:40,wpn:-20,back:120,backFore:110,bwpn:145}/* bwpn: angle of a pack weapon in the back hand */,shoulder:{arm:40,fore:-100,wpn:-150,back:105},low:{arm:85,fore:65,wpn:150},guard:{arm:15,fore:-5,wpn:-12,back:-150,backFore:-95},
   draw:{arm:100,fore:175,wpn:-15,back:80,backFore:-10},high:{arm:-35,fore:-75,wpn:-125,back:-60,backFore:-80}};
 const KIND_POSE={hammer:'heavy',axe:'heavy',halberd:'heavy',greatsword:'heavy',sword:'blade',scimitar:'blade',twin:'blade',spear:'thrust',javelin:'thrust',rapier:'thrust',
   lyre:'cast',dagger:'dagger',twindagger:'dagger',bow:'bow',crossbow:'bow',talisman:'cast',staff:'cast',spirit:'cast',orb:'cast',fan:'cast',whip:'dagger',chain:'dagger',umbrella:'thrust'};
@@ -166,7 +166,7 @@ function hiArt(L,cls,team,wk,name,i,W){
   limb(sb,eb,sleeve,4);limb(eb,hb,body==='armor'?MT2:sk2,3);p.ell(hb[0],hb[1],2,2,sk2);
   if(L.bracers)limb(pt(...eb,P.backFore,2),pt(...eb,P.backFore,6),shade(L.bracers,.75),3);
   /* a pack sprite in the back hand is stamped at the very end, behind the whole body (see below) */
-  const backArt=kind==='twindagger'&&L.wpnArt&&WPN_ART[L.wpnArt]?[WPN_ART[L.wpnArt],hb,P.backFore-30]:null;
+  const backArt=kind==='twindagger'&&L.wpnArt&&WPN_ART[L.wpnArt]?[WPN_ART[L.wpnArt],hb,P.bwpn??P.backFore-30]:null;
   if(!backArt&&(kind==='twin'||kind==='twindagger')){const a=P.backFore-30;limb(hb,pt(...hb,a,kind==='twin'?14:L.jag?13:8),c.blade,2);if(L.jag)for(let k=4;k<12;k+=3)p.set(...pt(...pt(...hb,a,k),a+90,2),c.blade);limb(pt(...hb,a+90,2),pt(...hb,a-90,2),c.hilt,1)}
   /* ---- torso ---- */
   const sh=fem?8:9;
