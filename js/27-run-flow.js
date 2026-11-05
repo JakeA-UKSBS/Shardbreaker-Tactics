@@ -6,7 +6,7 @@ async function beginBattle(){
 }
 async function newRun(){
   const seed=(Date.now()^Math.floor(Math.random()*1e9))>>>0;seedRng(seed);
-  run={seed,n:0,uid:1,roster:[],pos:null,path:[],act:1,relics:[],rr:{},gold:30,meals:[],lost:0,ate:0};/* greybox: Act 1 is always the Cursed Woodland, whose maps are the hand-made height maps */run.biomes=['forest',...shuffle(biomeIds().filter(b=>b!=='forest'))].slice(0,ACTS);
+  run={seed,n:0,uid:1,roster:[],pos:null,path:[],act:1,relics:[],rr:{},gold:30,meals:[],lost:0,ate:0};/* Act 1 is any region except the Gemstone Caverns (Act 2 only) */{const a1=pick(biomeIds().filter(b=>b!=='cavern'));run.biomes=[a1,...shuffle(biomeIds().filter(b=>b!==a1))].slice(0,ACTS)}
   /* the Crossroads: 5 random starting-roster characters (6 with the unlock); no guaranteed Mender */
   run.castUsed=[];const lv0=unl('veterans')?3:2,starters=shuffle(CAST.filter(c=>c.joins==='start'));
   const opts=starters.slice(0,unl('draft6')?6:5).map(c=>castUnit(c.id,lv0));
