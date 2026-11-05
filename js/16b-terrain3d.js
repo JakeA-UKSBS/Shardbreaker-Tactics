@@ -19,11 +19,23 @@ texStyle.textContent+=Object.keys(PROPS).filter(k=>!OVER_T.includes(k)&&k!=='bou
 const SUNLESS_ROCKS=[['rock',1],['rocks',1],['rubble',1],['deadtree',1.1],['crystal',1],['skulls',.6]];
 /* other regions' boulders: CraftPix rocks (art/props/<name>.png, padded square, scale × the boulder's size). Regions not listed keep the plain boulder */
 const REGION_ROCKS={desert:[['sand-rock',1.1]],snow:[['ice-block',1.1],['snow-peaks',1.1]],forest:[['moss-rock',1.1]],swamp:[['moss-rock',1.1]],mountain:[['red-spire',1.1]],heart:[['red-spire',1.1]]};
+/* two boulders side by side are drawn as one big rock across both tiles (REGION_BIG: the wide rock per region) */
+const REGION_BIG={desert:'sand-rock',snow:'ice-block',forest:'moss-rock',swamp:'moss-rock'};
+let bigRocks=null,bigFor=null;
+/* pairs adjacent boulders, scanning row by row: {anchor key: partner [x,y]}, and each partner key -> 'skip' */
+function boulderPairs(){if(bigFor===MAP)return bigRocks;bigFor=MAP;bigRocks={};const isB=(x,y)=>MAP[y]&&TER[MAP[y][x]]&&TER[MAP[y][x]].k==='boulder';
+  for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){if(!isB(x,y)||bigRocks[key(x,y)])continue;
+    for(const[px,py]of[[x+1,y],[x,y+1]])if(isB(px,py)&&!bigRocks[key(px,py)]&&hOf(px,py)===hOf(x,y)){bigRocks[key(x,y)]=[px,py];bigRocks[key(px,py)]='skip';break}}
+  return bigRocks}
 function placeProp(x,y,k){const im=document.createElement('img'),c=scrC(x,y);let w=Math.round(T*PROPS[k]),src=propArt(k,state.visited.includes(key(x,y)));
   if(k==='boulder'&&actBiome().id==='shadow'){const[n,sc]=SUNLESS_ROCKS[(x*7+y*13)%SUNLESS_ROCKS.length];if(ART_PNG.has('props/sunless-'+n)){src='art/props/sunless-'+n+'.png';w=Math.round(w*sc)}}
   else if(k==='boulder'&&REGION_ROCKS[actBiome().id]){const rs=REGION_ROCKS[actBiome().id],[n,sc]=rs[(x*7+y*13)%rs.length];if(ART_PNG.has('props/'+n)){src='art/props/'+n+'.png';w=Math.round(w*sc)}}
+  let cx=c.x,cy=c.y,z=(x+y)*4+3;
+  const big=k==='boulder'&&REGION_BIG[actBiome().id]&&ART_PNG.has('props/'+REGION_BIG[actBiome().id])&&boulderPairs()[key(x,y)];
+  if(big==='skip')return;/* drawn by its partner */
+  if(big){const c2=scrC(...big);cx=(c.x+c2.x)/2;cy=Math.max(c.y,c2.y);z=(big[0]+big[1])*4+3;src='art/props/'+REGION_BIG[actBiome().id]+'.png';w=Math.round(T*PROPS[k]*1.9)}
   im.className='prop';im.alt='';im.dataset.k=key(x,y);im.dataset.p=k;im.src=src;
-  Object.assign(im.style,{left:c.x-w/2+'px',top:c.y+8-w+'px',width:w+'px',height:w+'px',zIndex:(x+y)*4+3});boardEl.appendChild(im)}
+  Object.assign(im.style,{left:cx-w/2+'px',top:cy+8-w+'px',width:w+'px',height:w+'px',zIndex:z});boardEl.appendChild(im)}
 /* each render: opened chests swap art, and tall props fade when a unit stands just behind them */
 function propsRender(){
   const occ=new Set(state.units.filter(u=>u.hp>0).flatMap(u=>cellsOf(u.x,u.y,u.sz||1).map(c=>key(...c))));

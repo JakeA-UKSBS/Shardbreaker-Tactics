@@ -200,16 +200,20 @@ function actBiome(){const a=run&&run.act||1;if(a>=3)return BIOMES.heart;
 /* bosses lumber: they move, but only a couple of tiles a turn */
 /* BOSS_MOV: max tiles a boss moves per turn */
 const BOSS_MOV=2;
-/* ROCK_MAX: most rocks left on a battle map (the rest are cleared, see genBattle) */
+/* ROCK_MAX: most rocks left on a battle map (the rest are cleared, see genBattle); two boulders side by side count as one */
 const ROCK_MAX=3;
 function genBattle(n,kind){
   const act=run&&run.act||1,B=actBiome(),bossFight=kind==='boss',elite=kind==='elite',ship=B.id==='ship',town=!bossFight&&!elite&&!ship&&MAPS['town_'+B.id]&&(run&&run.n||1)>=2&&rand()<.25;
   const mk=bossFight?B.bossMap:town?'town_'+B.id:pick(B.maps);let m=MAPS[mk];
   /* tidy the hand-made map: no altars (T), tents (A), chests (C) or ruined shrines (F), and at most ROCK_MAX rocks
      (boulders ^, sandstone k, crags R). What's removed becomes the map's most common ground. */
-  {const NO=['T','A','C','F'],ROCKS=['^','k','R'],rs=[];m.map.forEach((r,y)=>[...r].forEach((ch,x)=>{if(ROCKS.includes(ch))rs.push(x+','+y)}));
+  {const NO=['T','A','C','F'],ROCKS=['^','k','R'],rs=[],pair={};m.map.forEach((r,y)=>[...r].forEach((ch,x)=>{if(!ROCKS.includes(ch))return;
+     /* a boulder next to the one before it (left or above) is kept or dropped with it, so the pair can be drawn as one big rock */
+     const solo=k=>pair[k]===k&&Object.values(pair).filter(v=>v===k).length===1,isB=([a,b])=>m.map[b]&&m.map[b][a]==='^';
+     const p=ch==='^'&&[[x-1,y],[x,y-1]].filter(isB).map(([a,b])=>a+','+b).find(solo);
+     if(p)pair[x+','+y]=p;else{pair[x+','+y]=x+','+y;rs.push(x+','+y)}}));
    const cnt={};m.map.join('').split('').forEach(c=>{if(TER[c]&&TER[c].c<99&&!NO.includes(c))cnt[c]=(cnt[c]||0)+1});
-   const g=Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0][0],drop=new Set(rs.length>ROCK_MAX?shuffle(rs.slice()).slice(ROCK_MAX):[]);
+   const g=Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0][0],dropR=new Set(rs.length>ROCK_MAX?shuffle(rs.slice()).slice(ROCK_MAX):[]),drop=new Set(Object.keys(pair).filter(k=>dropR.has(pair[k])));
    const mud=B.id==='swamp';/* the swamp's water is deep mud instead */
    m={...m,map:m.map.map((r,y)=>[...r].map((ch,x)=>NO.includes(ch)||drop.has(x+','+y)?g:mud&&ch==='w'?'D':ch).join(''))}}
   /* difficulty climbs with the floor and the act: act 1 floor 1 is Lv 1, act 1 floor 9 is Lv 6, act 2 starts at Lv 7 */
