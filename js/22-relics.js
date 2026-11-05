@@ -28,6 +28,10 @@ const RELICS={
   plenty:{n:'Horn of Plenty',r:'u',d:'+15 gold after every won fight, and tavern meals last 1 fight longer.'},
   /* ev: only from its event (the Empty Throne), never in the relic pools */
   gemcrown:{n:'The Crystal Crown',r:'r',ev:1,d:'Units deal +3 damage, but the crystals call to monsters: enemies get +10 Hit against your units.'},
+  onyx:{n:'Black Onyx Shard',r:'u',ev:1,d:'Crystal creatures deal 1 less damage to your units.'},
+  ankh:{n:'Golden Ankh',r:'u',ev:1,d:'All units gain +1 Def.'},
+  gloves:{n:'Imbued Gloves',r:'r',ev:1,d:'All units gain +2 Res.'},
+  notes:{n:'Gnome’s Research Notes',r:'u',ev:1,d:'Units deal +2 damage to crystal creatures.'},
   /* starter relics: Ithren offers 3 of the r:'s' ones before you pick a squad; r:'h' ones join the Heirloom pick (unlocked by Field Hospital). Neither drops anywhere else */
   poultice:{n:'Herbal Poultice',r:'s',d:'Salves heal 2 more HP.'},
   satchel:{n:'Sage’s Satchel',r:'h',d:'Everyone in your starting squad carries an extra Salve.'},
@@ -57,6 +61,8 @@ async function relicPick(n,rs,title,text,first){
   const m=await modal(`<div class="eyebrow">Relic</div><h2>${title}</h2>${text?`<p>${text}</p>`:''}<div class="inv big">${opts.map((k,i)=>`<button type="button" class="it" data-m="r${i}"><img src="${relicArt(k)}" alt=""><span><b>${RELICS[k].n}</b> · ${RELICS[k].d}</span><em>${RN[RELICS[k].r]}</em></button>`).join('')}</div>`);
   const k=opts[+m.slice(1)];(run.relics=run.relics||[]).push(k);sfx('fanfare');toast(`${RELICS[k].n} obtained`);return k;
 }
+/* crystal creatures: enemies made of crystal or gem (for the Black Onyx Shard and the Gnome's notes) */
+const CRYS_CLS=['Shardling','Prism','CrystalSentinel','CrystalHeart','GemGolem','Gemsnail','AmethystTurtle','PyriteColossus','AgateGolem','AgateWyrm'],isCrys=u=>CRYS_CLS.includes(u.cls);
 /* combat hooks, called from calc(): only your units benefit */
 function relicCalc(x,xw,y){
   const o={pow:0,df:0,acc:0,avo:0,crit:0};if(!run)return o;
@@ -76,6 +82,7 @@ function relicCalc(x,xw,y){
     if(R('whetstone'))o.acc+=10;
     if(R('coin'))o.crit+=10;
     if(R('aventurine'))o.crit+=5;
+    if(R('notes')&&isCrys(y))o.pow+=2;
   }else{if(R('mirror'))o.acc-=10;if(R('gemcrown'))o.acc+=10}
   if(y.team==='p'){
     if(R('shield')&&state.units.some(a=>a!==y&&a.team==='p'&&a.hp>0&&man(a,y)===1))o.df+=2;
@@ -83,6 +90,9 @@ function relicCalc(x,xw,y){
     if(R('spurs')&&CLS[y.cls].mnt)o.avo+=10;
     if(R('aventurine'))o.avo+=10;
     if(R('ironrose')&&y.hp<y.maxhp/2)o.df+=3;
+    if(R('onyx')&&isCrys(x))o.df+=1;
+    if(R('ankh')&&!xw.mag)o.df+=1;
+    if(R('gloves')&&xw.mag)o.df+=2;
   }
   return o;
 }
