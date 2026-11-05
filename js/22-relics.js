@@ -3,7 +3,7 @@
 const RELICS={
   banner:{n:'Unbroken Banner',r:'c',d:'Units at full HP deal +2 damage.'},
   whetstone:{n:'Whetstone',r:'c',d:'All units gain +10 Hit.'},
-  travellersBoots:{n:'Swift Boots',r:'c',d:'All units gain +1 Move.'},
+  boots:{n:'Swift Boots',r:'c',d:'All units gain +1 Move.'},
   salvebag:{n:'Herbalist’s Bag',r:'c',d:'Units heal 3 HP at the start of each of your turns.'},
   shield:{n:'Tower Shield',r:'c',d:'Units next to an ally gain +2 Def and Res.'},
   tome:{n:'Old Tome',r:'u',d:'Units gain 50% more EXP.'},
