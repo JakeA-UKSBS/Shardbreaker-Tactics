@@ -174,8 +174,8 @@ const EVENTS={
         if(d==='skip')return null;run.roster.splice(+d.slice(1),1)}
       run.roster.push(nu);castJoined(nu);sfx('item');return`<b>${nu.name}</b> slings his lyre over his shoulder. “I’ll make you all sound taller.”`}},
     {l:'Ask for a song and move on',sub:'Every unit gains 20 EXP',go:async()=>{await expAll(run.roster,20);return'He plays something rousing about a dragon. Every unit gains 20 EXP.'}}]}},
-  spring:{t:'Healing Spring',art:'spring',d:'A clear spring bubbles up between the rocks. The water glows faintly.',o:[
-    {l:'One unit bathes',sub:'+3 max HP for good',go:async()=>{const u=await pickUnit('Who bathes in the spring?','They gain 3 max HP for good.');if(!u)return null;u.maxhp+=3;u.hp+=3;sfx('heal');return`${u.name} climbs out feeling years younger. Max HP ${u.maxhp}.`}},
+  spring:{t:'The Healing Fountain',art:'spring',d:'A fountain splashes in a quiet castle courtyard. The water glows faintly.',o:[
+    {l:'One unit bathes',sub:'+3 max HP for good',go:async()=>{const u=await pickUnit('Who bathes in the fountain?','They gain 3 max HP for good.');if(!u)return null;u.maxhp+=3;u.hp+=3;sfx('heal');return`${u.name} climbs out feeling years younger. Max HP ${u.maxhp}.`}},
     {l:'Everyone drinks',sub:'Every unit gains +1 Res',go:async()=>{run.roster.forEach(u=>u.res++);sfx('heal');return'The water tastes of rain. Every unit gains 1 Res.'}}]},
   well:{t:'Wishing Well',art:'well',d:'An old stone well, its bottom lost in the dark. Coins glint far below.',o:[
     {l:'Toss in 25 gold',sub:'Every unit gains +1 Luck',cost:25,go:async()=>{spend(25);run.roster.forEach(u=>u.lck++);sfx('ding');return'The coins vanish without a sound. Every unit feels luckier (+1 Luck).'}},
