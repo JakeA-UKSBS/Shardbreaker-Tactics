@@ -112,7 +112,7 @@ const BIOMES={
     tip:['ghosts','Ghosts','Ghosts ignore terrain and can pass through walls. Their dark magic heals them for a third of the damage dealt.'],
     maps:['graveyard','crypt','village'],bossMap:'chapel',pool:[['Skeleton',4],['Ghost',2,3]],elitePool:[['Ghost',3],['Skeleton',2]],
     boss:{name:'The Bone Wyrm',cls:'BoneWyrm',s:[32,0,11,8,5,3,6,9],items:['umbralSigil'],skill:'focus',summon:'Skeleton',look:{bones:true,glow:'#c77dff'}}},
-  swamp:{n:'Bog of Eternal Stench',bg:'#22362c',d:'Mangrove roots and ankle-deep water. Lurkers and lamias hunt the shallows; the sand banks are solid ground.',
+  swamp:{n:'Sobek’s Mire',noThe:1,bg:'#22362c',d:'Mangrove roots and ankle-deep water. Lurkers and lamias hunt the shallows; the sand banks are solid ground.',
     tip:['swamp','Ankle-deep water','A unit that starts its turn in the water or the mangrove roots has 1 less Move. Sand is solid ground. Fliers and swamp creatures ignore this.'],
     maps:['flats','road','bog'],bossMap:'lair',pool:[['BogLurker',3],['Lamia',3,2],['MudMonster',2,4]],elitePool:[['MudMonster',3],['Lamia',2],['BogLurker',2]],
     boss:{name:'Krondis',cls:'Krondis',mov:4,s:[40,13,0,5,5,2,10,1],items:['bite'],skill:'wrath',look:{body:'#5a6a86',belly:'#5a7a4a',crown:true}}},

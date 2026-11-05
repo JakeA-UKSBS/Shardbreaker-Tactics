@@ -262,7 +262,7 @@ Learned skills cost capacity (base 20, +5 when promoted). Personal skills are fr
 |---|---|---|---|
 | Mycelia | Sporeling 4, Mindsnail 2 (fl 3+) | Mindsnail, Sporeling | King Morel the Blighted |
 | Sunless Isle | Skeleton 4, Ghost 2 (fl 3+) | Ghost, Skeleton | The Bone Wyrm |
-| Bog of Eternal Stench | Bog Lurker 3, Lamia 3 (fl 2+), Mud Monster 2 (fl 4+) | Mud Monster, Lamia, Bog Lurker | Krondis |
+| Sobek’s Mire | Bog Lurker 3, Lamia 3 (fl 2+), Mud Monster 2 (fl 4+) | Mud Monster, Lamia, Bog Lurker | Krondis |
 | Cursed Woodland | Wolf 4, Cursed Stag 3 (fl 2+), Blighted Treant 2 (fl 5+) | Blighted Treant, Cursed Stag, Wolf | The Hollow Bear |
 | Volcanic Isle | Fire Sprite 3, Boulder Golem 3 (fl 3+), Harpy 1 (fl 4+) | Boulder Golem, Fire Sprite, Harpy | Pyraxis, the Magma Dragon |
 | The Flying Ship | Harpy 3, Wyvern 2 (fl 3+) | Wyvern, Harpy | The Great Roc |

@@ -50,7 +50,7 @@ A haunted land of graves and crypts. Skeletons walk, and ghosts drift straight t
 | --- | --- |
 | ![Skeleton](visuals/monsters/Skeleton.png) | ![Ghost](visuals/monsters/Ghost.png) |
 
-### Bog of Eternal Stench
+### Sobek’s Mire
 
 Mangrove roots and ankle-deep water. Lurkers and lamias hunt the shallows; the sand banks are solid ground. **Rule:** A unit that starts its turn in the water or the mangrove roots has 1 less Move. Sand is solid ground. Fliers and swamp creatures ignore this.
 

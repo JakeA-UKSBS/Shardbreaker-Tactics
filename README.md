@@ -19,7 +19,7 @@ Each run picks 2 of these 7 as its acts (`BIOMES`, `ACTS`). Each has 2-3 battle 
 | Region | Monsters | Rule | Boss |
 | --- | --- | --- | --- |
 | Sunless Isle | Skeletons, Skeleton Archers, Ghosts | Ghosts pass through walls; dark magic drains | The Bone Wyrm (raises skeletons every other turn) |
-| Bog of Eternal Stench | Bog Lurkers, Lamias, Mud Monsters | Starting a turn in ankle-deep water or mangrove roots costs 1 Move; sand is solid | Krondis the alligator |
+| Sobek’s Mire | Bog Lurkers, Lamias, Mud Monsters | Starting a turn in ankle-deep water or mangrove roots costs 1 Move; sand is solid | Krondis the alligator |
 | Cursed Woodland | Wolves, Cursed Stags, Blighted Treants | Cursed thickets: +25 Avoid, 2 Move to enter | The Hollow Bear |
 | Volcanic Isle | Boulder Golems, Fire Sprites | Magma blocks foot units; fliers and fire creatures cross it | Pyraxis, the Magma Dragon |
 | Sandstone Desert | Jackals, Sand Worms, Sandstone Golems | Quicksand costs 1 Move next turn; sandstone outcrops (cream feldspar with smoky quartz) give cover | The Pyrite Colossus |

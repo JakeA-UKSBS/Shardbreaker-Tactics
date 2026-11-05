@@ -68,7 +68,7 @@ Still to flesh out: the story scenes, and narrowing the longlist into roles that
 
 - Run History: click a Victory or Defeat card to open that run and see each unit's items and skills. Runs saved from Nov 2026 on already store them (`prof.hist[].squad[].items`, `.skills`); older entries only have name, class and level.
 
-- The swamp region (Bog of Eternal Stench): rename it to something swamp-meets-Egyptian (a "mire" name, e.g. Mire of Eternal Stench) and give it Egyptian-themed monsters.
+- Sobek’s Mire (the swamp region, renamed from Bog of Eternal Stench): give it Egyptian-themed monsters to match the name (e.g. mummified lurkers, scarab swarms, jackal-headed guards), with Krondis as a crocodile-god boss.
 
 - Music for the end of a run: a victory track and a defeat track (e.g. victory.mp3 and defeat.mp3), played on the win and wipe screens.
 
