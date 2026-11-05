@@ -2,6 +2,7 @@
 const ART_FILES=["bosses/crystal-heart",
 "bosses/crystal-heart-strike",
 "bosses/hollow-bear",
+"bosses/krondis",
 "cast/aldric/juggernaut-critup",
 "cast/aldric/juggernaut-follow",
 "cast/aldric/juggernaut-idle",
