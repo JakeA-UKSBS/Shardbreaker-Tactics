@@ -2,7 +2,8 @@
 /* ================= RULES ================= */
 const isWpn=k=>WTYPES.includes(IT[k].t);
 /* weapons never wear out, except the few big ones with a handful of uses (Meteor, Heaven’s Bolt) */
-const endless=k=>isWpn(k)&&IT[k].uses>5;
+/* endless: never loses uses. Every weapon with more than 5 uses, and all healing staves; only Heaven's Bolt and Meteor Sigil (5) run out */
+const endless=k=>(isWpn(k)&&IT[k].uses>5)||IT[k].t==='spirit';
 /* Fliers cross sky and rough ground at cost 1, but not walls, masts or crags. */
 function mcost(u,x,y){const t=ter(x,y);if(CLS[u.cls].phase)return 1;if(t.k==='lava'&&CLS[u.cls].lava)return 1;if(CLS[u.cls].fly)return['wall','mast','cliff','cavewall'].includes(t.k)?99:1;if(CLS[u.cls].mnt&&(t.k==='forest'||t.k==='hill'))return t.c+1;return t.c}
 /* Teams: p = player, e = enemy, g = green 'other' units that fight the enemy and can be recruited. */
@@ -87,7 +88,7 @@ function resolve(a,ai,d){
   let whirled=false;/* Whirlwind can only fire once per exchange */
   for(const s of order){
     const o=s==='a'?'d':'a',X=s==='a'?a:d,Y=s==='a'?d:a,S=s==='a'?f.A:f.D;
-    /* stop once someone falls; skip a side whose weapon has broken */
+    /* stop once someone falls; skip a side whose weapon has shattered (only the 5-use sigils can) */
     if(hp.a<=0||hp.d<=0)break;if(U[s]-used[s]<=0)continue;used[s]++;
     const e={by:s,hit:false,crit:false,dmg:0,proc:null,guard:null,heal:0};
     /* hit roll: the average of two rolls, as in the GBA games (high hit rates land more often than shown, low ones less) */
@@ -110,7 +111,7 @@ function resolve(a,ai,d){
       /* drain weapons (dark magic): heal a third of the damage dealt */
       const XW=s==='a'?f.aw:f.dw;if(XW&&XW.drain&&dmg>0){const dh=Math.min(Math.ceil(dmg/3),mx[s]-hp[s]);if(dh>0){hp[s]+=dh;e.heal+=dh}}
     }
-    /* HP after this strike, and whether the weapon just broke, for the animation */
+    /* HP after this strike, and whether the weapon just shattered, for the animation */
     e.hpA=hp.a;e.hpD=hp.d;e.broke=U[s]-used[s]<=0;ev.push(e);
   }
   return{f,ev,hpA:hp.a,hpD:hp.d,used};

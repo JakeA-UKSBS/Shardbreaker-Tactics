@@ -131,7 +131,7 @@ async function act(a){
   if(a==='talk'){commit();const r=talkTarget(u),lines=TALKS[r.id]||[[r.id,'I\'ll fight with you.']];clearSel();ui='idle';render();
     for(const[who,line]of lines){const sp=who==='lord'?u:r;await modal(`<div class="talk"><img src="${portrait(sp)}" alt=""><p><b>${sp.name}</b>${line.replace('{lord}',u.name)}</p></div><div class="mbtns"><button class="go" type="button" data-m="ok">Next</button></div>`)}
     const h=heroDef(r.id);r.team='p';r.recruit=false;r.hold=false;r.acted=false;r.g=h.g;r.items.forEach(i=>delete i.d);sfx('item');toast(`${r.name} joined you`);finishAction();return}
-  if(a==='doheal'){commit();const t=pending,si=spiritFor(u,t),w=IT[u.items[si].k],amt=Math.min(w.amt,t.maxhp-t.hp);t.hp+=amt;u.items[si].u--;if(u.items[si].u<=0){toast(w.n+' broke');u.items.splice(si,1)}pop(t,'+'+amt,'heal');sfx('heal');clearSel();ui='idle';busy=true;render();
+  if(a==='doheal'){commit();const t=pending,si=spiritFor(u,t),w=IT[u.items[si].k],amt=Math.min(w.amt,t.maxhp-t.hp);t.hp+=amt;if(!endless(u.items[si].k)){u.items[si].u--;if(u.items[si].u<=0){toast(w.n+' shattered');u.items.splice(si,1)}}pop(t,'+'+amt,'heal');sfx('heal');clearSel();ui='idle';busy=true;render();
     const g=gainExp(u,Math.round(15*EXP_RATE));await showExp(u,g);if(g&&g.gains)await levelUp(u,g);busy=false;finishAction();return}
   if(a==='attack-go'){commit();const t=pending,it=u.items.splice(pendW,1)[0];u.items.unshift(it);clearSel();ui='idle';await fight(u,0,t);saveGame();promptEnd();return}
 }
@@ -145,7 +145,7 @@ async function fight(a,ai,d){
   await quickPlay(a,d,res);
   a.hp=res.hpA;d.hp=res.hpD;
   for(const u of[a,d])if(u.team==='p'&&u.hp<=0&&R('phoenix')&&!run.phx){u.hp=1;run.phx=1;pop(u,'Phoenix!','heal');sfx('rise');toast(`The Phoenix Feather saves ${u.name}`)}
-  for(const[u,i,n]of[[a,ai,res.used.a],[d,res.f.di,res.used.d]]){if(i<0||!n)continue;const it=u.items[i];if(endless(it.k))continue;it.u-=n;if(it.u<=0){u.items.splice(i,1);sfx('broke');toast(`${u.name}'s ${IT[it.k].n} broke`)}}
+  for(const[u,i,n]of[[a,ai,res.used.a],[d,res.f.di,res.used.d]]){if(i<0||!n)continue;const it=u.items[i];if(endless(it.k))continue;it.u-=n;if(it.u<=0){u.items.splice(i,1);sfx('broke');toast(`${u.name}'s ${IT[it.k].n} shattered`)}}
   for(const u of [a,d])if(u.turncoat&&u.team==='e'&&u.hp>0&&u.hp<=Math.ceil(u.maxhp/3)){u.team='p';u.turncoat=false;u.acted=true;state.freed=true;pop(u,'Freed!','heal');sfx('ding')}
   const p=a.team==='p'?a:d.team==='p'?d:null,o=p===a?d:a;
   for(const e of res.ev)if(e.psn){const t=e.by==='a'?d:a;if(t.team==='p'&&M('soup'))continue;if(t.hp>0){t.psn=3;pop(t,'Poisoned','crit')}}
