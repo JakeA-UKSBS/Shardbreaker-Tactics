@@ -96,8 +96,8 @@ const MONLOOK={
   BlightedTreant:()=>({body:pick(['#5a4a32','#4a3a2a','#6a5a3a']),eye:'#9aff6a',leaves:pick(['#3f7a42','#5a6a2a','#6a3a5a'])}),
   Beholder:()=>({body:pick(['#8a4a6a','#4a6a8a','#6a4a3a']),eye:pick(['#5fc2a0','#ffd23f','#ff5a3a'])})
 };
-/* regions switched off for now: still defined (art, maps, docs) but runs never pick them. The Flying Ship and Mycelia are off for now; delete them from this list to bring them back */
-const BIOMES_OFF=['ship','mushroom'],biomeIds=()=>Object.keys(BIOMES).filter(b=>!BIOMES_OFF.includes(b)&&b!=='heart');
+/* regions switched off for now: still defined (art, maps, docs) but runs never pick them. The Flying Ship, Mycelia and the Labyrinth are off for now; delete them from this list to bring them back */
+const BIOMES_OFF=['ship','mushroom','labyrinth'],biomeIds=()=>Object.keys(BIOMES).filter(b=>!BIOMES_OFF.includes(b)&&b!=='heart');
 /* REGIONS: n = name, noThe = don't say 'the', bg = map-screen background colour, d = description, tip = [id, title, help text],
    maps = battle map ids (in MAPS), bossMap = the boss's map, town = [ground, cover] letters for Defend fights, townN = settlement name,
    pool / elitePool = enemies as [class id, weight, first floor it can appear on (default 1)]: weight is the relative chance of being picked,
@@ -122,7 +122,7 @@ const BIOMES={
     boss:{name:'The Hollow Bear',cls:'HollowBear',mov:4,s:[38,13,0,6,5,3,8,3],items:['slam'],skill:'wrath',look:{fur:'#3a2a24',eye:'#ff3a3a',core:'#ff6aa8'}}},
   mountain:{n:'Volcanic Isle',bg:'#3a2420',d:'Basalt slopes cut by rivers of magma. Golems block the passes, and fire sprites float over the lava.',
     tip:['lava','Magma','Magma can’t be crossed on foot. Fliers and fire creatures move over it freely.'],
-    maps:['fields','caldera','ridge'],bossMap:'crater',pool:[['FireSprite',3],['BoulderGolem',3,3],['Harpy',1,4]],elitePool:[['BoulderGolem',3],['FireSprite',2],['Harpy',1]],
+    maps:['fields','caldera','ridge'],bossMap:'crater',pool:[['FireSprite',3],['BoulderGolem',3,3]],elitePool:[['BoulderGolem',3],['FireSprite',2]],
     boss:{name:'Pyraxis, the Magma Dragon',cls:'MagmaDragon',s:[42,12,10,6,4,2,10,6],items:['magmaBreath'],skill:'steadfast',look:{body:'#4a2420',magma:true,big:true,crysSmall:true,crysCol:'#3a2a4a'}}},
   ship:{n:'The Flying Ship',bg:'#26304a',d:'A sky-galleon under attack. Hold the deck while wyverns, pegasi and harpies dive from the clouds.',
     tip:['ship','Defend the ship','Hold the deck until the turn count runs out; more fliers arrive every turn. Bows deal double damage to fliers.'],

@@ -51,7 +51,7 @@ async function ascPick(){
 }
 /* called once when a run ends; returns lines describing anything new */
 function endRun(won){
-  (prof.hist=prof.hist||[]).unshift({date:Date.now(),seed:run.seed,won,asc:run.asc||0,act:run.act||1,floor:run.n,regions:run.biomes,squad:(run.roster||[]).map(u=>({n:u.name,c:CLS[u.cls].n,lv:u.lv})),fallen:run.fallen||[],relics:run.relics||[]});prof.hist.length=Math.min(prof.hist.length,30);
+  (prof.hist=prof.hist||[]).unshift({date:Date.now(),seed:run.seed,won,asc:run.asc||0,act:run.act||1,floor:run.n,regions:run.biomes,squad:(run.roster||[]).map(u=>({n:u.name,c:CLS[u.cls].n,lv:u.lv,items:(u.items||[]).map(i=>i.k),skills:[u.skill,...(u.skills||[]).map(x=>x.id)].filter(Boolean)}))/* items and skills kept for a future run-detail view */,fallen:run.fallen||[],relics:run.relics||[]});prof.hist.length=Math.min(prof.hist.length,30);
   const out=[],sq=run.roster||[],before=new Set(Object.keys(RELICS).filter(relicOpen));
   prof.runs++;if(won){prof.wins++;if((run.asc||0)>=prof.asc&&prof.asc<ASC_MAX){prof.asc++;out.push(`<b>Ascension ${prof.asc}</b> is open: ${ASC[prof.asc]}`)}}
   /* best progress so far on counted achievements (shown as bars on the Unlocks screen) */
@@ -68,7 +68,7 @@ async function historyScreen(){
     <p>${h.won?'Cleared':'Fell in'} ${[...(h.regions||[]).slice(0,2),'heart'].slice(0,h.won?3:h.act||1).map(r=>BIOMES[r]?BIOMES[r].n:r).join(' → ')}${h.won?'':` · Act ${h.act||1}, floor ${h.floor||1} of ${RUN_LEN}`}</p>
     <div class="hsq">${(h.squad||[]).map(u=>`<span>${u.n} <small>${u.c} · Lv ${u.lv}</small></span>`).join('')}${(h.fallen||[]).map(u=>`<span class="dead">${u.n} <small>${u.c} · fell A${u.act} F${u.floor}</small></span>`).join('')}</div>
     ${(h.relics||[]).length?`<div class="hrel">${h.relics.filter(k=>RELICS[k]).map(k=>`<img src="${relicArt(k)}" alt="${RELICS[k].n}" title="${RELICS[k].n}: ${RELICS[k].d}">`).join('')}</div>`:''}</div>`;
-  await modal(`<div class="eyebrow">${prof.runs} run${prof.runs===1?'':'s'} · ${prof.wins} won</div><h2>Run History</h2>
+  await modal(`<h2>Run History</h2>
     <div class="hlist">${H.length?H.map(card).join(''):'<p class="hint">No runs yet. Finished runs show up here.</p>'}</div>
     <div class="mbtns"><button class="go" type="button" data-m="back">Back</button></div>`);
 }

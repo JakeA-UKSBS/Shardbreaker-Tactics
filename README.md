@@ -15,23 +15,20 @@ The fixed art (tiles, icons, relics, scenes, backdrops) loads from PNGs in `art/
 Drop mp3 files into a `music/` folder next to `index.html`: `title.mp3`, `tavern.mp3`, `mushroom.mp3`, `shadow.mp3`, `swamp.mp3`, `forest.mp3`, `mountain.mp3`, `ship.mp3`, `labyrinth.mp3`, `desert.mp3`, `snow.mp3`, `cavern.mp3`, `heart.mp3` (Act 3). Each loops while you're in that region (map and battles). Missing files are skipped. "Sound and music" in Options turns it off.
 
 ## Regions
-Each run picks 2 of these 10 as its acts (`BIOMES`, `ACTS`). Each has 2-3 battle maps, a boss map, a monster pool and a rule.
+Each run picks 2 of these 7 as its acts (`BIOMES`, `ACTS`). Each has 2-3 battle maps, a boss map, a monster pool and a rule.
 | Region | Monsters | Rule | Boss |
 | --- | --- | --- | --- |
-| Mycelia | Sporelings, Mindsnails | Spores poison on a hit (3 HP a turn for 3 turns; a Salve cures it) | King Morel the Blighted |
 | Sunless Isle | Skeletons, Skeleton Archers, Ghosts | Ghosts pass through walls; dark magic drains | The Bone Wyrm (raises skeletons every other turn) |
 | Bog of Eternal Stench | Bog Lurkers, Lamias, Mud Monsters | Starting a turn in ankle-deep water or mangrove roots costs 1 Move; sand is solid | Krondis the alligator |
 | Cursed Woodland | Wolves, Cursed Stags, Blighted Treants | Cursed thickets: +25 Avoid, 2 Move to enter | The Hollow Bear |
-| Volcanic Isle | Boulder Golems, Fire Sprites, Harpies | Magma blocks foot units; fliers and fire creatures cross it | Pyraxis, the Magma Dragon |
-| The Flying Ship | Harpies, Wyverns | Defend the deck for 5-6 turns; fliers arrive every turn | The Great Roc |
-| The Labyrinth | Gremlins, Beholders (stone gaze) | Maze corridors | A Minotaur lord |
+| Volcanic Isle | Boulder Golems, Fire Sprites | Magma blocks foot units; fliers and fire creatures cross it | Pyraxis, the Magma Dragon |
 | Sandstone Desert | Jackals, Sand Worms, Sandstone Golems | Quicksand costs 1 Move next turn; sandstone outcrops (cream feldspar with smoky quartz) give cover | The Pyrite Colossus |
 | Agate Peaks | Frost Wolves, Frost Sprites, Agate Golems | Deep snow costs 1 Move next turn (snow creatures ignore it); frozen lakes −10 Avoid; blue agate gives cover | Glacius, the Agate Wyrm |
 | Gemstone Caverns | Gremlins, Gemsnails, Gem Golems | Chests everywhere: gold, or worthless pyrite; emerald, ruby and sapphire clusters give cover; walls are iridescent rock | Amethyra, the Amethyst Turtle |
 
 Only creatures are enemies; there are no human foes.
 
-Defend fights: from floor 2, a quarter of normal battles (outside the Flying Ship and the Labyrinth) are a settlement to hold for 5-7 turns, with monsters arriving from the top of the map each turn (`TOWN`, `town_<region>` maps, each region's `town` ground and cover). Battle maps are tidied when generated: altars, tents, chests and ruined shrines are cleared, and at most 3 rocks are kept (`ROCK_MAX`).
+Defend fights: from floor 2, a quarter of normal battles are a settlement to hold for 5-7 turns, with monsters arriving from the top of the map each turn (`TOWN`, `town_<region>` maps, each region's `town` ground and cover). Battle maps are tidied when generated: altars, tents, chests and ruined shrines are cleared, and at most 3 rocks are kept (`ROCK_MAX`).
 
 
 ## A run
