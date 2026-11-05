@@ -35,8 +35,8 @@ function tap(x,y){
   const o=unitAt(x,y),k=key(x,y);
   if(ui==='move'){
     const u=byId(sel);
-    if(moveSet.has(k)){stepSfx(u);u.x=x;u.y=y;springTrap(u);if(u.tumbled){u.tumbled=0;fringe=null}afterMove(u);return}
-    if(o&&o.team==='e'&&fringe.has(k)){const t=bestApproach(u,o);if(t){if(t.x!==u.x||t.y!==u.y)stepSfx(u);u.x=t.x;u.y=t.y;targets=atkTargets(u);tmode='atk';openConfirm(o);return}}
+    if(moveSet.has(k)){stepSfx(u,x,y);u.x=x;u.y=y;springTrap(u);if(u.tumbled){u.tumbled=0;fringe=null}afterMove(u);return}
+    if(o&&o.team==='e'&&fringe.has(k)){const t=bestApproach(u,o);if(t){if(t.x!==u.x||t.y!==u.y)stepSfx(u,t.x,t.y);u.x=t.x;u.y=t.y;targets=atkTargets(u);tmode='atk';openConfirm(o);return}}
     if(o&&o.team==='p'&&!o.acted&&o!==u){cancelMove();select(o);return}
     cancelMove();return;
   }
@@ -268,7 +268,7 @@ async function runAI(team){
   for(const e of state.units.filter(u=>u.team===team)){
     if(e.hp<=0||over)continue;if(e.stone){e.stone=0;render();continue}if(hasSt(e,'stun')){pop(e,'Stunned','miss');await sleep(300);continue}
     if(e.boss&&e.cls==='CrystalHeart'&&state.turn%2===0){await crystalStorm(e);if(over)break;continue}const plan=aiPlan(e);
-    if(plan.tile&&(plan.tile.x!==e.x||plan.tile.y!==e.y)){if(ensureVisible(plan.tile.x,plan.tile.y))await sleep(300);stepSfx(e);e.x=plan.tile.x;e.y=plan.tile.y;render();await sleep(330)}
+    if(plan.tile&&(plan.tile.x!==e.x||plan.tile.y!==e.y)){if(ensureVisible(plan.tile.x,plan.tile.y))await sleep(300);stepSfx(e,plan.tile.x,plan.tile.y);e.x=plan.tile.x;e.y=plan.tile.y;render();await sleep(330)}
     /* Cover: the protector takes the hit instead, if the attacker can reach them from here */
     if(plan.target&&hasSt(plan.target,'cover')){const cv=byId(plan.target.st.cover.by);if(cv&&cv.hp>0&&cv!==plan.target){const wl=wpnsAt(e,man(e,cv),cv);if(wl.length){pop(cv,'Cover!','heal');plan.target=cv;plan.wi=wl[0];await sleep(250)}}}
     if(plan.target&&plan.target.hp>0){await fight(e,plan.wi,plan.target);busy=true}

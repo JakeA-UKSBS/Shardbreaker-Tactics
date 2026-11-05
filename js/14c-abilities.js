@@ -187,7 +187,7 @@ async function useAbility(u,id,tx,ty){
   const a=ABIL[id];busy=true;
   if(a.mp){u.mp-=abCost(u,id);if(a.el)u.lastEl=a.el}if(a.cd)(u.cd=u.cd||{})[id]=a.cd;
   pop(u,a.n,'heal');await sleep(D(350));
-  if(a.side==='tile'){stepSfx(u);u.x=tx;u.y=ty;render();await sleep(D(250));sfx('earth');shake()}
+  if(a.side==='tile'){stepSfx(u,tx,ty);u.x=tx;u.y=ty;render();await sleep(D(250));sfx('earth');shake()}
   const{foes,allies}=abHits(u,id,tx,ty),w=abWeapon(u,a),killed=[];let exp=0;
   /* damage */
   for(const t of foes){

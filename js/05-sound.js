@@ -8,7 +8,7 @@ function audio(){
   if(AU.ctx.state==='suspended')AU.ctx.resume();return AU.ctx;
 }
 /* recorded sounds (sfx/, Helton Yan's Pixel Combat pack): name -> [file, volume]. These replace the synth sound of the same name once loaded */
-const SFX_FILE={heal:['sfx/healing-gusts.mp3',.7],zap:['sfx/sparkle-zap.mp3',.7],sandswipe:['sfx/sand-swipe.mp3',.8],levelup:['sfx/aura-up.mp3',.5],step:['sfx/boots-grass.mp3',.45],swordcrit:['sfx/sword-crit.mp3',.8]};
+const SFX_FILE={heal:['sfx/healing-gusts.mp3',.7],zap:['sfx/sparkle-zap.mp3',.7],sandswipe:['sfx/sand-swipe.mp3',.8],levelup:['sfx/aura-up.mp3',.5],step:['sfx/boots-grass.mp3',.45],swordcrit:['sfx/sword-crit.mp3',.8],jump:['sfx/retro-jump.mp3',.5]};
 function playBuf(n,delay=0,rate=1){const c=AU.ctx,s=c.createBufferSource(),g=c.createGain();s.buffer=AU.buf[n];s.playbackRate.value=rate;g.gain.value=SFX_FILE[n][1];s.connect(g).connect(c.destination);s.start(c.currentTime+delay)}
 function tone(f,dur,o={}){const c=audio();if(!c)return;const t=c.currentTime+(o.delay||0),os=c.createOscillator(),g=c.createGain();os.type=o.type||'sine';os.frequency.setValueAtTime(f,t);if(o.slide)os.frequency.exponentialRampToValueAtTime(o.slide,t+dur);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(o.vol||.2,t+.006);g.gain.exponentialRampToValueAtTime(.0001,t+dur);os.connect(g).connect(c.destination);os.start(t);os.stop(t+dur+.03)}
 function noise(dur,o={}){const c=audio();if(!c)return;const t=c.currentTime+(o.delay||0),s=c.createBufferSource(),fl=c.createBiquadFilter(),g=c.createGain();s.buffer=AU.nb;fl.type=o.type||'bandpass';fl.frequency.setValueAtTime(o.f||1200,t);if(o.slide)fl.frequency.exponentialRampToValueAtTime(o.slide,t+dur);fl.Q.value=o.q||1;g.gain.setValueAtTime(o.vol||.3,t);g.gain.exponentialRampToValueAtTime(.0001,t+dur);s.connect(fl).connect(g).connect(c.destination);s.start(t);s.stop(t+dur+.03)}
@@ -49,8 +49,9 @@ const SFX={
   chain:()=>[0,.05,.1,.15].forEach(d=>tone(2400+Math.random()*800,.05,{type:'square',vol:.03,delay:d}))
 };
 /* synth stand-ins for recorded-only sounds */
-Object.assign(SFX,{swordcrit:()=>SFX.crit(),zap:()=>SFX.thunder(),sandswipe:()=>SFX.swing(),levelup:()=>{}});
+Object.assign(SFX,{jump:()=>tone(330,.12,{type:'square',vol:.04,slide:660}),swordcrit:()=>SFX.crit(),zap:()=>SFX.thunder(),sandswipe:()=>SFX.swing(),levelup:()=>{}});
 function sfx(n){if(!settings.sound)return;try{if(audio()&&AU.buf[n]){if(n==='step')[0,.16].forEach((d,i)=>playBuf(n,d,i?.92:1.04));/* two footfalls */else playBuf(n)}else SFX[n]()}catch(_){}}
-function stepSfx(u){if(settings.steps===false)return;const C=CLS[u.cls]||{};sfx(C.fly?'flap':C.mnt?'hoof':'step')}
+/* tx,ty: where the unit is going; walkers (not fliers) also hop when it's higher ground */
+function stepSfx(u,tx,ty){if(settings.steps===false)return;const C=CLS[u.cls]||{};sfx(C.fly?'flap':C.mnt?'hoof':'step');if(!C.fly&&tx!=null&&hOf(tx,ty)>hOf(u.x,u.y))sfx('jump')}
 document.addEventListener('pointerdown',()=>{if(settings.sound)audio()},{capture:true});
 
