@@ -100,7 +100,7 @@ button.mini{padding:4px 8px;font-size:12px}
 .it em{font-style:normal;font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:.06em}
 .it.eqd{border-color:color-mix(in srgb,var(--blue) 60%,transparent)}
 button.it{width:100%;padding:6px}
-.inv.big{gap:8px}.inv.big button.it{padding:12px 14px;font-size:15px;gap:12px}.inv.big .it img{width:40px;height:40px;image-rendering:pixelated}.inv.big button.it:hover{border-color:var(--gold)}
+.inv.big{gap:8px}.inv.big button.it{padding:12px 14px;font-size:15px;gap:12px;border-color:color-mix(in srgb,var(--gold) 40%,transparent)}.inv.big .it img{width:40px;height:40px;image-rendering:pixelated}.inv.big button.it:hover{border-color:var(--gold)}
 button.it.sel{border-color:var(--gold)}
 .acts{display:flex;gap:6px;flex-wrap:wrap}
 .acts button{flex:1;min-width:64px}
