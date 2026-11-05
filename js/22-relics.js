@@ -34,6 +34,7 @@ const RELICS={
   ward:{n:'Ithren’s Ward',r:'s',d:'All your units get +1 Res.'},
   sprig:{n:'Sprig of Renewal',r:'s',d:'Every unit heals 1 HP at the start of each player phase.'}
 };
+/* RC: relic gem colour per rarity (c common blue, u uncommon purple, r rare gold, s starter green, h heirloom bronze). RN: rarity names. */
 const RC={c:'#9fd8ff',u:'#c58aff',r:'#ffd23f',s:'#9fe8a0',h:'#e8b87a'},RN={c:'Common',u:'Uncommon',r:'Rare',s:'Starter',h:'Heirloom'};
 const salveAmt=k=>IT[k].amt+(R('poultice')?2:0);
 const R=id=>!!(run&&run.relics&&run.relics.includes(id));

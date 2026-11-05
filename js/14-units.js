@@ -1,11 +1,14 @@
 /* Run state, class building, names, random looks, unit generation */
 /* ================= RUN (roguelike) ================= */
 /* Act 1: a branching node map of ROWS floors, then the boss on floor RUN_LEN (both defined with the map below). Units, classes, looks, maps and enemies all come from the run's seed. */
+/* TEAM_CAP: max units in the squad */
 const TEAM_CAP=6;
 let run=null;
 
 /* ---- classes from parts: role + movement + weapon ---- */
 /* b = base stats, gr = growth ranges (%), both in ST order: HP Str Mag Skl Spd Lck Def Res */
+/* also: n / n2 = base and promoted class name, w = weapon types, body = sprite body, crit = bonus Crit %, skills = starting skill pool,
+   gr = [min, max] growth % per stat (rolled per unit), bonus = stats added on promotion */
 const ROLES={
   bruiser:{n:'Fighter',n2:'Warrior',w:['heavy','pole'],body:'vest',crit:5,skills:['fury','swift','brace','quickdraw','momentum','heavybane'],
     b:[21,7,0,4,4,2,4,1],gr:[[75,95],[45,65],[0,10],[30,45],[30,45],[15,35],[20,35],[5,20]],bonus:[5,3,0,1,2,0,2,1]},
@@ -31,10 +34,13 @@ const ROLES={
   summoner:{n:'Summoner',n2:'Conjurer',w:['art'],body:'robe',skills:['kindle','focus','quickstudy'],
     b:[16,0,5,4,5,3,2,5],gr:[[50,65],[0,10],[40,55],[30,45],[35,50],[25,45],[10,20],[35,50]],bonus:[3,0,3,2,1,0,1,3]}
 };
+/* MOVES: movement types. mov = Move, pre = name prefix, st = stat changes in stat order [HP, Str, Mag, Skl, Spd, Lck, Def, Res],
+   mnt = mounted, fly = flier, names = class names per role [base, promoted] */
 const MOVES={foot:{mov:5},armour:{pre:'Iron',mov:4,st:[2,1,0,0,-2,0,3,0]},
   /* Mounted: 7 move, slowed by forest and hills. Names replace the role word, e.g. Lance Cavalier. */
   flying:{mov:6,mnt:true,fly:true,st:[-1,0,0,0,1,1,-1,1],names:{bruiser:['Wyvern Rider','Wyvern Lord'],tank:['Wyvern Knight','Dragonmaster'],skirm:['Pegasus Knight','Falcon Knight'],caster:['Sky Mage','Storm Sage'],support:['Sky Mender','Seraph'],summoner:['Sky Caller','Storm Caller'],rogue:['Sky Raider','Sky Reaver'],sword:['Sky Blade','Sky Master'],shield:['Sky Shield','Valkyrie Knight'],knight:['Wyvern Knight','Dragonmaster']}},
   mounted:{mov:7,mnt:true,st:[1,0,0,0,1,0,0,-1],names:{bruiser:['Rider','Warlord'],tank:['Cavalier','Paladin'],skirm:['Outrider','Ranger'],caster:['Battlemage','Archmage'],support:['Troubadour','Valkyrie'],summoner:['Beastcaller','Beastmaster'],rogue:['Raider','Marauder'],sword:['Blade Rider','Blade Lord'],shield:['Shield Rider','Shield Lord'],knight:['Cavalier','Paladin']}}};
+/* WN: weapon type names. SEC: second weapon type gained on promotion. KIT: starting weapons per type (keys in IT). */
 const WN={blade:'Blade',heavy:'Axe',pole:'Lance',bow:'Bow'};
 const SEC={blade:'pole',heavy:'blade',pole:'heavy',bow:'blade',art:'spirit'};
 const KIT={blade:['ironJian','needle','ironDao'],heavy:['ironAxe','ironJi'],pole:['ironSpear','javelin'],bow:['shortBow','crossbow'],art:['flameT','lightT','flameT','lightT','darkT']};
@@ -49,12 +55,14 @@ function ensureCls(k){
 }
 
 /* ---- names ---- */
+/* NA + NB: name parts joined to make random unit names */
 const NA=['Ael','Bran','Cor','Dar','El','Fen','Gar','Hal','Is','Jor','Kael','Lir','Mor','Nym','Or','Per','Ryn','Sel','Tor','Ul','Vey','Wyn','Yr','Zan','Ash','Bel','Cy','Ed','Mar','Thal'];
 const NB=['a','an','ric','wyn','eth','is','or','ira','en','ius','elle','ard','as','yn','orn','ia','ith','os','ene','ren'];
 const genName=(sx)=>pick(NA)+pick(sx==='f'?['a','ira','elle','ia','ene','wyn','is','yn']:sx==='m'?['ric','ard','orn','ius','os','an','or','eth']:NB);
 const BOSSN=['Gorvak','Bruul','Hraxa','Murgh','Tarvos','Kragga'],BOSST=['the Horned','Bloodhoof','the Ironhide','of the Maze'];
 
 /* ---- random looks: hair, headgear, outfit colours, skin, extras ---- */
+/* random look palettes (hex): skin tones, hair colours, clothing, sashes, eye colours; GEAR: headwear options per role */
 const SKINS=['#f6dcc4','#f3cfa6','#e8b98f','#c98e62','#a8714a','#7a4e32'];
 const HAIRC=['#1d1a24','#3a2a20','#6b4226','#a8743a','#d9b25a','#e8e2d0','#8a2a22','#3a4a6a','#c9c3cf','#4a2a4a'];
 const CLOTH=['#3a7cc0','#4a8a5a','#8a3a3a','#6a4a8a','#a8743a','#3a6a7a','#7a6a4a','#8a5a7a','#4a5a3a','#5a6a8a','#2f4f6f','#9a4a2a'];
@@ -98,6 +106,7 @@ function genUnit(lv,role){
 }
 
 /* ---- monsters ---- */
+/* fields: see the CLASSES key in 01-data.js */
 Object.assign(CLS,{
   Wolf:{n:'Wolf',w:['blade'],body:'beast',mov:6,crit:5},
   Harpy:{n:'Harpy',w:['blade'],body:'robe',mov:6,fly:true},
@@ -106,6 +115,7 @@ Object.assign(CLS,{
 });
 IT.fangs={n:'Fangs',t:'blade',kind:'claw',mt:5,hit:85,crit:5,r:[1,1],uses:99,key:'fangs'};
 IT.talons={n:'Talons',t:'blade',kind:'claw',mt:4,hit:90,crit:5,r:[1,1],uses:99,key:'talons'};
+/* fields: see the ENEMY STATS key in 01-data.js (b/g order: HP, Str, Mag, Skl, Spd, Lck, Def, Res) */
 Object.assign(FOE,{
   Wolf:{b:[15,5,0,3,7,1,2,0],g:[.55,.35,0,.3,.45,.1,.15,.05],items:['fangs'],look:{}},
   Harpy:{b:[16,5,0,5,6,2,1,2],g:[.5,.35,0,.35,.4,.15,.1,.2],items:['talons'],look:{}},

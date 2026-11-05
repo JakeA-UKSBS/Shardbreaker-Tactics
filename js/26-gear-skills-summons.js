@@ -56,6 +56,7 @@ const canSummon=u=>isSummoner(u)&&(u.sumLeft||0)>0&&summonTile(u);
 /* ---- familiars: each Summoner is bonded to one spirit for life (u.familiar) ---- */
 const FAMILIARS={spiritWolf:{cls:'SpiritWolf',n:'Spirit Wolf',d:'fast, bites in melee'},stoneWarden:{cls:'StoneWarden',n:'Stone Warden',d:'slow and sturdy, a wall for the back line'},
   wisp:{cls:'Wisp',n:'Wisp',d:'floats, casts light magic at range 1–2'},spiritHawk:{cls:'SpiritHawk',n:'Spirit Hawk',d:'flies, quick strikes'}};
+/* CLS / FOE fields: see the CLASSES and ENEMY STATS keys in 01-data.js */
 Object.assign(CLS,{SpiritWolf:{n:'Spirit Wolf',w:['blade'],body:'beast',mov:6},StoneWarden:{n:'Stone Warden',w:['heavy'],body:'golem',mov:4},
   Wisp:{n:'Wisp',w:['art'],body:'flame',mov:5,fly:true},SpiritHawk:{n:'Spirit Hawk',w:['blade'],body:'hawk',mov:7,fly:true}});
 Object.assign(FOE,{SpiritWolf:{b:[16,5,0,5,8,2,2,2],g:[.5,.35,0,.35,.45,.15,.1,.15],items:['fangs'],look:{fur:'#8ad8ff',eye:'#ffffff',spirit:true}},

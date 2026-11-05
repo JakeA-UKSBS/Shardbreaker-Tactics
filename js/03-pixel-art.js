@@ -1,7 +1,11 @@
 /* Px canvas helper, unit/monster bodies (fig), 64px boss art, weapon icons, tiles */
 /* ================= PIXEL ART ================= */
+/* shared palette: OUT = sprite outline, SKIN/SKIN2 = default skin and its shadow, METAL/METAL2 = steel and its shadow, BROWN/BROWN2 = wood/leather,
+   GOLD, CREAM, JADE, RED, INK = near-black for eyes and details */
 const OUT='#1a1420',SKIN='#f3cfa6',SKIN2='#d6a07a',METAL='#c3cad6',METAL2='#7f889b',BROWN='#7a5230',BROWN2='#4f331d',GOLD='#e2b553',CREAM='#efe6cf',JADE='#5fc2a0',RED='#c8322e',INK='#2a2230';
+/* TEAMC: team colours. p = player (blue), e = enemy (purple), g = guest/ally (green); a = main, A = shadow, s = trim */
 const TEAMC={p:{a:'#3a7cc0',A:'#22507f',s:'#ece6d4'},e:{a:'#4a3d66',A:'#2a2140',s:'#1c1826'},g:{a:'#3f8f5a',A:'#25603a',s:'#e6efd8'}};
+/* ELC: glow colour per magic element */
 const ELC={dark:'#9a6ad8',nature:'#7fd36a',light:'#fff2b0',fire:'#ff8a3c',water:'#4fb2ff',wind:'#7fe0a8',earth:'#c9a060',lightning:'#ffe14a',illusion:'#c58aff',spirit:'#bff5e0',crystal:'#ff5a6a'};
 function shade(h,f){const n=parseInt(h.slice(1),16);const c=[n>>16,(n>>8)&255,n&255].map(v=>clamp(Math.round(v*f),0,255));return'#'+c.map(v=>v.toString(16).padStart(2,'0')).join('')}
 let pxHook=null,pxScale=1,pxMini=false;
@@ -120,6 +124,7 @@ const ART_PNG=new Set(typeof ART_FILES!=='undefined'&&!/[?&]codeart\b/.test(loca
 const ART_GEN={};/* key -> its drawing function, so tools/export-art.mjs can find every key */
 function art(key,draw){ART_GEN[key]=draw;if(ART_PNG.has(key))return'art/'+key+'.png';const c='ART|'+key;return sprCache[c]||(sprCache[c]=draw())}
 /* crystallised creatures: every enemy grows gem shards along the top of its silhouette, plus a facet in its body */
+/* CRYS: malignant crystal colours (violet, cyan, pink, mint, gold) */
 const CRYS=['#b07ae8','#5fd3e8','#e86a9a','#6ae8a0','#e8c85a'];
 /* hand-placed crystals (32px coords): {core:[x,y]} = a facet set into the body, {gem:[x,y,h]} = a small shard */
 function crysAt(P,list){for(const c of list){const col=c.col||'#b07ae8',hi=shade(col,1.5),lo=shade(col,.62);

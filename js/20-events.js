@@ -1,5 +1,6 @@
 /* Event scenes, events, woes and event helpers */
 /* ---- events: a scene of what's happening, a short text, and choices. Each choice's go() returns the outcome text, or null to step back. ---- */
+/* REG_SKY: event-scene sky per region, 3 bands top to bottom (hex). REG_GROUND: the ground colour under it. */
 const REG_SKY={heart:['#0e0408','#2e0c16','#4e1424'],mushroom:['#2a2040','#5a3a6a','#8a5a8a'],shadow:['#14121e','#24223a','#3a3450'],swamp:['#1a2a24','#2e4a3a','#4a6a4a'],forest:['#1a221c','#2e3a2e','#4a5240'],
   mountain:['#2a1414','#5a2a1e','#a8482a'],ship:['#26304a','#56668c','#8e9ab8'],labyrinth:['#141218','#24202c','#34303e'],
   desert:['#c8783a','#e8a85a','#f3d08a'],snow:['#4a6a9a','#8aaad0','#c8daf0'],cavern:['#120e1a','#221a2e','#342a44']};
@@ -98,6 +99,8 @@ function evShow(E,text,opts){
   return new Promise(res=>{evEl.onclick=e=>{const b=e.target.closest('[data-t]');if(!b||b.disabled)return;sfx('tick');res(b.dataset.t)}});
 }
 const lvAvg=()=>Math.max(1,Math.round(run.roster.reduce((a,u)=>a+u.lv,0)/run.roster.length));
+/* EVENTS: t = title, art = scene prop drawn by eventScene(), fig = PNG figure laid over it (art/scenes/<fig>.png), d = intro text,
+   o = options: l = button label, sub = small text under it, cost = gold, need = check it can be chosen, go = what happens */
 const EVENTS={
   smith:{t:'The Wandering Smith',art:'smith',d:'A smith with a cart-mounted forge waves you over. “One weapon, no charge. I like the look of you.”',o:[
     {l:'Reforge a weapon',sub:'+2 Mt and +5 Hit (staves heal +5), up to +3',go:async()=>{

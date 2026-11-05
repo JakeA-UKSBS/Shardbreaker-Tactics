@@ -2,6 +2,8 @@
 /* ================= DATA ================= */
 const PICS={};
 
+/* STAT ORDER: every 8-number stat array in the game (b, g, s, bonus, st, gr) uses this order:
+   [HP, Str, Mag, Skl, Spd, Lck, Def, Res]. Skl is folded into Luck for display (see foldLuck). */
 const ST=['hp','str','mag','skl','spd','lck','def','res'];
 const SL={hp:'HP',str:'Str',mag:'Mag',skl:'Skl',spd:'Spd',lck:'Luck',def:'Def',res:'Res'};
 /* the stats a unit shows and levels: HP, Str or Mag (by class), Luck, Spd, Def, Res. Skl is folded into Luck. */
@@ -11,8 +13,13 @@ const foldLuck=u=>{u.lck=Math.max(u.lck||0,u.skl||0);return u};
 /* attack speed (FE9): weight above your Str (Mag for sigils) slows doubling and dodging */
 const wtOver=(u,w)=>Math.max(0,(w&&w.wt||0)-(w&&w.mag?u.mag:u.str));
 const AS=(u,w)=>Math.max(0,u.spd+gearOf(u).spd-wtOver(u,w));
+/* DIRS: the 4 neighbouring tiles (right, left, down, up). T: tile size in px for the old flat board. */
 const DIRS=[[1,0],[-1,0],[0,1],[0,-1]];
 const T=48;
+/* TERRAIN, keyed by the letter used in MAPS:
+   n = name shown in the tile info, k = art key (tiles/<k>.png and CSS class t-<k>),
+   c = Move cost to enter (99 = impassable), av = Avoid bonus, df = Def bonus,
+   heal = restores HP at the start of your turn, slow = −1 Move next turn for a unit that starts there. */
 const TER={
   '.':{n:'Ashgrass',k:'plain',c:1,av:0,df:0},'f':{n:'Dead Wood',k:'forest',c:2,av:20,df:1},'m':{n:'Rubble',k:'hill',c:3,av:30,df:2},
   'w':{n:'Black Water',k:'water',c:99,av:0,df:0},'=':{n:'Bridge',k:'bridge',c:1,av:0,df:0},'F':{n:'Ruined Shrine',k:'fort',c:1,av:20,df:2,heal:true},'C':{n:'Cache',k:'chest',c:1,av:0,df:0},
@@ -24,6 +31,11 @@ const TER={
 };
 /* Weapon types: blade > heavy > pole > blade. bow and reach are neutral.
    Arts (t:'art'): fire > nature > water > fire, and light > dark. Dark is neutral to the rest but drains life (heals 25% of damage dealt). */
+/* ITEMS AND WEAPONS:
+   n = name, t = weapon type (blade/heavy/pole/bow/reach/art/spirit, or item/scroll/crest), kind = which icon/sprite shape to draw,
+   mt = Might (added to Str or Mag for damage), hit = Hit %, crit = Crit %, r = [min, max] range in tiles, uses = durability (99 = unbreakable),
+   wt = weight (set from WT below), el = element of a sigil, mag = uses Mag instead of Str, tint = steel/jade colouring,
+   key = icon art key (icons/<key>.png), brk = 'breaker' weapon type it beats, eff = effective against (×2 damage), amt = HP healed by a staff/salve. */
 const IT={
   ironJian:{n:'Worn Sword',t:'blade',kind:'sword',mt:5,hit:90,crit:0,r:[1,1],uses:40},
   twinBlades:{n:'Twin Daggers',t:'blade',kind:'twindagger',mt:4,hit:95,crit:5,r:[1,1],uses:40},
@@ -76,6 +88,7 @@ Object.assign(IT,{
   reaverAxe:{n:'Reaver Axe',t:'heavy',kind:'axe',mt:10,hit:65,crit:30,r:[1,1],uses:20,tint:'killer',key:'reaverAxe'},
   hawkeyeBow:{n:'Hawkeye Bow',t:'bow',kind:'bow',mt:7,hit:80,crit:30,r:[2,2],uses:20,tint:'killer',key:'hawkeyeBow'}
 });
+/* WT: weapon weight. Weight above the wielder's Str (Mag for sigils) is taken off their attack speed (see wtOver/AS). */
 const WT={ironJian:4,twinBlades:2,steelJian:8,needle:3,ironDao:6,moonDao:6,greatsword:12,ironSpear:6,steelSpear:10,javelin:8,ironAxe:7,steelAxe:11,throwAxe:9,ironJi:9,labrys:13,
   shortBow:3,steelBow:7,crossbow:6,whip:3,chainBlade:5,ironFan:3,parasol:5,flameT:2,tideT:3,galeT:2,stoneT:6,thunderT:5,mirageT:3,natureT:3,lightT:2,darkT:5,crookStaff:4,runeStaff:3,glimmer:1,
   dirk:1,stiletto:2,lancebreaker:6,axebreaker:7,swordbreaker:8,barbedSpear:7,reaverAxe:9,hawkeyeBow:5};
@@ -113,10 +126,17 @@ Object.assign(IT,{
 });
 for(const k in IT)IT[k].key=k;
 
+/* WTYPES: weapon types. TRI: the weapon triangle (key beats value). ELE: element cycle (key beats value). ELN: element display names.
+   (the triangle and elements are switched off for now, see TYPES_ON in 06-rules.js) */
 const WTYPES=['blade','heavy','pole','bow','reach','art'];
 const TRI={blade:'heavy',heavy:'pole',pole:'blade'};
 const ELE={fire:'nature',nature:'water',water:'fire'};
 const ELN={light:'Light',dark:'Dark',fire:'Fire',nature:'Nature',water:'Water',wind:'Wind',earth:'Earth',lightning:'Lightning',illusion:'Illusion'};
+/* CLASSES, keyed by class id (shared by player classes and monsters):
+   n = class name shown in game, w = weapon types it can use, body = which sprite body fig() draws (tunic/robe/vest/armor/beast/golem...),
+   mov = Move, crit = bonus Crit %, promo = class it promotes to, tier = 2 for promoted classes, bonus = stats added on promotion (stat order above),
+   fly = flier (ignores terrain, weak to bows), mnt = mounted, wade = ignores water slowdown, phase = walks through walls, lava = can cross magma,
+   jump = how high a step it can climb (default 2). */
 const CLS={
   Heir:{n:'Initiate',w:['blade'],body:'tunic',mov:5,crit:10,promo:'Vanguard'},SpearGuard:{n:'Warden',w:['pole'],body:'armor',mov:5,promo:'Bastion'},Halberdier:{n:'Breaker',w:['heavy'],body:'vest',mov:5,promo:'Ravager'},
   Archer:{n:'Hunter',w:['bow'],body:'tunic',mov:5,promo:'Deadshot'},Adept:{n:'Sigilist',w:['art'],body:'robe',mov:5,promo:'Runelord'},Healer:{n:'Mender',w:['spirit','art'],body:'robe',mov:5,promo:'Lightbearer'},
@@ -145,6 +165,7 @@ const CLS={
   FanDancer:{n:'Veil Dancer',w:['reach'],body:'robe',mov:5},ChainReaper:{n:'Chain Reaper',w:['reach'],body:'tunic',mov:5},Assassin:{n:'Pale Stalker',w:['reach'],body:'robe',mov:5},
   Warlord:{n:'Nightmare',w:['heavy','pole'],body:'armor',mov:4},Butcher:{n:'Butcher',w:['blade','heavy'],body:'vest',mov:5,crit:5},Matron:{n:'Demon Matron',w:['art'],body:'robe',mov:5}
 };
+/* SKILLS: n = name, cost = skill capacity it takes up (units have BASE_CAP to spend), d = description shown in game. */
 const SKILLS={
   rally:{n:'Command',cost:10,d:'Allies within 2 tiles gain +10 Hit and +10 Avoid.'},
   brace:{n:'Steadfast',cost:5,d:'+4 Def and Res when attacked during the enemy phase.'},
@@ -181,10 +202,16 @@ Object.assign(SKILLS,{
 });
 for(const k in SKILLS)if(k!=='rally')IT['scroll_'+k]={n:SKILLS[k].n+' Scroll',t:'scroll',kind:'scroll',skill:k,uses:1,key:'scroll_'+k};
 IT.crest={n:'Ascension Fragment',t:'crest',kind:'crest',uses:1,key:'crest'};
+/* BASE_CAP: skill capacity a unit starts with. PROMO_CAP: extra capacity on promotion. PROMO_LV: level a unit can promote at. */
 const BASE_CAP=20,PROMO_CAP=5,PROMO_LV=5;
 const START_PARTY=['lord','maren','dax','oti','silas','kestrel'];
 const heroDef=id=>HEROES.find(h=>h.id===id);
 function lordName(){return'Your squad'}
+/* ENEMY STATS, keyed by class id (must also exist in CLS):
+   b = base stats at level 1, g = growth per level (a fixed amount, not a % chance), both in stat order [HP, Str, Mag, Skl, Spd, Lck, Def, Res].
+   A foe's stat = b + floor(g × (level − 1)), see foe() in 02-rng-units.js.
+   items = weapons/attacks it carries (keys in IT), pic = portrait art key, look = sprite options (colours are hex: skin, eye, hair, cloth, wing, shell...).
+   Monsters with an entry in MONLOOK get a random look from there instead. */
 const FOE={
   LamiaE:{b:[19,5,0,4,4,0,4,2],g:[.7,.4,0,.35,.3,.05,.2,.15],items:['ironSpear'],pic:'javelin',look:{style:'long',tail:'#55635c'}},
   Bandit:{b:[20,5,0,1,3,0,2,0],g:[.8,.45,0,.2,.25,.05,.15,.05],items:['ironAxe'],pic:'earth',look:{style:'bald',gear:'headband',beard:true}},
@@ -199,12 +226,14 @@ const FOE={
   ChainReaper:{b:[19,5,0,4,5,0,3,1],g:[.75,.4,0,.3,.3,.05,.2,.1],items:['chainBlade'],pic:'chain',look:{style:'wild'}},
   Assassin:{b:[18,5,0,6,6,2,2,2],g:[.7,.4,0,.4,.4,.15,.15,.15],items:['parasol'],pic:'umbrella',look:{style:'long',gear:'ribbon'}}
 };
+/* makes the entries above pale grey-skinned with glowing cyan eyes (the 'Fallen' look) */
 for(const k in FOE)Object.assign(FOE[k].look,{skin:'#b9c2cc',eye:'#7fe3ff',hair:'#d9dde3'});
 /* Nightmare creatures (not Fallen, so not pale). Fliers are weak to bows. */
 FOE.Gremlin={b:[14,4,0,5,8,2,1,1],g:[.5,.3,0,.4,.5,.2,.1,.1],items:['claws'],pic:'twin',look:{skin:'#5f6e52',crysSmall:true}};
 FOE.Gloomwing={b:[18,6,0,5,7,1,2,3],g:[.6,.4,0,.35,.45,.1,.1,.2],items:['claws'],pic:'twin',look:{style:'wild',hair:'#2a2236',skin:'#8f8aa6',eye:'#ffd23f',cloth:'#3b3050',wing:'#3b3050'}};
 FOE.Mindsnail={b:[24,0,7,5,2,2,8,7],g:[.6,0,.4,.3,.1,.1,.3,.3],items:['mirageT'],pic:'illusion',look:{skin:'#a8b59a',shell:'#b98fbf',eye:'#c77dff'}};
 FOE.StormHarpy={b:[17,0,6,5,6,1,1,5],g:[.55,0,.4,.35,.4,.1,.1,.3],items:['thunderT'],pic:'lightning',look:{style:'long',hair:'#c8d0e0',skin:'#a9a3c0',eye:'#9fd8ff',cloth:'#4a5a7a',wing:'#55607a'}};
+/* HAIRS: dark hair colours (hex) */
 const HAIRS=['#1d1a24','#2a2230','#3a2a20','#241c1c','#4a3a30'];
 
 /* Battles are generated per run (see RUN below). CH holds the current battle only. */

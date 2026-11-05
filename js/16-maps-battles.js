@@ -1,5 +1,6 @@
 /* Desert, snow and cavern regions, music, battle maps, settlements and genBattle() */
 /* ---- new regions: Sandstone Desert, Agate Peaks, Gemstone Caverns ---- */
+/* fields: see the CLASSES key in 01-data.js */
 Object.assign(CLS,{
   Jackal:{n:'Jackal',w:['blade'],body:'beast',mov:6},SandWorm:{n:'Sand Worm',w:['heavy'],body:'worm',mov:4,wade:true},SandGolem:{n:'Sandstone Golem',w:['heavy'],body:'golem',mov:4},
   PyriteColossus:{n:'Pyrite Colossus',w:['heavy'],body:'cubes',mov:0},
@@ -17,6 +18,7 @@ Object.assign(CLS,{
 IT.crystalBall={n:'Crystal Ball',t:'item',kind:'orb',uses:1,key:'crystalBall'};
 IT.frostBreath={n:'Frost Breath',t:'art',kind:'talisman',el:'water',mt:9,hit:80,crit:0,r:[1,2],uses:99,mag:true,key:'frostBreath'};
 IT.shards={n:'Crystal Shards',t:'art',kind:'talisman',el:'earth',mt:7,hit:80,crit:10,r:[1,2],uses:99,mag:true,key:'shards'};
+/* fields: see the ENEMY STATS key in 01-data.js (b/g order: HP, Str, Mag, Skl, Spd, Lck, Def, Res) */
 Object.assign(FOE,{
   Jackal:{b:[14,5,0,4,8,2,1,0],g:[.5,.35,0,.3,.5,.15,.1,.05],items:['fangs'],look:{}},
   SandWorm:{b:[20,6,0,4,4,1,4,1],g:[.7,.4,0,.3,.25,.1,.2,.05],items:['bite'],look:{}},
@@ -28,6 +30,7 @@ Object.assign(FOE,{
   GemGolem:{b:[22,7,0,3,2,0,9,3],g:[.75,.4,0,.25,.1,0,.35,.15],items:['slam'],look:{}},
   Gemsnail:{b:[20,0,5,4,2,2,6,6],g:[.65,0,.35,.3,.1,.1,.3,.3],items:['shards'],look:{}}
 });
+/* GEMS: crystal colours (green, red, blue, gold, violet) */
 const GEMS=['#3aa86a','#c8323a','#3a5ac8','#c8a83a','#9a5ac8'];
 Object.assign(MONLOOK,{
   Jackal:()=>({fur:pick(['#c9a060','#b08850','#d8b878']),eye:'#ffd23f'}),
@@ -39,6 +42,7 @@ Object.assign(MONLOOK,{
   GemGolem:()=>({body:pick(GEMS),eye:'#ffffff'}),
   Gemsnail:()=>({skin:'#8a8a9a',shell:pick(GEMS),eye:'#ffffff'})
 });
+/* fields: see the TERRAIN key in 01-data.js */
 Object.assign(TER,{
   'k':{n:'Sandstone Rocks',k:'sandstone',c:99,av:0,df:0},'^':{n:'Boulders',k:'boulder',c:99,av:0,df:0},'z':{n:'Quicksand',k:'quicksand',c:1,av:0,df:0,slow:true},
   'o':{n:'Snow',k:'snow',c:1,av:0,df:0},'j':{n:'Deep Snow',k:'deepsnow',c:1,av:0,df:0,slow:true},'a':{n:'Blue Agate',k:'agate',c:2,av:20,df:2},'i':{n:'Frozen Lake',k:'ice',c:1,av:-10,df:0},
@@ -81,6 +85,7 @@ function bioTile2_draw(k,part){
   return p.url();
 }
 texStyle.textContent+=['sandstone','quicksand','snow','deepsnow','agate','ice','cave','cavewall','emerald','ruby','sapphire','scorch','bgem-g','bgem-r','bgem-b','bgem-v','spire'].map(k=>`.t-${k}{background:url(${bioTile2(k)}) 0 0/100% 100%}`).join('');
+/* fields: see the REGIONS key in 15-regions-monsters.js */
 Object.assign(BIOMES,{
   desert:{n:'Sandstone Desert',bg:'#4a3a24',town:['n','k'],townN:'Oasis Town',d:'Dunes and sandstone ruins under a white sun. Jackals run in packs, and the quicksand swallows the careless.',
     tip:['desert','Quicksand','A unit that starts its turn in quicksand has 1 less Move. Sandstone rocks block the way.'],
@@ -107,6 +112,7 @@ let bgm=null,bgmKey='';
 /* Background music: drop mp3s into music/ (title.mp3, mushroom.mp3, shadow.mp3, swamp.mp3, forest.mp3, mountain.mp3, ship.mp3, labyrinth.mp3). Missing files are skipped. */
 function music(k){if(k===bgmKey&&bgm)return;bgmKey=k;try{if(bgm)bgm.pause();bgm=null;if(!settings.sound||!MUSIC[k])return;bgm=new Audio(MUSIC[k]);bgm.loop=true;bgm.volume=.45;bgm.play().catch(()=>{})}catch(_){}}
 
+/* BATTLE MAPS: n = name, map = rows of terrain letters (top row first, see TER for each letter), start = [x, y] tiles your units deploy on. */
 const MAPS={
   /* Mycelia */
   glade:{n:'Glowcap Glade',map:[",q,,,,,qq,",",,,,,,^q^^","qq,,,F,,,,",",,,^^,,,,q",",,,q,,,,,,",",,,qq,,,,q",",^^,,,,,,,",",q,,,,,q,,",",,,,,,,,,,",",,,,,,,,,,"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
@@ -180,6 +186,7 @@ const TOWNS={
   cavern:["cccccccccc","cecccccccu","cccxccxccc","pccccccccp","ccAceccAcc","cccccccccc","xcccFccccx","ccuccccecc","cccccccccc","cccccccccc"]
 };
 for(const k in TOWNS)if(BIOMES[k])MAPS['town_'+k]={n:BIOMES[k].townN,map:TOWNS[k],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]};
+/* ADJ: adjectives for generated names */
 const ADJ=['Howling','Silent','Broken','Ashen','Bitter','Hollow','Moonlit','Drowned'];
 function spawnTiles(m){
   const out=[];for(let y=0;y<m.map.length;y++)for(let x=0;x<m.map[0].length;x++){const t=TER[m.map[y][x]];if(t.c>=99)continue;const d=Math.min(...m.start.map(([sx,sy])=>Math.abs(sx-x)+Math.abs(sy-y)));if(d>=4)out.push({x,y,d})}
@@ -190,6 +197,7 @@ function skyEdge(m){const out=[],H=m.map.length,W=m.map[0].length;for(let y=0;y<
 function actBiome(){const a=run&&run.act||1;if(a>=3)return BIOMES.heart;
   return BIOMES[(run&&run.biomes&&run.biomes[a-1])||'forest']}
 /* bosses lumber: they move, but only a couple of tiles a turn */
+/* BOSS_MOV: max tiles a boss moves per turn */
 const BOSS_MOV=2;
 function genBattle(n,kind){
   const act=run&&run.act||1,B=actBiome(),bossFight=kind==='boss',elite=kind==='elite',ship=B.id==='ship',town=!bossFight&&!elite&&!ship&&MAPS['town_'+B.id]&&(run&&run.n||1)>=2&&rand()<.25;

@@ -10,6 +10,7 @@ const routeOk=c=>(c.battle||0)+(c.elite||0)>=FIGHTS[0]&&(c.battle||0)+(c.elite||
 /* does every route through the rolled floors pass routeOk? */
 function routesOk(rows){const walk=(r,i,c)=>{const t=rows[r][i].t;c={...c,[t]:(c[t]||0)+1};return r===rows.length-1?routeOk(c):rows[r][i].next.every(j=>walk(r+1,j,c))};
   return rows[0].every((_,i)=>walk(0,i,{}))}
+/* ROOM_W: relative chance of each room type when a floor is rolled (out of 100). NO_REPEAT: types that can't come twice in a row. */
 const ROOM_W={battle:45,event:23,rest:12,elite:10,tavern:10},NO_REPEAT=['elite','rest','tavern'];
 const NODE_N={tavern:'Tavern',battle:'Battle',elite:'Elite',recruit:'Recruit',rest:'Rest',event:'Event',treasure:'Treasure',boss:'Boss'};
 const NODE_D={tavern:'Spend gold on a drink, a meal and a sellsword.',battle:'Fight monsters for EXP and loot.',elite:'Elite fight: a stronger pack led by an Elder monster. Drops a relic and a steel weapon.',recruit:'Pick 1 of 3 new units.',rest:'Heal fully, and train one unit: it gains a level.',

@@ -1,8 +1,10 @@
 /* Gold, meals and the tavern */
 /* ---- gold and meals ---- */
+/* GOLDWIN: gold earned for winning each kind of fight */
 const GOLDWIN={battle:25,elite:45,boss:80};
 const gold=()=>run&&run.gold||0;
 /* food: temporary buffs that last n fights (counted down after each won fight) */
+/* p = price in gold, f = how many fights it lasts, d = effect shown in game */
 const MEALS={
   boar:{n:'Roast Boar',p:35,f:3,d:'+2 damage'},
   bread:{n:'Honey Bread',p:25,f:3,d:'+15 Hit'},
@@ -23,7 +25,9 @@ function mugArt_draw(){const c='MUG';if(sprCache[c])return sprCache[c];const p=P
 function afterFightMeals(){if(!run)return;for(const k of['meals','woes']){if(!run[k])continue;run[k].forEach(m=>m.n--);run[k]=run[k].filter(m=>m.n>0)}}
 
 /* ---- the tavern ---- */
+/* KEEPER: the innkeeper's name and sprite colours */
 const KEEPER={name:'Marla',look:{style:'bun',hair:'#8a2a22',skin:'#e8b98f',cloth:'#5a6a3a',sash:'#7a5230',eye:'#3a5a8a',apron:true}};
+/* p = price in gold, d = effect, all = affects the whole squad, st = which stat(s) the chosen unit gains */
 const DRINKS={
   ale:{n:'A round of ale',p:25,d:'Every unit gains 30 EXP.',all:true},
   whiskey:{n:'Dragonfire Whiskey',p:45,d:'One unit gains +1 Str or Mag (whichever is higher).',st:u=>u.mag>u.str?'mag':'str'},

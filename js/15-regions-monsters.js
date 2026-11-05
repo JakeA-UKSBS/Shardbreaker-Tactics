@@ -3,6 +3,7 @@
    Each act takes place in one region (picked from the run's seed). A region sets its maps, monster pool, boss,
    terrain rule and music. Map letters for region terrain: , mycelium · q giant toadstool · ; grave soil · t tombstone
    · s ankle-deep water (−1 Move next turn) · n sand · v mangrove roots · y cursed thicket · b basalt · l magma. */
+/* fields: see the TERRAIN key in 01-data.js */
 Object.assign(TER,{
   ',':{n:'Mycelium',k:'myc',c:1,av:0,df:0},'q':{n:'Giant Toadstool',k:'shroom',c:2,av:20,df:1},
   ';':{n:'Grave Soil',k:'grave',c:1,av:0,df:0},'t':{n:'Tombstone',k:'tomb',c:2,av:15,df:2},
@@ -42,6 +43,7 @@ SKILLS.venom={n:'Venom',cost:15,d:'On a hit, poisons the target: it loses 3 HP a
 IT.scroll_venom={n:'Venom Scroll',t:'scroll',kind:'scroll',skill:'venom',uses:1,key:'scroll_venom'};
 SKILLS.spore={n:'Poison Spores',cost:15,d:'On a hit, poisons the target: it loses 3 HP at the start of each of its turns for 3 turns (never below 1 HP).'};
 IT.scroll_spore={n:'Poison Spores Scroll',t:'scroll',kind:'scroll',skill:'spore',uses:1,key:'scroll_spore'};
+/* fields: see the CLASSES key in 01-data.js */
 Object.assign(CLS,{
   Hawk:{n:'Hawk',w:['blade'],body:'hawk',mov:7,fly:true},
   Gnome:{n:'Gnome',w:['heavy'],body:'gnome',mov:5},Snake:{n:'Snake',w:['blade'],body:'snake',mov:5,wade:true},
@@ -58,6 +60,7 @@ Object.assign(CLS,{
   Lurker:{n:'Bog Lurker',w:['blade'],body:'gator',mov:4,wade:true},Treant:{n:'Blighted Treant',w:['heavy'],body:'golem',mov:3}
 });
 CLS.LamiaM.wade=true;
+/* fields: see the ENEMY STATS key in 01-data.js (b/g order: HP, Str, Mag, Skl, Spd, Lck, Def, Res) */
 Object.assign(FOE,{
   Hawk:{b:[12,4,0,6,9,3,1,2],g:[.4,.3,0,.3,.4,.2,.1,.1],items:['talons'],look:{}},
   Gnome:{b:[16,5,0,5,4,5,4,3],g:[.55,.35,0,.35,.25,.35,.25,.2],items:['mallet'],look:{}},
@@ -79,6 +82,10 @@ Object.assign(FOE,{
   Lurker:{b:[18,6,0,4,5,1,4,0],g:[.65,.4,0,.3,.3,.1,.2,.05],items:['fangs'],look:{}},
   Treant:{b:[24,6,0,3,1,0,6,3],g:[.8,.4,0,.25,.1,0,.3,.15],items:['slam'],look:{}}
 });
+/* MONLOOK: a function per monster that rolls its sprite look each time one spawns. pick([...]) chooses one of the hex colours at random.
+   Common fields: body/fur/skin = main colour, eye = eye colour, cap/stem = mushroom cap and stalk, cloth = clothing, gem = crystal colour,
+   crys:false = no malignant crystals stuck on it, crysSmall = small crystals only, crysAt = where its crystals sit on the 32px sprite,
+   mount/horse = mount type and its colour, leaves/antlers = extra part colours. */
 const MONLOOK={
   Sporeling:()=>({cap:pick(['#d8483a','#e8a23a','#c85aa8','#4a9ad8']),stem:'#efe6cf',small:true}),
   Myconid:()=>({cap:pick(['#8a5a3a','#6a7a3a','#7a4a8a']),stem:'#d8ccb0'}),
@@ -100,6 +107,11 @@ const MONLOOK={
 };
 /* regions switched off for now: still defined (art, maps, docs) but runs never pick them. The Flying Ship and Mycelia are off for now; delete them from this list to bring them back */
 const BIOMES_OFF=['ship','mushroom'],biomeIds=()=>Object.keys(BIOMES).filter(b=>!BIOMES_OFF.includes(b)&&b!=='heart');
+/* REGIONS: n = name, noThe = don't say 'the', bg = map-screen background colour, d = description, tip = [id, title, help text],
+   maps = battle map ids (in MAPS), bossMap = the boss's map, town = [ground, cover] letters for Defend fights, townN = settlement name,
+   pool / elitePool = enemies as [class id, weight, first floor it can appear on (default 1)]: weight is the relative chance of being picked,
+     and in Act 2 every floor limit is ignored. An elite fight is led by an Elder of the first elitePool entry.
+   boss: name, cls (class id), mov, s = stats in stat order [HP, Str, Mag, Skl, Spd, Lck, Def, Res], items, skill, summon, look (sprite colours). */
 const BIOMES={
   mushroom:{n:'Mycelia',noThe:1,bg:'#3a2a48',d:'Glowing mycelium and giant toadstools. The fungus folk have turned feverish under the blight, and their spores poison on a hit.',
     tip:['spores','Poison spores','Fungus attacks poison on a hit: 3 damage at the start of each of your turns for 3 turns. A Salve cures it.'],

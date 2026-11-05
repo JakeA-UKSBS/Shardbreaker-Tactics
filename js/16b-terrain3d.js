@@ -33,6 +33,7 @@ function propsRender(){
    - no step between walkable tiles is more than 1, so every unit can still go everywhere it could before
    - rocks, walls and other solid tiles sit at the height of the ground around them
    Indoor maps (crypt, chapel, the Labyrinth) and the ship's deck stay flat. */
+/* HPROF: height profile per region. a = how tall the hills get (in steps); swamp = flat with only sand and mangrove raised 1 step; dune = rolling dune ridges */
 const HPROF={mushroom:{a:2},shadow:{a:2},swamp:{a:1,swamp:1},forest:{a:2},mountain:{a:3},desert:{a:2,dune:1},snow:{a:3},cavern:{a:2},heart:{a:2}};
 const FLAT_MAPS=new Set(['crypt','chapel']);
 function autoHeights(id,m,P){
