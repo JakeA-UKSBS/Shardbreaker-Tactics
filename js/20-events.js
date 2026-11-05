@@ -110,7 +110,7 @@ const lvAvg=()=>Math.max(1,Math.round(run.roster.reduce((a,u)=>a+u.lv,0)/run.ros
 /* EVENTS: t = title, art = scene prop drawn by eventScene(), fig = PNG figure(s) laid over it (art/scenes/<fig>.png; a name or a list), d = intro text,
    o = options: l = button label, sub = small text under it, cost = gold, need = check it can be chosen, go = what happens */
 const EVENTS={
-  smith:{t:'The Wandering Smith',art:'smith',d:'A smith with a cart-mounted forge waves you over. “One weapon, no charge. For your journey.”',o:[
+  smith:{t:'The Wandering Smith',art:'smith',d:'A travelling smith has taken over an old roadside forge for the night, and waves you over. “One weapon, no charge. For your journey.”',o:[
     {l:'Reforge a weapon',sub:'+2 Mt and +5 Hit (staves heal +5), up to +3',go:async()=>{
       const u=await pickUnit('Whose weapon?','Choose a weapon to reforge.',u=>{const w=weaponOf(u);return!w?'No weapon':forgeLv(w)>=FORGE_MAX?'Already +3':null});
       if(!u)return null;const w=weaponOf(u),old=IT[w.k].n;forge(w);if(R('anvil'))forge(w);sfx('item');return`Sparks fly. ${u.name}’s ${old} comes back as the <b>${IT[w.k].n}</b>: Mt ${IT[w.k].mt}, Hit ${IT[w.k].hit}.`}},
