@@ -63,9 +63,10 @@ function nodeIcon(t){if(t==='boss')return bossIcon();return NODE_IC[t]||(NODE_IC
 function bossIcon(){const B=actBiome(),k='boss:'+B.id;if(NODE_IC[k])return NODE_IC[k];const s=rngS,L=B.boss.look?clone(B.boss.look):monLook(B.boss.cls);rngS=s;return NODE_IC[k]=fig(L,B.boss.cls,'e','idle',B.boss.items[0],2)}
 function reachable(){const M=run.map.rows;if(!run.pos)return M[0].map((_,i)=>({r:0,i}));const n=M[run.pos.r][run.pos.i];return run.pos.r+1<M.length?n.next.map(i=>({r:run.pos.r+1,i})):[]}
 const mapEl=document.createElement('div');mapEl.className='nmap';mapEl.hidden=true;document.body.appendChild(mapEl);
-/* preview: look at the act's map from the Crossroads before choosing a squad (nothing can be picked) */
+/* preview: look at the map without moving (nothing can be picked); a string is the close button's label.
+   Used from the Crossroads (true) and mid-battle ('Back to the battle'). In dev mode every room can be picked. */
 function mapScreen(preview){
-  const M=run.map.rows,RH=92,H=(M.length+1)*RH+124,ok=preview?[]:reachable(),isOk=(r,i)=>ok.some(o=>o.r===r&&o.i===i);
+  const M=run.map.rows,RH=92,H=(M.length+1)*RH+124,anyRoom=!preview&&settings.dev,ok=preview?[]:anyRoom?M.flatMap((row,r)=>row.map((_,i)=>({r,i}))):reachable(),isOk=(r,i)=>ok.some(o=>o.r===r&&o.i===i);
   const Y=r=>H-36-(r+1)*RH-(r===M.length-1?50:0),vis=new Set((run.path||[]).map(p=>p.r+','+p.i));
   let lines='';M.forEach((row,r)=>row.forEach((n,i)=>n.next.forEach(j=>{const m=M[r+1]&&M[r+1][j];if(!m)return;const walked=vis.has(r+','+i)&&vis.has((r+1)+','+j);
     lines+=`<line x1="${n.x}" y1="${Y(r)}" x2="${m.x}" y2="${Y(r+1)}" stroke="${walked?'#8b2e16':'#5b3d20'}" stroke-width="${walked?2.5:1.5}" stroke-dasharray="${walked?'':'3 4'}" vector-effect="non-scaling-stroke"/>`})));
@@ -73,7 +74,7 @@ function mapScreen(preview){
   const nodes=M.map((row,r)=>row.map((n,i)=>{const cur=run.pos&&run.pos.r===r&&run.pos.i===i,c=['nd','n-'+n.t,isOk(r,i)?'ok':'',vis.has(r+','+i)?'vis':'',cur?'cur':''].join(' ');
     return`<button type="button" class="${c}" style="left:${n.x}%;top:${Y(r)}px" data-n="${r},${i}" ${isOk(r,i)?'':'tabindex="-1"'} aria-label="${NODE_N[n.t]}"><img src="${nodeIcon(n.t)}" alt=""></button>`}).join('')).join('')
     +`<button type="button" class="nd n-start ${run.pos?'vis':'cur'}" style="left:50%;top:${Y(-1)}px" data-start="1" aria-label="Start"><img src="${flagArt()}" alt=""></button>`;
-  mapEl.innerHTML=`<div class="nm-head"><div class="eyebrow">Act ${run.act||1} of ${ACTS} · Seed ${run.seed}${run.asc?` · Ascension ${run.asc}`:''} · <span class="gold">${gold()} gold</span></div><h2>${actBiome().n}</h2>${preview?'<button type="button" class="go nm-close" data-close="1">Back to the Crossroads</button>':''}</div>
+  mapEl.innerHTML=`<div class="nm-head"><div class="eyebrow">Act ${run.act||1} of ${ACTS} · Seed ${run.seed}${run.asc?` · Ascension ${run.asc}`:''} · <span class="gold">${gold()} gold</span></div><h2>${actBiome().n}</h2>${anyRoom?'<div class="eyebrow gold">Dev: pick any room</div>':''}${preview?`<button type="button" class="go nm-close" data-close="1">${typeof preview==='string'?preview:'Back to the Crossroads'}</button>`:''}</div>
     <div class="nm-scroll"><div class="nm-board" style="height:${H}px"><svg viewBox="0 0 100 ${H}" preserveAspectRatio="none" width="100%" height="${H}">${lines}</svg>${nodes}</div></div>
     ${(run.relics||[]).length||(run.meals||[]).length||(run.woes||[]).length?`<div class="nm-relics">${(run.relics||[]).map(k=>`<button type="button" class="rl" data-rel="${k}" aria-label="${RELICS[k].n}"><img src="${relicArt(k)}" alt=""></button>`).join('')}${(run.meals||[]).map(x=>`<button type="button" class="rl ml" data-meal="${x.id}" aria-label="${MEALS[x.id].n}"><img src="${mealArt(x.id)}" alt=""><i>${x.n}</i></button>`).join('')}${(run.woes||[]).map((w,i)=>`<button type="button" class="rl ml wo" data-woe="${i}" aria-label="${WOES[w.id].n}"><img src="${woeArt(w.id)}" alt=""><i>${w.n}</i></button>`).join('')}</div>`:''}
     <aside class="nm-side"><div class="ns-gold"><img src="${coinArt()}" alt="">${gold()} gold</div>
@@ -85,7 +86,7 @@ function mapScreen(preview){
     <div class="nm-squad">${run.roster.map((u,ui)=>`<div data-u="${ui}" role="button" tabindex="0"><img src="${uSpr(u)}" alt=""><span>${u.name}</span><small>Lv ${u.lv}</small>${squadHp(u)}</div>`).join('')}</div>`;
   tip('map','The road ahead','Tap a glowing room to see what it is, then tap it again to go there. 15 floors: fights (the red skull is an elite), events, camps that heal, taverns, and a treasure room halfway. Then a camp and the boss.');
   mapEl.hidden=false;mapEl.style.background=`radial-gradient(ellipse at 50% 0%,${actBiome().bg},#121018 72%)`;
-  const sc=mapEl.querySelector('.nm-scroll'),focus=ok[0]?Y(ok[0].r):H;sc.scrollTop=Math.max(0,focus-sc.clientHeight/2);
+  const sc=mapEl.querySelector('.nm-scroll'),focus=!anyRoom&&ok[0]?Y(ok[0].r):run.pos?Y(run.pos.r):H;sc.scrollTop=Math.max(0,focus-sc.clientHeight/2);
   /* the unit panel floats over the map; tap the unit again, the ✕, anywhere off the panel, Esc or right-click to close it */
   const closeUnit=()=>{const box=mapEl.querySelector('.nm-unit');if(box)box.hidden=true;mapEl.querySelectorAll('.nm-squad .on').forEach(x=>x.classList.remove('on'))};
   mapEl.oncontextmenu=e=>{e.preventDefault();closeUnit()};mapEl.onkeydown=null;
@@ -93,6 +94,7 @@ function mapScreen(preview){
   return new Promise(res=>{let sel=null;mapEl.onclick=e=>{
     if(e.target.closest('[data-ux]')){closeUnit();return}
     if(!e.target.closest('.nm-unit,[data-u]'))closeUnit();
+    if(preview&&e.target.closest('[data-equip],[data-drop],[data-salve]'))return;/* no changing kit while only looking */
     if(e.target.closest('[data-close]')){mapEl.onclick=null;mapEl.hidden=true;sfx('select');return res(null)}
     const eq=e.target.closest('[data-equip]');if(eq){const u=run.roster[+eq.dataset.uu],it=u.items.splice(+eq.dataset.equip,1)[0];u.items.unshift(it);sfx('tick');saveGame();
       const side=eq.closest('.nm-side,.nm-info');if(side)side.innerHTML=unitBox(u);toast(`${u.name} equips the ${IT[it.k].n}`);return}

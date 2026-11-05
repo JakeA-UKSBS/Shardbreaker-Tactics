@@ -199,14 +199,17 @@ function actBiome(){const a=run&&run.act||1;if(a>=3)return BIOMES.heart;
 /* bosses lumber: they move, but only a couple of tiles a turn */
 /* BOSS_MOV: max tiles a boss moves per turn */
 const BOSS_MOV=2;
+/* ROCK_MAX: most rocks left on a battle map (the rest are cleared, see genBattle) */
+const ROCK_MAX=3;
 function genBattle(n,kind){
   const act=run&&run.act||1,B=actBiome(),bossFight=kind==='boss',elite=kind==='elite',ship=B.id==='ship',town=!bossFight&&!elite&&!ship&&MAPS['town_'+B.id]&&(run&&run.n||1)>=2&&rand()<.25;
   const mk=bossFight?B.bossMap:town?'town_'+B.id:pick(B.maps);let m=MAPS[mk];
-  /* at most 3 chests per map, and no altars (boss maps had them): the extras become the map's most common ground */
-  {const cs=[];m.map.forEach((r,y)=>[...r].forEach((ch,x)=>{if(ch==='C')cs.push(x+','+y)}));
-   const cnt={};m.map.join('').split('').forEach(c=>{if(TER[c]&&TER[c].c<99&&c!=='C'&&c!=='T')cnt[c]=(cnt[c]||0)+1});
-   const g=Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0][0],drop=new Set(cs.length>3?shuffle(cs.slice()).slice(3):[]);
-   m={...m,map:m.map.map((r,y)=>[...r].map((ch,x)=>ch==='T'||drop.has(x+','+y)?g:ch).join(''))}}
+  /* tidy the hand-made map: no altars (T), tents (A), chests (C) or ruined shrines (F), and at most ROCK_MAX rocks
+     (boulders ^, sandstone k, crags R). What's removed becomes the map's most common ground. */
+  {const NO=['T','A','C','F'],ROCKS=['^','k','R'],rs=[];m.map.forEach((r,y)=>[...r].forEach((ch,x)=>{if(ROCKS.includes(ch))rs.push(x+','+y)}));
+   const cnt={};m.map.join('').split('').forEach(c=>{if(TER[c]&&TER[c].c<99&&!NO.includes(c))cnt[c]=(cnt[c]||0)+1});
+   const g=Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0][0],drop=new Set(rs.length>ROCK_MAX?shuffle(rs.slice()).slice(ROCK_MAX):[]);
+   m={...m,map:m.map.map((r,y)=>[...r].map((ch,x)=>NO.includes(ch)||drop.has(x+','+y)?g:ch).join(''))}}
   /* difficulty climbs with the floor and the act: act 1 floor 1 is Lv 1, act 1 floor 9 is Lv 6, act 2 starts at Lv 7 */
   const fl=flScale(run&&run.n),diff=(act-1)*10+fl,lvBase=1+Math.floor(diff*.6)+(A(1)?1:0)+(A(4)?1:0);
   const pool=(elite?B.elitePool:B.pool).filter(p=>act>=2||fl>=(p[2]||1)),tot=pool.reduce((a,p)=>a+p[1],0);

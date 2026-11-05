@@ -76,6 +76,7 @@ function render(){
   $('#btnEnd').classList.toggle('pulse',idle&&state.units.filter(u=>u.team==='p').every(u=>u.acted));
   $('#btnDanger').classList.toggle('on',danger);
   $('#btnDev').hidden=!settings.dev;
+  {const b=$('#btnMap');b.hidden=!(run&&run.map);if(!b.hidden&&!b.firstChild.src)b.firstChild.src=mapIconArt()}
   renderPanel();
 }
 

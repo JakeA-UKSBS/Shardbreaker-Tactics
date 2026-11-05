@@ -31,7 +31,7 @@ Each run picks 2 of these 10 as its acts (`BIOMES`, `ACTS`). Each has 2-3 battle
 
 Only creatures are enemies; there are no human foes.
 
-Defend fights: from floor 2, a quarter of normal battles (outside the Flying Ship and the Labyrinth) are a settlement to hold for 5-7 turns, with monsters arriving from the top of the map each turn (`TOWN`, `town_<region>` maps, each region's `town` ground and cover). Chests (`C`) on any map hold 15-30 gold, or pyrite (30%).
+Defend fights: from floor 2, a quarter of normal battles (outside the Flying Ship and the Labyrinth) are a settlement to hold for 5-7 turns, with monsters arriving from the top of the map each turn (`TOWN`, `town_<region>` maps, each region's `town` ground and cover). Battle maps are tidied when generated: altars, tents, chests and ruined shrines are cleared, and at most 3 rocks are kept (`ROCK_MAX`).
 
 
 ## A run

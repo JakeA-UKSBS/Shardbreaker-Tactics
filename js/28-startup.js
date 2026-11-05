@@ -79,6 +79,8 @@ $('#btnRewind').addEventListener('click',rewind);
 $('#btnDanger').addEventListener('click',()=>{danger=!danger;render();if(danger)tip('danger','Danger zone','Red tiles are where enemies can strike next turn. Tap a tile, or move a unit onto one, to see which enemies they are.')});
 /* the cog: options from anywhere (not while a dialog is open or a fight is playing out) */
 $('#cog').addEventListener('click',()=>{if(!modalEl.hidden)return;const screen=[...document.querySelectorAll('.nmap,.tav')].some(e=>!e.hidden);if(busy&&!screen&&titleEl.hidden)return;sfx('tick');optionsMenu(!titleEl.hidden)});
+/* view the act map mid-battle, then return to the fight */
+$('#btnMap').addEventListener('click',()=>{if(!busy&&modalEl.hidden&&run&&run.map)mapScreen('Back to the battle')});
 $('#btnDev').addEventListener('click',()=>{if(!busy&&!over&&modalEl.hidden)devMenu()});
 /* Dev mode: win the current battle straight away. */
 async function devMenu(){
