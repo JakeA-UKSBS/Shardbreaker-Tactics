@@ -29,8 +29,27 @@ function mapPose(u,name,t,wk){const el=uEls[u.id];if(!el||u.sz>1)return;const im
 /* one weapon strike on the map: wind up, swing (the lunge lands on it), then follow through. Resolves when the blow lands */
 async function swingAt(X,Y,w,crit,ranged){const wk=w&&w.key;
   mapPose(X,crit?'critup':'windup',Y,wk);await sleep(D(crit?120:150));
-  mapPose(X,'swing',Y,wk);if(ranged){lunge(X,Y,-6);await shoot(X,Y,w)}else{lunge(X,Y);await sleep(D(110))}
+  mapPose(X,'swing',Y,wk);if(ranged){lunge(X,Y,-6);await shoot(X,Y,w)}else{lunge(X,Y);slashFx(X,Y,w,crit);await sleep(D(110))}
   setTimeout(()=>mapPose(X,'follow',Y,wk),D(90))}
+
+/* slash trail: a pale pixel-art arc sweeps across the target as the blow lands (swords and axes arc, lances thrust).
+   4 frames of 32x32 drawn once per shape, shown at 2x over the target and flipped to face away from the attacker */
+const SLASH_C=['#fffbe8','#efe8c8','#c8c0a0'];
+function slashFrames(shape){const c='SLASH|'+shape;if(sprCache[c])return sprCache[c];const out=[];
+  for(let f=0;f<4;f++){const p=Px(32,32);
+    if(shape==='thrust'){/* a streak that shoots right, then thins out */
+      const x1=[14,28,31,31][f],x0=[2,4,12,22][f];for(let x=x0;x<=x1;x++){const t=(x-x0)/Math.max(1,x1-x0),th=f<2?Math.round(1+2*t):Math.round(2*t);for(let d=-th;d<=th;d++)p.set(x,16+d,Math.abs(d)===th?SLASH_C[2]:x>x1-3?SLASH_C[0]:SLASH_C[1])}}
+    else{/* a crescent sweeping clockwise from upper left to lower right; the head is thickest, the tail tapers */
+      const R=shape==='heavy'?14:13,TH=shape==='heavy'?5:3.5,a0=[-150,-150,-110,-30][f]*Math.PI/180,a1=[-70,10,70,90][f]*Math.PI/180;
+      for(let y=0;y<32;y++)for(let x=0;x<32;x++){const dx=x-12.5,dy=y-15.5,r=Math.hypot(dx,dy),a=Math.atan2(dy,dx);if(a<a0||a>a1)continue;
+        const t=(a-a0)/(a1-a0),th=TH*(f===3?1-t*.6:t)+.6;if(r>R||r<R-th)continue;p.set(x,y,r>R-1?SLASH_C[0]:r<R-th+1?SLASH_C[2]:SLASH_C[1])}}
+    out.push(p.url())}
+  return sprCache[c]=out}
+function slashFx(X,Y,w,crit){if(!w||!['blade','heavy','pole'].includes(w.t))return;
+  const fr=slashFrames(w.t==='pole'?'thrust':w.t==='heavy'?'heavy':'blade'),b=uBox(Y),a=scrC(X.x,X.y,X.sz),q=scrC(Y.x,Y.y,Y.sz),S=crit?80:64;
+  const im=document.createElement('img');im.className='fx-slash';im.alt='';
+  Object.assign(im.style,{left:b.l+b.w/2-S/2+'px',top:b.t+b.h*.5-S/2+'px',width:S+'px',height:S+'px',zIndex:9999,transform:q.x<a.x?'scaleX(-1)':''});
+  boardEl.appendChild(im);fr.forEach((src,i)=>setTimeout(()=>{im.src=src;if(i===3)im.style.opacity='.6'},D(i*45)));setTimeout(()=>im.remove(),D(4*45+40))}
 
 /* ================= ON-MAP ATTACKS ================= */
 let fast=false;
