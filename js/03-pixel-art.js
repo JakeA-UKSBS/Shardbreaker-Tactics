@@ -566,7 +566,7 @@ function tagArt_draw(t){const c='TAG|'+t;if(sprCache[c])return sprCache[c];const
   if(t==='plant'){p.poly([[3,13],[4,6],[9,2],[13,3],[12,9],[7,12]],'#6ab04a');p.line(3,13,11,4,'#3f7a2a');p.line(6,9,9,10,'#3f7a2a');p.line(8,6,7,3,'#3f7a2a')}
   p.outline(OUT);return sprCache[c]=p.url()}
 function mapWk(u){const i=u.items.findIndex(it=>WTYPES.includes(IT[it.k].t)||IT[it.k].t==='spirit');return i>=0?u.items[i].k:null}
-function sprite(u,pose,wk){const k=[u.id,u.name,u.cls,u.team,pose,wk,u.sz||1,JSON.stringify(u.look)].join('|');return sprCache[k]||(sprCache[k]=fig(u.look,u.cls,u.team,pose,wk,u.sz))}
+function sprite(u,pose,wk){{const png=typeof castPng==='function'&&castPng(u,pose==='strike'?'swing':'idle');if(png)return png}const k=[u.id,u.name,u.cls,u.team,pose,wk,u.sz||1,JSON.stringify(u.look)].join('|');return sprCache[k]||(sprCache[k]=fig(u.look,u.cls,u.team,pose,wk,u.sz))}
 function portraitArt(L,cls,team,sz){return fig(L,cls,team,'idle',null,sz)}
 function portrait(u){if(u.pic&&PICS[u.pic])return PICS[u.pic];const k='P|'+u.id+'|'+u.name+'|'+u.cls+'|'+u.team+'|'+JSON.stringify(u.look);return sprCache[k]||(sprCache[k]=portraitArt(u.look,u.cls,u.team,u.sz))}
 function picOf(h){return h.pic&&PICS[h.pic]?PICS[h.pic]:portraitArt(h.look,h.cls,'p')}

@@ -44,6 +44,7 @@ await page.waitForTimeout(500);
 const keys = await page.evaluate(() => {
   const each = (o, f) => Object.keys(o).forEach(k => { try { f(k) } catch (_) {} });
   each(IT, k => { if (!k.includes('~')) iconArt(k) });
+  try { castArtAll() } catch (_) {}
   monsterClasses().forEach(c => { try { monsterArt(c, false); monsterArt(c, true) } catch (_) {} });
   each(TAGS, tagArt); each(RELICS, relicArt); each(MEALS, mealArt); each(WOES, woeArt);
   [mugArt, tavernArt, counterArt, musterArt, flagArt, sageRoomArt, sageTableArt, sageBallArt, mapIconArt, coinArt,

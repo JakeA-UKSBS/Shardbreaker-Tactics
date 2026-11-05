@@ -13,6 +13,7 @@ function flash(u){const el=uEls[u.id];if(!el)return;el.classList.add('flash');se
    side-on battle in Shardbreaker uses. t: turn to face that unit. Rigged units get every pose; older sprites only swing. */
 function mapPose(u,name,t,wk){const el=uEls[u.id];if(!el||u.sz>1)return;const img=el.firstChild;wk=wk||mapWk(u);let src;
   if(name==='idle')src=sprite(u,'idle',mapWk(u));
+  else if(castPng(u,name))src=castPng(u,name);
   else if(isHi(u.cls,u.sz)){const k=['MP',u.cls,u.team,name,wk,JSON.stringify(u.look)].join('|');src=sprCache[k]||(sprCache[k]=hiArt(u.look,u.cls,u.team,wk,name,0,64))}
   else if(name==='swing'||name==='follow')src=sprite(u,'strike',wk);else return;
   img.src=src;img.dataset.s=src;

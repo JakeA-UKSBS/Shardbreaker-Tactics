@@ -96,6 +96,15 @@ CAST.forEach(c=>{const base=castCls(c.cls);c.cls=base;
     asc[castCls(n)]={n,wk:a.wk===undefined?c.wk:a.wk,swap:a.swap,gain:a.gain,look}}
   c.asc=asc;CLS[base].asc=[...new Set([...(CLS[base].asc||[]),...Object.keys(asc)])];CLS[base].promo=CLS[base].asc[0]}});
 const castDef=id=>CAST.find(c=>c.id===id);
+/* ---- cast PNGs: art/cast/<id>/<class>-<pose>.png replaces the rig-drawn frame (edit them in Aseprite or any pixel editor) ----
+   One set per class the character can be (base and each ascension). Poses: idle, and the attack frames windup, swing,
+   follow, critup (see STRIPS). The PNG is drawn with the character's listed weapon, so weapon upgrades don't show on it.
+   Make the starting PNGs with: node tools/export-art.mjs */
+const CAST_POSES=['idle','windup','swing','follow','critup'];
+const castPngKey=(id,cls,pose)=>'cast/'+id+'/'+CLS[cls].n.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'-'+pose;
+function castPng(u,pose){if(!u||!u.cast)return null;const k=castPngKey(u.cast,u.cls,pose);return ART_PNG.has(k)?'art/'+k+'.png':null}
+function castArt(id,cls,pose){const c=castDef(id),a=c.asc&&c.asc[cls];return art(castPngKey(id,cls,pose),()=>hiArt(clone(a?a.look:c.look),cls,'p',a?a.wk:c.wk,pose,0,64))}
+function castArtAll(){for(const c of CAST)for(const cls of[c.cls,...Object.keys(c.asc||{})])for(const p of CAST_POSES)castArt(c.id,cls,p)}
 /* weapon types: a cast class (and its ascensions) wields only the type its characters start with; Menders wield staves
    only (no sigils), and an ascension that gains a weapon (gain) adds that weapon's type (a Crusader: staves and blades) */
 {const W={},add=(k,ts)=>(W[k]=W[k]||new Set(),ts.forEach(t=>W[k].add(t)));
