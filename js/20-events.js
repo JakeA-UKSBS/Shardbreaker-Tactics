@@ -191,15 +191,14 @@ const EVENTS={
     {l:'Break the crown',sub:'Every unit gains 10 EXP',go:async()=>{await expAll(run.roster,10);sfx('broke');return'The gems crack, and something inside them screams thinly before going quiet. Better no one wears it. Every unit gains 10 EXP.'}}]}}
 };
 /* ---- woes: bad luck from events that lasts a fight or two (shown on the map in red) ---- */
-const WOES={wound:{n:'Wounded',d:'Every unit starts the next fight 5 HP down'},weary:{n:'Weary Legs',d:'Every unit has −1 Move'},marked:{n:'Marked',d:'Enemies would rather attack this unit'}};
+const WOES={wound:{n:'Wounded',d:'Every unit starts the next fight 5 HP down'},weary:{n:'Weary Legs',d:'Every unit has −1 Move'},halfhp:{n:'Scratched Up',d:'Starts the next fight at half HP'}};
 const Wo=id=>!!(run&&run.woes&&run.woes.some(w=>w.id===id&&w.n>0));
-const markedU=u=>u.team==='p'&&!!(run&&run.woes&&run.woes.some(w=>w.id==='marked'&&w.u===u.id));
 function addWoe(id,n,u){(run.woes=run.woes||[]).push({id,n,u:u&&u.id,nm:u&&u.name})}
 const woeText=w=>`<b>${WOES[w.id].n}${w.nm?': '+w.nm:''}.</b> ${WOES[w.id].d} for ${w.n} more fight${w.n>1?'s':''}.`;
 function woeArt_draw(id){const c='WO|'+id;if(sprCache[c])return sprCache[c];const p=Px(16,16);
   if(id==='wound'){p.line(3,13,13,3,'#c8322e',2);p.line(3,3,13,13,'#c8322e',2);p.ell(8,8,2,2,'#ff8a7a')}
   if(id==='weary'){p.rect(3,6,4,7,'#7a5230');p.rect(3,11,6,3,'#7a5230');p.rect(10,3,2,6,'#c8322e');p.poly([[8,9],[14,9],[11,13]],'#c8322e')}
-  if(id==='marked'){p.ring(8,8,6,'#c8322e');p.ring(8,8,3,'#c8322e');p.ell(8,8,1.2,1.2,'#ff8a7a');p.line(8,0,8,4,'#c8322e');p.line(8,12,8,15,'#c8322e')}
+  if(id==='halfhp'){p.ell(8,8,6,6,'#5a2a2a');p.ell(8,8,6,6,'#c8322e',(x,y)=>y>=8)}
   p.outline(OUT);return sprCache[c]=p.url()}
 /* ---- event helpers ---- */
 async function expAll(us,n){evEl.hidden=true;for(const u of us){let left=n;while(left>0){const g=gainExp(u,Math.min(100,left));left-=100;if(g&&g.gains)await levelUp(u,g)}}}
@@ -229,7 +228,7 @@ Object.assign(EVENTS,{
   statue:{t:'Statue of Valour',art:'statue',d:'A stone hero, sword raised. People leave offerings at its feet, and some say it answers.',o:[
     {l:'One unit kneels',sub:'+2 Str or Mag for good',go:async()=>{const u=await pickUnit('Who kneels?','+2 Str (Mag for casters) for good.');if(!u)return null;const s=powS(u);bump(u,s,2);sfx('ding');return`${u.name} rises stronger (+2 ${SN[s]}).`}},
     {l:'Everyone leaves an offering',sub:'Every unit +1 Def',go:async()=>{run.roster.forEach(u=>u.def++);sfx('ding');return'The stone seems to nod. Every unit gains 1 Def.'}}]},
-  toll:{t:'The Toll Bridge',art:'bridge',d:'Armed thugs block the only bridge. “Forty gold a head. Well, forty gold for the lot of you.”',o:[
+  toll:{t:'The Toll Bridge',art:'bridge',d:'Armed thugs block the only bridge. “Forty gold for the lot of you.”',o:[
     {l:'Pay the toll',sub:'40 gold',cost:40,go:async()=>{spend(40);return'They step aside, grinning.'}},
     {l:'Fight through',sub:'Every unit gains 30 EXP; Wounded next fight (−5 HP)',go:async()=>{await expAll(run.roster,30);addWoe('wound',1);return'You clear the bridge. Everyone gains 30 EXP, but the squad is still bruised for the next fight.'}}]},
   witch:{t:'The Bog Witch',art:'witch',fig:['witch','cauldron'],d:'A crooked hut, a bubbling pot, and a woman who already knows your names. “At least stay for a cup of tea, won’t you?”',o:[
@@ -238,31 +237,28 @@ Object.assign(EVENTS,{
     {l:'Back away',go:async()=>'“Another time, then.”'}]},
   fog:{t:'The Strange Fog',art:'fog',d:'A thick white fog rolls over the road. There’s a shortcut through it, if you trust your feet.',o:[
     {l:'Take the shortcut',sub:'Every unit gains 40 EXP; Weary Legs for 2 fights (−1 Move)',go:async()=>{await expAll(run.roster,40);addWoe('weary',2);return'You stumble out the far side hours later. Everyone gains 40 EXP, but the squad is footsore for 2 fights.'}},
+    {l:'Send a scout ahead',sub:'One unit gains 80 EXP, but starts the next fight at half HP',go:async()=>{const u=await pickUnit('Who scouts ahead?','+80 EXP, but half HP next fight.');if(!u)return null;await expAll([u],80);addWoe('halfhp',1,u);return`${u.name} vanishes into the white and returns at dusk, scratched up but sharper for it.`}},
     {l:'Wait for it to lift',go:async()=>'By noon the road is clear.'}]},
   chest:{t:'A Suspicious Chest',art:'chest',fig:'chest',d:'A fine chest sits alone in the middle of the road. Nobody around. Nobody at all.',o:[
-    {l:'Open it',sub:'Gold, or an ambush',go:async()=>{if(rand()<.55){run.gold=gold()+70;sfx('fanfare');return'70 gold, and no catch. Lucky.'}const v=pick(run.roster);addWoe('wound',1);addWoe('marked',1,v);sfx('broke');return`It’s a trap. Bandits scatter, but they’ll be back next fight: everyone starts 5 HP down, and they’re after <b>${v.name}</b>.`}},
+    {l:'Open it',sub:'Gold, or an ambush',go:async()=>{if(rand()<.65){run.gold=gold()+70;sfx('fanfare');return'70 gold, and no catch. Lucky.'}addWoe('wound',1);sfx('broke');return'It’s a trap. Everyone starts the next fight 5 HP down.'}},
     {l:'Leave it',go:async()=>'You give it a wide berth.'}]},
   library:{t:'The Ruined Library',art:'library',d:'Half the roof is gone, but the shelves still stand. Rain has spared a few tomes.',o:[
     {l:'Study the tomes',sub:'Casters, Menders and Summoners gain 60 EXP; others 20',go:async()=>{evEl.hidden=true;const m=run.roster.filter(u=>CLS[u.cls].w.includes('art')||CLS[u.cls].w.includes('spirit'));await expAll(m,60);await expAll(run.roster.filter(u=>!m.includes(u)),20);return'A long afternoon of reading. The spellcasters gain 60 EXP, everyone else 20.'}},
     {l:'Take the storm tome',sub:'The Spark Sigil',need:()=>canAny('sparkSigil'),go:async()=>{const u=await giveTo('sparkSigil');return u&&`${u.name} pockets the <b>Spark Sigil</b>.`}}]},
   /* Act 2 only */
-  star:{t:'The Fallen Star',act:2,art:'crater',fig:'meteor',d:'A crater, still smoking. At its heart a sigil has burned itself into the star-iron.',o:[
-    {l:'Take the Meteor Sigil',sub:'Rng 3–10, 5 uses, huge damage',need:()=>canAny('meteorSigil'),go:async()=>{const u=await giveTo('meteorSigil');return u&&`${u.name} pries the <b>Meteor Sigil</b> free. It’s warm to the touch.`}},
+  star:{t:'The Fallen Star',act:2,ok:()=>run.roster.some(u=>u.cast==='ash'),art:'crater',fig:'meteor',d:'A crater, still smoking. At its heart a sigil has burned itself into the star-iron.',o:[
+    {l:'Take the Meteor Sigil',sub:'Ash takes it: Rng 3–10, 5 uses, huge damage',go:async()=>{const u=run.roster.find(u=>u.cast==='ash');if(!await stow(u,'meteorSigil'))return null;sfx('item');return `${u.name} pries the <b>Meteor Sigil</b> free. It’s warm to the touch.`}},
     {l:'Sell the star-iron',sub:'+80 gold',go:async()=>{run.gold=gold()+80;sfx('item');return'The iron fetches 80 gold in the next town.'}}]},
   spire:{t:'The Storm Spire',act:2,art:'spire',d:'A tower that drinks lightning. At the top, a sigil and a staff hang in the air, waiting.',o:[
-    {l:'Take Heaven’s Bolt',sub:'Lightning sigil, Rng 3–10, 5 uses',need:()=>canAny('heavensBolt'),go:async()=>{const u=await giveTo('heavensBolt');return u&&`${u.name} takes <b>Heaven’s Bolt</b>. The sky rumbles.`}},
-    {l:'Take the Far Charm',sub:'Heals at Rng 1–10',need:()=>canAny('farStaff'),go:async()=>{const u=await giveTo('farStaff');return u&&`${u.name} takes the <b>Far Charm</b>.`}},
+    {l:'Take Heaven’s Bolt',sub:'Corvin only: long-range lightning sigil, Rng 3–10, 5 uses',need:()=>run.roster.some(u=>u.cast==='corvin'),go:async()=>{const u=run.roster.find(u=>u.cast==='corvin');if(!await stow(u,'heavensBolt'))return null;sfx('item');return `${u.name} takes <b>Heaven’s Bolt</b>. The sky rumbles.`}},
+    {l:'Take the Far Charm',sub:'Menders only: a ranged heal, Rng 1–10',need:()=>run.roster.some(u=>isRoleU(u,'support')),go:async()=>{const u=await pickUnit('Who takes the Far Charm?',itemText('farStaff'),u=>isRoleU(u,'support')?null:'Menders only');if(!u||!await stow(u,'farStaff'))return null;sfx('item');return `${u.name} takes the <b>Far Charm</b>.`}},
     {l:'Climb to the top',sub:'Every unit +1 Spd and +1 Luck; Wounded next fight',go:async()=>{run.roster.forEach(u=>{u.spd++;u.lck++});addWoe('wound',1);sfx('thunder');return'Struck, all of you. Every unit gains 1 Spd and 1 Luck, and starts the next fight singed.'}}]},
   oracle:{t:'The Oracle',act:2,art:'oracle',d:'A blindfolded oracle turns a crystal in her hands. “I see what each of you lacks.”',o:[
     {l:'Hear your weakness',sub:'Every unit +1 to their lowest stat',go:async()=>{const t=run.roster.map(u=>{const s=shown(u).filter(k=>k!=='hp').sort((a,b)=>u[a]-u[b])[0];bump(u,s,1);return`${u.name} +1 ${SN[s]}`});sfx('ding');return t.join(', ')+'.'}},
-    {l:'A full reading',sub:'One unit +1 to every stat',cost:50,go:async()=>{const u=await pickUnit('Whose fortune?','+1 to every stat for good.');if(!u)return null;spend(50);shown(u).forEach(s=>bump(u,s,1));sfx('fanfare');return`The oracle smiles at ${u.name}. +1 to everything.`}}]},
-  sage:{t:'The Mountain Sage',act:2,art:'sage',d:'A sage sits on a peak above the clouds. He opens one eye. “One of you. Not all.”',o:[
-    {l:'Train with the sage',sub:'One unit gains 200 EXP',go:async()=>{const u=await pickUnit('Who climbs to him?','They gain 200 EXP.');if(!u)return null;await expAll([u],200);return`${u.name} comes down a week later, changed. 200 EXP.`}},
-    {l:'Meditate below',sub:'Every unit gains 50 EXP',go:async()=>{await expAll(run.roster,50);return'Quiet, cold, and useful. Every unit gains 50 EXP.'}}]},
-  hoard:{t:'The Dragon’s Hoard',act:2,art:'hoard',d:'A dragon’s hoard, the dragon long dead. Mostly. Something big still breathes somewhere below.',o:null,make:()=>{const k=jadePick();return[
-    {l:`Grab the ${IT[k].n} and run`,sub:`${IT[k].n} + 40 gold; Wounded and someone Marked next fight`,go:async()=>{const u=await pickUnit(`Who grabs the ${IT[k].n}?`,itemText(k),u=>canUse(u,k)?null:'Can’t wield it');if(!u)return null;
-      if(!await stow(u,k))return null;run.gold=gold()+40;addWoe('wound',1);addWoe('marked',1,u);sfx('fanfare');return`${u.name} grabs the <b>${IT[k].n}</b> and a fistful of gold. Something wakes. You’ll be hunted next fight, ${u.name} most of all.`}},
-    {l:'Pocket some gold quietly',sub:'+40 gold',go:async()=>{run.gold=gold()+40;sfx('item');return'40 gold, and nothing stirs.'}}]}}
+    {l:'A full reading',sub:'One unit levels up',cost:50,go:async()=>{const u=await pickUnit('Whose fortune?','They gain a level.',u=>u.lv>=20?'Max level':null);if(!u)return null;spend(50);await expAll([u],100-u.exp);return`The oracle smiles at ${u.name}.`}}]},
+  sage:{t:'The Mountain Sage',act:2,art:'sage',d:'A sage sits on a peak above the clouds. He opens one eye. “You may listen, or rest. It would be wise to wait before continuing.”',o:[
+    {l:'Meditate with the sage',sub:'Every unit gains 50 EXP',go:async()=>{await expAll(run.roster,50);return'Quiet, cold, but useful. Every unit gains 50 EXP.'}},
+    {l:'Rest below',sub:'Every unit heals 10 HP',go:async()=>{run.roster.forEach(u=>u.hp=Math.min(u.maxhp,u.hp+10));sfx('heal');return'Every unit rests up before continuing.'}}]}
 });
 /* ---- act 3 events: only these appear on the road to the Crystal Heart ---- */
 Object.assign(EVENTS,{
@@ -272,12 +268,8 @@ Object.assign(EVENTS,{
     {l:'“Shield us”',sub:'Every unit +2 Res',go:async()=>{run.roster.forEach(u=>bump(u,'res',2));sfx('ding');return'A pale light settles over the squad. Every unit gains 2 Res.'}}]},
   fallen:{t:'Those Who Came Before',act:3,art:'battlefield',d:'Another squad got this far. Their gear lies where they fell, half grown over with red crystal.',o:null,make:()=>{
     const last=(prof.hist||[]).flatMap(h=>h.fallen||[])[0];if(last)EVENTS.fallen.d=`Another squad got this far. Their gear lies where they fell, half grown over with red crystal. One of the blades is ${last.n}’s.`;return[
-    {l:'Take a fallen weapon',sub:'One unit’s weapon is reforged +2',go:async()=>{const u=await pickUnit('Whose weapon is reforged?','Their weapon gains +2 (up to +3).',u=>weaponOf(u)?null:'No weapon');if(!u)return null;const it=weaponOf(u);forge(it);forge(it);sfx('item');return`${u.name} works the old steel into their own. <b>${IT[it.k].n}</b>.`}},
-    {l:'Bury them',sub:'Every unit gains 50 EXP',go:async()=>{await expAll(run.roster,50);return'You do what you can for them. The squad goes on quieter (+50 EXP).'}}]}},
-  seam:{t:'The Bleeding Seam',act:3,art:'shrine',d:'A seam of red crystal pulses in the rock like a heartbeat. It runs straight towards the Heart.',o:[
-    {l:'Break the seam',sub:'The Crystal Heart starts with 20% less HP; every unit loses 3 HP now',go:async()=>{run.heartCut=1;run.roster.forEach(u=>u.hp=Math.max(1,u.hp-3));sfx('broke');return'The seam shatters and something deep below screams. The shards bite on the way out (−3 HP each), but the Heart is weaker for it.'}},
-    {l:'Pry out a shard',sub:'A rare relic; one unit is Marked next fight',go:async()=>{const k=await relicPick(1,['r'],'A shard of the Heart','It’s warm, and it’s watching.');const v=pick(run.roster);addWoe('marked',1,v);return`${k?`<b>${RELICS[k].n}</b>. `:''}${v.name} feels something turn to look at them.`}},
-    {l:'Leave it',go:async()=>'You step over it. It keeps beating.'}]}
+    ...(last?[{l:`Take ${last.n}’s keepsake`,sub:'Pick 1 of 2 relics',go:async()=>{const k=await relicPick(2,['u','r'],`${last.n}’s keepsake`,'They carried it this far. It can go a little further.');return k&&`You take <b>${RELICS[k].n}</b> from ${last.n}’s pack. It feels right that it goes on.`}}]:[]),
+    {l:'Bury them',sub:'Every unit gains 50 EXP',go:async()=>{await expAll(run.roster,50);return'You do what you can for them. The squad goes on quieter (+50 EXP).'}}]}}
 });
 async function eventNode(){
   /* act 3 only draws act-3 events; acts 1 and 2 never do */

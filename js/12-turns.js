@@ -231,7 +231,7 @@ function aiPlan(e){
   if(hasSt(e,'challenged')){const ch=byId(e.st.challenged.by);if(ch&&ch.hp>0&&tiles.some(([x,y])=>wpnsAt({...e,x,y},man({x,y,sz:e.sz},ch),ch).length))ps=[ch]}
   for(const[x,y]of tiles)for(const p of ps){const d=man({x,y,sz:e.sz},p);
     for(const wi of wpnsAt({...e,x,y},d,p)){const f=forecast({...e,x,y},wi,p),A=f.A,D=f.D;
-      const s=A.dmg*A.n*A.hit/100+(A.dmg*A.n>=p.hp?40:0)-(D?D.dmg*D.n*D.hit/200:0)+ter(x,y).av/10+(p.lord?3:0)+(has(p,'taunt')||markedU(p)?25:0);
+      const s=A.dmg*A.n*A.hit/100+(A.dmg*A.n>=p.hp?40:0)-(D?D.dmg*D.n*D.hit/200:0)+ter(x,y).av/10+(p.lord?3:0)+(has(p,'taunt')?25:0);
       if(!best||s>best.s)best={s,tile:{x,y},target:p,wi}}}
   if(best||e.hold||e.mov===0)return best||{};
   const F=field(ps,e);let bt=null,bv=1e9;for(const[x,y]of tiles){const v=(F[key(x,y)]??999)-ter(x,y).av/100;if(v<bv){bv=v;bt={x,y}}}
