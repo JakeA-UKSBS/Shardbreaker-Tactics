@@ -88,7 +88,7 @@ const POSES={
 
 /* which pose set each weapon kind uses */
 /* idle stances a character can hold instead of their weapon set's idle (look.stance) */
-const STANCES={shoulder:{arm:40,fore:-100,wpn:-150,back:105},low:{arm:85,fore:65,wpn:150},guard:{arm:15,fore:-5,wpn:-12,back:-150,backFore:-95},
+const STANCES={lowguard:{arm:70,fore:40,wpn:-20},shoulder:{arm:40,fore:-100,wpn:-150,back:105},low:{arm:85,fore:65,wpn:150},guard:{arm:15,fore:-5,wpn:-12,back:-150,backFore:-95},
   draw:{arm:100,fore:175,wpn:-15,back:80,backFore:-10},high:{arm:-35,fore:-75,wpn:-125,back:-60,backFore:-80}};
 const KIND_POSE={hammer:'heavy',axe:'heavy',halberd:'heavy',greatsword:'heavy',sword:'blade',scimitar:'blade',twin:'blade',spear:'thrust',javelin:'thrust',rapier:'thrust',
   lyre:'cast',dagger:'dagger',twindagger:'dagger',bow:'bow',crossbow:'bow',talisman:'cast',staff:'cast',spirit:'cast',orb:'cast',fan:'cast',whip:'dagger',chain:'dagger',umbrella:'thrust'};
@@ -165,7 +165,8 @@ function hiArt(L,cls,team,wk,name,i,W){
   const sb=[nx-5,ny+3],eb=pt(...sb,P.back,8),hb=pt(...eb,P.backFore,7),sleeve=body==='vest'?sk2:body==='armor'?MT2:cl2;
   limb(sb,eb,sleeve,4);limb(eb,hb,body==='armor'?MT2:sk2,3);p.ell(hb[0],hb[1],2,2,sk2);
   if(L.bracers)limb(pt(...eb,P.backFore,2),pt(...eb,P.backFore,6),shade(L.bracers,.75),3);
-  if(kind==='twin'||kind==='twindagger'){const a=P.backFore-30;limb(hb,pt(...hb,a,kind==='twin'?14:L.jag?13:8),c.blade,2);if(L.jag)for(let k=4;k<12;k+=3)p.set(...pt(...pt(...hb,a,k),a+90,2),c.blade);limb(pt(...hb,a+90,2),pt(...hb,a-90,2),c.hilt,1)}
+  if(kind==='twindagger'&&L.wpnArt&&WPN_ART[L.wpnArt])stampWpn(p,WPN_ART[L.wpnArt],hb,P.backFore-30);
+  else if(kind==='twin'||kind==='twindagger'){const a=P.backFore-30;limb(hb,pt(...hb,a,kind==='twin'?14:L.jag?13:8),c.blade,2);if(L.jag)for(let k=4;k<12;k+=3)p.set(...pt(...pt(...hb,a,k),a+90,2),c.blade);limb(pt(...hb,a+90,2),pt(...hb,a-90,2),c.hilt,1)}
   /* ---- torso ---- */
   const sh=fem?8:9;
   if(body==='armor'){p.poly([[hx-7,hy+1],[hx+7,hy+1],[nx+sh+1,ny+1],[nx-sh-1,ny+1]],MT);p.poly([[hx-7,hy+1],[hx-3,hy+1],[nx-5,ny+1],[nx-sh-1,ny+1]],MT2);
@@ -256,8 +257,24 @@ function hiArt(L,cls,team,wk,name,i,W){
    scimitar · rapier · dagger · spear/javelin · bow/crossbow · staff ·
    talisman (sigil) · spirit charm/orb · fan · whip/chain · umbrella.
    ================================================================== */
+/* ---- weapon art from packs: a pixel sprite rotated into the hand instead of the drawn weapon (look field wpnArt) ----
+   rows/pal: the sprite's pixels (black outline and shadow removed: the rig outlines it), pivot: where the hand grips it,
+   ang: the angle the sprite points at as drawn (-45 = up-right), sc: scale.
+   dagger: Dungeon Crawl Stone Soup item/weapon/dagger.png (CC0, github.com/crawl/crawl). */
+const WPN_ART={
+  dagger:{pal:{a:'#482008',b:'#535353',c:'#552309',d:'#565656',e:'#692c0c',f:'#6a6a6a',g:'#6c6c6c',h:'#7a7a7a',i:'#a0a0a0',j:'#a3a3a3',k:'#e7e7e7'},
+    rows:['............jkj','...........kkjj','..........kbhjh','.........kbhbj.','........kbhbj..','....i..kbhbj...','....dfkbhbj....','.....dfhbj.....',
+          '.....adfj......','....eaadf......','...eca..dd.....','..eca..........','.eca...........','ifa............','gd.............'],
+    pivot:[3.5,10.5],ang:-45,sc:.8}
+};
+/* stamp a WPN_ART sprite with its grip at h, pointing along angle a (sampled backwards so the rotated pixels stay solid) */
+function stampWpn(p,spec,h,a){const th=(a-spec.ang)*Math.PI/180,co=Math.cos(th),si=Math.sin(th),R=Math.ceil(spec.rows.length*1.5*spec.sc);
+  for(let y=Math.floor(h[1]-R);y<=h[1]+R;y++)for(let x=Math.floor(h[0]-R);x<=h[0]+R;x++){const dx=x+.5-h[0],dy=y+.5-h[1],
+    sx=Math.floor((dx*co+dy*si)/spec.sc+spec.pivot[0]),sy=Math.floor((-dx*si+dy*co)/spec.sc+spec.pivot[1]),r=spec.rows[sy],ch=r&&r[sx];
+    if(ch&&ch!=='.')p.set(x,y,spec.pal[ch])}}
 function drawHiWeapon(p,kind,w,c,h,a,P,hb,pt,limb,L={}){
   if(!w)return;
+  if(L.wpnArt&&WPN_ART[L.wpnArt]&&(kind==='dagger'||kind==='twindagger')){stampWpn(p,WPN_ART[L.wpnArt],h,a);return}
   /* hammer: a short haft with a square block head */
   if(kind==='hammer'){const tip=pt(...h,a,18),bt=pt(...h,a+180,4);limb(bt,tip,BROWN,3);const h1=pt(...tip,a+90,5),h2=pt(...tip,a-90,5),b1=pt(...h1,a,6),b2=pt(...h2,a,6);p.poly([h1,b1,b2,h2],c.blade);limb(h1,b1,c.edge,1)}
   /* axe / halberd: haft, crescent head; halberds are longer with a spike */

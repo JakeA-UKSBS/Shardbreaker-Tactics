@@ -3,7 +3,7 @@
    body (tunic/robe/vest/armor), pants, boot, metal (armour tint), capeC, shieldC, shawl, collar, feather (list of colours),
    tattoo, scar, wraps (hand wraps), mask, voidFace, mist (dark mist round the hand), hand (casts from the open hand), el (spell glow colour),
    staff/orb (staff colours), nature (branch staff), jag (jagged daggers), dblAxe (two-headed axe), joust + lanceC (jousting lance),
-   barding (horse armour), bolt / hem (robe trims), tails (sash ribbons), stance (idle: shoulder/low/guard/draw/high),
+   barding (horse armour), bolt / hem (robe trims), tails (sash ribbons), stance (idle: shoulder/low/guard/lowguard/draw/high), wpnArt (a pack weapon sprite from WPN_ART in place of the drawn one),
    bigBow (a larger bow), bracers (wristguards + shoulder plate), lapels, boots (tall boots), noCrown (no gold band when ascended),
    style also takes 'mane' (longer hair) and 'bunback', shield (round/kite/tower/aegis), gear also takes 'nursecap', prop ('lyre': held instead of a weapon).
    Preview them all: node tools/export-cast.mjs (writes docs/visuals/cast/). */
@@ -52,7 +52,7 @@ const CAST=[
   {id:'maelis',name:'Maelis',cls:'Mender',wk:'spiritMend',joins:'start',look:{fem:true,style:'long',hair:'#6b4226',skin:'#f6dcc4',cloth:'#efe6cf',sash:'#e2b553',shawl:'#fff8e8',staff:'#e2b553',orb:'#fff2b0',eye:'#3a5a8a'},
     asc:{'Saint':{look:{gear:'circlet',capeC:'#fff8e8',collar:'#efe6cf'}},
          'Crusader':{wk:'holySword',gain:'holySword',look:{metal:'#e8e2d0',shield:'kite',shieldC:'#efe6cf',capeC:'#e2b553',shawl:null}}}},
-  {id:'rook',name:'Rook',cls:'Rogue',wk:'twinBlades',joins:'start',look:{style:'wild',hair:'#1d1a24',skin:'#c98e62',cloth:'#3a3036',pants:'#2a2226',sash:'#5a4a3a',wraps:'#c9bfa8',jag:true,eye:'#2a2230'},
+  {id:'rook',name:'Rook',cls:'Rogue',wk:'twinBlades',joins:'start',look:{style:'wild',hair:'#1d1a24',skin:'#c98e62',cloth:'#3a3036',pants:'#2a2226',sash:'#5a4a3a',wraps:'#c9bfa8',jag:true,wpnArt:'dagger',stance:'lowguard',eye:'#2a2230'},
     asc:{'Duelist':{wk:'needle',look:{cloth:'#4a3a4a',sash:'#c8322e',capeC:'#2a2230',jag:null}},
          'Assassin':{wk:'stiletto',look:{gear:'hood',mask:'#4a4656',capeC:'#1e1a22',cloth:'#2a2230'}}}},
   {id:'brynhildr',name:'Brynhildr',cls:'Shieldmaiden',wk:'ironJian',joins:'start',look:{fem:true,style:'tail',hair:'#d9b25a',skin:'#f6dcc4',cloth:'#5a6a3a',pants:'#3f4a2a',sash:'#a8743a',shield:'kite',shieldC:'#2f5a4a',eye:'#3a5a8a'},
