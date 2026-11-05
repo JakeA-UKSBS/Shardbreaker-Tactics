@@ -22,7 +22,8 @@ const STATUS={
   rally:{n:'Rallied',tick:'start',d:'+2 Str and +2 Def.'},
   cover:{n:'Covered',tick:'start',d:'Attacks on this unit hit its protector instead, if they can.'},
   steady:{n:'Steady',tick:'start',d:'Can’t be pushed.'},
-  shieldUp:{n:'Shield Up',tick:'start',d:'Counterattacks deal 1.3×.'}
+  shieldUp:{n:'Shield Up',tick:'start',d:'Counterattacks deal 1.3×.'},
+  valour:{n:'Valour',tick:'start',d:'Deals 20% more damage.'}
 };
 const hasSt=(u,k)=>!!(u&&u.st&&u.st[k]&&u.st[k].n>0);
 function addSt(u,k,n,by){if(!u.st)u.st={};const o=u.st[k];u.st[k]={n:Math.max(n,o?o.n:0),by:by?by.id:(o&&o.by)};if(k==='stun'&&u.team==='p')u.acted=true}
@@ -41,7 +42,8 @@ Object.assign(SKILLS,{
   lastLight:{n:'Last Light',cost:5,kit:1,d:'Her heals restore 50% more on allies below half HP.'},
   slippery:{n:'Slippery',cost:5,kit:1,d:'Can move through enemy tiles.'},
   bulwarkAura:{n:'Bulwark',cost:5,kit:1,d:'Allies next to her take 30% less damage from ranged attacks.'},
-  beginnersLuck:{n:'Beginner’s Luck',cost:5,kit:1,d:'+10 Crit and +10 Avoid while at full HP.'}
+  beginnersLuck:{n:'Beginner’s Luck',cost:5,kit:1,d:'+10 Crit and +10 Avoid while at full HP.'},
+  audience:{n:'Audience',cost:5,kit:1,d:'Allies within 2 tiles of him get +10 Hit.'}
 });
 
 /* ---- abilities ----
@@ -51,7 +53,7 @@ Object.assign(SKILLS,{
    aim: 'any' = aim at any tile in range (area spells); 'dir' = pick a direction (an adjacent tile).
    dmg: × attack power; hit: + Hit; hits: number of strikes; mag: uses Mag (a spell); el: element (colour, Attunement).
    st: [status, turns, chance] on the enemies hit; give: [status, turns] on the allies in the shape; self: statuses on the user.
-   heal: × (Mag + 5); cure: removes bad statuses; push: tiles pushed back. */
+   heal: × (Mag + 5); cure: removes bad statuses; push: tiles pushed back; once: once a fight; encore: the ally can act again. */
 const ABIL={
   aimedShot:{n:'Aimed Shot',cd:2,side:'foe',r:[2,5],dmg:1.5,hit:10,d:'A careful shot from range 2–5: 1.5× damage, as accurate as a normal attack.'},
   pinningArrow:{n:'Pinning Arrow',cd:3,side:'foe',r:'wpn',dmg:.8,st:['root',1],d:'0.8× damage, and the target is Rooted (can’t move) next turn.'},
@@ -79,7 +81,10 @@ const ABIL={
   holdTheLine:{n:'Hold the Line',cd:4,side:'self',self:[['guard',1],['steady',1]],d:'Guard (30% less damage), and she can’t be pushed, until your next turn.'},
   rally:{n:'Rally',cd:3,side:'self',shape:'burst1',give:['rally',2],others:1,d:'Allies around him get +2 Str and +2 Def for 2 turns.'},
   cleanCut:{n:'Clean Cut',cd:2,side:'foe',r:[1,1],dmg:1.2,hit:10,d:'1.2× damage, as accurate as a normal attack.'},
-  shieldUp:{n:'Shield Up',cd:3,side:'self',self:[['guard',1],['shieldUp',1]],d:'Guard, and his counterattacks deal 1.3×, until your next turn.'}
+  shieldUp:{n:'Shield Up',cd:3,side:'self',self:[['guard',1],['shieldUp',1]],d:'Guard, and his counterattacks deal 1.3×, until your next turn.'},
+  songOfValour:{n:'Song of Valour',mp:6,side:'self',shape:'burst2',give:['valour',2],others:1,d:'Allies within 2 tiles deal 20% more damage for 2 turns.'},
+  lullaby:{n:'Lullaby',mp:8,side:'foe',r:[1,1],shape:'cone',aim:'dir',st:['stun',1,.5],d:'A cone of song (4 tiles): 50% chance to Stun each enemy hit.'},
+  encore:{n:'Encore',mp:15,once:1,side:'ally',r:[1,3],encore:1,d:'An ally up to 3 away who has already acted can act again this turn. Once a fight.'}
 };
 /* the kits: passive, MP pool (spellcasters) and abilities */
 const KITS={
@@ -91,7 +96,8 @@ const KITS={
   maelis:{passive:'lastLight',mp:26,abil:['mend','circleOfRest','sanctuary']},
   rook:{passive:'slippery',mp:0,abil:['backstab','smokeBomb','tumble']},
   brynhildr:{passive:'bulwarkAura',mp:0,abil:['shieldBash','challenge','holdTheLine']},
-  brin:{passive:'beginnersLuck',mp:0,abil:['rally','cleanCut','shieldUp']}
+  brin:{passive:'beginnersLuck',mp:0,abil:['rally','cleanCut','shieldUp']},
+  lysander:{passive:'audience',mp:24,abil:['songOfValour','lullaby','encore']}
 };
 const kitOf=u=>u&&u.cast&&KITS[u.cast]||null;
 const abilOf=u=>(kitOf(u)||{abil:[]}).abil;
@@ -102,13 +108,13 @@ const ABIL_HIT=-10;
 /* MP cost after Attunement */
 function abCost(u,id){const a=ABIL[id];if(!a.mp)return 0;return Math.max(0,a.mp-(has(u,'attunement')&&u.lastEl&&a.el&&u.lastEl!==a.el?2:0))}
 /* why an ability can't be used right now (null if it can) */
-function abBlock(u,id){const a=ABIL[id],cd=(u.cd||{})[id]||0;if(cd>0)return`Ready in ${cd} turn${cd>1?'s':''}`;if(a.mp&&(u.mp||0)<abCost(u,id))return'Not enough MP';
+function abBlock(u,id){const a=ABIL[id],cd=(u.cd||{})[id]||0;if(a.once&&cd>0)return'Used this fight';if(cd>0)return`Ready in ${cd} turn${cd>1?'s':''}`;if(a.mp&&(u.mp||0)<abCost(u,id))return'Not enough MP';
   if(a.side!=='self'&&!aimTiles(u,id).size)return'No target in range';return null}
 
 /* ---- combat hooks (called from calc, reach and the turn loop) ---- */
 /* the last step of every damage roll: Weak, Guard, Bulwark, Shield Up */
 function dmgMods(x,y,ctx,dmg){
-  let m=1;if(hasSt(x,'weak'))m*=.7;if(hasSt(y,'guard'))m*=.7;if(hasSt(x,'shieldUp')&&ctx&&ctx.init!==x)m*=1.3;
+  let m=1;if(hasSt(x,'weak'))m*=.7;if(hasSt(x,'valour'))m*=1.2;if(hasSt(y,'guard'))m*=.7;if(hasSt(x,'shieldUp')&&ctx&&ctx.init!==x)m*=1.3;
   if(man(x,y)>1&&state.units.some(o=>o!==y&&o.hp>0&&o.team===y.team&&man(o,y)===1&&has(o,'bulwarkAura')))m*=.7;
   return Math.max(0,Math.round(dmg*m));
 }
@@ -116,7 +122,7 @@ function dmgMods(x,y,ctx,dmg){
 function stCalc(x,xw,y){
   const phys=!xw.mag,fx=x.hp>=x.maxhp,fy=y.hp>=y.maxhp;
   return{pow:(hasSt(x,'rally')&&phys?2:0),df:(phys&&hasSt(y,'rally')?2:0)-(phys&&hasSt(y,'sunder')?3:0)+(phys&&has(y,'plate')?2:0),
-    acc:(hasSt(x,'blind')?-30:0),avo:(hasSt(y,'smoke')?30:0)+(has(y,'beginnersLuck')&&fy?10:0),crit:(has(x,'beginnersLuck')&&fx?10:0)};
+    acc:(hasSt(x,'blind')?-30:0)+(state.units.some(o=>o!==x&&o.hp>0&&o.team===x.team&&has(o,'audience')&&man(o,x)<=2)?10:0),avo:(hasSt(y,'smoke')?30:0)+(has(y,'beginnersLuck')&&fy?10:0),crit:(has(x,'beginnersLuck')&&fx?10:0)};
 }
 const eagle=(u,w)=>w&&w.t==='bow'&&has(u,'eagleEye')?1:0;
 const stMov=u=>hasSt(u,'chill')?2:0;
@@ -152,7 +158,7 @@ function aimTiles(u,id){
     if(a.aim==='dir'){if(d===1&&abHits(u,id,x,y).foes.length)s.add(key(x,y));continue}
     if(a.side==='tile'){const o=unitAt(x,y);if(!o&&mcost(u,x,y)<99)s.add(key(x,y));continue}
     if(a.aim==='any'){const h=abHits(u,id,x,y);if((a.side==='ally'?h.allies:h.foes).length)s.add(key(x,y));continue}
-    const o=unitAt(x,y);if(o&&o.hp>0&&(a.side==='foe'?hostile(o,u):!hostile(o,u)&&(o!==u||r0===0)))s.add(key(x,y))}
+    const o=unitAt(x,y);if(o&&o.hp>0&&(a.side==='foe'?hostile(o,u):!hostile(o,u)&&(o!==u||r0===0)&&(!a.encore||o.acted)))s.add(key(x,y))}
   return s;
 }
 
@@ -185,7 +191,7 @@ function pushUnit(u,t,n){
 /* ---- using an ability ---- */
 async function useAbility(u,id,tx,ty){
   const a=ABIL[id];busy=true;
-  if(a.mp){u.mp-=abCost(u,id);if(a.el)u.lastEl=a.el}if(a.cd)(u.cd=u.cd||{})[id]=a.cd;
+  if(a.mp){u.mp-=abCost(u,id);if(a.el)u.lastEl=a.el}if(a.cd)(u.cd=u.cd||{})[id]=a.cd;if(a.once)(u.cd=u.cd||{})[id]=99;
   pop(u,a.n,'heal');await sleep(D(350));
   if(a.side==='tile'){stepSfx(u,tx,ty);u.x=tx;u.y=ty;render();await sleep(D(250));sfx('earth');shake()}
   const{foes,allies}=abHits(u,id,tx,ty),w=abWeapon(u,a),killed=[];let exp=0;
@@ -211,8 +217,9 @@ async function useAbility(u,id,tx,ty){
     if(a.heal){const h=healAmt(u,id,t);if(h){t.hp+=h;pop(t,'+'+h,'heal')}exp+=12}
     if(a.cure&&t.st)for(const k of Object.keys(t.st))if(STATUS[k]&&STATUS[k].bad){delete t.st[k];pop(t,'Cured','heal')}
     if(a.give){addSt(t,a.give[0],a.give[1],u);pop(t,STATUS[a.give[0]].n,'heal');exp+=6}
+    if(a.encore){t.acted=false;pop(t,'Encore!','heal');exp+=10}
   }
-  if(a.heal||a.give||a.cure)sfx('heal');
+  if(a.heal||a.give||a.cure||a.encore)sfx('heal');
   for(const[k,n]of a.self||[]){addSt(u,k,n,u);pop(u,STATUS[k].n,'heal')}
   render();await sleep(D(300));
   /* defeated enemies: relic heal, drops and gold, as in a normal fight */
@@ -235,7 +242,7 @@ function abPlayerStart(){for(const u of state.units)if(u.team==='p'){if(mpMax(u)
 /* ---- the Abilities menu, aiming and the forecast ---- */
 let abSel=null,abT=null,aimSet=null;
 const SHAPE_N={one:'',cross:'Cross',area:'3×3 area',burst1:'Around the user',burst2:'Within 2 of the user',pierce:'2 tiles in a line',cone:'Cone, 4 tiles'};
-function abCostTxt(u,id){const a=ABIL[id];return a.mp?`${abCost(u,id)} MP`:`CD ${a.cd}`}
+function abCostTxt(u,id){const a=ABIL[id];return a.mp?`${abCost(u,id)} MP${a.once?' · once':''}`:`CD ${a.cd}`}
 function abRangeTxt(u,id){const a=ABIL[id];if(a.side==='self')return SHAPE_N[a.shape]||'Self';const r=abRange(u,id);return`Rng ${r[0]===r[1]?r[0]:r[0]+'–'+r[1]}${a.shape&&a.shape!=='one'?' · '+SHAPE_N[a.shape]:''}`}
 function mpLine(u){const m=mpMax(u);return m?`<div class="mpl"><span class="bar"><i style="width:${(u.mp||0)/m*100}%"></i></span><span>${u.mp||0}/${m} MP</span></div>`:''}
 function stChips(u){const l=stList(u);return l.length?`<div class="stc">${l.map(k=>`<span class="st ${STATUS[k].bad?'bad':'good'}" title="${STATUS[k].d}">${STATUS[k].n}${u.st[k].n>1?' '+u.st[k].n:''}</span>`).join('')}</div>`:''}

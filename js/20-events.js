@@ -110,7 +110,7 @@ const lvAvg=()=>Math.max(1,Math.round(run.roster.reduce((a,u)=>a+u.lv,0)/run.ros
 /* EVENTS: t = title, art = scene prop drawn by eventScene(), fig = PNG figure(s) laid over it (art/scenes/<fig>.png; a name or a list), d = intro text,
    o = options: l = button label, sub = small text under it, cost = gold, need = check it can be chosen, go = what happens */
 const EVENTS={
-  smith:{t:'The Wandering Smith',art:'smith',d:'A smith with a cart-mounted forge waves you over. “One weapon, no charge. I like the look of you.”',o:[
+  smith:{t:'The Wandering Smith',art:'smith',d:'A smith with a cart-mounted forge waves you over. “One weapon, no charge. For your journey.”',o:[
     {l:'Reforge a weapon',sub:'+2 Mt and +5 Hit (staves heal +5), up to +3',go:async()=>{
       const u=await pickUnit('Whose weapon?','Choose a weapon to reforge.',u=>{const w=weaponOf(u);return!w?'No weapon':forgeLv(w)>=FORGE_MAX?'Already +3':null});
       if(!u)return null;const w=weaponOf(u),old=IT[w.k].n;forge(w);if(R('anvil'))forge(w);sfx('item');return`Sparks fly. ${u.name}’s ${old} comes back as the <b>${IT[w.k].n}</b>: Mt ${IT[w.k].mt}, Hit ${IT[w.k].hit}.`}},
@@ -122,12 +122,13 @@ const EVENTS={
       return`${u.name} pulls a <b>${IT[st].n}</b> from the rack. Mt ${IT[st].mt}, Wt ${IT[st].wt}.`}},
     {l:'Take the medicine',sub:'2 Salves',go:async()=>{evEl.hidden=true;const a=await giveTo('salve','The first of two Salves.',true),b=await giveTo('salve','The second Salve.',true);evEl.hidden=false;return[a,b].filter(Boolean).map(u=>`${u.name} takes a Salve.`).join(' ')||'You leave the medicine on the shelf.'}}]},
   /* the spellcasters' version of the armoury: a sigil or staff is enchanted (+1, like the smith) */
-  enchanter:{t:'The Enchanter’s Study',art:'study',d:'A tower room full of half-finished sigils. The enchanter left in a hurry, but the inks are still wet.',o:[
+  enchanter:{t:'The Enchanter’s Study',art:'study',d:'A tower full of books on enchantment and arcane knowledge.',o:[
     {l:'Enchant a sigil or staff',sub:'+2 Mt and +5 Hit (staves heal +5), up to +3',need:()=>run.roster.some(u=>{const w=weaponOf(u);return w&&['art','spirit'].includes(IT[w.k].t)}),go:async()=>{
       const u=await pickUnit('Whose sigil or staff?','Sigils hit harder; staves heal more.',u=>{const w=weaponOf(u);return!w||!['art','spirit'].includes(IT[w.k].t)?'No sigil or staff':forgeLv(w)>=FORGE_MAX?'Already +3':null});
       if(!u)return null;const w=weaponOf(u),old=IT[w.k].n;forge(w);sfx('item');return`${u.name} copies the enchanter’s runes onto their ${old}. It is now the <b>${IT[w.k].n}</b>.`}},
+    {l:'Study the tomes',sub:'One unit +2 Mag for good',go:async()=>{const u=await pickUnit('Who studies?','+2 Mag for good.');if(!u)return null;bump(u,'mag',2);sfx('ding');return`${u.name} reads until the candles gutter out, and comes away with a head full of power (+2 Mag).`}},
     {l:'Read the notes',sub:'Casters, Menders and Summoners gain 40 EXP',go:async()=>{await expAll(run.roster.filter(u=>CLS[u.cls].w.includes('art')||CLS[u.cls].w.includes('spirit')),40);return'Dense, but worth it. The spellcasters gain 40 EXP.'}}]},
-  shrine:{t:'Shrine of Trial',art:'shrine',d:'A cracked altar, still warm. Words cut into the stone: <i>give blood, and be taught</i>.',o:[
+  shrine:{t:'Blood Shrine',art:'shrine',d:'A cracked altar, still warm. Words cut into the stone: <i>blood for knowledge</i>.',o:[
     {l:'Offer blood',sub:'One unit loses 3 max HP for good and learns a random skill',go:async()=>{
       const u=await pickUnit('Who offers blood?','They lose 3 max HP for good.',u=>u.maxhp<=12?'Too weak':null);if(!u)return null;
       const ks=SKILL_POOL().filter(k=>!has(u,k));if(!ks.length)return`The altar stays cold. ${u.name} already knows everything it could teach.`;const k=pick(ks);
@@ -155,18 +156,11 @@ const EVENTS={
         if(d==='skip')return null;run.roster.splice(+d.slice(1),1)}
       run.roster.push(nu);castJoined(nu);sfx('item');return`The lock gives. <b>${nu.name}</b>, a ${CLS[nu.cls].n}, joins the squad.`}},
     {l:'Leave them',go:async()=>'You walk on. The traveller’s shouts follow you a long way.'}]}},
-  /* weapon upgrades */
-  forge:{t:'The Old King’s Forge',art:'smith',d:'A dwarven forge, cold for a century, roars back to life as you approach. The anvil is warm to the touch.',o:[
-    {l:'Temper every weapon',sub:'Each unit’s weapon +1 (up to +3); Weary Legs next fight',go:async()=>{const n=run.roster.filter(u=>{const w=weaponOf(u);return w&&forgeLv(w)<FORGE_MAX&&forge(w)}).length;addWoe('weary',1);sfx('item');
-      return n?`You work through the night. ${n} weapon${n>1?'s are':' is'} tempered (+1), and everyone is worn out for the next fight.`:'Nothing here can be tempered any further.'}},
-    {l:'Masterwork one weapon',sub:'+2 to one weapon (up to +3)',go:async()=>{
-      const u=await pickUnit('Whose weapon?','It gains two reforges.',u=>{const w=weaponOf(u);return!w?'No weapon':forgeLv(w)>=FORGE_MAX?'Already +3':null});
-      if(!u)return null;const w=weaponOf(u);forge(w);forge(w);sfx('item');return`The anvil sings. ${u.name}’s weapon comes back as the <b>${IT[w.k].n}</b>: Mt ${IT[w.k].mt}, Hit ${IT[w.k].hit}.`}}]},
   weaponmaster:{t:'The Weaponmaster',art:'armoury',d:'A scarred weaponmaster sits behind a table of fine arms. “Your blades are a disgrace. Give me one, and coin, and I’ll give you something worthy.”',o:[
     {l:'Trade up a weapon',sub:'35 gold: a better weapon of the same kind',cost:35,need:()=>run.roster.some(u=>{const w=weaponOf(u);return w&&tierUp(u,w)}),go:async()=>{
       const u=await pickUnit('Whose weapon?','They get the next tier of the same weapon, keeping any reforging.',u=>{const w=weaponOf(u);return!w?'No weapon':tierUp(u,w)?null:'Nothing better for them'});
       if(!u)return null;const w=weaponOf(u),old=IT[w.k].n,up=tierUp(u,w);w.k=up;w.u=IT[up].uses;spend(35);return`The weaponmaster weighs your ${old}, snorts, and hands over the <b>${IT[up].n}</b>: Mt ${IT[up].mt}, Hit ${IT[up].hit}.`}},
-    {l:'Ask for a lesson',sub:'One unit gains 60 EXP',go:async()=>{const u=await pickUnit('Who takes the lesson?','They gain 60 EXP.');if(!u)return null;await expAll([u],60);return`An hour of drills and bruises. ${u.name} gains 60 EXP.`}}]},
+    {l:'Leave them',go:async()=>'You walk on.'}]},
   /* Lysander joins only through this event */
   minstrel:{t:'The Wandering Minstrel',art:'veteran',ok:()=>!(run.castUsed||[]).includes('lysander')&&!run.roster.some(u=>u.cast==='lysander'),
     d:'A man in a feathered cap sits by the road, tuning a lyre. “Monster hunters! Every ballad needs heroes. Mind if I come along and write yours?”',o:null,make:()=>{const nu=castUnit('lysander',lvAvg());EVENTS.minstrel.card=`<div class="dcard on ev-card">${unitCard(nu)}</div>`;return[
@@ -180,7 +174,6 @@ const EVENTS={
     {l:'Everyone drinks',sub:'Every unit gains +1 Res',go:async()=>{run.roster.forEach(u=>u.res++);sfx('heal');return'The water tastes of rain. Every unit gains 1 Res.'}}]},
   well:{t:'Wishing Well',art:'well',d:'An old stone well, its bottom lost in the dark. Coins glint far below.',o:[
     {l:'Toss in 25 gold',sub:'Every unit gains +1 Luck',cost:25,go:async()=>{spend(25);run.roster.forEach(u=>u.lck++);sfx('ding');return'The coins vanish without a sound. Every unit feels luckier (+1 Luck).'}},
-    {l:'Fish for coins',sub:'Win some gold, but someone might get hurt',go:async()=>{if(rand()<.6){const g=ri(20,45);run.gold+=g;sfx('item');return`You haul up a bucket of old coins: ${g} gold.`}const u=pick(run.roster);u.maxhp=Math.max(10,u.maxhp-2);u.hp=Math.min(u.hp,u.maxhp);sfx('broke');return`The rope snaps. ${u.name} cuts their hands badly on the way up (−2 max HP).`}},
     {l:'Leave it',go:async()=>'You keep your coins.'}]},
   battlefield:{t:'Old Battlefield',art:'battlefield',d:'Rusted armour and broken weapons litter the ground. Whatever happened here was a long time ago.',o:[
     {l:'Search the dead',sub:'Find a weapon or gear; it may cost you',go:async()=>{const k=pick(['knightlySword','steelSpear','cleaver','ironwoodBow','moonglassEdge','barbedSpear','reaverAxe','hawkeyeBow','chainmail','leatherArmour','ironGauntlets']);evEl.hidden=true;const u=await giveTo(k,'Pulled from the mud.',true);evEl.hidden=false;
@@ -194,8 +187,8 @@ const EVENTS={
     {l:'Ask for her blessing',sub:'Choose a relic',go:async()=>{evEl.hidden=true;const k=await relicPick(3,['c','u'],'The healer’s blessing','She presses something into your hands. “Carry this, and come back to us.”');evEl.hidden=false;return k?`You leave with the <b>${RELICS[k].n}</b>.`:'She has nothing left to give.'}}]}},
   throne:{t:'The Empty Throne',art:'throne',d:'A throne room with no king. Dust lies thick on the red tiles, and a jewelled crown still rests on the seat.',o:null,
     make:()=>{EVENTS.throne.ov='<div class="ev-floor"></div>';return[
-    {l:'Sit on the throne',sub:'One unit gains +1 to two random stats',go:async()=>{const u=await pickUnit('Who sits on the throne?','They gain +1 to two random stats.');if(!u)return null;const st=shuffle(['str','mag','skl','spd','lck','def','res']).slice(0,2);st.forEach(k=>bump(u,k,1));sfx('ding');return`${u.name} sits, and for a moment looks every inch a ruler (+1 ${st.map(k=>k.toUpperCase()).join(', +1 ')}).`}},
-    {l:'Take the crown',sub:'+50 gold; Wounded next fight',go:async()=>{run.gold=gold()+50;addWoe('wound',1);sfx('item');return'You pry out the jewels: 50 gold. As you leave, guards that should be long dead stir in the dark. You’ll go into the next fight hurt.'}}]}}
+    {l:'Take the crown',sub:'Gain the Crystal Crown: +3 damage, but enemies get +10 Hit against you',need:()=>!R('gemcrown'),go:async()=>{run.relics.push('gemcrown');sfx('dark');return`The crown is lighter than it looks. Under the jewels, crystal has grown into the gold, and it pulses faintly in your hands. <b>${RELICS.gemcrown.n}</b>: ${RELICS.gemcrown.d}`}},
+    {l:'Break the crown',sub:'Every unit gains 10 EXP',go:async()=>{await expAll(run.roster,10);sfx('broke');return'The gems crack, and something inside them screams thinly before going quiet. Better no one wears it. Every unit gains 10 EXP.'}}]}}
 };
 /* ---- woes: bad luck from events that lasts a fight or two (shown on the map in red) ---- */
 const WOES={wound:{n:'Wounded',d:'Every unit starts the next fight 5 HP down'},weary:{n:'Weary Legs',d:'Every unit has −1 Move'},marked:{n:'Marked',d:'Enemies would rather attack this unit'}};

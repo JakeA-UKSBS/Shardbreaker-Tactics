@@ -25,7 +25,7 @@ The cast, by when they can join. First names only for now. Kits are first drafts
 - **Free slots:** 1–2 slots per character for customising, filled from scrolls or skills found during the run (the Shardbreaker scroll skills are the starting pool).
 - **Costs:** spells cost **MP**, physical skills have a **cooldown (CD)** in turns. MP starts full and refills slowly (starting numbers: casters 20–30 MP, everyone else 0–10, +2 MP a turn).
 - **Damage:** a multiple of the unit's normal attack power (Str or Mag + weapon Mt, with height, effectiveness and relics), e.g. "1.5×". Defence or Resistance is subtracted afterwards. Abilities aren't countered. Heals are a multiple of (Mag + 5).
-- **In the game so far:** the 9 starting-roster characters have their kits (the Abilities button in the command menu). Their passive replaces the random personal skill. The others still have a random personal skill for now.
+- **In the game so far:** the 9 starting-roster characters and Lysander have their kits (the Abilities button in the command menu). Their passive replaces the random personal skill. The others still have a random personal skill for now.
 
 ### Shapes
 
@@ -266,7 +266,8 @@ A travelling bard who joined for the songs he'll write about it. Vain, charming,
 - **Passive: Audience.** Allies within 2 tiles of him get +10 Hit.
 - **Song of Valour** (burst r2 · 6 MP): allies deal 20% more damage for 2 turns.
 - **Lullaby** (cone 3 · 8 MP): 50% chance to Stun each enemy hit.
-- **Encore** (single ally · 15 MP, once per fight): that ally acts again this turn.
+- **Encore** (single ally, range 3 · 15 MP, once per fight): an ally who has already acted acts again this turn.
+- He carries no staff and can't heal or attack: he sings.
 
 ## Found during the run
 

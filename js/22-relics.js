@@ -26,6 +26,8 @@ const RELICS={
   bedroll:{n:'Traveller’s Bedroll',r:'c',d:'Training at a camp gives 100 EXP instead of 50.'},
   kettle:{n:'Camp Kettle',r:'u',d:'At every camp, all units gain 20 EXP.'},
   plenty:{n:'Horn of Plenty',r:'u',d:'+15 gold after every won fight, and tavern meals last 1 fight longer.'},
+  /* ev: only from its event (the Empty Throne), never in the relic pools */
+  gemcrown:{n:'The Crystal Crown',r:'r',ev:1,d:'Units deal +3 damage, but the crystals call to monsters: enemies get +10 Hit against your units.'},
   /* starter relics: Ithren offers 3 of the r:'s' ones before you pick a squad; r:'h' ones join the Heirloom pick (unlocked by Field Hospital). Neither drops anywhere else */
   poultice:{n:'Herbal Poultice',r:'s',d:'Salves heal 2 more HP.'},
   satchel:{n:'Sage’s Satchel',r:'h',d:'Everyone in your starting squad carries an extra Salve.'},
@@ -48,7 +50,7 @@ function dropGold(){
   const last=!state.units.some(u=>u.team==='e'&&u.hp>0&&!u.summon),g=last?state.goldLeft:rand()<.5?Math.min(state.goldLeft,ri(3,6)):0;if(!g)return;
   state.goldLeft-=g;state.gold=(state.gold||0)+g;sfx('item');notify(`${g} gold dropped`,'Collected when the fight is won.',coinArt());
 }
-function relicPool(rs){return Object.keys(RELICS).filter(k=>!R(k)&&rs.includes(RELICS[k].r)&&relicOpen(k))}
+function relicPool(rs){return Object.keys(RELICS).filter(k=>!R(k)&&!RELICS[k].ev&&rs.includes(RELICS[k].r)&&relicOpen(k))}
 async function relicPick(n,rs,title,text,first){
   /* first: relics that are always offered (the Heirloom pick always has one heirloom relic) */
   const opts=[...(first||[]).filter(Boolean),...shuffle(relicPool(rs))].slice(0,n);if(!opts.length)return null;
@@ -68,12 +70,13 @@ function relicCalc(x,xw,y){
     if(R('banner')&&x.hp===x.maxhp)o.pow+=2;
     if(R('horn')&&state.turn===1)o.pow+=3;
     if(R('crown')&&y.boss)o.pow+=4;
+    if(R('gemcrown'))o.pow+=3;
     if(R('quiver')&&xw.t==='bow')o.pow+=3;
     if(R('focusgem')&&xw.t==='art'){o.pow+=2;o.acc+=10}
     if(R('whetstone'))o.acc+=10;
     if(R('coin'))o.crit+=10;
     if(R('aventurine'))o.crit+=5;
-  }else if(R('mirror'))o.acc-=10;
+  }else{if(R('mirror'))o.acc-=10;if(R('gemcrown'))o.acc+=10}
   if(y.team==='p'){
     if(R('shield')&&state.units.some(a=>a!==y&&a.team==='p'&&a.hp>0&&man(a,y)===1))o.df+=2;
     if(R('bulwark')&&CLS[y.cls].body==='armor')o.df+=2;

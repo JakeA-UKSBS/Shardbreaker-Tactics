@@ -122,7 +122,7 @@ function castUnit(id,lv){
   const s=R.b.slice();if(M.st)M.st.forEach((d,i)=>s[i]=Math.max(0,s[i]+d));if(t==='2'&&R.bonus)R.bonus.forEach((d,i)=>s[i]+=d);
   const g=R.gr.map(([a,b])=>Math.round((a+b)/2)),items=[];
   if(c.wk)items.push({k:c.wk,u:IT[c.wk].uses});
-  if(role==='support'&&c.wk!=='mendingStaff')items.push({k:'mendingStaff',u:IT.mendingStaff.uses});
+  if(role==='support'&&c.wk!=='mendingStaff'&&c.cls!=='Minstrel')/* Lysander sings rather than heals */items.push({k:'mendingStaff',u:IT.mendingStaff.uses});
   items.push({k:'salve',u:IT.salve.uses});
   const u={id:'c'+(run.uid++),cast:id,name:c.name,cls:c.cls,team:'p',lv:1,exp:0,skill:KITS[id]?KITS[id].passive:pick(R.skills),skills:[],cap:BASE_CAP,look:clone(c.look),g,mov:CLS[c.cls].mov,items,acted:false,x:0,y:0};
   ST.forEach((k,i)=>u[k]=s[i]);u.maxhp=u.hp;
