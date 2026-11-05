@@ -7,9 +7,9 @@ async function beginBattle(){
 async function newRun(){
   const seed=(Date.now()^Math.floor(Math.random()*1e9))>>>0;seedRng(seed);
   run={seed,n:0,uid:1,roster:[],pos:null,path:[],act:1,relics:[],rr:{},gold:30,meals:[],lost:0,ate:0};/* greybox: Act 1 is always the Cursed Woodland, whose maps are the hand-made height maps */run.biomes=['forest',...shuffle(biomeIds().filter(b=>b!=='forest'))].slice(0,ACTS);
-  /* the Crossroads: Maelis (the starting Mender) plus starting-roster characters, 5 in all (6 with the unlock) */
-  run.castUsed=[];const lv0=unl('veterans')?3:2,starters=shuffle(CAST.filter(c=>c.joins==='start'&&c.id!=='maelis'));
-  const opts=shuffle([castUnit('maelis',lv0),...starters.slice(0,(unl('draft6')?6:5)-1).map(c=>castUnit(c.id,lv0))]);
+  /* the Crossroads: 5 random starting-roster characters (6 with the unlock); no guaranteed Mender */
+  run.castUsed=[];const lv0=unl('veterans')?3:2,starters=shuffle(CAST.filter(c=>c.joins==='start'));
+  const opts=starters.slice(0,unl('draft6')?6:5).map(c=>castUnit(c.id,lv0));
   run.map=genMap();titleEl.hidden=true;const asc=await sageScene();if(asc===null){titleEl.hidden=false;return false}run.asc=asc;if(A(3))run.gold=0;if(unl('funds'))run.gold+=20;
   {const k=await relicPick(3,['s'],'Ithren’s gift','“Take this to assist you.”');if(k==='purse')run.gold+=30}
 const squad=await musterScene(opts,3);if(!squad)return false;

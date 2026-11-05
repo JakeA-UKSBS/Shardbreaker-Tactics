@@ -30,19 +30,27 @@ Defend fights: from floor 2, a quarter of normal battles are a settlement to hol
 
 
 ## A run
-- Title subtitle: "Break the blight". Battle titles are just the place name ("Oasis", "Old Mineshaft (Elite)").
-- Every opening draft includes at least one Mender (healer).
+- Title subtitle: "Break the blight". Battle titles say what the fight is ("Battle", "Elite Battle", "Defend the Settlement"); boss fights use the boss's name.
 - Early ease: in Act 1, enemies deal 3 less damage on floors 1-3, 2 less on 4-6 and 1 less on 7-9; the first two floors have 2 enemies.
 - A run opens in Ithren the Sage's tent (`sageScene()`): he talks over his crystal ball (4 lines, naming the run's two regions), then asks how deep into the blight to go once Ascension is unlocked. Then the Crossroads (`musterScene()`): Your candidates stand around a campfire, with the run's two regions on the signpost. Travellers start at Lv 2. Tap travellers to see their card and choose 3, then Set out. Each act's map starts from a flag node at the bottom. Fallen units are gone for the rest of the run; you only lose when the whole squad falls.
-- Each act is a branching node map (`genMap()`): 10 floors of 3 lanes, then a shared campfire (rest) on floor 11 and the boss on floor 12.
-- Every path holds exactly `MIX`: 3 battles, 1 elite (never before floor 4; shown as a red horned skull on the map), 1 recruit, 1 tavern, 1 rest, 2 events, 1 treasure. One lane swaps a battle for a second elite (`MIX_HARD`), so the riskier route is there if you want it. Lanes are shuffles of the same mix, and a crossing between lanes is only kept if every path through the map still matches, so no route skips the treasure room. Change `MIX` to change the length and mix.
+- Each act is a branching node map (`genMap()` in `js/18-node-map.js`), following Slay the Spire's map: 15 floors on 4 lanes that cross now and then, then the boss on floor 16. Act 3 is a short straight road instead: tavern, elite, event, camp, then the Crystal Heart.
+- Fixed floors: 1 is a battle, 8 a treasure room, 15 a camp (rest) and 16 the boss. Every other floor is rolled from `ROOM_W`:
+
+  | Room | Chance | Rules |
+  | --- | --- | --- |
+  | Battle | 45% | |
+  | Event | 23% | |
+  | Camp (rest) | 12% | Not before floor 6, not on floor 14, never twice in a row |
+  | Elite | 10% | Not before floor 6, never twice in a row; shown as a horned skull |
+  | Tavern | 10% | Never twice in a row |
+
+  A roll that breaks a rule is rolled again, so on floors where a room isn't allowed (camps and elites before floor 6, say) the others come up a little more often.
+- On top of the odds, every route through floors 1-14 must have 6-9 fights (elites count) and at least one camp before the fixed one on 15 (`FIGHTS`, `routeOk()`). A lane that fails is rolled again.
+- Each map gets 6-8 crossings between neighbouring lanes, never on the same or neighbouring floors, and only where every route still passes those checks.
 - Nodes: Battle; Elite (Elder leader, always drops a relic (1 of 2) and a jade weapon for a unit you choose); Recruit (pick 1 of 3; team caps at 6, `TEAM_CAP`); Rest (train one unit +1 level); Treasure (pick 1 of 3 items); Event (`EVENTS`); Tavern; Boss.
 - Gold: 30 to start, then 25 per battle, 45 per elite, 80 per boss (`GOLDWIN`). Spent at taverns.
 - Tavern (`tavernNode()`): talk to Marla the innkeeper and pick as many options as you can afford before leaving. Drinks (`DRINKS`): a round of ale (+30 EXP for everyone) or a spirit for one unit (+1 to a stat for good). Food (`MEALS`): squad-wide buffs for 2-3 fights (+2 damage, +15 Hit, +2 Def/Res, +1 Move, poison immunity), counted down after each won fight and shown on the map. Sellswords: 3 units for hire at 40 + 15 per level. Rumours: a hint about the region's boss and rule. Music slot: `music/tavern.mp3`.
-- Events (`EVENTS`) don't repeat within a run while fresh ones are left. They open a full-screen scene drawn for that event (`eventScene()`, tinted to the region), with choices underneath and the outcome shown in the same box: Wandering Smith, Abandoned Armoury, Shrine of Trial, Training Ground, Travelling Merchant (3 items for gold), Gambler's Table (bet 30 for 60), The Golden Idol (rare relic for −2 max HP all round), The Caged Traveller (free unit), Healing Spring (+3 max HP for one, or +1 Res for all), Wishing Well (25 gold for +1 Luck all round, or fish for coins), Old Battlefield (search for gear at a risk, or +20 EXP).
-  - More events: Jade Tomb, Storm Altar, Specialist's Cache (crates matched to your squad: Longbow if you have an archer, Throwing Knives for a Rogue, Far Charm for a Mender, Spark Sigil for a caster, Rune Staff for a Summoner), Old Veteran, Statue of Valour, Drill Sergeant, Toll Bridge, Bog Witch, Strange Fog, Suspicious Chest, Ruined Library.
-  - Act 2 only (`act:2`): Fallen Star (Meteor Sigil), Storm Spire (Heaven's Bolt or Far Charm), The Oracle, Mountain Sage, Dragon's Hoard.
-  - Woes (`WOES`, `run.woes`): bad luck from events, shown in red on the map and counted down after each won fight. Wounded (every unit starts the next fight 5 HP down), Weary Legs (−1 Move), Marked (one unit acts as if it had Taunt).
+- Events, Act 2 events and Woes: see [docs/EVENTS.md](docs/EVENTS.md).
 - Special weapons from events: Jade weapons (Jian, Fang, Spear, Axe, Bow; Crit 30-35), Spark and Thunderhead lightning sigils, Longbow (Rng 2-3), Throwing Knives (Rng 1-2), Far Charm (heals at Rng 1-10), and in Act 2 Meteor Sigil and Heaven's Bolt (Rng 3-10, 5 uses). A unit carrying several charms heals with whichever one reaches.
 - Forged weapons use keys like `ironAxe~2` (+2 Mt and +5 Hit per level; charms heal +5), built on demand by `ensureIt()`.
 - Enemy strength climbs with floor and act (floors are scaled to a 10-floor curve by `flScale()`, so a longer map doesn't make enemies tougher): Lv 1 on Act 1 floor 1, about Lv 6 by floor 9, Lv 7+ in Act 2. Numbers grow with the floor too. Each region's `pool` lists its monsters with the floor they start appearing on (all are open in Act 2). Elites use the region's tougher `elitePool`, are led by an Elder of its strongest monster, and fight 2 levels higher with one extra enemy.

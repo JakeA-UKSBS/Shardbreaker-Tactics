@@ -220,7 +220,7 @@ function genBattle(n,kind){
   while(list.length<count){const c=roll();list.push(c);if(c==='Wolf'&&list.length<count&&rand()<.6)list.push('Wolf')}
   const bossName=B.boss.name||pick(BOSSN)+' '+pick(BOSST),turns=ship&&!bossFight?(elite?6:5):town?ri(5,7):0;
   const goal=bossFight?'boss':ship||town?'defend':'rout';
-  const def={biome:B.id,title:bossFight?m.n:town?`Defend the ${m.n}`:m.n+(elite?' (Elite)':''),goal,turns,map:m.map,h:m.h,start:m.start,gifts:{},
+  const def={biome:B.id,title:bossFight?(B.boss&&B.boss.name||'Boss Battle'):town?'Defend the Settlement':elite?'Elite Battle':'Battle',/* no map names in titles; bosses go by their own name */goal,turns,map:m.map,h:m.h,start:m.start,gifts:{},
     intro:bossFight&&B.boss.intro?B.boss.intro:bossFight?`${bossName} waits for you in the ${m.n}. Defeat it to clear ${theN(B)}.`:ship?`Fliers are diving on the ship. Hold the deck for ${turns} turns.`:town?`Crystallised beasts are closing on the ${m.n.toLowerCase()}. Hold them off for ${turns} turns.`:elite?`A pack led by something old and strong holds the ${m.n.toLowerCase()}. Rout them all.`:`${count} monsters wait in the ${m.n.toLowerCase()}. Rout them.`};
   /* drops: 12% of enemies carry something, at most one weapon a battle, and never a weapon the squad already has */
   def.foes=()=>{const tiles=spawnTiles(m),out=[];let wDrop=0;

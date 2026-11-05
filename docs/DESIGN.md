@@ -70,6 +70,8 @@ Still to flesh out: the story scenes, and narrowing the longlist into roles that
 
 - Sobek’s Mire (the swamp region, renamed from Bog of Eternal Stench): give it Egyptian-themed monsters to match the name (e.g. mummified lurkers, scarab swarms, jackal-headed guards), with Krondis as a crocodile-god boss.
 
+- Ascension: at higher Ascension levels, Crossroads travellers start at Lv 1 instead of 2 (to be sorted with the rest of the Ascension changes).
+
 - Music for the end of a run: a victory track and a defeat track (e.g. victory.mp3 and defeat.mp3), played on the win and wipe screens.
 
 ## Carried over from Shardbreaker
