@@ -666,7 +666,7 @@ button.it.sel{border-color:var(--gold)}
 .vp>.umenu.dl{left:10px}.vp>.umenu.dr{right:10px}
 /* hand-drawn event figures laid over the event scene: sizes are fractions of the 160x90 scene, so pixels match it */
 .ev-fig{position:absolute;bottom:0;image-rendering:pixelated;pointer-events:none}
-.ev-witch{left:5%;width:38.125%}
+.ev-witch{left:5%;width:30%}
 .ev-well{left:34%;width:32%;bottom:12%}
 .ev-anvil{left:35%;width:30%;bottom:10%}
 .ev-altar{left:34%;width:32%;bottom:14%}
