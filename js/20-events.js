@@ -5,15 +5,19 @@ const REG_SKY={heart:['#0e0408','#2e0c16','#4e1424'],mushroom:['#2a2040','#5a3a6
   mountain:['#2a1414','#5a2a1e','#a8482a'],ship:['#26304a','#56668c','#8e9ab8'],labyrinth:['#141218','#24202c','#34303e'],
   desert:['#c8783a','#e8a85a','#f3d08a'],snow:['#4a6a9a','#8aaad0','#c8daf0'],cavern:['#120e1a','#221a2e','#342a44']};
 const REG_GROUND={heart:'#1e1416',mushroom:'#4e4058',shadow:'#34303c',swamp:'#3f5a4a',forest:'#3e4436',mountain:'#3a3034',ship:'#7a5230',labyrinth:'#4a4652',desert:'#c9a060',snow:'#e4ecf4',cavern:'#3a3444'};
+/* PROP_FIG: a scene prop's PNG laid over the scene (art/scenes/<png>.png). PROP_OWN: props whose PNG replaces the code-drawn one outright */
+const PROP_FIG={well:'well',smith:'anvil',shrine:'altar',library:'desk',study:'potions'},PROP_OWN=['well','smith','shrine'];
+const propFig=prop=>PROP_FIG[prop]&&ART_PNG.has('scenes/'+PROP_FIG[prop])?PROP_FIG[prop]:null;
 function eventScene(prop){
   if(prop==='witch'&&ART_PNG.has('scenes/witch-hut'))return'art/scenes/witch-hut.png';/* Rhi's hut, drawn at 640x360 */
   const B=actBiome(),c='EV|'+prop+'|'+B.id;if(sprCache[c])return sprCache[c];
   const W=160,H=90,p=Px(W,H),sky=REG_SKY[B.id]||REG_SKY.forest,gr=REG_GROUND[B.id]||'#3e4436';
-  if(['smith','spar','witch','library','armoury'].includes(prop)){const wl=prop==='witch'?'#3a3028':'#4a4038',wl2=shade(wl,.8);p.rect(0,0,W,64,wl);for(let y=0;y<64;y+=8)for(let x=(y/8%2)*8;x<W;x+=16)p.rect(x,y,15,7,wl2);
+  if(['smith','spar','witch','library','armoury','study'].includes(prop)){const wl=prop==='witch'?'#3a3028':'#4a4038',wl2=shade(wl,.8);p.rect(0,0,W,64,wl);for(let y=0;y<64;y+=8)for(let x=(y/8%2)*8;x<W;x+=16)p.rect(x,y,15,7,wl2);
     p.rect(142,14,14,18,sky[2]);p.rect(142,14,14,6,sky[1]);p.rect(148,14,2,18,'#2a1e14');p.rect(142,22,14,2,'#2a1e14');
     for(const x of[0,52,104])p.rect(x,0,6,64,'#3a2a1a');p.rect(0,0,W,5,'#3a2a1a');p.rect(0,62,W,28,'#6a4a2a');for(let y=64;y<90;y+=5)p.rect(0,y,W,1,'#4a3218');for(let i=0;i<14;i++)p.rect((i*37)%W,64+((i*13)%5)*5,1,5,'#4a3218')}
   else{sky.forEach((col,i)=>p.rect(0,i*20,W,20,col));p.rect(0,60,W,30,gr);for(let i=0;i<40;i++)p.set((i*41)%W,62+(i*17)%26,shade(gr,i%2?1.15:.85));
   p.poly([[0,60],[20,48],[44,58],[70,46],[100,58],[126,44],[160,56],[160,60]],shade(sky[0],1.1));}
+  const own=PROP_OWN.includes(prop)&&propFig(prop);if(own)prop='_'+prop;/* the PNG draws this prop, so skip the code-drawn one */
   const S=(x,y,w,h,col)=>p.rect(x,y,w,h,col),G=GOLD,M=METAL,M2=METAL2,WD='#7a5230',WD2='#4f331d';
   if(prop==='smith'){S(22,40,30,24,'#4a3a3a');S(26,44,22,12,'#2a1a14');p.ell(37,52,9,5,'#ff8a3c');p.ell(37,51,5,3,'#ffe14a');S(28,30,18,10,'#5a4a4a');S(32,8,10,22,'#4a3a3a');
     S(70,62,20,14,WD2);S(64,54,32,8,M2);S(60,52,40,4,M);S(96,54,8,3,M);S(108,36,30,3,WD2);for(const x of[112,120,128])p.line(x,39,x,52,M);p.rect(118,52,5,6,WD2);p.line(126,39,124,50,M2,2);
@@ -94,7 +98,7 @@ const evEl=document.createElement('div');evEl.className='tav ev';evEl.hidden=tru
 /* the cage's bars, drawn over the traveller inside */
 function cageBarsArt_draw(){if(sprCache.CAGEBARS)return sprCache.CAGEBARS;const p=Px(160,90);for(let x=60;x<=100;x+=8){p.rect(x,33,1,34,METAL);p.rect(x+1,33,1,34,'#5a6070')}p.rect(58,30,44,3,METAL2);p.rect(58,30,44,1,METAL);p.rect(58,67,44,3,METAL2);p.ring(93,42,2.5,GOLD);p.set(93,45,GOLD);return sprCache.CAGEBARS=p.url()}
 function evShow(E,text,opts){
-  evEl.innerHTML=`<div class="tv-scene"><img class="tv-bg" src="${eventScene(E.art)}" alt="">${[].concat(E.fig||[]).filter(f=>ART_PNG.has('scenes/'+f)).map(f=>`<img class="ev-fig ev-${f}" src="art/scenes/${f}.png" alt="">`).join('')}${E.ov&&E.card?E.ov:''}<span class="tv-gold">${gold()} gold</span></div>
+  evEl.innerHTML=`<div class="tv-scene"><img class="tv-bg" src="${eventScene(E.art)}" alt="">${[].concat(E.fig||[],propFig(E.art)||[]).filter(f=>ART_PNG.has('scenes/'+f)).map(f=>`<img class="ev-fig ev-${f}" src="art/scenes/${f}.png" alt="">`).join('')}${E.ov&&E.card?E.ov:''}<span class="tv-gold">${gold()} gold</span></div>
     <div class="tv-box"><div class="tv-name">${E.t}</div><p class="tv-text">${text}</p>${E.card&&opts.length>1?E.card:''}<div class="tv-opts">${opts.map(([k,l,sub,dis])=>`<button type="button" class="tv-o" data-t="${k}"${dis?' disabled':''}>${l}${sub?`<span>${sub}</span>`:''}</button>`).join('')}</div></div>`;
   evEl.hidden=false;
   return new Promise(res=>{evEl.onclick=e=>{const b=e.target.closest('[data-t]');if(!b||b.disabled)return;sfx('tick');res(b.dataset.t)}});
@@ -115,7 +119,7 @@ const EVENTS={
       return`${u.name} pulls a <b>${IT[st].n}</b> from the rack. Mt ${IT[st].mt}, Wt ${IT[st].wt}.`}},
     {l:'Take the medicine',sub:'2 Salves',go:async()=>{evEl.hidden=true;const a=await giveTo('salve','The first of two Salves.',true),b=await giveTo('salve','The second Salve.',true);evEl.hidden=false;return[a,b].filter(Boolean).map(u=>`${u.name} takes a Salve.`).join(' ')||'You leave the medicine on the shelf.'}}]},
   /* the spellcasters' version of the armoury: a sigil or staff is enchanted (+1, like the smith) */
-  enchanter:{t:'The Enchanter’s Study',art:'library',d:'A tower room full of half-finished sigils. The enchanter left in a hurry, but the inks are still wet.',o:[
+  enchanter:{t:'The Enchanter’s Study',art:'study',d:'A tower room full of half-finished sigils. The enchanter left in a hurry, but the inks are still wet.',o:[
     {l:'Enchant a sigil or staff',sub:'+2 Mt and +5 Hit (staves heal +5), up to +3',need:()=>run.roster.some(u=>{const w=weaponOf(u);return w&&['art','spirit'].includes(IT[w.k].t)}),go:async()=>{
       const u=await pickUnit('Whose sigil or staff?','Sigils hit harder; staves heal more.',u=>{const w=weaponOf(u);return!w||!['art','spirit'].includes(IT[w.k].t)?'No sigil or staff':forgeLv(w)>=FORGE_MAX?'Already +3':null});
       if(!u)return null;const w=weaponOf(u),old=IT[w.k].n;forge(w);sfx('item');return`${u.name} copies the enchanter’s runes onto their ${old}. It is now the <b>${IT[w.k].n}</b>.`}},
