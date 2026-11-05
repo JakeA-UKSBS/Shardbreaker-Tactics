@@ -209,7 +209,7 @@ const isRoleU=(u,r)=>u.cls.startsWith(`G.${r}.`);
 const canAny=k=>run.roster.some(u=>canUse(u,k));
 /* the jade (killer) weapon that suits a unit, if any */
 const jadePick=()=>{const ks=[...new Set(run.roster.map(jadeFor).filter(Boolean))];return ks.length?pick(ks):'jadeJian'};
-function jadeFor(u){if(isRoleU(u,'rogue'))return'jadeFang';const m={blade:'jadeJian',pole:'jadeSpear',heavy:'jadeAxe',bow:'jadeBow',art:'thunderheadSigil'};for(const t of CLS[u.cls].w)if(m[t])return m[t];return null}
+function jadeFor(u){if(isRoleU(u,'rogue'))return'jadeFang';const m={blade:'jadeJian',pole:'jadeSpear',heavy:'jadeAxe',bow:'jadeBow',art:'thunderheadSigil'};for(const t of CLS[u.cls].w)if(m[t]&&canUse(u,m[t]))return m[t];return null}
 /* every item the squad gains goes through this picker; found=true shows it as "Found: X" with a Leave it option */
 async function giveTo(k,why,found){for(;;){const u=await pickUnit(found?`Found: ${IT[k].n}`:`Who takes the ${IT[k].n}?`,found?`${why?why+' ':''}${itemText(k)}`:why||itemText(k),u=>isWpn(k)&&!canUse(u,k)?'Can’t wield it':null,found?'Leave it':'Cancel');if(!u)return null;if(!await stow(u,k))continue;sfx('item');return u}}
 Object.assign(EVENTS,{
@@ -220,7 +220,7 @@ Object.assign(EVENTS,{
   cache:{t:'The Specialist’s Cache',art:'cache',d:'A sealed quartermaster’s cache. Each crate is stencilled for a different trade.',o:null,
     make:()=>{const has=f=>run.roster.some(f),o=[];
       if(has(u=>CLS[u.cls].w.includes('bow')))o.push('longbow');if(has(u=>isRoleU(u,'rogue')))o.push('throwingKnives');if(has(u=>isRoleU(u,'support')))o.push('farStaff');
-      if(has(u=>isRoleU(u,'caster')))o.push('sparkSigil');if(has(u=>isRoleU(u,'summoner')))o.push('runeStaff');if(o.length<2)o.push(pick(['knightlySword','steelSpear','cleaver']));
+      if(has(u=>canUse(u,'sparkSigil')))o.push('sparkSigil');if(has(u=>isRoleU(u,'summoner')))o.push('runeStaff');if(o.length<2)o.push(pick(['knightlySword','steelSpear','cleaver']));
       return[...o.slice(0,3).map(k=>({l:`Open the ${IT[k].n} crate`,sub:itemText(k),go:async()=>{const u=await giveTo(k);return u&&`${u.name} takes the <b>${IT[k].n}</b>.`}})),{l:'Leave it sealed',go:async()=>'Not your trade.'}]}},
   veteran:{t:'The Old Veteran',art:'veteran',d:'A grey-bearded soldier sits by a fire, sharpening a notched blade. “Sit. I’ve stories, if you’ve time.”',o:[
     {l:'Hear his stories',sub:'Every unit gains 30 EXP',go:async()=>{await expAll(run.roster,30);return'Old wars, old mistakes. Every unit gains 30 EXP.'}},
