@@ -629,7 +629,7 @@ button.it.sel{border-color:var(--gold)}
 @media (min-width:960px){
   .nmap{display:grid;grid-template-columns:280px minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;column-gap:16px;row-gap:10px;padding:16px 20px}
   .nmap .nm-head{grid-column:1/-1;max-width:none}
-  .nmap .nm-side:not(.nm-unit){display:block;position:static;grid-column:1;grid-row:2;width:auto;max-height:none;min-height:0;overflow:auto;align-self:start}
+  .nmap .nm-side:not(.nm-unit){display:block;position:static;grid-column:1;grid-row:2;width:auto;max-height:100%;min-height:0;overflow:auto;align-self:start}
   .nmap .nm-squad{grid-column:1;grid-row:3;max-width:none;flex-wrap:wrap;overflow:visible;margin:0}
   .nmap .nm-scroll{grid-column:2;grid-row:2/4;max-width:none;margin:0}
   .nmap .nm-board{max-width:900px}
@@ -667,6 +667,8 @@ button.it.sel{border-color:var(--gold)}
 /* hand-drawn event figures laid over the event scene: sizes are fractions of the 160x90 scene, so pixels match it */
 .ev-fig{position:absolute;bottom:0;image-rendering:pixelated;pointer-events:none}
 .ev-witch{left:5%;width:38.125%}
+.ev-cauldron{left:38%;width:22%;bottom:10%}
+.ev-meteor{left:30%;width:40%;bottom:11%}
 
 /* abilities: MP bar, status chips, the ability list and its forecast */
 .mpl{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}.mpl .bar{flex:1;height:5px;border-radius:3px;background:#2a2638;overflow:hidden}.mpl .bar i{display:block;height:100%;background:#6a8cff}
@@ -734,3 +736,5 @@ button.it.sel{border-color:var(--gold)}
 .sg-diff button{width:36px;height:21px;padding:0;border:0;border-radius:0;font-size:0;background:url(../art/ui/arrow-l.png) 0 0/100% 100%;image-rendering:pixelated}
 .sg-diff button[data-d="1"]{background-image:url(../art/ui/arrow-r.png)}
 .sg-diff button:hover:not([disabled]){filter:brightness(1.3)}
+/* Rhi's tavern mug on the node map, sized like her chest */
+.nmap .nm-scroll .nd.n-tavern{width:66px;height:66px;margin:-33px 0 0 -33px}.nmap .nm-scroll .nd.n-tavern img{width:50px;height:50px;image-rendering:auto}

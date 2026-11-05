@@ -67,7 +67,8 @@ function eventScene(prop){
   if(prop==='chest'){/* the chest itself is Rhi's PNG laid over the scene (art/scenes/chest.png, see EV_FIG) */for(const[x,y]of[[40,40],[120,36],[132,46],[28,48]]){p.set(x,y,'#ff3a3a');p.set(x+3,y,'#ff3a3a')}}
   if(prop==='library'){for(const x of[24,68,112]){S(x,22,26,46,WD2);for(let r=0;r<4;r++){S(x+1,25+r*10,24,1,WD);for(let b=0;b<8;b++)S(x+2+b*3,26+r*10,2,8,['#c8322e','#3a6a9a','#7fd36a','#c9a050','#8a4ab0'][(b+r+x)%5])}}
     p.ell(98,70,9,3,ST1);p.ell(58,72,5,2,ST2);S(54,66,10,4,'#e8dcc0');S(55,66,4,4,'#d8ccb0');p.ell(150,40,3,4,'#ffd27a')}
-  if(prop==='crater'){p.line(10,4,70,48,'#ffd27a',2);p.line(14,4,72,46,'#fff2b0');p.ell(80,64,30,8,'#2a2026');p.ell(80,62,24,5,'#4a3a3a');p.ell(80,58,9,7,'#a8482a');p.ell(80,57,5,4,'#ff8a3c');p.ell(79,56,2,2,YL);
+  if(prop==='crater'){p.line(10,4,70,48,'#ffd27a',2);p.line(14,4,72,46,'#fff2b0');}/* the crater itself is Rhi's meteor PNG (art/scenes/meteor.png); the code-drawn one is the fallback */
+  if(prop==='crater'&&!ART_PNG.has('scenes/meteor')){p.ell(80,64,30,8,'#2a2026');p.ell(80,62,24,5,'#4a3a3a');p.ell(80,58,9,7,'#a8482a');p.ell(80,57,5,4,'#ff8a3c');p.ell(79,56,2,2,YL);
     for(let i=0;i<6;i++)p.set(66+i*6,48-(i%2)*4,'#9a9aa8')}
   if(prop==='spire'){S(72,16,16,52,ST1);S(70,60,20,8,ST2);for(let y=20;y<60;y+=8)S(74,y,3,4,'#2a2630');p.poly([[70,16],[90,16],[80,4]],ST3);zig(80,-6,4);p.ell(80,10,4,4,YL);p.ell(30,10,24,6,'#2a2a3a');p.ell(130,12,24,6,'#2a2a3a')}
   if(prop==='oracle'){S(62,58,36,4,WD);S(66,62,4,10,WD2);S(90,62,4,10,WD2);p.ell(80,52,6,6,'#c58aff');p.ell(78,50,2,2,'#f0e0ff');
@@ -93,13 +94,13 @@ const evEl=document.createElement('div');evEl.className='tav ev';evEl.hidden=tru
 /* the cage's bars, drawn over the traveller inside */
 function cageBarsArt_draw(){if(sprCache.CAGEBARS)return sprCache.CAGEBARS;const p=Px(160,90);for(let x=60;x<=100;x+=8){p.rect(x,33,1,34,METAL);p.rect(x+1,33,1,34,'#5a6070')}p.rect(58,30,44,3,METAL2);p.rect(58,30,44,1,METAL);p.rect(58,67,44,3,METAL2);p.ring(93,42,2.5,GOLD);p.set(93,45,GOLD);return sprCache.CAGEBARS=p.url()}
 function evShow(E,text,opts){
-  evEl.innerHTML=`<div class="tv-scene"><img class="tv-bg" src="${eventScene(E.art)}" alt="">${E.fig&&ART_PNG.has('scenes/'+E.fig)?`<img class="ev-fig ev-${E.fig}" src="art/scenes/${E.fig}.png" alt="">`:''}${E.ov&&E.card?E.ov:''}<span class="tv-gold">${gold()} gold</span></div>
+  evEl.innerHTML=`<div class="tv-scene"><img class="tv-bg" src="${eventScene(E.art)}" alt="">${[].concat(E.fig||[]).filter(f=>ART_PNG.has('scenes/'+f)).map(f=>`<img class="ev-fig ev-${f}" src="art/scenes/${f}.png" alt="">`).join('')}${E.ov&&E.card?E.ov:''}<span class="tv-gold">${gold()} gold</span></div>
     <div class="tv-box"><div class="tv-name">${E.t}</div><p class="tv-text">${text}</p>${E.card&&opts.length>1?E.card:''}<div class="tv-opts">${opts.map(([k,l,sub,dis])=>`<button type="button" class="tv-o" data-t="${k}"${dis?' disabled':''}>${l}${sub?`<span>${sub}</span>`:''}</button>`).join('')}</div></div>`;
   evEl.hidden=false;
   return new Promise(res=>{evEl.onclick=e=>{const b=e.target.closest('[data-t]');if(!b||b.disabled)return;sfx('tick');res(b.dataset.t)}});
 }
 const lvAvg=()=>Math.max(1,Math.round(run.roster.reduce((a,u)=>a+u.lv,0)/run.roster.length));
-/* EVENTS: t = title, art = scene prop drawn by eventScene(), fig = PNG figure laid over it (art/scenes/<fig>.png), d = intro text,
+/* EVENTS: t = title, art = scene prop drawn by eventScene(), fig = PNG figure(s) laid over it (art/scenes/<fig>.png; a name or a list), d = intro text,
    o = options: l = button label, sub = small text under it, cost = gold, need = check it can be chosen, go = what happens */
 const EVENTS={
   smith:{t:'The Wandering Smith',art:'smith',d:'A smith with a cart-mounted forge waves you over. “One weapon, no charge. I like the look of you.”',o:[
@@ -229,7 +230,7 @@ Object.assign(EVENTS,{
   toll:{t:'The Toll Bridge',art:'bridge',d:'Armed thugs block the only bridge. “Forty gold a head. Well, forty gold for the lot of you.”',o:[
     {l:'Pay the toll',sub:'40 gold',cost:40,go:async()=>{spend(40);return'They step aside, grinning.'}},
     {l:'Fight through',sub:'Every unit gains 30 EXP; Wounded next fight (−5 HP)',go:async()=>{await expAll(run.roster,30);addWoe('wound',1);return'You clear the bridge. Everyone gains 30 EXP, but the squad is still bruised for the next fight.'}}]},
-  witch:{t:'The Bog Witch',art:'witch',fig:'witch',d:'A crooked hut, a bubbling pot, and a woman who already knows your names. “Coin for you, or a brew? Everything has a price.”',o:[
+  witch:{t:'The Bog Witch',art:'witch',fig:['witch','cauldron'],d:'A crooked hut, a bubbling pot, and a woman who already knows your names. “Coin for you, or a brew? Everything has a price.”',o:[
     {l:'Take her gold',sub:'+60 gold; a random unit is Marked for 2 fights',go:async()=>{run.gold=gold()+60;const v=pick(run.roster);addWoe('marked',2,v);sfx('dark');return`She counts out 60 gold and points a bony finger at <b>${v.name}</b>. Enemies will go for them for the next 2 fights.`}},
     {l:'Buy a brew',sub:'One unit +2 Res and +2 max HP for good',cost:25,go:async()=>{const u=await pickUnit('Who drinks?','+2 Res and +2 max HP for good.');if(!u)return null;spend(25);bump(u,'res',2);bump(u,'hp',2);sfx('heal');return`${u.name} gags it down. +2 Res, +2 max HP.`}},
     {l:'Back away',go:async()=>'“Another time, then.”'}]},
@@ -243,7 +244,7 @@ Object.assign(EVENTS,{
     {l:'Study the tomes',sub:'Casters, Menders and Summoners gain 60 EXP; others 20',go:async()=>{evEl.hidden=true;const m=run.roster.filter(u=>CLS[u.cls].w.includes('art')||CLS[u.cls].w.includes('spirit'));await expAll(m,60);await expAll(run.roster.filter(u=>!m.includes(u)),20);return'A long afternoon of reading. The spellcasters gain 60 EXP, everyone else 20.'}},
     {l:'Take the storm tome',sub:'The Spark Sigil',need:()=>canAny('sparkSigil'),go:async()=>{const u=await giveTo('sparkSigil');return u&&`${u.name} pockets the <b>Spark Sigil</b>.`}}]},
   /* Act 2 only */
-  star:{t:'The Fallen Star',act:2,art:'crater',d:'A crater, still smoking. At its heart a sigil has burned itself into the star-iron.',o:[
+  star:{t:'The Fallen Star',act:2,art:'crater',fig:'meteor',d:'A crater, still smoking. At its heart a sigil has burned itself into the star-iron.',o:[
     {l:'Take the Meteor Sigil',sub:'Rng 3–10, 5 uses, huge damage',need:()=>canAny('meteorSigil'),go:async()=>{const u=await giveTo('meteorSigil');return u&&`${u.name} pries the <b>Meteor Sigil</b> free. It’s warm to the touch.`}},
     {l:'Sell the star-iron',sub:'+80 gold',go:async()=>{run.gold=gold()+80;sfx('item');return'The iron fetches 80 gold in the next town.'}}]},
   spire:{t:'The Storm Spire',act:2,art:'spire',d:'A tower that drinks lightning. At the top, a sigil and a staff hang in the air, waiting.',o:[
