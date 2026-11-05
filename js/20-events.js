@@ -214,13 +214,9 @@ function jadeFor(u){if(isRoleU(u,'rogue'))return'jadeFang';const m={blade:'jadeJ
 /* every item the squad gains goes through this picker; found=true shows it as "Found: X" with a Leave it option */
 async function giveTo(k,why,found){for(;;){const u=await pickUnit(found?`Found: ${IT[k].n}`:`Who takes the ${IT[k].n}?`,found?`${why?why+' ':''}${itemText(k)}`:why||itemText(k),u=>isWpn(k)&&!canUse(u,k)?'Can’t wield it':null,found?'Leave it':'Cancel');if(!u)return null;if(!await stow(u,k))continue;sfx('item');return u}}
 Object.assign(EVENTS,{
-  jadetomb:{t:'The Jade Tomb',art:'tomb',d:'A warrior’s tomb, its door carved from a single slab of jade. Inside, the grave goods are still bright.',o:null,make:()=>{const k=jadePick();return[
-    {l:`Take the ${IT[k].n}`,sub:itemText(k),go:async()=>{const u=await giveTo(k,'Jade weapons crit far more often.');return u&&`${u.name} lifts the <b>${IT[k].n}</b> from its rest. Mt ${IT[k].mt}, Crit ${IT[k].crit}.`}},
-    {l:'Pry out the jade eyes',sub:'+70 gold; someone is Marked for 2 fights',go:async()=>{run.gold=gold()+70;const v=pick(run.roster);addWoe('marked',2,v);sfx('broke');return`70 gold of jade comes free. Something in the dark takes note of <b>${v.name}</b>. Enemies will go for them for the next 2 fights.`}},
-    {l:'Leave the dead in peace',go:async()=>'You close the door behind you.'}]}},
-  stormaltar:{t:'The Storm Altar',art:'stormaltar',d:'Lightning strikes the same black altar again and again. A sigil sits in the scorch mark, crackling.',o:[
-    {l:'Take the Thunderhead Sigil',sub:'A high-crit lightning sigil',need:()=>canAny('thunderheadSigil'),go:async()=>{const u=await giveTo('thunderheadSigil');return u&&`${u.name} snatches the <b>Thunderhead Sigil</b> between strikes.`}},
-    {l:'Take the Spark Sigil',sub:'A light, quick lightning sigil',need:()=>canAny('sparkSigil'),go:async()=>{const u=await giveTo('sparkSigil');return u&&`${u.name} takes the <b>Spark Sigil</b>. Their hair stands on end.`}},
+  /* only turns up when Corvin is in the squad, and the sigil is his */
+  stormaltar:{t:'The Storm Altar',art:'stormaltar',ok:()=>run.roster.some(u=>u.cast==='corvin'),d:'Lightning strikes the same black altar again and again. A sigil sits in the scorch mark, crackling.',o:[
+    {l:'Take the Thunderhead Sigil',sub:'A high-crit lightning sigil for Corvin',go:async()=>{const u=run.roster.find(u=>u.cast==='corvin');if(!u||!await stow(u,'thunderheadSigil'))return null;sfx('item');return`${u.name} snatches the <b>Thunderhead Sigil</b> between strikes.`}},
     {l:'Everyone touches the stone',sub:'Every unit +1 Spd; Wounded next fight (−5 HP)',go:async()=>{run.roster.forEach(u=>u.spd++);addWoe('wound',1);sfx('thunder');return'The jolt knocks everyone flat. Faster for it (+1 Spd), but still singed for the next fight.'}}]},
   cache:{t:'The Specialist’s Cache',art:'cache',d:'A sealed quartermaster’s cache. Each crate is stencilled for a different trade.',o:null,
     make:()=>{const has=f=>run.roster.some(f),o=[];
