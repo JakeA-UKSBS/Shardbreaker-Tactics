@@ -722,10 +722,15 @@ button.it.sel{border-color:var(--gold)}
 .nmap .nm-scroll .nd.n-treasure{width:66px;height:66px;margin:-33px 0 0 -33px}.nmap .nm-scroll .nd.n-treasure img{width:50px;height:50px;image-rendering:auto}
 .t-water{background:url(../art/tiles/water.png) 0 0/100% 100%}
 
-/* framed UI: Dark Ages UI pieces (art/ui/frame, parchment, rule, btn, btn-on), scaled 2x so their pixels stay square */
+/* framed UI: the Dark Ages UI frame (art/ui/frame), scaled 2x so its pixels stay square */
 .tv-box,.sbox,.mbox{border:0;border-radius:0;background:none;border-image:url(../art/ui/frame.png) 24 fill / 48px round;image-rendering:pixelated;padding:26px 30px}
-.tv-box>.tv-name{align-self:flex-start;color:#3a2412;border-image:url(../art/ui/parchment.png) 8 fill / 16px stretch;padding:6px 18px 4px;text-shadow:none}
-.tv-text::after{content:'';display:block;height:14px;margin-top:12px;border-image:url(../art/ui/rule.png) 0 12 fill / 0 24px stretch}
-.tv-o{border:0;border-radius:0;background:none;border-image:url(../art/ui/btn.png) 6 12 fill / 12px 24px stretch;padding:10px 26px}
-.tv-o:hover:not(:disabled){border-image-source:url(../art/ui/btn-on.png)}
-.tv-o:disabled{opacity:.5}
+/* node map and its side panels: Dark Ages UI scroll thumbs (art/ui/scroll-v, scroll-h), 2x */
+:is(.nmap,.nmap *)::-webkit-scrollbar{width:14px;height:14px}
+:is(.nmap,.nmap *)::-webkit-scrollbar-track,:is(.nmap,.nmap *)::-webkit-scrollbar-corner{background:rgba(0,0,0,.35)}
+:is(.nmap,.nmap *)::-webkit-scrollbar-thumb:vertical{border-image:url(../art/ui/scroll-v.png) 12 0 fill / 24px 0 stretch;image-rendering:pixelated}
+:is(.nmap,.nmap *)::-webkit-scrollbar-thumb:horizontal{border-image:url(../art/ui/scroll-h.png) 0 12 fill / 0 24px stretch;image-rendering:pixelated}
+:is(.nmap,.nmap *)::-webkit-scrollbar-button{display:none}
+/* Ascension arrows over the crystal ball: gold arrowheads (art/ui/arrow-l, arrow-r), 3x */
+.sg-diff button{width:36px;height:21px;padding:0;border:0;border-radius:0;font-size:0;background:url(../art/ui/arrow-l.png) 0 0/100% 100%;image-rendering:pixelated}
+.sg-diff button[data-d="1"]{background-image:url(../art/ui/arrow-r.png)}
+.sg-diff button:hover:not([disabled]){filter:brightness(1.3)}
