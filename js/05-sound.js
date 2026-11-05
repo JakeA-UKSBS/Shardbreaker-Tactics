@@ -4,8 +4,12 @@ const AU={ctx:null,nb:null};
 function audio(){
   if(!settings.sound)return null;
   if(!AU.ctx){try{AU.ctx=new(window.AudioContext||window.webkitAudioContext)();const n=AU.ctx.sampleRate,b=AU.ctx.createBuffer(1,n,n),d=b.getChannelData(0);for(let i=0;i<n;i++)d[i]=Math.random()*2-1;AU.nb=b}catch(_){return null}}
+  if(!AU.buf){AU.buf={};for(const n in SFX_FILE)fetch(SFX_FILE[n][0]).then(r=>r.arrayBuffer()).then(b=>AU.ctx.decodeAudioData(b)).then(d=>{AU.buf[n]=d}).catch(()=>{})}/* recorded sounds load once; until then (or offline) the synth versions play */
   if(AU.ctx.state==='suspended')AU.ctx.resume();return AU.ctx;
 }
+/* recorded sounds (sfx/, Helton Yan's Pixel Combat pack): name -> [file, volume]. These replace the synth sound of the same name once loaded */
+const SFX_FILE={heal:['sfx/healing-gusts.mp3',.7],zap:['sfx/sparkle-zap.mp3',.7],sandswipe:['sfx/sand-swipe.mp3',.8],levelup:['sfx/aura-up.mp3',.5],step:['sfx/boots-grass.mp3',.45]};
+function playBuf(n,delay=0,rate=1){const c=AU.ctx,s=c.createBufferSource(),g=c.createGain();s.buffer=AU.buf[n];s.playbackRate.value=rate;g.gain.value=SFX_FILE[n][1];s.connect(g).connect(c.destination);s.start(c.currentTime+delay)}
 function tone(f,dur,o={}){const c=audio();if(!c)return;const t=c.currentTime+(o.delay||0),os=c.createOscillator(),g=c.createGain();os.type=o.type||'sine';os.frequency.setValueAtTime(f,t);if(o.slide)os.frequency.exponentialRampToValueAtTime(o.slide,t+dur);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(o.vol||.2,t+.006);g.gain.exponentialRampToValueAtTime(.0001,t+dur);os.connect(g).connect(c.destination);os.start(t);os.stop(t+dur+.03)}
 function noise(dur,o={}){const c=audio();if(!c)return;const t=c.currentTime+(o.delay||0),s=c.createBufferSource(),fl=c.createBiquadFilter(),g=c.createGain();s.buffer=AU.nb;fl.type=o.type||'bandpass';fl.frequency.setValueAtTime(o.f||1200,t);if(o.slide)fl.frequency.exponentialRampToValueAtTime(o.slide,t+dur);fl.Q.value=o.q||1;g.gain.setValueAtTime(o.vol||.3,t);g.gain.exponentialRampToValueAtTime(.0001,t+dur);s.connect(fl).connect(g).connect(c.destination);s.start(t);s.stop(t+dur+.03)}
 const SFX={
@@ -44,7 +48,9 @@ const SFX={
   whip:()=>{noise(.08,{vol:.5,f:4000,q:2,delay:.12});noise(.15,{vol:.15,f:1500,slide:3000})},
   chain:()=>[0,.05,.1,.15].forEach(d=>tone(2400+Math.random()*800,.05,{type:'square',vol:.03,delay:d}))
 };
-function sfx(n){if(settings.sound)try{SFX[n]()}catch(_){}}
+/* synth stand-ins for recorded-only sounds */
+Object.assign(SFX,{zap:()=>SFX.thunder(),sandswipe:()=>SFX.swing(),levelup:()=>{}});
+function sfx(n){if(!settings.sound)return;try{if(audio()&&AU.buf[n]){if(n==='step')[0,.16].forEach((d,i)=>playBuf(n,d,i?.92:1.04));/* two footfalls */else playBuf(n)}else SFX[n]()}catch(_){}}
 function stepSfx(u){if(settings.steps===false)return;const C=CLS[u.cls]||{};sfx(C.fly?'flap':C.mnt?'hoof':'step')}
 document.addEventListener('pointerdown',()=>{if(settings.sound)audio()},{capture:true});
 
