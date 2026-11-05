@@ -363,6 +363,8 @@ button.it.sel{border-color:var(--gold)}
 .sback{position:absolute;top:max(12px,env(safe-area-inset-top,0px));left:max(12px,env(safe-area-inset-left,0px));z-index:2;border-color:var(--gold);color:var(--gold)}
 .devch{display:flex;flex-direction:column;gap:4px}
 .devch button{text-align:left}
+/* uses left on a salve, e.g. 2/3 */
+.uses{color:var(--gold);font-weight:700}
 #btnMap{padding:4px 6px;line-height:0}#btnMap img{width:24px;height:24px;image-rendering:pixelated}
 #btnDev{border-color:var(--gold);color:var(--gold);padding:6px 5px;font-size:11px}
 .sskip{position:absolute;top:max(12px,env(safe-area-inset-top,0px));right:12px;z-index:2}

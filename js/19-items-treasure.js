@@ -22,9 +22,14 @@ async function pickUnit(title,text,ok,skipLabel='Cancel',add){
 const evDone=(t,html)=>modal(`<h2>${t}</h2><p>${html}</p><div class="mbtns"><button class="go" type="button" data-m="ok">Continue</button></div>`);
 const full=u=>u.items.length>=5?'Inventory full':null;
 /* put item k in u's bag; if it's full, ask which item to swap out (that one is left behind). false if they cancel */
+/* the equipped weapon can be swapped out too, as long as the unit is left with at least one weapon (or staff) it can use;
+   the next one in the bag is then equipped */
+const usableWpn=(u,k)=>(isWpn(k)||IT[k].t==='spirit')&&canUse(u,k);
 async function stow(u,k){if(u.items.length<5){u.items.push({k,u:IT[k].uses});return true}
-  const m=await modal(`<h2>${u.name}’s bag is full</h2><p>Swap something out for the <b>${IT[k].n}</b>? The item you swap out is left behind.</p><div class="draft">${u.items.map((it,i)=>`<button type="button" class="dcard" data-m="s${i}"${i===eqIdx(u)?' disabled':''}><div class="dimg"><img src="${icon(it.k)}" alt=""></div><div class="dtxt"><span>${itemText(it.k)}${IT[it.k].t==='item'?` (${it.u} left)`:''}${i===eqIdx(u)?' <b>(equipped)</b>':''}</span></div></button>`).join('')}</div><div class="mbtns"><button type="button" data-m="skip">Don’t swap</button></div>`);
-  if(m==='skip')return false;const out=u.items[+m.slice(1)];u.items.splice(+m.slice(1),1,{k,u:IT[k].uses});toast(`${u.name} leaves the ${IT[out.k].n} behind`);return true}
+  const eq=eqIdx(u),keeps=i=>[...u.items.filter((_,j)=>j!==i).map(it=>it.k),k].some(x=>usableWpn(u,x));
+  const m=await modal(`<h2>${u.name}’s bag is full</h2><p>Swap something out for the <b>${IT[k].n}</b>? The item you swap out is left behind.</p><div class="draft">${u.items.map((it,i)=>`<button type="button" class="dcard" data-m="s${i}"${keeps(i)?'':' disabled'}><div class="dimg"><img src="${icon(it.k)}" alt=""></div><div class="dtxt"><span>${itemText(it.k)}${IT[it.k].t==='item'?` <span class="uses">${it.u}/${IT[it.k].uses}</span>`:''}${i===eq?' <b>(equipped)</b>':''}${keeps(i)?'':' <b>(only weapon)</b>'}</span></div></button>`).join('')}</div><div class="mbtns"><button type="button" data-m="skip">Don’t swap</button></div>`);
+  if(m==='skip')return false;const n=+m.slice(1),out=u.items[n];u.items.splice(n,1,{k,u:IT[k].uses});toast(`${u.name} leaves the ${IT[out.k].n} behind`);
+  if(n===eq){const e=eqIdx(u);if(e>=0)toast(`${u.name} equips the ${IT[u.items[e].k].n}`)}return true}
 /* the best steel weapon for a unit's weapon type (the elite's reward) */
 const steelFor=u=>{if(canUse(u,'zweihander')&&!canUse(u,'steelJian'))return'zweihander';for(const t of CLS[u.cls].w)if(STEEL[t]&&canUse(u,STEEL[t]))return STEEL[t];return null};
 /* the steel weapons by name, for offers (only the spear has "Steel" in its name) */
