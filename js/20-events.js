@@ -12,7 +12,7 @@ function eventScene(prop){
   if(prop==='witch'&&ART_PNG.has('scenes/witch-hut'))return'art/scenes/witch-hut.png';/* Rhi's hut, drawn at 640x360 */
   const B=actBiome(),c='EV|'+prop+'|'+B.id;if(sprCache[c])return sprCache[c];
   const W=160,H=90,p=Px(W,H),sky=REG_SKY[B.id]||REG_SKY.forest,gr=REG_GROUND[B.id]||'#3e4436';
-  if(['smith','spar','witch','library','armoury','study'].includes(prop)){const wl=prop==='witch'?'#3a3028':'#4a4038',wl2=shade(wl,.8);p.rect(0,0,W,64,wl);for(let y=0;y<64;y+=8)for(let x=(y/8%2)*8;x<W;x+=16)p.rect(x,y,15,7,wl2);
+  if(['smith','spar','witch','library','armoury','study','chapel','dungeon','throne'].includes(prop)){const wl=prop==='witch'?'#3a3028':'#4a4038',wl2=shade(wl,.8);p.rect(0,0,W,64,wl);for(let y=0;y<64;y+=8)for(let x=(y/8%2)*8;x<W;x+=16)p.rect(x,y,15,7,wl2);
     p.rect(142,14,14,18,sky[2]);p.rect(142,14,14,6,sky[1]);p.rect(148,14,2,18,'#2a1e14');p.rect(142,22,14,2,'#2a1e14');
     for(const x of[0,52,104])p.rect(x,0,6,64,'#3a2a1a');p.rect(0,0,W,5,'#3a2a1a');p.rect(0,62,W,28,'#6a4a2a');for(let y=64;y<90;y+=5)p.rect(0,y,W,1,'#4a3218');for(let i=0;i<14;i++)p.rect((i*37)%W,64+((i*13)%5)*5,1,5,'#4a3218')}
   else{sky.forEach((col,i)=>p.rect(0,i*20,W,20,col));p.rect(0,60,W,30,gr);for(let i=0;i<40;i++)p.set((i*41)%W,62+(i*17)%26,shade(gr,i%2?1.15:.85));
@@ -67,6 +67,7 @@ function eventScene(prop){
     for(const x of[60,70,80,90])p.line(x,0,x+1,10,'#5a7a3a');for(const x of[60,70,80,90])p.ell(x+1,11,2,3,'#6a8a3a');
     p.ell(84,66,16,7,'#2a2630');p.ell(84,61,13,4,'#7fd36a');for(const[x,y]of[[78,55],[88,52],[83,48]])p.ell(x,y,2,2,'#a8f08a');S(70,70,4,6,INK);S(94,70,4,6,INK);}
     /* the witch herself is a hand-drawn PNG laid over the scene (art/scenes/witch.png, see EV_FIG) */
+  if(prop==='throne'){S(70,16,20,6,G);p.poly([[70,16],[80,8],[90,16]],G);p.ell(80,12,2,2,'#c8322e');S(70,22,20,30,'#7a2a2a');S(72,24,16,26,'#9a3a3a');S(66,44,28,8,G);S(66,52,4,14,G);S(90,52,4,14,G);S(68,46,24,4,'#9a3a3a')}
   if(prop==='fog'){S(76,30,2,30,WD);p.poly([[78,30],[90,33],[78,36]],'#efe6cf');p.line(40,62,60,40,'#5a4a3a');p.line(120,64,100,42,'#5a4a3a')}
   if(prop==='chest'){/* the chest itself is Rhi's PNG laid over the scene (art/scenes/chest.png, see EV_FIG) */for(const[x,y]of[[40,40],[120,36],[132,46],[28,48]]){p.set(x,y,'#ff3a3a');p.set(x+3,y,'#ff3a3a')}}
   if(prop==='library'){for(const x of[24,68,112]){S(x,22,26,46,WD2);for(let r=0;r<4;r++){S(x+1,25+r*10,24,1,WD);for(let b=0;b<8;b++)S(x+2+b*3,26+r*10,2,8,['#c8322e','#3a6a9a','#7fd36a','#c9a050','#8a4ab0'][(b+r+x)%5])}}
@@ -98,7 +99,7 @@ const evEl=document.createElement('div');evEl.className='tav ev';evEl.hidden=tru
 /* the cage's bars, drawn over the traveller inside */
 function cageBarsArt_draw(){if(sprCache.CAGEBARS)return sprCache.CAGEBARS;const p=Px(160,90);for(let x=60;x<=100;x+=8){p.rect(x,33,1,34,METAL);p.rect(x+1,33,1,34,'#5a6070')}p.rect(58,30,44,3,METAL2);p.rect(58,30,44,1,METAL);p.rect(58,67,44,3,METAL2);p.ring(93,42,2.5,GOLD);p.set(93,45,GOLD);return sprCache.CAGEBARS=p.url()}
 function evShow(E,text,opts){
-  evEl.innerHTML=`<div class="tv-scene"><img class="tv-bg" src="${eventScene(E.art)}" alt="">${[].concat(E.fig||[],propFig(E.art)||[]).filter(f=>ART_PNG.has('scenes/'+f)).map(f=>`<img class="ev-fig ev-${f}" src="art/scenes/${f}.png" alt="">`).join('')}${E.ov&&E.card?E.ov:''}<span class="tv-gold">${gold()} gold</span></div>
+  evEl.innerHTML=`<div class="tv-scene"><img class="tv-bg" src="${eventScene(E.art)}" alt="">${[].concat(E.fig||[],propFig(E.art)||[]).filter(f=>ART_PNG.has('scenes/'+f)).map(f=>`<img class="ev-fig ev-${f}" src="art/scenes/${f}.png" alt="">`).join('')}${E.ov||''}<span class="tv-gold">${gold()} gold</span></div>
     <div class="tv-box"><div class="tv-name">${E.t}</div><p class="tv-text">${text}</p>${E.card&&opts.length>1?E.card:''}<div class="tv-opts">${opts.map(([k,l,sub,dis])=>`<button type="button" class="tv-o" data-t="${k}"${dis?' disabled':''}>${l}${sub?`<span>${sub}</span>`:''}</button>`).join('')}</div></div>`;
   evEl.hidden=false;
   return new Promise(res=>{evEl.onclick=e=>{const b=e.target.closest('[data-t]');if(!b||b.disabled)return;sfx('tick');res(b.dataset.t)}});
@@ -183,7 +184,22 @@ const EVENTS={
     {l:'Search the dead',sub:'Find a weapon or gear; it may cost you',go:async()=>{const k=pick(['knightlySword','steelSpear','cleaver','ironwoodBow','moonglassEdge','barbedSpear','reaverAxe','hawkeyeBow','chainmail','leatherArmour','ironGauntlets']);evEl.hidden=true;const u=await giveTo(k,'Pulled from the mud.',true);evEl.hidden=false;
       let t=u?`${u.name} pulls a <b>${IT[k].n}</b> from the mud.`:`You leave the ${IT[k].n} in the mud.`;
       if(rand()<.35){const v=pick(run.roster);v.maxhp=Math.max(10,v.maxhp-2);v.hp=Math.min(v.hp,v.maxhp);t+=` ${v.name} is cut by old blades in the search (−2 max HP).`}sfx('item');return t}},
-    {l:'Pay respects',sub:'Every unit gains 20 EXP',go:async()=>{evEl.hidden=true;for(const u of run.roster){const g=gainExp(u,20);if(g&&g.gains)await levelUp(u,g)}return'You bury what you can. The squad marches on quieter, and wiser (+20 EXP).'}}]}
+    {l:'Pay respects',sub:'Every unit gains 20 EXP',go:async()=>{evEl.hidden=true;for(const u of run.roster){const g=gainExp(u,20);if(g&&g.gains)await levelUp(u,g)}return'You bury what you can. The squad marches on quieter, and wiser (+20 EXP).'}}]},
+  /* the chapel's healer stands to the right of the window (a code-drawn figure, see .ev-healer) */
+  chapel:{t:'The Wayside Chapel',art:'chapel',fig:['stained-glass','banner'],d:'Light pours through a stained-glass window onto the pews. A healer in white looks up from her prayers. “Rest a while. I can mend you, or send you on with a blessing.”',o:null,
+    make:()=>{EVENTS.chapel.ov=`<img class="ev-ov2 ev-healer" src="${fig({style:'long',hair:'#8a5a3a',gear:'hood',cloth:'#efe6cf',skin:'#e0b090',sash:GOLD},'Sage','p','idle',null)}" alt="">`;return[
+    {l:'Ask her to heal you',sub:'Every unit heals to full HP',go:async()=>{run.roster.forEach(u=>u.hp=u.maxhp);sfx('heal');return'She lays her hands on each of you in turn. Every wound closes.'}},
+    {l:'Ask for her blessing',sub:'Choose a relic',go:async()=>{evEl.hidden=true;const k=await relicPick(3,['c','u'],'The healer’s blessing','She presses something into your hands. “Carry this, and come back to us.”');evEl.hidden=false;return k?`You leave with the <b>${RELICS[k].n}</b>.`:'She has nothing left to give.'}}]}},
+  ruins:{t:'The Fallen Temple',art:'ruins',fig:'broken-pillar',d:'Broken pillars stand in long grass, all that’s left of a temple. Something glints in the rubble.',o:[
+    {l:'Dig through the rubble',sub:'Gold, but a unit may be hurt (−5 HP)',go:async()=>{const g=ri(25,45);run.gold=gold()+g;sfx('item');let t=`Under a fallen lintel: ${g} gold.`;if(rand()<.5){const v=pick(run.roster);v.hp=Math.max(1,v.hp-5);t+=` A stone shifts and catches ${v.name} (−5 HP).`}return t}},
+    {l:'Rest in the shade',sub:'Every unit heals 10 HP',go:async()=>{run.roster.forEach(u=>u.hp=Math.min(u.maxhp,u.hp+10));sfx('heal');return'You sit among the old stones for an hour. Every unit heals 10 HP.'}}]},
+  dungeon:{t:'The Forgotten Dungeon',art:'dungeon',fig:'chained-wall',d:'Stairs lead down to a row of empty cells. Chains still hang from the walls. Whoever kept prisoners here left in a hurry.',o:[
+    {l:'Search the cells',sub:'Find a weapon or gear',go:async()=>{const k=pick(['knightlySword','steelSpear','cleaver','ironwoodBow','barbedSpear','reaverAxe','chainmail','ironGauntlets','stiletto']);evEl.hidden=true;const u=await giveTo(k,'Left behind in a cell.',true);evEl.hidden=false;sfx('item');return u?`${u.name} takes a <b>${IT[k].n}</b> from the jailer’s chest.`:`You leave the ${IT[k].n} where it lies.`}},
+    {l:'Read the scratches on the walls',sub:'Your lowest-level unit gains 60 EXP',go:async()=>{const u=run.roster.reduce((a,b)=>b.lv<a.lv?b:a);await expAll([u],60);return`Tallies, names, a map of the tunnels. ${u.name} studies them closely (+60 EXP).`}}]},
+  throne:{t:'The Empty Throne',art:'throne',d:'A throne room with no king. Dust lies thick on the red tiles, and a jewelled crown still rests on the seat.',o:null,
+    make:()=>{EVENTS.throne.ov='<div class="ev-floor"></div>';return[
+    {l:'Sit on the throne',sub:'One unit gains +1 to two random stats',go:async()=>{const u=await pickUnit('Who sits on the throne?','They gain +1 to two random stats.');if(!u)return null;const st=shuffle(['str','mag','skl','spd','lck','def','res']).slice(0,2);st.forEach(k=>bump(u,k,1));sfx('ding');return`${u.name} sits, and for a moment looks every inch a ruler (+1 ${st.map(k=>k.toUpperCase()).join(', +1 ')}).`}},
+    {l:'Take the crown',sub:'+50 gold; Wounded next fight',go:async()=>{run.gold=gold()+50;addWoe('wound',1);sfx('item');return'You pry out the jewels: 50 gold. As you leave, guards that should be long dead stir in the dark. You’ll go into the next fight hurt.'}}]}}
 };
 /* ---- woes: bad luck from events that lasts a fight or two (shown on the map in red) ---- */
 const WOES={wound:{n:'Wounded',d:'Every unit starts the next fight 5 HP down'},weary:{n:'Weary Legs',d:'Every unit has −1 Move'},marked:{n:'Marked',d:'Enemies would rather attack this unit'}};
