@@ -45,7 +45,7 @@ function slashFrames(shape){const c='SLASH|'+shape;if(sprCache[c])return sprCach
         const t=(a-a0)/(a1-a0),th=TH*(f===3?1-t*.6:t)+.6;if(r>R||r<R-th)continue;p.set(x,y,r>R-1?SLASH_C[0]:r<R-th+1?SLASH_C[2]:SLASH_C[1])}}
     out.push(p.url())}
   return sprCache[c]=out}
-function slashFx(X,Y,w,crit){if(!w||!['blade','heavy','pole'].includes(w.t))return;
+function slashFx(X,Y,w,crit){if(!w||!['blade','heavy'].includes(w.t))return;/* lances ('pole', the 'thrust' frames) are off until the thrust looks right */
   const fr=slashFrames(w.t==='pole'?'thrust':w.t==='heavy'?'heavy':'blade'),b=uBox(Y),a=scrC(X.x,X.y,X.sz),q=scrC(Y.x,Y.y,Y.sz),S=crit?80:64;
   const im=document.createElement('img');im.className='fx-slash';im.alt='';
   Object.assign(im.style,{left:b.l+b.w/2-S/2+'px',top:b.t+b.h*.5-S/2+'px',width:S+'px',height:S+'px',zIndex:9999,transform:q.x<a.x?'scaleX(-1)':''});
