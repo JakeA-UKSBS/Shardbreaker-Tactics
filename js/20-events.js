@@ -10,6 +10,7 @@ const PROP_FIG={well:'well',smith:'anvil',shrine:'altar',library:'desk',study:'p
 const propFig=prop=>PROP_FIG[prop]&&ART_PNG.has('scenes/'+PROP_FIG[prop])?PROP_FIG[prop]:null;
 function eventScene(prop){
   if(prop==='witch'&&ART_PNG.has('scenes/witch-hut'))return'art/scenes/witch-hut.png';/* Rhi's hut, drawn at 640x360 */
+  if(prop==='cage'&&ART_PNG.has('scenes/village'))return'art/scenes/village.png';/* CraftPix abandoned village, 576x324; the cage bars are laid over it */
   if(prop==='spring'&&ART_PNG.has('scenes/fountain'))return'art/scenes/fountain.png';/* CraftPix castle courtyard fountain, 576x324 */
   const B=actBiome(),c='EV|'+prop+'|'+B.id;if(sprCache[c])return sprCache[c];
   const W=160,H=90,p=Px(W,H),sky=REG_SKY[B.id]||REG_SKY.forest,gr=REG_GROUND[B.id]||'#3e4436';
