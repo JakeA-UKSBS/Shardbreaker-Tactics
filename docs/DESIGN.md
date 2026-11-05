@@ -64,6 +64,10 @@ Still to flesh out: the story scenes, and narrowing the longlist into roles that
 
 - Maps: battle maps are hand-made per region already (only enemies and loot are rolled each fight). The aim is a set of hand-made maps for every fight type, with height maps; the defend maps are now one per region (TOWNS in js/16-maps-battles.js), and only the Cursed Woodland maps have hand-made heights so far.
 
+- Victory screen: let you see each surviving unit's items (e.g. on hover or click on their portrait), and show the unlocks differently from the current plain list of achievements, Ascension and new relics.
+
+- Music for the end of a run: a victory track and a defeat track (e.g. victory.mp3 and defeat.mp3), played on the win and wipe screens.
+
 ## Carried over from Shardbreaker
 
 Everything in the copy works as it did at the fork point: body tags and effectiveness, relics, the tavern, events, Ascension and the hi-res unit sprites. docs/VISUALS.md and docs/INFO.md describe that starting point.
