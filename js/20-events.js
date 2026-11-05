@@ -110,7 +110,7 @@ const lvAvg=()=>Math.max(1,Math.round(run.roster.reduce((a,u)=>a+u.lv,0)/run.ros
 /* EVENTS: t = title, art = scene prop drawn by eventScene(), fig = PNG figure(s) laid over it (art/scenes/<fig>.png; a name or a list), d = intro text,
    o = options: l = button label, sub = small text under it, cost = gold, need = check it can be chosen, go = what happens */
 const EVENTS={
-  smith:{t:'The Wandering Smith',art:'smith',d:'A smith with a cart-mounted forge waves you over. “One weapon, no charge. For your journey.”',o:[
+  smith:{t:'The Wandering Smith',art:'smith',d:'A travelling smith has taken over an old roadside forge for the night, and waves you over. “One weapon, no charge. For your journey.”',o:[
     {l:'Reforge a weapon',sub:'+2 Mt and +5 Hit (staves heal +5), up to +3',go:async()=>{
       const u=await pickUnit('Whose weapon?','Choose a weapon to reforge.',u=>{const w=weaponOf(u);return!w?'No weapon':forgeLv(w)>=FORGE_MAX?'Already +3':null});
       if(!u)return null;const w=weaponOf(u),old=IT[w.k].n;forge(w);if(R('anvil'))forge(w);sfx('item');return`Sparks fly. ${u.name}’s ${old} comes back as the <b>${IT[w.k].n}</b>: Mt ${IT[w.k].mt}, Hit ${IT[w.k].hit}.`}},
@@ -257,7 +257,7 @@ Object.assign(EVENTS,{
     {l:'Hear your weakness',sub:'Every unit +1 to their lowest stat',go:async()=>{const t=run.roster.map(u=>{const s=shown(u).filter(k=>k!=='hp').sort((a,b)=>u[a]-u[b])[0];bump(u,s,1);return`${u.name} +1 ${SN[s]}`});sfx('ding');return t.join(', ')+'.'}},
     {l:'A full reading',sub:'One unit levels up',cost:50,go:async()=>{const u=await pickUnit('Whose fortune?','They gain a level.',u=>u.lv>=20?'Max level':null);if(!u)return null;spend(50);await expAll([u],100-u.exp);return`The oracle smiles at ${u.name}.`}}]},
   sage:{t:'The Mountain Sage',act:2,art:'sage',d:'A sage sits on a peak above the clouds. He opens one eye. “You may listen, or rest. It would be wise to wait before continuing.”',o:[
-    {l:'Meditate with the sage',sub:'Every unit gains 50 EXP',go:async()=>{await expAll(run.roster,50);return'Quiet, cold, but useful. Every unit gains 50 EXP.'}},
+    {l:'Meditate with the sage',sub:'Every unit gains 50 EXP',go:async()=>{await expAll(run.roster,50);return'The sage breathes, and you breathe with him. When you open your eyes, the world feels clearer. Every unit gains 50 EXP.'}},
     {l:'Rest below',sub:'Every unit heals 10 HP',go:async()=>{run.roster.forEach(u=>u.hp=Math.min(u.maxhp,u.hp+10));sfx('heal');return'Every unit rests up before continuing.'}}]}
 });
 /* ---- region events: each only turns up in its own region ---- */
