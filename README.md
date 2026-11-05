@@ -2,7 +2,7 @@
 
 An isometric, height-based fork of Shardbreaker (FFTA / Tactics Ogre style). See [docs/DESIGN.md](docs/DESIGN.md) for where it's heading and what's built so far. Below is the original Shardbreaker readme.
 
-A run-based tactics roguelike in the style of GBA Fire Emblem. Built for PC first (map left, command panel right), and still playable on phones. Forked from Nightbound's engine.
+A run-based tactics roguelike in the style of GBA Fire Emblem. Built for PC first (map left, command panel right), and still playable on phones.
 
 See [docs/VISUALS.md](docs/VISUALS.md) for pictures of every region, boss, monster, class, weapon, tile and scene, and [docs/INFO.md](docs/INFO.md) for the numbers: recruit odds, base stats and growths, weapons, effectiveness, skills, relics and regions.
 
@@ -92,7 +92,6 @@ Defend fights: from floor 2, a quarter of normal battles (outside the Flying Shi
 - Gear (`t:'gear'`): Leather Armour, Chainmail, Warding Cloak, Traveller's Boots, Iron Gauntlets. Bonuses apply while carried (one of each counts; `gearOf()`). Found in treasure rooms and monster drops.
 - Trade: a unit next to an ally gets a Trade option. Salves, scrolls and gear can be passed across; weapons can't. Trading doesn't use the unit's action.
 - Tutorials: off by default. Turn on Tutorial tips in Options to get a tip the first time you reach each screen; every tip has a Turn off tutorials button.
-- Magic: fire > nature > water > fire, light > dark. Dark sigils drain 25% of damage dealt.
 
-## Not built yet
-A final fight after Act 2 against a great malignant crystal (like Slay the Spire's Heart), Run History screen, archetypes (named unlockable classes), more events, Act 3.
+
+
