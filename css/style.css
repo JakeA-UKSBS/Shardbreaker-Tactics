@@ -721,3 +721,11 @@ button.it.sel{border-color:var(--gold)}
 .ev-chest{left:41%;width:18%;bottom:12%}
 .nmap .nm-scroll .nd.n-treasure{width:66px;height:66px;margin:-33px 0 0 -33px}.nmap .nm-scroll .nd.n-treasure img{width:50px;height:50px;image-rendering:auto}
 .t-water{background:url(../art/tiles/water.png) 0 0/100% 100%}
+
+/* framed UI: Dark Ages UI pieces (art/ui/frame, parchment, rule, btn, btn-on), scaled 2x so their pixels stay square */
+.tv-box,.sbox,.mbox{border:0;border-radius:0;background:none;border-image:url(../art/ui/frame.png) 24 fill / 48px round;image-rendering:pixelated;padding:26px 30px}
+.tv-box>.tv-name{align-self:flex-start;color:#3a2412;border-image:url(../art/ui/parchment.png) 8 fill / 16px stretch;padding:6px 18px 4px;text-shadow:none}
+.tv-text::after{content:'';display:block;height:14px;margin-top:12px;border-image:url(../art/ui/rule.png) 0 12 fill / 0 24px stretch}
+.tv-o{border:0;border-radius:0;background:none;border-image:url(../art/ui/btn.png) 6 12 fill / 12px 24px stretch;padding:10px 26px}
+.tv-o:hover:not(:disabled){border-image-source:url(../art/ui/btn-on.png)}
+.tv-o:disabled{opacity:.5}
