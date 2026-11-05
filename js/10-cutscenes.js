@@ -1,38 +1,4 @@
-/* Old intro and cutscene engine, and class-change screens */
-/* ================= NEW GAME INTRO ================= */
-async function introScene(party){
-  const el=document.createElement('div');el.className='intro';
-  const look=u=>sprite(u,'idle',mapWk(u)),lord=party.find(u=>u.lord)||party[0];
-  const foes=['Bandit','Swordsman','SectGuard','Crossbowman'].map(k=>fig(FOE[k].look,k,'e','idle',FOE[k].items[0]));
-  const ash=Array.from({length:28},()=>`<i style="left:${(Math.random()*100).toFixed(1)}%;--d:${(5+Math.random()*6).toFixed(1)}s;--dl:${(-Math.random()*8).toFixed(1)}s;--x:${(Math.random()*40-20).toFixed(0)}px"></i>`).join('');
-  el.innerHTML=`<div class="in-room"><div class="in-lamp"></div><img class="in-sleeper" src="${look(lord)}" alt=""></div>
-   <div class="in-world"><div class="in-ruins"></div><div class="in-ash">${ash}</div>
-    <div class="in-foes">${foes.map(f=>`<img src="${f}" alt="">`).join('')}</div>
-    <div class="in-party">${party.map(u=>`<img src="${look(u)}" alt="">`).join('')}</div></div>
-   <p class="in-cap" aria-live="polite"></p><button type="button" class="in-skip">Skip</button>`;
-  document.body.appendChild(el);
-  let skip=false;const cap=el.querySelector('.in-cap');
-  const done=new Promise(res=>el.querySelector('.in-skip').addEventListener('click',()=>{skip=true;res()},{once:true}));
-  const w=ms=>Promise.race([sleep(ms),done]);
-  const say=async(t,ms)=>{if(skip)return;cap.classList.remove('on');await w(350);if(skip)return;cap.textContent=t;cap.classList.add('on');await w(ms)};
-  const steps=async()=>{
-    await w(300);el.classList.add('s1');
-    await say(`The night before ${lord.name} turns eighteen.`,2200);
-    if(skip)return;el.classList.add('s2');sfx('bell');
-    await say('At midnight, a bell begins to ring.',2600);
-    if(skip)return;el.classList.add('s3');
-    await say('Everyone hears it once. Nobody can stay awake.',2600);
-    if(skip)return;el.classList.add('s4');cap.classList.remove('on');await w(1400);
-    await say('Then they open their eyes somewhere else.',2000);
-    if(skip)return;el.classList.add('s5');await w(1300);
-    if(skip)return;el.classList.add('s6');sfx('rise');await w(1100);
-    if(skip)return;el.classList.add('s7');sfx('ephase');
-    await say('Strangers, waking at the same moment, in a world where the dead still walk.',3200);
-  };
-  await Promise.race([steps(),done]);
-  el.classList.add('out');await sleep(500);el.remove();
-}
-
+/* Old cutscene engine, and class-change screens */
 /* ================= CUTSCENES ================= */
 function captioner(el){
   let skip=false;const cap=el.querySelector('.in-cap');

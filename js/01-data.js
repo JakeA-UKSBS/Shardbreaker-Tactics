@@ -141,7 +141,6 @@ const CLS={
   Heir:{n:'Initiate',w:['blade'],body:'tunic',mov:5,crit:10,promo:'Vanguard'},SpearGuard:{n:'Warden',w:['pole'],body:'armor',mov:5,promo:'Bastion'},Halberdier:{n:'Breaker',w:['heavy'],body:'vest',mov:5,promo:'Ravager'},
   Archer:{n:'Hunter',w:['bow'],body:'tunic',mov:5,promo:'Deadshot'},Adept:{n:'Sigilist',w:['art'],body:'robe',mov:5,promo:'Runelord'},Healer:{n:'Mender',w:['spirit','art'],body:'robe',mov:5,promo:'Lightbearer'},
   Lamia:{n:'Lamia',w:['pole'],body:'serpent',mov:5,promo:'Gorgon'},
-  LamiaE:{n:'Lamia',w:['pole'],body:'serpent',mov:5},
   Merc:{n:'Sellsword',w:['blade'],body:'tunic',mov:5,crit:5,promo:'Warblade'},
   /* Ascended classes. bonus = stat gains on class change (HP Str Mag Skl Spd Lck Def Res). */
   Vanguard:{n:'Vanguard',w:['blade','pole'],body:'tunic',mov:6,crit:10,tier:2,bonus:[4,2,1,2,2,0,2,2]},
@@ -159,10 +158,6 @@ const CLS={
   Warblade:{n:'Warblade',w:['blade','heavy'],body:'tunic',mov:6,crit:10,tier:2,gift:'greatsword',bonus:[4,3,0,2,2,0,2,1]},
   Gorgon:{n:'Gorgon',w:['pole','art'],body:'serpent',mov:6,tier:2,bonus:[4,1,3,2,1,0,2,3]},
   Lightbearer:{n:'Lightbearer',w:['spirit','art'],body:'robe',mov:5,tier:2,bonus:[4,0,2,1,2,0,1,3]},
-  Bandit:{n:'Fallen Brute',w:['heavy'],body:'vest',mov:5},SectGuard:{n:'Fallen Sentinel',w:['pole'],body:'armor',mov:5},Crossbowman:{n:'Fallen Archer',w:['bow'],body:'tunic',mov:5},
-  HexAdept:{n:'Storm Husk',w:['art'],body:'robe',mov:5},TideAdept:{n:'Drowned Husk',w:['art'],body:'robe',mov:5},GaleAdept:{n:'Gale Husk',w:['art'],body:'robe',mov:5},
-  Swordsman:{n:'Fallen Duelist',w:['blade'],body:'tunic',mov:5,crit:5},IronGuard:{n:'Iron Husk',w:['pole'],body:'armor',mov:4},
-  FanDancer:{n:'Veil Dancer',w:['reach'],body:'robe',mov:5},ChainReaper:{n:'Chain Reaper',w:['reach'],body:'tunic',mov:5},Assassin:{n:'Pale Stalker',w:['reach'],body:'robe',mov:5},
   Warlord:{n:'Nightmare',w:['heavy','pole'],body:'armor',mov:4},Butcher:{n:'Butcher',w:['blade','heavy'],body:'vest',mov:5,crit:5},Matron:{n:'Demon Matron',w:['art'],body:'robe',mov:5}
 };
 /* SKILLS: n = name, cost = skill capacity it takes up (units have BASE_CAP to spend), d = description shown in game. */
@@ -212,22 +207,7 @@ function lordName(){return'Your squad'}
    A foe's stat = b + floor(g × (level − 1)), see foe() in 02-rng-units.js.
    items = weapons/attacks it carries (keys in IT), pic = portrait art key, look = sprite options (colours are hex: skin, eye, hair, cloth, wing, shell...).
    Monsters with an entry in MONLOOK get a random look from there instead. */
-const FOE={
-  LamiaE:{b:[19,5,0,4,4,0,4,2],g:[.7,.4,0,.35,.3,.05,.2,.15],items:['ironSpear'],pic:'javelin',look:{style:'long',tail:'#55635c'}},
-  Bandit:{b:[20,5,0,1,3,0,2,0],g:[.8,.45,0,.2,.25,.05,.15,.05],items:['ironAxe'],pic:'earth',look:{style:'bald',gear:'headband',beard:true}},
-  SectGuard:{b:[18,4,0,3,2,0,4,0],g:[.75,.35,0,.3,.25,.05,.25,.05],items:['ironSpear'],pic:'javelin',look:{style:'topknot',gear:'helm'}},
-  Crossbowman:{b:[17,4,0,4,3,1,3,1],g:[.7,.35,0,.35,.3,.1,.15,.1],items:['crossbow'],pic:'crossbow',look:{style:'topknot',gear:'hood'}},
-  HexAdept:{b:[16,0,4,3,3,0,1,4],g:[.6,0,.4,.35,.3,.1,.1,.3],items:['thunderT'],pic:'lightning',look:{style:'long',gear:'veil'}},
-  TideAdept:{b:[16,0,4,3,3,0,1,4],g:[.6,0,.4,.35,.3,.1,.1,.3],items:['tideT'],pic:'water',look:{style:'bun',gear:'hairpin'}},
-  GaleAdept:{b:[16,0,4,4,4,0,1,4],g:[.6,0,.4,.35,.35,.1,.1,.3],items:['galeT'],pic:'wind',look:{style:'tail',gear:'ribbon'}},
-  Swordsman:{b:[19,4,0,6,6,1,3,1],g:[.75,.35,0,.4,.4,.1,.2,.1],items:['ironDao'],pic:'rapier',look:{style:'tail'}},
-  IronGuard:{b:[22,6,0,3,1,0,9,0],g:[.8,.4,0,.3,.1,.05,.35,.05],items:['ironSpear'],pic:'javelin',look:{style:'topknot',gear:'helm'}},
-  FanDancer:{b:[18,4,0,6,6,2,2,3],g:[.7,.35,0,.4,.4,.15,.1,.2],items:['ironFan'],pic:'fan',look:{style:'bun',gear:'ribbon'}},
-  ChainReaper:{b:[19,5,0,4,5,0,3,1],g:[.75,.4,0,.3,.3,.05,.2,.1],items:['chainBlade'],pic:'chain',look:{style:'wild'}},
-  Assassin:{b:[18,5,0,6,6,2,2,2],g:[.7,.4,0,.4,.4,.15,.15,.15],items:['parasol'],pic:'umbrella',look:{style:'long',gear:'ribbon'}}
-};
-/* makes the entries above pale grey-skinned with glowing cyan eyes (the 'Fallen' look) */
-for(const k in FOE)Object.assign(FOE[k].look,{skin:'#b9c2cc',eye:'#7fe3ff',hair:'#d9dde3'});
+const FOE={};
 /* Nightmare creatures (not Fallen, so not pale). Fliers are weak to bows. */
 FOE.Gremlin={b:[14,4,0,5,8,2,1,1],g:[.5,.3,0,.4,.5,.2,.1,.1],items:['claws'],pic:'twin',look:{skin:'#5f6e52',crysSmall:true}};
 FOE.Gloomwing={b:[18,6,0,5,7,1,2,3],g:[.6,.4,0,.35,.45,.1,.1,.2],items:['claws'],pic:'twin',look:{style:'wild',hair:'#2a2236',skin:'#8f8aa6',eye:'#ffd23f',cloth:'#3b3050',wing:'#3b3050'}};
