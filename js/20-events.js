@@ -229,15 +229,12 @@ Object.assign(EVENTS,{
   statue:{t:'Statue of Valour',art:'statue',d:'A stone hero, sword raised. People leave offerings at its feet, and some say it answers.',o:[
     {l:'One unit kneels',sub:'+2 Str or Mag for good',go:async()=>{const u=await pickUnit('Who kneels?','+2 Str (Mag for casters) for good.');if(!u)return null;const s=powS(u);bump(u,s,2);sfx('ding');return`${u.name} rises stronger (+2 ${SN[s]}).`}},
     {l:'Everyone leaves an offering',sub:'Every unit +1 Def',go:async()=>{run.roster.forEach(u=>u.def++);sfx('ding');return'The stone seems to nod. Every unit gains 1 Def.'}}]},
-  drill:{t:'The Drill Sergeant',art:'drill',d:'A drill sergeant barks at nobody in an empty yard. “You lot! Footwork! Now!”',o:[
-    {l:'Pay for a private lesson',sub:'One unit +2 Spd for good',cost:30,go:async()=>{const u=await pickUnit('Who takes the lesson?','+2 Spd for good.');if(!u)return null;spend(30);bump(u,'spd',2);sfx('ding');return`${u.name} can barely walk afterwards, but they’re quicker (+2 Spd).`}},
-    {l:'Join the free drill',sub:'Every unit +1 Spd; Weary Legs next fight (−1 Move)',go:async()=>{run.roster.forEach(u=>u.spd++);addWoe('weary',1);sfx('ding');return'Laps until everyone drops. Every unit gains 1 Spd, but legs will be heavy next fight.'}}]},
   toll:{t:'The Toll Bridge',art:'bridge',d:'Armed thugs block the only bridge. “Forty gold a head. Well, forty gold for the lot of you.”',o:[
     {l:'Pay the toll',sub:'40 gold',cost:40,go:async()=>{spend(40);return'They step aside, grinning.'}},
     {l:'Fight through',sub:'Every unit gains 30 EXP; Wounded next fight (−5 HP)',go:async()=>{await expAll(run.roster,30);addWoe('wound',1);return'You clear the bridge. Everyone gains 30 EXP, but the squad is still bruised for the next fight.'}}]},
-  witch:{t:'The Bog Witch',art:'witch',fig:['witch','cauldron'],d:'A crooked hut, a bubbling pot, and a woman who already knows your names. “Coin for you, or a brew? Everything has a price.”',o:[
-    {l:'Take her gold',sub:'+60 gold; a random unit is Marked for 2 fights',go:async()=>{run.gold=gold()+60;const v=pick(run.roster);addWoe('marked',2,v);sfx('dark');return`She counts out 60 gold and points a bony finger at <b>${v.name}</b>. Enemies will go for them for the next 2 fights.`}},
-    {l:'Buy a brew',sub:'One unit +2 Res and +2 max HP for good',cost:25,go:async()=>{const u=await pickUnit('Who drinks?','+2 Res and +2 max HP for good.');if(!u)return null;spend(25);bump(u,'res',2);bump(u,'hp',2);sfx('heal');return`${u.name} gags it down. +2 Res, +2 max HP.`}},
+  witch:{t:'The Bog Witch',art:'witch',fig:['witch','cauldron'],d:'A crooked hut, a bubbling pot, and a woman who already knows your names. “At least stay for a cup of tea, won’t you?”',o:[
+    {l:'Rest for a while',sub:'Every unit heals to full HP',go:async()=>{run.roster.forEach(u=>u.hp=u.maxhp);sfx('heal');return'You doze by the fire while the pot bubbles. Everyone wakes up fully healed.'}},
+    {l:'Stay for a drink',sub:'One unit +1 Res and +2 max HP for good',go:async()=>{const u=await pickUnit('Who drinks?','+1 Res and +2 max HP for good.');if(!u)return null;bump(u,'res',1);bump(u,'hp',2);sfx('heal');return`${u.name} gags it down. +1 Res, +2 max HP.`}},
     {l:'Back away',go:async()=>'“Another time, then.”'}]},
   fog:{t:'The Strange Fog',art:'fog',d:'A thick white fog rolls over the road. There’s a shortcut through it, if you trust your feet.',o:[
     {l:'Take the shortcut',sub:'Every unit gains 40 EXP; Weary Legs for 2 fights (−1 Move)',go:async()=>{await expAll(run.roster,40);addWoe('weary',2);return'You stumble out the far side hours later. Everyone gains 40 EXP, but the squad is footsore for 2 fights.'}},
