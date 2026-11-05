@@ -153,10 +153,8 @@ const SKILLS={
   wrath:{n:'Wrath',cost:10,d:'+15 Crit while at half HP or less.'},
   focus:{n:'Focus',cost:10,d:'+10 Crit when no ally is adjacent.'},
   renewal:{n:'Renewal',cost:10,d:'Adjacent allies recover 5 HP at the start of each of your turns.'},
-  pierce:{n:'Pierce',cost:15,d:'Luck×1.5% chance: the strike ignores half the target\'s Def.'},
   bulwark:{n:'Bulwark',cost:15,d:'Luck×2% chance: halves damage from an incoming strike.'},
-  stoneGaze:{n:'Stone Gaze',cost:15,d:'Luck% chance on a hit: the target turns to stone, loses its next turn and can\'t counter. Bosses are immune.'},
-  lifetaker:{n:'Lifetaker',cost:15,d:'Luck×2% chance: restores HP equal to the damage dealt.'}
+  stoneGaze:{n:'Stone Gaze',cost:15,d:'Luck% chance on a hit: the target turns to stone, loses its next turn and can\'t counter. Bosses are immune.'}
 };
 /* Skill scrolls (one per skill except Command) and the class-change item. */
 Object.assign(SKILLS,{

@@ -2,7 +2,12 @@
 /* ================= CHAPTERS / SAVE ================= */
 const SAVE='sbtactics.save.v2'/* v2: items, skills and monsters renamed to match their in-game names; v1 runs are dropped */,OPTS='sbtactics.opts';
 function saveGame(){if(!run)return;const map=run.phase==='map';try{localStorage.setItem(SAVE,JSON.stringify({state:map?null:state,rewinds,chStart:map?null:chStart,run,def:map?null:CH[0],rng:rngS}))}catch(_){}}
-function loadGame(){try{return JSON.parse(localStorage.getItem(SAVE))}catch(_){return null}}
+/* dropGone: strips skills and items that no longer exist (e.g. Pierce and Lifetaker, and their scrolls) from a save, so older runs still load */
+function dropGone(o){if(!o||typeof o!=='object')return;
+  if(Array.isArray(o.skills))o.skills=o.skills.filter(x=>!x||!x.id||SKILLS[x.id]);
+  if(Array.isArray(o.items))o.items=o.items.filter(i=>!i||!i.k||IT[i.k]);
+  for(const v of Object.values(o))dropGone(v)}
+function loadGame(){try{const sv=JSON.parse(localStorage.getItem(SAVE));dropGone(sv);return sv}catch(_){return null}}
 function setMap(){setMapFor(state.ch)}
 function setupChapter(ci,roster){
   foeSeq=0;const c=CH[ci];setMapFor(ci);

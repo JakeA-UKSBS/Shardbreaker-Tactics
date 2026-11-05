@@ -84,7 +84,7 @@ function dieFx(el,host,cx,cy,u,k=1,quiet){if(!quiet){sfx('death');setTimeout(()=
 async function quickPlay(a,d,res){
   fast=false;const f=res.f,wOf=u=>u===a?f.aw:f.dw;
   for(const e of res.ev){const X=e.by==='a'?a:d,Y=X===a?d:a,w=wOf(X)||{t:'blade'},ranged=w.t==='bow'||(w.t==='art'&&f.dist>1)||(w.thrown&&f.dist>1)||f.dist>1;
-    if(e.proc&&e.proc!==SKILLS.lifetaker.n)pop(X,e.proc,'crit');
+    if(e.proc)pop(X,e.proc,'crit');
     if(e.crit){sfx('critcharge');const el=uEls[X.id];if(el)el.animate([{filter:'none'},{filter:'brightness(2.2) drop-shadow(0 0 6px #fff)'},{filter:'none'}],{duration:D(320)});await sleep(D(260))}
     sfx(hitSfx(w,ranged));
     await swingAt(X,Y,w,e.crit,ranged);

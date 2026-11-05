@@ -192,10 +192,8 @@ Learned skills cost capacity (base 20, +5 when promoted). Personal skills are fr
 | Wrath | 10 | +15 Crit while at half HP or less. |
 | Focus | 10 | +10 Crit when no ally is adjacent. |
 | Renewal | 10 | Adjacent allies recover 5 HP at the start of each of your turns. |
-| Pierce | 15 | Luck×1.5% chance: the strike ignores half the target's Def. |
 | Bulwark | 15 | Luck×2% chance: halves damage from an incoming strike. |
 | Stone Gaze | 20 | Luck% chance on a hit: the target turns to stone, loses its next turn and can't counter. Bosses are immune. |
-| Lifetaker | 20 | Luck×2% chance: restores HP equal to the damage dealt. |
 | Hit and Run | 10 | After attacking in melee, steps back one tile if there is room. |
 | Quick Draw | 15 | When attacked at half HP or less, strikes first. |
 | Flurry | 15 | Spd% chance of an extra strike in each fight. |
