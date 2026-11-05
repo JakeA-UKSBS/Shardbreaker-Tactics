@@ -402,7 +402,7 @@ button.it.sel{border-color:var(--gold)}
   .wrap{max-width:1500px;height:100%;box-sizing:border-box;display:grid;grid-template-columns:minmax(0,1fr) 360px;grid-template-rows:auto auto minmax(0,1fr);column-gap:14px;padding-inline:20px;padding-block:12px}
   .top,.bar{grid-column:1/-1}.vp{grid-column:1;grid-row:3;height:auto;min-height:0}.panel{grid-column:2;grid-row:3;overflow:auto;align-self:stretch}
   h1{font-size:26px}.mbox{max-width:640px}.draft{display:grid;grid-template-columns:1fr 1fr}.nm-board{max-width:620px}.nm-scroll{max-width:760px;width:100%;margin:0 auto}
-  .nm-head,.nm-info,.nm-squad,.nm-relics{max-width:760px;width:100%;margin-inline:auto}.nd{width:54px;height:54px;margin:-27px 0 0 -27px}.nd img{width:34px;height:34px}
+  .nm-head,.nm-info,.nm-squad,.nm-relics{max-width:760px;width:100%;margin-inline:auto}.nd{width:54px;height:54px;margin:-27px 0 0 -27px}.nd img{width:30px;height:30px}
 }
 .draft{display:flex;flex-direction:column;gap:6px}
 .nmap{position:fixed;inset:0;z-index:55;display:flex;flex-direction:column;background:radial-gradient(ellipse at 50% 0%,#2a2433,#121018 70%);padding:12px 12px max(12px,env(safe-area-inset-bottom,0px));padding-top:max(12px,env(safe-area-inset-top,0px));gap:8px}
@@ -412,7 +412,7 @@ button.it.sel{border-color:var(--gold)}
 .nm-board{position:relative;max-width:420px;margin:0 auto}
 .nm-board svg{position:absolute;inset:0}
 .nd{position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;padding:0;display:grid;place-items:center;background:var(--panel2);border:2px solid var(--line);opacity:.55}
-.nd img{width:28px;height:28px;image-rendering:pixelated}
+.nd img{width:24px;height:24px;image-rendering:pixelated}
 .nd.n-boss{width:104px;height:104px;margin:-52px 0 0 -52px;border-width:3px;border-color:#a8483a;box-shadow:0 0 18px rgba(200,60,50,.45)}.nd.n-boss img{width:88px;height:88px}
 .nd.n-elite{border-color:#e0503a;background:radial-gradient(circle,#5a1a16,#2a0e0c);box-shadow:0 0 12px rgba(224,80,58,.55);width:52px;height:52px;margin:-26px 0 0 -26px}.nd.n-elite img{width:34px;height:34px}
 @media (min-width:960px){.nd.n-elite{width:64px;height:64px;margin:-32px 0 0 -32px}.nd.n-elite img{width:42px;height:42px}}.nd.n-rest{border-color:#c98a3a}.nd.n-recruit{border-color:var(--blue)}.nd.n-treasure{border-color:var(--gold)}.nd.n-tavern{border-color:#c98a4a}.nd.n-event{border-color:#8a6ab0}
