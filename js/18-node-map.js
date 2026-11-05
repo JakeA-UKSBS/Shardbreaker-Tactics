@@ -59,7 +59,7 @@ const actLen=()=>run&&run.map&&run.map.rows?run.map.rows.length:RUN_LEN;
 const flScale=n=>Math.round((n||1)*10/RUN_LEN);
 const NODE_IC={};
 function nodeIcon(t){if(t==='boss')return bossIcon();return NODE_IC[t]||(NODE_IC[t]=t==='battle'?swordsArt():t==='elite'?eliteArt():t==='rest'?campArt():t==='treasure'?chestArt():t==='tavern'?mugArt():t==='event'?eventArt():
-  t==='recruit'?fig({style:'short',hair:'#6b4226',cloth:'#3a7cc0'},'Heir','p','idle',null):bossIcon())}
+  t==='recruit'?fig({style:'short',hair:'#6b4226',cloth:'#3a7cc0'},'Villager','p','idle',null):bossIcon())}
 function bossIcon(){const B=actBiome(),k='boss:'+B.id;if(NODE_IC[k])return NODE_IC[k];const s=rngS,L=B.boss.look?clone(B.boss.look):monLook(B.boss.cls);rngS=s;return NODE_IC[k]=fig(L,B.boss.cls,'e','idle',B.boss.items[0],2)}
 function reachable(){const M=run.map.rows;if(!run.pos)return M[0].map((_,i)=>({r:0,i}));const n=M[run.pos.r][run.pos.i];return run.pos.r+1<M.length?n.next.map(i=>({r:run.pos.r+1,i})):[]}
 const mapEl=document.createElement('div');mapEl.className='nmap';mapEl.hidden=true;document.body.appendChild(mapEl);

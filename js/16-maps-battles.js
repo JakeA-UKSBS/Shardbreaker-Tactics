@@ -2,40 +2,40 @@
 /* ---- new regions: Sandstone Desert, Agate Peaks, Gemstone Caverns ---- */
 /* fields: see the CLASSES key in 01-data.js */
 Object.assign(CLS,{
-  Jackal:{n:'Jackal',w:['blade'],body:'beast',mov:6},SandWorm:{n:'Sand Worm',w:['heavy'],body:'worm',mov:4,wade:true},SandGolem:{n:'Sandstone Golem',w:['heavy'],body:'golem',mov:4},
+  Jackal:{n:'Jackal',w:['blade'],body:'beast',mov:6},SandWorm:{n:'Sand Worm',w:['heavy'],body:'worm',mov:4,wade:true},SandstoneGolem:{n:'Sandstone Golem',w:['heavy'],body:'golem',mov:4},
   PyriteColossus:{n:'Pyrite Colossus',w:['heavy'],body:'cubes',mov:0},
   FrostWolf:{n:'Frost Wolf',w:['blade'],body:'beast',mov:6,wade:true},AgateGolem:{n:'Agate Golem',w:['heavy'],body:'golem',mov:4,wade:true},FrostSprite:{n:'Frost Sprite',w:['art'],body:'frost',mov:5,wade:true},
   AgateWyrm:{n:'Agate Wyrm',w:['art','heavy'],body:'dragon',mov:0},
   GemGolem:{n:'Gem Golem',w:['heavy'],body:'golem',mov:4},Gemsnail:{n:'Gemsnail',w:['art'],body:'snail',mov:3},
   AmethystTurtle:{n:'Amethyst Turtle',w:['heavy','art'],body:'turtle',mov:0},
   HollowBear:{n:'Hollow Bear',w:['heavy'],body:'bear',mov:4},
-  MiniGolem:{n:'Pebble Golem',w:['heavy'],body:'golem',mov:4,lava:true},
+  PebbleGolem:{n:'Pebble Golem',w:['heavy'],body:'golem',mov:4,lava:true},
   BoneWyrm:{n:'Bone Wyrm',w:['art'],body:'dragon',mov:0},
   Roc:{n:'Roc',w:['blade','art'],body:'roc',mov:4,fly:true},
-  SkyWyrm:{n:'Wyvern Matriarch',w:['heavy','art'],body:'dragon',mov:3,fly:true},
+  WyvernMatriarch:{n:'Wyvern Matriarch',w:['heavy','art'],body:'dragon',mov:3,fly:true},
   Sage:{n:'Sage',w:['art'],body:'robe',mov:0}
 });
 IT.crystalBall={n:'Crystal Ball',t:'item',kind:'orb',uses:1,key:'crystalBall'};
 IT.frostBreath={n:'Frost Breath',t:'art',kind:'talisman',el:'water',mt:9,hit:80,crit:0,r:[1,2],uses:99,mag:true,key:'frostBreath'};
-IT.shards={n:'Crystal Shards',t:'art',kind:'talisman',el:'earth',mt:7,hit:80,crit:10,r:[1,2],uses:99,mag:true,key:'shards'};
+IT.crystalShards={n:'Crystal Shards',t:'art',kind:'talisman',el:'earth',mt:7,hit:80,crit:10,r:[1,2],uses:99,mag:true,key:'crystalShards'};
 /* fields: see the ENEMY STATS key in 01-data.js (b/g order: HP, Str, Mag, Skl, Spd, Lck, Def, Res) */
 Object.assign(FOE,{
   Jackal:{b:[14,5,0,4,8,2,1,0],g:[.5,.35,0,.3,.5,.15,.1,.05],items:['fangs'],look:{}},
   SandWorm:{b:[20,6,0,4,4,1,4,1],g:[.7,.4,0,.3,.25,.1,.2,.05],items:['bite'],look:{}},
-  SandGolem:{b:[24,7,0,2,2,0,9,1],g:[.8,.4,0,.2,.1,0,.35,.05],items:['slam'],look:{}},
-  MiniGolem:{b:[16,6,0,3,2,0,6,1],g:[.6,.35,0,.2,.1,0,.3,.05],items:['slam'],look:{mini:true}},
+  SandstoneGolem:{b:[24,7,0,2,2,0,9,1],g:[.8,.4,0,.2,.1,0,.35,.05],items:['slam'],look:{}},
+  PebbleGolem:{b:[16,6,0,3,2,0,6,1],g:[.6,.35,0,.2,.1,0,.3,.05],items:['slam'],look:{mini:true}},
   FrostWolf:{b:[16,5,0,4,7,1,2,2],g:[.55,.35,0,.3,.45,.1,.15,.15],items:['fangs'],look:{}},
   AgateGolem:{b:[22,6,0,2,1,0,8,4],g:[.75,.4,0,.2,.05,0,.3,.2],items:['slam'],look:{}},
-  FrostSprite:{b:[14,0,5,5,7,2,1,4],g:[.5,0,.4,.35,.45,.15,.05,.3],items:['tideT'],look:{}},
+  FrostSprite:{b:[14,0,5,5,7,2,1,4],g:[.5,0,.4,.35,.45,.15,.05,.3],items:['tideSigil'],look:{}},
   GemGolem:{b:[22,7,0,3,2,0,9,3],g:[.75,.4,0,.25,.1,0,.35,.15],items:['slam'],look:{}},
-  Gemsnail:{b:[20,0,5,4,2,2,6,6],g:[.65,0,.35,.3,.1,.1,.3,.3],items:['shards'],look:{}}
+  Gemsnail:{b:[20,0,5,4,2,2,6,6],g:[.65,0,.35,.3,.1,.1,.3,.3],items:['crystalShards'],look:{}}
 });
 /* GEMS: crystal colours (green, red, blue, gold, violet) */
 const GEMS=['#3aa86a','#c8323a','#3a5ac8','#c8a83a','#9a5ac8'];
 Object.assign(MONLOOK,{
   Jackal:()=>({fur:pick(['#c9a060','#b08850','#d8b878']),eye:'#ffd23f'}),
   SandWorm:()=>({body:pick(['#c98a6a','#b8785a','#d8a07a'])}),
-  SandGolem:()=>({body:pick(['#c9945a','#b8824a','#d8a46a']),eye:'#ffd23f'}),
+  SandstoneGolem:()=>({body:pick(['#c9945a','#b8824a','#d8a46a']),eye:'#ffd23f'}),
   FrostWolf:()=>({crysSmall:true,fur:pick(['#e8eef8','#c8d8ec','#b0c4e0']),eye:'#7fe3ff'}),
   AgateGolem:()=>({body:pick(['#5a8ac8','#4a7ab8','#7aa8d8']),eye:'#e8f4ff'}),
   FrostSprite:()=>({crys:false,body:pick(['#9fd8ff','#7fc8ff','#b8e4ff'])}),
@@ -89,16 +89,16 @@ texStyle.textContent+=['sandstone','quicksand','snow','deepsnow','agate','ice','
 Object.assign(BIOMES,{
   desert:{n:'Sandstone Desert',bg:'#4a3a24',town:['n','k'],townN:'Oasis Town',d:'Dunes and sandstone ruins under a white sun. Jackals run in packs, and the quicksand swallows the careless.',
     tip:['desert','Quicksand','A unit that starts its turn in quicksand has 1 less Move. Sandstone rocks block the way.'],
-    maps:['dunes','oasis','canyon'],bossMap:'sunTemple',pool:[['Jackal',4],['SandWorm',3,2],['SandGolem',2,4]],elitePool:[['SandGolem',3],['Jackal',2],['SandWorm',2]],
-    boss:{name:'The Pyrite Colossus',cls:'PyriteColossus',s:[42,13,0,5,3,2,12,3],items:['slam'],skill:'brace',look:{body:'#c9a83a',eye:'#fff2b0',crysAt:[{core:[14,19],col:'#3ad87a'}]}}},
+    maps:['dunes','oasis','canyon'],bossMap:'sunTemple',pool:[['Jackal',4],['SandWorm',3,2],['SandstoneGolem',2,4]],elitePool:[['SandstoneGolem',3],['Jackal',2],['SandWorm',2]],
+    boss:{name:'The Pyrite Colossus',cls:'PyriteColossus',s:[42,13,0,5,3,2,12,3],items:['slam'],skill:'steadfast',look:{body:'#c9a83a',eye:'#fff2b0',crysAt:[{core:[14,19],col:'#3ad87a'}]}}},
   snow:{n:'Agate Peaks',bg:'#2a3a4e',town:['o','a'],townN:'Hill Village',d:'Snowfields studded with blue agate. Frost wolves hunt the drifts, and the golems are made of the agate itself.',
     tip:['snow','Deep snow','A unit that starts its turn in deep snow has 1 less Move (snow creatures ignore it). Frozen lakes give −10 Avoid; blue agate gives +20 Avoid and +2 Def.'],
     maps:['tundra','frozenLake','agateField'],bossMap:'agateSpire',pool:[['FrostWolf',4],['FrostSprite',3,2],['AgateGolem',2,4]],elitePool:[['AgateGolem',3],['FrostWolf',2],['FrostSprite',2]],
-    boss:{name:'Glacius, the Agate Wyrm',cls:'AgateWyrm',s:[40,11,10,6,5,2,9,8],items:['frostBreath'],skill:'brace',look:{body:'#3a5a8a',glow:'#7fc8ff',glow2:'#e8f4ff',crysAt:[{gem:[14,17,3],col:'#e8f6ff'},{gem:[18,16,2],col:'#e8f6ff'}]}}},
+    boss:{name:'Glacius, the Agate Wyrm',cls:'AgateWyrm',s:[40,11,10,6,5,2,9,8],items:['frostBreath'],skill:'steadfast',look:{body:'#3a5a8a',glow:'#7fc8ff',glow2:'#e8f4ff',crysAt:[{gem:[14,17,3],col:'#e8f6ff'},{gem:[18,16,2],col:'#e8f6ff'}]}}},
   cavern:{n:'Gemstone Caverns',bg:'#2a2436',town:['c','e'],townN:'Miners’ Camp',d:'Caves glittering with emerald, ruby and sapphire, and chests everywhere. Not everything that shines is gold.',
     tip:['cavern','Chests','Open chests for gold, but some hold only pyrite. Gem clusters give +20 Avoid and +2 Def.'],
     maps:['geode','mineshaft','glitter'],bossMap:'amethystHollow',pool:[['Gremlin',3],['Gemsnail',3,2],['GemGolem',2,4]],elitePool:[['GemGolem',3],['Gemsnail',2],['Gremlin',1]],
-    boss:{name:'Amethyra, the Amethyst Turtle',cls:'AmethystTurtle',s:[46,11,8,5,2,3,14,8],items:['slam','shards'],skill:'brace',look:{body:'#6a7a5a',shell:'#4a3a5a',gem:'#b07ae8',crys:false}}}
+    boss:{name:'Amethyra, the Amethyst Turtle',cls:'AmethystTurtle',s:[46,11,8,5,2,3,14,8],items:['slam','crystalShards'],skill:'steadfast',look:{body:'#6a7a5a',shell:'#4a3a5a',gem:'#b07ae8',crys:false}}}
 });
 Object.assign(BIOMES.mushroom,{town:[',','q'],townN:'Toadstool Hamlet'});Object.assign(BIOMES.shadow,{town:[';','t'],townN:'Lantern Village'});
 Object.assign(BIOMES.swamp,{town:['n','v'],townN:'Stilt Village'});Object.assign(BIOMES.forest,{town:['.','f'],townN:'Woodcutters’ Hamlet'});Object.assign(BIOMES.mountain,{town:['b','m'],townN:'Smelters’ Camp'});
@@ -223,8 +223,8 @@ function genBattle(n,kind){
   /* drops: 12% of enemies carry something, at most one weapon a battle, and never a weapon the squad already has */
   def.foes=()=>{const tiles=spawnTiles(m),out=[];let wDrop=0;
     list.forEach((c,i)=>{const lv=Math.max(1,lvBase+(rand()<.3?1:0)-(c==='Wolf'?1:0)+(elite?2:0)),u=mkMon(c,lv),t=tiles[i%tiles.length];u.x=t.x;u.y=t.y;
-      if(elite&&i===0){u.name='Elder '+u.name;u.boss=true;const eb=A(2)?2:1;ST.forEach(k=>{if(k==='hp'){u.maxhp+=6*eb;u.hp+=6*eb}else u[k]+=2*eb});u.skill=u.skill||pick(['fury','brace','swift','shieldwall'])}
-      if(rand()<.12){const k=pick(['qiPill','qiPill','qiPill','steelJian','steelAxe','steelSpear','steelBow','javelin','throwAxe','throwKnives','leather','cloak','boots'].filter(k=>!isWpn(k)||!wDrop&&!squadHas(k)));if(isWpn(k))wDrop=1;u.items.push({k,u:IT[k].uses,d:true})}out.push(u)});
+      if(elite&&i===0){u.name='Elder '+u.name;u.boss=true;const eb=A(2)?2:1;ST.forEach(k=>{if(k==='hp'){u.maxhp+=6*eb;u.hp+=6*eb}else u[k]+=2*eb});u.skill=u.skill||pick(['wrath','steadfast','swiftstrike','bulwark'])}
+      if(rand()<.12){const k=pick(['salve','salve','salve','knightlySword','cleaver','steelSpear','ironwoodBow','javelin','throwingAxe','throwingKnives','leatherArmour','wardingCloak','travellersBoots'].filter(k=>!isWpn(k)||!wDrop&&!squadHas(k)));if(isWpn(k))wDrop=1;u.items.push({k,u:IT[k].uses,d:true})}out.push(u)});
     if(bossFight){let bx=6,by=3;MAPS[mk].map.forEach((r,y)=>{const x=r.indexOf('T');if(x>=0){bx=x;by=y}});/* the altar marks where the boss stands */
       const b=B.boss,up=[10,3,3,3,2,2,3,3].map((v,i)=>v*(act-1)+(A(2)?[8,2,2,1,1,0,2,2][i]:0));
       const bsz=b.sz||2,fits=(x,y)=>cellsOf(x,y,bsz).every(([cx,cy])=>cy>=0&&cx>=0&&cy<m.map.length&&cx<m.map[0].length&&TER[m.map[cy][cx]].c<99);
@@ -233,7 +233,7 @@ function genBattle(n,kind){
       const bc=new Set(cellsOf(bx,by,bsz).map(c=>key(...c))),tk=new Set([...bc,...out.map(u=>key(u.x,u.y))]);
       for(const u of out)if(bc.has(key(u.x,u.y))){let t=null;for(const s of spawnTiles(m))if(!tk.has(key(s.x,s.y))){t=s;break}if(t){u.x=t.x;u.y=t.y;tk.add(key(t.x,t.y))}}
       out.push(bu)}
-    if(A(5))out.forEach(u=>{if(!u.skill)u.skill=pick(['fury','brace','swift','shieldwall','focus'])});
+    if(A(5))out.forEach(u=>{if(!u.skill)u.skill=pick(['wrath','steadfast','swiftstrike','bulwark','focus'])});
     return out};
   /* reinforcements are plain data so they survive a save: {turn:[{c,lv,x,y,ifBoss}]} */
   const W={};

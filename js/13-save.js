@@ -1,6 +1,6 @@
 /* Save/load and chapter setup */
 /* ================= CHAPTERS / SAVE ================= */
-const SAVE='sbtactics.save.v1',OPTS='sbtactics.opts';
+const SAVE='sbtactics.save.v2'/* v2: items, skills and monsters renamed to match their in-game names; v1 runs are dropped */,OPTS='sbtactics.opts';
 function saveGame(){if(!run)return;const map=run.phase==='map';try{localStorage.setItem(SAVE,JSON.stringify({state:map?null:state,rewinds,chStart:map?null:chStart,run,def:map?null:CH[0],rng:rngS}))}catch(_){}}
 function loadGame(){try{return JSON.parse(localStorage.getItem(SAVE))}catch(_){return null}}
 function setMap(){setMapFor(state.ch)}

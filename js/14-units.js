@@ -10,28 +10,28 @@ let run=null;
 /* also: n / n2 = base and promoted class name, w = weapon types, body = sprite body, crit = bonus Crit %, skills = starting skill pool,
    gr = [min, max] growth % per stat (rolled per unit), bonus = stats added on promotion */
 const ROLES={
-  bruiser:{n:'Fighter',n2:'Warrior',w:['heavy','pole'],body:'vest',crit:5,skills:['fury','swift','brace','quickdraw','momentum','heavybane'],
+  bruiser:{n:'Fighter',n2:'Warrior',w:['heavy','pole'],body:'vest',crit:5,skills:['wrath','swiftstrike','steadfast','quickDraw','momentum','stonebane'],
     b:[21,7,0,4,4,2,4,1],gr:[[75,95],[45,65],[0,10],[30,45],[30,45],[15,35],[20,35],[5,20]],bonus:[5,3,0,1,2,0,2,1]},
-  tank:{n:'Guard',n2:'Bastion',w:['blade','heavy','pole'],body:'armor',skills:['brace','taunt','ironskin','retaliate','polebane'],
+  tank:{n:'Guard',n2:'Bastion',w:['blade','heavy','pole'],body:'armor',skills:['steadfast','taunt','ironSkin','retaliate','spiritbane'],
     b:[22,5,0,3,2,1,7,1],gr:[[80,100],[40,55],[0,10],[25,40],[15,30],[15,30],[35,50],[5,20]],bonus:[6,2,0,1,1,0,4,2]},
-  skirm:{n:'Skirmisher',n2:'Duelist',w:['blade','pole','bow'],body:'tunic',crit:10,skills:['swift','focus','deadeye','hitrun','flurry','earlyedge'],
+  skirm:{n:'Skirmisher',n2:'Duelist',w:['blade','pole','bow'],body:'tunic',crit:10,skills:['swiftstrike','focus','keenEye','hitAndRun','flurry','earlyEdge'],
     b:[18,5,0,7,8,4,3,2],gr:[[60,80],[35,50],[0,15],[45,65],[50,70],[30,50],[15,30],[15,30]],bonus:[3,2,0,3,3,0,1,2]},
-  caster:{n:'Sigilist',n2:'Runelord',w:['art'],body:'robe',skills:['kindle','focus','spellward','quickstudy'],
+  caster:{n:'Sigilist',n2:'Runelord',w:['art'],body:'robe',skills:['kindle','focus','spellWard','quickStudy'],
     b:[17,0,6,5,5,3,2,5],gr:[[55,70],[0,10],[45,65],[35,50],[35,55],[20,40],[10,20],[35,55]],bonus:[3,0,3,2,1,0,1,3]},
-  support:{n:'Mender',n2:'Lightbearer',w:['spirit'],body:'robe',skills:['renewal','spellward','fleetfoot','quickstudy'],
+  support:{n:'Mender',n2:'Lightbearer',w:['spirit'],body:'robe',skills:['renewal','spellWard','fleetFoot','quickStudy'],
     b:[17,0,3,4,6,5,1,6],gr:[[50,65],[0,10],[40,55],[30,45],[40,55],[40,60],[10,20],[40,60]],bonus:[4,0,2,1,2,0,1,3]},
-  rogue:{n:'Rogue',n2:'Assassin',w:['blade'],body:'tunic',crit:15,skills:['flurry','whirlwind','hitrun','bladebane','focus'],
+  rogue:{n:'Rogue',n2:'Assassin',w:['blade'],body:'tunic',crit:15,skills:['flurry','whirlwind','hitAndRun','wolfsbane','focus'],
     b:[16,5,0,7,9,6,2,1],gr:[[50,65],[30,45],[0,10],[45,60],[55,70],[40,60],[10,20],[10,25]],bonus:[3,2,0,3,3,2,1,1]},
   /* fast duelist: swords only, high Spd and crit */
-  sword:{n:'Swordsman',n2:'Swordmaster',w:['blade'],body:'tunic',crit:10,skills:['swift','flurry','focus','bladebane','earlyedge'],
+  sword:{n:'Swordsman',n2:'Swordmaster',w:['blade'],body:'tunic',crit:10,skills:['swiftstrike','flurry','focus','wolfsbane','earlyEdge'],
     b:[18,6,0,7,9,4,3,1],gr:[[60,75],[40,55],[0,10],[45,60],[55,70],[30,45],[15,25],[10,25]],bonus:[3,3,0,3,3,0,1,1]},
   /* tanks with a shield: the Shieldmaiden protects her neighbours, the Knight is an armoured wall */
-  shield:{n:'Shieldmaiden',n2:'Shield Warden',w:['blade','pole'],body:'tunic',shield:true,skills:['guardian','brace','taunt','spellward'],
+  shield:{n:'Shieldmaiden',n2:'Shield Warden',w:['blade','pole'],body:'tunic',shield:true,skills:['guardian','steadfast','taunt','spellWard'],
     b:[20,4,0,4,5,3,6,4],gr:[[70,90],[35,50],[0,10],[30,45],[30,45],[20,40],[30,45],[20,35]],bonus:[5,2,0,1,2,0,3,3]},
-  knight:{n:'Knight',n2:'General',w:['blade','pole'],body:'armor',shield:true,skills:['pikewall','brace','ironskin','retaliate'],
+  knight:{n:'Knight',n2:'General',w:['blade','pole'],body:'armor',shield:true,skills:['pikeWall','steadfast','ironSkin','retaliate'],
     b:[24,5,0,3,1,0,9,0],gr:[[85,100],[45,60],[0,10],[20,35],[10,25],[10,25],[40,55],[0,15]],bonus:[7,3,0,1,0,0,5,1]},
   /* summons a minion from the current region once per battle (twice once promoted) */
-  summoner:{n:'Summoner',n2:'Conjurer',w:['art'],body:'robe',skills:['kindle','focus','quickstudy'],
+  summoner:{n:'Summoner',n2:'Conjurer',w:['art'],body:'robe',skills:['kindle','focus','quickStudy'],
     b:[16,0,5,4,5,3,2,5],gr:[[50,65],[0,10],[40,55],[30,45],[35,50],[25,45],[10,20],[35,50]],bonus:[3,0,3,2,1,0,1,3]}
 };
 /* MOVES: movement types. mov = Move, pre = name prefix, st = stat changes in stat order [HP, Str, Mag, Skl, Spd, Lck, Def, Res],
@@ -43,7 +43,7 @@ const MOVES={foot:{mov:5},armour:{pre:'Iron',mov:4,st:[2,1,0,0,-2,0,3,0]},
 /* WN: weapon type names. SEC: second weapon type gained on promotion. KIT: starting weapons per type (keys in IT). */
 const WN={blade:'Blade',heavy:'Axe',pole:'Lance',bow:'Bow'};
 const SEC={blade:'pole',heavy:'blade',pole:'heavy',bow:'blade',art:'spirit'};
-const KIT={blade:['ironJian','needle','ironDao'],heavy:['ironAxe','ironJi'],pole:['ironSpear','javelin'],bow:['shortBow','crossbow'],art:['flameT','lightT','flameT','lightT','darkT']};
+const KIT={blade:['wornSword','thornRapier','hookedBlade'],heavy:['hatchet','halberd'],pole:['ironSpear','javelin'],bow:['shortBow','crossbow'],art:['emberSigil','dawnSigil','emberSigil','dawnSigil','umbralSigil']};
 /* Class keys look like G.role.move.weapon.tier and are rebuilt on demand, so saves only store the key. */
 function ensureCls(k){
   if(CLS[k]||!k.startsWith('G.'))return k;
@@ -86,10 +86,10 @@ function genLook(role,mv,w){
 
 /* ---- units ---- */
 function startItems(role,w){
-  if(role==='support')return[{k:'spiritMend',u:IT.spiritMend.uses},{k:'qiPill',u:IT.qiPill.uses}];
-  if(role==='summoner'){const k=pick(['crookStaff','runeStaff']);return[{k,u:IT[k].uses},{k:'qiPill',u:IT.qiPill.uses}]}
-  if(role==='rogue'){const k=pick(['dirk','dirk','twinBlades','stiletto']);return[{k,u:IT[k].uses},{k:'qiPill',u:IT.qiPill.uses}]}
-  const kit=(role==='shield'||role==='knight')?KIT[w].filter(k=>!['twin','rapier'].includes(IT[k].kind)&&k!=='needle'):KIT[w],k=pick(kit.length?kit:KIT[w]);return[{k,u:IT[k].uses},{k:'qiPill',u:IT.qiPill.uses}];
+  if(role==='support')return[{k:'mendingStaff',u:IT.mendingStaff.uses},{k:'salve',u:IT.salve.uses}];
+  if(role==='summoner'){const k=pick(['crookStaff','runeStaff']);return[{k,u:IT[k].uses},{k:'salve',u:IT.salve.uses}]}
+  if(role==='rogue'){const k=pick(['dirk','dirk','twinDaggers','stiletto']);return[{k,u:IT[k].uses},{k:'salve',u:IT.salve.uses}]}
+  const kit=(role==='shield'||role==='knight')?KIT[w].filter(k=>!['twin','rapier'].includes(IT[k].kind)&&k!=='thornRapier'):KIT[w],k=pick(kit.length?kit:KIT[w]);return[{k,u:IT[k].uses},{k:'salve',u:IT.salve.uses}];
 }
 function genUnit(lv,role){
   role=role||pick(Object.keys(ROLES).filter(r=>r!=='summoner'||unl('summoner')));const R=ROLES[role],w=pick(R.w);
@@ -110,8 +110,8 @@ function genUnit(lv,role){
 Object.assign(CLS,{
   Wolf:{n:'Wolf',w:['blade'],body:'beast',mov:6,crit:5},
   Harpy:{n:'Harpy',w:['blade'],body:'robe',mov:6,fly:true},
-  LamiaM:{n:'Lamia',w:['art'],body:'serpent',mov:5},
-  MinotaurM:{n:'Minotaur',w:['heavy'],body:'vest',mov:4,crit:10}
+  Lamia:{n:'Lamia',w:['art'],body:'serpent',mov:5},
+  Minotaur:{n:'Minotaur',w:['heavy'],body:'vest',mov:4,crit:10}
 });
 IT.fangs={n:'Fangs',t:'blade',kind:'claw',mt:5,hit:85,crit:5,r:[1,1],uses:99,key:'fangs'};
 IT.talons={n:'Talons',t:'blade',kind:'claw',mt:4,hit:90,crit:5,r:[1,1],uses:99,key:'talons'};
@@ -119,15 +119,15 @@ IT.talons={n:'Talons',t:'blade',kind:'claw',mt:4,hit:90,crit:5,r:[1,1],uses:99,k
 Object.assign(FOE,{
   Wolf:{b:[15,5,0,3,7,1,2,0],g:[.55,.35,0,.3,.45,.1,.15,.05],items:['fangs'],look:{}},
   Harpy:{b:[16,5,0,5,6,2,1,2],g:[.5,.35,0,.35,.4,.15,.1,.2],items:['talons'],look:{}},
-  LamiaM:{b:[18,0,5,4,4,1,3,4],g:[.6,0,.4,.3,.3,.1,.15,.3],items:['natureT'],look:{}},
-  MinotaurM:{b:[24,8,0,3,2,0,5,0],g:[.8,.5,0,.25,.15,.05,.3,.05],items:['ironAxe'],look:{}}
+  Lamia:{b:[18,0,5,4,4,1,3,4],g:[.6,0,.4,.3,.3,.1,.15,.3],items:['thornSigil'],look:{}},
+  Minotaur:{b:[24,8,0,3,2,0,5,0],g:[.8,.5,0,.25,.15,.05,.3,.05],items:['hatchet'],look:{}}
 });
 function monLook(c){
   if(MONLOOK[c])return MONLOOK[c]();
   if(c==='Wolf')return{crysSmall:true,fur:pick(['#8a8f9a','#6b5a48','#3a3640','#c9c3b8','#9a7a52']),eye:'#ffd23f'};
   if(c==='Harpy'){const wg=pick(['#6b5240','#55607a','#7a5a7a','#4a4a3a']);return{style:'wild',hair:pick(HAIRC),skin:pick(['#c9b6a0','#a9a3c0','#b8c4a8']),wing:wg,cloth:wg,eye:'#ffd23f'}}
-  if(c==='LamiaM')return{style:pick(['long','tail','wild']),hair:pick(HAIRC),tail:pick(['#4f8a5a','#3a7a7a','#7a5aa0','#8a7a3a']),cloth:pick(CLOTH),skin:pick(['#d6c0a0','#b8c8a8','#c9b6a0']),eye:'#ffd23f'};
-  if(c!=='MinotaurM')return clone(FOE[c].look||{});
+  if(c==='Lamia')return{style:pick(['long','tail','wild']),hair:pick(HAIRC),tail:pick(['#4f8a5a','#3a7a7a','#7a5aa0','#8a7a3a']),cloth:pick(CLOTH),skin:pick(['#d6c0a0','#b8c8a8','#c9b6a0']),eye:'#ffd23f'};
+  if(c!=='Minotaur')return clone(FOE[c].look||{});
   return{style:'bald',horns:true,beard:true,hair:'#2a1a14',skin:pick(['#7a4e32','#5a3a2a','#8a6a4a']),cloth:'#4a3a2a',eye:'#ff5a3a'};
 }
 /* ---- monster PNGs (art/monsters/) ----
@@ -143,7 +143,7 @@ function monsterArt(c,strike){return art('monsters/'+c+(strike?'-strike':''),()=
   const L=boss?clone(boss.boss.look||{}):monLook(c);rngS=s0;
   return fig(L,c,FOE[c]&&FOE[c].look&&FOE[c].look.spirit?'p':'e',strike?'strike':'idle',FOE[c]&&FOE[c].items[0],1)})}
 function mkMon(c,lv){const u=foe(c,lv,0,0);u.look=monLook(c);
-  if(c==='LamiaM'||c==='Beholder')u.skill='stone';if(c==='Sporeling')u.skill='spore';
+  if(c==='Lamia'||c==='Beholder')u.skill='stoneGaze';if(c==='Sporeling')u.skill='poisonSpores';
   if(c==='Skeleton'&&rand()<.35){u.items[0]={k:'shortBow',u:IT.shortBow.uses};u.name='Skeleton Archer'}
   return u}
 

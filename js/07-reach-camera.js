@@ -8,7 +8,7 @@ function reach(u){
   while(q.length){
     q.sort((a,b)=>dist[key(...a)]-dist[key(...b)]);const[x,y]=q.shift(),d=dist[key(x,y)];
     for(const[dx,dy]of DIRS){const nx=x+dx,ny=y+dy,sz=u.sz||1;if(nx<0||ny<0||nx+sz>MW||ny+sz>MH||!canStep(u,x,y,nx,ny))continue;
-      const cs=cellsOf(nx,ny,sz),nd=d+Math.max(...cs.map(([cx,cy])=>mcost(u,cx,cy)));if(nd>u.mov+relicMov(u)+gearOf(u).mov+(has(u,'fleetfoot')?2:0)-slowOf(u)-stMov(u))continue;if(!has(u,'slippery')&&cs.some(([cx,cy])=>{const o=unitAt(cx,cy);return o&&o!==u&&hostile(o,u)}))continue;
+      const cs=cellsOf(nx,ny,sz),nd=d+Math.max(...cs.map(([cx,cy])=>mcost(u,cx,cy)));if(nd>u.mov+relicMov(u)+gearOf(u).mov+(has(u,'fleetFoot')?2:0)-slowOf(u)-stMov(u))continue;if(!has(u,'slippery')&&cs.some(([cx,cy])=>{const o=unitAt(cx,cy);return o&&o!==u&&hostile(o,u)}))continue;
       const k=key(nx,ny);if(dist[k]===undefined||nd<dist[k]){dist[k]=nd;q.push([nx,ny])}}
   }
   const s=new Set();for(const k in dist){const[x,y]=k.split(',').map(Number);if(cellsOf(x,y,u.sz).every(([cx,cy])=>{const o=unitAt(cx,cy);return!o||o===u}))s.add(k)}return s;

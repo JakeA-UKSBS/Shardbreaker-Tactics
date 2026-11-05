@@ -15,7 +15,7 @@ async function newRun(){
 const squad=await musterScene(opts,3);if(!squad)return false;
   run.roster=squad;squad.forEach(castJoined);
   if(unl('startRelic'))await relicPick(2,['c','u'],'An heirloom','Choose a relic to carry from the start.',[pick(relicPool(['h']))]);
-  if(R('satchel'))squad.forEach(u=>{if(u.items.length<5)u.items.push({k:'qiPill',u:IT.qiPill.uses})});
+  if(R('satchel'))squad.forEach(u=>{if(u.items.length<5)u.items.push({k:'salve',u:IT.salve.uses})});
   await mapStep();return true;
 }
 async function titleScreen(){

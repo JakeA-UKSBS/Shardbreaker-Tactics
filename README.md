@@ -74,7 +74,7 @@ Defend fights: from floor 2, a quarter of normal battles (outside the Flying Shi
 - Skills (`SKILLS`), on top of the originals: Hit and Run, Quick Draw, Flurry, Whirlwind, Retaliate, Iron Skin, Spell Ward, Momentum, Fleet Foot, Taunt, Quick Study, Early Edge, Wolfsbane (vs claws, fangs, blades), Stonebane (vs slams, heavy blows), Hexbane (vs sigils, magic). Each role starts with one from its own list. A fifth of sigil casters start with dark magic. There are no scrolls: skills found after battles (40% chance), in treasure rooms or at the Shrine are given straight to a unit you choose (`allocSkill()`); a unit without capacity can forget a learned skill to make room.
 - `genUnit()`: rolls stats, growths, starting skill, kit, name and look.
 - `genLook()`, `GEAR`, `SKINS`, `HAIRC`, `CLOTH`: the random sprite parts. Sprites are 32×32, drawn in code by `fig()`.
-- Monsters: `Wolf`, `Harpy`, `LamiaM`, `MinotaurM` in `CLS`/`FOE`, looks from `monLook()`. Wolves use the `beast` body in `fig()`.
+- Monsters: `Wolf`, `Harpy`, `Lamia`, `Minotaur` in `CLS`/`FOE`, looks from `monLook()`. Wolves use the `beast` body in `fig()`.
 - `MAPS`: battle maps, grouped by region. `genBattle()` picks a map and enemies from the act's region. Region terrain letters are listed at the top of the REGIONS section; tile art is `bioTile()`.
 - Region monster sprites are bodies in `fig()` (`shroom`, `ghost`, `mud`, `gator`, `golem`, `flame`, `dragon`, `storm`, `eye`, riderless `mount`), with looks from `MONLOOK`. Skeletons are humanoids with `look.skel`.
 - Reinforcements (`def.waves`) are plain data, `{turn:[{c,lv,x,y,ifBoss}]}`, so they survive a save.

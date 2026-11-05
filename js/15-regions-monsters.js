@@ -29,7 +29,7 @@ function bioTile_draw(k,part){
 texStyle.textContent+=['myc','shroom','grave','tomb','shallow','mangrove','sand','curse','basalt','lava'].map(k=>`.t-${k}{background:url(${bioTile(k)}) 0 0/100% 100%}`).join('');
 
 /* ---- monsters ---- */
-IT.spores={n:'Spore Puff',t:'art',kind:'talisman',el:'nature',mt:3,hit:90,crit:0,r:[1,1],uses:99,mag:true,key:'spores'};
+IT.sporePuff={n:'Spore Puff',t:'art',kind:'talisman',el:'nature',mt:3,hit:90,crit:0,r:[1,1],uses:99,mag:true,key:'sporePuff'};
 IT.sporeCloud={n:'Spore Cloud',t:'art',kind:'talisman',el:'nature',mt:5,hit:85,crit:0,r:[1,2],uses:99,mag:true,key:'sporeCloud'};
 IT.slam={n:'Slam',t:'heavy',kind:'claw',mt:7,hit:75,crit:0,r:[1,1],uses:99,key:'slam'};
 IT.bite={n:'Bite',t:'heavy',kind:'claw',mt:9,hit:75,crit:10,r:[1,1],uses:99,key:'bite'};
@@ -38,44 +38,44 @@ IT.mallet={n:'Mallet',t:'heavy',kind:'claw',mt:6,hit:85,crit:0,r:[1,1],uses:99,k
 IT.hooves={n:'Hooves',t:'blade',kind:'claw',mt:5,hit:90,crit:0,r:[1,1],uses:99,key:'hooves'};
 /* the Crystal Heart's attack: crystals grow on the target and shatter. Long range, but it can't strike next to itself */
 IT.shatter={n:'Shatter',t:'art',kind:'talisman',el:'crystal',mt:6,hit:85,crit:0,r:[2,6],uses:99,mag:true,key:'shatter'};
-IT.breath={n:'Magma Breath',t:'art',kind:'talisman',el:'fire',mt:9,hit:80,crit:0,r:[1,2],uses:99,mag:true,key:'breath'};
+IT.magmaBreath={n:'Magma Breath',t:'art',kind:'talisman',el:'fire',mt:9,hit:80,crit:0,r:[1,2],uses:99,mag:true,key:'magmaBreath'};
 SKILLS.venom={n:'Venom',cost:15,d:'On a hit, poisons the target: it loses 3 HP at the start of each of its turns for 3 turns (never below 1 HP).'};
 IT.scroll_venom={n:'Venom Scroll',t:'scroll',kind:'scroll',skill:'venom',uses:1,key:'scroll_venom'};
-SKILLS.spore={n:'Poison Spores',cost:15,d:'On a hit, poisons the target: it loses 3 HP at the start of each of its turns for 3 turns (never below 1 HP).'};
-IT.scroll_spore={n:'Poison Spores Scroll',t:'scroll',kind:'scroll',skill:'spore',uses:1,key:'scroll_spore'};
+SKILLS.poisonSpores={n:'Poison Spores',cost:15,d:'On a hit, poisons the target: it loses 3 HP at the start of each of its turns for 3 turns (never below 1 HP).'};
+IT.scroll_poisonSpores={n:'Poison Spores Scroll',t:'scroll',kind:'scroll',skill:'poisonSpores',uses:1,key:'scroll_poisonSpores'};
 /* fields: see the CLASSES key in 01-data.js */
 Object.assign(CLS,{
   Hawk:{n:'Hawk',w:['blade'],body:'hawk',mov:7,fly:true},
-  Sporeling:{n:'Sporeling',w:['art'],body:'shroom',mov:5},MorelKing:{n:'Mushroom King',w:['art'],body:'shroom',mov:0},
+  Sporeling:{n:'Sporeling',w:['art'],body:'shroom',mov:5},MushroomKing:{n:'Mushroom King',w:['art'],body:'shroom',mov:0},
   Skeleton:{n:'Skeleton',w:['blade','bow'],body:'vest',mov:5},Ghost:{n:'Ghost',w:['art'],body:'ghost',mov:5,phase:true},
   MudMonster:{n:'Mud Monster',w:['heavy'],body:'mud',mov:4,wade:true},Krondis:{n:'Alligator',w:['heavy'],body:'gator',mov:4,wade:true},
   CursedStag:{n:'Cursed Stag',w:['pole'],body:'beast',mov:6},HollowStag:{n:'Hollow Stag',w:['pole'],body:'beast',mov:4},
-  Boulder:{n:'Boulder Golem',w:['heavy'],body:'golem',mov:4},FireSprite:{n:'Fire Sprite',w:['art'],body:'flame',mov:5,lava:true},MagmaDragon:{n:'Magma Dragon',w:['art','heavy'],body:'dragon',mov:0,lava:true},
-  WyvernM:{n:'Wyvern',w:['heavy'],body:'mount',mov:6,fly:true},Tempest:{n:'Storm Elemental',w:['art'],body:'storm',mov:3,fly:true},
+  BoulderGolem:{n:'Boulder Golem',w:['heavy'],body:'golem',mov:4},FireSprite:{n:'Fire Sprite',w:['art'],body:'flame',mov:5,lava:true},MagmaDragon:{n:'Magma Dragon',w:['art','heavy'],body:'dragon',mov:0,lava:true},
+  Wyvern:{n:'Wyvern',w:['heavy'],body:'mount',mov:6,fly:true},StormElemental:{n:'Storm Elemental',w:['art'],body:'storm',mov:3,fly:true},
   Beholder:{n:'Beholder',w:['art'],body:'eye',mov:4},
   CrystalHeart:{n:'Crystal Heart',w:['art'],body:'crystal',mov:0},
   /* the Heart's own creatures (Act 3) */
-  Shardling:{n:'Shardling',w:['blade'],body:'shardling',mov:5},Prism:{n:'Prism',w:['art'],body:'prism',mov:4,fly:true},Sentinel:{n:'Crystal Sentinel',w:['heavy'],body:'sentinel',mov:3},
-  Lurker:{n:'Bog Lurker',w:['blade'],body:'gator',mov:4,wade:true},Treant:{n:'Blighted Treant',w:['heavy'],body:'golem',mov:3}
+  Shardling:{n:'Shardling',w:['blade'],body:'shardling',mov:5},Prism:{n:'Prism',w:['art'],body:'prism',mov:4,fly:true},CrystalSentinel:{n:'Crystal Sentinel',w:['heavy'],body:'sentinel',mov:3},
+  BogLurker:{n:'Bog Lurker',w:['blade'],body:'gator',mov:4,wade:true},BlightedTreant:{n:'Blighted Treant',w:['heavy'],body:'golem',mov:3}
 });
-CLS.LamiaM.wade=true;
+CLS.Lamia.wade=true;
 /* fields: see the ENEMY STATS key in 01-data.js (b/g order: HP, Str, Mag, Skl, Spd, Lck, Def, Res) */
 Object.assign(FOE,{
   Hawk:{b:[12,4,0,6,9,3,1,2],g:[.4,.3,0,.3,.4,.2,.1,.1],items:['talons'],look:{}},
-  Sporeling:{b:[14,0,4,4,6,4,2,3],g:[.5,0,.35,.3,.4,.3,.1,.2],items:['spores'],look:{}},
-  Skeleton:{b:[16,5,0,4,4,0,3,0],g:[.6,.4,0,.35,.3,0,.2,.05],items:['ironJian'],look:{}},
-  Ghost:{b:[15,0,5,4,6,2,1,5],g:[.5,0,.4,.3,.4,.15,.05,.35],items:['darkT'],look:{}},
+  Sporeling:{b:[14,0,4,4,6,4,2,3],g:[.5,0,.35,.3,.4,.3,.1,.2],items:['sporePuff'],look:{}},
+  Skeleton:{b:[16,5,0,4,4,0,3,0],g:[.6,.4,0,.35,.3,0,.2,.05],items:['wornSword'],look:{}},
+  Ghost:{b:[15,0,5,4,6,2,1,5],g:[.5,0,.4,.3,.4,.15,.05,.35],items:['umbralSigil'],look:{}},
   MudMonster:{b:[26,6,0,2,1,0,6,0],g:[.9,.4,0,.2,.1,0,.3,0],items:['slam'],look:{}},
   CursedStag:{b:[17,6,0,5,8,2,2,2],g:[.6,.4,0,.35,.45,.15,.1,.15],items:['antlers'],look:{}},
-  Boulder:{b:[24,7,0,2,1,0,10,0],g:[.8,.4,0,.2,.05,0,.4,0],items:['slam'],look:{}},
-  FireSprite:{b:[14,0,5,5,7,2,1,4],g:[.5,0,.4,.35,.45,.15,.05,.3],items:['flameT'],look:{}},
-  WyvernM:{b:[20,7,0,4,4,0,6,0],g:[.7,.45,0,.3,.25,.05,.3,.05],items:['bite'],look:{}},
-  Beholder:{b:[20,0,6,6,3,2,4,6],g:[.6,0,.4,.35,.2,.1,.2,.3],items:['darkT'],look:{}},
+  BoulderGolem:{b:[24,7,0,2,1,0,10,0],g:[.8,.4,0,.2,.05,0,.4,0],items:['slam'],look:{}},
+  FireSprite:{b:[14,0,5,5,7,2,1,4],g:[.5,0,.4,.35,.45,.15,.05,.3],items:['emberSigil'],look:{}},
+  Wyvern:{b:[20,7,0,4,4,0,6,0],g:[.7,.45,0,.3,.25,.05,.3,.05],items:['bite'],look:{}},
+  Beholder:{b:[20,0,6,6,3,2,4,6],g:[.6,0,.4,.35,.2,.1,.2,.3],items:['umbralSigil'],look:{}},
   Shardling:{b:[16,6,0,5,8,0,3,1],g:[.55,.4,0,.35,.4,0,.2,.1],items:['claws'],look:{}},
-  Prism:{b:[15,0,6,5,4,0,2,6],g:[.5,0,.4,.3,.25,0,.1,.35],items:['shards'],look:{}},
-  Sentinel:{b:[24,7,0,3,2,0,9,2],g:[.8,.4,0,.25,.1,0,.4,.1],items:['slam'],look:{}},
-  Lurker:{b:[18,6,0,4,5,1,4,0],g:[.65,.4,0,.3,.3,.1,.2,.05],items:['fangs'],look:{}},
-  Treant:{b:[24,6,0,3,1,0,6,3],g:[.8,.4,0,.25,.1,0,.3,.15],items:['slam'],look:{}}
+  Prism:{b:[15,0,6,5,4,0,2,6],g:[.5,0,.4,.3,.25,0,.1,.35],items:['crystalShards'],look:{}},
+  CrystalSentinel:{b:[24,7,0,3,2,0,9,2],g:[.8,.4,0,.25,.1,0,.4,.1],items:['slam'],look:{}},
+  BogLurker:{b:[18,6,0,4,5,1,4,0],g:[.65,.4,0,.3,.3,.1,.2,.05],items:['fangs'],look:{}},
+  BlightedTreant:{b:[24,6,0,3,1,0,6,3],g:[.8,.4,0,.25,.1,0,.3,.15],items:['slam'],look:{}}
 });
 /* MONLOOK: a function per monster that rolls its sprite look each time one spawns. pick([...]) chooses one of the hex colours at random.
    Common fields: body/fur/skin = main colour, eye = eye colour, cap/stem = mushroom cap and stalk, cloth = clothing, gem = crystal colour,
@@ -87,13 +87,13 @@ const MONLOOK={
   Ghost:()=>({crys:false,body:pick(['#d8e0f0','#c8e8e0','#e0d0f0']),eye:'#7fe3ff'}),
   MudMonster:()=>({body:pick(['#5a4a32','#4a4a2a','#5a3a2a'])}),
   CursedStag:()=>({fur:pick(['#4a3a4a','#5a4a3a','#3a3040']),eye:'#ff3a5a',antlers:'#d8d0bc',antler2:'#b07ae8',crys:false}),
-  Boulder:()=>({body:pick(['#7a746e','#6a625c','#8a8278']),eye:'#ff9a3c'}),
+  BoulderGolem:()=>({body:pick(['#7a746e','#6a625c','#8a8278']),eye:'#ff9a3c'}),
   FireSprite:()=>({crys:false,body:pick(['#ff8a3c','#ff6a2a','#ffaa3c'])}),
-  WyvernM:()=>({crysAt:[{dot:[13,21]},{dot:[16,21]},{dot:[19,21]},{dot:[23,17]}],mount:'wyvern',horse:pick(['#4f7a4a','#5a4a7a','#7a4a3a','#3a5a6a'])}),
+  Wyvern:()=>({crysAt:[{dot:[13,21]},{dot:[16,21]},{dot:[19,21]},{dot:[23,17]}],mount:'wyvern',horse:pick(['#4f7a4a','#5a4a7a','#7a4a3a','#3a5a6a'])}),
   /* crystal creatures: mostly blood red, sometimes another gem. crys:false = no extra crystals stuck on (they are crystal) */
-  Shardling:()=>({crys:false,gem:pick(['#c8283a','#c8283a','#c8283a','#2a9a5a','#3a5ac8','#8a3ac0'])}),Prism:()=>({crys:false,gem:pick(['#c8283a','#c8283a','#3a5ac8','#8a3ac0'])}),Sentinel:()=>({crys:false,gem:pick(['#a8202e','#a8202e','#2a8a4a','#7a3ab0'])}),
-  Lurker:()=>({crysSmall:true,body:pick(['#4a5a32','#3a4a3a','#5a5a3a'])}),
-  Treant:()=>({body:pick(['#5a4a32','#4a3a2a','#6a5a3a']),eye:'#9aff6a',leaves:pick(['#3f7a42','#5a6a2a','#6a3a5a'])}),
+  Shardling:()=>({crys:false,gem:pick(['#c8283a','#c8283a','#c8283a','#2a9a5a','#3a5ac8','#8a3ac0'])}),Prism:()=>({crys:false,gem:pick(['#c8283a','#c8283a','#3a5ac8','#8a3ac0'])}),CrystalSentinel:()=>({crys:false,gem:pick(['#a8202e','#a8202e','#2a8a4a','#7a3ab0'])}),
+  BogLurker:()=>({crysSmall:true,body:pick(['#4a5a32','#3a4a3a','#5a5a3a'])}),
+  BlightedTreant:()=>({body:pick(['#5a4a32','#4a3a2a','#6a5a3a']),eye:'#9aff6a',leaves:pick(['#3f7a42','#5a6a2a','#6a3a5a'])}),
   Beholder:()=>({body:pick(['#8a4a6a','#4a6a8a','#6a4a3a']),eye:pick(['#5fc2a0','#ffd23f','#ff5a3a'])})
 };
 /* regions switched off for now: still defined (art, maps, docs) but runs never pick them. The Flying Ship and Mycelia are off for now; delete them from this list to bring them back */
@@ -107,35 +107,35 @@ const BIOMES={
   mushroom:{n:'Mycelia',noThe:1,bg:'#3a2a48',d:'Glowing mycelium and giant toadstools. The fungus folk have turned feverish under the blight, and their spores poison on a hit.',
     tip:['spores','Poison spores','Fungus attacks poison on a hit: 3 damage at the start of each of your turns for 3 turns. A Salve cures it.'],
     maps:['glade','hollow','ring'],bossMap:'mushThrone',pool:[['Sporeling',4],['Mindsnail',2,3]],elitePool:[['Mindsnail',3],['Sporeling',2]],
-    boss:{name:'King Morel the Blighted',cls:'MorelKing',s:[36,0,9,6,3,4,7,8],items:['sporeCloud'],skill:'spore',look:{cap:'#6a3a6a',stem:'#bab2a0',crown:true,blight:true}}},
+    boss:{name:'King Morel the Blighted',cls:'MushroomKing',s:[36,0,9,6,3,4,7,8],items:['sporeCloud'],skill:'poisonSpores',look:{cap:'#6a3a6a',stem:'#bab2a0',crown:true,blight:true}}},
   shadow:{n:'Sunless Isle',bg:'#24223a',d:'A haunted land of graves and crypts. Skeletons walk, and ghosts drift straight through walls.',
     tip:['ghosts','Ghosts','Ghosts ignore terrain and can pass through walls. Their dark magic heals them for a third of the damage dealt.'],
     maps:['graveyard','crypt','village'],bossMap:'chapel',pool:[['Skeleton',4],['Ghost',2,3]],elitePool:[['Ghost',3],['Skeleton',2]],
-    boss:{name:'The Bone Wyrm',cls:'BoneWyrm',s:[32,0,11,8,5,3,6,9],items:['darkT'],skill:'focus',summon:'Skeleton',look:{bones:true,glow:'#c77dff'}}},
+    boss:{name:'The Bone Wyrm',cls:'BoneWyrm',s:[32,0,11,8,5,3,6,9],items:['umbralSigil'],skill:'focus',summon:'Skeleton',look:{bones:true,glow:'#c77dff'}}},
   swamp:{n:'Bog of Eternal Stench',bg:'#22362c',d:'Mangrove roots and ankle-deep water. Lurkers and lamias hunt the shallows; the sand banks are solid ground.',
     tip:['swamp','Ankle-deep water','A unit that starts its turn in the water or the mangrove roots has 1 less Move. Sand is solid ground. Fliers and swamp creatures ignore this.'],
-    maps:['flats','road','bog'],bossMap:'lair',pool:[['Lurker',3],['LamiaM',3,2],['MudMonster',2,4]],elitePool:[['MudMonster',3],['LamiaM',2],['Lurker',2]],
-    boss:{name:'Krondis',cls:'Krondis',mov:4,s:[40,13,0,5,5,2,10,1],items:['bite'],skill:'fury',look:{body:'#5a6a86',belly:'#5a7a4a',crown:true}}},
+    maps:['flats','road','bog'],bossMap:'lair',pool:[['BogLurker',3],['Lamia',3,2],['MudMonster',2,4]],elitePool:[['MudMonster',3],['Lamia',2],['BogLurker',2]],
+    boss:{name:'Krondis',cls:'Krondis',mov:4,s:[40,13,0,5,5,2,10,1],items:['bite'],skill:'wrath',look:{body:'#5a6a86',belly:'#5a7a4a',crown:true}}},
   forest:{n:'Cursed Woodland',bg:'#26302a',d:'A dead forest under a curse. The deer here have gone wrong, wolves hunt in packs, and the trees themselves are waking up.',
     tip:['woods','Cursed thickets','Cursed thickets give +25 Avoid and +1 Def, but cost 2 Move to enter. Stags are fast: keep your back line covered.'],
-    maps:['woodland','brook','clearing'],bossMap:'heart',pool:[['Wolf',4],['CursedStag',3,2],['Treant',2,5]],elitePool:[['Treant',3],['CursedStag',3],['Wolf',2]],
-    boss:{name:'The Hollow Bear',cls:'HollowBear',mov:4,s:[38,13,0,6,5,3,8,3],items:['slam'],skill:'fury',look:{fur:'#3a2a24',eye:'#ff3a3a',core:'#ff6aa8'}}},
+    maps:['woodland','brook','clearing'],bossMap:'heart',pool:[['Wolf',4],['CursedStag',3,2],['BlightedTreant',2,5]],elitePool:[['BlightedTreant',3],['CursedStag',3],['Wolf',2]],
+    boss:{name:'The Hollow Bear',cls:'HollowBear',mov:4,s:[38,13,0,6,5,3,8,3],items:['slam'],skill:'wrath',look:{fur:'#3a2a24',eye:'#ff3a3a',core:'#ff6aa8'}}},
   mountain:{n:'Volcanic Isle',bg:'#3a2420',d:'Basalt slopes cut by rivers of magma. Golems block the passes, and fire sprites float over the lava.',
     tip:['lava','Magma','Magma can’t be crossed on foot. Fliers and fire creatures move over it freely.'],
-    maps:['fields','caldera','ridge'],bossMap:'crater',pool:[['FireSprite',3],['Boulder',3,3],['Harpy',1,4]],elitePool:[['Boulder',3],['FireSprite',2],['Harpy',1]],
-    boss:{name:'Pyraxis, the Magma Dragon',cls:'MagmaDragon',s:[42,12,10,6,4,2,10,6],items:['breath'],skill:'brace',look:{body:'#4a2420',magma:true,big:true,crysSmall:true,crysCol:'#3a2a4a'}}},
+    maps:['fields','caldera','ridge'],bossMap:'crater',pool:[['FireSprite',3],['BoulderGolem',3,3],['Harpy',1,4]],elitePool:[['BoulderGolem',3],['FireSprite',2],['Harpy',1]],
+    boss:{name:'Pyraxis, the Magma Dragon',cls:'MagmaDragon',s:[42,12,10,6,4,2,10,6],items:['magmaBreath'],skill:'steadfast',look:{body:'#4a2420',magma:true,big:true,crysSmall:true,crysCol:'#3a2a4a'}}},
   ship:{n:'The Flying Ship',bg:'#26304a',d:'A sky-galleon under attack. Hold the deck while wyverns, pegasi and harpies dive from the clouds.',
     tip:['ship','Defend the ship','Hold the deck until the turn count runs out; more fliers arrive every turn. Bows deal double damage to fliers.'],
-    maps:['deck','galleon'],bossMap:'deck',pool:[['Harpy',3],['WyvernM',2,3]],elitePool:[['WyvernM',3],['Harpy',2]],
-    boss:{name:'The Great Roc',cls:'Roc',mov:4,s:[36,12,6,7,8,3,7,6],items:['talons','galeT'],skill:'swift',look:{body:'#8a5a2a',head:'#efe6cf',beak:'#e8b83a'}}},
+    maps:['deck','galleon'],bossMap:'deck',pool:[['Harpy',3],['Wyvern',2,3]],elitePool:[['Wyvern',3],['Harpy',2]],
+    boss:{name:'The Great Roc',cls:'Roc',mov:4,s:[36,12,6,7,8,3,7,6],items:['talons','galeSigil'],skill:'swiftstrike',look:{body:'#8a5a2a',head:'#efe6cf',beak:'#e8b83a'}}},
   labyrinth:{n:'The Labyrinth',bg:'#2a2630',d:'Stone corridors with no daylight. Something with too many eyes watches from the dark.',
     tip:['maze','The Labyrinth','Beholders can turn units to stone with their gaze. Stone units skip their next turn.'],
     maps:['maze1','vaults','pillars'],bossMap:'mazeHeart',pool:[['Gremlin',3],['Beholder',2,3]],elitePool:[['Beholder',3],['Gremlin',2]],
-    boss:{name:'',cls:'MinotaurM',s:[34,12,0,6,4,2,9,2],items:['steelAxe'],skill:'fury',look:{style:'bald',horns:true,beard:true,hair:'#2a1a14',skin:'#7a4e32',cloth:'#4a3a2a',eye:'#ff5a3a',hornGem:'#d8323a',crysAt:[{core:[15,19],col:'#d8323a'}]}}},
+    boss:{name:'',cls:'Minotaur',s:[34,12,0,6,4,2,9,2],items:['cleaver'],skill:'wrath',look:{style:'bald',horns:true,beard:true,hair:'#2a1a14',skin:'#7a4e32',cloth:'#4a3a2a',eye:'#ff5a3a',hornGem:'#d8323a',crysAt:[{core:[15,19],col:'#d8323a'}]}}},
   /* Act 3, the end of every run: not in the region draw (biomeIds). Its monsters are the Heart's own crystal creatures */
   heart:{n:'The Heart of the Blight',noThe:1,bg:'#3a1018',d:'Scorched ground split by veins of glowing gem. Every crystal in these lands grew from what waits here.',
     tip:['heart','The Crystal Heart','The Heart never moves, but it strikes from 2 to 6 tiles away. Get next to it: it can’t hit what’s beside it. On even turns it hurls a Crystal Storm at your toughest unit and everyone next to them, so spread out. It calls more blighted monsters on turns 3, 5 and 7.'],
-    maps:['heartHall'],bossMap:'heartCore',pool:[['Shardling',4],['Prism',3],['Sentinel',2]],elitePool:[['Sentinel',3],['Shardling',2],['Prism',2]],
+    maps:['heartHall'],bossMap:'heartCore',pool:[['Shardling',4],['Prism',3],['CrystalSentinel',2]],elitePool:[['CrystalSentinel',3],['Shardling',2],['Prism',2]],
     boss:{name:'The Crystal Heart',cls:'CrystalHeart',sz:3,mov:0,s:[56,0,8,8,0,0,8,8],items:['shatter'],skill:'focus',summon:'*',summonTxt:'The Crystal Heart calls the blighted!',intro:'The Crystal Heart beats at the centre of the chamber, and every crystal in these lands beats with it. Shatter it to end the blight.',look:{crys:false}}}
 };
 

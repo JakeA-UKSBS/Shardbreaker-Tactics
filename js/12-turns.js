@@ -79,21 +79,21 @@ function cycleSvg(nodes,R,lab){
 /* the effective-damage chart: pictures, not paragraphs. Each row: what it is → what beats it */
 function effChart(){
   const ic=k=>`<img src="${icon(k)}" alt="${IT[k].n}" title="${IT[k].n}">`,tg=t=>`<img src="${tagArt(t)}" alt="">`,sk=k=>`<span class="ec-sk" title="${SKILLS[k].d}">${SKILLS[k].n}</span>`;
-  const rows=[['flier',['shortBow','crossbow','longbow'],null,'×2'],['armoured',['warHammer'],'heavybane','×2'],['beast',['huntSpear'],'bladebane','×2'],['colossal',['giantslayer'],null,'×2'],['spectral',['lightT','holySword'],'polebane','×2',1],['plant',['flameT'],null,'×2']];
+  const rows=[['flier',['shortBow','crossbow','longbow'],null,'×2'],['armoured',['warHammer'],'stonebane','×2'],['beast',['huntingSpear'],'wolfsbane','×2'],['colossal',['giantslayer'],null,'×2'],['spectral',['dawnSigil','holySword'],'spiritbane','×2',1],['plant',['emberSigil'],null,'×2']];
   return modal(`<div class="eyebrow">Effective damage</div><h2>What beats what</h2>
     <div class="ec">${rows.map(([t,ws,s,m,pal])=>`<div class="ec-r"><div class="ec-w">${ws.map(ic).join('')}${s?sk(s):''}${pal?'<span class="ec-sk" title="Paladins are effective against spectres with any weapon">Paladins</span>':''}</div><span class="ec-a">▶<em>${m}</em></span><div class="ec-t">${tg(t)}<b>${TAGS[t].n}</b></div></div>`).join('')}</div>
     <p class="hint">Effective hits multiply weapon might. A monster's type is on its info sheet.</p>
     <div class="mbtns"><button class="go" type="button" data-m="ok">Close</button></div>`);
 }
 function typeChart(){
-  const wpn=cycleSvg([{l:'Blades',c:'#c9d3e2',icons:['ironJian','ironDao']},{l:'Heavy',c:'#d8b88a',icons:['ironAxe','ironJi']},{l:'Polearms',c:'#e0a49a',icons:['ironSpear','javelin']}],70,'Weapon cycle');
+  const wpn=cycleSvg([{l:'Blades',c:'#c9d3e2',icons:['wornSword','hookedBlade']},{l:'Heavy',c:'#d8b88a',icons:['hatchet','halberd']},{l:'Polearms',c:'#e0a49a',icons:['ironSpear','javelin']}],70,'Weapon cycle');
   const ele=cycleSvg(['fire','nature','water'].map(e=>({l:ELN[e],c:ELC[e]})),70,'Element cycle');
   const ic=k=>`<img src="${icon(k)}" alt="" style="width:22px;height:22px;image-rendering:pixelated;vertical-align:middle">`;
   return modal(`<div class="eyebrow">Type chart</div><h2>Weapons</h2>${wpn}
    <p>Each arrow points at what it beats. Advantage gives +15 Hit and +1 damage.</p>
    <h2>Arts</h2>${ele}
    <p><b>Dark</b> sigils heal their user for a third of the damage they deal.</p>
-   <p><b>Neutral:</b> ${['shortBow','crossbow','lightT'].map(ic).join('')} bows, crossbows and Light sigils. Arts against weapons are always neutral.</p>
+   <p><b>Neutral:</b> ${['shortBow','crossbow','dawnSigil'].map(ic).join('')} bows, crossbows and Light sigils. Arts against weapons are always neutral.</p>
    <p><b>Bows beat fliers:</b> double weapon might against Harpies, wyverns and anything else with wings.</p>
    <div class="mbtns"><button class="go" type="button" data-m="ok">Close</button></div>`);
 }
@@ -152,13 +152,13 @@ async function fight(a,ai,d){
   for(const e of res.ev)if(e.stone){const t=e.by==='a'?d:a;if(t.hp>0&&!t.boss){t.stone=1;pop(t,'Stone!','crit');sfx('earth')}}
   /* a summon's EXP goes to the unit that summoned it */
   const ep=p&&p.summon?state.units.find(x=>x.id===p.owner&&x.hp>0):p;
-  if(p&&p.hp>0&&ep){const dealt=res.ev.some(e=>(e.by==='a')===(p===a)&&e.dmg>0);const g=gainExp(ep,Math.min(100,Math.round(expFor(ep,o,dealt,o.hp<=0)*EXP_RATE*(R('tome')?1.5:1)*(has(ep,'quickstudy')?2:1))));if(ep!==p&&g)toast(`${ep.name} gains ${g.amt} EXP`);await showExp(ep,g);if(g&&g.gains)await levelUp(ep,g)}
+  if(p&&p.hp>0&&ep){const dealt=res.ev.some(e=>(e.by==='a')===(p===a)&&e.dmg>0);const g=gainExp(ep,Math.min(100,Math.round(expFor(ep,o,dealt,o.hp<=0)*EXP_RATE*(R('tome')?1.5:1)*(has(ep,'quickStudy')?2:1))));if(ep!==p&&g)toast(`${ep.name} gains ${g.amt} EXP`);await showExp(ep,g);if(g&&g.gains)await levelUp(ep,g)}
   if(p&&o.hp<=0&&p.hp>0&&R('fang')){const h=Math.min(5,p.maxhp-p.hp);if(h){p.hp+=h;pop(p,'+'+h,'heal')}}
   if(p&&o.hp<=0&&p.hp>0)/* enemy drops go to the spoils: after the win the Found picker asks who takes each one */
     for(const it of o.items.filter(i=>i.d)){(state.loot=state.loot||[]).push(it.k);sfx('item');notify(`${IT[it.k].n} dropped`,'Added to the spoils: choose who takes it after the fight.',icon(it.k))}
   if(p&&o.hp<=0&&p.hp>0&&o.team==='e'&&!o.summon)dropGold();
   if(a.hp>0&&d.hp<=0&&a.team==='p'&&phase==='player'&&has(a,'momentum')&&a.gf!==state.turn){a.gf=state.turn;a.acted=false;pop(a,'Momentum!','heal')}
-  if(a.hp>0&&has(a,'hitrun')&&man(a,d)===1){let best=null,bd=-1;for(const[dx,dy]of DIRS){const x=a.x+dx,y=a.y+dy;if(x<0||y<0||x>=MW||y>=MH||unitAt(x,y)||mcost(a,x,y)>=99||!canStep(a,a.x,a.y,x,y))continue;
+  if(a.hp>0&&has(a,'hitAndRun')&&man(a,d)===1){let best=null,bd=-1;for(const[dx,dy]of DIRS){const x=a.x+dx,y=a.y+dy;if(x<0||y<0||x>=MW||y>=MH||unitAt(x,y)||mcost(a,x,y)>=99||!canStep(a,a.x,a.y,x,y))continue;
     const dd=Math.min(99,...state.units.filter(o=>hostile(o,a)&&o.hp>0).map(o=>man(o,{x,y})));if(dd>bd){bd=dd;best={x,y}}}if(best&&bd>1){a.x=best.x;a.y=best.y}}
   render();if(a.hp<=0||d.hp<=0)await sleep(380);
   state.units=state.units.filter(u=>u.hp>0);busy=false;render();checkEnd();

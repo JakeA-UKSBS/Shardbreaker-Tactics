@@ -1,11 +1,11 @@
 /* Gear, trading, skill allocation, summons and the hawk */
 /* ---- gear: non-weapon items that work while carried (one of each kind counts), and can be traded ---- */
 Object.assign(IT,{
-  leather:{n:'Leather Armour',t:'gear',kind:'armor',uses:1,gear:{def:2},key:'leather'},
-  chain:{n:'Chainmail',t:'gear',kind:'armor',uses:1,gear:{def:4,spd:-1},tint:'steel',key:'chain'},
-  cloak:{n:'Warding Cloak',t:'gear',kind:'cloak',uses:1,gear:{res:3},key:'cloak'},
-  boots:{n:'Traveller’s Boots',t:'gear',kind:'boots',uses:1,gear:{mov:1},key:'boots'},
-  gauntlet:{n:'Iron Gauntlets',t:'gear',kind:'gauntlet',uses:1,gear:{str:2},key:'gauntlet'}
+  leatherArmour:{n:'Leather Armour',t:'gear',kind:'armor',uses:1,gear:{def:2},key:'leatherArmour'},
+  chainmail:{n:'Chainmail',t:'gear',kind:'armor',uses:1,gear:{def:4,spd:-1},tint:'steel',key:'chainmail'},
+  wardingCloak:{n:'Warding Cloak',t:'gear',kind:'cloak',uses:1,gear:{res:3},key:'wardingCloak'},
+  travellersBoots:{n:'Traveller’s Boots',t:'gear',kind:'boots',uses:1,gear:{mov:1},key:'travellersBoots'},
+  ironGauntlets:{n:'Iron Gauntlets',t:'gear',kind:'gauntlet',uses:1,gear:{str:2},key:'ironGauntlets'}
 });
 const GEAR_N={def:'Def',res:'Res',spd:'Spd',mov:'Move',str:'Str'};
 function gearOf(u){const g={def:0,res:0,spd:0,mov:0,str:0},seen=new Set();
@@ -35,7 +35,7 @@ function gearArt(p,kd,c){
 }
 
 /* ---- skill rewards: pick who learns it; a unit without room can forget a learned skill ---- */
-const SKILL_POOL=()=>Object.keys(SKILLS).filter(k=>!['rally','spore','venom','stone'].includes(k)&&!SKILLS[k].kit);
+const SKILL_POOL=()=>Object.keys(SKILLS).filter(k=>!['command','poisonSpores','venom','stoneGaze'].includes(k)&&!SKILLS[k].kit);
 async function allocSkill(k,title){
   const sk=SKILLS[k];
   for(;;){
@@ -61,7 +61,7 @@ Object.assign(CLS,{SpiritWolf:{n:'Spirit Wolf',w:['blade'],body:'beast',mov:6},S
   Wisp:{n:'Wisp',w:['art'],body:'flame',mov:5,fly:true},SpiritHawk:{n:'Spirit Hawk',w:['blade'],body:'hawk',mov:7,fly:true}});
 Object.assign(FOE,{SpiritWolf:{b:[16,5,0,5,8,2,2,2],g:[.5,.35,0,.35,.45,.15,.1,.15],items:['fangs'],look:{fur:'#8ad8ff',eye:'#ffffff',spirit:true}},
   StoneWarden:{b:[22,6,0,3,2,1,8,4],g:[.7,.35,0,.2,.1,.05,.35,.2],items:['slam'],look:{body:'#8ab0d0',eye:'#e8faff',spirit:true}},
-  Wisp:{b:[14,0,6,6,6,3,1,6],g:[.45,0,.4,.35,.4,.2,.05,.35],items:['lightT'],look:{body:'#9fe8ff',core:'#f3fdff',rim:'#3a88d8',spirit:true}},
+  Wisp:{b:[14,0,6,6,6,3,1,6],g:[.45,0,.4,.35,.4,.2,.05,.35],items:['dawnSigil'],look:{body:'#9fe8ff',core:'#f3fdff',rim:'#3a88d8',spirit:true}},
   SpiritHawk:{b:[13,5,0,7,10,3,1,3],g:[.4,.35,0,.35,.45,.2,.1,.15],items:['talons'],look:{body:'#7ac8f0',spirit:true}}});
 const famOf=u=>FAMILIARS[u.familiar]||FAMILIARS.spiritWolf;
 function summonTile(u){const probe={cls:famOf(u).cls};let best=null,bd=1e9;

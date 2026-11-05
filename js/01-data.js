@@ -37,51 +37,51 @@ const TER={
    wt = weight (set from WT below), el = element of a sigil, mag = uses Mag instead of Str, tint = steel/jade colouring,
    key = icon art key (icons/<key>.png), brk = 'breaker' weapon type it beats, eff = effective against (×2 damage), amt = HP healed by a staff/salve. */
 const IT={
-  ironJian:{n:'Worn Sword',t:'blade',kind:'sword',mt:5,hit:90,crit:0,r:[1,1],uses:40},
-  twinBlades:{n:'Twin Daggers',t:'blade',kind:'twindagger',mt:4,hit:95,crit:5,r:[1,1],uses:40},
-  steelJian:{n:'Knightly Sword',t:'blade',kind:'sword',mt:8,hit:75,crit:0,r:[1,1],uses:30,tint:'steel'},
-  needle:{n:'Thorn Rapier',t:'blade',kind:'rapier',mt:5,hit:100,crit:10,r:[1,1],uses:30},
-  ironDao:{n:'Hooked Blade',t:'blade',kind:'scimitar',mt:7,hit:80,crit:5,r:[1,1],uses:35},
-  moonDao:{n:'Moonglass Edge',t:'blade',kind:'scimitar',mt:7,hit:80,crit:30,r:[1,1],uses:20,tint:'killer'},
+  wornSword:{n:'Worn Sword',t:'blade',kind:'sword',mt:5,hit:90,crit:0,r:[1,1],uses:40},
+  twinDaggers:{n:'Twin Daggers',t:'blade',kind:'twindagger',mt:4,hit:95,crit:5,r:[1,1],uses:40},
+  knightlySword:{n:'Knightly Sword',t:'blade',kind:'sword',mt:8,hit:75,crit:0,r:[1,1],uses:30,tint:'steel'},
+  thornRapier:{n:'Thorn Rapier',t:'blade',kind:'rapier',mt:5,hit:100,crit:10,r:[1,1],uses:30},
+  hookedBlade:{n:'Hooked Blade',t:'blade',kind:'scimitar',mt:7,hit:80,crit:5,r:[1,1],uses:35},
+  moonglassEdge:{n:'Moonglass Edge',t:'blade',kind:'scimitar',mt:7,hit:80,crit:30,r:[1,1],uses:20,tint:'killer'},
   ironSpear:{n:'Iron Spear',t:'pole',kind:'spear',mt:7,hit:80,crit:0,r:[1,1],uses:45},
   steelSpear:{n:'Steel Spear',t:'pole',kind:'spear',mt:10,hit:70,crit:0,r:[1,1],uses:30,tint:'steel'},
   javelin:{n:'Javelin',t:'pole',kind:'javelin',mt:6,hit:65,crit:0,r:[1,2],uses:20,thrown:true},
-  ironAxe:{n:'Hatchet',t:'heavy',kind:'axe',mt:8,hit:75,crit:0,r:[1,1],uses:45},
-  steelAxe:{n:'Cleaver',t:'heavy',kind:'axe',mt:11,hit:65,crit:0,r:[1,1],uses:30,tint:'steel'},
-  throwAxe:{n:'Throwing Axe',t:'heavy',kind:'axe',mt:7,hit:60,crit:0,r:[1,2],uses:20,thrown:true},
-  ironJi:{n:'Halberd',t:'heavy',kind:'halberd',mt:9,hit:70,crit:0,r:[1,1],uses:40},
+  hatchet:{n:'Hatchet',t:'heavy',kind:'axe',mt:8,hit:75,crit:0,r:[1,1],uses:45},
+  cleaver:{n:'Cleaver',t:'heavy',kind:'axe',mt:11,hit:65,crit:0,r:[1,1],uses:30,tint:'steel'},
+  throwingAxe:{n:'Throwing Axe',t:'heavy',kind:'axe',mt:7,hit:60,crit:0,r:[1,2],uses:20,thrown:true},
+  halberd:{n:'Halberd',t:'heavy',kind:'halberd',mt:9,hit:70,crit:0,r:[1,1],uses:40},
   shortBow:{n:'Short Bow',t:'bow',kind:'bow',mt:6,hit:85,crit:0,r:[2,2],uses:45},
-  steelBow:{n:'Ironwood Bow',t:'bow',kind:'bow',mt:9,hit:70,crit:0,r:[2,2],uses:30,tint:'steel'},
+  ironwoodBow:{n:'Ironwood Bow',t:'bow',kind:'bow',mt:9,hit:70,crit:0,r:[2,2],uses:30,tint:'steel'},
   crossbow:{n:'Crossbow',t:'bow',kind:'crossbow',mt:8,hit:80,crit:0,r:[2,2],uses:35},
-  whip:{n:'Thorn Whip',t:'reach',kind:'whip',mt:4,hit:85,crit:0,r:[1,2],uses:40},
-  chainBlade:{n:'Chain Sickle',t:'reach',kind:'chain',mt:6,hit:75,crit:0,r:[1,2],uses:35},
-  ironFan:{n:'War Fan',t:'reach',kind:'fan',mt:5,hit:85,crit:5,r:[1,2],uses:40},
-  parasol:{n:'Bone Parasol',t:'reach',kind:'umbrella',mt:6,hit:80,crit:0,r:[1,2],uses:35},
-  flameT:{n:'Ember Sigil',t:'art',kind:'talisman',el:'fire',mt:5,hit:90,crit:0,r:[1,2],uses:40,mag:true},
-  tideT:{n:'Tide Sigil',t:'art',kind:'talisman',el:'water',mt:5,hit:90,crit:0,r:[1,2],uses:40,mag:true},
-  galeT:{n:'Gale Sigil',t:'art',kind:'talisman',el:'wind',mt:4,hit:95,crit:5,r:[1,2],uses:40,mag:true},
-  stoneT:{n:'Stone Sigil',t:'art',kind:'talisman',el:'earth',mt:7,hit:75,crit:0,r:[1,2],uses:35,mag:true},
-  thunderT:{n:'Storm Sigil',t:'art',kind:'talisman',el:'lightning',mt:8,hit:80,crit:5,r:[1,2],uses:35,mag:true},
-  mirageT:{n:'Mirror Sigil',t:'art',kind:'talisman',el:'illusion',mt:6,hit:85,crit:0,r:[1,2],uses:40,mag:true},
-  natureT:{n:'Thorn Sigil',t:'art',kind:'talisman',el:'nature',mt:5,hit:90,crit:0,r:[1,2],uses:40,mag:true},
-  lightT:{n:'Dawn Sigil',t:'art',kind:'talisman',el:'light',mt:5,hit:90,crit:0,r:[1,2],uses:40,mag:true},
-  darkT:{n:'Umbral Sigil',t:'art',kind:'talisman',el:'dark',mt:5,hit:85,crit:0,r:[1,2],uses:40,mag:true,drain:true},
+  thornWhip:{n:'Thorn Whip',t:'reach',kind:'whip',mt:4,hit:85,crit:0,r:[1,2],uses:40},
+  chainSickle:{n:'Chain Sickle',t:'reach',kind:'chain',mt:6,hit:75,crit:0,r:[1,2],uses:35},
+  warFan:{n:'War Fan',t:'reach',kind:'fan',mt:5,hit:85,crit:5,r:[1,2],uses:40},
+  boneParasol:{n:'Bone Parasol',t:'reach',kind:'umbrella',mt:6,hit:80,crit:0,r:[1,2],uses:35},
+  emberSigil:{n:'Ember Sigil',t:'art',kind:'talisman',el:'fire',mt:5,hit:90,crit:0,r:[1,2],uses:40,mag:true},
+  tideSigil:{n:'Tide Sigil',t:'art',kind:'talisman',el:'water',mt:5,hit:90,crit:0,r:[1,2],uses:40,mag:true},
+  galeSigil:{n:'Gale Sigil',t:'art',kind:'talisman',el:'wind',mt:4,hit:95,crit:5,r:[1,2],uses:40,mag:true},
+  stoneSigil:{n:'Stone Sigil',t:'art',kind:'talisman',el:'earth',mt:7,hit:75,crit:0,r:[1,2],uses:35,mag:true},
+  stormSigil:{n:'Storm Sigil',t:'art',kind:'talisman',el:'lightning',mt:8,hit:80,crit:5,r:[1,2],uses:35,mag:true},
+  mirrorSigil:{n:'Mirror Sigil',t:'art',kind:'talisman',el:'illusion',mt:6,hit:85,crit:0,r:[1,2],uses:40,mag:true},
+  thornSigil:{n:'Thorn Sigil',t:'art',kind:'talisman',el:'nature',mt:5,hit:90,crit:0,r:[1,2],uses:40,mag:true},
+  dawnSigil:{n:'Dawn Sigil',t:'art',kind:'talisman',el:'light',mt:5,hit:90,crit:0,r:[1,2],uses:40,mag:true},
+  umbralSigil:{n:'Umbral Sigil',t:'art',kind:'talisman',el:'dark',mt:5,hit:85,crit:0,r:[1,2],uses:40,mag:true,drain:true},
   crookStaff:{n:'Crook Staff',t:'art',kind:'staff',mt:6,hit:85,crit:0,r:[1,1],uses:45,mag:true},
   runeStaff:{n:'Rune Staff',t:'art',kind:'staff',mt:4,hit:85,crit:0,r:[1,2],uses:40,mag:true},
   glimmer:{n:'Glimmer',t:'art',kind:'talisman',el:'light',mt:2,hit:85,crit:0,r:[1,2],uses:45,mag:true},
-  spiritMend:{n:'Mending Staff',t:'spirit',kind:'staff',amt:10,r:[1,1],uses:30},
-  greaterMend:{n:'Dawn Staff',t:'spirit',kind:'staff',amt:20,r:[1,1],uses:20,tint:'mend'},
+  mendingStaff:{n:'Mending Staff',t:'spirit',kind:'staff',amt:10,r:[1,1],uses:30},
+  dawnStaff:{n:'Dawn Staff',t:'spirit',kind:'staff',amt:20,r:[1,1],uses:20,tint:'mend'},
   greatsword:{n:'Greatsword',t:'blade',kind:'greatsword',mt:11,hit:70,crit:5,r:[1,1],uses:30,tint:'steel'},
   claws:{n:'Claws',t:'blade',kind:'twin',mt:4,hit:85,crit:10,r:[1,1],uses:99},
   labrys:{n:'Labrys',t:'heavy',kind:'axe',mt:12,hit:75,crit:10,r:[1,1],uses:30,tint:'steel'},
-  qiPill:{n:'Salve',t:'item',kind:'pill',amt:10,uses:3}
+  salve:{n:'Salve',t:'item',kind:'pill',amt:10,uses:3}
 };
 for(const k in IT)IT[k].key=k;
 /* ---- weapon weight (Wt): weight above the wielder's Str (Mag for sigils) costs that much attack speed ---- */
 Object.assign(IT,{
   dirk:{n:'Dirk',t:'blade',kind:'dagger',mt:3,hit:95,crit:15,r:[1,1],uses:45,key:'dirk'},
   stiletto:{n:'Stiletto',t:'blade',kind:'dagger',thin:true,mt:4,hit:90,crit:25,r:[1,1],uses:30,key:'stiletto'},
-  lancebreaker:{n:'Spellbreaker',t:'blade',kind:'sword',mt:6,hit:80,crit:0,r:[1,1],uses:35,brk:'art',key:'lancebreaker'},
+  spellbreaker:{n:'Spellbreaker',t:'blade',kind:'sword',mt:6,hit:80,crit:0,r:[1,1],uses:35,brk:'art',key:'spellbreaker'},
   axebreaker:{n:'Axebreaker',t:'pole',kind:'spear',mt:7,hit:80,crit:0,r:[1,1],uses:35,brk:'heavy',key:'axebreaker'},
   swordbreaker:{n:'Swordbreaker',t:'heavy',kind:'axe',mt:8,hit:75,crit:0,r:[1,1],uses:35,brk:'blade',key:'swordbreaker'},
   barbedSpear:{n:'Barbed Spear',t:'pole',kind:'spear',mt:8,hit:75,crit:30,r:[1,1],uses:20,tint:'killer',key:'barbedSpear'},
@@ -89,9 +89,9 @@ Object.assign(IT,{
   hawkeyeBow:{n:'Hawkeye Bow',t:'bow',kind:'bow',mt:7,hit:80,crit:30,r:[2,2],uses:20,tint:'killer',key:'hawkeyeBow'}
 });
 /* WT: weapon weight. Weight above the wielder's Str (Mag for sigils) is taken off their attack speed (see wtOver/AS). */
-const WT={ironJian:4,twinBlades:2,steelJian:8,needle:3,ironDao:6,moonDao:6,greatsword:12,ironSpear:6,steelSpear:10,javelin:8,ironAxe:7,steelAxe:11,throwAxe:9,ironJi:9,labrys:13,
-  shortBow:3,steelBow:7,crossbow:6,whip:3,chainBlade:5,ironFan:3,parasol:5,flameT:2,tideT:3,galeT:2,stoneT:6,thunderT:5,mirageT:3,natureT:3,lightT:2,darkT:5,crookStaff:4,runeStaff:3,glimmer:1,
-  dirk:1,stiletto:2,lancebreaker:6,axebreaker:7,swordbreaker:8,barbedSpear:7,reaverAxe:9,hawkeyeBow:5};
+const WT={wornSword:4,twinDaggers:2,knightlySword:8,thornRapier:3,hookedBlade:6,moonglassEdge:6,greatsword:12,ironSpear:6,steelSpear:10,javelin:8,hatchet:7,cleaver:11,throwingAxe:9,halberd:9,labrys:13,
+  shortBow:3,ironwoodBow:7,crossbow:6,thornWhip:3,chainSickle:5,warFan:3,boneParasol:5,emberSigil:2,tideSigil:3,galeSigil:2,stoneSigil:6,stormSigil:5,mirrorSigil:3,thornSigil:3,dawnSigil:2,umbralSigil:5,crookStaff:4,runeStaff:3,glimmer:1,
+  dirk:1,stiletto:2,spellbreaker:6,axebreaker:7,swordbreaker:8,barbedSpear:7,reaverAxe:9,hawkeyeBow:5};
 for(const k in WT)IT[k].wt=WT[k];
 /* ---- special weapons from events: jade (killer) weapons, lightning sigils, long-range sigils and charms ---- */
 Object.assign(IT,{
@@ -107,18 +107,18 @@ Object.assign(IT,{
   steelKnives:{n:'Steel Knives',t:'blade',kind:'dagger',mt:5,hit:90,crit:10,r:[1,2],uses:30,thrown:true,wt:2,tint:'steel'},
   galeSword:{n:'Gale Sword',t:'blade',kind:'sword',mt:6,hit:80,crit:0,r:[1,2],uses:25,wt:6,tint:'steel'},
   arbalest:{n:'Arbalest',t:'bow',kind:'crossbow',mt:11,hit:75,crit:0,r:[2,3],uses:30,wt:10,tint:'steel'},
-  greatbow:{n:'Yew Greatbow',t:'bow',kind:'bow',mt:9,hit:75,crit:0,r:[2,3],uses:30,wt:8,tint:'steel'},
-  throwKnives:{n:'Throwing Knives',t:'blade',kind:'dagger',mt:3,hit:90,crit:10,r:[1,2],uses:30,thrown:true,wt:1},
-  sparkT:{n:'Spark Sigil',t:'art',kind:'talisman',el:'lightning',mt:4,hit:95,crit:15,r:[1,2],uses:40,mag:true,wt:2},
-  thunderhead:{n:'Thunderhead Sigil',t:'art',kind:'talisman',el:'lightning',mt:8,hit:75,crit:30,r:[1,2],uses:25,mag:true,wt:6},
-  boltT:{n:'Heaven’s Bolt',t:'art',kind:'talisman',el:'lightning',mt:10,hit:65,crit:5,r:[3,10],uses:5,mag:true,wt:8},
-  meteorT:{n:'Meteor Sigil',t:'art',kind:'talisman',el:'earth',mt:13,hit:60,crit:0,r:[3,10],uses:5,mag:true,wt:9},
+  yewGreatbow:{n:'Yew Greatbow',t:'bow',kind:'bow',mt:9,hit:75,crit:0,r:[2,3],uses:30,wt:8,tint:'steel'},
+  throwingKnives:{n:'Throwing Knives',t:'blade',kind:'dagger',mt:3,hit:90,crit:10,r:[1,2],uses:30,thrown:true,wt:1},
+  sparkSigil:{n:'Spark Sigil',t:'art',kind:'talisman',el:'lightning',mt:4,hit:95,crit:15,r:[1,2],uses:40,mag:true,wt:2},
+  thunderheadSigil:{n:'Thunderhead Sigil',t:'art',kind:'talisman',el:'lightning',mt:8,hit:75,crit:30,r:[1,2],uses:25,mag:true,wt:6},
+  heavensBolt:{n:'Heaven’s Bolt',t:'art',kind:'talisman',el:'lightning',mt:10,hit:65,crit:5,r:[3,10],uses:5,mag:true,wt:8},
+  meteorSigil:{n:'Meteor Sigil',t:'art',kind:'talisman',el:'earth',mt:13,hit:60,crit:0,r:[3,10],uses:5,mag:true,wt:9},
   /* slayer weapons: effective (×2 Mt) against one body tag */
   warHammer:{n:'War Hammer',t:'heavy',kind:'hammer',mt:8,hit:70,crit:0,r:[1,1],uses:30,wt:10,eff:['armoured']},
-  huntSpear:{n:'Hunting Spear',t:'pole',kind:'spear',mt:7,hit:80,crit:0,r:[1,1],uses:30,wt:6,eff:['beast']},
+  huntingSpear:{n:'Hunting Spear',t:'pole',kind:'spear',mt:7,hit:80,crit:0,r:[1,1],uses:30,wt:6,eff:['beast']},
   holySword:{n:'Holy Sword',t:'blade',kind:'sword',mt:8,hit:80,crit:5,r:[1,1],uses:25,wt:6,eff:['spectral'],tint:'holy'},
   giantslayer:{n:'Giantslayer',t:'blade',kind:'greatsword',mt:9,hit:70,crit:0,r:[1,1],uses:25,wt:10,eff:['colossal'],tint:'steel'},
-  farMend:{n:'Far Staff',t:'spirit',kind:'staff',amt:10,r:[1,10],uses:15,tint:'mend'},
+  farStaff:{n:'Far Staff',t:'spirit',kind:'staff',amt:10,r:[1,10],uses:15,tint:'mend'},
   /* two-handed swords (kind greatsword): heavy, hard-hitting blades. Zwei wields only these */
   claymore:{n:'Claymore',t:'blade',kind:'greatsword',mt:9,hit:75,crit:0,r:[1,1],uses:40,wt:10},
   zweihander:{n:'Zweihänder',t:'blade',kind:'greatsword',mt:14,hit:65,crit:5,r:[1,1],uses:30,wt:14,tint:'steel'},
@@ -138,63 +138,48 @@ const ELN={light:'Light',dark:'Dark',fire:'Fire',nature:'Nature',water:'Water',w
    fly = flier (ignores terrain, weak to bows), mnt = mounted, wade = ignores water slowdown, phase = walks through walls, lava = can cross magma,
    jump = how high a step it can climb (default 2). */
 const CLS={
-  Heir:{n:'Initiate',w:['blade'],body:'tunic',mov:5,crit:10,promo:'Vanguard'},SpearGuard:{n:'Warden',w:['pole'],body:'armor',mov:5,promo:'Bastion'},Halberdier:{n:'Breaker',w:['heavy'],body:'vest',mov:5,promo:'Ravager'},
-  Archer:{n:'Hunter',w:['bow'],body:'tunic',mov:5,promo:'Deadshot'},Adept:{n:'Sigilist',w:['art'],body:'robe',mov:5,promo:'Runelord'},Healer:{n:'Mender',w:['spirit','art'],body:'robe',mov:5,promo:'Lightbearer'},
-  Lamia:{n:'Lamia',w:['pole'],body:'serpent',mov:5,promo:'Gorgon'},
-  Merc:{n:'Sellsword',w:['blade'],body:'tunic',mov:5,crit:5,promo:'Warblade'},
-  /* Ascended classes. bonus = stat gains on class change (HP Str Mag Skl Spd Lck Def Res). */
-  Vanguard:{n:'Vanguard',w:['blade','pole'],body:'tunic',mov:6,crit:10,tier:2,bonus:[4,2,1,2,2,0,2,2]},
-  Bastion:{n:'Bastion',w:['pole','blade'],body:'armor',mov:5,tier:2,bonus:[6,2,0,1,1,0,4,2]},
-  Ravager:{n:'Ravager',w:['heavy','blade'],body:'vest',mov:5,crit:10,tier:2,bonus:[6,3,0,1,2,0,2,1]},
-  Deadshot:{n:'Deadshot',w:['bow','blade'],body:'tunic',mov:6,crit:5,tier:2,bonus:[3,2,0,3,2,0,1,2]},
-  Runelord:{n:'Runelord',w:['art','spirit'],body:'robe',mov:5,tier:2,bonus:[3,0,3,2,1,0,1,3]},
+  /* a plain townsfolk body for NPC figures (the innkeeper, recruit icons) */
+  Villager:{n:'Villager',w:['blade'],body:'tunic',mov:5},
   Gremlin:{n:'Gremlin',w:['blade'],body:'gremlin',mov:6,crit:10},
-  Minotaur:{n:'Minotaur',w:['heavy'],body:'vest',mov:4,crit:10},
-  MireBeast:{n:'Nightmare',w:['blade'],body:'gremlin',mov:4,crit:5},
-  Mindsnail:{n:'Mindsnail',w:['art'],body:'snail',mov:3},
-  Skywright:{n:'Skywright',w:['art','heavy'],body:'robe',mov:6,tier:2},
-  Warblade:{n:'Warblade',w:['blade','heavy'],body:'tunic',mov:6,crit:10,tier:2,gift:'greatsword',bonus:[4,3,0,2,2,0,2,1]},
-  Gorgon:{n:'Gorgon',w:['pole','art'],body:'serpent',mov:6,tier:2,bonus:[4,1,3,2,1,0,2,3]},
-  Lightbearer:{n:'Lightbearer',w:['spirit','art'],body:'robe',mov:5,tier:2,bonus:[4,0,2,1,2,0,1,3]},
-  Warlord:{n:'Nightmare',w:['heavy','pole'],body:'armor',mov:4},Butcher:{n:'Butcher',w:['blade','heavy'],body:'vest',mov:5,crit:5},Matron:{n:'Demon Matron',w:['art'],body:'robe',mov:5}
+  Mindsnail:{n:'Mindsnail',w:['art'],body:'snail',mov:3}
 };
 /* SKILLS: n = name, cost = skill capacity it takes up (units have BASE_CAP to spend), d = description shown in game. */
 const SKILLS={
-  rally:{n:'Command',cost:10,d:'Allies within 2 tiles gain +10 Hit and +10 Avoid.'},
-  brace:{n:'Steadfast',cost:5,d:'+4 Def and Res when attacked during the enemy phase.'},
-  deadeye:{n:'Keen Eye',cost:5,d:'+20 Hit, and the target\'s terrain gives no Avoid.'},
+  command:{n:'Command',cost:10,d:'Allies within 2 tiles gain +10 Hit and +10 Avoid.'},
+  steadfast:{n:'Steadfast',cost:5,d:'+4 Def and Res when attacked during the enemy phase.'},
+  keenEye:{n:'Keen Eye',cost:5,d:'+20 Hit, and the target\'s terrain gives no Avoid.'},
   kindle:{n:'Kindle',cost:5,d:'+2 Mag when this unit starts the fight.'},
-  swift:{n:'Swiftstrike',cost:5,d:'+3 Spd for doubling when this unit starts the fight.'},
-  fury:{n:'Wrath',cost:10,d:'+15 Crit while at half HP or less.'},
+  swiftstrike:{n:'Swiftstrike',cost:5,d:'+3 Spd for doubling when this unit starts the fight.'},
+  wrath:{n:'Wrath',cost:10,d:'+15 Crit while at half HP or less.'},
   focus:{n:'Focus',cost:10,d:'+10 Crit when no ally is adjacent.'},
   renewal:{n:'Renewal',cost:10,d:'Adjacent allies recover 5 HP at the start of each of your turns.'},
-  sunder:{n:'Pierce',cost:15,d:'Luck×1.5% chance: the strike ignores half the target\'s Def.'},
-  shieldwall:{n:'Bulwark',cost:15,d:'Luck×2% chance: halves damage from an incoming strike.'},
-  stone:{n:'Stone Gaze',cost:15,d:'Luck% chance on a hit: the target turns to stone, loses its next turn and can\'t counter. Bosses are immune.'},
-  siphon:{n:'Lifetaker',cost:15,d:'Luck×2% chance: restores HP equal to the damage dealt.'}
+  pierce:{n:'Pierce',cost:15,d:'Luck×1.5% chance: the strike ignores half the target\'s Def.'},
+  bulwark:{n:'Bulwark',cost:15,d:'Luck×2% chance: halves damage from an incoming strike.'},
+  stoneGaze:{n:'Stone Gaze',cost:15,d:'Luck% chance on a hit: the target turns to stone, loses its next turn and can\'t counter. Bosses are immune.'},
+  lifetaker:{n:'Lifetaker',cost:15,d:'Luck×2% chance: restores HP equal to the damage dealt.'}
 };
 /* Skill scrolls (one per skill except Command) and the class-change item. */
 Object.assign(SKILLS,{
-  hitrun:{n:'Hit and Run',cost:10,d:'After attacking in melee, steps back one tile if there is room.'},
-  quickdraw:{n:'Quick Draw',cost:15,d:'When attacked at half HP or less, strikes first.'},
+  hitAndRun:{n:'Hit and Run',cost:10,d:'After attacking in melee, steps back one tile if there is room.'},
+  quickDraw:{n:'Quick Draw',cost:15,d:'When attacked at half HP or less, strikes first.'},
   flurry:{n:'Flurry',cost:15,d:'Spd% chance of an extra strike in each fight.'},
   whirlwind:{n:'Whirlwind',cost:15,d:'Luck÷2% chance: one strike becomes five hits at half damage.'},
   retaliate:{n:'Retaliate',cost:15,d:'Luck% chance, when hit in melee, to deal the same damage back.'},
-  ironskin:{n:'Iron Skin',cost:10,d:'Luck×2% chance to halve physical damage taken.'},
-  spellward:{n:'Spell Ward',cost:10,d:'Luck×2% chance to halve magic damage taken.'},
+  ironSkin:{n:'Iron Skin',cost:10,d:'Luck×2% chance to halve physical damage taken.'},
+  spellWard:{n:'Spell Ward',cost:10,d:'Luck×2% chance to halve magic damage taken.'},
   momentum:{n:'Momentum',cost:15,d:'Once per turn, defeating an enemy on your turn lets this unit act again.'},
-  fleetfoot:{n:'Fleet Foot',cost:10,d:'+2 Move.'},
+  fleetFoot:{n:'Fleet Foot',cost:10,d:'+2 Move.'},
   taunt:{n:'Taunt',cost:5,d:'Enemies would rather attack this unit.'},
-  quickstudy:{n:'Quick Study',cost:10,d:'Gains double EXP.'},
-  earlyedge:{n:'Early Edge',cost:10,d:'+20 Hit and Avoid on turns 1 to 5.'},
-  bladebane:{n:'Wolfsbane',cost:10,d:'Effective (×2) against Beasts.'},
-  polebane:{n:'Spiritbane',cost:10,d:'Effective (×2) against Spectral foes.'},
-  heavybane:{n:'Stonebane',cost:10,d:'Effective (×2) against Armoured foes.'},
+  quickStudy:{n:'Quick Study',cost:10,d:'Gains double EXP.'},
+  earlyEdge:{n:'Early Edge',cost:10,d:'+20 Hit and Avoid on turns 1 to 5.'},
+  wolfsbane:{n:'Wolfsbane',cost:10,d:'Effective (×2) against Beasts.'},
+  spiritbane:{n:'Spiritbane',cost:10,d:'Effective (×2) against Spectral foes.'},
+  stonebane:{n:'Stonebane',cost:10,d:'Effective (×2) against Armoured foes.'},
   guardian:{n:'Guardian',cost:10,d:'Adjacent allies take 2 less damage.'},
-  pikewall:{n:'Pike Wall',cost:5,d:'+4 Def and +10 Hit against mounted units and fliers.'}
+  pikeWall:{n:'Pike Wall',cost:5,d:'+4 Def and +10 Hit against mounted units and fliers.'}
 });
-for(const k in SKILLS)if(k!=='rally')IT['scroll_'+k]={n:SKILLS[k].n+' Scroll',t:'scroll',kind:'scroll',skill:k,uses:1,key:'scroll_'+k};
-IT.crest={n:'Ascension Fragment',t:'crest',kind:'crest',uses:1,key:'crest'};
+for(const k in SKILLS)if(k!=='command')IT['scroll_'+k]={n:SKILLS[k].n+' Scroll',t:'scroll',kind:'scroll',skill:k,uses:1,key:'scroll_'+k};
+IT.ascensionFragment={n:'Ascension Fragment',t:'crest',kind:'crest',uses:1,key:'ascensionFragment'};
 /* BASE_CAP: skill capacity a unit starts with. PROMO_CAP: extra capacity on promotion. PROMO_LV: level a unit can promote at. */
 const BASE_CAP=20,PROMO_CAP=5,PROMO_LV=5;
 const START_PARTY=['lord','maren','dax','oti','silas','kestrel'];
@@ -208,7 +193,7 @@ function lordName(){return'Your squad'}
 const FOE={};
 /* Nightmare creatures (not Fallen, so not pale). Fliers are weak to bows. */
 FOE.Gremlin={b:[14,4,0,5,8,2,1,1],g:[.5,.3,0,.4,.5,.2,.1,.1],items:['claws'],pic:'twin',look:{skin:'#5f6e52',crysSmall:true}};
-FOE.Mindsnail={b:[24,0,7,5,2,2,8,7],g:[.6,0,.4,.3,.1,.1,.3,.3],items:['mirageT'],pic:'illusion',look:{skin:'#a8b59a',shell:'#b98fbf',eye:'#c77dff'}};
+FOE.Mindsnail={b:[24,0,7,5,2,2,8,7],g:[.6,0,.4,.3,.1,.1,.3,.3],items:['mirrorSigil'],pic:'illusion',look:{skin:'#a8b59a',shell:'#b98fbf',eye:'#c77dff'}};
 /* HAIRS: dark hair colours (hex) */
 const HAIRS=['#1d1a24','#2a2230','#3a2a20','#241c1c','#4a3a30'];
 

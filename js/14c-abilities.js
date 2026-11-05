@@ -35,7 +35,7 @@ const stList=u=>Object.keys(u.st||{}).filter(k=>hasSt(u,k)&&STATUS[k]);
 Object.assign(SKILLS,{
   eagleEye:{n:'Eagle Eye',cost:5,kit:1,d:'+1 range on every bow shot, on top of the height bonus.'},
   ironBody:{n:'Iron Body',cost:5,kit:1,d:'Can’t be pushed or pulled.'},
-  darkSiphon:{n:'Siphon',cost:5,kit:1,d:'Her dark spells heal her for 25% of the damage they deal.'},
+  siphon:{n:'Siphon',cost:5,kit:1,d:'Her dark spells heal her for 25% of the damage they deal.'},
   attunement:{n:'Attunement',cost:5,kit:1,d:'A spell of a different element from her last one costs 2 less MP.'},
   plate:{n:'Plate',cost:5,kit:1,d:'Physical hits deal 2 less damage to him; −1 Jump.'},
   lastLight:{n:'Last Light',cost:5,kit:1,d:'Her heals restore 50% more on allies below half HP.'},
@@ -85,7 +85,7 @@ const ABIL={
 const KITS={
   kili:{passive:'eagleEye',mp:0,abil:['aimedShot','pinningArrow','volley']},
   vaar:{passive:'ironBody',mp:0,abil:['palmStrike','flurry','leap']},
-  morrigan:{passive:'darkSiphon',mp:24,abil:['drainTouch','hex','darkPulse']},
+  morrigan:{passive:'siphon',mp:24,abil:['drainTouch','hex','darkPulse']},
   corvin:{passive:'attunement',mp:28,abil:['flameBurst','frostWave','chainLightning']},
   aldric:{passive:'plate',mp:0,abil:['sunder','valiantThrust','cover']},
   maelis:{passive:'lastLight',mp:26,abil:['mend','circleOfRest','sanctuary']},
@@ -197,7 +197,7 @@ async function useAbility(u,id,tx,ty){
         if((rn()+rn())/2<V.hit){const d=Math.min(V.dmg,t.hp);t.hp-=d;total+=d;sfx('hit');pop(t,'-'+d,'dmg');flash(t);mapPose(t,'hit',u);if(a.mag)burst(t,EL_COL[a.el]||'#c8b8ff')}else{sfx('miss');pop(t,'Miss','miss');mapPose(t,'dodge',u)}
         await sleep(D(n>1?160:220));mapPose(u,'idle');mapPose(t,'idle');render();await sleep(D(n>1?60:110))}
       landed=total>0;
-      if(total&&has(u,'darkSiphon')&&a.el==='dark'){const h=Math.min(Math.ceil(total/4),u.maxhp-u.hp);if(h){u.hp+=h;pop(u,'+'+h,'heal')}}
+      if(total&&has(u,'siphon')&&a.el==='dark'){const h=Math.min(Math.ceil(total/4),u.maxhp-u.hp);if(h){u.hp+=h;pop(u,'+'+h,'heal')}}
       exp+=expFor(u,t,total>0,t.hp<=0);
       if(t.hp>0&&total&&a.push){pushUnit(u,t,a.push);render();await sleep(D(250))}
       if(a.chain&&t.hp>0||a.chain)for(const c of chainTo(u,id,t)){const V2=abVs(u,id,c,a.chain[1]);sfx('thunder');burst(c,EL_COL.lightning);
@@ -219,7 +219,7 @@ async function useAbility(u,id,tx,ty){
   for(const o of new Set(killed)){if(R('fang')&&u.hp>0){const h=Math.min(5,u.maxhp-u.hp);if(h){u.hp+=h;pop(u,'+'+h,'heal')}}
     for(const it of o.items.filter(i=>i.d)){(state.loot=state.loot||[]).push(it.k);sfx('item');notify(`${IT[it.k].n} dropped`,'Added to the spoils: choose who takes it after the fight.',icon(it.k))}
     if(o.team==='e'&&!o.summon)dropGold()}
-  if(u.team==='p'&&u.hp>0&&exp){const g=gainExp(u,Math.min(100,Math.round(Math.max(10,exp)*EXP_RATE*(R('tome')?1.5:1)*(has(u,'quickstudy')?2:1))));await showExp(u,g);if(g&&g.gains)await levelUp(u,g)}
+  if(u.team==='p'&&u.hp>0&&exp){const g=gainExp(u,Math.min(100,Math.round(Math.max(10,exp)*EXP_RATE*(R('tome')?1.5:1)*(has(u,'quickStudy')?2:1))));await showExp(u,g);if(g&&g.gains)await levelUp(u,g)}
   state.units=state.units.filter(o=>o.hp>0);busy=false;render();checkEnd();
 }
 /* Tumble: a free 2-tile move that ignores height, then back to the command menu */

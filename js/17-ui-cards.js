@@ -27,7 +27,7 @@ async function recruitNode(where='recruit'){
   }
 }
 /* slayer loot follows the region: the body tags of its monsters pick which slayer weapon or skill can drop */
-const SLAYER_WPN={armoured:'warHammer',beast:'huntSpear',colossal:'giantslayer',spectral:'holySword'},SLAYER_SKILL={beast:'bladebane',armoured:'heavybane',spectral:'polebane'};
+const SLAYER_WPN={armoured:'warHammer',beast:'huntingSpear',colossal:'giantslayer',spectral:'holySword'},SLAYER_SKILL={beast:'wolfsbane',armoured:'stonebane',spectral:'spiritbane'};
 function regionTags(withBoss){const B=actBiome(),t=[];for(const[c,w]of[...B.pool,...B.elitePool])for(const g of tagsOf({cls:c}))for(let i=0;i<w;i++)t.push(g);if(withBoss)t.push('colossal','colossal');return t}
 /* returns the item keys found after a win; winScreen offers each one with the Found picker.
    Includes chests nobody opened and anything that was left behind because a unit's bag was full (state.loot) */
@@ -39,7 +39,7 @@ function battleRewards(){
   if(rand()<(elite?.35:.15)){const ws=rt.filter(t=>SLAYER_WPN[t]);if(ws.length)add(SLAYER_WPN[pick(ws)])}
   /* skills are rare: 10% after a battle, 40% after an elite; half the time it's the slayer skill for this region's monsters */
   if(rand()<(elite?.4:.1)){const ss=rt.filter(t=>SLAYER_SKILL[t]).map(t=>SLAYER_SKILL[t]).filter(k=>!run.roster.every(u=>has(u,k)));run.pendSkill=ss.length&&rand()<.5?pick(ss):pick(SKILL_POOL())}
-  if(rand()<.5)add('qiPill');
+  if(rand()<.5)add('salve');
   return out;
 }
 

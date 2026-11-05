@@ -78,7 +78,7 @@ const newsHTML=lines=>lines.length?`<div class="news">${lines.map(l=>`<p>${l}</p
 function unlockArt(k){const c='UNL|'+k;if(sprCache[c])return sprCache[c];let u;
   if(k==='summoner')u=hiFig({style:'long',gear:'hood',cloth:'#5a3a8a',skin:'#e0b090',hair:'#2a2230'},ensureCls('G.summoner.foot.art.1'),'p','idle','crookStaff');
   else if(k==='flying')u=hiFig({style:'tail',hair:'#8a2a22',cloth:'#3a7cc0',mount:'pegasus',horse:'#f3f0e8'},ensureCls('G.skirm.flying.pole.1'),'p','idle','ironSpear');
-  else if(k==='startRelic')u=relicArt('waybread');else if(k==='veterans')u=icon('crest');else if(k==='funds')u=coinArt();else if(k==='gourmet')u=mealArt('boar');else if(k==='draft6')u=campArt();
+  else if(k==='startRelic')u=relicArt('waybread');else if(k==='veterans')u=icon('ascensionFragment');else if(k==='funds')u=coinArt();else if(k==='gourmet')u=mealArt('boar');else if(k==='draft6')u=campArt();
   else{const p=Px(16,16);if(k==='ascension'){p.poly([[8,1],[13,7],[8,15],[3,7]],'#c8283a');p.poly([[8,1],[13,7],[8,8]],'#ff5a6a');p.line(8,2,8,14,'#ffb0b8')}
     if(k==='reroll'){p.rect(1,5,8,8,'#efe6cf');p.rect(7,2,8,8,'#e0d6bc');for(const[x,y]of[[3,7],[6,10],[9,4],[12,7]])p.set(x,y,INK)}if(k==='none'){p.ell(8,8,5,5,'#5a5466')}
     p.outline(OUT);u=p.url()}

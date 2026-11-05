@@ -62,7 +62,7 @@ function tavShow(text,opts){
 }
 function spend(n){run.gold=gold()-n;sfx('item')}
 async function tavernNode(){
-  const look={...KEEPER.look},keeper=fig(look,'Heir','g','idle',null),bought=new Set(),done={},B=actBiome();
+  const look={...KEEPER.look},keeper=fig(look,'Villager','g','idle',null),bought=new Set(),done={},B=actBiome();
   const hires=castOffer(3,Math.max(1,Math.round(run.roster.reduce((a,u)=>a+u.lv,0)/run.roster.length)),'tavern');
   const price=u=>40+15*u.lv;
   tavEl.innerHTML=`<div class="tv-scene"><img class="tv-bg" src="${tavernArt()}" alt=""><img class="tv-keeper" src="${keeper}" alt="${KEEPER.name}"><img class="tv-counter" src="${counterArt()}" alt=""><span class="tv-gold"></span></div>

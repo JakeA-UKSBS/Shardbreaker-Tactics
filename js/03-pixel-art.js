@@ -151,7 +151,7 @@ function fig(L,cls,team,pose,wk,sz){
   /* monsters: art/monsters/<Class>.png (and <Class>-strike.png for the attack pose) replaces the code-drawn sprite, see monsterArt() */
   {const k='monsters/'+cls;if(ART_PNG.has(k))return'art/'+k+(pose==='strike'&&ART_PNG.has(k+'-strike')?'-strike':'')+'.png'}
   if(sz>=2)pxScale=2;
-  if(team==='e'&&!CLS[cls].tier&&!String(cls).startsWith('G.')&&!L.blight){pxHook=P=>L.crys===false?0:L.crysAt?crysAt(P,L.crysAt):crystallise(P,cls,!!L.big||/Wyrm|Dragon|Colossus|Turtle|King|Stag|Krondis|Tempest|Roc/.test(cls),L.crysSmall,L.crysCol)}
+  if(team==='e'&&!CLS[cls].tier&&!String(cls).startsWith('G.')&&!L.blight){pxHook=P=>L.crys===false?0:L.crysAt?crysAt(P,L.crysAt):crystallise(P,cls,!!L.big||/Wyrm|Dragon|Colossus|Turtle|King|Stag|Krondis|StormElemental|Matriarch|Roc/.test(cls),L.crysSmall,L.crysCol)}
   pxMini=!!L.mini;try{return fig0(L,cls,team,pose,wk)}finally{pxHook=null;pxScale=1;pxMini=false}
 }
 /* ==================================================================
