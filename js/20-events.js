@@ -260,6 +260,29 @@ Object.assign(EVENTS,{
     {l:'Meditate with the sage',sub:'Every unit gains 50 EXP',go:async()=>{await expAll(run.roster,50);return'Quiet, cold, but useful. Every unit gains 50 EXP.'}},
     {l:'Rest below',sub:'Every unit heals 10 HP',go:async()=>{run.roster.forEach(u=>u.hp=Math.min(u.maxhp,u.hp+10));sfx('heal');return'Every unit rests up before continuing.'}}]}
 });
+/* ---- region events: each only turns up in its own region ---- */
+const inReg=id=>()=>actBiome().id===id;
+Object.assign(EVENTS,{
+  onyx:{t:'The Black Onyx',art:'shrine',ok:inReg('cavern'),d:'Deep in a side tunnel, a shard of black onyx pulses like a slow heartbeat. The air around it is still: it’s drinking in the wild mana of the caves.',o:[
+    {l:'Take the shard',sub:'Relic: crystal creatures deal 1 less damage to you',go:async()=>{run.relics.push('onyx');sfx('dark');return'The shard is cold and heavy. The crystals nearby dim as you pass.'}},
+    {l:'Leave it',go:async()=>'Some things are better left in the dark.'}]},
+  ankh:{t:'The Sinking Sands',art:'idol',ok:inReg('desert'),d:'Half sunk in the quicksand, a golden ankh glints in the sun. Reaching it means wading in.',o:[
+    {l:'Wade in for it',sub:'Relic: every unit +1 Def; every unit −1 Spd for good',go:async()=>{run.roster.forEach(u=>bump(u,'spd',-1));run.relics.push('ankh');sfx('item');return'You haul it out, and the sand nearly has you. The ankh is yours (+1 Def), but every unit loses 1 Spd.'}},
+    {l:'Leave it',go:async()=>'The sand can keep it.'}]},
+  icecache:{t:'The Frozen Cache',art:'cache',ok:inReg('snow'),d:'Under a sheet of blue ice, someone stashed supplies and never came back. The only path down is glassy and steep.',o:[
+    {l:'Climb down',sub:'Pick 1 of 2 relics; someone slips and takes 2 damage',go:async()=>{const v=pick(run.roster);v.hp=Math.max(1,v.hp-2);const k=await relicPick(2,['c','u'],'The Frozen Cache','Chip one free before the ice closes over again.');return`${v.name} slips on the way down (−2 HP).${k?` You dig out <b>${RELICS[k].n}</b>.`:''}`}},
+    {l:'Leave it',go:async()=>'Not worth a broken neck.'}]},
+  dwarf:{t:'The Dwarf Smith',art:'smith',ok:inReg('mountain'),d:'A dwarf works an anvil on the lip of a lava flow. “Best heat on the isle. I’ll do one for you, no charge. I like the look of you.”',o:[
+    {l:'Hand over a weapon',sub:'Reforge one weapon +1, free',need:()=>run.roster.some(u=>weaponOf(u)&&forgeLv(weaponOf(u))<FORGE_MAX),go:async()=>{const u=await pickUnit('Whose weapon?','It gains +1 (up to +3).',u=>!weaponOf(u)?'No weapon':forgeLv(weaponOf(u))>=FORGE_MAX?'Already +3':null);if(!u)return null;const it=weaponOf(u);forge(it);sfx('item');return`The dwarf hammers it in the lava light. <b>${IT[it.k].n}</b>.`}},
+    {l:'Leave',go:async()=>'“Suit yourself.”'}]},
+  tailor:{t:'The Tailor',art:'merchant',ok:inReg('mountain'),d:'A tailor sells fireproof cloth from a cart at the foot of the volcano. “Heat-proofed by hand. You’ll thank me later.”',o:[
+    {l:'Buy a heat-proof cloak',sub:'One unit +3 Res for good',cost:50,go:async()=>{const u=await pickUnit('Who wears it?','+3 Res for good.');if(!u)return null;spend(50);bump(u,'res',3);sfx('item');return`${u.name} looks very smart in it. +3 Res.`}},
+    {l:'Buy the imbued gloves',sub:'Relic: every unit +2 Res',cost:100,go:async()=>{spend(100);run.relics.push('gloves');sfx('fanfare');return'Enough pairs for everyone, each stitched with a warding rune. Every unit gains 2 Res.'}},
+    {l:'Leave',go:async()=>'“Your loss.”'}]},
+  gnome:{t:'The Gnome Scholar',art:'library',ok:inReg('forest'),d:'A gnome sits on a stump, surrounded by crystal shards and very full notebooks. “I’m not much of a fighter, but I’m happy to share what I know for the cause.”',o:[
+    {l:'Take his research notes',sub:'Relic: +2 damage against crystal creatures',go:async()=>{run.relics.push('notes');sfx('item');return'“Hit them where the facets meet. Trust me.” You take the notes.'}},
+    {l:'Hear him out',sub:'Every unit gains 30 EXP',go:async()=>{await expAll(run.roster,30);return'He talks until sunset. Every unit gains 30 EXP.'}}]}
+});
 /* ---- act 3 events: only these appear on the road to the Crystal Heart ---- */
 Object.assign(EVENTS,{
   echo:{t:'Ithren’s Echo',act:3,art:'sage',d:'The air shivers, and Ithren’s voice comes through the crystal, faint and far away. “You’re close now. I can give you one thing. Choose.”',o:[
