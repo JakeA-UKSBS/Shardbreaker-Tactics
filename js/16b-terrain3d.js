@@ -41,7 +41,7 @@ function autoHeights(id,m,P){
   const rnd=(x,y,i)=>{let h=2166136261;for(const c of id+'|'+x+'|'+y+'|'+i)h=Math.imul(h^c.charCodeAt(0),16777619);return((h>>>0)%10007)/10007};
   const sm=t=>t*t*(3-2*t),noise=(x,y,s,i)=>{const gx=x/s,gy=y/s,x0=Math.floor(gx),y0=Math.floor(gy),fx=sm(gx-x0),fy=sm(gy-y0),v=(X,Y)=>rnd(X,Y,i);
     const top=v(x0,y0)+(v(x0+1,y0)-v(x0,y0))*fx,bot=v(x0,y0+1)+(v(x0+1,y0+1)-v(x0,y0+1))*fx;return top+(bot-top)*fy};
-  const T=(x,y)=>TER[m.map[y][x]],low=t=>['water','lava','ice','quicksand'].includes(t.k)||P.swamp&&t.k==='shallow',solid=t=>t.c>=99&&!low(t);
+  const T=(x,y)=>TER[m.map[y][x]],low=t=>['water','mud','lava','ice','quicksand'].includes(t.k)||P.swamp&&t.k==='shallow',solid=t=>t.c>=99&&!low(t);
   const ph=rnd(0,0,9)*6.28,starts=new Set((m.start||[]).map(([x,y])=>x+','+y));
   const h=[];for(let y=0;y<H;y++){h.push([]);for(let x=0;x<W;x++){const t=T(x,y);let v;
     if(P.swamp)v=['sand','mangrove'].includes(t.k)?1:0;

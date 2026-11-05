@@ -44,6 +44,7 @@ Object.assign(MONLOOK,{
 });
 /* fields: see the TERRAIN key in 01-data.js */
 Object.assign(TER,{
+  'D':{n:'Deep Mud',k:'mud',c:99,av:0,df:0},/* the swamp's impassable ground: its maps' water (w) becomes this */
   'k':{n:'Sandstone Rocks',k:'sandstone',c:99,av:0,df:0},'^':{n:'Boulders',k:'boulder',c:99,av:0,df:0},'z':{n:'Quicksand',k:'quicksand',c:1,av:0,df:0,slow:true},
   'o':{n:'Snow',k:'snow',c:1,av:0,df:0},'j':{n:'Deep Snow',k:'deepsnow',c:1,av:0,df:0,slow:true},'a':{n:'Blue Agate',k:'agate',c:2,av:20,df:2},'i':{n:'Frozen Lake',k:'ice',c:1,av:-10,df:0},
   'c':{n:'Cave Floor',k:'cave',c:1,av:0,df:0},'x':{n:'Iridescent Rock',k:'cavewall',c:99,av:0,df:0},'g':{n:'Malachite',k:'malachite',c:2,av:20,df:2},
@@ -209,7 +210,8 @@ function genBattle(n,kind){
   {const NO=['T','A','C','F'],ROCKS=['^','k','R'],rs=[];m.map.forEach((r,y)=>[...r].forEach((ch,x)=>{if(ROCKS.includes(ch))rs.push(x+','+y)}));
    const cnt={};m.map.join('').split('').forEach(c=>{if(TER[c]&&TER[c].c<99&&!NO.includes(c))cnt[c]=(cnt[c]||0)+1});
    const g=Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0][0],drop=new Set(rs.length>ROCK_MAX?shuffle(rs.slice()).slice(ROCK_MAX):[]);
-   m={...m,map:m.map.map((r,y)=>[...r].map((ch,x)=>NO.includes(ch)||drop.has(x+','+y)?g:ch).join(''))}}
+   const mud=B.id==='swamp';/* the swamp's water is deep mud instead */
+   m={...m,map:m.map.map((r,y)=>[...r].map((ch,x)=>NO.includes(ch)||drop.has(x+','+y)?g:mud&&ch==='w'?'D':ch).join(''))}}
   /* difficulty climbs with the floor and the act: act 1 floor 1 is Lv 1, act 1 floor 9 is Lv 6, act 2 starts at Lv 7 */
   const fl=flScale(run&&run.n),diff=(act-1)*10+fl,lvBase=1+Math.floor(diff*.6)+(A(1)?1:0)+(A(4)?1:0);
   const pool=(elite?B.elitePool:B.pool).filter(p=>act>=2||fl>=(p[2]||1)),tot=pool.reduce((a,p)=>a+p[1],0);
@@ -255,4 +257,11 @@ texStyle.textContent+=`.tile.boulder::before{inset:0;background:url(${boulderArt
 
 /* PNG art: each of these uses art/<key>.png when it exists, else the drawing code above (see art() in 03-pixel-art.js) */
 function bioTile2(k){return art('tiles/'+k,()=>bioTile2_draw(k))}
+/* Deep Mud: churned, wet brown mud with darker sinkholes and a little sheen (art/tiles/mud.png) */
+function mudArt_draw(){const p=Px(16,16),M='#4a3524',M2='#3a2818',M3='#5e4630',W='#7a6448';p.rect(0,0,16,16,M);
+  for(const[x,y,rx,ry]of[[4,4,3,2],[11,10,3.5,2.2],[12,3,2,1.4],[3,12,2.4,1.6]])p.ell(x,y,rx,ry,M2);
+  for(const[x,y]of[[7,7],[8,7],[1,8],[14,14],[6,14],[13,7],[9,1],[2,1]])p.set(x,y,M3);
+  for(const[x,y]of[[3,3],[10,9],[11,9],[12,2],[2,11]])p.set(x,y,W);return p.url()}
+function mudArt(){return art('tiles/mud',()=>mudArt_draw())}
+texStyle.textContent+=`.t-mud{background:url(${mudArt()}) 0 0/100% 100%}`;
 function boulderArt(){return art('tiles/boulder',()=>boulderArt_draw())}

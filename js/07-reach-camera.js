@@ -30,7 +30,7 @@ function talkTarget(u){if(!u.lord)return null;return state.units.find(o=>o.recru
 /* Tiles are drawn as diamonds TW wide and TH tall; each height level lifts a tile HS px. BW/BH/OX/OY are set in buildBoard(). */
 const TW=68,TH=34,HS=16;let BW=0,BH=0,OX=0,OY=0;
 /* walls and other solid blocks stand taller than the ground they're on (looks only: they can't be entered) */
-function vhOf(x,y){const t=ter(x,y),h=hOf(x,y);if(t.c<99||PROPS[t.k]||['water','lava','sky'].includes(t.k))return h;return h+(['wall','cavewall','mast','hull'].includes(t.k)?2:1)}
+function vhOf(x,y){const t=ter(x,y),h=hOf(x,y);if(t.c<99||PROPS[t.k]||['water','mud','lava','sky'].includes(t.k))return h;return h+(['wall','cavewall','mast','hull'].includes(t.k)?2:1)}
 /* top corner of a tile's top face at height h */
 const tileTop=(x,y,h)=>({x:OX+(x-y)*TW/2,y:OY+(x+y)*TH/2-h*HS});
 const hOfU=(x,y,sz)=>Math.max(...cellsOf(x,y,sz||1).map(([cx,cy])=>hOf(cx,cy)));

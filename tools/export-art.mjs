@@ -48,7 +48,7 @@ const keys = await page.evaluate(() => {
   monsterClasses().forEach(c => { try { monsterArt(c, false); monsterArt(c, true) } catch (_) {} });
   each(TAGS, tagArt); each(RELICS, relicArt); each(MEALS, mealArt); each(WOES, woeArt);
   [mugArt, tavernArt, counterArt, musterArt, flagArt, sageRoomArt, sageTableArt, sageBallArt, mapIconArt, coinArt,
-   swordsArt, eliteArt, campArt, chestArt, eventArt, titleCrystalArt, cageBarsArt, boulderArt, shipSideArt, shipWingArt,
+   swordsArt, eliteArt, campArt, chestArt, eventArt, titleCrystalArt, cageBarsArt, boulderArt, mudArt, shipSideArt, shipWingArt,
    () => shipArt(0), () => shipArt(1), () => BIG.crystal({}, false), () => BIG.crystal({}, true)].forEach(f => { try { f() } catch (_) {} });
   return Object.keys(ART_GEN).sort();
 });
