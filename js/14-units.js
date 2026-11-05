@@ -143,7 +143,7 @@ function monsterArt(c,strike){return art('monsters/'+c+(strike?'-strike':''),()=
   const L=boss?clone(boss.boss.look||{}):monLook(c);rngS=s0;
   return fig(L,c,FOE[c]&&FOE[c].look&&FOE[c].look.spirit?'p':'e',strike?'strike':'idle',FOE[c]&&FOE[c].items[0],1)})}
 function mkMon(c,lv){const u=foe(c,lv,0,0);u.look=monLook(c);
-  if(c==='LamiaM'||c==='Beholder')u.skill='stone';if(c==='Sporeling'||c==='Myconid')u.skill='spore';if(c==='Snake')u.skill='venom';
+  if(c==='LamiaM'||c==='Beholder')u.skill='stone';if(c==='Sporeling')u.skill='spore';
   if(c==='Skeleton'&&rand()<.35){u.items[0]={k:'shortBow',u:IT.shortBow.uses};u.name='Skeleton Archer'}
   return u}
 

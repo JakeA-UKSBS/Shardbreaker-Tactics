@@ -149,8 +149,6 @@ const CLS={
   Deadshot:{n:'Deadshot',w:['bow','blade'],body:'tunic',mov:6,crit:5,tier:2,bonus:[3,2,0,3,2,0,1,2]},
   Runelord:{n:'Runelord',w:['art','spirit'],body:'robe',mov:5,tier:2,bonus:[3,0,3,2,1,0,1,3]},
   Gremlin:{n:'Gremlin',w:['blade'],body:'gremlin',mov:6,crit:10},
-  Gloomwing:{n:'Gloomwing',w:['blade'],body:'robe',mov:7,fly:true},
-  StormHarpy:{n:'Storm Harpy',w:['art'],body:'robe',mov:6,fly:true},
   Minotaur:{n:'Minotaur',w:['heavy'],body:'vest',mov:4,crit:10},
   MireBeast:{n:'Nightmare',w:['blade'],body:'gremlin',mov:4,crit:5},
   Mindsnail:{n:'Mindsnail',w:['art'],body:'snail',mov:3},
@@ -210,9 +208,7 @@ function lordName(){return'Your squad'}
 const FOE={};
 /* Nightmare creatures (not Fallen, so not pale). Fliers are weak to bows. */
 FOE.Gremlin={b:[14,4,0,5,8,2,1,1],g:[.5,.3,0,.4,.5,.2,.1,.1],items:['claws'],pic:'twin',look:{skin:'#5f6e52',crysSmall:true}};
-FOE.Gloomwing={b:[18,6,0,5,7,1,2,3],g:[.6,.4,0,.35,.45,.1,.1,.2],items:['claws'],pic:'twin',look:{style:'wild',hair:'#2a2236',skin:'#8f8aa6',eye:'#ffd23f',cloth:'#3b3050',wing:'#3b3050'}};
 FOE.Mindsnail={b:[24,0,7,5,2,2,8,7],g:[.6,0,.4,.3,.1,.1,.3,.3],items:['mirageT'],pic:'illusion',look:{skin:'#a8b59a',shell:'#b98fbf',eye:'#c77dff'}};
-FOE.StormHarpy={b:[17,0,6,5,6,1,1,5],g:[.55,0,.4,.35,.4,.1,.1,.3],items:['thunderT'],pic:'lightning',look:{style:'long',hair:'#c8d0e0',skin:'#a9a3c0',eye:'#9fd8ff',cloth:'#4a5a7a',wing:'#55607a'}};
 /* HAIRS: dark hair colours (hex) */
 const HAIRS=['#1d1a24','#2a2230','#3a2a20','#241c1c','#4a3a30'];
 

@@ -46,13 +46,12 @@ IT.scroll_spore={n:'Poison Spores Scroll',t:'scroll',kind:'scroll',skill:'spore'
 /* fields: see the CLASSES key in 01-data.js */
 Object.assign(CLS,{
   Hawk:{n:'Hawk',w:['blade'],body:'hawk',mov:7,fly:true},
-  Gnome:{n:'Gnome',w:['heavy'],body:'gnome',mov:5},Snake:{n:'Snake',w:['blade'],body:'snake',mov:5,wade:true},
-  Sporeling:{n:'Sporeling',w:['art'],body:'shroom',mov:5},Myconid:{n:'Myconid',w:['art'],body:'shroom',mov:4},MorelKing:{n:'Mushroom King',w:['art'],body:'shroom',mov:0},
+  Sporeling:{n:'Sporeling',w:['art'],body:'shroom',mov:5},MorelKing:{n:'Mushroom King',w:['art'],body:'shroom',mov:0},
   Skeleton:{n:'Skeleton',w:['blade','bow'],body:'vest',mov:5},Ghost:{n:'Ghost',w:['art'],body:'ghost',mov:5,phase:true},
   MudMonster:{n:'Mud Monster',w:['heavy'],body:'mud',mov:4,wade:true},Krondis:{n:'Alligator',w:['heavy'],body:'gator',mov:4,wade:true},
   CursedStag:{n:'Cursed Stag',w:['pole'],body:'beast',mov:6},HollowStag:{n:'Hollow Stag',w:['pole'],body:'beast',mov:4},
   Boulder:{n:'Boulder Golem',w:['heavy'],body:'golem',mov:4},FireSprite:{n:'Fire Sprite',w:['art'],body:'flame',mov:5,lava:true},MagmaDragon:{n:'Magma Dragon',w:['art','heavy'],body:'dragon',mov:0,lava:true},
-  WyvernM:{n:'Wyvern',w:['heavy'],body:'mount',mov:6,fly:true},PegasusM:{n:'Pegasus',w:['blade'],body:'mount',mov:7,fly:true},Tempest:{n:'Storm Elemental',w:['art'],body:'storm',mov:3,fly:true},
+  WyvernM:{n:'Wyvern',w:['heavy'],body:'mount',mov:6,fly:true},Tempest:{n:'Storm Elemental',w:['art'],body:'storm',mov:3,fly:true},
   Beholder:{n:'Beholder',w:['art'],body:'eye',mov:4},
   CrystalHeart:{n:'Crystal Heart',w:['art'],body:'crystal',mov:0},
   /* the Heart's own creatures (Act 3) */
@@ -63,10 +62,7 @@ CLS.LamiaM.wade=true;
 /* fields: see the ENEMY STATS key in 01-data.js (b/g order: HP, Str, Mag, Skl, Spd, Lck, Def, Res) */
 Object.assign(FOE,{
   Hawk:{b:[12,4,0,6,9,3,1,2],g:[.4,.3,0,.3,.4,.2,.1,.1],items:['talons'],look:{}},
-  Gnome:{b:[16,5,0,5,4,5,4,3],g:[.55,.35,0,.35,.25,.35,.25,.2],items:['mallet'],look:{}},
-  Snake:{b:[14,4,0,6,7,2,2,2],g:[.45,.3,0,.35,.4,.15,.1,.15],items:['fangs'],look:{}},
   Sporeling:{b:[14,0,4,4,6,4,2,3],g:[.5,0,.35,.3,.4,.3,.1,.2],items:['spores'],look:{}},
-  Myconid:{b:[20,0,5,3,2,2,4,5],g:[.7,0,.35,.25,.15,.1,.25,.25],items:['sporeCloud'],look:{}},
   Skeleton:{b:[16,5,0,4,4,0,3,0],g:[.6,.4,0,.35,.3,0,.2,.05],items:['ironJian'],look:{}},
   Ghost:{b:[15,0,5,4,6,2,1,5],g:[.5,0,.4,.3,.4,.15,.05,.35],items:['darkT'],look:{}},
   MudMonster:{b:[26,6,0,2,1,0,6,0],g:[.9,.4,0,.2,.1,0,.3,0],items:['slam'],look:{}},
@@ -74,7 +70,6 @@ Object.assign(FOE,{
   Boulder:{b:[24,7,0,2,1,0,10,0],g:[.8,.4,0,.2,.05,0,.4,0],items:['slam'],look:{}},
   FireSprite:{b:[14,0,5,5,7,2,1,4],g:[.5,0,.4,.35,.45,.15,.05,.3],items:['flameT'],look:{}},
   WyvernM:{b:[20,7,0,4,4,0,6,0],g:[.7,.45,0,.3,.25,.05,.3,.05],items:['bite'],look:{}},
-  PegasusM:{b:[16,4,2,6,8,4,2,6],g:[.55,.3,.1,.4,.45,.3,.1,.35],items:['hooves'],look:{}},
   Beholder:{b:[20,0,6,6,3,2,4,6],g:[.6,0,.4,.35,.2,.1,.2,.3],items:['darkT'],look:{}},
   Shardling:{b:[16,6,0,5,8,0,3,1],g:[.55,.4,0,.35,.4,0,.2,.1],items:['claws'],look:{}},
   Prism:{b:[15,0,6,5,4,0,2,6],g:[.5,0,.4,.3,.25,0,.1,.35],items:['shards'],look:{}},
@@ -88,7 +83,6 @@ Object.assign(FOE,{
    mount/horse = mount type and its colour, leaves/antlers = extra part colours. */
 const MONLOOK={
   Sporeling:()=>({cap:pick(['#d8483a','#e8a23a','#c85aa8','#4a9ad8']),stem:'#efe6cf',small:true}),
-  Myconid:()=>({cap:pick(['#8a5a3a','#6a7a3a','#7a4a8a']),stem:'#d8ccb0'}),
   Skeleton:()=>({crysSmall:true,skel:true,style:'bald',skin:'#e8e2d0',cloth:pick(['#3a3540','#4a3a2a','#2a3a3a']),eye:'#ff5a3a',gear:rand()<.4?'helm':undefined}),
   Ghost:()=>({crys:false,body:pick(['#d8e0f0','#c8e8e0','#e0d0f0']),eye:'#7fe3ff'}),
   MudMonster:()=>({body:pick(['#5a4a32','#4a4a2a','#5a3a2a'])}),
@@ -96,9 +90,6 @@ const MONLOOK={
   Boulder:()=>({body:pick(['#7a746e','#6a625c','#8a8278']),eye:'#ff9a3c'}),
   FireSprite:()=>({crys:false,body:pick(['#ff8a3c','#ff6a2a','#ffaa3c'])}),
   WyvernM:()=>({crysAt:[{dot:[13,21]},{dot:[16,21]},{dot:[19,21]},{dot:[23,17]}],mount:'wyvern',horse:pick(['#4f7a4a','#5a4a7a','#7a4a3a','#3a5a6a'])}),
-  PegasusM:()=>({mount:'pegasus',horse:pick(['#f3f0e8','#e0e6f0','#3a3440'])}),
-  Gnome:()=>({hat:pick(['#c8322e','#3a7a3a','#c87a2a','#6a3a8a']),cloth:pick(['#3a6ab0','#5a3a22','#3a7a5a'])}),
-  Snake:()=>({body:pick(['#4f8a3a','#7a6a2a','#3a6a5a'])}),
   /* crystal creatures: mostly blood red, sometimes another gem. crys:false = no extra crystals stuck on (they are crystal) */
   Shardling:()=>({crys:false,gem:pick(['#c8283a','#c8283a','#c8283a','#2a9a5a','#3a5ac8','#8a3ac0'])}),Prism:()=>({crys:false,gem:pick(['#c8283a','#c8283a','#3a5ac8','#8a3ac0'])}),Sentinel:()=>({crys:false,gem:pick(['#a8202e','#a8202e','#2a8a4a','#7a3ab0'])}),
   Lurker:()=>({crysSmall:true,body:pick(['#4a5a32','#3a4a3a','#5a5a3a'])}),

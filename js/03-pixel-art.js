@@ -281,27 +281,13 @@ function fig0(L,cls,team,pose,wk){
     p.ell(18,18,9.5,9.5,sh);p.ring(18,18,7,sh2);p.ring(19,18,4.5,sh2);p.ring(19.5,18.5,2.2,sh2);p.line(10,22,26,22,shade(sh,.85));
     p.ell(7+lean,24,4,3.5,b);p.line(6+lean,21,4+lean,12,b2);p.line(9+lean,21,11+lean,12,b2);p.ell(4+lean,11,1.8,1.8,ey);p.ell(11+lean,11,1.8,1.8,ey);
     p.outline(OUT);return p.url()}
-  /* ---- body: riderless mounts (Wyvern, Pegasus) ---- */
+  /* ---- body: riderless mounts (Wyvern) ---- */
   if(body==='mount'){return horseUnder(Px(32,32),L,TC,cloth,strike,true)}
-  /* ---- body: gnome ---- */
-  if(body==='gnome'){const hat=L.hat||'#c8322e',coat=L.cloth||'#3a6ab0',sk='#f3cfa6',bd='#f3f0e8',w=strike?4:0;
-    p.rect(11,27,4,3,'#5a3a22');p.rect(17,27,4,3,'#5a3a22');p.poly([[10,18],[22,18],[23,27],[9,27]],coat);p.rect(10,23,13,2,'#7a5230');
-    p.ell(16,14,5,4,sk);p.poly([[10,15],[22,15],[19,24],[16,26],[13,24]],bd);p.ell(16,15,1.8,1.6,'#e89a8a');p.set(14,13,INK);p.set(18,13,INK);
-    p.poly([[9,12],[23,12],[16,0]],hat);p.rect(9,11,14,2,shade(hat,.75));p.set(16,1,'#ffffff');
-    p.line(22,20,26+w,16-w,'#7a5230',2);p.rect(25+w,12-w,4,4,'#9aa3b5');p.rect(8,20,3,3,sk);
-    p.outline(OUT);return p.url()}
   /* ---- body: sand worm ---- */
   if(body==='worm'){const c=L.body||'#c98a6a',c2=shade(c,.75),c3=shade(c,1.15),sd='#b8a070',o=strike?3:0;
     p.ell(14,29,11,3,sd);p.ell(14,28,8,1.6,shade(sd,.85));
     for(let i=0;i<6;i++){const t=i/5,x=9+t*10+o*t,y=27-Math.sin(t*2.6)*15;p.ell(x,y,6.2-t*.6,5,i%2?c:c2);p.line(x-4,y+1,x+4,y+1,shade(c,.6))}
     const hx=20+o,hy=10-o;p.ell(hx,hy,7,6.2,c3);p.ell(hx+1.5,hy,4.2,4.2,'#5a1a1a');for(const[a,b]of[[0,-3],[2.5,-2],[3,1],[1,3],[-1.5,2.5],[-1.5,-2]])p.set(hx+1.5+a,hy+b,'#f3f0e8');p.ell(hx+1.5,hy,1.4,1.4,'#2a0a0a');
-    p.outline(OUT);return p.url()}
-  /* ---- body: snake ---- */
-  if(body==='snake'){const c=L.body||'#4f8a3a',c2=shade(c,.7),bl='#d8d08a',r=strike?-4:0;
-    p.ell(16,26,10,4,c);p.ell(16,26,6,2,c2);p.ell(14,22,7,3.2,c);p.line(9,26,4,24,c,2);
-    p.poly([[18,21],[22,12+r],[25,12+r],[22,22]],c);for(let y=14;y<21;y+=2)p.set(21,y+r/2,bl);
-    p.ell(24,10+r,4,3,c);p.rect(24,8+r,2,2,'#ffd23f');p.set(25,9+r,INK);p.line(28,11+r,31,11+r,'#c8322e');p.set(31,10+r,'#c8322e');p.set(31,12+r,'#c8322e');
-    for(let x=10;x<23;x+=3)p.set(x,24,c2);
     p.outline(OUT);return p.url()}
   /* ---- body: hawk ---- */
   if(body==='hawk'){const c=L.body||'#8a5a32',c2=shade(c,.7),bl='#e8dcc0',f=strike?4:0;
@@ -310,7 +296,7 @@ function fig0(L,cls,team,pose,wk){
     p.poly([[13,24],[19,24],[18,29],[14,29]],c2);p.ell(16,12,4,3.5,c);p.rect(14,10,1,2,INK);p.rect(18,10,1,2,INK);p.set(14,10,'#ffd23f');p.set(18,10,'#ffd23f');
     p.poly([[15,13],[17,13],[16,16]],'#e2b553');p.rect(13,28,2,2,'#e2b553');p.rect(17,28,2,2,'#e2b553');
     p.outline(OUT);return p.url()}
-  /* ---- body: mushroom folk (Sporeling, Myconid, Mushroom King) ---- */
+  /* ---- body: mushroom folk (Sporeling, Mushroom King) ---- */
   if(body==='shroom'){const k=L.small?.75:1,X=x=>16+(x-16)*k,Y=y=>31-(31-y)*k,cap=L.cap||'#d8483a',cap2=shade(cap,.72),st=L.stem||'#efe6cf',st2=shade(st,.8),sq=strike?2:0;
     p.poly([[X(11),Y(17)],[X(21),Y(17)],[X(22),Y(29)],[X(10),Y(29)]],st);p.rect(X(10),Y(17),Math.max(1,2*k),12*k,st2);
     p.rect(X(10),Y(29),4*k,2,st2);p.rect(X(18),Y(29),4*k,2,st2);

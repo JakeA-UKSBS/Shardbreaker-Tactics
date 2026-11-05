@@ -172,12 +172,12 @@ An effective hit multiplies weapon Mt ×2. Only your side deals them for now.
 
 | Monster type | Who has it | Beaten by |
 |---|---|---|
-| Flier | Gloomwing, Storm Harpy, Harpy, Hawk, Wyvern, Pegasus, Prism, Roc, Wisp, Spirit Hawk | Bows |
-| Armoured | Mindsnail, Fallen Sentinel, Iron Husk, Boulder Golem, Crystal Sentinel, Sandstone Golem, Pyrite Colossus, Agate Golem, Gem Golem, Gemsnail, Amethyst Turtle, Pebble Golem, Stone Warden | War Hammer, Stonebane |
-| Beast | Wolf, Hawk, Snake, Alligator, Cursed Stag, Magma Dragon, Wyvern, Pegasus, Bog Lurker, Jackal, Sand Worm, Frost Wolf, Agate Wyrm, Hollow Bear, Bone Wyrm, Roc, Spirit Wolf, Spirit Hawk | Hunting Spear, Wolfsbane |
+| Flier | Harpy, Hawk, Wyvern, Prism, Roc, Wisp, Spirit Hawk | Bows |
+| Armoured | Mindsnail, Boulder Golem, Crystal Sentinel, Sandstone Golem, Pyrite Colossus, Agate Golem, Gem Golem, Gemsnail, Amethyst Turtle, Pebble Golem, Stone Warden | War Hammer, Stonebane |
+| Beast | Wolf, Hawk, Alligator, Cursed Stag, Magma Dragon, Wyvern, Bog Lurker, Jackal, Sand Worm, Frost Wolf, Agate Wyrm, Hollow Bear, Bone Wyrm, Roc, Spirit Wolf, Spirit Hawk | Hunting Spear, Wolfsbane |
 | Colossal | Every 2×2 boss | Giantslayer |
 | Spectral | Ghost, Fire Sprite, Frost Sprite, Wisp | Light sigils, Holy Sword, Spiritbane, Paladins |
-| Plant | Sporeling, Myconid, Mushroom King, Blighted Treant | Fire sigils |
+| Plant | Sporeling, Mushroom King, Blighted Treant | Fire sigils |
 
 ## Skills
 
