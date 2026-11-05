@@ -138,7 +138,7 @@ const MAPS={
   /* Volcanic Isle */
   fields:{n:'Magma Fields',map:["bbbllbbbbR","mbbbllbbbb","bbbbbllbmb","bbbbbblbbb","bmbbbbbbbb","bbllbbbmbb","bbblllbbbb","mbbbbbbbbm","bbbbbbbbbb","bbbbbbbbbb"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   caldera:{n:'Caldera Pass',map:["bbmbllbmbb","bbbllllbbb","mbbllllbbm","bbbbllbbbb","bbbbbbbbbb","lbbmbbmbbl","bbbbbbbbbb","bmbbbbbbmb","bbbbFbbbbb","bbbbbbbbbb"],start:[[4,9],[5,9],[3,9],[6,9],[3,8],[5,8]]},
-  ridge:{n:'Rockslide Ridge',map:["bbbbRbbbbm","mbbbbbbbbb","bbRbbbbRbb","bbRRbbRRbb","bbbbbbbbbb","lbbbmbbbbl","bbbbbbbmbb","mbbRbbbbbb","bbbbbbbbbb","bbbbbbbbbb"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
+  ridge:{n:'Rockslide Ridge',map:["bbbbRbbbbl","mRbbbbbbbl","bbRbbbblll","bbRRbbRlbb","bbbbbbbbll","llbbmbbbbl","blbbbbbmbb","llbRbbbbbb","lbbbbbbbbb","lbbbbbbbbb"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   crater:{n:'Dragon’s Crater',map:["llbbbTbbll","lbbbbbbbbl","bbmbbbbmbb","bbbbllbbbb","bbbllllbbb","bbbbllbbbb","bmbbbbbbmb","bbbbbbbbbb","bbbbbbbbbb","bbbbbbbbbb"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   /* The Flying Ship */
   deck:{n:'Main Deck',map:["~~~~~~~~~~~","~~~~~d~~~~~","~~~~ddd~~~~","~~~ddddd~~~","~~~ddMdd~~~","~~ddddddd~~","~~ddddddd~~","~~dddMddd~~","~~ddddddd~~","~~ddddddd~~","~~dddMddd~~","~~ddddddd~~","~~~ddHdd~~~","~~~~ddd~~~~","~~~~~~~~~~~"],start:[[5,9],[4,9],[6,9],[3,8],[7,8],[4,11]]},
@@ -166,11 +166,11 @@ Object.assign(MAPS,{
   geode:{n:"Geode Chamber",map:["CcceccuccC","cccccccccc","cpcxxxxcec","cccccccccc","xcccFcccxx","cuccccccpc","ccccxxcccc","cecccccccu","cccccccccc","cccccccccc"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   mineshaft:{n:"Old Mineshaft",map:["CcxcccxccC","ccxcecxcce","cccccccccc","xxcxxxxcxx","ccccuccccC","cecccccpcc","xccxxxxccx","cccccccccu","cccccccccc","cccccccccc"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   glitter:{n:"Glittering Hall",map:["CcecccuceC","cccccccccc","cuccpccecp","ccccccccc^","ecccCccccc","^ccp^ccucc","^ccccc^cce","cucccccccc","cccccccccc","cccccccccc"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  amethystHollow:{n:"Amethyst Hollow",map:["xcccTcccCx","cceccccucc","cccccccccc","cpccxxccec","cccccccccc","xcccccccCx","cuccccccpc","cccccccccc","cccccccccc","cccccccccc"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]}
+  amethystHollow:{n:"Amethyst Hollow",map:["xxccTcccCx","xccccccuuc","pcccccccue","ppccxxccee","cccccccccc","xuccccccCx","xuucccccpp","cccccccccc","cccccccccx","xxccccccxx"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]}
 });
 
 /* hand-made height maps (greybox): one digit per tile, 0 = ground. Maps without h get hills and rubble at 1. */
-MAPS.woodland.h=["4443210011", "4443210012", "4440000012", "0000000001", "0000000000", "0011000000", "0012000110", "0000000110", "0000000000", "0000000000"];
+MAPS.woodland.h=["5443210011", "4443210012", "4440000012", "0000000001", "0000000000", "0011000000", "0000000210", "0002000110", "0022000000", "0010000000"];
 MAPS.brook.h=["4433333344", "3333333333", "3333333333", "0100000010", "1111111111", "1111111111", "1122111111", "1122110000", "0000000000", "0000000000"];
 MAPS.clearing.h=["1111111111", "1111222111", "1112222211", "0112332110", "0112332100", "0011221000", "0001110000", "0000000000", "0000000000", "0000000000"];
 MAPS.heart.h=["2213333122", "2213333122", "1112222111", "0001111000", "0000000000", "0000000000", "0000000000", "0000000000", "0000000000", "0000000000"];
@@ -188,7 +188,7 @@ MAPS.agateSpire.h=["3344444433", "2333433332", "2222332222", "1112222111", "0011
 MAPS.geode.h=["3333333333", "3222222223", "3211111123", "2100000012", "2100000012", "2100000012", "2110000112", "2221111222", "2222222222", "2222222222"];
 MAPS.mineshaft.h=["2222222222", "2222222222", "2222222222", "2222222222", "1111111111", "1111111111", "1111111111", "0000000000", "0000000000", "0000000000"];
 MAPS.glitter.h=["1111111111", "1111111111", "1112222111", "1122332211", "1123333211", "1122332211", "0011221100", "0000110000", "0000000000", "0000000000"];
-MAPS.amethystHollow.h=["3334444333", "2333443332", "2223333222", "1112222111", "0011111100", "0000000000", "0000000000", "0000000000", "0000000000", "0000000000"];
+MAPS.amethystHollow.h=["3334444335", "2333222234", "2333222222", "2212222211", "0012211100", "0002220000", "0011000000", "0010000000", "0011000001", "0000000001"];
 /* Sunless Isle (the crypt and chapel stay flat) */
 MAPS.graveyard.h=["1111111111", "1111111111", "0000000000", "0000000000", "0000000000", "0000000000", "0011111100", "0112222110", "1122332211", "1123333211"];
 MAPS.village.h=["1111111111", "1111111111", "0001111000", "0011221100", "0122222210", "0011221100", "0000000000", "0000000000", "0000000000", "0000000000"];
@@ -200,7 +200,7 @@ MAPS.lair.h=["0001222100", "0002333200", "0011111100", "0000000000", "0000000000
 /* Volcanic Isle */
 MAPS.fields.h=["2220022333", "2221002223", "1111100222", "1111110111", "0000000000", "0000000000", "0000000000", "0000000000", "0000000000", "0000000000"];
 MAPS.caldera.h=["3333003333", "3330000333", "2220000222", "2222002222", "1111111111", "0111111110", "0000000000", "0000000000", "0000000000", "0000000000"];
-MAPS.ridge.h=["1111111111", "1111111111", "0000000000", "0000000000", "0000000000", "0111111110", "1122222211", "2233333322", "3334444333", "3344444433"];
+MAPS.ridge.h=["1111111111", "1111111111", "0020000000", "0022000011", "0000000001", "0111111121", "1122222211", "2233333322", "3334444333", "3344444433"];
 MAPS.crater.h=["0034444300", "0233333320", "1222222221", "1111001111", "1110000111", "1111001111", "0111111110", "0000000000", "0000000000", "0000000000"];
 /* settlements for Defend fights: one hand-made map per region, in its own terrain. Enemies arrive along the top two
    rows; tents (A) and the shrine (F) heal and give cover in the middle; you start along the bottom. */
