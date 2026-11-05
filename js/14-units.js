@@ -130,6 +130,18 @@ function monLook(c){
   if(c!=='MinotaurM')return clone(FOE[c].look||{});
   return{style:'bald',horns:true,beard:true,hair:'#2a1a14',skin:pick(['#7a4e32','#5a3a2a','#8a6a4a']),cloth:'#4a3a2a',eye:'#ff5a3a'};
 }
+/* ---- monster PNGs (art/monsters/) ----
+   monsterClasses(): every monster the game can spawn (region pools, bosses, summons, familiars). Bosses drawn as big 64px art (BIG) are left out.
+   monsterArt(): the code-drawn sprite with one fixed look, for tools/export-art.mjs to save as the starting PNG. */
+function monsterClasses(){const out=new Set();
+  for(const B of Object.values(BIOMES)){for(const p of[...(B.pool||[]),...(B.elitePool||[])])out.add(p[0]);if(B.boss){if(B.boss.summon&&B.boss.summon!=='*')out.add(B.boss.summon);if(!BIG[CLS[B.boss.cls].body+(B.boss.look&&B.boss.look.bones?'_bones':'')])out.add(B.boss.cls)}}
+  for(const f of Object.values(FAMILIARS))out.add(f.cls);
+  out.add('Hawk');/* the Hawk relic's ally */
+  return[...out].filter(c=>CLS[c]).sort()}
+function monsterArt(c,strike){return art('monsters/'+c+(strike?'-strike':''),()=>{
+  const boss=Object.values(BIOMES).find(B=>B.boss&&B.boss.cls===c),s0=rngS;seedRng(7);
+  const L=boss?clone(boss.boss.look||{}):monLook(c);rngS=s0;
+  return fig(L,c,FOE[c]&&FOE[c].look&&FOE[c].look.spirit?'p':'e',strike?'strike':'idle',FOE[c]&&FOE[c].items[0],1)})}
 function mkMon(c,lv){const u=foe(c,lv,0,0);u.look=monLook(c);
   if(c==='LamiaM'||c==='Beholder')u.skill='stone';if(c==='Sporeling'||c==='Myconid')u.skill='spore';if(c==='Snake')u.skill='venom';
   if(c==='Skeleton'&&rand()<.35){u.items[0]={k:'shortBow',u:IT.shortBow.uses};u.name='Skeleton Archer'}

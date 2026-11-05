@@ -21,6 +21,7 @@ You only need to rebuild the manifest when you **add** or **delete** a PNG: `nod
 | `scenes/` | Tavern, Crossroads, Ithren's tent, cage bars, the Bog Witch's hut (`witch-hut`, 640×360, used instead of the code-drawn witch scene) | 160×90 (`tavern-counter` is 160×34) |
 | `title/` | Title-screen crystal | 120×120 |
 | `bosses/` | The Crystal Heart (act 3 boss, 3×3 tiles): idle and `-strike` | 96×96 |
+| `monsters/` | Every monster, region boss (except the big hand-drawn ones in `bosses/` and the Roc, Bone Wyrm and Krondis) and summon: `<Class>.png` standing and `<Class>-strike.png` attacking. One fixed look each, so a monster no longer gets random colours | 32×32 |
 | `bosses/hollow-bear` | The Hollow Bear (2×2 boss); add `hollow-bear-strike` for an attack pose | 128×128 |
 | `ship/` | Flying Ship parts (region is switched off for now) | as exported |
 
@@ -39,6 +40,6 @@ The tool needs Node and Playwright: `npm i -D playwright && npx playwright insta
 
 These are still drawn in code:
 
-- **Units and monsters:** their looks (hair, skin, cloth, gem colours) are randomised per unit.
-- **The other bosses.**
+- **The named cast and generated units:** their looks come from the unit rig and their own colours.
+- **The Roc, Bone Wyrm and Krondis:** 64px boss art drawn in `BIG`.
 - **Event scenes:** each one combines the region's background with the event's prop.

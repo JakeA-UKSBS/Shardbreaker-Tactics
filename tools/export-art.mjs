@@ -35,7 +35,7 @@ function writeManifest() {
 
 if (onlyManifest) { writeManifest(); process.exit(0); }
 
-const browser = await chromium.launch();
+const browser = await chromium.launch(process.env.CHROME ? { executablePath: process.env.CHROME } : {}); // CHROME=/path/to/chrome to use an installed browser
 const page = await browser.newPage();
 await page.route('**/music/**', r => r.abort());
 await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href + '?codeart');
@@ -44,6 +44,7 @@ await page.waitForTimeout(500);
 const keys = await page.evaluate(() => {
   const each = (o, f) => Object.keys(o).forEach(k => { try { f(k) } catch (_) {} });
   each(IT, k => { if (!k.includes('~')) iconArt(k) });
+  monsterClasses().forEach(c => { try { monsterArt(c, false); monsterArt(c, true) } catch (_) {} });
   each(TAGS, tagArt); each(RELICS, relicArt); each(MEALS, mealArt); each(WOES, woeArt);
   [mugArt, tavernArt, counterArt, musterArt, flagArt, sageRoomArt, sageTableArt, sageBallArt, mapIconArt, coinArt,
    swordsArt, eliteArt, campArt, chestArt, eventArt, titleCrystalArt, cageBarsArt, boulderArt, shipSideArt, shipWingArt,
