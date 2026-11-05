@@ -165,8 +165,9 @@ function hiArt(L,cls,team,wk,name,i,W){
   const sb=[nx-5,ny+3],eb=pt(...sb,P.back,8),hb=pt(...eb,P.backFore,7),sleeve=body==='vest'?sk2:body==='armor'?MT2:cl2;
   limb(sb,eb,sleeve,4);limb(eb,hb,body==='armor'?MT2:sk2,3);p.ell(hb[0],hb[1],2,2,sk2);
   if(L.bracers)limb(pt(...eb,P.backFore,2),pt(...eb,P.backFore,6),shade(L.bracers,.75),3);
-  if(kind==='twindagger'&&L.wpnArt&&WPN_ART[L.wpnArt])stampWpn(p,WPN_ART[L.wpnArt],hb,P.backFore-30);
-  else if(kind==='twin'||kind==='twindagger'){const a=P.backFore-30;limb(hb,pt(...hb,a,kind==='twin'?14:L.jag?13:8),c.blade,2);if(L.jag)for(let k=4;k<12;k+=3)p.set(...pt(...pt(...hb,a,k),a+90,2),c.blade);limb(pt(...hb,a+90,2),pt(...hb,a-90,2),c.hilt,1)}
+  /* a pack sprite in the back hand is stamped at the very end, behind the whole body (see below) */
+  const backArt=kind==='twindagger'&&L.wpnArt&&WPN_ART[L.wpnArt]?[WPN_ART[L.wpnArt],hb,P.backFore-30]:null;
+  if(!backArt&&(kind==='twin'||kind==='twindagger')){const a=P.backFore-30;limb(hb,pt(...hb,a,kind==='twin'?14:L.jag?13:8),c.blade,2);if(L.jag)for(let k=4;k<12;k+=3)p.set(...pt(...pt(...hb,a,k),a+90,2),c.blade);limb(pt(...hb,a+90,2),pt(...hb,a-90,2),c.hilt,1)}
   /* ---- torso ---- */
   const sh=fem?8:9;
   if(body==='armor'){p.poly([[hx-7,hy+1],[hx+7,hy+1],[nx+sh+1,ny+1],[nx-sh-1,ny+1]],MT);p.poly([[hx-7,hy+1],[hx-3,hy+1],[nx-5,ny+1],[nx-sh-1,ny+1]],MT2);
@@ -247,6 +248,7 @@ function hiArt(L,cls,team,wk,name,i,W){
   else if(!onShoulder)drawHiWeapon(p,kind,w,c,hf,a,P,hb,pt,limb,L);
   p.ell(hf[0],hf[1],2,2,L.wraps||sk);
   if(L.mist)for(const[dx,dy,k]of[[-3,-2,0],[3,-3,1],[-4,2,1],[2,3,0],[4,0,0],[0,-5,1],[-2,5,1],[5,-6,0],[-5,-5,0],[6,3,1]])p.ell(hf[0]+dx,hf[1]+dy+(P.flap?-1:0),k?1.1:1.6,k?1.1:1.4,k?shade(L.mist,2.2):L.mist);
+  if(backArt){const q=Px(W,W);stampWpn(q,...backArt);q.g.forEach((col,i)=>{if(col&&!p.g[i])p.g[i]=col})}
   p.outline(OUT);return p.url();
 }
 
