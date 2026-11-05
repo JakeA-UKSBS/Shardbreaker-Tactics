@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Shardbreaker map editor</title>
+<style>
+  :root{--bg:#1c1a20;--panel:#26232c;--line:#3a3642;--text:#e8e2d6;--dim:#a49e94;--gold:#f0d278;--bad:#ff5a5a;--blue:#5aaaff}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:14px/1.4 system-ui,sans-serif;display:flex;min-height:100vh}
+  aside{width:280px;flex:none;background:var(--panel);border-right:1px solid var(--line);padding:14px;display:flex;flex-direction:column;gap:12px;overflow:auto;max-height:100vh;position:sticky;top:0}
+  main{flex:1;padding:16px;display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start}
+  h1{font-size:16px;margin:0;color:var(--gold)}
+  h2{font-size:12px;margin:0 0 6px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em}
+  select,button,textarea{font:inherit;color:var(--text);background:#1a181e;border:1px solid var(--line);border-radius:6px}
+  select{width:100%;padding:6px}
+  button{padding:6px 10px;cursor:pointer}
+  button:hover{border-color:var(--gold)}
+  button.on{background:#4a3e1e;border-color:var(--gold)}
+  .row{display:flex;flex-wrap:wrap;gap:6px}
+  .hb{width:34px}
+  .sw{display:flex;align-items:center;gap:6px;padding:4px 6px;font-size:12px}
+  .sw i{width:16px;height:16px;border-radius:3px;display:inline-block;border:1px solid #0006}
+  textarea{width:100%;height:150px;padding:6px;font:11px/1.35 ui-monospace,monospace;resize:vertical}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px}
+  .card h2{margin-bottom:8px}
+  canvas{display:block;image-rendering:auto}
+  #grid{cursor:crosshair}
+  .msg{font-size:12px;color:var(--dim)}
+  .msg b{color:var(--bad)}
+  .ok{color:#7fd36a}
+  kbd{background:#1a181e;border:1px solid var(--line);border-radius:4px;padding:0 4px;font-size:11px}
+</style>
+</head>
+<body>
+<aside>
+  <h1>Shardbreaker map editor</h1>
+  <div><h2>Map</h2>
+    <select id="region"></select>
+    <select id="map" style="margin-top:6px"></select>
+    <p class="msg" id="src"></p>
+  </div>
+  <div><h2>Tool</h2>
+    <div class="row">
+      <button data-tool="height" class="on">Height</button>
+      <button data-tool="terrain">Terrain</button>
+      <button data-tool="deploy">Deploy</button>
+    </div>
+  </div>
+  <div id="heightTools"><h2>Height brush</h2>
+    <div class="row" id="hbtns"></div>
+    <p class="msg">Click or drag to paint that height. <kbd>Shift</kbd>+click raises by 1, right-click lowers by 1. Keys <kbd>0</kbd>–<kbd>6</kbd> pick the brush.</p>
+  </div>
+  <div id="terrainTools" hidden><h2>Terrain brush</h2><div id="tpal"></div></div>
+  <div id="deployTools" hidden><h2>Deploy tiles</h2><p class="msg">Click a tile to add or remove it as a deploy tile (up to 6; the first listed is where the first unit stands).</p></div>
+  <div><h2>Checks</h2><p class="msg" id="checks"></p></div>
+  <div class="row">
+    <button id="undo">Undo</button>
+    <button id="reset">Reset to game</button>
+    <button id="png">Download PNG</button>
+  </div>
+  <div><h2>Copy into js/16-maps-battles.js</h2>
+    <textarea id="out" readonly></textarea>
+    <button id="copy" style="margin-top:6px">Copy</button>
+    <p class="msg">The first line replaces the map's <code>MAPS.&lt;id&gt;.h=</code> line. The second line is only needed if you changed terrain or deploy tiles: it replaces the map's entry in <code>MAPS</code>. Edits are kept in this browser until you reset.</p>
+  </div>
+</aside>
+<main>
+  <div class="card"><h2>Top down</h2><canvas id="grid"></canvas></div>
+  <div class="card"><h2>In game angle</h2><canvas id="iso"></canvas></div>
+</main>
+<script>
+/* Reads the maps straight from the game's own files (works when served, e.g. GitHub Pages or a local server).
+   Opened as a plain file it can't read them, so it says so. */
+const FILES=['../js/01-data.js','../js/15-regions-monsters.js','../js/16-maps-battles.js'];
+const SOLID_K=['wall','cliff','boulder','sandstone','lava','water','cavewall'];
+const KCOL={plain:'#7a8060',forest:'#3a5234',curse:'#6e3c82',boulder:'#6e6860',water:'#1e283c',bridge:'#8c643c',fort:'#aa966e',throne:'#c8aa3c',
+  sand:'#c8a868',quicksand:'#8a6a3a',sandstone:'#9a6a40',snow:'#d8e0e8',deepsnow:'#b8c4d4',agate:'#5a8ac8',ice:'#8ac8e8',
+  cave:'#5a5068',emerald:'#3aa868',ruby:'#c83a4a',sapphire:'#3a5ac8',cavewall:'#2a2236',chest:'#c89a3a',
+  grave:'#4a4656',tomb:'#8a8494',floor:'#8a8478',light:'#fff2b0',carpet:'#8a2a3a',wall:'#2a2830',
+  shallow:'#3a6a6a',mangrove:'#3a5a2a',mud:'#4a3a2a',basalt:'#4a3a3a',lava:'#e8582a',hill:'#7a6a5a',cliff:'#3a2a2a'};
+let TER={},MAPS={},HSET={},REG=[],cur=null,tool='height',brush=1,tbrush=null,undo=[],drag=false;
+const $=id=>document.getElementById(id);
+const S=46;/* tile size on the top-down grid */
+
+async function load(){
+  let txt;
+  try{txt=await Promise.all(FILES.map(f=>fetch(f).then(r=>{if(!r.ok)throw 0;return r.text()})))}
+  catch(e){$('src').innerHTML='<b>Couldn’t read the game files.</b> Open this page from the game’s site (…/tools/map-editor.html) or a local server, not as a file.';return}
+  const all=txt.join('\n'),mf=txt[2];
+  for(const m of all.matchAll(/'(.)':\{n:'([^']*)',k:'([^']*)',c:(\d+)/g))if(!TER[m[1]])TER[m[1]]={n:m[2],k:m[3],c:+m[4]};
+  for(const m of mf.matchAll(/(\w+):\{n:(['"])(.*?)\2,map:(\[[^\]]*\]),start:(\[\[.*?\]\])\}/g))MAPS[m[1]]={n:m[3],map:JSON.parse(m[4]),start:JSON.parse(m[5])};
+  for(const m of mf.matchAll(/MAPS\.(\w+)\.h=(\[[^\]]*\]);/g))HSET[m[1]]=JSON.parse(m[2]);
+  for(const m of all.matchAll(/\n  (\w+):\{n:'([^']+)'(?:(?!\n  \w+:\{n:)[\s\S])*?maps:(\[[^\]]*\]),bossMap:'(\w+)'/g)){
+    const ids=[...JSON.parse(m[3].replace(/'/g,'"')),m[4]].filter((v,i,a)=>MAPS[v]&&a.indexOf(v)===i);if(ids.length)REG.push({id:m[1],n:m[2],ids,boss:m[4]})}
+  REG=REG.filter(r=>!['ship','mushroom','labyrinth'].includes(r.id));
+  $('src').textContent=`${Object.keys(MAPS).length} maps read from the game files.`;
+  $('region').innerHTML=REG.map((r,i)=>`<option value="${i}">${r.n}</option>`).join('');
+  $('region').onchange=fillMaps;fillMaps();
+}
+function fillMaps(){const r=REG[$('region').value];$('map').innerHTML=r.ids.map(id=>`<option value="${id}">${MAPS[id].n}${id===r.boss?' (boss)':''}</option>`).join('');$('map').onchange=pickMap;pickMap()}
+function gameVersion(id){const m=MAPS[id];return{id,n:m.n,map:m.map.slice(),start:m.start.map(s=>s.slice()),h:(HSET[id]||m.map.map(r=>'0'.repeat(r.length))).slice()}}
+function pickMap(){const id=$('map').value;let d=null;try{d=JSON.parse(localStorage.getItem('sbmap:'+id))}catch(e){}
+  cur=d||gameVersion(id);undo=[];buildPalette();draw()}
+function save(){try{localStorage.setItem('sbmap:'+cur.id,JSON.stringify(cur))}catch(e){}}
+function snap(){undo.push(JSON.stringify(cur));if(undo.length>100)undo.shift()}
+
+const W=()=>cur.map[0].length,H=()=>cur.map.length,ch=(x,y)=>cur.map[y][x],hh=(x,y)=>+cur.h[y][x],
+  solid=(x,y)=>{const t=TER[ch(x,y)];return !t||t.c>=99},setStr=(arr,x,y,v)=>{arr[y]=arr[y].slice(0,x)+v+arr[y].slice(x+1)};
+/* tiles a unit can't reach from the first deploy tile, stepping at most J levels at a time */
+function unreachable(J){const[sx,sy]=cur.start[0]||[0,0],seen=new Set([sx+','+sy]),st=[[sx,sy]];
+  while(st.length){const[x,y]=st.pop();for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy,k=nx+','+ny;
+    if(nx<0||ny<0||nx>=W()||ny>=H()||seen.has(k)||solid(nx,ny)||Math.abs(hh(nx,ny)-hh(x,y))>J)continue;seen.add(k);st.push([nx,ny])}}
+  const out=[];for(let y=0;y<H();y++)for(let x=0;x<W();x++)if(!solid(x,y)&&!seen.has(x+','+y))out.push([x,y]);return out}
+function shade(hex,f){const n=parseInt(hex.slice(1),16),c=[n>>16,n>>8&255,n&255].map(v=>Math.max(0,Math.min(255,Math.round(v*f))));return`rgb(${c})`}
+const colOf=c=>KCOL[(TER[c]||{}).k]||'#ff00ff';
+
+function draw(){
+  const g=$('grid'),c=g.getContext('2d'),w=W(),h=H();g.width=w*S;g.height=h*S;
+  const u2=new Set(unreachable(2).map(p=>p+'')),u1=new Set(unreachable(1).map(p=>p+''));
+  c.textAlign='center';c.textBaseline='middle';
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){const v=hh(x,y);
+    c.fillStyle=shade(colOf(ch(x,y)),1+.17*v);c.fillRect(x*S,y*S,S,S);c.strokeStyle='#14141a';c.lineWidth=1;c.strokeRect(x*S+.5,y*S+.5,S-1,S-1);
+    if(solid(x,y)){c.strokeStyle='#0008';c.beginPath();c.moveTo(x*S+6,y*S+6);c.lineTo(x*S+S-6,y*S+S-6);c.moveTo(x*S+S-6,y*S+6);c.lineTo(x*S+6,y*S+S-6);c.stroke()}
+    if(v){c.font='bold 15px system-ui';c.fillStyle='#000a';c.fillText(v,x*S+S/2+1,y*S+S/2+1);c.fillStyle='#fff';c.fillText(v,x*S+S/2,y*S+S/2)}
+    if(u2.has(x+','+y)){c.strokeStyle='#ff4a4a';c.lineWidth=3;c.strokeRect(x*S+3,y*S+3,S-6,S-6)}
+    else if(u1.has(x+','+y)){c.strokeStyle='#ffa03a';c.lineWidth=2;c.setLineDash([4,3]);c.strokeRect(x*S+4,y*S+4,S-8,S-8);c.setLineDash([])}}
+  cur.start.forEach(([x,y],i)=>{c.strokeStyle='#5aaaff';c.lineWidth=3;c.strokeRect(x*S+5,y*S+5,S-10,S-10);c.font='bold 10px system-ui';c.fillStyle='#9fd0ff';c.fillText(i+1,x*S+11,y*S+12)});
+  drawIso();
+  const steps=[];for(let y=0;y<h;y++)for(let x=0;x<w;x++)if(!solid(x,y))for(const[dx,dy]of[[1,0],[0,1]]){const nx=x+dx,ny=y+dy;if(nx<w&&ny<h&&!solid(nx,ny)&&Math.abs(hh(x,y)-hh(nx,ny))>2)steps.push(1)}
+  const sh=cur.start.map(([x,y])=>hh(x,y));
+  $('checks').innerHTML=[
+    u2.size?`<b>${u2.size} tiles nobody can reach</b> (red boxes).`:'<span class="ok">Every tile can be reached.</span>',
+    u1.size?`${u1.size} tiles armoured units (jump 1) can’t reach (orange dashes).`:'<span class="ok">Armoured units can reach everywhere.</span>',
+    steps.length?`${steps.length} cliff edges (a step of 3+ between walkable tiles).`:'',
+    `Deploy tiles: ${cur.start.length}, at height ${Math.min(...sh)}–${Math.max(...sh)}.`,
+    'Rules in game: a unit steps up or down 2 levels (1 in Plate). Attacking from above: +10 Hit and +1 damage a level (max 3); bows reach 1 tile further per 2 levels.'
+  ].filter(Boolean).join('<br>');
+  $('out').value=`MAPS.${cur.id}.h=[${cur.h.map(r=>JSON.stringify(r)).join(', ')}];\n  ${cur.id}:{n:${JSON.stringify(cur.n)},map:${JSON.stringify(cur.map)},start:${JSON.stringify(cur.start)}},`;
+}
+/* the same diamond view as the game: tiles 2:1, each level lifts a tile */
+function drawIso(){
+  const cv=$('iso'),c=cv.getContext('2d'),w=W(),h=H(),TW=64,TH=32,LH=15,maxH=Math.max(...cur.h.join('').split('').map(Number));
+  cv.width=(w+h)*TW/2+20;cv.height=(w+h)*TH/2+maxH*LH+40;const ox=h*TW/2+10,oy=maxH*LH+16;
+  const tiles=[];for(let y=0;y<h;y++)for(let x=0;x<w;x++)tiles.push([x,y]);tiles.sort((a,b)=>a[0]+a[1]-b[0]-b[1]);
+  const starts=new Set(cur.start.map(p=>p+''));
+  for(const[x,y]of tiles){const v=hh(x,y),px=ox+(x-y)*TW/2,py=oy+(x+y)*TH/2-v*LH,base=colOf(ch(x,y)),side=Math.max(v,0)*LH+6;
+    c.fillStyle=shade(base,.55);c.beginPath();c.moveTo(px-TW/2,py+TH/2);c.lineTo(px,py+TH);c.lineTo(px,py+TH+side);c.lineTo(px-TW/2,py+TH/2+side);c.fill();
+    c.fillStyle=shade(base,.72);c.beginPath();c.moveTo(px+TW/2,py+TH/2);c.lineTo(px,py+TH);c.lineTo(px,py+TH+side);c.lineTo(px+TW/2,py+TH/2+side);c.fill();
+    c.fillStyle=shade(base,1+.1*v);c.beginPath();c.moveTo(px,py);c.lineTo(px+TW/2,py+TH/2);c.lineTo(px,py+TH);c.lineTo(px-TW/2,py+TH/2);c.closePath();c.fill();
+    c.strokeStyle=starts.has(x+','+y)?'#5aaaff':'#0004';c.lineWidth=starts.has(x+','+y)?2:1;c.stroke();
+    if(solid(x,y)){c.fillStyle=shade(base,.8);c.beginPath();c.moveTo(px-TW/4,py+TH/2+2);c.lineTo(px,py-TH*.6);c.lineTo(px+TW/4,py+TH/2+2);c.fill()}}
+}
+function buildPalette(){const used=[...new Set(cur.map.join(''))],common=['.','f','^','w','=','T','C'];
+  const keys=[...used,...Object.keys(TER).filter(k=>!used.includes(k)&&common.includes(k))];if(!tbrush||!keys.includes(tbrush))tbrush=keys[0];
+  $('tpal').innerHTML=keys.map(k=>`<button class="sw${k===tbrush?' on':''}" data-t="${k}"><i style="background:${colOf(k)}"></i>${TER[k].n} <span class="msg">${TER[k].c>=99?'(solid)':''}</span></button>`).join('');
+  $('tpal').querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{tbrush=b.dataset.t;buildPalette()})}
+
+function cell(e){const r=$('grid').getBoundingClientRect(),x=Math.floor((e.clientX-r.left)/r.width*W()),y=Math.floor((e.clientY-r.top)/r.height*H());return x>=0&&y>=0&&x<W()&&y<H()?[x,y]:null}
+function apply(e,first){const p=cell(e);if(!p)return;const[x,y]=p;
+  if(tool==='height'){let v=e.button===2?hh(x,y)-1:e.shiftKey?hh(x,y)+1:brush;if(!first&&(e.button===2||e.shiftKey))return;v=Math.max(0,Math.min(6,v));if(v===hh(x,y))return;setStr(cur.h,x,y,String(v))}
+  else if(tool==='terrain'){if(ch(x,y)===tbrush)return;setStr(cur.map,x,y,tbrush)}
+  else if(tool==='deploy'){if(!first)return;const i=cur.start.findIndex(s=>s[0]===x&&s[1]===y);if(i>=0)cur.start.splice(i,1);else if(cur.start.length<6&&!solid(x,y))cur.start.push([x,y]);else return}
+  save();draw()}
+$('grid').addEventListener('contextmenu',e=>e.preventDefault());
+$('grid').addEventListener('mousedown',e=>{snap();drag=true;apply(e,true)});
+$('grid').addEventListener('mousemove',e=>{if(drag)apply(e,false)});
+addEventListener('mouseup',()=>drag=false);
+document.querySelectorAll('[data-tool]').forEach(b=>b.onclick=()=>{tool=b.dataset.tool;document.querySelectorAll('[data-tool]').forEach(o=>o.classList.toggle('on',o===b));
+  $('heightTools').hidden=tool!=='height';$('terrainTools').hidden=tool!=='terrain';$('deployTools').hidden=tool!=='deploy'});
+function hbtns(){$('hbtns').innerHTML=[0,1,2,3,4,5,6].map(v=>`<button class="hb${v===brush?' on':''}" data-h="${v}">${v}</button>`).join('');$('hbtns').querySelectorAll('[data-h]').forEach(b=>b.onclick=()=>{brush=+b.dataset.h;hbtns()})}hbtns();
+addEventListener('keydown',e=>{if(e.target.tagName==='TEXTAREA')return;if(/^[0-6]$/.test(e.key)){brush=+e.key;hbtns()}if((e.ctrlKey||e.metaKey)&&e.key==='z'){e.preventDefault();$('undo').click()}});
+$('undo').onclick=()=>{if(!undo.length)return;cur=JSON.parse(undo.pop());save();draw()};
+$('reset').onclick=()=>{if(!confirm('Throw away your edits to this map?'))return;try{localStorage.removeItem('sbmap:'+cur.id)}catch(e){}snap();cur=gameVersion(cur.id);draw()};
+$('copy').onclick=()=>{navigator.clipboard.writeText($('out').value).then(()=>{$('copy').textContent='Copied';setTimeout(()=>$('copy').textContent='Copy',1200)})};
+$('png').onclick=()=>{const a=$('grid'),b=$('iso'),cv=document.createElement('canvas'),pad=16;cv.width=a.width+b.width+pad*3;cv.height=Math.max(a.height,b.height)+pad*2+24;
+  const c=cv.getContext('2d');c.fillStyle='#1c1a20';c.fillRect(0,0,cv.width,cv.height);c.fillStyle='#f0d278';c.font='bold 16px system-ui';c.fillText(cur.n,pad,pad+12);
+  c.drawImage(a,pad,pad+24);c.drawImage(b,a.width+pad*2,pad+24);const l=document.createElement('a');l.download=cur.id+'.png';l.href=cv.toDataURL();l.click()};
+load();
+</script>
+</body>
+</html>

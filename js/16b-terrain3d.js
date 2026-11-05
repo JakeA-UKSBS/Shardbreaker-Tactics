@@ -44,7 +44,8 @@ function propsRender(){
     im.classList.toggle('fade',PROPS[k]>=1&&[[x-1,y],[x,y-1],[x-1,y-1]].some(([a,b])=>occ.has(key(a,b))))})}
 
 /* ---- height maps ----
-   The Cursed Woodland has hand-made height maps. Every other outdoor map gets one generated from its own layout,
+   Every region's battle and boss maps have hand-made height maps (see 16-maps-battles.js; edit them with tools/map-editor.html).
+   Any outdoor map without one (the towns) gets one generated from its own layout,
    the same every time (seeded by the map's name):
    - smooth rolling noise, higher toward the top of the map (where the enemies wait), scaled by the region's profile
    - water, lava, the frozen lake and quicksand are the low ground; the starting rows are flat ground
