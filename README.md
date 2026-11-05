@@ -1,8 +1,6 @@
 # Shardbreaker Tactics
 
-An isometric, height-based fork of Shardbreaker (FFTA / Tactics Ogre style). See [docs/DESIGN.md](docs/DESIGN.md) for where it's heading and what's built so far. Below is the original Shardbreaker readme.
-
-A run-based tactics roguelike in the style of GBA Fire Emblem. Built for PC first (map left, command panel right), and still playable on phones.
+An isometric, height-based fork of Shardbreaker (FFTA / Tactics Ogre style) with inspiration from GBA Fire emblem games. See [docs/DESIGN.md](docs/DESIGN.md) for where it's heading and what's built so far. Below is the original Shardbreaker readme.
 
 See [docs/VISUALS.md](docs/VISUALS.md) for pictures of every region, boss, monster, class, weapon, tile and scene, and [docs/INFO.md](docs/INFO.md) for the numbers: recruit odds, base stats and growths, weapons, effectiveness, skills, relics and regions.
 
@@ -28,7 +26,7 @@ Each run picks 2 of these 7 as its acts (`BIOMES`, `ACTS`). Each has 2-3 battle 
 
 Only creatures are enemies; there are no human foes.
 
-Defend fights: from floor 2, a quarter of normal battles are a settlement to hold for 5-7 turns, with monsters arriving from the top of the map each turn (`TOWN`, `town_<region>` maps, each region's `town` ground and cover). Battle maps are tidied when generated: altars, tents, chests and ruined shrines are cleared, and at most 3 rocks are kept (`ROCK_MAX`).
+Defend fights: from floor 2, a quarter of normal battles are a settlement to hold for 5-7 turns, with monsters arriving from the top of the map each turn (`TOWN`, `town_<region>` maps, each region's `town` ground and cover). 
 
 
 ## A run
