@@ -88,7 +88,7 @@ async function quickPlay(a,d,res){
     if(e.crit){sfx('critcharge');const el=uEls[X.id];if(el)el.animate([{filter:'none'},{filter:'brightness(2.2) drop-shadow(0 0 6px #fff)'},{filter:'none'}],{duration:D(320)});await sleep(D(260))}
     sfx(X.cls==='Krondis'?'sandswipe':hitSfx(w,ranged));
     await swingAt(X,Y,w,e.crit,ranged);
-    if(e.hit){sfx(e.crit?'crit':'hit');Y.hp=Y===a?e.hpA:e.hpD;pop(Y,(e.crit?'Crit ':'')+'-'+e.dmg,e.crit?'crit':'dmg');flash(Y);lunge(Y,X,-6);mapPose(Y,'hit',X);
+    if(e.hit){sfx(e.crit?(w.t==='art'?'crit':'swordcrit'):'hit');/* weapon crits use the recorded sword crit */Y.hp=Y===a?e.hpA:e.hpD;pop(Y,(e.crit?'Crit ':'')+'-'+e.dmg,e.crit?'crit':'dmg');flash(Y);lunge(Y,X,-6);mapPose(Y,'hit',X);
       if(w.t==='art')burst(Y,EL_COL[w.el]||'#c8b8ff');if(w.el==='crystal')shatterFx(Y);if(e.crit){shake();burst(Y,'#fff')}if(e.guard)pop(Y,e.guard,'heal');
       if(e.heal){X.hp=X===a?e.hpA:e.hpD;pop(X,'+'+e.heal,'heal')}}
     else{sfx('miss');pop(Y,'Miss','miss');lunge(Y,X,-10);mapPose(Y,'dodge',X)}
