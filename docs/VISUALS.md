@@ -134,7 +134,7 @@ Dunes and sandstone ruins under a white sun. Jackals run in packs, and the quick
 | --- | --- | --- |
 | ![Jackal](visuals/monsters/Jackal.png) | ![Sand Worm](visuals/monsters/SandWorm.png) | ![Sandstone Golem](visuals/monsters/SandGolem.png) |
 
-### Agate Peaks
+### Frostveil Reaches
 
 Snowfields studded with blue agate. Frost wolves hunt the drifts, and the golems are made of the agate itself. **Rule:** A unit that starts its turn in deep snow has 1 less Move (snow creatures ignore it). Frozen lakes give −10 Avoid; blue agate gives +20 Avoid and +2 Def.
 

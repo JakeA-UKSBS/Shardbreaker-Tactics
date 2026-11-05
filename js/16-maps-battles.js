@@ -1,5 +1,5 @@
 /* Desert, snow and cavern regions, music, battle maps, settlements and genBattle() */
-/* ---- new regions: Sandstone Desert, Agate Peaks, Gemstone Caverns ---- */
+/* ---- new regions: Sandstone Desert, Frostveil Reaches, Gemstone Caverns ---- */
 /* fields: see the CLASSES key in 01-data.js */
 Object.assign(CLS,{
   Jackal:{n:'Jackal',w:['blade'],body:'beast',mov:6},SandWorm:{n:'Sand Worm',w:['heavy'],body:'worm',mov:4,wade:true},SandstoneGolem:{n:'Sandstone Golem',w:['heavy'],body:'golem',mov:4},
@@ -92,7 +92,7 @@ Object.assign(BIOMES,{
     tip:['desert','Quicksand','A unit that starts its turn in quicksand has 1 less Move. Sandstone rocks block the way.'],
     maps:['dunes','oasis','canyon'],bossMap:'sunTemple',pool:[['Jackal',4],['SandWorm',3,2],['SandstoneGolem',2,4]],elitePool:[['SandstoneGolem',3],['Jackal',2],['SandWorm',2]],
     boss:{name:'The Pyrite Colossus',cls:'PyriteColossus',s:[42,13,0,5,3,2,12,3],items:['slam'],skill:'steadfast',look:{body:'#c9a83a',eye:'#fff2b0',crysAt:[{core:[14,19],col:'#3ad87a'}]}}},
-  snow:{n:'Agate Peaks',bg:'#2a3a4e',town:['o','a'],townN:'Hill Village',d:'Snowfields studded with blue agate. Frost wolves hunt the drifts, and the golems are made of the agate itself.',
+  snow:{n:'Frostveil Reaches',bg:'#2a3a4e',town:['o','a'],townN:'Hill Village',d:'Snowfields studded with blue agate. Frost wolves hunt the drifts, and the golems are made of the agate itself.',
     tip:['snow','Deep snow','A unit that starts its turn in deep snow has 1 less Move (snow creatures ignore it). Frozen lakes give −10 Avoid; blue agate gives +20 Avoid and +2 Def.'],
     maps:['tundra','frozenLake','agateField'],bossMap:'agateSpire',pool:[['FrostWolf',4],['FrostSprite',3,2],['AgateGolem',2,4]],elitePool:[['AgateGolem',3],['FrostWolf',2],['FrostSprite',2]],
     boss:{name:'Glacius, the Agate Wyrm',cls:'AgateWyrm',s:[40,11,10,6,5,2,9,8],items:['frostBreath'],skill:'steadfast',look:{body:'#3a5a8a',glow:'#7fc8ff',glow2:'#e8f4ff',crysAt:[{gem:[14,17,3],col:'#e8f6ff'},{gem:[18,16,2],col:'#e8f6ff'}]}}},

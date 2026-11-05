@@ -270,5 +270,5 @@ Learned skills cost capacity (base 20, +5 when promoted). Personal skills are fr
 | The Labyrinth | Gremlin 3, Beholder 2 (fl 3+) | Beholder, Gremlin | Minotaur lord |
 | The Heart of the Blight | Shardling 4, Prism 3, Crystal Sentinel 2 | Crystal Sentinel, Shardling, Prism | The Crystal Heart |
 | Sandstone Desert | Jackal 4, Sand Worm 3 (fl 2+), Sandstone Golem 2 (fl 4+) | Sandstone Golem, Jackal, Sand Worm | The Pyrite Colossus |
-| Agate Peaks | Frost Wolf 4, Frost Sprite 3 (fl 2+), Agate Golem 2 (fl 4+) | Agate Golem, Frost Wolf, Frost Sprite | Glacius, the Agate Wyrm |
+| Frostveil Reaches | Frost Wolf 4, Frost Sprite 3 (fl 2+), Agate Golem 2 (fl 4+) | Agate Golem, Frost Wolf, Frost Sprite | Glacius, the Agate Wyrm |
 | Gemstone Caverns | Gremlin 3, Gemsnail 3 (fl 2+), Gem Golem 2 (fl 4+) | Gem Golem, Gemsnail, Gremlin | Amethyra, the Amethyst Turtle |
