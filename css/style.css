@@ -734,7 +734,7 @@ button.it.sel{border-color:var(--gold)}
 .t-water{background:url(../art/tiles/water.png) 0 0/100% 100%}
 
 /* framed UI: the Dark Ages UI frame (art/ui/frame), scaled 2x so its pixels stay square */
-.tv-box,.sbox,.mbox{border:0;border-radius:0;background:none;border-image:url(../art/ui/frame.png) 24 fill / 48px round;image-rendering:pixelated;padding:26px 30px}
+.tv-box,.sbox,.mbox{border:0;border-radius:0;background:none;border-image:url(../art/ui/frame.png) 24 fill / 24px round;image-rendering:pixelated;padding:16px 20px}
 /* node map and its side panels: Dark Ages UI scroll thumbs (art/ui/scroll-v, scroll-h), 2x */
 :is(.nmap,.nmap *)::-webkit-scrollbar{width:14px;height:14px}
 :is(.nmap,.nmap *)::-webkit-scrollbar-track,:is(.nmap,.nmap *)::-webkit-scrollbar-corner{background:rgba(0,0,0,.35)}
