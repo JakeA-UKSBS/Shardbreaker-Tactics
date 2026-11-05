@@ -364,6 +364,7 @@ button.it.sel{border-color:var(--gold)}
 .devch{display:flex;flex-direction:column;gap:4px}
 .devch button{text-align:left}
 /* uses left on a salve, e.g. 2/3 */
+.seed{all:unset;cursor:pointer;border-bottom:1px dotted currentColor}.seed:hover{color:var(--gold)}
 .uses{color:var(--gold);font-weight:700}
 #btnMap{padding:4px 6px;line-height:0}#btnMap img{width:24px;height:24px;image-rendering:pixelated}
 #btnDev{border-color:var(--gold);color:var(--gold);padding:6px 5px;font-size:11px}

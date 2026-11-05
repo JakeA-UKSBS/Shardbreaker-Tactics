@@ -84,7 +84,7 @@ $('#btnMap').addEventListener('click',()=>{if(!busy&&modalEl.hidden&&run&&run.ma
 $('#btnDev').addEventListener('click',()=>{if(!busy&&!over&&modalEl.hidden)devMenu()});
 /* Dev mode: win the current battle straight away. */
 async function devMenu(){
-  const m=await modal(`<div class="eyebrow">Dev mode</div><h2>Skip ahead</h2><p>Win this battle straight away. Seed ${run?run.seed:'-'}.</p><div class="mbtns"><button type="button" data-m="close">Close</button><button class="go" type="button" data-m="win">Win this battle</button></div>`);
+  const m=await modal(`<div class="eyebrow">Dev mode</div><h2>Skip ahead</h2><p>Win this battle straight away. ${run?seedTag(run.seed):'Seed -'}.</p><div class="mbtns"><button type="button" data-m="close">Close</button><button class="go" type="button" data-m="win">Win this battle</button></div>`);
   if(m==='win'){cancelMove();over='win';render();winScreen()}
 }
 function start(data){

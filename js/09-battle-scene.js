@@ -1,6 +1,13 @@
 /* Hit popups and the on-map attack animations (no side-on battle scene in Tactics) */
 /* ================= FX ================= */
 function pop(u,txt,cls){const p=document.createElement('div'),b=uBox(u);p.className='pop '+cls;p.textContent=txt;p.style.left=b.l+b.w/2-24+'px';p.style.top=b.t+'px';boardEl.appendChild(p);setTimeout(()=>p.remove(),950)}
+/* the run's seed, shown as a button that copies it (seedTag) */
+const seedTag=s=>`<button type="button" class="seed" data-seed="${s}" title="Copy the seed">Seed ${s}</button>`;
+document.addEventListener('click',e=>{const b=e.target.closest('[data-seed]');if(!b)return;e.stopPropagation();e.preventDefault();
+  const s=b.dataset.seed,done=()=>{sfx('tick');b.textContent='Copied';setTimeout(()=>{b.textContent='Seed '+s},1200)};
+  /* the clipboard API needs https or localhost; opened from a file, fall back to a hidden text box */
+  const old=()=>{const t=document.createElement('textarea');t.value=s;document.body.appendChild(t);t.select();try{document.execCommand('copy')}catch(_){}t.remove();done()};
+  if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(s).then(done,old);else old()},true);
 function toast(t){const d=document.createElement('div');d.className='toast';d.textContent=t;vp.appendChild(d);setTimeout(()=>d.remove(),1900)}
 /* a notification card in the corner of the board: stays a few seconds, stacks if several arrive at once */
 function notify(title,sub,img,ms=4000){let box=vp.querySelector('.notes');if(!box){box=document.createElement('div');box.className='notes';vp.appendChild(box)}
