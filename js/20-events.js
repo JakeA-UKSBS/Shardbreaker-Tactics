@@ -5,6 +5,7 @@ const REG_SKY={heart:['#0e0408','#2e0c16','#4e1424'],mushroom:['#2a2040','#5a3a6
   desert:['#c8783a','#e8a85a','#f3d08a'],snow:['#4a6a9a','#8aaad0','#c8daf0'],cavern:['#120e1a','#221a2e','#342a44']};
 const REG_GROUND={heart:'#1e1416',mushroom:'#4e4058',shadow:'#34303c',swamp:'#3f5a4a',forest:'#3e4436',mountain:'#3a3034',ship:'#7a5230',labyrinth:'#4a4652',desert:'#c9a060',snow:'#e4ecf4',cavern:'#3a3444'};
 function eventScene(prop){
+  if(prop==='witch'&&ART_PNG.has('scenes/witch-hut'))return'art/scenes/witch-hut.png';/* Rhi's hut, drawn at 640x360 */
   const B=actBiome(),c='EV|'+prop+'|'+B.id;if(sprCache[c])return sprCache[c];
   const W=160,H=90,p=Px(W,H),sky=REG_SKY[B.id]||REG_SKY.forest,gr=REG_GROUND[B.id]||'#3e4436';
   if(['smith','spar','witch','library','armoury'].includes(prop)){const wl=prop==='witch'?'#3a3028':'#4a4038',wl2=shade(wl,.8);p.rect(0,0,W,64,wl);for(let y=0;y<64;y+=8)for(let x=(y/8%2)*8;x<W;x+=16)p.rect(x,y,15,7,wl2);

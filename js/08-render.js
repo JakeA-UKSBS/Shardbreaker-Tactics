@@ -33,7 +33,7 @@ function threatLine(k){const ids=danger&&threatMap().get(k);if(!ids||!ids.length
 /* 2x2 bosses: scale the art so the creature itself fills its whole 2x2 footprint (art has empty margins) */
 const FILLS={};
 function fillBox(img,src,flip){const go=f=>{if(img.dataset.s!==src)return;img.style.transformOrigin=`${f.cx}% ${f.by}%`;img.style.transform=`translate(${50-f.cx}%,${100-f.by}%) scale(${f.k*(flip?-1:1)},${f.k})`};
-  if(FILLS[src])return go(FILLS[src]);const im=new Image();im.onload=()=>{const W=im.width,H=im.height,cv=document.createElement('canvas');cv.width=W;cv.height=H;const cx=cv.getContext('2d');cx.drawImage(im,0,0);const d=cx.getImageData(0,0,W,H).data;
+  if(FILLS[src])return go(FILLS[src]);const im=new Image();im.onload=()=>{const W=im.width,H=im.height,cv=document.createElement('canvas');cv.width=W;cv.height=H;const cx=cv.getContext('2d');cx.drawImage(im,0,0);let d;try{d=cx.getImageData(0,0,W,H).data}catch(_){return}/* file:// PNGs can't be read back */
     let x0=W,x1=0,y0=H,y1=0;for(let y=0;y<H;y++)for(let x=0;x<W;x++)if(d[(y*W+x)*4+3]>0){x0=Math.min(x0,x);x1=Math.max(x1,x);y0=Math.min(y0,y);y1=Math.max(y1,y)}
     if(x1<x0)return;const bw=(x1-x0+1)/W,bh=(y1-y0+1)/H,k=Math.min(1/bw,1/bh,1.7)*.96;FILLS[src]={k,cx:(x0+x1+1)/2/W*100,by:(y1+1)/H*100};go(FILLS[src])};im.src=src}
 
@@ -63,7 +63,7 @@ function render(){
     const ub=uBox(u);el.style.left=ub.l+'px';el.style.top=ub.t+'px';el.style.zIndex=unitZ(u);{const w=ub.w+'px';if(el.style.width!==w){el.style.width=el.style.height=w;el.firstChild.style.width=el.firstChild.style.height=w}}
     if(u.hp<=0&&!el.dataset.dead&&el.isConnected&&el.style.opacity!==''){el.dataset.dead=1;dieFx(el,boardEl,ub.l+ub.w/2,ub.t+ub.h/2,u,1)}else if(u.hp>0)delete el.dataset.dead;
     el.style.opacity=u.hp>0?1:0;
-    const src=sprite(u,'idle',mapWk(u)),img=el.firstChild;if(img.dataset.s!==src){img.src=src;img.dataset.s=src;img.style.transform='';img.style.transformOrigin='';if(u.sz>1&&src.startsWith('data:'))fillBox(img,src,u.team==='e')}img.classList.toggle('hi',isHi(u.cls,u.sz));
+    const src=sprite(u,'idle',mapWk(u)),img=el.firstChild;if(img.dataset.s!==src){img.src=src;img.dataset.s=src;img.style.transform='';img.style.transformOrigin='';if(u.sz===2||u.sz>1&&src.startsWith('data:'))fillBox(img,src,u.team==='e')}img.classList.toggle('hi',isHi(u.cls,u.sz));
     el.querySelector('.hpb i').style.width=(u.hp/u.maxhp*100)+'%';
   }
   for(const id in uEls)if(!live.has(id)){uEls[id].remove();delete uEls[id]}

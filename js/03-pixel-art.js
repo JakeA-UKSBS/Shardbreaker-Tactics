@@ -258,6 +258,8 @@ BIG.bear=(L,strike)=>{const p=Px(64,64),c=L.fur||'#3a2a24',c2=shade(c,.68),c3=sh
   p.poly([[56,22],[63,24],[63,30],[56,31]],sn);p.rect(61,23,3,3,INK);p.line(50,21,57,20,c4);p.rect(53,22,3,2,INK);p.set(54,22,ey);p.set(55,22,shade(ey,1.4));
   p.poly([[52,30],[62,31+o],[61,34+o],[53,34]],c2);if(strike){for(let x=55;x<62;x+=2){p.set(x,31,cl);p.set(x,32+o,cl)}p.poly([[55,31],[61,31],[60,32+o],[56,33]],'#7a1a1a')}
   p.outline(OUT);return p.url()};
+/* the Hollow Bear is Rhi's PNG (art/bosses/hollow-bear.png) when there is one; a -strike PNG is used if added, else the idle one */
+{const draw=BIG.bear;BIG.bear=(L,strike)=>{const k='bosses/hollow-bear';if(!ART_PNG.has(k))return draw(L,strike);return'art/'+k+(strike&&ART_PNG.has(k+'-strike')?'-strike':'')+'.png'}}
 /* ==================================================================
    32px SPRITES (fig0): one branch per monster body type, then the generic
    humanoid body (tunic, robe, armour, vest, serpent) for anything else.

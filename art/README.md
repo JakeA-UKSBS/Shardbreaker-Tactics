@@ -18,9 +18,10 @@ You only need to rebuild the manifest when you **add** or **delete** a PNG: `nod
 | `icons/` | Item and weapon icons | 16×16 |
 | `relics/`, `meals/`, `woes/`, `tags/`, `nodes/`, `ui/` | Small icons (relics, tavern meals, woes, body-type tags, map rooms, coin/map/mug) | 16×16 |
 | `backdrops/` | Fight-scene backdrop per region (horizon at y 63) | 160×90 |
-| `scenes/` | Tavern, Crossroads, Ithren's tent, cage bars | 160×90 (`tavern-counter` is 160×34) |
+| `scenes/` | Tavern, Crossroads, Ithren's tent, cage bars, the Bog Witch's hut (`witch-hut`, 640×360, used instead of the code-drawn witch scene) | 160×90 (`tavern-counter` is 160×34) |
 | `title/` | Title-screen crystal | 120×120 |
 | `bosses/` | The Crystal Heart (act 3 boss, 3×3 tiles): idle and `-strike` | 96×96 |
+| `bosses/hollow-bear` | The Hollow Bear (2×2 boss); add `hollow-bear-strike` for an attack pose | 128×128 |
 | `ship/` | Flying Ship parts (region is switched off for now) | as exported |
 
 ## The code-drawn versions
