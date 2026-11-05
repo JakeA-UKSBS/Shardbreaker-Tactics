@@ -15,8 +15,11 @@ function propGroundArt(k){return art('tiles/'+k+'-ground',()=>PROP_BIO1.includes
 const propGround=(k,gk)=>OVER_T.includes(k)||k==='boulder'?'t-'+gk:'t-g-'+k;
 texStyle.textContent+=Object.keys(PROPS).filter(k=>!OVER_T.includes(k)&&k!=='boulder').map(k=>`.t-g-${k}{background:url(${propGroundArt(k)}) 0 0/100% 100%}`).join('');
 /* stand a prop on tile x,y (called by buildBoard). Its base sits a little below the tile's centre */
-function placeProp(x,y,k){const im=document.createElement('img'),w=Math.round(T*PROPS[k]),c=scrC(x,y);
-  im.className='prop';im.alt='';im.dataset.k=key(x,y);im.dataset.p=k;im.src=propArt(k,state.visited.includes(key(x,y)));
+/* the Sunless Isle's boulders are a mix of rocks, rubble, skulls, dead trees and crystal (art/props/sunless-*, scale × the boulder's size) */
+const SUNLESS_ROCKS=[['rock',1],['rocks',1],['rubble',1],['deadtree',1.1],['crystal',1],['skulls',.6]];
+function placeProp(x,y,k){const im=document.createElement('img'),c=scrC(x,y);let w=Math.round(T*PROPS[k]),src=propArt(k,state.visited.includes(key(x,y)));
+  if(k==='boulder'&&actBiome().id==='shadow'){const[n,sc]=SUNLESS_ROCKS[(x*7+y*13)%SUNLESS_ROCKS.length];if(ART_PNG.has('props/sunless-'+n)){src='art/props/sunless-'+n+'.png';w=Math.round(w*sc)}}
+  im.className='prop';im.alt='';im.dataset.k=key(x,y);im.dataset.p=k;im.src=src;
   Object.assign(im.style,{left:c.x-w/2+'px',top:c.y+8-w+'px',width:w+'px',height:w+'px',zIndex:(x+y)*4+3});boardEl.appendChild(im)}
 /* each render: opened chests swap art, and tall props fade when a unit stands just behind them */
 function propsRender(){

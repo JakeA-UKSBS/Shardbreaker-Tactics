@@ -5,3 +5,4 @@
 - Campfire (`art/nodes/rest.png`) and chest (`art/nodes/treasure.png`, `art/scenes/chest.png`) drawn by Rhi. Also the Hollow Bear and Krondis bosses (`art/bosses/hollow-bear.png`, `art/bosses/krondis.png`) and the Bog Witch's hut (`art/scenes/witch-hut.png`).
 - **Dungeon Crawl Stone Soup** tiles ([crawl/crawl](https://github.com/crawl/crawl), CC0). Rook's dagger is its `item/weapon/dagger.png`, stored as pixel data in `WPN_ART` in `js/09b-battle-rig.js`.
 - **Dark Ages UI - Pixel Art Asset Pack** v1.0 by [Hypnobius](https://hypnobius.itch.io/dark-ages-ui). Used for the ornate box frame, parchment title plate, arrow divider and option buttons (`art/ui/frame.png`, `parchment.png`, `rule.png`, `btn.png`, `btn-on.png`; the hover button has its top crest removed so it can stretch). Only the pieces the game uses are kept here.
+- Sunless Isle rocks, rubble, skulls, dead tree and crystal (`art/props/sunless-*.png`): source pack still to be credited.
