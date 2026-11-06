@@ -62,18 +62,8 @@ function promptEnd(){setTimeout(async()=>{
   if(m==='end'&&phase==='player'&&!busy&&!over)enemyPhase()},350)}
 
 /* ==================================================================
-   CHARTS: the effective-damage chart (live) and the old weapon/element cycle (switched off)
+   CHARTS: the effective-damage chart
    ================================================================== */
-function cycleSvg(nodes,R,lab){
-  const n=nodes.length,cx=120,cy=n===3?112:108,H=n===3?200:205,r=n===3?28:22;
-  const pts=nodes.map((_,i)=>{const a=(-90+i*360/n)*Math.PI/180;return[cx+R*Math.cos(a),cy+R*Math.sin(a)]});
-  let svg=`<svg viewBox="0 0 240 ${H}" width="100%" style="max-width:280px;display:block;margin:0 auto" role="img" aria-label="${lab}"><defs><marker id="ah${n}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="#d8b15a"/></marker></defs>`;
-  for(let i=0;i<n;i++){const[a,b]=pts[i],[c,d]=pts[(i+1)%n],L=Math.hypot(c-a,d-b),ux=(c-a)/L,uy=(d-b)/L;svg+=`<line x1="${a+ux*(r+2)}" y1="${b+uy*(r+2)}" x2="${c-ux*(r+4)}" y2="${d-uy*(r+4)}" stroke="#d8b15a" stroke-width="2.5" marker-end="url(#ah${n})"/>`}
-  nodes.forEach((nd,i)=>{const[a,b]=pts[i];svg+=`<circle cx="${a}" cy="${b}" r="${r}" fill="${nd.c}"/>`;
-    if(nd.icons){nd.icons.forEach((k,j)=>{svg+=`<image href="${icon(k)}" x="${a-17+j*16}" y="${b-17}" width="18" height="18" style="image-rendering:pixelated"/>`});svg+=`<text x="${a}" y="${b+14}" text-anchor="middle" font-size="9.5" font-weight="700" fill="#1a1420" font-family="system-ui,sans-serif">${nd.l}</text>`}
-    else svg+=`<text x="${a}" y="${b+4}" text-anchor="middle" font-size="${nd.l.length>6?8.5:11}" font-weight="700" fill="#1a1420" font-family="system-ui,sans-serif">${nd.l}</text>`});
-  return svg+'</svg>';
-}
 /* the effective-damage chart: pictures, not paragraphs. Each row: what it is → what beats it */
 function effChart(){
   const ic=k=>`<img src="${icon(k)}" alt="${IT[k].n}" title="${IT[k].n}">`,tg=t=>`<img src="${tagArt(t)}" alt="">`,sk=k=>`<span class="ec-sk" title="${SKILLS[k].d}">${SKILLS[k].n}</span>`;
@@ -82,18 +72,6 @@ function effChart(){
     <div class="ec">${rows.map(([t,ws,s,m,pal])=>`<div class="ec-r"><div class="ec-w">${ws.map(ic).join('')}${s?sk(s):''}${pal?'<span class="ec-sk" title="Paladins are effective against spectres with any weapon">Paladins</span>':''}</div><span class="ec-a">▶<em>${m}</em></span><div class="ec-t">${tg(t)}<b>${TAGS[t].n}</b></div></div>`).join('')}</div>
     <p class="hint">Effective hits multiply weapon might. A monster's type is on its info sheet.</p>
     <div class="mbtns"><button class="go" type="button" data-m="ok">Close</button></div>`);
-}
-function typeChart(){
-  const wpn=cycleSvg([{l:'Blades',c:'#c9d3e2',icons:['wornSword','hookedBlade']},{l:'Heavy',c:'#d8b88a',icons:['hatchet','halberd']},{l:'Polearms',c:'#e0a49a',icons:['ironSpear','javelin']}],70,'Weapon cycle');
-  const ele=cycleSvg(['fire','nature','water'].map(e=>({l:ELN[e],c:ELC[e]})),70,'Element cycle');
-  const ic=k=>`<img src="${icon(k)}" alt="" style="width:22px;height:22px;image-rendering:pixelated;vertical-align:middle">`;
-  return modal(`<div class="eyebrow">Type chart</div><h2>Weapons</h2>${wpn}
-   <p>Each arrow points at what it beats. Advantage gives +15 Hit and +1 damage.</p>
-   <h2>Arts</h2>${ele}
-   <p><b>Dark</b> sigils heal their user for a third of the damage they deal.</p>
-   <p><b>Neutral:</b> ${['shortBow','crossbow','dawnSigil'].map(ic).join('')} bows, crossbows and Light sigils. Arts against weapons are always neutral.</p>
-   <p><b>Bows beat fliers:</b> double weapon might against anything with wings.</p>
-   <div class="mbtns"><button class="go" type="button" data-m="ok">Close</button></div>`);
 }
 
 

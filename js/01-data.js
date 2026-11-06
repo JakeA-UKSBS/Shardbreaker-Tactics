@@ -121,11 +121,8 @@ Object.assign(IT,{
 });
 for(const k in IT)IT[k].key=k;
 
-/* WTYPES: weapon types. TRI: the weapon triangle (key beats value). ELE: element cycle (key beats value). ELN: element display names.
-   (the triangle and elements are switched off for now, see TYPES_ON in 06-rules.js) */
+/* WTYPES: weapon types. ELN: element display names. */
 const WTYPES=['blade','heavy','pole','bow','reach','art'];
-const TRI={blade:'heavy',heavy:'pole',pole:'blade'};
-const ELE={fire:'nature',nature:'water',water:'fire'};
 const ELN={light:'Light',dark:'Dark',fire:'Fire',nature:'Nature',water:'Water',wind:'Wind',earth:'Earth',lightning:'Lightning',illusion:'Illusion'};
 /* CLASSES, keyed by class id (shared by player classes and monsters):
    n = class name shown in game, w = weapon types it can use, body = which sprite body fig() draws (tunic/robe/vest/armor/beast/golem...),

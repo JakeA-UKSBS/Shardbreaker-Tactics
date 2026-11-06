@@ -36,7 +36,6 @@ function maxRange(u){let m=0;u.items.forEach(it=>{if((isWpn(it.k)||IT[it.k].t===
 function minRange(u){let m=9;u.items.forEach(it=>{if((isWpn(it.k)||IT[it.k].t==='spirit')&&canUse(u,it.k))m=Math.min(m,IT[it.k].r[0])});return m===9?1:m}
 function aura(u){if(u.team!=='p')return 0;const l=state.units.find(o=>has(o,'command')&&o.hp>0&&o.team===u.team&&o.id!==u.id);return l&&man(l,u)<=2?10:0}
 
-const TYPES_ON=false;
 /* ---- body tags and effective damage ----
    Monsters carry body tags; some weapons (and the slayer skills) are effective against a tag: ×2 weapon Mt (bows vs fliers too).
    One-way for now: only your side (and green allies) deal effective hits; your own units have no tags. */
@@ -54,15 +53,12 @@ function effHit(x,xw,y){if(x.team==='e')return 0;const tg=tagsOf(y);if(!tg.lengt
   if(CLS[x.cls]&&/Paladin/.test(CLS[x.cls].n))e.push('spectral');
   const hit=tg.filter(t=>e.includes(t));if(!hit.length)return 0;return 2}
 function calc(x,xw,y,yw,ctx){
-  const t=ter(y.x,y.y),RB=relicCalc(x,xw,y),SB=stCalc(x,xw,y),gx=gearOf(x),gy=gearOf(y);let adv=0;
-  /* weapon triangle and elements are switched off for now: every matchup is neutral (TRI, ELE and typeChart() are kept for later) */
-  if(TYPES_ON){if(yw&&TRI[xw.t]===yw.t)adv=1;else if(yw&&TRI[yw.t]===xw.t)adv=-1;
-  if(yw&&xw.t==='art'&&yw.t==='art'){if(ELE[xw.el]===yw.el)adv=1;else if(ELE[yw.el]===xw.el)adv=-1}}
-  const eff=effHit(x,xw,y)||(xw.t==='bow'&&CLS[y.cls].fly?2:0);const hd=hDiff(x,y);let pow=Math.max(0,hd)+(xw.mag?x.mag:x.str)+xw.mt*(eff||1)+(eff&&R('trophies')?2:0)+adv+RB.pow+SB.pow+(xw.mag?0:gx.str);if(has(x,'kindle')&&ctx.init===x)pow+=2;
+  const t=ter(y.x,y.y),RB=relicCalc(x,xw,y),SB=stCalc(x,xw,y),gx=gearOf(x),gy=gearOf(y);
+  const eff=effHit(x,xw,y)||(xw.t==='bow'&&CLS[y.cls].fly?2:0);const hd=hDiff(x,y);let pow=Math.max(0,hd)+(xw.mag?x.mag:x.str)+xw.mt*(eff||1)+(eff&&R('trophies')?2:0)+RB.pow+SB.pow+(xw.mag?0:gx.str);if(has(x,'kindle')&&ctx.init===x)pow+=2;
   const yf=!!CLS[y.cls].fly;let df=(xw.mag?y.res+gy.res:y.def+gy.def)+(yf?0:t.df)+RB.df+SB.df;if(has(y,'steadfast')&&ctx.phase==='enemy'&&ctx.init!==y)df+=4;
   if(state.units.some(o=>o!==y&&o.team===y.team&&o.hp>0&&man(o,y)===1&&has(o,'guardian')))df+=2;const xm=CLS[x.cls].mnt||CLS[x.cls].fly,ym=CLS[y.cls].mnt||CLS[y.cls].fly;if(has(y,'pikeWall')&&xm)df+=4;
   const dead=has(x,'keenEye');
-  const acc=hd*10+xw.hit+x.lck*2+(has(x,'earlyEdge')&&state.turn<=5?20:0)+adv*15+aura(x)+(dead?20:0)+RB.acc+SB.acc+(has(x,'pikeWall')&&ym?10:0);
+  const acc=hd*10+xw.hit+x.lck*2+(has(x,'earlyEdge')&&state.turn<=5?20:0)+aura(x)+(dead?20:0)+RB.acc+SB.acc+(has(x,'pikeWall')&&ym?10:0);
   const avo=AS(y,yw)*2+y.lck+(has(y,'earlyEdge')&&state.turn<=5?20:0)+(dead||yf?0:t.av)+aura(y)+RB.avo+SB.avo;
   let crit=RB.crit+SB.crit+(xw.crit||0)+(CLS[x.cls].crit||0)+Math.floor(x.lck/2)-Math.floor(y.lck/2);if(has(x,'focus')&&!state.units.some(o=>o!==x&&o.team===x.team&&o.hp>0&&man(o,x)===1))crit+=10;if(has(x,'wrath')&&x.hp*2<=x.maxhp)crit+=15;
   return{dmg:dmgMods(x,y,ctx,Math.max(0,pow-df)),pow,df,hit:clamp(acc-avo,0,100),crit:x.team==='e'?0:clamp(crit,0,100),n:AS(x,xw)+(has(x,'swiftstrike')&&ctx.init===x?3:0)-AS(y,yw)>=4?2:1,adv,eff,hd};
