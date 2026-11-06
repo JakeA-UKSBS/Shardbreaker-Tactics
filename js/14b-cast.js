@@ -160,7 +160,7 @@ function castPool(where){
   return CAST.filter(c=>!used.has(c.id)&&(where==='act1'?c.joins==='act1':c.joins==='start'||c.joins==='run'||(where==='tavern'&&c.joins==='tavern')||(act>=2&&c.joins==='act1')));
 }
 /* n cast units for an offer; random units fill in only once the cast has run out */
-function castOffer(n,lv,where){const out=shuffle(castPool(where).slice()).slice(0,n).map(c=>castUnit(c.id,lv));while(out.length<n&&where!=='act1')out.push(genUnit(lv));return out}
+function castOffer(n,lv,where){const out=shuffle(castPool(where).slice()).slice(0,n).map(c=>castUnit(c.id,lv));return out}
 /* call when a unit joins the squad, so that character isn't offered again this run */
 function castJoined(u){if(u&&u.cast)(run.castUsed=run.castUsed||[]).push(u.cast)}
 /* the look a cast unit takes on ascending into class k */

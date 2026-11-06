@@ -1,4 +1,4 @@
-/* Movement reach, heal/gift/talk targets, and the pan/zoom camera */
+/* Movement reach, heal targets, and the pan/zoom camera */
 /* ================= MAP LOGIC ================= */
 /* ankle-deep water: a unit that starts its turn in it has 1 less Move (fliers and swamp creatures ignore it) */
 function slowOf(u){const C=CLS[u.cls];return ter(u.x,u.y).slow&&!C.fly&&!C.wade&&!C.phase?1:0}
@@ -23,8 +23,6 @@ function hitsFrom(u,x,y,nx,ny,d){return u.items.some(it=>{const w=IT[it.k];if(!(
 const atkTargets=u=>state.units.filter(o=>o.hp>0&&hostile(o,u)&&wpnsAt(u,man(u,o),o).length);
 function spiritFor(u,o){const d=man(u,o);return u.items.findIndex(it=>IT[it.k].t==='spirit'&&canUse(u,it.k)&&it.u>0&&d>=IT[it.k].r[0]&&d<=IT[it.k].r[1])}
 function healTargets(u){if(staffIdx(u)<0)return[];return state.units.filter(o=>o.hp>0&&o.team===u.team&&o!==u&&o.hp<o.maxhp&&spiritFor(u,o)>=0)}
-function giftHere(u){const k=key(u.x,u.y),c=MAP[u.y][u.x];if(u.team!=='p'||c!=='V'||state.visited.includes(k)||!CH[state.ch].gifts[k])return null;return{k,kind:'Visit',item:CH[state.ch].gifts[k]}}
-function talkTarget(u){if(!u.lord)return null;return state.units.find(o=>o.recruit&&o.team!=='p'&&o.hp>0&&man(o,u)===1)||null}
 
 /* ================= ISOMETRIC PROJECTION ================= */
 /* Tiles are drawn as diamonds TW wide and TH tall; each height level lifts a tile HS px. BW/BH/OX/OY are set in buildBoard(). */
@@ -64,7 +62,7 @@ function clampCam(){const b=vb();cam.s=clamp(cam.s,minS(),2.2);const sw=b.bw*cam
 function applyCam(anim){clampCam();boardEl.style.transition=anim?'transform .35s ease':'none';boardEl.style.transform=`translate(${cam.x}px,${cam.y}px) scale(${cam.s})`}
 function centerOn(x,y,anim){const b=vb(),c=scrC(x,y);cam.x=b.w/2-c.x*cam.s;cam.y=b.h/2-(c.y-20)*cam.s;applyCam(anim)}
 function ensureVisible(x,y){const b=vb(),c=scrC(x,y),m=T*cam.s*1.2,px=cam.x+c.x*cam.s,py=cam.y+(c.y-20)*cam.s;if(px<m||px>b.w-m||py<m||py>b.h-m){centerOn(x,y,true);return true}return false}
-function initCam(){const f=fitS();cam.s=f>=.75?f:1;const a=state.units.find(u=>u.lord)||state.units[0];centerOn(a.x,a.y,false)}
+function initCam(){const f=fitS();cam.s=f>=.75?f:1;const a=state.units[0];centerOn(a.x,a.y,false)}
 const ptrs=new Map();let gest=null;
 vp.addEventListener('pointerdown',e=>{
   if(e.pointerType==='mouse'&&e.button!==0)return;

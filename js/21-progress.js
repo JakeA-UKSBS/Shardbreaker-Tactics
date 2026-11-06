@@ -5,8 +5,6 @@ let prof={un:[],runs:0,wins:0,asc:0,ach:[],bosses:[]};
 function loadProf(){try{const p=JSON.parse(localStorage.getItem(PROF));if(p)prof=Object.assign(prof,p)}catch(_){}}
 function saveProf(){try{localStorage.setItem(PROF,JSON.stringify(prof))}catch(_){}}
 const unl=k=>prof.un.includes(k);
-/* Rewind is retired: it never turns on (the button stays hidden) */
-const rwOn=()=>false;
 /* rewards that achievements hand out */
 const UNLOCKS={
   summoner:{n:'Summoner',d:'Summoners can join: casters who call a creature from each region.'},

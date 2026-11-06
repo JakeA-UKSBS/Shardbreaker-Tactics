@@ -124,21 +124,14 @@ Weapons never break (except the 5-use Meteor and Heaven's Bolt).
 | Short Bow | Bow | 6 | 85 | 0 | 3 | 2 | Flier |
 | Ironwood Bow | Bow | 9 | 70 | 0 | 7 | 2 | Flier |
 | Crossbow | Bow | 8 | 80 | 0 | 6 | 2 | Flier |
-| Thorn Whip | Reach | 4 | 85 | 0 | 3 | 1–2 |  |
-| Chain Sickle | Reach | 6 | 75 | 0 | 5 | 1–2 |  |
-| War Fan | Reach | 5 | 85 | 5 | 3 | 1–2 |  |
-| Bone Parasol | Reach | 6 | 80 | 0 | 5 | 1–2 |  |
 | Ember Sigil | Sigil (Fire) | 5 | 90 | 0 | 2 | 1–2 | Plant |
 | Tide Sigil | Sigil (Water) | 5 | 90 | 0 | 3 | 1–2 |  |
-| Stone Sigil | Sigil (Earth) | 7 | 75 | 0 | 6 | 1–2 |  |
 | Storm Sigil | Sigil (Lightning) | 8 | 80 | 5 | 5 | 1–2 |  |
-| Mirror Sigil | Sigil (Illusion) | 6 | 85 | 0 | 3 | 1–2 |  |
 | Thorn Sigil | Sigil (Nature) | 5 | 90 | 0 | 3 | 1–2 |  |
 | Dawn Sigil | Sigil (Light) | 5 | 90 | 0 | 2 | 1–2 | Spectral |
 | Umbral Sigil | Sigil (Dark) | 5 | 85 | 0 | 5 | 1–2 |  |
 | Crook Staff | Sigil | 6 | 85 | 0 | 4 | 1 |  |
 | Rune Staff | Sigil | 4 | 85 | 0 | 3 | 1–2 |  |
-| Glimmer | Sigil (Light) | 2 | 85 | 0 | 1 | 1–2 | Spectral |
 | Greatsword | Blade | 11 | 70 | 5 | 12 | 1 |  |
 | Labrys | Heavy | 12 | 75 | 10 | 13 | 1 |  |
 | Dirk | Blade | 3 | 95 | 15 | 1 | 1 |  |
@@ -169,7 +162,7 @@ An effective hit multiplies weapon Mt ×2. Only your side deals them for now.
 | Monster type | Who has it | Beaten by |
 |---|---|---|
 | Flier | Hawk, Prism, Wisp, Spirit Hawk | Bows |
-| Armoured | Magma Golem, Crystal Sentinel, Sandstone Golem, Pyrite Colossus, Agate Golem, Gem Golem, Gemsnail, Amethyst Turtle, Pebble Golem, Stone Warden, Yeti | War Hammer, Stonebane |
+| Armoured | Magma Golem, Crystal Sentinel, Sandstone Golem, Pyrite Colossus, Agate Golem, Gem Golem, Gemsnail, Amethyst Turtle, Stone Warden, Yeti | War Hammer, Stonebane |
 | Beast | Wolf, Hawk, Alligator, Cursed Stag, Magma Dragon, Bog Lurker, Jackal, Sand Worm, Frost Wolf, Agate Wyrm, Hollow Bear, Spirit Wolf, Spirit Hawk | Hunting Spear, Wolfsbane |
 | Colossal | Every 2×2 boss | Giantslayer |
 | Spectral | Fire Sprite, Frost Sprite, Wisp | Light sigils, Holy Sword, Spiritbane, Paladins |
@@ -259,7 +252,6 @@ Learned skills cost capacity (base 20, +5 when promoted). Personal skills are fr
 | Sobek’s Mire | Bog Lurker 3, Lamia 3 (fl 2+), Mud Monster 2 (fl 4+) | Mud Monster, Lamia, Bog Lurker | Krondis |
 | Cursed Woodland | Wolf 4, Cursed Stag 3 (fl 2+), Blighted Treant 2 (fl 5+) | Blighted Treant, Cursed Stag, Wolf | The Hollow Bear |
 | Volcanic Isle | Fire Sprite 3, Magma Golem 3 (fl 3+) | Magma Golem, Fire Sprite | Pyraxis, the Magma Dragon |
-| The Labyrinth | Gremlin 3, Beholder 2 (fl 3+) | Beholder, Gremlin | Minotaur lord |
 | The Heart of the Blight | Shardling 4, Prism 3, Crystal Sentinel 2 | Crystal Sentinel, Shardling, Prism | The Crystal Heart |
 | Sandstone Desert | Jackal 4, Sand Worm 3 (fl 2+), Sandstone Golem 2 (fl 4+) | Sandstone Golem, Jackal, Sand Worm | The Pyrite Colossus |
 | Frostveil Reaches | Frost Wolf 4, Frost Sprite 3 (fl 2+), Agate Golem 2 (fl 4+), Ice Troll 2 (fl 5+) | Agate Golem, Ice Troll, Frost Wolf, Frost Sprite | The Yeti |

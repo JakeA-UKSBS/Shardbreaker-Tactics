@@ -49,7 +49,6 @@ async function sageScene(){
   /* the tent stays up behind Ithren's gift until the Crossroads replaces it, so the title's throwaway battle never shows through */
   sgEl.onclick=null;return asc;
 }
-function sageArt(){return sprCache.SAGE||(sprCache.SAGE=fig({style:'long',beard:true,hair:'#e8e2d0',gear:'hood',cloth:'#3a4a8a',skin:'#e0b090',sash:GOLD},'Sage','p','idle','crystalBall'))}
 async function musterScene(opts,need){
   const chosen=[],B1=BIOMES[run.biomes[0]],B2=BIOMES[run.biomes[1]],n=opts.length;
   /* stand the travellers in an arc around the campfire: the far ones behind it, smaller */

@@ -323,9 +323,6 @@ function drawHiWeapon(p,kind,w,c,h,a,P,hb,pt,limb,L={}){
     if(P.glow){const g=pt(...h,a,10);p.ell(g[0],g[1],2+P.glow*2,2+P.glow*2,c.el);p.ell(g[0],g[1],1+P.glow,1+P.glow,'#ffffff')}}
   /* spirit charm / orb: a glowing ball held up, sparkles when casting */
   else if(kind==='spirit'||kind==='orb'){const col=kind==='orb'?'#9a6ad8':w.tint==='mend'?'#7ad6ff':JADE,g=pt(...h,-90,4);p.ell(g[0],g[1],3+(P.glow||0),3+(P.glow||0),col);p.set(g[0]-1,g[1]-1,'#ffffff');if(P.glow)for(const d of[[-6,-4],[5,-6],[6,3],[-5,4]])p.set(g[0]+d[0],g[1]+d[1],'#e9fff5')}
-  else if(kind==='fan'){p.poly([h,pt(...h,a-30,11),pt(...h,a+30,11)],CREAM);limb(h,pt(...h,a,11),RED,1)}
-  else if(kind==='whip'||kind==='chain'){let q=h;for(let k=0;k<6;k++){const n=pt(...q,a+(k%2?20:-20),3.5);limb(q,n,kind==='whip'?'#9a3a72':METAL2,1);q=n}}
-  else if(kind==='umbrella'){const tip=pt(...h,a,18);limb(h,tip,BROWN,1);p.poly([pt(...tip,a+180,8),pt(...pt(...tip,a+180,8),a+90,7),tip,pt(...pt(...tip,a+180,8),a-90,7)],'#e58fb0')}
 }
 
 /* map and card sprite (64x64) */

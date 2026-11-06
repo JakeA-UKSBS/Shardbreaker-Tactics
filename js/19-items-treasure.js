@@ -19,7 +19,6 @@ async function pickUnit(title,text,ok,skipLabel='Cancel',add){
   const m=await modal(`<h2>${title}</h2><p>${text}</p><div class="draft">${L.map(({u,i,why})=>`<button type="button" class="dcard" data-m="u${i}"${why?' disabled':''}>${unitCard(u,false,add)}${why?`<span class="dno">${why}</span>`:''}</button>`).join('')}</div><div class="mbtns"><button type="button" data-m="skip">${skipLabel}</button></div>`);
   return m==='skip'?null:run.roster[+m.slice(1)];
 }
-const evDone=(t,html)=>modal(`<h2>${t}</h2><p>${html}</p><div class="mbtns"><button class="go" type="button" data-m="ok">Continue</button></div>`);
 const full=u=>u.items.length>=5?'Inventory full':null;
 /* put item k in u's bag; if it's full, ask which item to swap out (that one is left behind). false if they cancel */
 /* the equipped weapon can be swapped out too, as long as the unit is left with at least one weapon (or staff) it can use;

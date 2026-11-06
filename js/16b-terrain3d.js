@@ -40,7 +40,7 @@ function boulderPairs(){if(bigFor===MAP)return bigRocks;bigFor=MAP;bigRocks={};c
   for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){if(!isB(x,y)||bigRocks[key(x,y)])continue;
     for(const[px,py]of[[x+1,y],[x,y+1]])if(isB(px,py)&&!bigRocks[key(px,py)]&&hOf(px,py)===hOf(x,y)){bigRocks[key(x,y)]=[px,py];bigRocks[key(px,py)]='skip';break}}
   return bigRocks}
-function placeProp(x,y,k){const im=document.createElement('img'),c=scrC(x,y);let w=Math.round(T*PROPS[k]),src=propArt(k,state.visited.includes(key(x,y)));
+function placeProp(x,y,k){const im=document.createElement('img'),c=scrC(x,y);let w=Math.round(T*PROPS[k]),src=propArt(k);
   if(k==='boulder'&&REGION_ROCKS[actBiome().id]||KIND_ROCKS[k]){const rs=KIND_ROCKS[k]||REGION_ROCKS[actBiome().id],[n,sc]=rs[(x*7+y*13)%rs.length];if(ART_PNG.has('props/'+n)){src='art/props/'+n+'.png';w=Math.round(w*sc)}}
   let cx=c.x,cy=c.y,z=(x+y)*4+3;
   /* single rocks sit inside their own diamond: no wider than ROCK_W and based nearer the tile's centre, so wide ones don't hang off the map's edge */
@@ -50,11 +50,10 @@ function placeProp(x,y,k){const im=document.createElement('img'),c=scrC(x,y);let
   if(big){const c2=scrC(...big);cx=(c.x+c2.x)/2;cy=Math.max(c.y,c2.y);z=(big[0]+big[1])*4+3;src='art/props/'+REGION_BIG[actBiome().id]+'.png';w=Math.round(T*PROPS[k]*1.9);base=8}
   im.className='prop';im.alt='';im.dataset.k=key(x,y);im.dataset.p=k;im.src=src;
   Object.assign(im.style,{left:cx-w/2+'px',top:cy+base-w+'px',width:w+'px',height:w+'px',zIndex:z});boardEl.appendChild(im)}
-/* each render: opened chests swap art, and tall props fade when a unit stands just behind them */
+/* each render: tall props fade when a unit stands just behind them */
 function propsRender(){
   const occ=new Set(state.units.filter(u=>u.hp>0).flatMap(u=>cellsOf(u.x,u.y,u.sz||1).map(c=>key(...c))));
   boardEl.querySelectorAll('img.prop').forEach(im=>{const[x,y]=im.dataset.k.split(',').map(Number),k=im.dataset.p;
-    if(k==='chest'){const s=propArt(k,state.visited.includes(im.dataset.k));if(im.getAttribute('src')!==s)im.src=s}
     im.classList.toggle('fade',PROPS[k]>=1&&[[x-1,y],[x,y-1],[x-1,y-1]].some(([a,b])=>occ.has(key(a,b))))})}
 
 /* ---- height maps ----
@@ -64,8 +63,7 @@ function propsRender(){
    - smooth rolling noise, higher toward the top of the map (where the enemies wait), scaled by the region's profile
    - water, lava, the frozen lake and quicksand are the low ground; the starting rows are flat ground
    - no step between walkable tiles is more than 1, so every unit can still go everywhere it could before
-   - rocks, walls and other solid tiles sit at the height of the ground around them
-   Indoor maps (the Labyrinth) stay flat. */
+   - rocks, walls and other solid tiles sit at the height of the ground around them */
 /* HPROF: height profile per region. a = how tall the hills get (in steps); swamp = flat with only sand and mangrove raised 1 step; dune = rolling dune ridges */
 const HPROF={swamp:{a:1,swamp:1},forest:{a:2},mountain:{a:3},desert:{a:2,dune:1},snow:{a:3},cavern:{a:2},heart:{a:2}};
 function autoHeights(id,m,P){

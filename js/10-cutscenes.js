@@ -17,7 +17,7 @@ async function ascend(u,to){
   const el=document.createElement('div');el.className='asc';
   const parts=Array.from({length:36},()=>`<i class="asc-p" style="left:${10+Math.random()*80}%;--x:${(Math.random()*60-30).toFixed(0)}px;--d:${(1.6+Math.random()*1.8).toFixed(2)}s;--dl:${(Math.random()*2).toFixed(2)}s"></i>`).join('');
   el.innerHTML=`<div class="asc-stage"><div class="asc-pillar"></div><div class="asc-ring"></div><div class="asc-ring r2"></div>${parts}<div class="asc-wave"></div><img class="asc-spr" src="${before}" alt=""></div>
-   <div class="asc-txt"><div class="eyebrow">Ascension</div><h2>${u.name}</h2><p class="asc-cls"><span>${CLS[r.from].n}</span> → <b>${CLS[r.to].n}</b></p>${heroDef(u.id)?.ascend?`<p class="asc-why">${heroDef(u.id).ascend.replaceAll('{lord}',u.name)}</p>`:''}</div>
+   <div class="asc-txt"><div class="eyebrow">Ascension</div><h2>${u.name}</h2><p class="asc-cls"><span>${CLS[r.from].n}</span> → <b>${CLS[r.to].n}</b></p></div>
    <div class="asc-box" hidden><div class="lvl">${shown(u).map((s,i)=>`<div data-s="${s}"><span>${SL[s]}</span><span><b class="v">${r.old[s]}</b><em></em></span></div>`).join('')}</div>
    <p class="asc-cap">Skill capacity <b>${r.old.cap} → ${capOf(u)}</b> · Move <b>${u.mov}</b> · Wields <b>${CLS[u.cls].w.map(t=>CLS[r.from].w.includes(t)?TN[t]:`<span class="asc-new">${TN[t]}</span>`).join(', ')}</b>${r.gift?` · Gains a <b>${IT[r.gift].n}</b>`:''}</p>
    <p class="asc-cap dim">Level resets to 1. EXP is earned as an ascended unit from now on.</p>

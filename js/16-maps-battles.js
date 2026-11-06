@@ -12,8 +12,6 @@ Object.assign(CLS,{
   /* placeholders until they get their own art: the Ice Troll is a humanoid brute, the Yeti a white golem body */
   IceTroll:{n:'Ice Troll',w:['heavy'],body:'vest',mov:4,wade:true,crit:5},
   Yeti:{n:'Yeti',w:['heavy'],body:'golem',mov:4,wade:true},
-  PebbleGolem:{n:'Pebble Golem',w:['heavy'],body:'golem',mov:4,lava:true},
-  WyvernMatriarch:{n:'Wyvern Matriarch',w:['heavy','art'],body:'dragon',mov:3,fly:true},
   Sage:{n:'Sage',w:['art'],body:'robe',mov:0}
 });
 IT.crystalBall={n:'Crystal Ball',t:'item',kind:'orb',uses:1,key:'crystalBall'};
@@ -24,7 +22,6 @@ Object.assign(FOE,{
   Jackal:{b:[14,5,0,4,8,2,1,0],g:[.5,.35,0,.3,.5,.15,.1,.05],items:['fangs'],look:{}},
   SandWorm:{b:[20,6,0,4,4,1,4,1],g:[.7,.4,0,.3,.25,.1,.2,.05],items:['bite'],look:{}},
   SandstoneGolem:{b:[24,7,0,2,2,0,9,1],g:[.8,.4,0,.2,.1,0,.35,.05],items:['slam'],look:{}},
-  PebbleGolem:{b:[16,6,0,3,2,0,6,1],g:[.6,.35,0,.2,.1,0,.3,.05],items:['slam'],look:{mini:true}},
   FrostWolf:{b:[16,5,0,4,7,1,2,2],g:[.55,.35,0,.3,.45,.1,.15,.15],items:['fangs'],look:{}},
   AgateGolem:{b:[22,6,0,2,1,0,8,4],g:[.75,.4,0,.2,.05,0,.3,.2],items:['slam'],look:{}},
   IceTroll:{b:[24,8,0,3,3,0,5,1],g:[.8,.5,0,.25,.2,.05,.3,.05],items:['slam'],look:{}},
@@ -132,11 +129,6 @@ const MAPS={
   caldera:{n:'Caldera Pass',map:["bbmbllbmbb","bbbllllbbb","mbbllllbbm","bbbbllbbbb","bbbbbbbbbb","lbbmbbmbbl","bbbbbbbbbb","bmbbbbbbmb","bbbbFbbbbb","bbbbbbbbbb"],start:[[4,9],[5,9],[3,9],[6,9],[3,8],[5,8]]},
   ridge:{n:'Rockslide Ridge',map:["bbbbRbbbbl","mRbbbbbbbl","bbRbbbblll","bbRRbbRlbb","bbbbbbbbll","llbbmbbbbl","blbbbbbmbb","llbRbbbbbb","lbbbbbbbbb","lbbbbbbbbb"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   crater:{n:'Dragon’s Crater',map:["llbbbbbbll","lbbbbbbbbl","bbmbbbbmbb","bbbbllbbbb","bbbllllbbb","bbbbllbbbb","bmbbbbbbmb","bbbbbbbbbb","bbbbbbbbbb","bbbbbbbbbb"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]],boss:[5,0]},
-  /* The Labyrinth */
-  maze1:{n:'Labyrinth',map:["#############","#________#__#","#_##_###_#_##","#___#___#___#","###_#___#_#_#","#___#___#_#_#","#_#####_###_#","#_m___#___F_#","#_###_#_###_#","#___#_m_#___#","#_#_#####_#_#","#_#___#___#_#","#_###___###_#","#_____#_____#","#############"],start:[[6,12],[5,12],[7,12],[5,13],[7,13],[4,13]]},
-  vaults:{n:'Vaults',map:["##############","#___#____#___#","#___#____#___#","##_###__###_##","#____________#","#_##_m__m_##_#","#_#________#_#","#_##_m__m_##_#","#____________#","##_###__###_##","#___#____#___#","#___#_F__#___#","##############"],start:[[6,10],[5,10],[7,10],[8,10],[5,11],[6,11]]},
-  pillars:{n:'Hall of Pillars',map:["#############","#___#___#___#","#_m_______m_#","#___#_#_#___#","##_##___##_##","#_____F_____#","##_##___##_##","#___#_#_#___#","#_m_______m_#","#___#___#___#","#####___#####","#___________#","#############"],start:[[5,11],[6,11],[7,11],[4,11],[8,11],[6,10]]},
-  mazeHeart:{n:'Labyrinth Heart',map:["#############","###_______###","##___#_#___##","#__m_____m__#","#_#_______#_#","#___#___#___#","#__m_____m__#","##_#_____#_##","#____m_m____#","##__#___#__##","###___F___###","####_____####","#############"],start:[[6,11],[5,11],[7,11],[4,11],[8,11],[6,10]],boss:[6,4]}
 };
 Object.assign(MAPS,{
   /* Act 3: the Heart of the Blight */
@@ -239,7 +231,7 @@ function genBattle(n,kind){
   const roll=()=>{let r=rand()*tot;for(const[c,w]of pool){if((r-=w)<0)return c}return pool[0][0]};
   const count=bossFight?(B.id==='heart'?0:act>=2?5:4):town?Math.min(4,1+Math.floor(fl/4)+(act-1)):Math.min(7,2+Math.floor(fl/3)+(act-1)*2+(elite?1:0)+(A(4)?1:0)),list=elite?[B.elitePool[0][0]]:[];
   while(list.length<count){const c=roll();list.push(c);if(c==='Wolf'&&list.length<count&&rand()<.6)list.push('Wolf')}
-  const bossName=B.boss.name||pick(BOSSN)+' '+pick(BOSST),turns=town?ri(5,7):0;
+  const bossName=B.boss.name,turns=town?ri(5,7):0;
   const goal=bossFight?'boss':town?'defend':'rout';
   const def={biome:B.id,title:bossFight?(B.boss&&B.boss.name||'Boss Battle'):town?'Defend the Settlement':elite?'Elite Battle':'Battle',/* no map names in titles; bosses go by their own name */goal,turns,map:m.map,h:m.h,start:m.start,gifts:{},
     intro:bossFight&&B.boss.intro?B.boss.intro:bossFight?`${bossName} waits for you in the ${m.n}. Defeat it to clear ${theN(B)}.`:town?`Crystallised beasts are closing on the ${m.n.toLowerCase()}. Hold them off for ${turns} turns.`:elite?`A pack led by something old and strong holds the ${m.n.toLowerCase()}. Rout them all.`:`${count} monsters wait in the ${m.n.toLowerCase()}. Rout them.`};

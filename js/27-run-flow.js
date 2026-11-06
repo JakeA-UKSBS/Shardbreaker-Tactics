@@ -1,8 +1,8 @@
 /* Run flow: new run, battles, title screen, win/lose, restore */
 /* ---- flow ---- */
 async function beginBattle(){
-  run.fights=(run.fights||0)+1;const def=genBattle(run.fights,run.kind);CH.length=0;CH.push(def);
-  setupChapter(0,run.roster);battleAllies();rewinds=3;saveGame();music(def.biome);await chapterIntro();
+  run.fights=(run.fights||0)+1;const def=genBattle(run.fights,run.kind);BATTLE=def;
+  setupBattle(run.roster);battleAllies();saveGame();music(def.biome);await battleIntro();
 }
 async function newRun(){
   const seed=(Date.now()^Math.floor(Math.random()*1e9))>>>0;seedRng(seed);
@@ -43,7 +43,7 @@ async function winScreen(){
   const gg=(GOLDWIN[run.kind]||GOLDWIN.battle)+(R('plenty')?15:0)+(rw.gold||0);run.gold=gold()+gg;afterFightMeals();
   const ro=survivors.map(u=>`<div><img src="${portrait(u)}" alt="">${u.name}<span class="hint">Lv ${u.lv} · ${Math.min(u.maxhp,u.hp+afterHeal())}/${u.maxhp} HP</span></div>`).join('')+fallen.map(u=>`<div class="dead"><img src="${portrait(u)}" alt="">${u.name}<span class="hint">Fallen</span></div>`).join('');
   /* beating the Crystal Heart ends the run: straight to Victory, no floor summary, loot or skills */
-  if(!final){await modal(`<div class="eyebrow">Act ${run.act||1} · Floor ${run.n} of ${actLen()} won · Turn ${state.turn}</div><h2>${CH[0].title}</h2><p>${final?'The run is complete.':bossWin?`${TheN(actBiome())} is cleared. The road leads on to ${theN(run.act>=2?BIOMES.heart:BIOMES[run.biomes[run.act]])}.`:`Survivors recover ${afterHeal()} HP. Camps heal fully.`}</p><div class="roster">${ro}</div><p>${rw.length?`Found: ${rw.map(k=>`<b>${IT[k].n}</b>`).join(', ')}. `:''}<span class="gold">+${gg} gold</span></p><div class="mbtns"><button class="go" type="button" data-m="next">${final?'Finish':'Press on'}</button></div>`);
+  if(!final){await modal(`<div class="eyebrow">Act ${run.act||1} · Floor ${run.n} of ${actLen()} won · Turn ${state.turn}</div><h2>${BATTLE.title}</h2><p>${final?'The run is complete.':bossWin?`${TheN(actBiome())} is cleared. The road leads on to ${theN(run.act>=2?BIOMES.heart:BIOMES[run.biomes[run.act]])}.`:`Survivors recover ${afterHeal()} HP. Camps heal fully.`}</p><div class="roster">${ro}</div><p>${rw.length?`Found: ${rw.map(k=>`<b>${IT[k].n}</b>`).join(', ')}. `:''}<span class="gold">+${gg} gold</span></p><div class="mbtns"><button class="go" type="button" data-m="next">${final?'Finish':'Press on'}</button></div>`);
   for(const k of rw)await giveTo(k,'From the battlefield.',true);
   if(run.pendSkill){const k=run.pendSkill;run.pendSkill=null;await allocSkill(k,`Found: ${SKILLS[k].n}`)}}
   else run.pendSkill=null;
@@ -59,19 +59,17 @@ async function winScreen(){
   await mapStep();
 }
 async function loseScreen(){
-  await sleep(500);const can=rwOn()&&rewinds>0&&history.length;
+  await sleep(500);
   const sq=chStart.units.filter(u=>u.team==='p'&&!u.summon);
-  const m=await modal(`<div class="endban lose">Defeat</div><div class="eyebrow">${seedTag(run.seed)}${run.asc?` · Ascension ${run.asc}`:''}</div><h2>The run ends</h2><p>Your squad fell in Act ${run.act||1}, floor ${run.n} of ${RUN_LEN}, in ${TheN(actBiome()).replace(/^The /,'the ')}.</p><div class="roster">${sq.map(u=>`<div class="dead"><img src="${portrait(u)}" alt="">${u.name}<span class="hint">${CLS[u.cls].n} · Lv ${u.lv}</span></div>`).join('')}</div>${can?`<p>You have ${rewinds} rewind${rewinds>1?'s':''} left.</p>`:''}<div class="mbtns">${can?'<button class="go" type="button" data-m="rewind">Rewind</button>':''}<button type="button" data-m="title">Back to title</button></div>`);
-  if(m==='rewind'){rewind();return}
+  const m=await modal(`<div class="endban lose">Defeat</div><div class="eyebrow">${seedTag(run.seed)}${run.asc?` · Ascension ${run.asc}`:''}</div><h2>The run ends</h2><p>Your squad fell in Act ${run.act||1}, floor ${run.n} of ${RUN_LEN}, in ${TheN(actBiome()).replace(/^The /,'the ')}.</p><div class="roster">${sq.map(u=>`<div class="dead"><img src="${portrait(u)}" alt="">${u.name}<span class="hint">${CLS[u.cls].n} · Lv ${u.lv}</span></div>`).join('')}</div><div class="mbtns"><button class="go" type="button" data-m="title">Back to title</button></div>`);
   const news=endRun(false);if(news.length)await modal(`<h2>Progress</h2>${newsHTML(news)}<div class="mbtns"><button class="go" type="button" data-m="ok">Back to title</button></div>`);
   try{localStorage.removeItem(SAVE)}catch(_){}run=null;titleScreen();
 }
-function rewind(){if(!rwOn()||rewinds<=0||!history.length||busy)return;if(ui!=='idle')cancelMove();state=history.pop();rewinds--;over=null;phase='player';clearSel();ui='idle';render();saveGame()}
 function restore(d){
   run=d.run;seedRng(d.rng);
   const fix=us=>us.forEach(u=>{ensureCls(u.cls);u.items.forEach(it=>ensureIt(it.k))});
   fix(run.roster);if(run.phase==='map')return;
-  CH.length=0;CH.push(d.def);
+  BATTLE=d.def;
   fix([...d.state.units,...(d.chStart?d.chStart.units:[])]);
-  state=d.state;history=d.history||[];rewinds=d.rewinds??3;chStart=d.chStart||clone(state);enterMap();
+  state=d.state;chStart=d.chStart||clone(state);enterMap();
 }

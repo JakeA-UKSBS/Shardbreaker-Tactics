@@ -1,8 +1,8 @@
 /* Seeded random numbers and the basic unit constructors */
 /* ================= STATE ================= */
-let state,history=[],rewinds=3,chStart=null,MAP=[],HM=[],MW=8,MH=11;
-let ui='idle',sel=null,pre=null,origin=null,moveSet=null,fringe=null,targets=[],tmode='atk',pending=null,pendW=0,phase='player',busy=false,over=null,inspect=null,danger=false,details=false,itemSel=null,terInfo='';
-let settings={anim:true,sound:true,tips:false,seen:[],lord:'m',rewind:false,dev:false,theme:'tavern'};
+let state,chStart=null,MAP=[],HM=[],MW=8,MH=11;
+let ui='idle',sel=null,origin=null,moveSet=null,fringe=null,targets=[],tmode='atk',pending=null,pendW=0,phase='player',busy=false,over=null,inspect=null,danger=false,details=false,itemSel=null,terInfo='';
+let settings={anim:true,sound:true,tips:false,seen:[],dev:false,theme:'tavern'};
 /* colour schemes: tavern (warm wood and gold, like the story scenes) or jade (Obsidian & Jade) */
 const THEMES={tavern:'Tavern',jade:'Obsidian & Jade'};
 function applyTheme(){const t=THEMES[settings.theme]?settings.theme:'tavern';for(const k in THEMES)document.documentElement.classList.toggle('th-'+k,k===t)}
@@ -27,10 +27,9 @@ const pick=a=>a[Math.floor(rand()*a.length)];
 const unitAt=(x,y)=>state.units.find(u=>u.hp>0&&x>=u.x&&y>=u.y&&x<u.x+(u.sz||1)&&y<u.y+(u.sz||1));
 const byId=id=>state.units.find(u=>u.id===id);
 const ter=(x,y)=>TER[MAP[y][x]];
-/* tile height level (0 = ground). HM is set with the map in setMapFor() */
+/* tile height level (0 = ground). HM is set with the map in setMap() */
 const hOf=(x,y)=>(HM[y]&&HM[y][x])||0;
 
-function mkHero(h){const u={id:h.id,name:h.name,cls:h.cls,team:'p',lv:h.lv,exp:0,skill:h.skill,skills:[],cap:BASE_CAP,look:h.look,pic:h.pic,g:h.g,lord:!!h.lord,mov:CLS[h.cls].mov,items:h.items.map(k=>({k,u:IT[k].uses})),acted:false,x:0,y:0};ST.forEach((s,i)=>u[s]=h.s[i]);u.maxhp=u.hp;return u}
 function foe(cls,lv,x,y,o={}){
   const t=FOE[cls],u={id:'f'+(foeSeq++),name:o.name||CLS[cls].n,cls,team:'e',lv,exp:0,x,y,acted:false,hold:!!o.hold,mov:CLS[cls].mov,skill:o.skill||null,pic:t.pic};
   ST.forEach((s,i)=>u[s]=t.b[i]+Math.floor(t.g[i]*(lv-1)));u.maxhp=u.hp;
@@ -39,6 +38,4 @@ function foe(cls,lv,x,y,o={}){
 }
 function boss(b){return foldLuck(boss0(b))}
 function boss0(b){const u={id:b.id,name:b.name,cls:b.cls,team:'e',lv:b.lv,exp:0,x:b.x,y:b.y,acted:false,boss:true,mov:b.mov||0,skill:b.skill,look:b.look,pic:b.pic};ST.forEach((s,i)=>u[s]=b.s[i]);u.maxhp=u.hp;u.items=b.items.map(k=>({k,u:IT[k].uses}));if(b.carry)u.items.push({k:b.carry,u:IT[b.carry].uses,d:true});return u}
-function recruitFoe(id,x,y){const u=mkHero(heroDef(id));return Object.assign(u,{team:'e',x,y,recruit:true,hold:true})}
-function recruitGreen(id,x,y){return Object.assign(recruitFoe(id,x,y),{team:'g'})}
 
