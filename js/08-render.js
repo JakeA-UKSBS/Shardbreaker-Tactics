@@ -10,7 +10,7 @@ function barsOf(u){if(!u.bars)return null;const per=u.maxhp/u.bars,n=Math.max(0,
 const uEls={};
 function buildBoard(){
   boardEl.innerHTML='';for(const id in uEls)delete uEls[id];
-  const c=BATTLE;boardEl.classList.toggle('bright',!!c.bright);boardEl.style.background=MAP.some(r=>r.includes('~'))?'linear-gradient(#26304a,#56668c 55%,#8e9ab8)':'';
+  boardEl.style.background=MAP.some(r=>r.includes('~'))?'linear-gradient(#26304a,#56668c 55%,#8e9ab8)':'';
   /* isometric: each tile is its square art mapped onto a diamond (the top face), over a block of side faces down to the ground */
   const mx=Math.max(0,...MAP.flatMap((r,y)=>[...r].map((_,x)=>vhOf(x,y))));
   OX=MH*TW/2;OY=56+mx*HS;BW=(MW+MH)*TW/2;BH=OY+(MW+MH)*TH/2+HS+12;

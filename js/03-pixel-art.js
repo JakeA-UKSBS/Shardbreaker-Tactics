@@ -346,13 +346,6 @@ function fig0(L,cls,team,pose,wk){
     p.rect(12,13,3,2,'#9fd8ff');p.rect(19,12,3,2,'#9fd8ff');p.line(13,17,19,17,c2);
     p.line(16,21,13,25,bo,2);p.line(13,25,17,26,bo,2);p.line(17,26,14,31,bo,2);if(strike){p.line(26,15,29,19,bo,2);p.line(29,19,27,22,bo,2);p.line(27,22,31,27,bo,2)}
     p.outline(OUT);return p.url()}
-  /* ---- body: beholder ---- */
-  if(body==='eye'){const c=L.body||'#8a4a6a',c2=shade(c,.7),ey='#f3f0e8',ir=L.eye||'#5fc2a0';
-    [[-8,-1],[-4,-2],[0,-2],[4,-2],[8,-1]].forEach(([dx],i)=>{const tx=16+dx*1.4,ty=3+(i%2);p.line(16+dx*.6,10,tx,ty+2,c2);p.ell(tx,ty,1.7,1.7,ey);p.set(Math.round(tx),Math.round(ty),ir)});
-    p.ell(16,18,10,9,c);p.ell(13,21,6,5,c2,(x,y)=>x<12);p.ell(16,17,5,4.5,ey);p.ell(16,17,2.6,2.6,ir);p.ell(16,17,1,1,INK);p.line(11,13,21,13,c2);
-    p.line(10,24,22,24,'#2a1a1a');for(let x=11;x<22;x+=2)p.set(x,25,'#ffffff');
-    if(strike)p.line(21,17,31,14,'#c77dff',2);
-    p.outline(OUT);return p.url()}
   /* ---- body: four-legged beasts (wolves, jackals, stags) ---- */
   if(body==='beast'){const f=L.fur||'#8a8f9a',f2=shade(f,.7),f3=shade(f,1.25),ey=L.eye||'#ffd23f',ln=strike?3:0;
     p.poly([[6+ln,17],[1+ln,11],[2+ln,9],[8+ln,15]],f2);
@@ -364,12 +357,6 @@ function fig0(L,cls,team,pose,wk){
     if(L.antlers){const a=L.antlers;p.line(21+ln,9,19+ln,2,a);p.line(20+ln,5,17+ln,3,a);{const a2=L.antler2||a;p.line(24+ln,9,27+ln,1,a2);p.line(26+ln,5,29+ln,3,a2);if(L.antler2){p.set(27+ln,1,shade(a2,1.5));p.set(25+ln,7,shade(a2,1.5))}}}
     p.rect(25+ln,12,2,1,ey);p.set(31,14,OUT);
     if(strike){p.line(27,17,31,19,'#c8322e');p.set(28,18,'#ffffff');p.set(30,18,'#ffffff')}
-    p.outline(OUT);return p.url()}
-  /* ---- body: gremlin ---- */
-  if(body==='gremlin'){const c=sk,c2=shade(sk,.72),cl='#e8e2d0',st=strike?3:0;
-    p.ell(16,24,6,5,c);p.ell(16,17,5,4.5,c);p.poly([[12,16],[4,10],[12,13]],c2);p.poly([[20,16],[28,10],[20,13]],c2);
-    p.rect(13,16,2,2,'#ffd23f');p.rect(18,16,2,2,'#ffd23f');p.rect(14,20,4,1,'#2a1a1a');p.set(15,21,cl);p.set(17,21,cl);
-    p.line(11,23,8-st,27-st,c2,2);p.line(21,23,24+st,27-st,c2,2);p.set(7-st,29-st,cl);p.set(25+st,29-st,cl);p.rect(12,29,3,2,c2);p.rect(17,29,3,2,c2);
     p.outline(OUT);return p.url()}
   if(CLS[cls].fly&&!CLS[cls].mnt){const wc=L.wing||'#3b3050',wc2=shade(wc,.7);p.poly([[12,15],[1,5],[3,13],[0,20],[11,21]],wc);p.poly([[19,15],[30,5],[28,13],[31,20],[20,21]],wc);p.line(12,15,2,7,wc2);p.line(19,15,29,7,wc2);p.line(11,18,2,16,wc2);p.line(20,18,29,16,wc2)}
   if(L.style==='long'&&L.gear!=='helm')p.rect(10,8,4,13,hair2);
@@ -470,8 +457,6 @@ function tileArt_draw(kind,used,bare){
   if(kind==='village'){o.rect(3,9,10,6,used?'#a9a39a':'#e3d6b6');o.poly([[0,9],[2,6],[14,6],[16,9],[13,8],[3,8]],used?'#55545a':'#33394a');o.rect(2,5,12,1,used?'#6a6a70':'#4a5266');o.rect(7,11,2,4,used?'#555':RED);o.rect(4,10,2,2,used?'#666':'#f4d36a');o.rect(10,10,2,2,used?'#666':'#f4d36a')}
   if(kind==='fort'){o.rect(1,12,14,3,'#6f6c74');o.rect(2,4,3,8,'#8c8a90');o.rect(11,7,3,5,'#8c8a90');o.rect(2,3,5,1,'#a5a2aa');o.rect(5,10,6,2,'#55525a');o.ell(8,6,1.8,1.8,'#9fd8ff')}
   if(kind==='chest'){if(used){o.rect(4,4,8,3,'#b5413a');o.rect(4,8,8,5,'#8a2a26');o.rect(5,8,6,2,'#24160c');o.rect(4,10,8,1,GOLD)}else{o.rect(4,7,8,6,'#8a2a26');o.rect(4,7,8,2,'#b5413a');o.rect(4,9,8,1,GOLD);o.rect(7,9,2,2,GOLD)}}
-  if(kind==='shellwall'){p.rect(0,0,16,16,'#d9c3b4');o.ell(8,8,7.2,7.2,'#ecc9d8');o.ring(8,8,5.4,'#c99fb5');o.ring(9,8,3.4,'#c99fb5');o.ring(9.4,8.3,1.6,'#b07f9c');o.line(1,13,15,13,'#e3b9cc')}
-  if(kind==='shellfloor'){p.rect(0,0,16,16,'#f1e6da');p.ring(0,16,9,'#e6d2dc');p.ring(16,0,9,'#d9e4ea');p.ring(0,16,5,'#ead9e2');p.set(8,8,'#ffffff');p.set(3,4,'#ffffff');p.set(12,11,'#ffffff')}
   if(kind==='tent'){o.poly([[1,14],[8,2],[15,14]],'#8a7a5a');o.poly([[8,2],[11,14],[5,14]],'#5a4a34');o.line(8,2,8,14,'#3a2e20')}
   if(kind==='crag'){/* volcanic crag: dark basalt peaks with glowing seams */o.poly([[0,16],[4,4],[8,9],[11,2],[16,16]],'#2e2428');o.poly([[4,4],[8,9],[6,16],[1,16]],'#3e3236');o.line(11,2,9,9,'#4a3c40');o.line(10,9,12,14,'#ff7a2a');o.set(5,11,'#ff9a3c');o.set(11,3,'#6a5a5e');o.set(4,5,'#6a5a5e')}
   if(kind==='cliff'){o.poly([[0,16],[3,2],[7,6],[10,0],[14,7],[16,16]],'#3e3a44');o.line(3,2,5,10,'#5a5562');o.line(10,0,11,8,'#5a5562')}
@@ -482,7 +467,7 @@ const texStyle=document.createElement('style');
 texStyle.textContent=`.t-fort{background:url(${tileArt('fort')}) 0 0/100% 100%;box-shadow:none}.t-plain{background:url(${tileArt('plain')}) 0 0/100% 100%}.t-forest{background:url(${tileArt('forest')}) 0 0/100% 100%}.t-hill{background:url(${tileArt('hill')}) 0 0/100% 100%}.t-village{background:url(${tileArt('village')}) 0 0/100% 100%}.t-village.vis{background:url(${tileArt('village',1)}) 0 0/100% 100%}.t-chest{background:url(${tileArt('chest')}) 0 0/100% 100%}.t-chest.vis{background:url(${tileArt('chest',1)}) 0 0/100% 100%}`;
 /* features drawn over the region's own ground (see buildBoard): no green grass under a chest in a cave */
 texStyle.textContent+=OVER_T.map(k=>`.tile.ov-${k}::before{inset:0;background:url(${tileArt(k,0,true)}) 0 0/100% 100%}`).join('')+`.tile.ov-village.vis::before{background-image:url(${tileArt('village',1,true)})}.tile.ov-chest.vis::before{background-image:url(${tileArt('chest',1,true)})}`;
-texStyle.textContent+=`.board.bright .t-wall{background:url(${tileArt('shellwall')}) 0 0/100% 100%;filter:none}.board.bright .t-floor{background:url(${tileArt('shellfloor')}) 0 0/100% 100%;filter:none}.t-tent{background:url(${tileArt('tent')}) 0 0/100% 100%}.t-cliff{background:url(${tileArt('cliff')}) 0 0/100% 100%}`;
+texStyle.textContent+=`.t-tent{background:url(${tileArt('tent')}) 0 0/100% 100%}.t-cliff{background:url(${tileArt('cliff')}) 0 0/100% 100%}`;
 document.body.appendChild(texStyle);
 
 /* PNG art: each of these uses art/<key>.png when it exists, else the drawing code above (see art() in 03-pixel-art.js) */

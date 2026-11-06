@@ -99,7 +99,7 @@ function resolve(a,ai,d){
       else if(has(Y,XW0&&XW0.mag?'spellWard':'ironSkin')&&dmg>0&&rn()<Y.lck*2){e.guard=SKILLS[XW0&&XW0.mag?'spellWard':'ironSkin'].n;dmg=Math.floor(dmg/2)}
       /* damage can't go below 0 HP */
       dmg=Math.min(dmg,hp[o]);hp[o]-=dmg;e.dmg=dmg;
-      /* on-hit effects. Stone Gaze (Luck%): target is turned to stone (Lamia, Beholder). Venom: target is poisoned */
+      /* on-hit effects. Stone Gaze (Luck%): target is turned to stone (Lamia). Venom: target is poisoned */
       if(has(X,'stoneGaze')&&hp[o]>0&&rn()<X.lck){e.stone=true;e.proc=e.proc||SKILLS.stoneGaze.n}
       if(has(X,'venom')&&hp[o]>0&&dmg>0){e.psn=true;e.proc=e.proc||SKILLS.venom.n}
       /* Retaliate (Luck%): a melee hit is dealt straight back to the striker */

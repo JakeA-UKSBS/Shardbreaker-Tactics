@@ -131,8 +131,7 @@ const ELN={light:'Light',dark:'Dark',fire:'Fire',nature:'Nature',water:'Water',w
    jump = how high a step it can climb (default 2). */
 const CLS={
   /* a plain townsfolk body for NPC figures (the innkeeper, recruit icons) */
-  Villager:{n:'Villager',w:['blade'],body:'tunic',mov:5},
-  Gremlin:{n:'Gremlin',w:['blade'],body:'gremlin',mov:6,crit:10}
+  Villager:{n:'Villager',w:['blade'],body:'tunic',mov:5}
 };
 /* SKILLS: n = name, cost = skill capacity it takes up (units have BASE_CAP to spend), d = description shown in game. */
 const SKILLS={
@@ -175,8 +174,6 @@ const BASE_CAP=20,PROMO_CAP=5,PROMO_LV=5;
    items = weapons/attacks it carries (keys in IT), pic = portrait art key, look = sprite options (colours are hex: skin, eye, hair, cloth, wing, shell...).
    Monsters with an entry in MONLOOK get a random look from there instead. */
 const FOE={};
-/* Nightmare creatures (not Fallen, so not pale). Fliers are weak to bows. */
-FOE.Gremlin={b:[14,4,0,5,8,2,1,1],g:[.5,.3,0,.4,.5,.2,.1,.1],items:['claws'],pic:'twin',look:{skin:'#5f6e52',crysSmall:true}};
 /* HAIRS: dark hair colours (hex) */
 const HAIRS=['#1d1a24','#2a2230','#3a2a20','#241c1c','#4a3a30'];
 

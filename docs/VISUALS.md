@@ -62,18 +62,6 @@ Basalt slopes cut by rivers of magma. Golems block the passes, and fire sprites 
 | --- | --- |
 | ![Fire Sprite](visuals/monsters/FireSprite.png) | ![Magma Golem](visuals/monsters/Boulder.png) |
 
-### The Labyrinth
-
-Stone corridors with no daylight. Something with too many eyes watches from the dark. **Rule:** Beholders can turn units to stone with their gaze. Stone units skip their next turn.
-
-| Boss: Minotaur lord | Attacking |
-| --- | --- |
-| ![Minotaur lord](visuals/bosses/labyrinth.png) | ![Minotaur lord attacking](visuals/bosses/labyrinth_attack.png) |
-
-| Gremlin | Beholder |
-| --- | --- |
-| ![Gremlin](visuals/monsters/Gremlin.png) | ![Beholder](visuals/monsters/Beholder.png) |
-
 ### The Heart of the Blight
 
 Scorched ground split by veins of glowing gem. Every crystal in these lands grew from what waits here. **Rule:** The Heart never moves, but it strikes from 2 to 6 tiles away. Get next to it: it can’t hit what’s beside it. It calls more blighted monsters every other turn.

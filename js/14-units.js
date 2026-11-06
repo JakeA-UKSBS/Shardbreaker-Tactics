@@ -109,23 +109,20 @@ function genUnit(lv,role){
 /* fields: see the CLASSES key in 01-data.js */
 Object.assign(CLS,{
   Wolf:{n:'Wolf',w:['blade'],body:'beast',mov:6,crit:5},
-  Lamia:{n:'Lamia',w:['art'],body:'serpent',mov:5},
-  Minotaur:{n:'Minotaur',w:['heavy'],body:'vest',mov:4,crit:10}
+  Lamia:{n:'Lamia',w:['art'],body:'serpent',mov:5}
 });
 IT.fangs={n:'Fangs',t:'blade',kind:'claw',mt:5,hit:85,crit:5,r:[1,1],uses:99,key:'fangs'};
 IT.talons={n:'Talons',t:'blade',kind:'claw',mt:4,hit:90,crit:5,r:[1,1],uses:99,key:'talons'};
 /* fields: see the ENEMY STATS key in 01-data.js (b/g order: HP, Str, Mag, Skl, Spd, Lck, Def, Res) */
 Object.assign(FOE,{
   Wolf:{b:[15,5,0,3,7,1,2,0],g:[.55,.35,0,.3,.45,.1,.15,.05],items:['fangs'],look:{}},
-  Lamia:{b:[18,0,5,4,4,1,3,4],g:[.6,0,.4,.3,.3,.1,.15,.3],items:['thornSigil'],look:{}},
-  Minotaur:{b:[24,8,0,3,2,0,5,0],g:[.8,.5,0,.25,.15,.05,.3,.05],items:['hatchet'],look:{}}
+  Lamia:{b:[18,0,5,4,4,1,3,4],g:[.6,0,.4,.3,.3,.1,.15,.3],items:['thornSigil'],look:{}}
 });
 function monLook(c){
   if(MONLOOK[c])return MONLOOK[c]();
   if(c==='Wolf')return{crysSmall:true,fur:pick(['#8a8f9a','#6b5a48','#3a3640','#c9c3b8','#9a7a52']),eye:'#ffd23f'};
   if(c==='Lamia')return{style:pick(['long','tail','wild']),hair:pick(HAIRC),tail:pick(['#4f8a5a','#3a7a7a','#7a5aa0','#8a7a3a']),cloth:pick(CLOTH),skin:pick(['#d6c0a0','#b8c8a8','#c9b6a0']),eye:'#ffd23f'};
-  if(c!=='Minotaur')return clone(FOE[c].look||{});
-  return{style:'bald',horns:true,beard:true,hair:'#2a1a14',skin:pick(['#7a4e32','#5a3a2a','#8a6a4a']),cloth:'#4a3a2a',eye:'#ff5a3a'};
+  return clone(FOE[c].look||{});
 }
 /* ---- monster PNGs (art/monsters/) ----
    monsterClasses(): every monster the game can spawn (region pools, bosses, summons, familiars). Bosses drawn as big 64px art (BIG) are left out.
@@ -139,6 +136,6 @@ function monsterArt(c,strike){return art('monsters/'+c+(strike?'-strike':''),()=
   const L=boss?clone(boss.boss.look||{}):monLook(c);rngS=s0;
   return fig(L,c,FOE[c]&&FOE[c].look&&FOE[c].look.spirit?'p':'e',strike?'strike':'idle',FOE[c]&&FOE[c].items[0],1)})}
 function mkMon(c,lv){const u=foe(c,lv,0,0);u.look=monLook(c);
-  if(c==='Lamia'||c==='Beholder')u.skill='stoneGaze';
+  if(c==='Lamia')u.skill='stoneGaze';
   return u}
 

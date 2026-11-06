@@ -63,8 +63,7 @@ function propsRender(){
    - smooth rolling noise, higher toward the top of the map (where the enemies wait), scaled by the region's profile
    - water, lava, the frozen lake and quicksand are the low ground; the starting rows are flat ground
    - no step between walkable tiles is more than 1, so every unit can still go everywhere it could before
-   - rocks, walls and other solid tiles sit at the height of the ground around them
-   Indoor maps (the Labyrinth) stay flat. */
+   - rocks, walls and other solid tiles sit at the height of the ground around them */
 /* HPROF: height profile per region. a = how tall the hills get (in steps); swamp = flat with only sand and mangrove raised 1 step; dune = rolling dune ridges */
 const HPROF={swamp:{a:1,swamp:1},forest:{a:2},mountain:{a:3},desert:{a:2,dune:1},snow:{a:3},cavern:{a:2},heart:{a:2}};
 function autoHeights(id,m,P){

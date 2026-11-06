@@ -259,7 +259,6 @@ Learned skills cost capacity (base 20, +5 when promoted). Personal skills are fr
 | Sobek’s Mire | Bog Lurker 3, Lamia 3 (fl 2+), Mud Monster 2 (fl 4+) | Mud Monster, Lamia, Bog Lurker | Krondis |
 | Cursed Woodland | Wolf 4, Cursed Stag 3 (fl 2+), Blighted Treant 2 (fl 5+) | Blighted Treant, Cursed Stag, Wolf | The Hollow Bear |
 | Volcanic Isle | Fire Sprite 3, Magma Golem 3 (fl 3+) | Magma Golem, Fire Sprite | Pyraxis, the Magma Dragon |
-| The Labyrinth | Gremlin 3, Beholder 2 (fl 3+) | Beholder, Gremlin | Minotaur lord |
 | The Heart of the Blight | Shardling 4, Prism 3, Crystal Sentinel 2 | Crystal Sentinel, Shardling, Prism | The Crystal Heart |
 | Sandstone Desert | Jackal 4, Sand Worm 3 (fl 2+), Sandstone Golem 2 (fl 4+) | Sandstone Golem, Jackal, Sand Worm | The Pyrite Colossus |
 | Frostveil Reaches | Frost Wolf 4, Frost Sprite 3 (fl 2+), Agate Golem 2 (fl 4+), Ice Troll 2 (fl 5+) | Agate Golem, Ice Troll, Frost Wolf, Frost Sprite | The Yeti |
