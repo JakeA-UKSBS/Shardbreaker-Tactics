@@ -19,6 +19,8 @@ texStyle.textContent+=Object.keys(PROPS).filter(k=>!OVER_T.includes(k)&&k!=='bou
 const SUNLESS_ROCKS=[['rock',1],['rocks',1],['rubble',1],['deadtree',1.1],['crystal',1],['skulls',.6]];
 /* other regions' boulders: CraftPix rocks (art/props/<name>.png, padded square, scale × the boulder's size). Regions not listed keep the plain boulder */
 const REGION_ROCKS={desert:[['sand-rock',1.1]],snow:[['ice-block',1.1],['snow-peaks',1.1]],forest:[['moss-rock',1.1]],swamp:[['moss-rock',1.1]],mountain:[['red-spire',1.1]],heart:[['red-spire',1.1]]};
+/* tile kinds drawn with CraftPix rocks in every region: the desert's Sandstone Rocks (k) mix the sand rock with the pale stone piles */
+const KIND_ROCKS={sandstone:[['sand-rock',1.1],['sunless-rock',.95],['sunless-rocks',.9]]};
 /* two boulders side by side are drawn as one big rock across both tiles (REGION_BIG: the wide rock per region) */
 const REGION_BIG={desert:'sand-rock',snow:'ice-block',forest:'moss-rock',swamp:'moss-rock'};
 let bigRocks=null,bigFor=null;
@@ -29,7 +31,7 @@ function boulderPairs(){if(bigFor===MAP)return bigRocks;bigFor=MAP;bigRocks={};c
   return bigRocks}
 function placeProp(x,y,k){const im=document.createElement('img'),c=scrC(x,y);let w=Math.round(T*PROPS[k]),src=propArt(k,state.visited.includes(key(x,y)));
   if(k==='boulder'&&actBiome().id==='shadow'){const[n,sc]=SUNLESS_ROCKS[(x*7+y*13)%SUNLESS_ROCKS.length];if(ART_PNG.has('props/sunless-'+n)){src='art/props/sunless-'+n+'.png';w=Math.round(w*sc)}}
-  else if(k==='boulder'&&REGION_ROCKS[actBiome().id]){const rs=REGION_ROCKS[actBiome().id],[n,sc]=rs[(x*7+y*13)%rs.length];if(ART_PNG.has('props/'+n)){src='art/props/'+n+'.png';w=Math.round(w*sc)}}
+  else if(k==='boulder'&&REGION_ROCKS[actBiome().id]||KIND_ROCKS[k]){const rs=KIND_ROCKS[k]||REGION_ROCKS[actBiome().id],[n,sc]=rs[(x*7+y*13)%rs.length];if(ART_PNG.has('props/'+n)){src='art/props/'+n+'.png';w=Math.round(w*sc)}}
   let cx=c.x,cy=c.y,z=(x+y)*4+3;
   const big=k==='boulder'&&REGION_BIG[actBiome().id]&&ART_PNG.has('props/'+REGION_BIG[actBiome().id])&&boulderPairs()[key(x,y)];
   if(big==='skip')return;/* drawn by its partner */
