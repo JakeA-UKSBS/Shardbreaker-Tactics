@@ -76,7 +76,7 @@ const SOLID_K=['wall','cliff','boulder','sandstone','lava','water','cavewall'];
 const KCOL={plain:'#7a8060',forest:'#3a5234',curse:'#6e3c82',boulder:'#6e6860',water:'#1e283c',bridge:'#8c643c',fort:'#aa966e',throne:'#c8aa3c',
   sand:'#c8a868',quicksand:'#8a6a3a',sandstone:'#9a6a40',snow:'#d8e0e8',deepsnow:'#b8c4d4',agate:'#5a8ac8',ice:'#8ac8e8',
   cave:'#5a5068',emerald:'#3aa868',ruby:'#c83a4a',sapphire:'#3a5ac8',cavewall:'#2a2236',chest:'#c89a3a',
-  grave:'#4a4656',tomb:'#8a8494',floor:'#8a8478',light:'#fff2b0',carpet:'#8a2a3a',wall:'#2a2830',
+  grave:'#4a4656',tent:'#b89a6a',tomb:'#8a8494',floor:'#8a8478',light:'#fff2b0',carpet:'#8a2a3a',wall:'#2a2830',
   shallow:'#3a6a6a',mangrove:'#3a5a2a',mud:'#4a3a2a',basalt:'#4a3a3a',lava:'#e8582a',hill:'#7a6a5a',cliff:'#3a2a2a'};
 let TER={},MAPS={},HSET={},REG=[],cur=null,tool='height',brush=1,tbrush=null,undo=[],drag=false;
 const $=id=>document.getElementById(id);
@@ -89,9 +89,12 @@ async function load(){
   const all=txt.join('\n'),mf=txt[2];
   for(const m of all.matchAll(/'(.)':\{n:'([^']*)',k:'([^']*)',c:(\d+)/g))if(!TER[m[1]])TER[m[1]]={n:m[2],k:m[3],c:+m[4]};
   for(const m of mf.matchAll(/(\w+):\{n:(['"])(.*?)\2,map:(\[[^\]]*\]),start:(\[\[.*?\]\])\}/g))MAPS[m[1]]={n:m[3],map:JSON.parse(m[4]),start:JSON.parse(m[5])};
+  /* settlements (Defend fights) live in TOWNS as town_<region> */
+  const tb=(mf.match(/const TOWNS=\{([\s\S]*?)\n\};/)||[])[1]||'';
+  for(const m of tb.matchAll(/\n  (\w+):(\[[^\]]*\])/g))MAPS['town_'+m[1]]={n:'Settlement',map:JSON.parse(m[2]),start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]],town:m[1]};
   for(const m of mf.matchAll(/MAPS\.(\w+)\.h=(\[[^\]]*\]);/g))HSET[m[1]]=JSON.parse(m[2]);
   for(const m of all.matchAll(/\n  (\w+):\{n:'([^']+)'(?:(?!\n  \w+:\{n:)[\s\S])*?maps:(\[[^\]]*\]),bossMap:'(\w+)'/g)){
-    const ids=[...JSON.parse(m[3].replace(/'/g,'"')),m[4]].filter((v,i,a)=>MAPS[v]&&a.indexOf(v)===i);if(ids.length)REG.push({id:m[1],n:m[2],ids,boss:m[4]})}
+    const ids=[...JSON.parse(m[3].replace(/'/g,'"')),m[4],'town_'+m[1]].filter((v,i,a)=>MAPS[v]&&a.indexOf(v)===i);if(ids.length)REG.push({id:m[1],n:m[2],ids,boss:m[4]})}
   REG=REG.filter(r=>!['ship','mushroom','labyrinth'].includes(r.id));
   $('src').textContent=`${Object.keys(MAPS).length} maps read from the game files.`;
   $('region').innerHTML=REG.map((r,i)=>`<option value="${i}">${r.n}</option>`).join('');
@@ -135,7 +138,8 @@ function draw(){
     `Deploy tiles: ${cur.start.length}, at height ${Math.min(...sh)}–${Math.max(...sh)}.`,
     'Rules in game: a unit steps up or down 2 levels (1 in Plate). Attacking from above: +10 Hit and +1 damage a level (max 3); bows reach 1 tile further per 2 levels.'
   ].filter(Boolean).join('<br>');
-  $('out').value=`MAPS.${cur.id}.h=[${cur.h.map(r=>JSON.stringify(r)).join(', ')}];\n  ${cur.id}:{n:${JSON.stringify(cur.n)},map:${JSON.stringify(cur.map)},start:${JSON.stringify(cur.start)}},`;
+  const town=MAPS[cur.id].town;/* a settlement's second line replaces its row in TOWNS (its deploy tiles are fixed) */
+  $('out').value=`MAPS.${cur.id}.h=[${cur.h.map(r=>JSON.stringify(r)).join(', ')}];\n  `+(town?`${town}:${JSON.stringify(cur.map)},`:`${cur.id}:{n:${JSON.stringify(cur.n)},map:${JSON.stringify(cur.map)},start:${JSON.stringify(cur.start)}},`);
 }
 /* the same diamond view as the game: tiles 2:1, each level lifts a tile */
 function drawIso(){
@@ -159,7 +163,7 @@ function cell(e){const r=$('grid').getBoundingClientRect(),x=Math.floor((e.clien
 function apply(e,first){const p=cell(e);if(!p)return;const[x,y]=p;
   if(tool==='height'){let v=e.button===2?hh(x,y)-1:e.shiftKey?hh(x,y)+1:brush;if(!first&&(e.button===2||e.shiftKey))return;v=Math.max(0,Math.min(6,v));if(v===hh(x,y))return;setStr(cur.h,x,y,String(v))}
   else if(tool==='terrain'){if(ch(x,y)===tbrush)return;setStr(cur.map,x,y,tbrush)}
-  else if(tool==='deploy'){if(!first)return;const i=cur.start.findIndex(s=>s[0]===x&&s[1]===y);if(i>=0)cur.start.splice(i,1);else if(cur.start.length<6&&!solid(x,y))cur.start.push([x,y]);else return}
+  else if(tool==='deploy'){if(!first||MAPS[cur.id].town)return;const i=cur.start.findIndex(s=>s[0]===x&&s[1]===y);if(i>=0)cur.start.splice(i,1);else if(cur.start.length<6&&!solid(x,y))cur.start.push([x,y]);else return}
   save();draw()}
 $('grid').addEventListener('contextmenu',e=>e.preventDefault());
 $('grid').addEventListener('mousedown',e=>{snap();drag=true;apply(e,true)});

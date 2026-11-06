@@ -155,7 +155,7 @@ Object.assign(MAPS,{
   heartCore:{n:'Heart Chamber',map:["KSSSSSSSSK","SSYSTSSUSS","SSSSSSSSSS","SGSSSSSSPS","SSSSSSSSSS","KSUSSSSYSK","SSSSGSSSSS","SSPSSSSUSS","SSSSSSSSSS","SSSSSSSSSS","SSSSSSSSSS"],start:[[4,10],[5,10],[3,10],[6,10],[4,9],[5,9]]}
 });
 Object.assign(MAPS,{
-  dunes:{n:"Shifting Dunes",map:["nnnnzznnnn","knnnzznnnk","nnnnnnnnnn","nzznnknnnn","nzznnnnnzz","nnnnnnnnzz","nnnFnnnnnn","nnnnnnknnn","nnnnnnnnnn","nnnnnnnnnn"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
+  dunes:{n:"Shifting Dunes",map:["knffzznnnw","knnnzznwwk","wwzznnnnnn","nwwwnnnnnn","nzzwwnffzz","nnnnnnnfzz","nn..nnnnzn","nnnnnnknzn","knnnnnnnnn","knnnnnnnnn"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   oasis:{n:"Oasis",map:["nnnnwwnnnn","nnnwwwwnnn","knnnwwnnnk","nnnnnnnnnn","zznnknnzzn","zznnnnnzzn","nnnnnnnnnn","nknnnnnnkn","nnnnnnnnnn","nnnnnnnnnn"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   canyon:{n:"Sandstone Canyon",map:["nnnnzznnnn","nnknnnnknn","nnknnnnknn","nnnnnnnnnn","zznnkknnzz","nnnnkknnnn","nknnnnnnkn","nnnnnnnnnn","nnnnnnnnnn","nnnnnnnnnn"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   sunTemple:{n:"Temple of the Sun",map:["knnnnTnnnk","nnnnnnnnnn","nknnnnnnkn","nnnnzznnnn","nnnnzznnnn","knnnnnnnnk","nnnknnknnn","nnnnnnnnnn","nnnnnnnnnn","nnnnnnnnnn"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
@@ -175,7 +175,7 @@ MAPS.brook.h=["4433333344", "3333333333", "3333333333", "0100000010", "111111111
 MAPS.clearing.h=["1111111111", "1111222111", "1112222211", "0112332110", "0112332100", "0011221000", "0001110000", "0000000000", "0000000000", "0000000000"];
 MAPS.heart.h=["2213333122", "2213333122", "1112222111", "0001111000", "0000000000", "0000000000", "0000000000", "0000000000", "0000000000", "0000000000"];
 /* Sandstone Desert */
-MAPS.dunes.h=["1110001111", "1111001111", "1100000011", "1000000000", "0000000000", "0000000000", "0001100110", "1112222111", "2223333222", "2223333222"];
+MAPS.dunes.h=["1110001111", "1111001111", "1122000111", "1111000114", "2000000023", "1100000023", "0001100111", "1112222111", "2223333222", "2223333222"];
 MAPS.oasis.h=["2210000122", "2100000012", "2100000012", "1100000011", "0000000001", "0000000001", "1000000001", "1100000011", "0000000000", "0000000000"];
 MAPS.canyon.h=["3321001233", "3331001333", "3331001333", "3321001233", "0010000100", "1000000001", "1100000011", "0000000000", "0000000000", "0000000000"];
 MAPS.sunTemple.h=["1234444321", "1233443321", "1223333221", "0112002110", "0011001100", "0000000000", "0000000000", "0000000000", "0000000000", "0000000000"];
@@ -215,6 +215,15 @@ const TOWNS={
   cavern:["cccccccccc","cecccccccu","cccxccxccc","pccccccccp","ccAceccAcc","cccccccccc","xcccFccccx","ccuccccecc","cccccccccc","cccccccccc"]
 };
 for(const k in TOWNS)if(BIOMES[k])MAPS['town_'+k]={n:BIOMES[k].townN,map:TOWNS[k],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]};
+/* settlement height maps (made from the old generated ones, so they look the same; edit them with tools/map-editor.html) */
+MAPS.town_swamp.h=["0000110000", "0100110010", "0011111100", "0011111100", "0011011100", "0011111100", "0111011110", "0011111100", "0000000000", "0000000000"];
+MAPS.town_desert.h=["1233222122", "1332111133", "2221001123", "2222111123", "2221001222", "2221001222", "2210011222", "1100011111", "0000000000", "0000000000"];
+MAPS.town_forest.h=["2222222222", "2222222222", "2222222112", "2222222112", "2222221111", "2211111111", "2111111111", "1111111101", "0000000000", "0000000000"];
+MAPS.town_mushroom.h=["3333333222", "2222322222", "2222222222", "1112222121", "1111111111", "1111111111", "1111221122", "1111111111", "0000000000", "0000000000"];
+MAPS.town_shadow.h=["2222223222", "2222222222", "2222222212", "1122222111", "1122221111", "1122221111", "1111111101", "1111111000", "0000000000", "0000000000"];
+MAPS.town_mountain.h=["3443234443", "2333333432", "1233323321", "0122222210", "1211112221", "2221112222", "2221112222", "1111111111", "0000000000", "0000000000"];
+MAPS.town_snow.h=["4444444433", "3334334333", "3334224333", "2232112333", "2221001232", "1122112232", "1111112222", "0011111111", "0000000000", "0000000000"];
+MAPS.town_cavern.h=["2222222222", "2222222222", "1112222112", "1112222111", "1111222111", "1111111111", "1111111111", "1111110000", "0000000000", "0000000000"];
 /* ADJ: adjectives for generated names */
 const ADJ=['Howling','Silent','Broken','Ashen','Bitter','Hollow','Moonlit','Drowned'];
 function spawnTiles(m){
