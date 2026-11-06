@@ -707,7 +707,7 @@ button.it.sel{border-color:var(--gold)}
 .nmap .nm-scroll .nd.n-recruit{border-color:#4aaa6a}
 .nmap .nm-scroll .nd.pick{border-color:var(--gold)}
 /* campfire is a 52px hand-drawn sprite (by Rhi), shown at 1x */
-.nmap .nm-scroll .nd.n-rest{width:72px;height:72px;margin:-36px 0 0 -36px}.nmap .nm-scroll .nd.n-rest img{width:48px;height:48px;image-rendering:pixelated}
+.nmap .nm-scroll .nd.n-rest{width:60px;height:60px;margin:-30px 0 0 -30px}.nmap .nm-scroll .nd.n-rest img{width:48px;height:48px;image-rendering:pixelated}
 .nmap .nm-scroll .nd.n-event img{width:32px;height:32px}
 .tv-scene .ms-fire{left:50%;bottom:10%;width:11%;transform:translateX(-50%);z-index:6;filter:drop-shadow(0 0 10px rgba(255,140,40,.55))}
 /* map squad: unit sprites at their native 64px (1x, crisp) */
