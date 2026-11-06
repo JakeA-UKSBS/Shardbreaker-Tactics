@@ -18,10 +18,10 @@ Each run picks 2 of these 6 as its acts (`BIOMES`, `ACTS`). Each has 2-3 battle 
 | --- | --- | --- | --- |
 | Sobek’s Mire | Bog Lurkers, Lamias, Mud Monsters | Starting a turn in ankle-deep water or mangrove roots costs 1 Move; sand is solid | Krondis the alligator |
 | Cursed Woodland | Wolves, Cursed Stags, Blighted Treants | Cursed thickets: +25 Avoid, 2 Move to enter | The Hollow Bear |
-| Volcanic Isle | Boulder Golems, Fire Sprites | Magma blocks foot units; fliers and fire creatures cross it | Pyraxis, the Magma Dragon |
+| Volcanic Isle | Magma* Golems, Fire Sprites | Magma blocks foot units; fliers and fire creatures cross it | Pyraxis, the Magma Dragon |
 | Sandstone Desert | Jackals, Sand Worms, Sandstone Golems | Quicksand costs 1 Move next turn; sandstone outcrops (cream feldspar with smoky quartz) give cover | The Pyrite Colossus |
-| Frostveil Reaches | Frost Wolves, Frost Sprites, Agate Golems | Deep snow costs 1 Move next turn (snow creatures ignore it); frozen lakes −10 Avoid; blue agate gives cover | Glacius, the Agate Wyrm OR * Yeti? |
-| Gemstone Caverns | Gremlins, Gemsnails, Gem Golems | Chests everywhere: gold, or worthless pyrite; emerald, ruby and sapphire clusters give cover; walls are iridescent rock | Amethyra, the Amethyst Turtle |
+| Frostveil Reaches | Frost Wolves, Frost Sprites, Agate Golems, Ice Trolls? | Deep snow costs 1 Move next turn (snow creatures ignore it); frozen lakes −10 Avoid; blue agate gives cover | Yeti |
+| Gemstone Caverns | Gemsnails, Gem Golems | Emerald, ruby and sapphire clusters give cover; walls are iridescent rock | Amethyra, the Amethyst Turtle |
 
 Only creatures are enemies; there are no human foes.
 
