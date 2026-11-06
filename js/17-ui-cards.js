@@ -30,10 +30,9 @@ async function recruitNode(where='recruit'){
 const SLAYER_WPN={armoured:'warHammer',beast:'huntingSpear',colossal:'giantslayer',spectral:'holySword'},SLAYER_SKILL={beast:'wolfsbane',armoured:'stonebane',spectral:'spiritbane'};
 function regionTags(withBoss){const B=actBiome(),t=[];for(const[c,w]of[...B.pool,...B.elitePool])for(const g of tagsOf({cls:c}))for(let i=0;i<w;i++)t.push(g);if(withBoss)t.push('colossal','colossal');return t}
 /* returns the item keys found after a win; winScreen offers each one with the Found picker.
-   Includes chests nobody opened and anything that was left behind because a unit's bag was full (state.loot) */
+   Includes anything that was left behind because a unit's bag was full (state.loot) */
 function battleRewards(){
   const out=(state.loot||[]).slice();if(state.gold)out.gold=state.gold;const add=k=>{if(!isWpn(k)||run.roster.some(u=>canUse(u,k))&&!squadHas(k)&&!out.includes(k))out.push(k)};
-  for(const[k,it]of Object.entries(CH[state.ch].gifts||{})){const[x,y]=k.split(',').map(Number);if(MAP[y]&&MAP[y][x]==='C'&&!state.visited.includes(k)){if(/^gold:/.test(it))out.gold=(out.gold||0)+ +it.slice(5);else if(it!=='pyrite')add(it)}}
   const elite=run.kind==='elite',rt=regionTags(elite);
   /* slayer weapon: 15% after a battle, 35% after an elite */
   if(rand()<(elite?.35:.15)){const ws=rt.filter(t=>SLAYER_WPN[t]);if(ws.length)add(SLAYER_WPN[pick(ws)])}

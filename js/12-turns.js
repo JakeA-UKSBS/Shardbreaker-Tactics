@@ -94,7 +94,7 @@ function typeChart(){
    <h2>Arts</h2>${ele}
    <p><b>Dark</b> sigils heal their user for a third of the damage they deal.</p>
    <p><b>Neutral:</b> ${['shortBow','crossbow','dawnSigil'].map(ic).join('')} bows, crossbows and Light sigils. Arts against weapons are always neutral.</p>
-   <p><b>Bows beat fliers:</b> double weapon might against Harpies, wyverns and anything else with wings.</p>
+   <p><b>Bows beat fliers:</b> double weapon might against anything with wings.</p>
    <div class="mbtns"><button class="go" type="button" data-m="ok">Close</button></div>`);
 }
 

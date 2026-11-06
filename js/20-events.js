@@ -1,10 +1,10 @@
 /* Event scenes, events, woes and event helpers */
 /* ---- events: a scene of what's happening, a short text, and choices. Each choice's go() returns the outcome text, or null to step back. ---- */
 /* REG_SKY: event-scene sky per region, 3 bands top to bottom (hex). REG_GROUND: the ground colour under it. */
-const REG_SKY={heart:['#0e0408','#2e0c16','#4e1424'],mushroom:['#2a2040','#5a3a6a','#8a5a8a'],shadow:['#14121e','#24223a','#3a3450'],swamp:['#1a2a24','#2e4a3a','#4a6a4a'],forest:['#1a221c','#2e3a2e','#4a5240'],
-  mountain:['#2a1414','#5a2a1e','#a8482a'],ship:['#26304a','#56668c','#8e9ab8'],labyrinth:['#141218','#24202c','#34303e'],
+const REG_SKY={heart:['#0e0408','#2e0c16','#4e1424'],swamp:['#1a2a24','#2e4a3a','#4a6a4a'],forest:['#1a221c','#2e3a2e','#4a5240'],
+  mountain:['#2a1414','#5a2a1e','#a8482a'],labyrinth:['#141218','#24202c','#34303e'],
   desert:['#c8783a','#e8a85a','#f3d08a'],snow:['#4a6a9a','#8aaad0','#c8daf0'],cavern:['#120e1a','#221a2e','#342a44']};
-const REG_GROUND={heart:'#1e1416',mushroom:'#4e4058',shadow:'#34303c',swamp:'#3f5a4a',forest:'#3e4436',mountain:'#3a3034',ship:'#7a5230',labyrinth:'#4a4652',desert:'#c9a060',snow:'#e4ecf4',cavern:'#3a3444'};
+const REG_GROUND={heart:'#1e1416',swamp:'#3f5a4a',forest:'#3e4436',mountain:'#3a3034',labyrinth:'#4a4652',desert:'#c9a060',snow:'#e4ecf4',cavern:'#3a3444'};
 /* PROP_FIG: a scene prop's PNG laid over the scene (art/scenes/<png>.png). PROP_OWN: props whose PNG replaces the code-drawn one outright */
 const PROP_FIG={well:'well',smith:'anvil',shrine:'altar',library:'desk',study:'potions'},PROP_OWN=['well','smith','shrine'];
 const propFig=prop=>PROP_FIG[prop]&&ART_PNG.has('scenes/'+PROP_FIG[prop])?PROP_FIG[prop]:null;

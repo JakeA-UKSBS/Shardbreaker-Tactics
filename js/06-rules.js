@@ -5,7 +5,7 @@ const isWpn=k=>WTYPES.includes(IT[k].t);
 /* endless: never loses uses. Every weapon with more than 5 uses, and all healing staves; only Heaven's Bolt and Meteor Sigil (5) run out */
 const endless=k=>(isWpn(k)&&IT[k].uses>5)||IT[k].t==='spirit';
 /* Fliers cross sky and rough ground at cost 1, but not walls, masts or crags. */
-function mcost(u,x,y){const t=ter(x,y);if(CLS[u.cls].phase)return 1;if(t.k==='lava'&&CLS[u.cls].lava)return 1;if(CLS[u.cls].fly)return['wall','mast','cliff','cavewall'].includes(t.k)?99:1;if(CLS[u.cls].mnt&&(t.k==='forest'||t.k==='hill'))return t.c+1;return t.c}
+function mcost(u,x,y){const t=ter(x,y);if(CLS[u.cls].phase)return 1;if(t.k==='lava'&&CLS[u.cls].lava)return 1;if(CLS[u.cls].fly)return['wall','cliff','cavewall'].includes(t.k)?99:1;if(CLS[u.cls].mnt&&(t.k==='forest'||t.k==='hill'))return t.c+1;return t.c}
 /* Teams: p = player, e = enemy, g = green 'other' units that fight the enemy and can be recruited. */
 const hostile=(a,b)=>(a.team==='e')!==(b.team==='e');
 /* Skills: u.skill is the personal skill (takes PERSONAL_CAP). u.skills holds extras: {id,src:"lv10"} (free) or {id,src:"scroll"} (costs capacity). */
@@ -22,7 +22,7 @@ const ONLY_KIND={zwei:['greatsword']};
 /* lightning is Corvin's element: only Corvin can wield lightning sigils */
 const canUse=(u,k)=>CLS[u.cls].w.includes(IT[k].t)&&(IT[k].el!=='lightning'||u.cast==='corvin')&&(!u.cast||!ONLY_KIND[u.cast]||!WTYPES.includes(IT[k].t)||ONLY_KIND[u.cast].includes(IT[k].kind));
 /* ---- height (Ogre/FFTA style) ----
-   Each tile has a height level (hOf). A unit can only step up or down JUMP levels at a time (fliers and ghosts ignore it).
+   Each tile has a height level (hOf). A unit can only step up or down JUMP levels at a time (fliers ignore it).
    Attacking from above: +10 Hit and +1 damage per level (max 3); from below: -10 Hit per level.
    Bows reach 1 tile further for every 2 levels of height over the target (max +2). */
 const JUMP=2,jumpOf=u=>(CLS[u.cls].jump??JUMP)-(has(u,'plate')?1:0);
@@ -44,7 +44,7 @@ const TYPES_ON=false;
 const TAGS={flier:{n:'Flier'},armoured:{n:'Armoured'},beast:{n:'Beast'},colossal:{n:'Colossal'},spectral:{n:'Spectral'},plant:{n:'Plant'}};
 const TAG_ORDER=['flier','armoured','beast','colossal','spectral','plant'];
 const BODY_TAGS={golem:['armoured'],snail:['armoured'],turtle:['armoured'],cubes:['armoured'],armor:['armoured'],beast:['beast'],gator:['beast'],bear:['beast'],worm:['beast'],
-  mount:['beast'],hawk:['beast'],roc:['beast'],dragon:['beast'],sentinel:['armoured'],ghost:['spectral'],flame:['spectral'],frost:['spectral'],storm:['spectral'],shroom:['plant']};
+  hawk:['beast'],dragon:['beast'],sentinel:['armoured'],flame:['spectral'],frost:['spectral'],storm:['spectral']};
 const TAG_FIX={BlightedTreant:['plant'],StoneWarden:['armoured'],PebbleGolem:['armoured']};
 function tagsOf(u){if(!u||!u.cls||u.cls.startsWith('G.'))return[];const C=CLS[u.cls]||{};let t=(TAG_FIX[u.cls]||BODY_TAGS[C.body]||[]).slice();if(C.fly)t.unshift('flier');if((u.sz||1)>1)t.push('colossal');return[...new Set(t)]}
 /* what a weapon is effective against: its own list, plus bows vs fliers, light sigils vs spectres, fire sigils vs plants */
@@ -104,9 +104,9 @@ function resolve(a,ai,d){
       else if(has(Y,XW0&&XW0.mag?'spellWard':'ironSkin')&&dmg>0&&rn()<Y.lck*2){e.guard=SKILLS[XW0&&XW0.mag?'spellWard':'ironSkin'].n;dmg=Math.floor(dmg/2)}
       /* damage can't go below 0 HP */
       dmg=Math.min(dmg,hp[o]);hp[o]-=dmg;e.dmg=dmg;
-      /* on-hit effects. Stone Gaze (Luck%): target is turned to stone (Lamia, Beholder). Poison Spores / Venom: target is poisoned */
+      /* on-hit effects. Stone Gaze (Luck%): target is turned to stone (Lamia, Beholder). Venom: target is poisoned */
       if(has(X,'stoneGaze')&&hp[o]>0&&rn()<X.lck){e.stone=true;e.proc=e.proc||SKILLS.stoneGaze.n}
-      if((has(X,'poisonSpores')||has(X,'venom'))&&hp[o]>0&&dmg>0){e.psn=true;e.proc=e.proc||SKILLS[has(X,'poisonSpores')?'poisonSpores':'venom'].n}
+      if(has(X,'venom')&&hp[o]>0&&dmg>0){e.psn=true;e.proc=e.proc||SKILLS.venom.n}
       /* Retaliate (Luck%): a melee hit is dealt straight back to the striker */
       if(has(Y,'retaliate')&&f.dist===1&&dmg>0&&hp[o]>0&&rn()<Y.lck){const back=Math.min(dmg,hp[s]);hp[s]-=back;e.guard=SKILLS.retaliate.n}
       /* drain weapons (dark magic): heal a third of the damage dealt */

@@ -88,22 +88,22 @@ async function load(){
   catch(e){$('src').innerHTML='<b>Couldn’t read the game files.</b> Open this page from the game’s site (…/tools/map-editor.html) or a local server, not as a file.';return}
   const all=txt.join('\n'),mf=txt[2];
   for(const m of all.matchAll(/'(.)':\{n:'([^']*)',k:'([^']*)',c:(\d+)/g))if(!TER[m[1]])TER[m[1]]={n:m[2],k:m[3],c:+m[4]};
-  for(const m of mf.matchAll(/(\w+):\{n:(['"])(.*?)\2,map:(\[[^\]]*\]),start:(\[\[.*?\]\])\}/g))MAPS[m[1]]={n:m[3],map:JSON.parse(m[4]),start:JSON.parse(m[5])};
+  for(const m of mf.matchAll(/(\w+):\{n:(['"])(.*?)\2,map:(\[[^\]]*\]),start:(\[\[.*?\]\])(?:,boss:(\[\d+,\d+\]))?\}/g))MAPS[m[1]]={n:m[3],map:JSON.parse(m[4]),start:JSON.parse(m[5]),boss:m[6]&&JSON.parse(m[6])};
   /* settlements (Defend fights) live in TOWNS as town_<region> */
   const tb=(mf.match(/const TOWNS=\{([\s\S]*?)\n\};/)||[])[1]||'';
   for(const m of tb.matchAll(/\n  (\w+):(\[[^\]]*\])/g))MAPS['town_'+m[1]]={n:'Settlement',map:JSON.parse(m[2]),start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]],town:m[1]};
   for(const m of mf.matchAll(/MAPS\.(\w+)\.h=(\[[^\]]*\]);/g))HSET[m[1]]=JSON.parse(m[2]);
   for(const m of all.matchAll(/\n  (\w+):\{n:'([^']+)'(?:(?!\n  \w+:\{n:)[\s\S])*?maps:(\[[^\]]*\]),bossMap:'(\w+)'/g)){
     const ids=[...JSON.parse(m[3].replace(/'/g,'"')),m[4],'town_'+m[1]].filter((v,i,a)=>MAPS[v]&&a.indexOf(v)===i);if(ids.length)REG.push({id:m[1],n:m[2],ids,boss:m[4]})}
-  REG=REG.filter(r=>!['ship','mushroom','labyrinth'].includes(r.id));
+  REG=REG.filter(r=>!['labyrinth'].includes(r.id));
   $('src').textContent=`${Object.keys(MAPS).length} maps read from the game files.`;
   $('region').innerHTML=REG.map((r,i)=>`<option value="${i}">${r.n}</option>`).join('');
   $('region').onchange=fillMaps;fillMaps();
 }
 function fillMaps(){const r=REG[$('region').value];$('map').innerHTML=r.ids.map(id=>`<option value="${id}">${MAPS[id].n}${id===r.boss?' (boss)':''}</option>`).join('');$('map').onchange=pickMap;pickMap()}
-function gameVersion(id){const m=MAPS[id];return{id,n:m.n,map:m.map.slice(),start:m.start.map(s=>s.slice()),h:(HSET[id]||m.map.map(r=>'0'.repeat(r.length))).slice()}}
+function gameVersion(id){const m=MAPS[id];return{id,n:m.n,map:m.map.slice(),start:m.start.map(s=>s.slice()),boss:m.boss,h:(HSET[id]||m.map.map(r=>'0'.repeat(r.length))).slice()}}
 function pickMap(){const id=$('map').value;let d=null;try{d=JSON.parse(localStorage.getItem('sbmap:'+id))}catch(e){}
-  cur=d||gameVersion(id);undo=[];buildPalette();draw()}
+  if(d&&!d.boss)d.boss=MAPS[id].boss;cur=d||gameVersion(id);undo=[];buildPalette();draw()}
 function save(){try{localStorage.setItem('sbmap:'+cur.id,JSON.stringify(cur))}catch(e){}}
 function snap(){undo.push(JSON.stringify(cur));if(undo.length>100)undo.shift()}
 
@@ -127,6 +127,7 @@ function draw(){
     if(v){c.font='bold 15px system-ui';c.fillStyle='#000a';c.fillText(v,x*S+S/2+1,y*S+S/2+1);c.fillStyle='#fff';c.fillText(v,x*S+S/2,y*S+S/2)}
     if(u2.has(x+','+y)){c.strokeStyle='#ff4a4a';c.lineWidth=3;c.strokeRect(x*S+3,y*S+3,S-6,S-6)}
     else if(u1.has(x+','+y)){c.strokeStyle='#ffa03a';c.lineWidth=2;c.setLineDash([4,3]);c.strokeRect(x*S+4,y*S+4,S-8,S-8);c.setLineDash([])}}
+  if(cur.boss){const[x,y]=cur.boss;c.strokeStyle='#ff5a5a';c.lineWidth=3;c.strokeRect(x*S+5,y*S+5,S-10,S-10);c.font='bold 10px system-ui';c.fillStyle='#ffb0b0';c.fillText('B',x*S+11,y*S+12)}
   cur.start.forEach(([x,y],i)=>{c.strokeStyle='#5aaaff';c.lineWidth=3;c.strokeRect(x*S+5,y*S+5,S-10,S-10);c.font='bold 10px system-ui';c.fillStyle='#9fd0ff';c.fillText(i+1,x*S+11,y*S+12)});
   drawIso();
   const steps=[];for(let y=0;y<h;y++)for(let x=0;x<w;x++)if(!solid(x,y))for(const[dx,dy]of[[1,0],[0,1]]){const nx=x+dx,ny=y+dy;if(nx<w&&ny<h&&!solid(nx,ny)&&Math.abs(hh(x,y)-hh(nx,ny))>2)steps.push(1)}
@@ -139,7 +140,7 @@ function draw(){
     'Rules in game: a unit steps up or down 2 levels (1 in Plate). Attacking from above: +10 Hit and +1 damage a level (max 3); bows reach 1 tile further per 2 levels.'
   ].filter(Boolean).join('<br>');
   const town=MAPS[cur.id].town;/* a settlement's second line replaces its row in TOWNS (its deploy tiles are fixed) */
-  $('out').value=`MAPS.${cur.id}.h=[${cur.h.map(r=>JSON.stringify(r)).join(', ')}];\n  `+(town?`${town}:${JSON.stringify(cur.map)},`:`${cur.id}:{n:${JSON.stringify(cur.n)},map:${JSON.stringify(cur.map)},start:${JSON.stringify(cur.start)}},`);
+  $('out').value=`MAPS.${cur.id}.h=[${cur.h.map(r=>JSON.stringify(r)).join(', ')}];\n  `+(town?`${town}:${JSON.stringify(cur.map)},`:`${cur.id}:{n:${JSON.stringify(cur.n)},map:${JSON.stringify(cur.map)},start:${JSON.stringify(cur.start)}${cur.boss?`,boss:${JSON.stringify(cur.boss)}`:''}},`);
 }
 /* the same diamond view as the game: tiles 2:1, each level lifts a tile */
 function drawIso(){
@@ -154,7 +155,7 @@ function drawIso(){
     c.strokeStyle=starts.has(x+','+y)?'#5aaaff':'#0004';c.lineWidth=starts.has(x+','+y)?2:1;c.stroke();
     if(solid(x,y)){c.fillStyle=shade(base,.8);c.beginPath();c.moveTo(px-TW/4,py+TH/2+2);c.lineTo(px,py-TH*.6);c.lineTo(px+TW/4,py+TH/2+2);c.fill()}}
 }
-function buildPalette(){const used=[...new Set(cur.map.join(''))],common=['.','f','^','w','=','T','C'];
+function buildPalette(){const used=[...new Set(cur.map.join(''))],common=['^','w','='];
   const keys=[...used,...Object.keys(TER).filter(k=>!used.includes(k)&&common.includes(k))];if(!tbrush||!keys.includes(tbrush))tbrush=keys[0];
   $('tpal').innerHTML=keys.map(k=>`<button class="sw${k===tbrush?' on':''}" data-t="${k}"><i style="background:${colOf(k)}"></i>${TER[k].n} <span class="msg">${TER[k].c>=99?'(solid)':''}</span></button>`).join('');
   $('tpal').querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{tbrush=b.dataset.t;buildPalette()})}

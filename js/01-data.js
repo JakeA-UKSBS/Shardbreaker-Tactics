@@ -22,12 +22,11 @@ const T=48;
    heal = restores HP at the start of your turn, slow = −1 Move next turn for a unit that starts there. */
 const TER={
   '.':{n:'Ashgrass',k:'plain',c:1,av:0,df:0},'f':{n:'Dead Wood',k:'forest',c:2,av:20,df:1},'m':{n:'Rubble',k:'hill',c:3,av:30,df:2},
-  'w':{n:'Black Water',k:'water',c:99,av:0,df:0},'=':{n:'Bridge',k:'bridge',c:1,av:0,df:0},'F':{n:'Ruined Shrine',k:'fort',c:1,av:20,df:2,heal:true},'C':{n:'Cache',k:'chest',c:1,av:0,df:0},
-  '_':{n:'Flagstones',k:'floor',c:1,av:0,df:0},'#':{n:'Wall',k:'wall',c:99,av:0,df:0},'T':{n:'Altar',k:'throne',c:1,av:30,df:3,heal:true},
+  'w':{n:'Black Water',k:'water',c:99,av:0,df:0},'=':{n:'Bridge',k:'bridge',c:1,av:0,df:0},'F':{n:'Ruined Shrine',k:'fort',c:1,av:20,df:2,heal:true},
+  '_':{n:'Flagstones',k:'floor',c:1,av:0,df:0},'#':{n:'Wall',k:'wall',c:99,av:0,df:0},
   'V':{n:'Ruined House',k:'village',c:1,av:10,df:0},
-  '~':{n:'Open Sky',k:'sky',c:99,av:0,df:0},'d':{n:'Deck',k:'deck',c:1,av:0,df:0},'M':{n:'Mast',k:'mast',c:99,av:0,df:0},'h':{n:'Hull',k:'hull',c:99,av:0,df:0},
-  'H':{n:'Helm',k:'helm',c:1,av:10,df:1},'X':{n:'Exit',k:'exit',c:1,av:0,df:0},'A':{n:'Tent',k:'tent',c:1,av:10,df:1,heal:true},'r':{n:'Carpet',k:'carpet',c:1,av:0,df:0},
-  'L':{n:'Light Font',k:'light',c:1,av:10,df:1,heal:true},'R':{n:'Crag',k:'cliff',c:99,av:0,df:0}
+  'X':{n:'Exit',k:'exit',c:1,av:0,df:0},'A':{n:'Tent',k:'tent',c:1,av:10,df:1,heal:true},
+  'R':{n:'Crag',k:'cliff',c:99,av:0,df:0}
 };
 /* Weapon types: blade > heavy > pole > blade. bow and reach are neutral.
    Arts (t:'art'): fire > nature > water > fire, and light > dark. Dark is neutral to the rest but drains life (heals 25% of damage dealt). */
@@ -140,8 +139,7 @@ const ELN={light:'Light',dark:'Dark',fire:'Fire',nature:'Nature',water:'Water',w
 const CLS={
   /* a plain townsfolk body for NPC figures (the innkeeper, recruit icons) */
   Villager:{n:'Villager',w:['blade'],body:'tunic',mov:5},
-  Gremlin:{n:'Gremlin',w:['blade'],body:'gremlin',mov:6,crit:10},
-  Mindsnail:{n:'Mindsnail',w:['art'],body:'snail',mov:3}
+  Gremlin:{n:'Gremlin',w:['blade'],body:'gremlin',mov:6,crit:10}
 };
 /* SKILLS: n = name, cost = skill capacity it takes up (units have BASE_CAP to spend), d = description shown in game. */
 const SKILLS={
@@ -191,7 +189,6 @@ function lordName(){return'Your squad'}
 const FOE={};
 /* Nightmare creatures (not Fallen, so not pale). Fliers are weak to bows. */
 FOE.Gremlin={b:[14,4,0,5,8,2,1,1],g:[.5,.3,0,.4,.5,.2,.1,.1],items:['claws'],pic:'twin',look:{skin:'#5f6e52',crysSmall:true}};
-FOE.Mindsnail={b:[24,0,7,5,2,2,8,7],g:[.6,0,.4,.3,.1,.1,.3,.3],items:['mirrorSigil'],pic:'illusion',look:{skin:'#a8b59a',shell:'#b98fbf',eye:'#c77dff'}};
 /* HAIRS: dark hair colours (hex) */
 const HAIRS=['#1d1a24','#2a2230','#3a2a20','#241c1c','#4a3a30'];
 

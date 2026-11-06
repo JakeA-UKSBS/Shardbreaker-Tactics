@@ -1,6 +1,6 @@
 /* Movement reach, heal/gift/talk targets, and the pan/zoom camera */
 /* ================= MAP LOGIC ================= */
-/* ankle-deep water: a unit that starts its turn in it has 1 less Move (fliers, ghosts and swamp creatures ignore it) */
+/* ankle-deep water: a unit that starts its turn in it has 1 less Move (fliers and swamp creatures ignore it) */
 function slowOf(u){const C=CLS[u.cls];return ter(u.x,u.y).slow&&!C.fly&&!C.wade&&!C.phase?1:0}
 function reach(u){
   if(hasSt(u,'root'))return new Set([key(u.x,u.y)]);
@@ -23,14 +23,14 @@ function hitsFrom(u,x,y,nx,ny,d){return u.items.some(it=>{const w=IT[it.k];if(!(
 const atkTargets=u=>state.units.filter(o=>o.hp>0&&hostile(o,u)&&wpnsAt(u,man(u,o),o).length);
 function spiritFor(u,o){const d=man(u,o);return u.items.findIndex(it=>IT[it.k].t==='spirit'&&canUse(u,it.k)&&it.u>0&&d>=IT[it.k].r[0]&&d<=IT[it.k].r[1])}
 function healTargets(u){if(staffIdx(u)<0)return[];return state.units.filter(o=>o.hp>0&&o.team===u.team&&o!==u&&o.hp<o.maxhp&&spiritFor(u,o)>=0)}
-function giftHere(u){const k=key(u.x,u.y),c=MAP[u.y][u.x];if(u.team!=='p'||(c!=='V'&&c!=='C')||state.visited.includes(k)||!CH[state.ch].gifts[k])return null;return{k,kind:c==='V'?'Visit':'Open',item:CH[state.ch].gifts[k]}}
+function giftHere(u){const k=key(u.x,u.y),c=MAP[u.y][u.x];if(u.team!=='p'||c!=='V'||state.visited.includes(k)||!CH[state.ch].gifts[k])return null;return{k,kind:'Visit',item:CH[state.ch].gifts[k]}}
 function talkTarget(u){if(!u.lord)return null;return state.units.find(o=>o.recruit&&o.team!=='p'&&o.hp>0&&man(o,u)===1)||null}
 
 /* ================= ISOMETRIC PROJECTION ================= */
 /* Tiles are drawn as diamonds TW wide and TH tall; each height level lifts a tile HS px. BW/BH/OX/OY are set in buildBoard(). */
 const TW=68,TH=34,HS=16;let BW=0,BH=0,OX=0,OY=0;
 /* walls and other solid blocks stand taller than the ground they're on (looks only: they can't be entered) */
-function vhOf(x,y){const t=ter(x,y),h=hOf(x,y);if(t.c<99||PROPS[t.k]||['water','mud','lava','sky'].includes(t.k))return h;return h+(['wall','cavewall','mast','hull'].includes(t.k)?2:1)}
+function vhOf(x,y){const t=ter(x,y),h=hOf(x,y);if(t.c<99||PROPS[t.k]||['water','mud','lava'].includes(t.k))return h;return h+(['wall','cavewall'].includes(t.k)?2:1)}
 /* top corner of a tile's top face at height h */
 const tileTop=(x,y,h)=>({x:OX+(x-y)*TW/2,y:OY+(x+y)*TH/2-h*HS});
 const hOfU=(x,y,sz)=>Math.max(...cellsOf(x,y,sz||1).map(([cx,cy])=>hOf(cx,cy)));
@@ -49,7 +49,7 @@ function pickAt(cx,cy){const b=vb(),px=(cx-b.l-cam.x)/cam.s,py=(cy-b.t-cam.y)/ca
   const us=state.units.filter(u=>u.hp>0).sort((a,b)=>unitZ(b)-unitZ(a));
   for(const u of us){const r=uBox(u);if(px>=r.l+r.w*.25&&px<=r.l+r.w*.75&&py>=r.t+r.h*.2&&py<=r.t+r.h-4)return[u.x,u.y]}
   let top=null,td=-1,side=null,sd=-1;
-  for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){if(ter(x,y).k==='sky')continue;const d=x+y;
+  for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const d=x+y;
     const vh=vhOf(x,y),p=tileTop(x,y,vh),dx=Math.abs(px-p.x);if(dx>TW/2)continue;const e=dx/(TW/2)*TH/2;
     if(py>=p.y+e&&py<=p.y+TH-e){if(d>td){top=[x,y];td=d}}
     else if(py>p.y+TH-e&&py<=p.y+TH-e+(vh+1)*HS&&d>sd){side=[x,y];sd=d}}

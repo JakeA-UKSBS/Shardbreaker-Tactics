@@ -1,21 +1,14 @@
 /* Region terrain tiles, region monsters and the BIOMES table */
 /* ================= REGIONS =================
    Each act takes place in one region (picked from the run's seed). A region sets its maps, monster pool, boss,
-   terrain rule and music. Map letters for region terrain: , mycelium · q giant toadstool · ; grave soil · t tombstone
-   · s ankle-deep water (−1 Move next turn) · n sand · v mangrove roots · y cursed thicket · b basalt · l magma. */
+   terrain rule and music. Map letters for region terrain: s ankle-deep water (−1 Move next turn) · n sand · v mangrove roots · y cursed thicket · b basalt · l magma. */
 /* fields: see the TERRAIN key in 01-data.js */
 Object.assign(TER,{
-  ',':{n:'Mycelium',k:'myc',c:1,av:0,df:0},'q':{n:'Giant Toadstool',k:'shroom',c:2,av:20,df:1},
-  ';':{n:'Grave Soil',k:'grave',c:1,av:0,df:0},'t':{n:'Tombstone',k:'tomb',c:2,av:15,df:2},
   's':{n:'Ankle-deep Water',k:'shallow',c:1,av:0,df:0,slow:true},'n':{n:'Sand',k:'sand',c:1,av:0,df:0},'v':{n:'Mangrove Roots',k:'mangrove',c:2,av:20,df:1,slow:true},
   'y':{n:'Cursed Thicket',k:'curse',c:2,av:25,df:1},'b':{n:'Basalt',k:'basalt',c:1,av:0,df:0},'l':{n:'Magma',k:'lava',c:99,av:0,df:0}
 });
 function bioTile_draw(k,part){
   const p=Px(16,16),o=Px(16,16),dots=(c,pts)=>pts.forEach(([x,y])=>p.set(x,y,c)),S=[[2,3],[9,2],[13,6],[4,12],[11,13],[7,8],[14,11]];
-  if(k==='myc'||k==='shroom'){p.rect(0,0,16,16,'#4e4058');p.line(0,5,7,9,'#665576');p.line(7,9,16,6,'#665576');p.line(4,16,9,9,'#665576');p.line(11,0,12,7,'#5c4d6a');dots('#c9b8ff',[[3,3],[12,12],[8,13],[14,2]])}
-  if(k==='shroom'){o.rect(6,9,4,6,'#efe6cf');o.rect(6,9,1,6,'#cfc4aa');o.ell(8,7,7,4.5,'#d8483a',(x,y)=>y<=8);o.rect(2,8,12,1,'#a8302a');o.ell(5,5,1.3,1,'#fff');o.ell(10,4,1.5,1.1,'#fff');o.ell(12,7,1,1,'#fff')}
-  if(k==='grave'||k==='tomb'){p.rect(0,0,16,16,'#34303c');S.forEach(([x,y])=>{p.set(x,y,'#2a2630');p.set(x+1,y-1,'#47434f')})}
-  if(k==='tomb'){o.ell(8,5,4,3,'#8a8794',(x,y)=>y<=5);o.rect(4,5,8,9,'#8a8794');o.rect(4,13,8,2,'#5a5762');o.rect(7,6,2,5,'#5a5762');o.rect(5,7,6,2,'#5a5762');o.rect(4,5,1,8,'#6f6c78')}
   if(k==='shallow'||k==='mangrove'){p.rect(0,0,16,16,'#3f5a4a');[[1,3],[8,6],[3,11],[11,12]].forEach(([x,y])=>p.line(x,y,x+3,y,'#5f7f6a'));p.set(13,3,'#7a9a6a');p.line(6,14,6,11,'#6a8a4a')}
   if(k==='mangrove'){o.line(2,15,5,8,'#5a3a24',2);o.line(13,15,10,8,'#5a3a24',2);o.line(7,15,7,8,'#4a2e1c',2);o.ell(8,5,7,4.5,'#2f5a32');o.ell(5,4,3,2,'#3f7a42');o.ell(11,5,3,2,'#3f7a42')}
   if(k==='sand'){p.rect(0,0,16,16,'#b8a070');dots('#a08858',S);dots('#d0bc8c',[[3,2],[10,1],[14,5],[5,11],[12,12]])}
@@ -26,11 +19,9 @@ function bioTile_draw(k,part){
   o.outline('#1a1414');if(part==='f')return o.url();if(part!=='g')for(let i=0;i<256;i++)if(o.g[i])p.g[i]=o.g[i];
   return p.url();
 }
-texStyle.textContent+=['myc','shroom','grave','tomb','shallow','mangrove','sand','curse','basalt','lava'].map(k=>`.t-${k}{background:url(${bioTile(k)}) 0 0/100% 100%}`).join('');
+texStyle.textContent+=['shallow','mangrove','sand','curse','basalt','lava'].map(k=>`.t-${k}{background:url(${bioTile(k)}) 0 0/100% 100%}`).join('');
 
 /* ---- monsters ---- */
-IT.sporePuff={n:'Spore Puff',t:'art',kind:'talisman',el:'nature',mt:3,hit:90,crit:0,r:[1,1],uses:99,mag:true,key:'sporePuff'};
-IT.sporeCloud={n:'Spore Cloud',t:'art',kind:'talisman',el:'nature',mt:5,hit:85,crit:0,r:[1,2],uses:99,mag:true,key:'sporeCloud'};
 IT.slam={n:'Slam',t:'heavy',kind:'claw',mt:7,hit:75,crit:0,r:[1,1],uses:99,key:'slam'};
 IT.bite={n:'Bite',t:'heavy',kind:'claw',mt:9,hit:75,crit:10,r:[1,1],uses:99,key:'bite'};
 IT.antlers={n:'Antlers',t:'pole',kind:'claw',mt:6,hit:85,crit:5,r:[1,1],uses:99,key:'antlers'};
@@ -41,17 +32,13 @@ IT.shatter={n:'Shatter',t:'art',kind:'talisman',el:'crystal',mt:6,hit:85,crit:0,
 IT.magmaBreath={n:'Magma Breath',t:'art',kind:'talisman',el:'fire',mt:9,hit:80,crit:0,r:[1,2],uses:99,mag:true,key:'magmaBreath'};
 SKILLS.venom={n:'Venom',cost:15,d:'On a hit, poisons the target: it loses 3 HP at the start of each of its turns for 3 turns (never below 1 HP).'};
 IT.scroll_venom={n:'Venom Scroll',t:'scroll',kind:'scroll',skill:'venom',uses:1,key:'scroll_venom'};
-SKILLS.poisonSpores={n:'Poison Spores',cost:15,d:'On a hit, poisons the target: it loses 3 HP at the start of each of its turns for 3 turns (never below 1 HP).'};
-IT.scroll_poisonSpores={n:'Poison Spores Scroll',t:'scroll',kind:'scroll',skill:'poisonSpores',uses:1,key:'scroll_poisonSpores'};
 /* fields: see the CLASSES key in 01-data.js */
 Object.assign(CLS,{
   Hawk:{n:'Hawk',w:['blade'],body:'hawk',mov:7,fly:true},
-  Sporeling:{n:'Sporeling',w:['art'],body:'shroom',mov:5},MushroomKing:{n:'Mushroom King',w:['art'],body:'shroom',mov:0},
-  Skeleton:{n:'Skeleton',w:['blade','bow'],body:'vest',mov:5},Ghost:{n:'Ghost',w:['art'],body:'ghost',mov:5,phase:true},
   MudMonster:{n:'Mud Monster',w:['heavy'],body:'mud',mov:4,wade:true},Krondis:{n:'Alligator',w:['heavy'],body:'gator',mov:4,wade:true},
   CursedStag:{n:'Cursed Stag',w:['pole'],body:'beast',mov:6},HollowStag:{n:'Hollow Stag',w:['pole'],body:'beast',mov:4},
   BoulderGolem:{n:'Boulder Golem',w:['heavy'],body:'golem',mov:4},FireSprite:{n:'Fire Sprite',w:['art'],body:'flame',mov:5,lava:true},MagmaDragon:{n:'Magma Dragon',w:['art','heavy'],body:'dragon',mov:0,lava:true},
-  Wyvern:{n:'Wyvern',w:['heavy'],body:'mount',mov:6,fly:true},StormElemental:{n:'Storm Elemental',w:['art'],body:'storm',mov:3,fly:true},
+  StormElemental:{n:'Storm Elemental',w:['art'],body:'storm',mov:3,fly:true},
   Beholder:{n:'Beholder',w:['art'],body:'eye',mov:4},
   CrystalHeart:{n:'Crystal Heart',w:['art'],body:'crystal',mov:0},
   /* the Heart's own creatures (Act 3) */
@@ -62,14 +49,10 @@ CLS.Lamia.wade=true;
 /* fields: see the ENEMY STATS key in 01-data.js (b/g order: HP, Str, Mag, Skl, Spd, Lck, Def, Res) */
 Object.assign(FOE,{
   Hawk:{b:[12,4,0,6,9,3,1,2],g:[.4,.3,0,.3,.4,.2,.1,.1],items:['talons'],look:{}},
-  Sporeling:{b:[14,0,4,4,6,4,2,3],g:[.5,0,.35,.3,.4,.3,.1,.2],items:['sporePuff'],look:{}},
-  Skeleton:{b:[16,5,0,4,4,0,3,0],g:[.6,.4,0,.35,.3,0,.2,.05],items:['wornSword'],look:{}},
-  Ghost:{b:[15,0,5,4,6,2,1,5],g:[.5,0,.4,.3,.4,.15,.05,.35],items:['umbralSigil'],look:{}},
   MudMonster:{b:[26,6,0,2,1,0,6,0],g:[.9,.4,0,.2,.1,0,.3,0],items:['slam'],look:{}},
   CursedStag:{b:[17,6,0,5,8,2,2,2],g:[.6,.4,0,.35,.45,.15,.1,.15],items:['antlers'],look:{}},
   BoulderGolem:{b:[24,7,0,2,1,0,10,0],g:[.8,.4,0,.2,.05,0,.4,0],items:['slam'],look:{}},
   FireSprite:{b:[14,0,5,5,7,2,1,4],g:[.5,0,.4,.35,.45,.15,.05,.3],items:['emberSigil'],look:{}},
-  Wyvern:{b:[20,7,0,4,4,0,6,0],g:[.7,.45,0,.3,.25,.05,.3,.05],items:['bite'],look:{}},
   Beholder:{b:[20,0,6,6,3,2,4,6],g:[.6,0,.4,.35,.2,.1,.2,.3],items:['umbralSigil'],look:{}},
   Shardling:{b:[16,6,0,5,8,0,3,1],g:[.55,.4,0,.35,.4,0,.2,.1],items:['claws'],look:{}},
   Prism:{b:[15,0,6,5,4,0,2,6],g:[.5,0,.4,.3,.25,0,.1,.35],items:['crystalShards'],look:{}},
@@ -78,40 +61,28 @@ Object.assign(FOE,{
   BlightedTreant:{b:[24,6,0,3,1,0,6,3],g:[.8,.4,0,.25,.1,0,.3,.15],items:['slam'],look:{}}
 });
 /* MONLOOK: a function per monster that rolls its sprite look each time one spawns. pick([...]) chooses one of the hex colours at random.
-   Common fields: body/fur/skin = main colour, eye = eye colour, cap/stem = mushroom cap and stalk, cloth = clothing, gem = crystal colour,
+   Common fields: body/fur/skin = main colour, eye = eye colour, cloth = clothing, gem = crystal colour,
    crys:false = no malignant crystals stuck on it, crysSmall = small crystals only, crysAt = where its crystals sit on the 32px sprite,
    mount/horse = mount type and its colour, leaves/antlers = extra part colours. */
 const MONLOOK={
-  Sporeling:()=>({cap:pick(['#d8483a','#e8a23a','#c85aa8','#4a9ad8']),stem:'#efe6cf',small:true}),
-  Skeleton:()=>({crysSmall:true,skel:true,style:'bald',skin:'#e8e2d0',cloth:pick(['#3a3540','#4a3a2a','#2a3a3a']),eye:'#ff5a3a',gear:rand()<.4?'helm':undefined}),
-  Ghost:()=>({crys:false,body:pick(['#d8e0f0','#c8e8e0','#e0d0f0']),eye:'#7fe3ff'}),
   MudMonster:()=>({body:pick(['#5a4a32','#4a4a2a','#5a3a2a'])}),
   CursedStag:()=>({fur:pick(['#4a3a4a','#5a4a3a','#3a3040']),eye:'#ff3a5a',antlers:'#d8d0bc',antler2:'#b07ae8',crys:false}),
   BoulderGolem:()=>({body:pick(['#7a746e','#6a625c','#8a8278']),eye:'#ff9a3c'}),
   FireSprite:()=>({crys:false,body:pick(['#ff8a3c','#ff6a2a','#ffaa3c'])}),
-  Wyvern:()=>({crysAt:[{dot:[13,21]},{dot:[16,21]},{dot:[19,21]},{dot:[23,17]}],mount:'wyvern',horse:pick(['#4f7a4a','#5a4a7a','#7a4a3a','#3a5a6a'])}),
   /* crystal creatures: mostly blood red, sometimes another gem. crys:false = no extra crystals stuck on (they are crystal) */
   Shardling:()=>({crys:false,gem:pick(['#c8283a','#c8283a','#c8283a','#2a9a5a','#3a5ac8','#8a3ac0'])}),Prism:()=>({crys:false,gem:pick(['#c8283a','#c8283a','#3a5ac8','#8a3ac0'])}),CrystalSentinel:()=>({crys:false,gem:pick(['#a8202e','#a8202e','#2a8a4a','#7a3ab0'])}),
   BogLurker:()=>({crysSmall:true,body:pick(['#4a5a32','#3a4a3a','#5a5a3a'])}),
   BlightedTreant:()=>({body:pick(['#5a4a32','#4a3a2a','#6a5a3a']),eye:'#9aff6a',leaves:pick(['#3f7a42','#5a6a2a','#6a3a5a'])}),
   Beholder:()=>({body:pick(['#8a4a6a','#4a6a8a','#6a4a3a']),eye:pick(['#5fc2a0','#ffd23f','#ff5a3a'])})
 };
-/* regions switched off for now: still defined (art, maps, docs) but runs never pick them. The Flying Ship, Mycelia, the Labyrinth and the Sunless Isle are off for now; delete them from this list to bring them back */
-const BIOMES_OFF=['ship','mushroom','labyrinth','shadow'],biomeIds=()=>Object.keys(BIOMES).filter(b=>!BIOMES_OFF.includes(b)&&b!=='heart');
+/* regions switched off for now: still defined (art, maps, docs) but runs never pick them. The Labyrinth is off for now; delete it from this list to bring it back */
+const BIOMES_OFF=['labyrinth'],biomeIds=()=>Object.keys(BIOMES).filter(b=>!BIOMES_OFF.includes(b)&&b!=='heart');
 /* REGIONS: n = name, noThe = don't say 'the', bg = map-screen background colour, d = description, tip = [id, title, help text],
    maps = battle map ids (in MAPS), bossMap = the boss's map, town = [ground, cover] letters for Defend fights, townN = settlement name,
    pool / elitePool = enemies as [class id, weight, first floor it can appear on (default 1)]: weight is the relative chance of being picked,
      and in Act 2 every floor limit is ignored. An elite fight is led by an Elder of the first elitePool entry.
    boss: name, cls (class id), mov, s = stats in stat order [HP, Str, Mag, Skl, Spd, Lck, Def, Res], items, skill, summon, look (sprite colours). */
 const BIOMES={
-  mushroom:{n:'Mycelia',noThe:1,bg:'#3a2a48',d:'Glowing mycelium and giant toadstools. The fungus folk have turned feverish under the blight, and their spores poison on a hit.',
-    tip:['spores','Poison spores','Fungus attacks poison on a hit: 3 damage at the start of each of your turns for 3 turns. A Salve cures it.'],
-    maps:['glade','hollow','ring'],bossMap:'mushThrone',pool:[['Sporeling',4],['Mindsnail',2,3]],elitePool:[['Mindsnail',3],['Sporeling',2]],
-    boss:{name:'King Morel the Blighted',cls:'MushroomKing',s:[36,0,9,6,3,4,7,8],items:['sporeCloud'],skill:'poisonSpores',look:{cap:'#6a3a6a',stem:'#bab2a0',crown:true,blight:true}}},
-  shadow:{n:'Sunless Isle',bg:'#24223a',d:'A haunted land of graves and crypts. Skeletons walk, and ghosts drift straight through walls.',
-    tip:['ghosts','Ghosts','Ghosts ignore terrain and can pass through walls. Their dark magic heals them for a third of the damage dealt.'],
-    maps:['graveyard','crypt','village'],bossMap:'chapel',pool:[['Skeleton',4],['Ghost',2,3]],elitePool:[['Ghost',3],['Skeleton',2]],
-    boss:{name:'The Bone Wyrm',cls:'BoneWyrm',s:[32,0,11,8,5,3,6,9],items:['umbralSigil'],skill:'focus',summon:'Skeleton',look:{bones:true,glow:'#c77dff'}}},
   swamp:{n:'Sobek’s Mire',noThe:1,bg:'#22362c',d:'Mangrove roots and ankle-deep water. Lurkers and lamias hunt the shallows; the sand banks are solid ground.',
     tip:['swamp','Ankle-deep water','A unit that starts its turn in the water or the mangrove roots has 1 less Move. Sand is solid ground. Fliers and swamp creatures ignore this.'],
     maps:['flats','road','bog'],bossMap:'lair',pool:[['BogLurker',3],['Lamia',3,2],['MudMonster',2,4]],elitePool:[['MudMonster',3],['Lamia',2],['BogLurker',2]],
@@ -124,10 +95,6 @@ const BIOMES={
     tip:['lava','Magma','Magma can’t be crossed on foot. Fliers and fire creatures move over it freely.'],
     maps:['fields','caldera','ridge'],bossMap:'crater',pool:[['FireSprite',3],['BoulderGolem',3,3]],elitePool:[['BoulderGolem',3],['FireSprite',2]],
     boss:{name:'Pyraxis, the Magma Dragon',cls:'MagmaDragon',s:[42,12,10,6,4,2,10,6],items:['magmaBreath'],skill:'steadfast',look:{body:'#4a2420',magma:true,big:true,crysSmall:true,crysCol:'#3a2a4a'}}},
-  ship:{n:'The Flying Ship',bg:'#26304a',d:'A sky-galleon under attack. Hold the deck while wyverns, pegasi and harpies dive from the clouds.',
-    tip:['ship','Defend the ship','Hold the deck until the turn count runs out; more fliers arrive every turn. Bows deal double damage to fliers.'],
-    maps:['deck','galleon'],bossMap:'deck',pool:[['Harpy',3],['Wyvern',2,3]],elitePool:[['Wyvern',3],['Harpy',2]],
-    boss:{name:'The Great Roc',cls:'Roc',mov:4,s:[36,12,6,7,8,3,7,6],items:['talons','galeSigil'],skill:'swiftstrike',look:{body:'#8a5a2a',head:'#efe6cf',beak:'#e8b83a'}}},
   labyrinth:{n:'The Labyrinth',bg:'#2a2630',d:'Stone corridors with no daylight. Something with too many eyes watches from the dark.',
     tip:['maze','The Labyrinth','Beholders can turn units to stone with their gaze. Stone units skip their next turn.'],
     maps:['maze1','vaults','pillars'],bossMap:'mazeHeart',pool:[['Gremlin',3],['Beholder',2,3]],elitePool:[['Beholder',3],['Gremlin',2]],

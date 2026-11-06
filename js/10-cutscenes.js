@@ -1,27 +1,4 @@
-/* Old cutscene engine, and class-change screens */
-/* ================= CUTSCENES ================= */
-function captioner(el){
-  let skip=false;const cap=el.querySelector('.in-cap');
-  const done=new Promise(res=>el.querySelector('.in-skip').addEventListener('click',()=>{skip=true;res()},{once:true}));
-  const w=ms=>Promise.race([sleep(ms),done]);
-  const say=async(t,ms)=>{if(skip)return;cap.classList.remove('on');await w(350);if(skip)return;cap.textContent=t;cap.classList.add('on');await w(ms)};
-  return{w,say,done,skipped:()=>skip};
-}
-const SCENES={
-  async takeoff(){
-    const el=document.createElement('div');el.className='intro shipsc';
-    el.innerHTML=`<div class="ss-cloud c2"></div><div class="ss-cliff"></div><div class="ss-ship"><img class="ss-wings" src="${shipWingArt()}" alt=""><img class="ss-body" src="${shipSideArt()}" alt=""></div><div class="ss-cloud c1"></div><p class="in-cap" aria-live="polite"></p><button type="button" class="in-skip">Skip</button>`;
-    document.body.appendChild(el);const{w,say,done,skipped}=captioner(el);
-    const steps=async()=>{
-      await say('Gruu presses both hands to the keel. Old runes wake along the hull.',2400);if(skipped())return;
-      el.classList.add('s2');sfx('rise');await w(900);if(skipped())return;
-      el.classList.add('s3');await say('With a groan of timber, the wooden wings unfold.',2400);if(skipped())return;
-      el.classList.add('s4');sfx('burst');await say('The ship lifts off the cliff and into the sea of cloud.',3200);
-    };
-    await Promise.race([steps(),done]);el.classList.add('out');await sleep(500);el.remove();
-  }
-};
-
+/* Class-change screens */
 /* ================= CLASS CHANGE ================= */
 function promote(u,to){
   const from=u.cls;to=to||CLS[from].promo;const b=CLS[to].bonus.slice();

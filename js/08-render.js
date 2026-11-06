@@ -22,7 +22,6 @@ function buildBoard(){
     if(!PROPS[ov]){const v=tileVariant(tk,x,y);if(v)t.style.backgroundImage=`url(${v})`}
     const vh=vhOf(x,y),p=tileTop(x,y,vh),z=(x+y)*4;
     Object.assign(t.style,{left:p.x+'px',top:p.y+'px',zIndex:z+1,transform:`matrix(${TW/2/T},${TH/2/T},${-TW/2/T},${TH/2/T},0,0)`});
-    if(tk==='sky'){t.style.visibility='hidden';boardEl.appendChild(t);continue}
     const D=(vh+1)*HS,sd=document.createElement('div'),sk=t.className.split(' ')[1];sd.className='blk';sd.dataset.t=sk;
     Object.assign(sd.style,{left:p.x-TW/2+'px',top:p.y+'px',width:TW+'px',height:TH+D+'px',zIndex:z});
     sd.innerHTML=`<svg width="${TW}" height="${TH+D}"><polygon points="0,${TH/2} ${TW/2},${TH} ${TW/2},${TH+D} 0,${TH/2+D}" fill="var(--c)"/><polygon points="0,${TH/2} ${TW/2},${TH} ${TW/2},${TH+D} 0,${TH/2+D}" fill="#000" opacity=".3"/><polygon points="${TW/2},${TH} ${TW},${TH/2} ${TW},${TH/2+D} ${TW/2},${TH+D}" fill="var(--c)"/><polygon points="${TW/2},${TH} ${TW},${TH/2} ${TW},${TH/2+D} ${TW/2},${TH+D}" fill="#000" opacity=".5"/><path d="M0 ${TH/2}L${TW/2} ${TH}L${TW} ${TH/2}" stroke="#fff" stroke-opacity=".32" fill="none"/></svg>`;

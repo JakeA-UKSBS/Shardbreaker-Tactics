@@ -2,7 +2,7 @@
 
 A picture guide to the game as it stands: every region, its monsters and boss, sample characters for each class, weapons, tiles and scenes. All art is drawn in code at 32×32 (bosses 64×64), shown here enlarged.
 
-**Pitch:** malignant crystals are spreading through the land's creatures, and the scent of the crystallised beasts is driving the kingdoms to war. Ithren the Sage sends a small band to break the crystals at their heart. A run is 2 acts in 2 of 10 regions; you recruit, promote and lose units along the way. Every enemy is a creature, and every creature is crystallised; each boss has its own crystal colour.
+**Pitch:** malignant crystals are spreading through the land's creatures, and the scent of the crystallised beasts is driving the kingdoms to war. Ithren the Sage sends a small band to break the crystals at their heart. A run is 2 acts in 2 of 6 regions; you recruit, promote and lose units along the way. Every enemy is a creature, and every creature is crystallised; each boss has its own crystal colour.
 
 ## Contents
 - [Opening scenes](#opening-scenes)
@@ -24,31 +24,7 @@ Ithren explains the blight over his crystal ball (difficulty arrows appear above
 
 ## Regions and bosses
 
-Bosses fill 2×2 squares on the map. The Roc, Bone Wyrm, Krondis and Hollow Bear are drawn at full 64×64; the others are their 32px art doubled for now.
-
-### Mycelia
-
-Glowing mycelium and giant toadstools. The fungus folk have turned feverish under the blight, and their spores poison on a hit. **Rule:** Fungus attacks poison on a hit: 3 damage at the start of each of your turns for 3 turns. A Salve cures it.
-
-| Boss: King Morel the Blighted | Attacking |
-| --- | --- |
-| ![King Morel the Blighted](visuals/bosses/mushroom.png) | ![King Morel the Blighted attacking](visuals/bosses/mushroom_attack.png) |
-
-| Sporeling | Mindsnail |
-| --- | --- |
-| ![Sporeling](visuals/monsters/Sporeling.png) | ![Mindsnail](visuals/monsters/Mindsnail.png) |
-
-### Sunless Isle
-
-A haunted land of graves and crypts. Skeletons walk, and ghosts drift straight through walls. **Rule:** Ghosts ignore terrain and can pass through walls. Their dark magic heals them for a third of the damage dealt.
-
-| Boss: The Bone Wyrm | Attacking |
-| --- | --- |
-| ![The Bone Wyrm](visuals/bosses/shadow.png) | ![The Bone Wyrm attacking](visuals/bosses/shadow_attack.png) |
-
-| Skeleton | Ghost |
-| --- | --- |
-| ![Skeleton](visuals/monsters/Skeleton.png) | ![Ghost](visuals/monsters/Ghost.png) |
+Bosses fill 2×2 squares on the map. Krondis and the Hollow Bear are drawn at full 64×64; the others are their 32px art doubled for now.
 
 ### Sobek’s Mire
 
@@ -82,21 +58,9 @@ Basalt slopes cut by rivers of magma. Golems block the passes, and fire sprites 
 | --- | --- |
 | ![Pyraxis, the Magma Dragon](visuals/bosses/mountain.png) | ![Pyraxis, the Magma Dragon attacking](visuals/bosses/mountain_attack.png) |
 
-| Fire Sprite | Boulder Golem | Harpy |
-| --- | --- | --- |
-| ![Fire Sprite](visuals/monsters/FireSprite.png) | ![Boulder Golem](visuals/monsters/Boulder.png) | ![Harpy](visuals/monsters/Harpy.png) |
-
-### The Flying Ship
-
-A sky-galleon under attack. Hold the deck while wyverns, pegasi and harpies dive from the clouds. **Rule:** Hold the deck until the turn count runs out; more fliers arrive every turn. Bows deal double damage to fliers.
-
-| Boss: The Great Roc | Attacking |
+| Fire Sprite | Boulder Golem |
 | --- | --- |
-| ![The Great Roc](visuals/bosses/ship.png) | ![The Great Roc attacking](visuals/bosses/ship_attack.png) |
-
-| Harpy | Wyvern |
-| --- | --- |
-| ![Harpy](visuals/monsters/Harpy.png) | ![Wyvern](visuals/monsters/WyvernM.png) |
+| ![Fire Sprite](visuals/monsters/FireSprite.png) | ![Boulder Golem](visuals/monsters/Boulder.png) |
 
 ### The Labyrinth
 
@@ -417,14 +381,6 @@ Monsters carry body tags, shown on their info sheet and in the forecast: wing (F
 A possible variant with three crystals and more veins (`TITLE_MULTI=true` in js/28-startup.js):
 
 ![Title, three crystals](visuals/scenes/title_multi.png)
-
-## The Flying Ship
-
-The ship isn't a tile set: it's drawn on the fly from the map letters (d deck, h hull, M mast, H helm) by `shipArt()` in `js/04-ship-art.js`, with sails either side. Two layouts:
-
-| Main Deck | Galleon Deck |
-|---|---|
-| ![Main Deck](visuals/scenes/map_deck.png) | ![Galleon Deck](visuals/scenes/map_galleon.png) |
 
 ## Battle backdrops
 
