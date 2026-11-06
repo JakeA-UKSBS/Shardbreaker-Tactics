@@ -33,7 +33,7 @@ async function chapterIntro(){
   await modal(`<div class="eyebrow">Act ${run.act||1} · Floor ${run.n} of ${actLen()}</div><h2>${c.title}</h2><p>${c.intro.replaceAll('{lord}',lordName())}</p><div class="lvl" style="grid-template-columns:1fr"><div><span style="color:var(--gold)">Goal</span><span>${goalText().replace(/<[^>]+>/g,' ').trim()}</span></div><div><span style="color:var(--red)">Lose</span><span>${loseText()}</span></div></div><div class="mbtns"><button class="go" type="button" data-m="go">Begin</button></div>`);
   banner('Player Phase','p');saveGame();
   {const B=BIOMES[c.biome];if(B&&B.tip)tip(...B.tip)}
-  if(state.ch===0)tip('basics','Moving your units','Tap a blue unit to see where it can go: blue tiles are moves, red tiles are what it can hit. Tap a tile to move there, or tap a red enemy to attack it straight away. Dead woods give +20 Avoid and +1 Def, so fight from the trees when you can.');
+  if(state.ch===0)tip('basics','Moving your units','Click a blue unit to see where it can go: blue tiles are moves, red tiles are what it can hit. Click a tile to move there, or click a red enemy to attack it straight away. Dead woods give +20 Avoid and +1 Def, so fight from the trees when you can.');
   if(state.ch===1)tip('defend','Hold the camp','You win by surviving: the goal counts the turns. Plug the gaps in the palisade, and expect new enemies every turn.');
   if(state.ch===2)tip('traps','Traps and gremlins','Some labyrinth tiles hide traps that hurt whoever steps on them. Sprung traps stay marked.');
   if(state.ch===6)tip('fliers','Fliers','Fliers cross open sky and ignore terrain bonuses. Bows deal double damage to them.');

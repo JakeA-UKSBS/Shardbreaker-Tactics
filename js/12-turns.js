@@ -2,7 +2,7 @@
 /* ================= TURN FLOW ================= */
 
 /* ==================================================================
-   SELECTING AND MOVING: select a unit, show its reach, tap to move
+   SELECTING AND MOVING: select a unit, show its reach, click to move
    ================================================================== */
 function clearSel(){sel=null;moveSet=null;fringe=null;targets=[];pending=null;inspect=null;itemSel=null;abSel=null;abT=null;aimSet=null}
 function select(u){clearSel();sel=u.id;pre=clone(state);origin={x:u.x,y:u.y};moveSet=reach(u);fringe=fringeOf(u,moveSet);ui='move';render()}
@@ -19,7 +19,7 @@ function afterMove(u){
   render();
 }
 function openConfirm(t){pending=t;const u=byId(sel);if(tmode==='atk')pendW=wpnsAt(u,man(u,t),t)[0];ui='confirm';render();
-  if(tmode==='atk')tip('forecast','Battle forecast','This shows damage, hit chance and crit chance for both sides. A gold Effective chip means a hit deals double weapon might. Tap the enemy again, or press Attack, to strike.');}
+  if(tmode==='atk')tip('forecast','Battle forecast','This shows damage, hit chance and crit chance for both sides. A gold Effective chip means a hit deals double weapon might. Click the enemy again, or press Attack, to strike.');}
 function bestApproach(u,o){
   let best=null,bs2=-1e9;
   for(const k of moveSet){const[x,y]=k.split(',').map(Number),d=Math.abs(x-o.x)+Math.abs(y-o.y);if(!wpnsAt({...u,x,y},d,o).length)continue;
@@ -28,7 +28,7 @@ function bestApproach(u,o){
 }
 
 /* ==================================================================
-   TAPS ON THE MAP: what a tap does in each ui state (idle, move, menu, target, confirm)
+   TAPS ON THE MAP: what a click does in each ui state (idle, move, menu, target, confirm)
    ================================================================== */
 function tap(x,y){
   if(busy||over||phase!=='player'||!modalEl.hidden)return;
