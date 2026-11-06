@@ -31,7 +31,7 @@ const TER={
 /* Weapon types: blade > heavy > pole > blade. bow and reach are neutral.
    Arts (t:'art'): fire > nature > water > fire, and light > dark. Dark is neutral to the rest but drains life (heals 25% of damage dealt). */
 /* ITEMS AND WEAPONS:
-   n = name, t = weapon type (blade/heavy/pole/bow/reach/art/spirit, or item/gear), kind = which icon/sprite shape to draw,
+   n = name, t = weapon type (blade/heavy/pole/bow/art/spirit, or item/gear), kind = which icon/sprite shape to draw,
    mt = Might (added to Str or Mag for damage), hit = Hit %, crit = Crit %, r = [min, max] range in tiles, uses = durability (99 = unbreakable),
    wt = weight (set from WT below), el = element of a sigil, mag = uses Mag instead of Str, tint = steel/jade colouring,
    key = icon art key (icons/<key>.png), eff = effective against (×2 damage), amt = HP healed by a staff/salve. */
@@ -52,21 +52,14 @@ const IT={
   shortBow:{n:'Short Bow',t:'bow',kind:'bow',mt:6,hit:85,crit:0,r:[2,2],uses:45},
   ironwoodBow:{n:'Ironwood Bow',t:'bow',kind:'bow',mt:9,hit:70,crit:0,r:[2,2],uses:30,tint:'steel'},
   crossbow:{n:'Crossbow',t:'bow',kind:'crossbow',mt:8,hit:80,crit:0,r:[2,2],uses:35},
-  thornWhip:{n:'Thorn Whip',t:'reach',kind:'whip',mt:4,hit:85,crit:0,r:[1,2],uses:40},
-  chainSickle:{n:'Chain Sickle',t:'reach',kind:'chain',mt:6,hit:75,crit:0,r:[1,2],uses:35},
-  warFan:{n:'War Fan',t:'reach',kind:'fan',mt:5,hit:85,crit:5,r:[1,2],uses:40},
-  boneParasol:{n:'Bone Parasol',t:'reach',kind:'umbrella',mt:6,hit:80,crit:0,r:[1,2],uses:35},
   emberSigil:{n:'Ember Sigil',t:'art',kind:'talisman',el:'fire',mt:5,hit:90,crit:0,r:[1,2],uses:40,mag:true},
   tideSigil:{n:'Tide Sigil',t:'art',kind:'talisman',el:'water',mt:5,hit:90,crit:0,r:[1,2],uses:40,mag:true},
-  stoneSigil:{n:'Stone Sigil',t:'art',kind:'talisman',el:'earth',mt:7,hit:75,crit:0,r:[1,2],uses:35,mag:true},
   stormSigil:{n:'Storm Sigil',t:'art',kind:'talisman',el:'lightning',mt:8,hit:80,crit:5,r:[1,2],uses:35,mag:true},
-  mirrorSigil:{n:'Mirror Sigil',t:'art',kind:'talisman',el:'illusion',mt:6,hit:85,crit:0,r:[1,2],uses:40,mag:true},
   thornSigil:{n:'Thorn Sigil',t:'art',kind:'talisman',el:'nature',mt:5,hit:90,crit:0,r:[1,2],uses:40,mag:true},
   dawnSigil:{n:'Dawn Sigil',t:'art',kind:'talisman',el:'light',mt:5,hit:90,crit:0,r:[1,2],uses:40,mag:true},
   umbralSigil:{n:'Umbral Sigil',t:'art',kind:'talisman',el:'dark',mt:5,hit:85,crit:0,r:[1,2],uses:40,mag:true,drain:true},
   crookStaff:{n:'Crook Staff',t:'art',kind:'staff',mt:6,hit:85,crit:0,r:[1,1],uses:45,mag:true},
   runeStaff:{n:'Rune Staff',t:'art',kind:'staff',mt:4,hit:85,crit:0,r:[1,2],uses:40,mag:true},
-  glimmer:{n:'Glimmer',t:'art',kind:'talisman',el:'light',mt:2,hit:85,crit:0,r:[1,2],uses:45,mag:true},
   mendingStaff:{n:'Mending Staff',t:'spirit',kind:'staff',amt:10,r:[1,1],uses:30},
   dawnStaff:{n:'Dawn Staff',t:'spirit',kind:'staff',amt:20,r:[1,1],uses:20,tint:'mend'},
   greatsword:{n:'Greatsword',t:'blade',kind:'greatsword',mt:11,hit:70,crit:5,r:[1,1],uses:30,tint:'steel'},
@@ -85,7 +78,7 @@ Object.assign(IT,{
 });
 /* WT: weapon weight. Weight above the wielder's Str (Mag for sigils) is taken off their attack speed (see wtOver/AS). */
 const WT={wornSword:4,twinDaggers:2,knightlySword:8,thornRapier:3,hookedBlade:6,moonglassEdge:6,greatsword:12,ironSpear:6,steelSpear:10,javelin:8,hatchet:7,cleaver:11,throwingAxe:9,halberd:9,labrys:13,
-  shortBow:3,ironwoodBow:7,crossbow:6,thornWhip:3,chainSickle:5,warFan:3,boneParasol:5,emberSigil:2,tideSigil:3,stoneSigil:6,stormSigil:5,mirrorSigil:3,thornSigil:3,dawnSigil:2,umbralSigil:5,crookStaff:4,runeStaff:3,glimmer:1,
+  shortBow:3,ironwoodBow:7,crossbow:6,emberSigil:2,tideSigil:3,stormSigil:5,thornSigil:3,dawnSigil:2,umbralSigil:5,crookStaff:4,runeStaff:3,
   dirk:1,stiletto:2,barbedSpear:7,reaverAxe:9,hawkeyeBow:5};
 for(const k in WT)IT[k].wt=WT[k];
 /* ---- special weapons from events: jade (killer) weapons, lightning sigils, long-range sigils and charms ---- */
@@ -122,7 +115,7 @@ Object.assign(IT,{
 for(const k in IT)IT[k].key=k;
 
 /* WTYPES: weapon types. ELN: element display names. */
-const WTYPES=['blade','heavy','pole','bow','reach','art'];
+const WTYPES=['blade','heavy','pole','bow','art'];
 const ELN={light:'Light',dark:'Dark',fire:'Fire',nature:'Nature',water:'Water',wind:'Wind',earth:'Earth',lightning:'Lightning',illusion:'Illusion'};
 /* CLASSES, keyed by class id (shared by player classes and monsters):
    n = class name shown in game, w = weapon types it can use, body = which sprite body fig() draws (tunic/robe/vest/armor/beast/golem...),

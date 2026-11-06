@@ -40,10 +40,9 @@ function aura(u){if(u.team!=='p')return 0;const l=state.units.find(o=>has(o,'com
    Monsters carry body tags; some weapons (and the slayer skills) are effective against a tag: ×2 weapon Mt (bows vs fliers too).
    One-way for now: only your side (and green allies) deal effective hits; your own units have no tags. */
 const TAGS={flier:{n:'Flier'},armoured:{n:'Armoured'},beast:{n:'Beast'},colossal:{n:'Colossal'},spectral:{n:'Spectral'},plant:{n:'Plant'}};
-const TAG_ORDER=['flier','armoured','beast','colossal','spectral','plant'];
 const BODY_TAGS={golem:['armoured'],snail:['armoured'],turtle:['armoured'],cubes:['armoured'],armor:['armoured'],beast:['beast'],gator:['beast'],bear:['beast'],worm:['beast'],
   hawk:['beast'],dragon:['beast'],sentinel:['armoured'],flame:['spectral'],frost:['spectral'],storm:['spectral']};
-const TAG_FIX={BlightedTreant:['plant'],StoneWarden:['armoured'],PebbleGolem:['armoured']};
+const TAG_FIX={BlightedTreant:['plant'],StoneWarden:['armoured']};
 function tagsOf(u){if(!u||!u.cls||u.cls.startsWith('G.'))return[];const C=CLS[u.cls]||{};let t=(TAG_FIX[u.cls]||BODY_TAGS[C.body]||[]).slice();if(C.fly)t.unshift('flier');if((u.sz||1)>1)t.push('colossal');return[...new Set(t)]}
 /* what a weapon is effective against: its own list, plus bows vs fliers, light sigils vs spectres, fire sigils vs plants */
 function effOf(w){const o=(w&&w.eff||[]).slice();if(w&&w.t==='bow')o.push('flier');if(w&&w.el==='light')o.push('spectral');if(w&&w.el==='fire')o.push('plant');return o}

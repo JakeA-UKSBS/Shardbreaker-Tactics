@@ -34,9 +34,8 @@ SKILLS.venom={n:'Venom',cost:15,d:'On a hit, poisons the target: it loses 3 HP a
 /* fields: see the CLASSES key in 01-data.js */
 Object.assign(CLS,{
   MudMonster:{n:'Mud Monster',w:['heavy'],body:'mud',mov:4,wade:true},Krondis:{n:'Alligator',w:['heavy'],body:'gator',mov:4,wade:true},
-  CursedStag:{n:'Cursed Stag',w:['pole'],body:'beast',mov:6},HollowStag:{n:'Hollow Stag',w:['pole'],body:'beast',mov:4},
+  CursedStag:{n:'Cursed Stag',w:['pole'],body:'beast',mov:6},
   BoulderGolem:{n:'Magma Golem',w:['heavy'],body:'golem',mov:4},FireSprite:{n:'Fire Sprite',w:['art'],body:'flame',mov:5,lava:true},MagmaDragon:{n:'Magma Dragon',w:['art','heavy'],body:'dragon',mov:0,lava:true},
-  StormElemental:{n:'Storm Elemental',w:['art'],body:'storm',mov:3,fly:true},
   CrystalHeart:{n:'Crystal Heart',w:['art'],body:'crystal',mov:0},
   /* the Heart's own creatures (Act 3) */
   Shardling:{n:'Shardling',w:['blade'],body:'shardling',mov:5},Prism:{n:'Prism',w:['art'],body:'prism',mov:4,fly:true},CrystalSentinel:{n:'Crystal Sentinel',w:['heavy'],body:'sentinel',mov:3},

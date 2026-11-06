@@ -13,8 +13,6 @@ function routesOk(rows){const walk=(r,i,c)=>{const t=rows[r][i].t;c={...c,[t]:(c
 /* ROOM_W: relative chance of each room type when a floor is rolled (out of 100). NO_REPEAT: types that can't come twice in a row. */
 const ROOM_W={battle:45,event:23,rest:12,elite:10,tavern:10},NO_REPEAT=['elite','rest','tavern'];
 const NODE_N={tavern:'Tavern',battle:'Battle',elite:'Elite',recruit:'Recruit',rest:'Rest',event:'Event',treasure:'Treasure',boss:'Boss'};
-const NODE_D={tavern:'Spend gold on a drink, a meal and a sellsword.',battle:'Fight monsters for EXP and loot.',elite:'Elite fight: a stronger pack led by an Elder monster. Drops a relic and a steel weapon.',recruit:'Pick 1 of 3 new units.',rest:'Heal fully, and train one unit: it gains a level.',
-  event:'Something unexpected: a smith, a shrine, an old armoury…',treasure:'A treasure room. Pick 1 of 3 items.',boss:'The act boss.'};
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(rand()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 /* can room t go on floor fl, coming from a room of type prev? */
 function roomOk(t,fl,prev){if((t==='elite'||t==='rest')&&fl<6)return false;if(t==='rest'&&fl===FLOORS-1)return false;return!(prev===t&&NO_REPEAT.includes(t))}

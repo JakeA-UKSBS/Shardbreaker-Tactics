@@ -62,10 +62,6 @@ function drawWeapon(p,w,ax,ay,strike,back){
   if(k==='bow'){for(let y=ay-12;y<=ay+6;y++)p.set(ax+3+Math.round(3*Math.sin(Math.PI*(y-ay+12)/18)),y,BROWN);p.set(ax+3,ay-12,GOLD);p.set(ax+3,ay+6,GOLD);p.line(ax+3,ay-12,ax+3,ay+6,CREAM);if(strike)p.line(ax-4,ay-3,ax+8,ay-3,'#e8dfc6')}
   if(k==='crossbow'){p.rect(ax-4,ay-1,10,2,BROWN);p.rect(ax-1,ay+1,2,3,BROWN2);p.line(ax+5,ay-5,ax+6,ay-1,METAL2);p.line(ax+6,ay,ax+5,ay+4,METAL2);p.set(ax+4,ay-6,METAL);p.set(ax+4,ay+5,METAL);
     p.line(ax+4,ay-5,ax+1,ay-1,'#f3ecd8');p.line(ax+1,ay,ax+4,ay+4,'#f3ecd8');if(strike)p.line(ax+6,ay-1,ax+11,ay-1,CREAM);else{p.line(ax+1,ay-2,ax+8,ay-2,'#c9b98f');p.set(ax+8,ay-2,METAL)}}
-  if(k==='whip'){const col='#9a3a72';if(strike){for(let i=0;i<=12;i++)p.set(ax+i*.7,ay-i*.8+Math.sin(i*.9)*1.6,col)}else{p.ring(ax+1,ay+3,2.6,col);p.ring(ax+1,ay+3,1.4,col)}p.rect(ax-1,ay-1,2,2,BROWN2)}
-  if(k==='chain'){if(strike){for(let i=0;i<9;i+=1.5)p.set(ax+i,ay-i*.9,METAL2);p.poly([[ax+8,ay-9],[ax+12,ay-12],[ax+10,ay-7]],c.blade)}else{for(let i=0;i<8;i+=1.5)p.set(ax+1,ay+i,METAL2);p.poly([[ax,ay+8],[ax+4,ay+11],[ax,ay+11]],c.blade)}p.poly([[ax-1,ay-4],[ax+3,ay-6],[ax+1,ay-1]],c.blade)}
-  if(k==='fan'){if(strike){p.poly([[ax,ay],[ax+5,ay-9],[ax+10,ay-5],[ax+10,ay+2]],CREAM);for(let i=0;i<4;i++)p.line(ax,ay,ax+5+i*1.7,ay-9+i*3,INK);p.line(ax+5,ay-9,ax+10,ay+2,RED)}else{p.line(ax,ay+1,ax+3,ay-6,INK,2);p.set(ax+3,ay-7,RED)}}
-  if(k==='umbrella'){const pk='#e58fb0';if(strike){p.line(ax,ay,ax+4,ay-8,BROWN);p.ell(ax+4,ay-9,7,4,pk,(x,y)=>y<=ay-9);p.line(ax-3,ay-9,ax+11,ay-9,shade(pk,.7))}else{p.line(ax-3,ay+8,ax+3,ay-14,pk,2);p.rect(ax-4,ay+8,2,2,BROWN)}}
   if(k==='talisman'){p.rect(ax-1,ay-5,3,6,'#f1d97a');p.set(ax,ay-4,RED);p.set(ax,ay-2,RED);
     if(strike){p.ell(ax+6,ay-3,3,3,c.el);p.ell(ax+6,ay-3,1.3,1.3,'#ffffff')}else p.ell(ax+3,ay-7,1.6,1.6,c.el)}
   if(k==='staff'){const o=w&&w.t==='spirit'?'#7ad6ff':'#c58aff';if(strike){p.line(ax-3,ay-2,ax+6,ay+4,BROWN,2);p.ell(ax+7,ay+5,2.2,2.2,o);p.set(ax+7,ay+4,'#ffffff')}else{p.line(ax-3,ay+9,ax+3,ay-15,BROWN,2);p.ell(ax+3,ay-16,2.2,2.2,o);p.set(ax+3,ay-17,'#ffffff')}}
@@ -151,7 +147,7 @@ function fig(L,cls,team,pose,wk,sz){
   /* monsters: art/monsters/<Class>.png (and <Class>-strike.png for the attack pose) replaces the code-drawn sprite, see monsterArt() */
   {const k='monsters/'+cls;if(ART_PNG.has(k))return'art/'+k+(pose==='strike'&&ART_PNG.has(k+'-strike')?'-strike':'')+'.png'}
   if(sz>=2)pxScale=2;
-  if(team==='e'&&!CLS[cls].tier&&!String(cls).startsWith('G.')&&!L.blight){pxHook=P=>L.crys===false?0:L.crysAt?crysAt(P,L.crysAt):crystallise(P,cls,!!L.big||/Wyrm|Dragon|Colossus|Turtle|King|Stag|Krondis|StormElemental|Matriarch/.test(cls),L.crysSmall,L.crysCol)}
+  if(team==='e'&&!CLS[cls].tier&&!String(cls).startsWith('G.')&&!L.blight){pxHook=P=>L.crys===false?0:L.crysAt?crysAt(P,L.crysAt):crystallise(P,cls,!!L.big||/Wyrm|Dragon|Colossus|Turtle|King|Stag|Krondis/.test(cls),L.crysSmall,L.crysCol)}
   pxMini=!!L.mini;try{return fig0(L,cls,team,pose,wk)}finally{pxHook=null;pxScale=1;pxMini=false}
 }
 /* ==================================================================
@@ -340,12 +336,6 @@ function fig0(L,cls,team,pose,wk){
       p.ell(15,25,5.5,2.8,ly);p.ell(15,25,3,1.5,'#fff6c0')}
     if(strike){p.line(31,11,31,15,lv,2);p.line(30,12,31,17,ly);p.set(29,14,ly)}
     p.outline(OUT);return p.url()}
-  /* ---- body: storm elemental ---- */
-  if(body==='storm'){const c='#8a96b8',c2='#5a6688',c3='#c8d0e8',bo='#ffe14a';
-    p.ell(10,12,6,5,c);p.ell(20,9,7,6,c);p.ell(16,15,9,6,c);p.ell(25,14,5,4,c);p.ell(16,19,9,3,c2);p.ell(19,6,3,1.5,c3);p.ell(9,9,2,1,c3);
-    p.rect(12,13,3,2,'#9fd8ff');p.rect(19,12,3,2,'#9fd8ff');p.line(13,17,19,17,c2);
-    p.line(16,21,13,25,bo,2);p.line(13,25,17,26,bo,2);p.line(17,26,14,31,bo,2);if(strike){p.line(26,15,29,19,bo,2);p.line(29,19,27,22,bo,2);p.line(27,22,31,27,bo,2)}
-    p.outline(OUT);return p.url()}
   /* ---- body: four-legged beasts (wolves, jackals, stags) ---- */
   if(body==='beast'){const f=L.fur||'#8a8f9a',f2=shade(f,.7),f3=shade(f,1.25),ey=L.eye||'#ffd23f',ln=strike?3:0;
     p.poly([[6+ln,17],[1+ln,11],[2+ln,9],[8+ln,15]],f2);
@@ -414,10 +404,6 @@ function iconArt_draw(k){
   if(kd==='axe'){p.line(4,14,9,3,BROWN,2);p.poly([[8,1],[14,1],[14,8],[9,7]],c.blade)}
   if(kd==='bow'){for(let y=1;y<=14;y++)p.set(5+Math.round(5*Math.sin(Math.PI*(y-1)/13)),y,BROWN);p.line(5,1,5,14,CREAM)}
   if(kd==='crossbow'){p.rect(2,7,12,2,BROWN);p.rect(3,9,2,4,BROWN2);p.line(11,1,12,7,METAL2,2);p.line(12,8,11,14,METAL2,2);p.line(11,2,6,7,'#f3ecd8');p.line(6,8,11,13,'#f3ecd8');p.line(5,6,14,6,'#c9b98f');p.set(14,6,METAL)}
-  if(kd==='whip'){p.ring(7,8,5,'#9a3a72');p.ring(7,8,3,'#9a3a72');p.rect(11,11,3,3,BROWN2)}
-  if(kd==='chain'){for(let i=0;i<10;i+=2)p.set(2+i,12-i*.6,METAL2);p.poly([[11,2],[15,1],[13,7]],c.blade)}
-  if(kd==='fan'){p.poly([[3,13],[2,4],[8,1],[14,4],[13,13]],CREAM);for(let i=0;i<5;i++)p.line(8,14,2+i*3,3+(i%4===0?1:0),INK);p.rect(7,13,2,2,RED)}
-  if(kd==='umbrella'){p.ell(8,7,7,4,'#e58fb0',(x,y)=>y<=7);p.line(8,7,8,14,BROWN);p.set(7,14,BROWN)}
   if(kd==='talisman'){p.rect(4,1,7,14,'#f1d97a');p.line(7,3,7,11,RED);p.rect(6,5,3,1,RED);p.ell(12,12,2.6,2.6,c.el)}
   if(kd==='staff'){if(w.r[1]>1||w.t==='spirit'){const mo=w.t==='spirit'?(w.tint==='mend'?'#ffe9a0':'#7ad6ff'):'#c58aff';p.line(3,14,11,4,w.t==='spirit'?'#c9a46a':BROWN,2);p.ell(12,3,2.6,2.6,mo);p.set(12,2,'#ffffff')}else{p.line(3,14,10,5,BROWN,2);p.ring(11,4,2.6,BROWN);p.set(13,6,BROWN);p.ell(10,5,1.2,1.2,'#c58aff')}}
   if(kd==='spirit'){p.ell(8,8,5,5,w.tint==='mend'?'#7ad6ff':JADE);p.ell(6.5,6.5,1.5,1.5,'#e9fff5')}
@@ -441,7 +427,6 @@ function mapWk(u){const i=u.items.findIndex(it=>WTYPES.includes(IT[it.k].t)||IT[
 function sprite(u,pose,wk){{const png=typeof castPng==='function'&&castPng(u,pose==='strike'?'swing':'idle');if(png)return png}const k=[u.id,u.name,u.cls,u.team,pose,wk,u.sz||1,JSON.stringify(u.look)].join('|');return sprCache[k]||(sprCache[k]=fig(u.look,u.cls,u.team,pose,wk,u.sz))}
 function portraitArt(L,cls,team,sz){return fig(L,cls,team,'idle',null,sz)}
 function portrait(u){if(u.pic&&PICS[u.pic])return PICS[u.pic];const k='P|'+u.id+'|'+u.name+'|'+u.cls+'|'+u.team+'|'+JSON.stringify(u.look);return sprCache[k]||(sprCache[k]=portraitArt(u.look,u.cls,u.team,u.sz))}
-function picOf(h){return h.pic&&PICS[h.pic]?PICS[h.pic]:portraitArt(h.look,h.cls,'p')}
 function icon(k){const c='I|'+k;return sprCache[c]||(sprCache[c]=iconArt(k))}
 
 /* ==================================================================

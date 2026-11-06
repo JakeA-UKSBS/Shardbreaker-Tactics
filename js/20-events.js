@@ -200,8 +200,6 @@ const powS=u=>usesMag(u)?'mag':'str';
 const isRoleU=(u,r)=>u.cls.startsWith(`G.${r}.`);
 const canAny=k=>run.roster.some(u=>canUse(u,k));
 /* the jade (killer) weapon that suits a unit, if any */
-const jadePick=()=>{const ks=[...new Set(run.roster.map(jadeFor).filter(Boolean))];return ks.length?pick(ks):'jadeJian'};
-function jadeFor(u){if(isRoleU(u,'rogue'))return'jadeFang';const m={blade:'jadeJian',pole:'jadeSpear',heavy:'jadeAxe',bow:'jadeBow',art:'thunderheadSigil'};for(const t of CLS[u.cls].w)if(m[t]&&canUse(u,m[t]))return m[t];return null}
 /* every item the squad gains goes through this picker; found=true shows it as "Found: X" with a Leave it option */
 async function giveTo(k,why,found){for(;;){const u=await pickUnit(found?`Found: ${IT[k].n}`:`Who takes the ${IT[k].n}?`,found?`${why?why+' ':''}${itemText(k)}`:why||itemText(k),u=>isWpn(k)&&!canUse(u,k)?'Can’t wield it':null,found?'Leave it':'Cancel');if(!u)return null;if(!await stow(u,k))continue;sfx('item');return u}}
 Object.assign(EVENTS,{

@@ -45,8 +45,6 @@ const SFX={
   water:()=>{noise(.45,{vol:.3,f:600,slide:250,q:3});tone(520,.3,{vol:.06,slide:260})},
   wind:()=>noise(.35,{vol:.25,f:1800,slide:4000,q:1.5}),
   earth:()=>{noise(.5,{vol:.55,f:180,type:'lowpass'});tone(70,.4,{type:'triangle',vol:.4,slide:40})},
-  whip:()=>{noise(.08,{vol:.5,f:4000,q:2,delay:.12});noise(.15,{vol:.15,f:1500,slide:3000})},
-  chain:()=>[0,.05,.1,.15].forEach(d=>tone(2400+Math.random()*800,.05,{type:'square',vol:.03,delay:d}))
 };
 /* synth stand-ins for recorded-only sounds */
 Object.assign(SFX,{jump:()=>tone(330,.12,{type:'square',vol:.04,slide:660}),swordcrit:()=>SFX.crit(),sandswipe:()=>SFX.swing(),levelup:()=>{}});

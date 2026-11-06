@@ -92,7 +92,6 @@ function render(){
    UNIT CARD AND ITEM LIST: shared bits of the side panel
    ================================================================== */
 function terrText(t){return t.n+(t.df?` +${t.df} Def`:'')+(t.av?` ${t.av>0?'+':''}${t.av} Avo`:'')+(t.slow?' · −1 Move':'')}
-function statBox(l,v){return`<div><small>${l}</small>${v}</div>`}
 function itemRows(u,btn){
   const ei=eqIdx(u);
   return`<div class="inv">${u.items.map((it,i)=>{const w=IT[it.k],tag=btn?'button':'div';
@@ -111,7 +110,7 @@ function card(u){
 }
 
 /* ---- unit sheet (two pages, cycles through the same team) ---- */
-const TN={blade:'Blade',heavy:'Heavy',pole:'Polearm',bow:'Bow',reach:'Reach',art:'Sigil',spirit:'Staff',item:'Item'};
+const TN={blade:'Blade',heavy:'Heavy',pole:'Polearm',bow:'Bow',art:'Sigil',spirit:'Staff',item:'Item'};
 let sheetU=null,sheetPg=0,sheetIt=null,sheetRm=null;
 
 /* ==================================================================

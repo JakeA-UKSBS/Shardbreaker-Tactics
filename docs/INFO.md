@@ -124,21 +124,14 @@ Weapons never break (except the 5-use Meteor and Heaven's Bolt).
 | Short Bow | Bow | 6 | 85 | 0 | 3 | 2 | Flier |
 | Ironwood Bow | Bow | 9 | 70 | 0 | 7 | 2 | Flier |
 | Crossbow | Bow | 8 | 80 | 0 | 6 | 2 | Flier |
-| Thorn Whip | Reach | 4 | 85 | 0 | 3 | 1–2 |  |
-| Chain Sickle | Reach | 6 | 75 | 0 | 5 | 1–2 |  |
-| War Fan | Reach | 5 | 85 | 5 | 3 | 1–2 |  |
-| Bone Parasol | Reach | 6 | 80 | 0 | 5 | 1–2 |  |
 | Ember Sigil | Sigil (Fire) | 5 | 90 | 0 | 2 | 1–2 | Plant |
 | Tide Sigil | Sigil (Water) | 5 | 90 | 0 | 3 | 1–2 |  |
-| Stone Sigil | Sigil (Earth) | 7 | 75 | 0 | 6 | 1–2 |  |
 | Storm Sigil | Sigil (Lightning) | 8 | 80 | 5 | 5 | 1–2 |  |
-| Mirror Sigil | Sigil (Illusion) | 6 | 85 | 0 | 3 | 1–2 |  |
 | Thorn Sigil | Sigil (Nature) | 5 | 90 | 0 | 3 | 1–2 |  |
 | Dawn Sigil | Sigil (Light) | 5 | 90 | 0 | 2 | 1–2 | Spectral |
 | Umbral Sigil | Sigil (Dark) | 5 | 85 | 0 | 5 | 1–2 |  |
 | Crook Staff | Sigil | 6 | 85 | 0 | 4 | 1 |  |
 | Rune Staff | Sigil | 4 | 85 | 0 | 3 | 1–2 |  |
-| Glimmer | Sigil (Light) | 2 | 85 | 0 | 1 | 1–2 | Spectral |
 | Greatsword | Blade | 11 | 70 | 5 | 12 | 1 |  |
 | Labrys | Heavy | 12 | 75 | 10 | 13 | 1 |  |
 | Dirk | Blade | 3 | 95 | 15 | 1 | 1 |  |

@@ -12,8 +12,6 @@ Object.assign(CLS,{
   /* placeholders until they get their own art: the Ice Troll is a humanoid brute, the Yeti a white golem body */
   IceTroll:{n:'Ice Troll',w:['heavy'],body:'vest',mov:4,wade:true,crit:5},
   Yeti:{n:'Yeti',w:['heavy'],body:'golem',mov:4,wade:true},
-  PebbleGolem:{n:'Pebble Golem',w:['heavy'],body:'golem',mov:4,lava:true},
-  WyvernMatriarch:{n:'Wyvern Matriarch',w:['heavy','art'],body:'dragon',mov:3,fly:true},
   Sage:{n:'Sage',w:['art'],body:'robe',mov:0}
 });
 IT.crystalBall={n:'Crystal Ball',t:'item',kind:'orb',uses:1,key:'crystalBall'};
@@ -24,7 +22,6 @@ Object.assign(FOE,{
   Jackal:{b:[14,5,0,4,8,2,1,0],g:[.5,.35,0,.3,.5,.15,.1,.05],items:['fangs'],look:{}},
   SandWorm:{b:[20,6,0,4,4,1,4,1],g:[.7,.4,0,.3,.25,.1,.2,.05],items:['bite'],look:{}},
   SandstoneGolem:{b:[24,7,0,2,2,0,9,1],g:[.8,.4,0,.2,.1,0,.35,.05],items:['slam'],look:{}},
-  PebbleGolem:{b:[16,6,0,3,2,0,6,1],g:[.6,.35,0,.2,.1,0,.3,.05],items:['slam'],look:{mini:true}},
   FrostWolf:{b:[16,5,0,4,7,1,2,2],g:[.55,.35,0,.3,.45,.1,.15,.15],items:['fangs'],look:{}},
   AgateGolem:{b:[22,6,0,2,1,0,8,4],g:[.75,.4,0,.2,.05,0,.3,.2],items:['slam'],look:{}},
   IceTroll:{b:[24,8,0,3,3,0,5,1],g:[.8,.5,0,.25,.2,.05,.3,.05],items:['slam'],look:{}},
