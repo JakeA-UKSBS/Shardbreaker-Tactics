@@ -10,13 +10,12 @@ Open `index.html` in a browser (or serve the folder, e.g. VS Code's Live Server)
 The fixed art (tiles, icons, relics, scenes, backdrops) loads from PNGs in `art/`: edit them in any pixel editor and refresh. See [art/README.md](art/README.md) for sizes and the export tool.
 
 ## Music
-Drop mp3 files into a `music/` folder next to `index.html`: `title.mp3`, `tavern.mp3`, `mushroom.mp3`, `shadow.mp3`, `swamp.mp3`, `forest.mp3`, `mountain.mp3`, `ship.mp3`, `labyrinth.mp3`, `desert.mp3`, `snow.mp3`, `cavern.mp3`, `heart.mp3` (Act 3). Each loops while you're in that region (map and battles). Missing files are skipped. "Sound and music" in Options turns it off.
+Drop mp3 files into a `music/` folder next to `index.html`: `title.mp3`, `tavern.mp3`, `swamp.mp3`, `forest.mp3`, `mountain.mp3`, `labyrinth.mp3`, `desert.mp3`, `snow.mp3`, `cavern.mp3`, `heart.mp3` (Act 3). Each loops while you're in that region (map and battles). Missing files are skipped. "Sound and music" in Options turns it off.
 
 ## Regions
-Each run picks 2 of these 7 as its acts (`BIOMES`, `ACTS`). Each has 2-3 battle maps, a boss map, a monster pool and a rule.
+Each run picks 2 of these 6 as its acts (`BIOMES`, `ACTS`). Each has 2-3 battle maps, a boss map, a monster pool and a rule.
 | Region | Monsters | Rule | Boss |
 | --- | --- | --- | --- |
-| Sunless Isle | Skeletons, Skeleton Archers, Ghosts | Ghosts pass through walls; dark magic drains | The Bone Wyrm (raises skeletons every other turn) |
 | Sobek’s Mire | Bog Lurkers, Lamias, Mud Monsters | Starting a turn in ankle-deep water or mangrove roots costs 1 Move; sand is solid | Krondis the alligator |
 | Cursed Woodland | Wolves, Cursed Stags, Blighted Treants | Cursed thickets: +25 Avoid, 2 Move to enter | The Hollow Bear |
 | Volcanic Isle | Boulder Golems, Fire Sprites | Magma blocks foot units; fliers and fire creatures cross it | Pyraxis, the Magma Dragon |
@@ -58,7 +57,7 @@ Defend fights: from floor 2, a quarter of normal battles are a settlement to hol
 - Every run has a seed (shown on the draft and defeat screens). All rolls come from it.
 
 ## Where things live
-`js/01-data.js` items, weapons, skills · `02-rng-units` random numbers, unit constructors · `03-pixel-art` sprite drawing (`Px`, `fig`, `BIG`) · `04-ship-art` · `05-sound` · `06-rules` combat maths · `07-reach-camera` movement and camera · `08-render` board and unit sheet · `09-battle-scene` fight animation · `09b-battle-rig` posed battle sprites (Fighter, Swordsman) · `10-cutscenes` · `11-modals` · `12-turns` actions, AI, turn loop · `13-save` · `14-units` classes, looks, unit generation · `15-regions-monsters` · `16-maps-battles` maps and `genBattle()` · `17-ui-cards` · `18-node-map` · `19-items-treasure` · `20-events` · `21-progress` achievements and Ascension · `22-relics` · `23-promotion` · `24-tavern` · `25-crossroads-sage` · `26-gear-skills-summons` · `27-run-flow` · `28-startup`. A file can call anything from any other file at run time; only code that runs while the files load has to come after what it uses.
+`js/01-data.js` items, weapons, skills · `02-rng-units` random numbers, unit constructors · `03-pixel-art` sprite drawing (`Px`, `fig`, `BIG`) · `05-sound` · `06-rules` combat maths · `07-reach-camera` movement and camera · `08-render` board and unit sheet · `09-battle-scene` fight animation · `09b-battle-rig` posed battle sprites (Fighter, Swordsman) · `10-cutscenes` · `11-modals` · `12-turns` actions, AI, turn loop · `13-save` · `14-units` classes, looks, unit generation · `15-regions-monsters` · `16-maps-battles` maps and `genBattle()` · `17-ui-cards` · `18-node-map` · `19-items-treasure` · `20-events` · `21-progress` achievements and Ascension · `22-relics` · `23-promotion` · `24-tavern` · `25-crossroads-sage` · `26-gear-skills-summons` · `27-run-flow` · `28-startup`. A file can call anything from any other file at run time; only code that runs while the files load has to come after what it uses.
 
 - Region bosses are 2×2 (`u.sz=2`, x/y is the top-left). `man()` measures between footprints and `unitAt()` checks every cell, so movement, range, the danger map and the AI all handle them. Their sprites are 64×64: hand-drawn in `BIG` (the Roc, the Bone Wyrm), otherwise the 32px art doubled.
 - `ROLES`, `MOVES`, `KIT`: the class parts. Movement is foot, armoured (Knights only) or mounted (7 move, slowed by forest and hills; names like Lance Cavalier, Troubadour). A class is role + movement + weapon, keyed like `G.skirm.foot.pole.1`. `ensureCls()` builds it, plus its promoted version (`.2`, adds a second weapon type).
@@ -77,16 +76,16 @@ Defend fights: from floor 2, a quarter of normal battles are a settlement to hol
 - Skills (`SKILLS`), on top of the originals: Hit and Run, Quick Draw, Flurry, Whirlwind, Retaliate, Iron Skin, Spell Ward, Momentum, Fleet Foot, Taunt, Quick Study, Early Edge, Wolfsbane (vs claws, fangs, blades), Stonebane (vs slams, heavy blows), Hexbane (vs sigils, magic). Each role starts with one from its own list. A fifth of sigil casters start with dark magic. There are no scrolls: skills found after battles (40% chance), in treasure rooms or at the Shrine are given straight to a unit you choose (`allocSkill()`); a unit without capacity can forget a learned skill to make room.
 - `genUnit()`: rolls stats, growths, starting skill, kit, name and look.
 - `genLook()`, `GEAR`, `SKINS`, `HAIRC`, `CLOTH`: the random sprite parts. Sprites are 32×32, drawn in code by `fig()`.
-- Monsters: `Wolf`, `Harpy`, `Lamia`, `Minotaur` in `CLS`/`FOE`, looks from `monLook()`. Wolves use the `beast` body in `fig()`.
+- Monsters: `Wolf`, `Lamia`, `Minotaur` in `CLS`/`FOE`, looks from `monLook()`. Wolves use the `beast` body in `fig()`.
 - `MAPS`: battle maps, grouped by region. `genBattle()` picks a map and enemies from the act's region. Region terrain letters are listed at the top of the REGIONS section; tile art is `bioTile()`.
-- Region monster sprites are bodies in `fig()` (`shroom`, `ghost`, `mud`, `gator`, `golem`, `flame`, `dragon`, `storm`, `eye`, riderless `mount`), with looks from `MONLOOK`. Skeletons are humanoids with `look.skel`.
+- Region monster sprites are bodies in `fig()` (`mud`, `gator`, `golem`, `flame`, `dragon`, `storm`, `eye`), with looks from `MONLOOK`.
 - Reinforcements (`def.waves`) are plain data, `{turn:[{c,lv,x,y,ifBoss}]}`, so they survive a save.
 - Mounted units are drawn by `horseUnder()`: a random-coloured horse with team barding, rider laid on top.
 - EXP is 1.5× the Fire Emblem formula (`EXP_RATE`), so units evolve during Act 1.
 - Promotion: a unit evolves as soon as it reaches Lv 5 (`PROMO_LV`, `evolveCheck()` after any level-up), choosing from up to 3 paths (`promoOptions()`): the usual upgrade, a new movement type, and a new role that keeps the weapon.
 - Flying units (`MOVES.flying`, needs the Sky Riders unlock): pegasus riders for skirmishers, casters and menders, wyverns for brutes and guards. Drawn by `horseUnder()` with wings.
 - Relics (`RELICS`): team passives for the run. Elites offer 1 of 2, the Act 1 boss 1 of 3, treasure rooms sometimes hold one. Combat effects go through `relicCalc()`, move through `relicMov()`. Shown on the map; tap one to read it.
-- Act 2 (`run.act`): a second 9-floor map after the Act 1 boss, with gremlins, gloomwings, mindsnails and storm harpies added, and the Lamia Queen in the Serpent Palace as the final boss.
+- Act 2 (`run.act`): a second 9-floor map after the Act 1 boss, with gremlins and gloomwings added, and the Lamia Queen in the Serpent Palace as the final boss.
 - Progression (saved in `embermarch2.profile`, shown under Records on the title screen):
   - Relics: 15 are open from the start (including Iron Rose: −3 damage taken below half HP; Aventurine: +10 Avoid, +5 Crit; Horn of Plenty: +15 gold per won fight and meals last 1 fight longer); 6 more join the pool after 2, 4 and 6 runs (`RELICS[k].x`).
   - Ascension (`ASC`, up to 5): winning at your highest level opens the next. Each level adds to the last: +1 enemy level; tougher bosses and elite leaders; no early ease and no starting gold; another +1 level and +1 enemy per battle; every enemy has a skill.

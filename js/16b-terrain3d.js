@@ -1,12 +1,12 @@
-/* 3D terrain: standing props (trees, rocks, gems, tombstones...) and height maps for every region */
+/* 3D terrain: standing props (trees, rocks, gems...) and height maps for every region */
 
 /* ---- standing props ----
    tile kind -> size of its upright sprite (× a tile). The feature stands on the tile's ground like a unit does,
    instead of being painted flat onto the diamond. Solid ones (boulders, rocks, spires) no longer raise a block. */
 const PROPS={forest:1.3,hill:1,village:1,fort:1.1,chest:.75,tent:1.1,cliff:1.1,crag:1.1,boulder:1.15,
-  shroom:1.15,tomb:.85,mangrove:1.25,curse:1.15,sandstone:1,agate:1,emerald:1,ruby:1,sapphire:1,malachite:.9,
+  mangrove:1.25,curse:1.15,sandstone:1,agate:1,emerald:1,ruby:1,sapphire:1,malachite:.9,
   'bgem-g':1,'bgem-r':1,'bgem-b':1,'bgem-v':1,spire:1.45};
-const PROP_BIO1=['shroom','tomb','mangrove','curse'];
+const PROP_BIO1=['mangrove','curse'];
 /* the feature alone (transparent round it), and the ground under it */
 function propArt(k,used){if(OVER_T.includes(k))return tileArt(k,used,true);if(k==='boulder')return boulderArt();
   return art('tiles/'+k+'-bare',()=>PROP_BIO1.includes(k)?bioTile_draw(k,'f'):bioTile2_draw(k,'f'))}
@@ -15,14 +15,12 @@ function propGroundArt(k){return art('tiles/'+k+'-ground',()=>PROP_BIO1.includes
 const propGround=(k,gk)=>OVER_T.includes(k)||k==='boulder'||k==='curse'?'t-'+gk:'t-g-'+k;
 texStyle.textContent+=Object.keys(PROPS).filter(k=>!OVER_T.includes(k)&&k!=='boulder').map(k=>`.t-g-${k}{background:url(${propGroundArt(k)}) 0 0/100% 100%}`).join('');
 /* stand a prop on tile x,y (called by buildBoard). Its base sits a little below the tile's centre */
-/* the Sunless Isle's boulders are a mix of rocks, rubble, skulls, dead trees and crystal (art/props/sunless-*, scale × the boulder's size) */
-const SUNLESS_ROCKS=[['rock',1],['rocks',1],['rubble',1],['deadtree',1.1],['crystal',1],['skulls',.6]];
 /* other regions' boulders: CraftPix rocks (art/props/<name>.png, padded square, scale × the boulder's size). Regions not listed keep the plain boulder */
 const REGION_ROCKS={desert:[['sand-rock',1.1]],snow:[['ice-block',.9],['snow-peaks',1.1]],forest:[['moss-rock',1.1]],swamp:[['moss-rock',1.1]],mountain:[['red-spire',1.1]],heart:[['red-spire',1.1]]};
 /* tile kinds drawn with CraftPix rocks in every region: the desert's Sandstone Rocks (k) mix the sand rock with the pale stone piles */
 /* ROCK_W: widest a single rock prop is drawn, in px (a tile is 68 wide) */
 const ROCK_W=54;
-const KIND_ROCKS={sandstone:[['sand-rock',1.1],['sunless-rock',.95],['sunless-rocks',.9]],
+const KIND_ROCKS={sandstone:[['sand-rock',1.1],['stone-rock',.95],['stone-rocks',.9]],
   /* the Cursed Woodland: Dead Wood (f) is bare dead trees; the Cursed Thicket (y) is a bramble bush or a dark mushroom tree */
   forest:[['wood-deadtree-1',1],['wood-deadtree-2',1],['wood-deadtree-3',.95]],
   curse:[['wood-bush',.8],['wood-shroom-1',.9],['wood-shroom-2',.9],['wood-shroom-3',.9]],
@@ -43,8 +41,7 @@ function boulderPairs(){if(bigFor===MAP)return bigRocks;bigFor=MAP;bigRocks={};c
     for(const[px,py]of[[x+1,y],[x,y+1]])if(isB(px,py)&&!bigRocks[key(px,py)]&&hOf(px,py)===hOf(x,y)){bigRocks[key(x,y)]=[px,py];bigRocks[key(px,py)]='skip';break}}
   return bigRocks}
 function placeProp(x,y,k){const im=document.createElement('img'),c=scrC(x,y);let w=Math.round(T*PROPS[k]),src=propArt(k,state.visited.includes(key(x,y)));
-  if(k==='boulder'&&actBiome().id==='shadow'){const[n,sc]=SUNLESS_ROCKS[(x*7+y*13)%SUNLESS_ROCKS.length];if(ART_PNG.has('props/sunless-'+n)){src='art/props/sunless-'+n+'.png';w=Math.round(w*sc)}}
-  else if(k==='boulder'&&REGION_ROCKS[actBiome().id]||KIND_ROCKS[k]){const rs=KIND_ROCKS[k]||REGION_ROCKS[actBiome().id],[n,sc]=rs[(x*7+y*13)%rs.length];if(ART_PNG.has('props/'+n)){src='art/props/'+n+'.png';w=Math.round(w*sc)}}
+  if(k==='boulder'&&REGION_ROCKS[actBiome().id]||KIND_ROCKS[k]){const rs=KIND_ROCKS[k]||REGION_ROCKS[actBiome().id],[n,sc]=rs[(x*7+y*13)%rs.length];if(ART_PNG.has('props/'+n)){src='art/props/'+n+'.png';w=Math.round(w*sc)}}
   let cx=c.x,cy=c.y,z=(x+y)*4+3;
   /* single rocks sit inside their own diamond: no wider than ROCK_W and based nearer the tile's centre, so wide ones don't hang off the map's edge */
   const rock=(k==='boulder'||k==='sandstone')&&src.startsWith('art/props/');let base=8;if(rock){w=Math.min(w,ROCK_W);base=3}
@@ -68,10 +65,9 @@ function propsRender(){
    - water, lava, the frozen lake and quicksand are the low ground; the starting rows are flat ground
    - no step between walkable tiles is more than 1, so every unit can still go everywhere it could before
    - rocks, walls and other solid tiles sit at the height of the ground around them
-   Indoor maps (crypt, chapel, the Labyrinth) and the ship's deck stay flat. */
+   Indoor maps (the Labyrinth) stay flat. */
 /* HPROF: height profile per region. a = how tall the hills get (in steps); swamp = flat with only sand and mangrove raised 1 step; dune = rolling dune ridges */
-const HPROF={mushroom:{a:2},shadow:{a:2},swamp:{a:1,swamp:1},forest:{a:2},mountain:{a:3},desert:{a:2,dune:1},snow:{a:3},cavern:{a:2},heart:{a:2}};
-const FLAT_MAPS=new Set(['crypt','chapel']);
+const HPROF={swamp:{a:1,swamp:1},forest:{a:2},mountain:{a:3},desert:{a:2,dune:1},snow:{a:3},cavern:{a:2},heart:{a:2}};
 function autoHeights(id,m,P){
   const H=m.map.length,W=m.map[0].length,a=P.a;
   const rnd=(x,y,i)=>{let h=2166136261;for(const c of id+'|'+x+'|'+y+'|'+i)h=Math.imul(h^c.charCodeAt(0),16777619);return((h>>>0)%10007)/10007};
@@ -98,4 +94,4 @@ function autoHeights(id,m,P){
   return h.map(r=>r.join(''));
 }
 for(const b in BIOMES){const B=BIOMES[b],P=HPROF[b];if(!P)continue;
-  for(const id of[...(B.maps||[]),B.bossMap,'town_'+b]){const m=MAPS[id];if(m&&!m.h&&!FLAT_MAPS.has(id))m.h=autoHeights(id,m,P)}}
+  for(const id of[...(B.maps||[]),B.bossMap,'town_'+b]){const m=MAPS[id];if(m&&!m.h)m.h=autoHeights(id,m,P)}}

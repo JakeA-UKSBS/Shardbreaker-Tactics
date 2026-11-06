@@ -215,29 +215,8 @@ button.it.sel{border-color:var(--gold)}
 .srit.no{color:var(--muted)}
 .srec{margin:0;color:var(--gold);font-size:14px}
 
-/* ship, sky and palace tiles */
-.underlay{position:absolute;left:0;top:0;image-rendering:pixelated;pointer-events:none}
-.t-sky,.t-deck,.t-hull,.t-mast,.t-helm{background:transparent;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
 .t-exit{background:radial-gradient(circle,#f3e6b0 0 20%,#c9a46a 22% 30%,transparent 33%),#4a4756}
-.t-carpet{background:linear-gradient(90deg,#c9a46a 0 6%,#7a1f2a 6% 94%,#c9a46a 94%)}
-.t-light{background:radial-gradient(circle,#fff6d0 0 28%,#e8cf8a 52%,#b89a5c)}
 .tile.trap::before{inset:20%;background:radial-gradient(circle,#d7dae3 0 22%,transparent 26%) 0 0/50% 50%;opacity:.9}
-.stage.sky{background:linear-gradient(#26304a,#56668c 60%,#8e9ab8)}.stage.sky .ground{background:#7a5230}
-/* ship take-off scene */
-.intro.shipsc{background:linear-gradient(#1f2740,#4a5878 60%,#8d97b5)}
-.ss-cloud{position:absolute;left:-20%;width:140%;height:20%;background:radial-gradient(ellipse at 20% 50%,rgba(230,235,245,.35),transparent 60%),radial-gradient(ellipse at 70% 40%,rgba(230,235,245,.3),transparent 55%)}
-.ss-cloud.c1{bottom:6%}.ss-cloud.c2{bottom:34%;opacity:.6}
-.ss-cliff{position:absolute;left:0;bottom:0;width:62%;height:34%;background:#1a1d27;clip-path:polygon(0 100%,0 20%,30% 10%,60% 22%,85% 18%,100% 40%,100% 100%)}
-.ss-ship{position:absolute;left:6%;bottom:29%;width:min(76vw,340px);aspect-ratio:120/72;transition:transform 3.2s cubic-bezier(.5,0,.3,1)}
-.ss-ship img{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}
-.ss-wings{transform-origin:50% 63%;transform:scaleY(.12);transition:transform 1s cubic-bezier(.3,1.4,.5,1)}
-.ss-body{transition:filter 1s}
-.shipsc.s2 .ss-body{filter:drop-shadow(0 0 6px #9fd8ff)}
-.shipsc.s3 .ss-wings{transform:scaleY(1);animation:ssFlap 1.1s ease-in-out 1s infinite}
-.shipsc.s4 .ss-ship{transform:translate(40%,-80%) scale(.75)}
-.shipsc.s4 .ss-cloud{animation:ssDrift 4s linear infinite}
-@keyframes ssFlap{50%{transform:scaleY(.65)}}
-@keyframes ssDrift{to{transform:translateX(-25%)}}
 
 /* New Game intro */
 .intro{position:fixed;inset:0;z-index:75;overflow:hidden;background:#05060a;transition:opacity .5s}

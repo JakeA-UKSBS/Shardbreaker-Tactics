@@ -172,12 +172,12 @@ An effective hit multiplies weapon Mt ×2. Only your side deals them for now.
 
 | Monster type | Who has it | Beaten by |
 |---|---|---|
-| Flier | Harpy, Hawk, Wyvern, Prism, Roc, Wisp, Spirit Hawk | Bows |
-| Armoured | Mindsnail, Boulder Golem, Crystal Sentinel, Sandstone Golem, Pyrite Colossus, Agate Golem, Gem Golem, Gemsnail, Amethyst Turtle, Pebble Golem, Stone Warden | War Hammer, Stonebane |
-| Beast | Wolf, Hawk, Alligator, Cursed Stag, Magma Dragon, Wyvern, Bog Lurker, Jackal, Sand Worm, Frost Wolf, Agate Wyrm, Hollow Bear, Bone Wyrm, Roc, Spirit Wolf, Spirit Hawk | Hunting Spear, Wolfsbane |
+| Flier | Hawk, Prism, Wisp, Spirit Hawk | Bows |
+| Armoured | Boulder Golem, Crystal Sentinel, Sandstone Golem, Pyrite Colossus, Agate Golem, Gem Golem, Gemsnail, Amethyst Turtle, Pebble Golem, Stone Warden | War Hammer, Stonebane |
+| Beast | Wolf, Hawk, Alligator, Cursed Stag, Magma Dragon, Bog Lurker, Jackal, Sand Worm, Frost Wolf, Agate Wyrm, Hollow Bear, Spirit Wolf, Spirit Hawk | Hunting Spear, Wolfsbane |
 | Colossal | Every 2×2 boss | Giantslayer |
-| Spectral | Ghost, Fire Sprite, Frost Sprite, Wisp | Light sigils, Holy Sword, Spiritbane, Paladins |
-| Plant | Sporeling, Mushroom King, Blighted Treant | Fire sigils |
+| Spectral | Fire Sprite, Frost Sprite, Wisp | Light sigils, Holy Sword, Spiritbane, Paladins |
+| Plant | Blighted Treant | Fire sigils |
 
 ## Skills
 
@@ -261,12 +261,9 @@ Learned skills cost capacity (base 20, +5 when promoted). Personal skills are fr
 
 | Region | Monsters (weight; from floor) | Elite pack | Boss |
 |---|---|---|---|
-| Mycelia | Sporeling 4, Mindsnail 2 (fl 3+) | Mindsnail, Sporeling | King Morel the Blighted |
-| Sunless Isle | Skeleton 4, Ghost 2 (fl 3+) | Ghost, Skeleton | The Bone Wyrm |
 | Sobek’s Mire | Bog Lurker 3, Lamia 3 (fl 2+), Mud Monster 2 (fl 4+) | Mud Monster, Lamia, Bog Lurker | Krondis |
 | Cursed Woodland | Wolf 4, Cursed Stag 3 (fl 2+), Blighted Treant 2 (fl 5+) | Blighted Treant, Cursed Stag, Wolf | The Hollow Bear |
-| Volcanic Isle | Fire Sprite 3, Boulder Golem 3 (fl 3+), Harpy 1 (fl 4+) | Boulder Golem, Fire Sprite, Harpy | Pyraxis, the Magma Dragon |
-| The Flying Ship | Harpy 3, Wyvern 2 (fl 3+) | Wyvern, Harpy | The Great Roc |
+| Volcanic Isle | Fire Sprite 3, Boulder Golem 3 (fl 3+) | Boulder Golem, Fire Sprite | Pyraxis, the Magma Dragon |
 | The Labyrinth | Gremlin 3, Beholder 2 (fl 3+) | Beholder, Gremlin | Minotaur lord |
 | The Heart of the Blight | Shardling 4, Prism 3, Crystal Sentinel 2 | Crystal Sentinel, Shardling, Prism | The Crystal Heart |
 | Sandstone Desert | Jackal 4, Sand Worm 3 (fl 2+), Sandstone Golem 2 (fl 4+) | Sandstone Golem, Jackal, Sand Worm | The Pyrite Colossus |

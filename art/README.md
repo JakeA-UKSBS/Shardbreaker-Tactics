@@ -22,9 +22,8 @@ You only need to rebuild the manifest when you **add** or **delete** a PNG: `nod
 | `title/` | Title-screen crystal | 120×120 |
 | `bosses/` | The Crystal Heart (act 3 boss, 3×3 tiles): idle and `-strike` | 96×96 |
 | `cast/<character>/` | The named cast: `<class>-<pose>.png` for their starting class and each ascension. Poses: `idle`, and the attack frames `windup`, `swing`, `follow`, `critup`. Drawn with the character's listed weapon, so weapon upgrades don't change the picture | 64×64 |
-| `monsters/` | Every monster, region boss (except the big hand-drawn ones in `bosses/` and the Roc and Bone Wyrm) and summon: `<Class>.png` standing and `<Class>-strike.png` attacking. One fixed look each, so a monster no longer gets random colours | 32×32 |
+| `monsters/` | Every monster, region boss (except the big hand-drawn ones in `bosses/`) and summon: `<Class>.png` standing and `<Class>-strike.png` attacking. One fixed look each, so a monster no longer gets random colours | 32×32 |
 | `bosses/hollow-bear`, `bosses/krondis` | The Hollow Bear and Krondis (2×2 bosses), facing right; add `<name>-strike` for an attack pose | 128×128 |
-| `ship/` | Flying Ship parts (region is switched off for now) | as exported |
 
 ## The code-drawn versions
 
@@ -42,5 +41,4 @@ The tool needs Node and Playwright: `npm i -D playwright && npx playwright insta
 These are still drawn in code:
 
 - **Generated units** (random recruits and sellswords): their looks are random, drawn by the unit rig.
-- **The Roc and Bone Wyrm:** 64px boss art drawn in `BIG`.
 - **Event scenes:** each one combines the region's background with the event's prop.

@@ -95,7 +95,7 @@ async function load(){
   for(const m of mf.matchAll(/MAPS\.(\w+)\.h=(\[[^\]]*\]);/g))HSET[m[1]]=JSON.parse(m[2]);
   for(const m of all.matchAll(/\n  (\w+):\{n:'([^']+)'(?:(?!\n  \w+:\{n:)[\s\S])*?maps:(\[[^\]]*\]),bossMap:'(\w+)'/g)){
     const ids=[...JSON.parse(m[3].replace(/'/g,'"')),m[4],'town_'+m[1]].filter((v,i,a)=>MAPS[v]&&a.indexOf(v)===i);if(ids.length)REG.push({id:m[1],n:m[2],ids,boss:m[4]})}
-  REG=REG.filter(r=>!['ship','mushroom','labyrinth','shadow'].includes(r.id));
+  REG=REG.filter(r=>!['labyrinth'].includes(r.id));
   $('src').textContent=`${Object.keys(MAPS).length} maps read from the game files.`;
   $('region').innerHTML=REG.map((r,i)=>`<option value="${i}">${r.n}</option>`).join('');
   $('region').onchange=fillMaps;fillMaps();

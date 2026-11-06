@@ -94,7 +94,7 @@ function hairFront(p,L,hair,hair2,TC,cloth){
   if(g==='circlet'){p.rect(10,6,12,1,GOLD);p.set(15,5,GOLD);p.set(16,5,GOLD);p.set(15,6,'#9fd8ff');p.set(16,6,'#9fd8ff')}
   if(L.beard){p.rect(16,14,3,3,hair);p.rect(17,12,3,1,hair)}
 }
-function horseUnder(p,L,TC,cloth,strike,bare){
+function horseUnder(p,L,TC,cloth,strike){
   /* a horse, pegasus (L.mount='pegasus') or wyvern under the rider; the rider's legs are dropped and the rest lifted 3px */
   const q=Px(32,32),hc=L.horse||'#7a5230',hc2=shade(hc,.72),hi=shade(hc,1.18),rear=strike?-2:0,wy=L.mount==='wyvern',peg=L.mount==='pegasus',mane=peg?'#e8e2d0':shade(hc,.45);
   if(wy||peg){const up=strike?-2:0,wc=wy?shade(hc,.85):'#ffffff',wc2=wy?shade(hc,.6):'#b9c4d6';
@@ -109,9 +109,9 @@ function horseUnder(p,L,TC,cloth,strike,bare){
   if(wy){q.poly([[25,10+rear],[31,12+rear],[31,15+rear],[26,16+rear]],hc);q.line(24,10+rear,22,6+rear,'#e8e2d0');q.line(26,10+rear,25,5+rear,'#e8e2d0');
     q.set(28,11+rear,'#ffd23f');q.set(31,13+rear,INK);for(let y=13;y<20;y+=2)q.set(21+(20-y)/4,y+rear/2,hc2)}
   else{q.poly([[25,11+rear],[31,14+rear],[31,17+rear],[27,17+rear]],hc);q.line(22,12+rear,20,20,mane,2);q.poly([[24,11+rear],[25,7+rear],[27,11+rear]],hc2);q.set(27,13+rear,INK);q.set(30,15+rear,INK);q.line(26,16+rear,22,19,BROWN2)}
-  if(!bare){q.poly([[10,18],[20,18],[19,25],[11,25]],TC.a);q.rect(10,18,10,1,GOLD);q.rect(11,24,8,1,shade(TC.a,.7))}
+  {q.poly([[10,18],[20,18],[19,25],[11,25]],TC.a);q.rect(10,18,10,1,GOLD);q.rect(11,24,8,1,shade(TC.a,.7))}
   for(let y=0;y<32;y++)for(let x=0;x<32;x++){const c=p.g[y*32+x];if(!c||(y>=24&&x>=8&&x<=23))continue;if(y-3>=0)q.set(x,y-3,c)}
-  if(!bare){q.rect(14,19,3,5,shade(cloth,.7));q.rect(14,24,4,2,INK)}
+  {q.rect(14,19,3,5,shade(cloth,.7));q.rect(14,24,4,2,INK)}
   q.outline(OUT);return q.url();
 }
 const sprCache={};
@@ -147,11 +147,11 @@ function crystallise(P,cls,big,small,sc){if(small){const W=32,g=P.g;let h=0;for(
 }
 function fig(L,cls,team,pose,wk,sz){
   if(typeof isHi==='function'&&isHi(cls,sz))return hiFig(L||{},cls,team,pose,wk);
-  if(sz>=2){const B=BIG[CLS[cls].body+(L.bones?'_bones':'')];if(B)return B(L,pose==='strike')}
+  if(sz>=2){const B=BIG[CLS[cls].body];if(B)return B(L,pose==='strike')}
   /* monsters: art/monsters/<Class>.png (and <Class>-strike.png for the attack pose) replaces the code-drawn sprite, see monsterArt() */
   {const k='monsters/'+cls;if(ART_PNG.has(k))return'art/'+k+(pose==='strike'&&ART_PNG.has(k+'-strike')?'-strike':'')+'.png'}
   if(sz>=2)pxScale=2;
-  if(team==='e'&&!CLS[cls].tier&&!String(cls).startsWith('G.')&&!L.blight){pxHook=P=>L.crys===false?0:L.crysAt?crysAt(P,L.crysAt):crystallise(P,cls,!!L.big||/Wyrm|Dragon|Colossus|Turtle|King|Stag|Krondis|StormElemental|Matriarch|Roc/.test(cls),L.crysSmall,L.crysCol)}
+  if(team==='e'&&!CLS[cls].tier&&!String(cls).startsWith('G.')&&!L.blight){pxHook=P=>L.crys===false?0:L.crysAt?crysAt(P,L.crysAt):crystallise(P,cls,!!L.big||/Wyrm|Dragon|Colossus|Turtle|King|Stag|Krondis|StormElemental|Matriarch/.test(cls),L.crysSmall,L.crysCol)}
   pxMini=!!L.mini;try{return fig0(L,cls,team,pose,wk)}finally{pxHook=null;pxScale=1;pxMini=false}
 }
 /* ==================================================================
@@ -171,59 +171,6 @@ BIG.crystal=(L,strike)=>art('bosses/crystal-heart'+(strike?'-strike':''),()=>{co
 /* a clean gem crystal for 64px art: dark rim, face, lit edge, shaded side */
 function gem64(p,x,y,h,w,col,lean=0){const hi=shade(col,1.5),lo=shade(col,.62),tx=x+lean;
   p.poly([[x-w-1,y+1],[tx,y-h-1],[x+w+1,y+1]],OUT);p.poly([[x-w,y],[tx,y-h],[x+w,y]],col);p.poly([[tx,y-h],[x+w,y],[x+1,y]],lo);p.line(tx-1,y-h+2,x-w+1,y-1,hi)}
-/* ---- 64px boss art: roc ---- */
-BIG.roc=(L,strike)=>{const p=Px(64,64),c=L.body||'#8a5a2a',c2=shade(c,.7),c3=shade(c,1.28),c4=shade(c,.48),hd=L.head||'#efe6cf',hd2=shade(hd,.78),bk=L.beak||'#e8b83a',bk2=shade(bk,.62),ft='#e8b83a',o=strike?5:0;
-  /* tail fan */
-  p.poly([[20,44],[3,46],[0,52],[4,52],[1,58],[7,57],[5,62],[12,58],[22,52]],c2);for(const[x,y]of[[3,47],[1,55],[6,60]])p.line(21,48,x,y,c4);
-  /* far wing behind, raised */
-  p.poly([[32,28],[8,0],[12,8],[2,6],[10,14],[0,16],[10,22],[4,28],[20,32]],c4);for(const[x,y]of[[8,0],[2,6],[0,16],[4,28]])p.line(30,28,x,y,shade(c4,.75));
-  /* body with chest feathers */
-  p.ell(32,42,17,12,c);p.ell(34,47,12,6,c3,(x,y)=>y>=45);p.ell(22,42,8,9,c2,(x,y)=>x<24);
-  for(let r=0;r<3;r++)for(let x=26+r*2;x<=44-r*2;x+=4)p.line(x,44+r*3,x+2,45+r*3,c2);
-  /* near wing raised high: covert rows, then separated primaries */
-  p.poly([[24,34],[14,10],[20,14],[24,4],[30,10],[34,2],[40,10],[44,6],[46,16],[42,30]],c);
-  p.poly([[26,32],[18,14],[24,16],[28,8],[32,14],[36,8],[40,14],[42,28]],c3);
-  for(const[x,y]of[[14,10],[24,4],[34,2],[44,6]])p.line(x,y,x+(38-x)*.45,y+(28-y)*.45,c2,2);
-  for(let y=20;y<32;y+=4)p.line(24,y+2,42,y,c2);
-  /* legs and talons */
-  for(const x of[28,40]){p.rect(x,52,4,6,ft);p.line(x,53,x+3,53,shade(ft,.7));p.line(x,56,x+3,56,shade(ft,.7));
-    p.line(x-2+o,58,x-4+o,62,INK,2);p.line(x+1+o,58,x+1+o,63,INK,2);p.line(x+4+o,58,x+6+o,62,INK,2)}
-  /* white neck and head, fierce eye, big hooked beak */
-  p.poly([[38,30],[44,14],[54,12],[52,34]],hd);p.line(44,18,46,32,hd2);p.line(48,16,50,32,hd2);
-  p.ell(51,16,8,7,hd);p.line(46,11,56,11,hd2,2);
-  p.rect(50,13,4,3,INK);p.rect(51,13,2,2,L.eye||'#ff5a3a');p.set(51,13,'#ffffff');
-  p.poly([[56,12],[62,14],[63,19],[61,24],[59,20],[57,19]],bk);p.line(57,18,62,18,bk2);p.poly([[61,20],[63,19],[62,25],[60,24]],bk2);
-  if(strike){p.poly([[56,20],[61,22],[58,26]],bk2);p.set(57,22,'#7a2a1a')}
-  /* malignant crystals growing from the back, between the wings */
-  {const B='#4a8ae8',B2='#a8d8ff',B3='#2a4a9a';for(const[x,y,r]of[[30,40,3],[37,46,2]]){p.poly([[x,y-r-1],[x+r+1,y],[x,y+r+1],[x-r-1,y]],OUT);p.poly([[x,y-r],[x+r,y],[x,y+r],[x-r,y]],B);p.poly([[x,y-r],[x+r,y],[x,y]],B2);p.poly([[x,y],[x+r,y],[x,y+r]],B3)}}
-  p.outline(OUT);return p.url()};
-/* ---- 64px boss art: dragon_bones ---- */
-BIG.dragon_bones=(L,strike)=>{const p=Px(64,64),bn='#e8e2d0',bn2='#b8b09a',bn3='#8a8270',dk='#2e2240',dk2='#3e2e54',gl=L.glow||'#c77dff',gl2='#f3e6ff',o=strike?4:0;
-  /* tattered wing: membrane scraps with holes, bare finger bones */
-  p.poly([[28,30],[14,4],[10,14],[2,16],[8,26],[2,34],[12,38],[24,40]],dk);p.poly([[26,30],[14,8],[12,16],[6,18],[10,26],[6,32],[14,36]],dk2);
-  for(const[x,y,r]of[[11,20,2.5],[8,30,2],[16,32,1.6],[14,14,1.5],[20,22,2.2],[5,24,1.6],[18,36,1.4],[22,30,1.8],[9,9,1.4]])p.ell(x,y,r,r,null);for(const[x,y]of[[2,20],[4,30],[8,36],[18,40],[10,6],[3,12]])p.poly([[x-2,y-2],[x+3,y],[x-1,y+3]],null);
-  p.line(28,30,16,10,bn,2);for(const[x,y]of[[14,4],[2,16],[2,34],[12,38]])p.line(16,10,x,y,bn2);p.line(28,30,12,38,bn2);p.ell(16,10,1.6,1.6,bn);p.ell(28,30,2,2,bn);
-  /* spine: tail tip to skull, vertebrae with dark gaps */
-  const sp=[[2,60],[8,56],[14,52],[20,46],[26,40],[32,34],[40,32],[46,26],[49,19],[50,14]];
-  for(let i=0;i<sp.length-1;i++)p.line(sp[i][0],sp[i][1],sp[i+1][0],sp[i+1][1],bn,3);
-  for(let i=1;i<sp.length-1;i++){p.set(sp[i][0],sp[i][1]-2,bn2);p.set(sp[i][0]+1,sp[i][1]-2,bn3)}
-  for(let i=0;i<sp.length-1;i+=1){const[x,y]=sp[i];p.set(x+1,y+1,bn3)}
-  /* ribcage around a glowing core */
-  p.ell(33,44,5,5,dk);p.ell(33,44,3.4,3.4,gl);p.ell(32,43,1.6,1.6,gl2);for(const[x,y]of[[27,40],[39,41],[33,50],[29,47],[37,47]])p.set(x,y,gl);
-  for(let i=0;i<6;i++){const x=24+i*3.2,y=38-i*.6;p.line(x,y,x-2,y+8,bn,2);p.line(x-2,y+8,x+1,y+14,bn);p.set(x+1,y+14,bn2)}
-  p.line(22,52,42,51,bn2);
-  /* pelvis and legs: femur, shin, clawed foot */
-  p.ell(20,48,3,2,bn);for(const[x,y,f]of[[18,50,-1],[22,50,1]]){p.line(x,y,x+f*2,y+6,bn,2);p.line(x+f*2,y+6,x,y+11,bn,2);p.ell(x+f*2,y+6,1.2,1.2,bn2);p.line(x,y+11,x-3,y+12,bn);p.line(x,y+11,x+3,y+12,bn)}
-  for(const[x,y]of[[38,48],[42,48]]){p.line(x,y,x+1,y+6,bn,2);p.line(x+1,y+6,x,y+11,bn,2);p.line(x,y+11,x+3,y+12,bn);p.line(x,y+11,x-2,y+12,bn)}
-  /* skull: long snout, hollow glowing socket, nasal hole, teeth, back-swept horns, dropping jaw */
-  p.poly([[44,10],[52,6],[60,8],[63,12],[62,15],[50,16],[45,15]],bn);p.line(46,15,62,14,bn3);p.line(50,7,58,8,'#ffffff');
-  p.ell(51,11,2.6,2.2,INK);p.ell(51,11,1.2,1,gl);p.set(51,10,gl2);p.set(60,11,INK);p.set(61,11,INK);
-  p.poly([[47,16],[62,16+o],[61,19+o],[49,19]],bn2);for(let x=50;x<62;x+=3){p.set(x,16,INK);p.set(x+1,17+o,INK)}
-  p.line(46,9,38,2,bn,2);p.line(38,2,35,1,bn2);p.line(49,7,44,0,bn2,2);
-  if(strike){p.line(62,18,63,26,gl,2);p.set(61,22,gl2);p.set(63,28,gl)}
-  /* crystals pushing out of the spine */
-  gem64(p,40,30,8,2,'#7ad84a',-1);gem64(p,26,38,6,2,'#8ae86a',1);gem64(p,46,24,5,1,'#7ad84a',1);
-  p.outline(OUT);return p.url()};
 /* ---- 64px boss art: gator ---- */
 BIG.gator=(L,strike)=>{const p=Px(64,64),c=L.body||'#5a6a86',c2=shade(c,.72),c3=shade(c,1.25),c4=shade(c,.5),bl=L.belly||'#5a7a4a',bl2=shade(bl,.75),gd='#e0a830',gd2=shade(gd,.7),cl='#c86a32',cl2='#6a2a1a',tt='#efe6cf',mo='#e8a090',o=strike?4:0;
   /* thick tail sweeping off to the left */
@@ -278,14 +225,12 @@ bigPng('bear','hollow-bear');
 function fig0(L,cls,team,pose,wk){
   const sk=L.skin||SKIN,sk2=L.skin?shade(L.skin,.85):SKIN2;
   const p=Px(32,32),TC=TEAMC[team],body=CLS[cls].body,hair=L.hair||'#1d1a24',hair2=shade(hair,.7),cloth=L.cloth||TC.a,cloth2=shade(cloth,.72),sash=L.sash||(team!=='e'?GOLD:'#2b2330'),inner=TC.s,strike=pose==='strike',w=wk?IT[wk]:null;
-  /* ---- body: snails (Mindsnail, Gemsnail) ---- */
+  /* ---- body: snails (Gemsnail) ---- */
   if(body==='snail'){const b=sk,b2=shade(sk,.75),sh=L.shell||'#b98fbf',sh2=shade(sh,.68),ey=L.eye||'#c77dff',lean=strike?-3:0;
     p.poly([[3,30],[29,30],[27,25],[6,24]],b);p.rect(4,29,24,1,b2);
     p.ell(18,18,9.5,9.5,sh);p.ring(18,18,7,sh2);p.ring(19,18,4.5,sh2);p.ring(19.5,18.5,2.2,sh2);p.line(10,22,26,22,shade(sh,.85));
     p.ell(7+lean,24,4,3.5,b);p.line(6+lean,21,4+lean,12,b2);p.line(9+lean,21,11+lean,12,b2);p.ell(4+lean,11,1.8,1.8,ey);p.ell(11+lean,11,1.8,1.8,ey);
     p.outline(OUT);return p.url()}
-  /* ---- body: riderless mounts (Wyvern) ---- */
-  if(body==='mount'){return horseUnder(Px(32,32),L,TC,cloth,strike,true)}
   /* ---- body: sand worm ---- */
   if(body==='worm'){const c=L.body||'#c98a6a',c2=shade(c,.75),c3=shade(c,1.15),sd='#b8a070',o=strike?3:0;
     p.ell(14,29,11,3,sd);p.ell(14,28,8,1.6,shade(sd,.85));
@@ -298,30 +243,6 @@ function fig0(L,cls,team,pose,wk){
     p.ell(16,19,5,6,c);p.ell(16,21,3.5,4,bl);for(let y=19;y<25;y+=2)p.line(14,y,18,y,shade(bl,.85));
     p.poly([[13,24],[19,24],[18,29],[14,29]],c2);p.ell(16,12,4,3.5,c);p.rect(14,10,1,2,INK);p.rect(18,10,1,2,INK);p.set(14,10,'#ffd23f');p.set(18,10,'#ffd23f');
     p.poly([[15,13],[17,13],[16,16]],'#e2b553');p.rect(13,28,2,2,'#e2b553');p.rect(17,28,2,2,'#e2b553');
-    p.outline(OUT);return p.url()}
-  /* ---- body: mushroom folk (Sporeling, Mushroom King) ---- */
-  if(body==='shroom'){const k=L.small?.75:1,X=x=>16+(x-16)*k,Y=y=>31-(31-y)*k,cap=L.cap||'#d8483a',cap2=shade(cap,.72),st=L.stem||'#efe6cf',st2=shade(st,.8),sq=strike?2:0;
-    p.poly([[X(11),Y(17)],[X(21),Y(17)],[X(22),Y(29)],[X(10),Y(29)]],st);p.rect(X(10),Y(17),Math.max(1,2*k),12*k,st2);
-    p.rect(X(10),Y(29),4*k,2,st2);p.rect(X(18),Y(29),4*k,2,st2);
-    if(L.blight){const gl=L.eye||'#5fe8d8';p.rect(X(12),Y(20),4,3,INK);p.rect(X(17),Y(20),4,3,INK);p.line(X(11),Y(19),X(15),Y(20),INK);p.line(X(17),Y(20),X(21),Y(19),INK);p.rect(X(13),Y(21),2,1,gl);p.rect(X(18),Y(21),2,1,gl);
-      p.rect(X(13),Y(25),7,2,INK);for(const x of[13,15,17,19])p.set(X(x),Y(25),'#e8e2d0');p.set(X(14),Y(26),'#e8e2d0');p.set(X(18),Y(26),'#e8e2d0');p.line(X(11),Y(18),X(12),Y(27),shade(st,.65));p.line(X(20),Y(18),X(21),Y(26),shade(st,.65))}
-    else{p.rect(X(13),Y(20),2,3,INK);p.rect(X(18),Y(20),2,3,INK);p.set(X(13),Y(20),'#ffffff');p.set(X(18),Y(20),'#ffffff');
-    p.set(X(14),Y(24),INK);p.rect(X(15),Y(25),3,1,INK);p.set(X(18),Y(24),INK);p.set(X(12),Y(23),'#f0a0a0');p.set(X(20),Y(23),'#f0a0a0')}
-    p.ell(16,Y(12)-sq,12*k,8*k,cap,(x,y)=>y<=Y(16)-sq);p.rect(X(4),Y(15)-sq,24*k,2,cap2);for(let x=X(6);x<X(26);x+=2)p.set(x,Y(16)-sq,'#d9c9a8');
-    if(L.blight){const g='#5fe8d8',g2='#e8fffb',g3='#2a9a8a',c3=shade(cap,1.35),c4=shade(cap,.5);
-      p.ell(19,9-sq,7,4,c3,(x,y)=>y<=12-sq&&p.g[y*32+x]);p.ell(9,13-sq,5,3,cap2,(x,y)=>y<=16-sq&&p.g[y*32+x]);p.rect(5,16-sq,22,1,c4);
-      for(let x=7;x<26;x+=3)p.line(x,16-sq,x+1,17-sq,c4);p.line(9,9-sq,13,13-sq,c4);p.line(21,7-sq,24,12-sq,c4);
-      for(const[x,y,h,w]of[[9,8,7,2],[16,5,9,2],[22,7,7,2],[26,11,4,1]]){p.poly([[x-w-1,y+1-sq],[x,y-h-1-sq],[x+w+1,y+1-sq]],OUT);p.poly([[x-w,y-sq],[x,y-h-sq],[x+w,y-sq]],g);p.line(x+1,y-h+2-sq,x+w,y-sq,g3);p.line(x-1,y-h+3-sq,x-1,y-1-sq,g2)}
-      if(L.crown){p.rect(13,15-sq,7,1,'#8a6a20');p.set(14,14-sq,'#8a6a20');p.set(16,14-sq,'#8a6a20');p.set(18,14-sq,'#8a6a20');p.set(16,15-sq,g)}}
-    else{[[10,10],[17,6],[22,11],[14,13],[25,14]].forEach(([x,y])=>p.ell(X(x),Y(y)-sq,1.6*k,1.3*k,'#ffffff'));
-    if(L.crown){p.rect(12,1,9,2,GOLD);[12,16,20].forEach(x=>p.rect(x,0,1,1,GOLD));p.set(16,1,RED)}}
-    if(strike)for(const[x,y]of[[27,18],[29,15],[30,20],[26,14],[31,17]])p.set(x,y,'#c58aff');
-    p.outline(OUT);return p.url()}
-  /* ---- body: ghost ---- */
-  if(body==='ghost'){const c=L.body||'#d8e0f0',c2=shade(c,.78),b=strike?-2:0,ey=L.eye||'#7fe3ff';
-    p.ell(16,12+b,8,8,c);p.rect(8,12+b,16,12,c);for(let i=0;i<4;i++)p.poly([[8+i*4,24+b],[12+i*4,24+b],[10+i*4,28+b+(i%2)]],c);
-    p.rect(8,12+b,2,12,c2);p.line(8,17+b,4,21+b,c2,2);if(strike)p.line(23,15+b,30,12+b,c,2);else p.line(23,17+b,27,21+b,c,2);
-    p.ell(13,12+b,1.8,2.6,INK);p.ell(19,12+b,1.8,2.6,INK);p.set(13,12+b,ey);p.set(19,12+b,ey);p.ell(16,18+b,1.6,2.2,INK);
     p.outline(OUT);return p.url()}
   /* ---- body: mud monster ---- */
   if(body==='mud'){const c=L.body||'#5a4a32',c2=shade(c,.7),c3=shade(c,1.25),s=strike?4:0;
@@ -394,41 +315,6 @@ function fig0(L,cls,team,pose,wk){
     p.poly([[16,1],[22,9],[25,18],[22,26],[10,26],[7,18],[10,9],[12,12]],c3);p.ell(16,19,7,7,c);p.poly([[16,5],[21,14],[11,14]],c);p.ell(16,21,4,4,c2);
     p.rect(13,18,2,2,INK);p.rect(18,18,2,2,INK);p.set(15,22,INK);p.set(17,22,INK);[[8,6],[24,5],[27,13],[5,14]].forEach(([x,y])=>p.set(x,y,c2));
     if(strike){p.ell(27,16,3,3,c);p.ell(28,16,1.5,1.5,c2)}p.ell(16,30,5,1,'#3a1a14');
-    p.outline(OUT);return p.url()}
-  /* ---- body: dragons ---- */
-  if(body==='dragon'&&L.bones){const bn='#e8e2d0',bn2='#a8a08a',dk='#3a2a48',gl=L.glow||'#c77dff',o=strike?2:0;
-    /* tattered membrane scraps between bare wing bones */
-    p.poly([[13,15],[6,5],[8,11]],dk);p.poly([[13,17],[3,12],[6,17]],dk);
-    for(const[x,y]of[[3,1],[1,9],[0,16],[3,22]]){p.line(13,15,x,y,bn);p.set(x,y,bn2)}p.ell(13,16,1.5,1.5,bn);
-    /* spine from tail tip over the back to the neck, with vertebrae */
-    const sp=[[0,30],[3,27],[7,24],[11,18],[15,16],[19,16],[21,12],[23,9]];for(let i=0;i<sp.length-1;i++)p.line(sp[i][0],sp[i][1],sp[i+1][0],sp[i+1][1],bn,2);sp.forEach(([x,y],i)=>{if(i%2)p.set(x,y-1,bn2)});
-    /* ribcage: curved ribs hanging from the spine around a glowing core */
-    p.ell(15,22,2.2,2.2,gl);p.set(15,21,'#f3e6ff');
-    for(let x=10;x<=19;x+=2){const t=Math.min(x-9,20-x);p.line(x,17,x-1,22+Math.min(3,t),bn);p.set(x-1,23+Math.min(3,t),bn2)}p.line(9,26,19,26,bn2);
-    /* bony legs with joints and claws */
-    for(const[x,y]of[[10,25],[19,25]]){p.line(x,y,x-1,28,bn);p.line(x-1,28,x,31,bn);p.set(x-1,28,bn2);p.set(x+1,31,bn)}
-    for(const[x,y]of[[13,25],[21,25]]){p.line(x,y,x+1,28,bn2);p.line(x+1,28,x,31,bn2)}
-    /* skull: hollow glowing socket, teeth, horns */
-    p.poly([[21,5],[27,4],[31,7],[31,9],[24,10],[22,10]],bn);p.line(22,9,30,9,bn2);p.rect(24,6,3,2,INK);p.set(25,6,gl);p.set(26,7,gl);p.set(29,7,INK);
-    p.poly([[23,10],[31,10+o],[30,11+o],[24,12]],bn2);for(let x=25;x<31;x+=2){p.set(x,10,INK);p.set(x,11+o,INK)}
-    p.line(22,5,18,0,bn);p.line(24,4,22,0,bn2);
-    if(strike){p.line(31,11,31,15,gl,2);p.set(30,13,'#f3e6ff')}
-    p.outline(OUT);return p.url()}
-  /* ---- body: roc ---- */
-  if(body==='roc'){const c=L.body||'#8a5a2a',c2=shade(c,.68),c3=shade(c,1.3),c4=shade(c,.45),hd=L.head||'#efe6cf',bk=L.beak||'#e8b83a',o=strike?3:0;
-    /* tail fan, far wing, body */
-    p.poly([[9,22],[1,24],[0,28],[3,27],[2,30],[6,28],[10,26]],c2);p.line(9,23,1,26,c4);p.line(9,24,3,29,c4);
-    p.poly([[15,14],[2,0],[4,5],[0,6],[5,10],[1,13],[9,16]],c4);
-    p.ell(15,20,8,6,c);p.ell(16,23,6,3,c3,(x,y)=>y>=22);for(let x=11;x<=20;x+=3)p.set(x,24,c2);
-    /* near wing raised high, with feather tips */
-    p.poly([[12,16],[5,1],[9,3],[11,0],[14,3],[17,1],[18,6],[19,14]],c);p.poly([[12,16],[7,4],[10,6],[13,4],[16,7],[18,14]],c3);
-    for(const[x,y]of[[5,1],[11,0],[17,1]])p.line(x,y,14,13,c2);p.line(12,16,19,14,c2);
-    /* talons */
-    for(const x of[14,19]){p.line(x,25,x+o,29,bk,2);p.set(x-1+o,31,INK);p.set(x+1+o,31,INK);p.set(x+o,31,bk)}
-    /* white head, hooked golden beak, fierce eye */
-    p.poly([[19,15],[22,8],[26,8],[24,17]],hd);p.ell(25,9,4,3.6,hd);p.line(22,12,23,16,shade(hd,.8));
-    p.poly([[27,8],[31,9],[31,12],[29,13],[28,11]],bk);p.line(29,12,30,13,shade(bk,.6));if(strike)p.poly([[27,11],[30,13],[27,13]],shade(bk,.75));
-    p.rect(25,8,2,1,INK);p.set(26,8,L.eye||'#ff5a3a');p.line(24,7,27,7,shade(hd,.7));
     p.outline(OUT);return p.url()}
   /* ---- body: dragons ---- */
   if(body==='dragon'){const c=L.body||'#5a2a22',c2=shade(c,.68),c3=shade(c,1.3),c4=shade(c,.45),lv=L.glow||'#ff8a3c',ly=L.glow2||'#ffe14a',bn='#e8e2d0',o=strike?2:0;
@@ -515,8 +401,6 @@ function fig0(L,cls,team,pose,wk){
   p.ell(15.5,10,4.8,5.2,sk);p.rect(11,11,2,2,sk2);
   p.rect(18,9,1,2,L.eye||INK);p.rect(14,9,1,2,L.eye||INK);p.rect(18,8,2,1,hair2);p.rect(13,8,2,1,hair2);p.rect(16,12,2,1,'#c0786a');
   hairFront(p,L,hair,hair2,TC,cloth);
-  if(L.skel){const ey=L.eye||'#ff5a3a';p.rect(13,8,3,3,INK);p.rect(17,8,3,3,INK);p.set(14,9,ey);p.set(18,9,ey);p.set(16,11,INK);p.rect(14,13,4,1,INK);p.set(15,13,sk);p.set(17,13,sk);
-    if(body==='vest'){for(const y of[16,18,20])p.line(13,y,17,y,INK);p.line(15,15,15,23,shade(sk,.8))}}
   if(L.horns){const h2=L.hornGem||'#d8d0bc';p.line(12,6,9,2,'#d8d0bc',2);p.line(9,2,8,0,'#d8d0bc');p.line(19,6,22,2,h2,2);p.line(22,2,23,0,h2);if(L.hornGem){p.set(21,3,shade(h2,1.5));p.set(23,0,shade(h2,1.5))}}
   if(CLS[cls].tier===2){p.rect(9,14,4,2,GOLD);p.rect(19,14,4,2,GOLD);p.rect(12,5,7,1,GOLD);p.set(15,4,'#9fd8ff')}
   const fsl=body==='vest'?sk:cloth;

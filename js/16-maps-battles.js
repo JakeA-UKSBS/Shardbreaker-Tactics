@@ -10,8 +10,6 @@ Object.assign(CLS,{
   AmethystTurtle:{n:'Amethyst Turtle',w:['heavy','art'],body:'turtle',mov:0},
   HollowBear:{n:'Hollow Bear',w:['heavy'],body:'bear',mov:4},
   PebbleGolem:{n:'Pebble Golem',w:['heavy'],body:'golem',mov:4,lava:true},
-  BoneWyrm:{n:'Bone Wyrm',w:['art'],body:'dragon',mov:0},
-  Roc:{n:'Roc',w:['blade','art'],body:'roc',mov:4,fly:true},
   WyvernMatriarch:{n:'Wyvern Matriarch',w:['heavy','art'],body:'dragon',mov:3,fly:true},
   Sage:{n:'Sage',w:['art'],body:'robe',mov:0}
 });
@@ -101,30 +99,19 @@ Object.assign(BIOMES,{
     maps:['geode','mineshaft','glitter'],bossMap:'amethystHollow',pool:[['Gremlin',3],['Gemsnail',3,2],['GemGolem',2,4]],elitePool:[['GemGolem',3],['Gemsnail',2],['Gremlin',1]],
     boss:{name:'Amethyra, the Amethyst Turtle',cls:'AmethystTurtle',s:[46,11,8,5,2,3,14,8],items:['slam','crystalShards'],skill:'steadfast',look:{body:'#6a7a5a',shell:'#4a3a5a',gem:'#b07ae8',crys:false}}}
 });
-Object.assign(BIOMES.mushroom,{town:[',','q'],townN:'Toadstool Hamlet'});Object.assign(BIOMES.shadow,{town:[';','t'],townN:'Lantern Village'});
 Object.assign(BIOMES.swamp,{town:['n','v'],townN:'Stilt Village'});Object.assign(BIOMES.forest,{town:['.','f'],townN:'Woodcutters’ Hamlet'});Object.assign(BIOMES.mountain,{town:['b','m'],townN:'Smelters’ Camp'});
 for(const k in BIOMES)BIOMES[k].id=k;
-/* region name with its article: 'the Sunless Isle', 'The Labyrinth', 'Mycelia' */
+/* region name with its article: 'the Cursed Woodland', 'The Labyrinth', 'Sobek’s Mire' */
 const theN=B=>B.noThe||/^The /.test(B.n)?B.n:'the '+B.n,TheN=B=>{const t=theN(B);return t[0].toUpperCase()+t.slice(1)};
 /* acts 1 and 2 are drawn from the regions; act 3 is always the Heart of the Blight */
 const ACTS=3;
 const MUSIC={title:'music/title.mp3',tavern:'music/tavern.mp3'};for(const k in BIOMES)MUSIC[k]=`music/${k}.mp3`;
 let bgm=null,bgmKey='';
-/* Background music: drop mp3s into music/ (title.mp3, mushroom.mp3, shadow.mp3, swamp.mp3, forest.mp3, mountain.mp3, ship.mp3, labyrinth.mp3). Missing files are skipped. */
+/* Background music: drop mp3s into music/ (title.mp3, swamp.mp3, forest.mp3, mountain.mp3, desert.mp3, snow.mp3, cavern.mp3, heart.mp3). Missing files are skipped. */
 function music(k){if(k===bgmKey&&bgm)return;bgmKey=k;try{if(bgm)bgm.pause();bgm=null;if(!settings.sound||!MUSIC[k])return;bgm=new Audio(MUSIC[k]);bgm.loop=true;bgm.volume=.45;bgm.play().catch(()=>{})}catch(_){}}
 
 /* BATTLE MAPS: n = name, map = rows of terrain letters (top row first, see TER for each letter), start = [x, y] tiles your units deploy on. */
 const MAPS={
-  /* Mycelia */
-  glade:{n:'Glowcap Glade',map:[",q,,,,,qq,",",,,,,,^q^^","qq,,,F,,,,",",,,^^,,,,q",",,,q,,,,,,",",,,qq,,,,q",",^^,,,,,,,",",q,,,,,q,,",",,,,,,,,,,",",,,,,,,,,,"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  hollow:{n:'Spore Hollow',map:[",,,,qq,,,,",",,,,,,,,,,","ww=wwwww=w",",,,,,,,,,,","q,,,,q,,,,",",,,,,,,,q,",",,q,,,,,,,",",,,,,F,,,,",",,,,,,,,,,",",,,,,,,,,,"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  ring:{n:'Fairy Ring',map:[",,qqqqqq,,",",qq^,,,qq,","^q,,,,,,q,","^q,,F,^,q,",",q,,,,^,q^",",qq,,,,qq^",",,qqq,,qq,",",,,,,,,,,,","q,,,,,,,,q",",,,,,,,,,,"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  mushThrone:{n:'Mushroom Throne',map:["q,,,,,,,,q",",,,,,^,,,,",",,q,,,,q^,",",,,,,,,,,,","q,^,^,,,,q",",,,q,,q,,,",",,,,,,,,,,",",,,,,,,,,,",",,,,,,,,,,",",,,,,,,,,,"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]],boss:[5,0]},
-  /* Sunless Isle */
-  graveyard:{n:'Graveyard',map:[";t;;;;;;t;",";;;;t;;;;;","t;;;;;;^^t",";;^t;;t;;;",";;^;;;;;;^","t;;;;;;;;t",";;;t;;t;;^",";;;;;;;;;^",";;;;;;;;;;",";;;;;;;;;;"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  crypt:{n:'Crypt',map:["__#____#__","__________","##_####_##","____##____","_t______t_","____F_____","##_####_##","__________","__________","##########"],start:[[4,8],[5,8],[3,8],[6,8],[4,7],[5,7]]},
-  village:{n:'Haunted Churchyard',map:[";;;;;;;t;;",";;;t^;;;;;",";f;;^;;;f;",";;;;__;;;^","t;;__F__;;",";;;;__^^;;",";f;;;;;;f;",";;;t;;t;;;",";;;;;;;;;;",";;;;;;;;;;"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  chapel:{n:'Bone Chapel',map:["#############","#L___rrr___L#","#_t__rrr__t_#","#____rrr____#","#_#__rrr__#_#","#____rrr____#","#_t__rrr__t_#","#____rrr____#","#_#__rrr__#_#","#____rrr____#","#L___rrr___L#","#####___#####"],start:[[5,11],[6,11],[7,11],[5,10],[6,10],[7,10]],boss:[6,1]},
   /* Swamp */
   flats:{n:'Mangrove Flats',map:["sssnnssssv","vssnnsswws","ssssssswws","ssvsssssss","nssssvsssn","nssssssssn","ssswwsssss","vsswwssvss","sssssnnsss","ssssnnnsss"],start:[[4,9],[5,9],[6,9],[5,8],[6,8],[3,9]]},
   road:{n:'Sunken Road',map:["wssnnnnnss","ssvnsssnvs","ssnnsvsnns","ssnsssssns","vsnssssssn","ssnnsssnns","ssvnnnnnvs","wsssnnnsss","wwsssnsssw","sssssnssss"],start:[[5,9],[4,9],[6,9],[5,8],[4,7],[6,7]]},
@@ -140,9 +127,6 @@ const MAPS={
   caldera:{n:'Caldera Pass',map:["bbmbllbmbb","bbbllllbbb","mbbllllbbm","bbbbllbbbb","bbbbbbbbbb","lbbmbbmbbl","bbbbbbbbbb","bmbbbbbbmb","bbbbFbbbbb","bbbbbbbbbb"],start:[[4,9],[5,9],[3,9],[6,9],[3,8],[5,8]]},
   ridge:{n:'Rockslide Ridge',map:["bbbbRbbbbl","mRbbbbbbbl","bbRbbbblll","bbRRbbRlbb","bbbbbbbbll","llbbmbbbbl","blbbbbbmbb","llbRbbbbbb","lbbbbbbbbb","lbbbbbbbbb"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   crater:{n:'Dragon’s Crater',map:["llbbbbbbll","lbbbbbbbbl","bbmbbbbmbb","bbbbllbbbb","bbbllllbbb","bbbbllbbbb","bmbbbbbbmb","bbbbbbbbbb","bbbbbbbbbb","bbbbbbbbbb"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]],boss:[5,0]},
-  /* The Flying Ship */
-  deck:{n:'Main Deck',map:["~~~~~~~~~~~","~~~~~d~~~~~","~~~~ddd~~~~","~~~ddddd~~~","~~~ddMdd~~~","~~ddddddd~~","~~ddddddd~~","~~dddMddd~~","~~ddddddd~~","~~ddddddd~~","~~dddMddd~~","~~ddddddd~~","~~~ddHdd~~~","~~~~ddd~~~~","~~~~~~~~~~~"],start:[[5,9],[4,9],[6,9],[3,8],[7,8],[4,11]]},
-  galleon:{n:'Galleon Deck',map:["~~~~~~~~~~~~~","~~~~~~d~~~~~~","~~~~~ddd~~~~~","~~~~ddddd~~~~","~~~dddMddd~~~","~~ddddddddd~~","~~ddddddddd~~","~~dddMdMddd~~","~~ddddddddd~~","~~ddddddddd~~","~~~ddddddd~~~","~~~~ddHdd~~~~","~~~~~~~~~~~~~"],start:[[6,9],[5,9],[7,9],[4,8],[8,8],[6,10]]},
   /* The Labyrinth */
   maze1:{n:'Labyrinth',map:["#############","#________#__#","#_##_###_#_##","#___#___#___#","###_#___#_#_#","#___#___#_#_#","#_#####_###_#","#_m___#___F_#","#_###_#_###_#","#___#_m_#___#","#_#_#####_#_#","#_#___#___#_#","#_###___###_#","#_____#_____#","#############"],start:[[6,12],[5,12],[7,12],[5,13],[7,13],[4,13]]},
   vaults:{n:'Vaults',map:["##############","#___#____#___#","#___#____#___#","##_###__###_##","#____________#","#_##_m__m_##_#","#_#________#_#","#_##_m__m_##_#","#____________#","##_###__###_##","#___#____#___#","#___#_F__#___#","##############"],start:[[6,10],[5,10],[7,10],[8,10],[5,11],[6,11]]},
@@ -189,9 +173,6 @@ MAPS.geode.h=["3333333333", "3222222223", "3211111123", "2100000012", "210000001
 MAPS.mineshaft.h=["2222222222", "2222222222", "2222222222", "2222222222", "1111111111", "1111111111", "1111111111", "0000000000", "0000000000", "0000000000"];
 MAPS.glitter.h=["1111111111", "1111111111", "1112222111", "1122332211", "1123333211", "1122332211", "0011221100", "0000110000", "0000000000", "0000000000"];
 MAPS.amethystHollow.h=["3334444335", "2333222234", "2333222222", "2212222211", "0012211100", "0002220000", "0011000000", "0010000000", "0011000001", "0000000001"];
-/* Sunless Isle (the crypt and chapel stay flat) */
-MAPS.graveyard.h=["1111111111", "1111111111", "0000000000", "0000000000", "0000000000", "0000000000", "0011111100", "0112222110", "1122332211", "1123333211"];
-MAPS.village.h=["1111111111", "1111111111", "0001111000", "0011221100", "0122222210", "0011221100", "0000000000", "0000000000", "0000000000", "0000000000"];
 /* Sobek’s Mire */
 MAPS.flats.h=["0001100001", "1001100000", "0000000000", "0010000000", "1000010001", "1000000001", "0000000000", "1000000100", "0000122100", "0001222100"];
 MAPS.road.h=["0002222200", "0012000210", "0011010110", "0010000010", "1010000001", "0011000110", "0011111110", "0000111000", "0000010000", "0000010000"];
@@ -208,8 +189,6 @@ const TOWNS={
   swamp:["ssssnnssss","svssnnssvs","ssnnnnnnss","wsnvnnvnsw","wsnnAnnnsw","ssnnnnnnss","snvnFnnvns","ssnnnnnnss","ssnnnnnnss","sssnnnnsss"],
   desert:["nnnnnnnnnn","nknnnnnnkn","nnnnzznnnn","knnnnnnnnk","nnAnwwnAnn","nnnnwwnnnn","knnnnnnnnk","nnnnFnnnnn","nnnnnnnnnn","nnnnnnnnnn"],
   forest:["..........",".f......f.","...^..^...","f..y..y..f","...A..A...",".f......f.","^...F....^","..y....y..","..........",".........."],
-  mushroom:[",,,,,,,,,,",",q,,,,,,q,",",,,^,,^,,,","q,,,,,,,,q",",,A,qq,A,,",",,,,,,,,,,","^,,,F,,,,^",",,q,,,,q,,",",,,,,,,,,,",",,,,,,,,,,"],
-  shadow:[";;;;;;;;;;",";t;;;;;;t;",";;;^;;^;;;","t;;;tt;;;t",";;A;;;;A;;",";;;;;;;;;;","^;;;F;;;;^",";;t;;;;t;;",";;;;;;;;;;",";;;;;;;;;;"],
   mountain:["bbbbbbbbbb","bmbbbbbbmb","bbbRbbRbbb","lbbbbbbbbl","bbAbmmbAbb","bbbbbbbbbb","RbbbFbbbbR","bbmbbbbmbb","bbbbbbbbbb","bbbbbbbbbb"],
   snow:["oooooooooo","oaoojjooao","ooo^oo^ooo","jooooooooj","ooAoiioAoo","oooooooooo","^oooFoooo^","ooaooooaoo","oooooooooo","oooooooooo"],
   cavern:["cccccccccc","cecccccccu","cccxccxccc","pccccccccp","ccAceccAcc","cccccccccc","xcccFccccx","ccuccccecc","cccccccccc","cccccccccc"]
@@ -219,8 +198,6 @@ for(const k in TOWNS)if(BIOMES[k])MAPS['town_'+k]={n:BIOMES[k].townN,map:TOWNS[k
 MAPS.town_swamp.h=["0000110000", "0100110010", "0011111100", "0011111100", "0011011100", "0011111100", "0111011110", "0011111100", "0000000000", "0000000000"];
 MAPS.town_desert.h=["1233222122", "1332111133", "2221001123", "2222111123", "2221001222", "2221001222", "2210011222", "1100011111", "0000000000", "0000000000"];
 MAPS.town_forest.h=["2222222222", "2222222222", "2222222112", "2222222112", "2222221111", "2211111111", "2111111111", "1111111101", "0000000000", "0000000000"];
-MAPS.town_mushroom.h=["3333333222", "2222322222", "2222222222", "1112222121", "1111111111", "1111111111", "1111221122", "1111111111", "0000000000", "0000000000"];
-MAPS.town_shadow.h=["2222223222", "2222222222", "2222222212", "1122222111", "1122221111", "1122221111", "1111111101", "1111111000", "0000000000", "0000000000"];
 MAPS.town_mountain.h=["3443234443", "2333333432", "1233323321", "0122222210", "1211112221", "2221112222", "2221112222", "1111111111", "0000000000", "0000000000"];
 MAPS.town_snow.h=["4444444433", "3334334333", "3334224333", "2232112333", "2221001232", "1122112232", "1111112222", "0011111111", "0000000000", "0000000000"];
 MAPS.town_cavern.h=["2222222222", "2222222222", "1112222112", "1112222111", "1111222111", "1111111111", "1111111111", "1111110000", "0000000000", "0000000000"];
@@ -230,17 +207,15 @@ function spawnTiles(m){
   const out=[];for(let y=0;y<m.map.length;y++)for(let x=0;x<m.map[0].length;x++){const t=TER[m.map[y][x]];if(t.c>=99)continue;const d=Math.min(...m.start.map(([sx,sy])=>Math.abs(sx-x)+Math.abs(sy-y)));if(d>=4)out.push({x,y,d})}
   return shuffle(out);
 }
-/* sky tiles along the map's edge, for fliers diving in */
-function skyEdge(m){const out=[],H=m.map.length,W=m.map[0].length;for(let y=0;y<H;y++)for(let x=0;x<W;x++)if((x===0||y===0||x===W-1||y===H-1)&&m.map[y][x]==='~'&&y<H-3)out.push({x,y});return shuffle(out)}
 function actBiome(){const a=run&&run.act||1;if(a>=3)return BIOMES.heart;
-  return BIOMES[(run&&run.biomes&&run.biomes[a-1])||'forest']}
+  return BIOMES[run&&run.biomes&&run.biomes[a-1]]||BIOMES.forest}
 /* bosses lumber: they move, but only a couple of tiles a turn */
 /* BOSS_MOV: max tiles a boss moves per turn */
 const BOSS_MOV=2;
 /* ROCK_MAX: most rocks left on a battle map (the rest are cleared, see genBattle); two boulders side by side count as one */
 const ROCK_MAX=3;
 function genBattle(n,kind){
-  const act=run&&run.act||1,B=actBiome(),bossFight=kind==='boss',elite=kind==='elite',ship=B.id==='ship',town=!bossFight&&!elite&&!ship&&MAPS['town_'+B.id]&&(run&&run.n||1)>=2&&rand()<.25;
+  const act=run&&run.act||1,B=actBiome(),bossFight=kind==='boss',elite=kind==='elite',town=!bossFight&&!elite&&MAPS['town_'+B.id]&&(run&&run.n||1)>=2&&rand()<.25;
   const mk=bossFight?B.bossMap:town?'town_'+B.id:pick(B.maps);let m=MAPS[mk];
   /* tidy the hand-made map: no altars (T), tents (A), chests (C) or ruined shrines (F), and at most ROCK_MAX rocks
      (boulders ^, sandstone k, crags R). What's removed becomes the map's most common ground. */
@@ -257,12 +232,12 @@ function genBattle(n,kind){
   const fl=flScale(run&&run.n),diff=(act-1)*10+fl,lvBase=1+Math.floor(diff*.6)+(A(1)?1:0)+(A(4)?1:0);
   const pool=(elite?B.elitePool:B.pool).filter(p=>act>=2||fl>=(p[2]||1)),tot=pool.reduce((a,p)=>a+p[1],0);
   const roll=()=>{let r=rand()*tot;for(const[c,w]of pool){if((r-=w)<0)return c}return pool[0][0]};
-  const count=bossFight?(B.id==='heart'?0:act>=2?5:4):town?Math.min(4,1+Math.floor(fl/4)+(act-1)):Math.min(7,(ship?1:2)+Math.floor(fl/3)+(act-1)*2+(elite?1:0)+(A(4)?1:0)),list=elite?[B.elitePool[0][0]]:[];
+  const count=bossFight?(B.id==='heart'?0:act>=2?5:4):town?Math.min(4,1+Math.floor(fl/4)+(act-1)):Math.min(7,2+Math.floor(fl/3)+(act-1)*2+(elite?1:0)+(A(4)?1:0)),list=elite?[B.elitePool[0][0]]:[];
   while(list.length<count){const c=roll();list.push(c);if(c==='Wolf'&&list.length<count&&rand()<.6)list.push('Wolf')}
-  const bossName=B.boss.name||pick(BOSSN)+' '+pick(BOSST),turns=ship&&!bossFight?(elite?6:5):town?ri(5,7):0;
-  const goal=bossFight?'boss':ship||town?'defend':'rout';
+  const bossName=B.boss.name||pick(BOSSN)+' '+pick(BOSST),turns=town?ri(5,7):0;
+  const goal=bossFight?'boss':town?'defend':'rout';
   const def={biome:B.id,title:bossFight?(B.boss&&B.boss.name||'Boss Battle'):town?'Defend the Settlement':elite?'Elite Battle':'Battle',/* no map names in titles; bosses go by their own name */goal,turns,map:m.map,h:m.h,start:m.start,gifts:{},
-    intro:bossFight&&B.boss.intro?B.boss.intro:bossFight?`${bossName} waits for you in the ${m.n}. Defeat it to clear ${theN(B)}.`:ship?`Fliers are diving on the ship. Hold the deck for ${turns} turns.`:town?`Crystallised beasts are closing on the ${m.n.toLowerCase()}. Hold them off for ${turns} turns.`:elite?`A pack led by something old and strong holds the ${m.n.toLowerCase()}. Rout them all.`:`${count} monsters wait in the ${m.n.toLowerCase()}. Rout them.`};
+    intro:bossFight&&B.boss.intro?B.boss.intro:bossFight?`${bossName} waits for you in the ${m.n}. Defeat it to clear ${theN(B)}.`:town?`Crystallised beasts are closing on the ${m.n.toLowerCase()}. Hold them off for ${turns} turns.`:elite?`A pack led by something old and strong holds the ${m.n.toLowerCase()}. Rout them all.`:`${count} monsters wait in the ${m.n.toLowerCase()}. Rout them.`};
   /* drops: 12% of enemies carry something, at most one weapon a battle, and never a weapon the squad already has */
   def.foes=()=>{const tiles=spawnTiles(m),out=[];let wDrop=0;
     list.forEach((c,i)=>{const lv=Math.max(1,lvBase+(rand()<.3?1:0)-(c==='Wolf'?1:0)+(elite?2:0)),u=mkMon(c,lv),t=tiles[i%tiles.length];u.x=t.x;u.y=t.y;
@@ -281,7 +256,6 @@ function genBattle(n,kind){
     return out};
   /* reinforcements are plain data so they survive a save: {turn:[{c,lv,x,y,ifBoss}]} */
   const W={};
-  if(ship){const edge=skyEdge(m),fl=pool.map(p=>p[0]);let e=0;for(let t=2;t<=(bossFight?6:turns);t++)W[t]=Array.from({length:1+(t%2===0?1:0)+(act>=2?1:0)},()=>({c:pick(fl),lv:Math.max(1,lvBase-1),...edge[(e++)%edge.length]}))}
   if(town){const top=[];m.map.forEach((r,y)=>{if(y<=1)[...r].forEach((ch,x)=>{if(TER[ch].c<99)top.push({x,y})})});shuffle(top);let e=0;for(let t=2;t<=turns;t++)W[t]=Array.from({length:1+(t%2)+(act>=2?1:0)},()=>({c:roll(),lv:Math.max(1,lvBase-1),...top[(e++)%top.length]}))}
   /* summoning bosses: two more every other turn. summon:'*' picks from the region's pool */
   if(bossFight&&B.boss.summon){const sc=()=>B.boss.summon==='*'?roll():B.boss.summon;for(const t of(B.id==='heart'?[3,5,7]:[3,5,7,9]))W[t]=[{c:sc(),lv:lvBase,x:6,y:3,ifBoss:1},{c:sc(),lv:lvBase,x:6,y:3,ifBoss:1}];def.summonTxt=B.boss.summonTxt}
