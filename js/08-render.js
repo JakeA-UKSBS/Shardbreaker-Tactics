@@ -16,6 +16,7 @@ function buildBoard(){
   const firstOf={};
   for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const t=document.createElement('div'),tk=ter(x,y).k;const vol=CH[state.ch]&&CH[state.ch].biome==='mountain',ov=tk==='hill'&&vol?'crag':tk;
     t.className=PROPS[ov]?'tile '+propGround(ov,gk):'tile t-'+tk;t.dataset.k=key(x,y);
+    if(!PROPS[ov]){const v=tileVariant(tk,x,y);if(v)t.style.backgroundImage=`url(${v})`}
     const vh=vhOf(x,y),p=tileTop(x,y,vh),z=(x+y)*4;
     Object.assign(t.style,{left:p.x+'px',top:p.y+'px',zIndex:z+1,transform:`matrix(${TW/2/T},${TH/2/T},${-TW/2/T},${TH/2/T},0,0)`});
     if(tk==='sky'){t.style.visibility='hidden';boardEl.appendChild(t);continue}
@@ -26,6 +27,11 @@ function buildBoard(){
   /* side faces take the average colour of their tile's art */
   for(const k in firstOf){const m=/url\("?(.*?)"?\)/.exec(getComputedStyle(firstOf[k]).backgroundImage);if(!m)continue;sideColor(m[1],c=>boardEl.querySelectorAll(`.blk[data-t="${k}"]`).forEach(e=>e.style.setProperty('--c',c)))}
 }
+/* ground variants: art/tiles/<kind>-2.png, -3... are mixed in with the main tile, the same pattern every time.
+   The main tile still shows on about half the tiles. Add a kind here once its variant PNGs exist. */
+const TILE_VARS={ice:['ice-2','ice-3','ice-4'],water:['water-2','water-3','water-4']};
+function tileVariant(k,x,y){const vs=(TILE_VARS[k]||[]).filter(v=>ART_PNG.has('tiles/'+v));if(!vs.length)return null;
+  const h=(Math.imul(x+1,73856093)^Math.imul(y+1,19349663))>>>0,i=h%(vs.length*2);return i<vs.length?'art/tiles/'+vs[i]+'.png':null}
 const SIDEC={};
 function sideColor(src,cb){if(SIDEC[src])return cb(SIDEC[src]);const im=new Image();im.onload=()=>{const cv=document.createElement('canvas');cv.width=cv.height=1;const cx=cv.getContext('2d');cx.drawImage(im,0,0,1,1);let d;try{d=cx.getImageData(0,0,1,1).data}catch(_){return}/* opened from file://: PNG art can't be read back, keep the default */cb(SIDEC[src]=`rgb(${d[0]},${d[1]},${d[2]})`)};im.src=src}
 function threatMap(){const m=new Map();for(const e of state.units.filter(u=>u.team==='e'&&u.hp>0&&!u.recruit)){const ms=reach(e),all=new Set([...ms,...fringeOf(e,ms)]);for(const k of all){if(!m.has(k))m.set(k,[]);m.get(k).push(e.id)}}return m}
