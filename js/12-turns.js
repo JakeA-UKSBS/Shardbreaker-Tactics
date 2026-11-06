@@ -117,8 +117,6 @@ async function act(a){
   if(a==='wprev'||a==='wnext'){const l=wpnsAt(u,man(u,pending),pending),i=l.indexOf(pendW);pendW=l[(i+(a==='wnext'?1:l.length-1))%l.length];render();return}
   if(a==='wait'){commit();finishAction();return}
   if(a==='summon'){if(!canSummon(u))return;commit();doSummon(u);finishAction();return}
-  if(a==='learn'){const it=u.items[itemSel],k=IT[it.k].skill;if(learnBlock(u,k))return;(u.skills=u.skills||[]).push({id:k,src:'scroll'});u.items.splice(itemSel,1);itemSel=null;sfx('item');toast(`${u.name} learned ${SKILLS[k].n}`);saveGame();render();return}
-  if(a==='ascend'){if(promoBlock(u))return;const to=await promoPick(u);if(!to){render();return}commit();u.items.splice(itemSel,1);itemSel=null;busy=true;clearSel();ui='idle';render();await ascend(u,to);busy=false;finishAction();return}
   if(a==='use'){commit();const it=u.items[itemSel],amt=Math.min(salveAmt(it.k),u.maxhp-u.hp);u.hp+=amt;if(u.psn){u.psn=0;toast(`${u.name} is cured`)}it.u--;if(it.u<=0)u.items.splice(itemSel,1);pop(u,'+'+amt,'heal');finishAction();return}
   if(a==='doheal'){commit();const t=pending,si=spiritFor(u,t),w=IT[u.items[si].k],amt=Math.min(w.amt,t.maxhp-t.hp);t.hp+=amt;if(!endless(u.items[si].k)){u.items[si].u--;if(u.items[si].u<=0){toast(w.n+' shattered');u.items.splice(si,1)}}pop(t,'+'+amt,'heal');sfx('heal');clearSel();ui='idle';busy=true;render();
     const g=gainExp(u,Math.round(15*EXP_RATE));await showExp(u,g);if(g&&g.gains)await levelUp(u,g);busy=false;finishAction();return}

@@ -31,7 +31,6 @@ IT.hooves={n:'Hooves',t:'blade',kind:'claw',mt:5,hit:90,crit:0,r:[1,1],uses:99,k
 IT.shatter={n:'Shatter',t:'art',kind:'talisman',el:'crystal',mt:6,hit:85,crit:0,r:[2,6],uses:99,mag:true,key:'shatter'};
 IT.magmaBreath={n:'Magma Breath',t:'art',kind:'talisman',el:'fire',mt:9,hit:80,crit:0,r:[1,2],uses:99,mag:true,key:'magmaBreath'};
 SKILLS.venom={n:'Venom',cost:15,d:'On a hit, poisons the target: it loses 3 HP at the start of each of its turns for 3 turns (never below 1 HP).'};
-IT.scroll_venom={n:'Venom Scroll',t:'scroll',kind:'scroll',skill:'venom',uses:1,key:'scroll_venom'};
 /* fields: see the CLASSES key in 01-data.js */
 Object.assign(CLS,{
   MudMonster:{n:'Mud Monster',w:['heavy'],body:'mud',mov:4,wade:true},Krondis:{n:'Alligator',w:['heavy'],body:'gator',mov:4,wade:true},

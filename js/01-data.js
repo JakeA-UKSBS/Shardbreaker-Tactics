@@ -31,7 +31,7 @@ const TER={
 /* Weapon types: blade > heavy > pole > blade. bow and reach are neutral.
    Arts (t:'art'): fire > nature > water > fire, and light > dark. Dark is neutral to the rest but drains life (heals 25% of damage dealt). */
 /* ITEMS AND WEAPONS:
-   n = name, t = weapon type (blade/heavy/pole/bow/reach/art/spirit, or item/scroll/crest), kind = which icon/sprite shape to draw,
+   n = name, t = weapon type (blade/heavy/pole/bow/reach/art/spirit, or item/gear), kind = which icon/sprite shape to draw,
    mt = Might (added to Str or Mag for damage), hit = Hit %, crit = Crit %, r = [min, max] range in tiles, uses = durability (99 = unbreakable),
    wt = weight (set from WT below), el = element of a sigil, mag = uses Mag instead of Str, tint = steel/jade colouring,
    key = icon art key (icons/<key>.png), eff = effective against (×2 damage), amt = HP healed by a staff/salve. */
@@ -150,7 +150,7 @@ const SKILLS={
   bulwark:{n:'Bulwark',cost:15,d:'Luck×2% chance: halves damage from an incoming strike.'},
   stoneGaze:{n:'Stone Gaze',cost:15,d:'Luck% chance on a hit: the target turns to stone, loses its next turn and can\'t counter. Bosses are immune.'}
 };
-/* Skill scrolls (one per skill except Command) and the class-change item. */
+/* more skills */
 Object.assign(SKILLS,{
   hitAndRun:{n:'Hit and Run',cost:10,d:'After attacking in melee, steps back one tile if there is room.'},
   quickDraw:{n:'Quick Draw',cost:15,d:'When attacked at half HP or less, strikes first.'},
@@ -170,8 +170,6 @@ Object.assign(SKILLS,{
   guardian:{n:'Guardian',cost:10,d:'Adjacent allies take 2 less damage.'},
   pikeWall:{n:'Pike Wall',cost:5,d:'+4 Def and +10 Hit against mounted units and fliers.'}
 });
-for(const k in SKILLS)if(k!=='command')IT['scroll_'+k]={n:SKILLS[k].n+' Scroll',t:'scroll',kind:'scroll',skill:k,uses:1,key:'scroll_'+k};
-IT.ascensionFragment={n:'Ascension Fragment',t:'crest',kind:'crest',uses:1,key:'ascensionFragment'};
 /* BASE_CAP: skill capacity a unit starts with. PROMO_CAP: extra capacity on promotion. PROMO_LV: level a unit can promote at. */
 const BASE_CAP=20,PROMO_CAP=5,PROMO_LV=5;
 /* ENEMY STATS, keyed by class id (must also exist in CLS):

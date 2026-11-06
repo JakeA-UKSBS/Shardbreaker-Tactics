@@ -434,8 +434,6 @@ function iconArt_draw(k){
   if(kd==='talisman'){p.rect(4,1,7,14,'#f1d97a');p.line(7,3,7,11,RED);p.rect(6,5,3,1,RED);p.ell(12,12,2.6,2.6,c.el)}
   if(kd==='staff'){if(w.r[1]>1||w.t==='spirit'){const mo=w.t==='spirit'?(w.tint==='mend'?'#ffe9a0':'#7ad6ff'):'#c58aff';p.line(3,14,11,4,w.t==='spirit'?'#c9a46a':BROWN,2);p.ell(12,3,2.6,2.6,mo);p.set(12,2,'#ffffff')}else{p.line(3,14,10,5,BROWN,2);p.ring(11,4,2.6,BROWN);p.set(13,6,BROWN);p.ell(10,5,1.2,1.2,'#c58aff')}}
   if(kd==='spirit'){p.ell(8,8,5,5,w.tint==='mend'?'#7ad6ff':JADE);p.ell(6.5,6.5,1.5,1.5,'#e9fff5')}
-  if(kd==='scroll'){p.rect(3,4,10,8,'#e9dcb4');p.rect(3,4,10,1,'#cbb98a');p.ell(3,8,1.6,4.2,'#b89f68');p.ell(13,8,1.6,4.2,'#b89f68');p.line(5,7,11,7,'#8a7a5a');p.line(5,9,10,9,'#8a7a5a');p.rect(7,11,2,3,RED)}
-  if(kd==='crest'){p.poly([[8,1],[12,5],[13,11],[3,11],[4,5]],GOLD);p.poly([[8,2],[10,5],[11,10],[8,10]],'#f3dc9a');p.rect(2,11,12,2,'#b8912f');p.ell(8,14,1.6,1.4,'#9fd8ff')}
   if(kd==='claw'){for(let i=0;i<3;i++)p.line(3+i*4,14,7+i*3,3,'#e8e2d0',1);p.line(3,14,13,14,'#8a7a5a')}
   if(kd==='pill'){p.ell(8,11,4.5,4,'#c98a3a');p.ell(8,5,2.6,2.4,'#c98a3a');p.rect(7,1,2,2,RED);p.set(6,10,'#f3d9a6')}
   if(['armor','cloak','boots','gauntlet'].includes(kd))gearArt(p,kd,w);

@@ -15,7 +15,6 @@ const PERSONAL_CAP=5;
 const capUsed=u=>(u.skill&&u.team!=='e'?PERSONAL_CAP:0)+(u.skills||[]).reduce((a,x)=>a+(x.src==='scroll'?SKILLS[x.id].cost:0),0);
 const capOf=u=>u.cap||BASE_CAP;
 function learnBlock(u,k){if(has(u,k))return`${u.name} already knows ${SKILLS[k].n}.`;const c=SKILLS[k].cost;if(capUsed(u)+c>capOf(u))return`Needs ${c} capacity; ${u.name} has ${capOf(u)-capUsed(u)} free.`;return null}
-function promoBlock(u){if(u.team!=='p')return'Only allies can ascend.';if(!CLS[u.cls].promo)return`${u.name} has already ascended.`;if(u.lv<PROMO_LV)return`${u.name} needs Lv ${PROMO_LV} to ascend.`;return null}
 const elv=u=>u.lv+(CLS[u.cls].tier===2?15:0);
 /* a few characters wield only certain kinds within their class's weapon types (Zwei: two-handed swords) */
 const ONLY_KIND={zwei:['greatsword']};
