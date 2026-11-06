@@ -13,13 +13,13 @@ function gearOf(u){const g={def:0,res:0,spd:0,mov:0,str:0},seen=new Set();
 const gearText=x=>Object.entries(x.gear).map(([s,v])=>`${v>0?'+':''}${v} ${GEAR_N[s]}`).join(', ');
 const tradable=k=>!WTYPES.includes(IT[k].t)&&IT[k].t!=='spirit';
 const tradeMates=u=>u.summon?[]:state.units.filter(o=>o!==u&&o.team==='p'&&!o.summon&&o.hp>0&&man(o,u)===1);
-/* trading: tap one of your items to hand it over, or one of theirs to take it. Doesn't use up the action. */
+/* trading: click one of your items to hand it over, or one of theirs to take it. Doesn't use up the action. */
 async function tradeWith(u){
   let mates=tradeMates(u),o=mates[0];
   for(;;){
     const col=(a,b,tag)=>`<div class="tcol"><div class="ch"><b>${a.name}</b><span>${a.items.length}/5</span></div><div class="inv">${a.items.map((it,i)=>{const x=IT[it.k],ok=tradable(it.k)&&b.items.length<5;
       return`<button type="button" class="it" data-m="${ok?tag+i:'no'}"${ok?'':' aria-disabled="true"'}><img src="${icon(it.k)}" alt="">${x.n}${tradable(it.k)?'':' <em>weapon</em>'}<span class="u">${x.t==='gear'?gearText(x):(x.r?`Rng ${rngTxt(x.r)} · `:'')+it.u+'/'+x.uses}</span></button>`}).join('')||'<p class="skd">No items.</p>'}</div></div>`;
-    const m=await modal(`<div class="eyebrow">Trade</div><h2>${u.name} and ${o.name}</h2><p>Tap an item to pass it across. Salves, scrolls and gear can be traded; weapons can’t.</p>
+    const m=await modal(`<div class="eyebrow">Trade</div><h2>${u.name} and ${o.name}</h2><p>Click an item to pass it across. Salves, scrolls and gear can be traded; weapons can’t.</p>
       ${mates.length>1?`<div class="mbtns">${mates.map((x,i)=>`<button type="button" data-m="w${i}"${x===o?' class="go"':''}>${x.name}</button>`).join('')}</div>`:''}
       <div class="trade">${col(u,o,'g')}${col(o,u,'t')}</div><div class="mbtns"><button class="go" type="button" data-m="done">Done</button></div>`);
     if(m==='done')return;if(m==='no')continue;

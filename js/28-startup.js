@@ -12,7 +12,7 @@ function playStory(lines){
   if(!lines||!lines.length)return Promise.resolve();
   return new Promise(res=>{
     let i=0,typing=null,full='';
-    storyEl.innerHTML=`<button type="button" class="mini sskip">Skip</button>${settings.dev?'<button type="button" class="mini sback">◀ Back · Dev</button>':''}<div class="sstage"><img class="spor l" alt="" hidden><img class="spor r" alt="" hidden></div><div class="sbox"><b class="sname"></b><p class="stext"></p><span class="snext">Tap to continue ▾</span></div>`;
+    storyEl.innerHTML=`<button type="button" class="mini sskip">Skip</button>${settings.dev?'<button type="button" class="mini sback">◀ Back · Dev</button>':''}<div class="sstage"><img class="spor l" alt="" hidden><img class="spor r" alt="" hidden></div><div class="sbox"><b class="sname"></b><p class="stext"></p><span class="snext">Click to continue ▾</span></div>`;
     storyEl.hidden=false;
     const pl=storyEl.querySelector('.spor.l'),pr=storyEl.querySelector('.spor.r'),nm=storyEl.querySelector('.sname'),tx=storyEl.querySelector('.stext');
     const finish=()=>{storyEl.hidden=true;storyEl.onclick=null;res()};
@@ -76,7 +76,7 @@ $('#btnEnd').addEventListener('click',async()=>{if(busy||over||phase!=='player'|
   const m=await modal(`<h2>End your turn?</h2><p>${left?`${left} unit${left>1?'s have':' has'} not moved yet.`:'Every unit has moved.'}</p><div class="mbtns"><button type="button" data-m="no">No</button><button class="go" type="button" data-m="end">Yes, end turn</button></div>`);
   if(m==='end'&&!busy&&!over&&phase==='player')enemyPhase()});
 $('#btnRewind').addEventListener('click',rewind);
-$('#btnDanger').addEventListener('click',()=>{danger=!danger;render();if(danger)tip('danger','Danger zone','Red tiles are where enemies can strike next turn. Tap a tile, or move a unit onto one, to see which enemies they are.')});
+$('#btnDanger').addEventListener('click',()=>{danger=!danger;render();if(danger)tip('danger','Danger zone','Red tiles are where enemies can strike next turn. Click a tile, or move a unit onto one, to see which enemies they are.')});
 /* the cog: options from anywhere (not while a dialog is open or a fight is playing out) */
 $('#cog').addEventListener('click',()=>{if(!modalEl.hidden)return;const screen=[...document.querySelectorAll('.nmap,.tav')].some(e=>!e.hidden);if(busy&&!screen&&titleEl.hidden)return;sfx('tick');optionsMenu(!titleEl.hidden)});
 /* view the act map mid-battle, then return to the fight */

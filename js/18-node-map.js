@@ -84,10 +84,10 @@ function mapScreen(preview){
     <div class="nm-info"></div>
     <aside class="nm-side nm-unit" hidden></aside>
     <div class="nm-squad">${run.roster.map((u,ui)=>`<div data-u="${ui}" role="button" tabindex="0"><img src="${uSpr(u)}" alt=""><span>${u.name}</span><small>Lv ${u.lv}</small>${squadHp(u)}</div>`).join('')}</div>`;
-  tip('map','The road ahead','Tap a glowing room to see what it is, then tap it again to go there. 15 floors: fights (the red skull is an elite), events, camps that heal, taverns, and a treasure room halfway. Then a camp and the boss.');
+  tip('map','The road ahead','Click a glowing room to see what it is, then click it again to go there. 15 floors: fights (the red skull is an elite), events, camps that heal, taverns, and a treasure room halfway. Then a camp and the boss.');
   mapEl.hidden=false;mapEl.style.background=`radial-gradient(ellipse at 50% 0%,${actBiome().bg},#121018 72%)`;
   const sc=mapEl.querySelector('.nm-scroll'),focus=!anyRoom&&ok[0]?Y(ok[0].r):run.pos?Y(run.pos.r):H;sc.scrollTop=Math.max(0,focus-sc.clientHeight/2);
-  /* the unit panel floats over the map; tap the unit again, the ✕, anywhere off the panel, Esc or right-click to close it */
+  /* the unit panel floats over the map; click the unit again, the ✕, anywhere off the panel, Esc or right-click to close it */
   const closeUnit=()=>{const box=mapEl.querySelector('.nm-unit');if(box)box.hidden=true;mapEl.querySelectorAll('.nm-squad .on').forEach(x=>x.classList.remove('on'))};
   mapEl.oncontextmenu=e=>{e.preventDefault();closeUnit()};mapEl.onkeydown=null;
   if(!mapEl._esc){mapEl._esc=1;document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!mapEl.hidden&&mapEl._close)mapEl._close()})}mapEl._close=closeUnit;

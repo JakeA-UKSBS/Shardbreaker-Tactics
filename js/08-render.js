@@ -175,7 +175,7 @@ function drawSheet(){
     const atk=w?(w.mag?u.mag:u.str)+w.mt:'–',hit=w?w.hit+u.lck*2:'–',crit=w?(w.crit||0)+(CLS[u.cls].crit||0)+Math.floor(u.lck/2):'–';
     pg=`<div class="scmb">${[['Atk',atk],['Hit',hit],['Crit',crit],['Avo',AS(u,w)*2+u.lck],['AS',AS(u,w)],['Rng',w?rngTxt(w.r):'–']].map(([l,v])=>`<div><span class="sl">${l}</span><b>${v}</b></div>`).join('')}</div>
     <div class="sitems">${u.items.map((it,i)=>{const x=IT[it.k];return`<button type="button" class="srit${i===ei?' eqd':''}${sheetIt===i?' sel':''}${isWpn(it.k)&&!canUse(u,it.k)?' no':''}" data-s="i${i}"><span class="e">${i===ei?'E':''}</span><img src="${icon(it.k)}" alt="">${x.n}${it.d?' <em>drops</em>':''}<span class="u">${[x.r&&x.t!=='item'?`Rng ${rngTxt(x.r)}`:'',endless(it.k)?'':`${it.u}/${x.uses}`].filter(Boolean).join(' · ')}</span></button>`}).join('')||'<p class="sid">No items.</p>'}</div>
-    ${sheetIt!=null&&u.items[sheetIt]?`<p class="sid">${itemInfo(u,u.items[sheetIt].k)}</p>`:(isHi(u.cls,u.sz)||u.team==='p'?'<p class="sid dim">Tap an item to see its stats. E marks the equipped weapon.</p>':'<p class="sid dim">Tap an attack to see its stats.</p>')}`;
+    ${sheetIt!=null&&u.items[sheetIt]?`<p class="sid">${itemInfo(u,u.items[sheetIt].k)}</p>`:(isHi(u.cls,u.sz)||u.team==='p'?'<p class="sid dim">Click an item to see its stats. E marks the equipped weapon.</p>':'<p class="sid dim">Click an attack to see its stats.</p>')}`;
   }
   const dis=L.length<2?' disabled':'';
   el.innerHTML=`<div class="sbx ${u.team}" role="dialog" aria-label="${u.name} details">
@@ -193,7 +193,7 @@ function renderPanel(){
   let h='',fm='';const u=sel&&byId(sel);
   if(over)h=`<p class="hint">${over==='win'?'Chapter cleared.':'The run has ended.'}</p>`;
   else if(phase==='enemy')h='<p class="hint">The enemy is moving…</p>';
-  else if(ui==='move')h=card(u)+`<p class="hint">Tap a blue tile to move, or a red enemy to attack it from the best tile. Tap ${u.name} to act in place.</p><div class="acts"><button type="button" data-act="cancel">Cancel</button></div>`;
+  else if(ui==='move')h=card(u)+`<p class="hint">Click a blue tile to move, or a red enemy to attack it from the best tile. Click ${u.name} to act in place.</p><div class="acts"><button type="button" data-act="cancel">Cancel</button></div>`;
   else if(ui==='menu'){
     const at=atkTargets(u).length,ht=healTargets(u).length,gf=giftHere(u),tk=talkTarget(u);
     h=card(u)+threatLine(key(u.x,u.y));fm=`<div class="acts">${abilOf(u).length?'<button class="go" type="button" data-act="abil">Abilities</button>':''}${tk?'<button class="go" type="button" data-act="talk">Talk</button>':''}${at?'<button class="go" type="button" data-act="attack">Attack</button>':''}${ht?'<button class="go" type="button" data-act="heal">Heal</button>':''}${gf?`<button class="go" type="button" data-act="gift">${gf.kind}</button>`:''}${canSummon(u)?`<button class="go" type="button" data-act="summon">Summon ${famOf(u).n}</button>`:''}<button type="button" data-act="items">Items</button>${tradeMates(u).length?'<button type="button" data-act="trade">Trade</button>':''}<button type="button" data-act="wait">Wait</button><button type="button" data-act="cancel">Back</button></div>`;
@@ -204,15 +204,15 @@ function renderPanel(){
     if(it){if(isWpn(it.k)&&canUse(u,it.k)&&itemSel!==eqIdx(u))ops+='<button class="go" type="button" data-act="equip">Equip</button>';if(IT[it.k].t==='item'&&(u.hp<u.maxhp||u.psn))ops+='<button class="go" type="button" data-act="use">Use</button>';if(IT[it.k].t==='scroll'){const r=learnBlock(u,IT[it.k].skill);ops+=r?`<span class="hint">${r}</span>`:`<button class="go" type="button" data-act="learn">Learn ${SKILLS[IT[it.k].skill].n} (${SKILLS[IT[it.k].skill].cost})</button>`}if(IT[it.k].t==='crest'){const r=promoBlock(u);ops+=r?`<span class="hint">${r}</span>`:`<button class="go" type="button" data-act="ascend">Ascend…</button>`}if(isWpn(it.k)&&!canUse(u,it.k))ops+=`<span class="hint">${u.name} can't wield this.</span>`}
     h=`<div class="ch"><b>${u.name}</b><span>Items · ${u.hp}/${u.maxhp} HP</span></div>`+itemRows(u,true)+`<div class="acts">${ops}<button type="button" data-act="menu">Back</button></div>`;
   }
-  else if(ui==='target'){const gf=giftHere(u),tk=talkTarget(u),sw=tmode==='atk'?(healTargets(u).length?'<button class="go" type="button" data-act="heal">Heal</button>':''):(atkTargets(u).length?'<button class="go" type="button" data-act="attack">Attack</button>':'');h=card(u)+`<p class="hint">Tap a highlighted ${tmode==='heal'?'ally to heal':'enemy to see the forecast'}, then tap it again to ${tmode==='heal'?'heal':'attack'}.</p>`;fm=`<div class="acts">${sw}${tk?'<button class="go" type="button" data-act="talk">Talk</button>':''}${gf?`<button class="go" type="button" data-act="gift">${gf.kind}</button>`:''}${canSummon(u)?`<button class="go" type="button" data-act="summon">Summon ${famOf(u).n}</button>`:''}<button type="button" data-act="items">Items</button>${tradeMates(u).length?'<button type="button" data-act="trade">Trade</button>':''}<button type="button" data-act="wait">Wait</button><button type="button" data-act="menu">Back</button></div>`}
+  else if(ui==='target'){const gf=giftHere(u),tk=talkTarget(u),sw=tmode==='atk'?(healTargets(u).length?'<button class="go" type="button" data-act="heal">Heal</button>':''):(atkTargets(u).length?'<button class="go" type="button" data-act="attack">Attack</button>':'');h=card(u)+`<p class="hint">Click a highlighted ${tmode==='heal'?'ally to heal':'enemy to see the forecast'}, then click it again to ${tmode==='heal'?'heal':'attack'}.</p>`;fm=`<div class="acts">${sw}${tk?'<button class="go" type="button" data-act="talk">Talk</button>':''}${gf?`<button class="go" type="button" data-act="gift">${gf.kind}</button>`:''}${canSummon(u)?`<button class="go" type="button" data-act="summon">Summon ${famOf(u).n}</button>`:''}<button type="button" data-act="items">Items</button>${tradeMates(u).length?'<button type="button" data-act="trade">Trade</button>':''}<button type="button" data-act="wait">Wait</button><button type="button" data-act="menu">Back</button></div>`}
   else if(ui==='confirm'){
     if(tmode==='heal'){const si=spiritFor(u,pending),w=IT[u.items[si].k],amt=Math.min(w.amt,pending.maxhp-pending.hp);
-      h=`<div class="wsel"><img src="${icon(w.key)}" alt="">${w.n}</div><p class="hint">Heal <b>${pending.name}</b>: ${pending.hp} → ${pending.hp+amt} HP. Tap ${pending.name} again or press Heal.</p><div class="acts"><button class="go" type="button" data-act="doheal">Heal</button><button type="button" data-act="back">Back</button></div>`}
+      h=`<div class="wsel"><img src="${icon(w.key)}" alt="">${w.n}</div><p class="hint">Heal <b>${pending.name}</b>: ${pending.hp} → ${pending.hp+amt} HP. Click ${pending.name} again or press Heal.</p><div class="acts"><button class="go" type="button" data-act="doheal">Heal</button><button type="button" data-act="back">Back</button></div>`}
     else{
       const f=forecast(u,pendW,pending),A=f.A,D=f.D,list=wpnsAt(u,f.dist,pending);
       const aft=(hp,s)=>Math.max(0,hp-(s?s.dmg*s.n:0)),effT=tagsOf(pending).filter(t=>effOf(f.aw).includes(t)||Object.entries(SLAYER).some(([k,v])=>v===t&&has(u,k))||(t==='spectral'&&/Paladin/.test(CLS[u.cls].n)));
       /* the forecast pops out on the board next to the fight; the panel keeps the attacker's card */
-      h=card(u)+`<p class="hint">Attack ${pending.name}? Tap it again, or press Attack.</p>`;
+      h=card(u)+`<p class="hint">Attack ${pending.name}? Click it again, or press Attack.</p>`;
       fm=`<div class="ufc-h"><span class="pc">${u.name}</span>${list.length>1?'<button class="mini" type="button" data-act="wprev" aria-label="Previous weapon">◀</button>':''}<img src="${icon(f.aw.key)}" alt="" title="${f.aw.n}">${list.length>1?'<button class="mini" type="button" data-act="wnext" aria-label="Next weapon">▶</button>':''}<span class="ec">${pending.name}</span></div>
       <div class="ufc-w">${f.aw.n}<button class="mini" type="button" data-act="chart" aria-label="Effective damage chart">?</button></div>
       ${A.hd?`<div class="ufc-w hgt">${A.hd>0?`High ground: +${A.hd*10} Hit, +${A.hd} Dmg`:`Low ground: ${A.hd*10} Hit`}</div>`:''}
@@ -223,7 +223,7 @@ function renderPanel(){
   }
   else if(inspect)h=card(inspect)+(inspect.team==='e'?'<p class="hint">Red tiles show where it can strike next turn.</p>':'');
   else if(ui==='terrain')h=terInfo;
-  else h=`<p class="hint"><b>${CH[state.ch].title}.</b> Tap a blue unit to move it. Drag to pan the map, pinch to zoom.</p>`;
+  else h=`<p class="hint"><b>${CH[state.ch].title}.</b> Click a blue unit to move it. Drag to pan the map, scroll to zoom.</p>`;
   panel.innerHTML=h;
   /* the command menu and the forecast dock in a bottom corner of the map view, on the side away from the fight */
   let mEl=$('#umenu');if(!mEl||!mEl.isConnected){mEl=document.createElement('div');mEl.id='umenu';mEl.className='umenu';vp.appendChild(mEl);

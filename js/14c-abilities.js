@@ -270,8 +270,8 @@ function abForecast(u,id,tx,ty){
 function abPanel(u){
   if(ui==='abil')return{h:card(u)+'<p class="hint">Choose an ability.</p>',fm:abList(u)};
   const a=ABIL[abSel];
-  if(abT)return{h:card(u)+`<p class="hint">${a.n}: tap the same tile again, or press Use.</p>`,fm:abForecast(u,abSel,abT.x,abT.y)};
-  return{h:card(u)+`<p class="hint">${a.n}: ${a.side==='tile'?'tap a tile to leap to':a.aim==='dir'?'tap a direction next to '+u.name:a.side==='ally'?'tap an ally':a.aim==='any'?'tap where to aim it':'tap a target'}.</p>`,fm:`<div class="acts"><button type="button" data-act="abil">Back</button></div>`};
+  if(abT)return{h:card(u)+`<p class="hint">${a.n}: click the same tile again, or press Use.</p>`,fm:abForecast(u,abSel,abT.x,abT.y)};
+  return{h:card(u)+`<p class="hint">${a.n}: ${a.side==='tile'?'click a tile to leap to':a.aim==='dir'?'click a direction next to '+u.name:a.side==='ally'?'click an ally':a.aim==='any'?'click where to aim it':'click a target'}.</p>`,fm:`<div class="acts"><button type="button" data-act="abil">Back</button></div>`};
 }
 /* the tiles to light up while aiming: range (aimSet) and the area of the chosen tile */
 function abTileCls(k){if(ui!=='aim'||!abSel)return null;const a=ABIL[abSel],out=[];

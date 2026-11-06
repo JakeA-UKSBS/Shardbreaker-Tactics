@@ -73,7 +73,7 @@ async function historyScreen(){
     <div class="mbtns"><button class="go" type="button" data-m="back">Back</button></div>`);
 }
 const newsHTML=lines=>lines.length?`<div class="news">${lines.map(l=>`<p>${l}</p>`).join('')}</div>`:'';
-/* the Unlocks screen: each achievement shows the picture of what it unlocks; tap one to see how to get it.
+/* the Unlocks screen: each achievement shows the picture of what it unlocks; click one to see how to get it.
    Achievements with progress (best so far) are grouped first with a bar; finished ones go last. */
 function unlockArt(k){const c='UNL|'+k;if(sprCache[c])return sprCache[c];let u;
   if(k==='summoner')u=hiFig({style:'long',gear:'hood',cloth:'#5a3a8a',skin:'#e0b090',hair:'#2a2230'},ensureCls('G.summoner.foot.art.1'),'p','idle','crookStaff');
