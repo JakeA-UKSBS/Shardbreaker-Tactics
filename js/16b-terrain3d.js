@@ -18,11 +18,19 @@ texStyle.textContent+=Object.keys(PROPS).filter(k=>!OVER_T.includes(k)&&k!=='bou
 /* the Sunless Isle's boulders are a mix of rocks, rubble, skulls, dead trees and crystal (art/props/sunless-*, scale × the boulder's size) */
 const SUNLESS_ROCKS=[['rock',1],['rocks',1],['rubble',1],['deadtree',1.1],['crystal',1],['skulls',.6]];
 /* other regions' boulders: CraftPix rocks (art/props/<name>.png, padded square, scale × the boulder's size). Regions not listed keep the plain boulder */
-const REGION_ROCKS={desert:[['sand-rock',1.1]],snow:[['ice-block',1.1],['snow-peaks',1.1]],forest:[['moss-rock',1.1]],swamp:[['moss-rock',1.1]],mountain:[['red-spire',1.1]],heart:[['red-spire',1.1]]};
+const REGION_ROCKS={desert:[['sand-rock',1.1]],snow:[['ice-block',.9],['snow-peaks',1.1]],forest:[['moss-rock',1.1]],swamp:[['moss-rock',1.1]],mountain:[['red-spire',1.1]],heart:[['red-spire',1.1]]};
 /* tile kinds drawn with CraftPix rocks in every region: the desert's Sandstone Rocks (k) mix the sand rock with the pale stone piles */
-const KIND_ROCKS={sandstone:[['sand-rock',1.1],['sunless-rock',.95],['sunless-rocks',.9]]};
+const KIND_ROCKS={sandstone:[['sand-rock',1.1],['sunless-rock',.95],['sunless-rocks',.9]],
+  /* the swamp's Mangrove Roots: rooted swamp trees */
+  mangrove:[['swamp-tree-1',1.25],['swamp-tree-2',1.25],['swamp-tree-3',1.3],['swamp-tree-4',1.3]]};
+/* decoration on shallow water: reeds and lily pads on some tiles (no effect on play). [art, share of tiles, size × a tile] */
+const WATER_DECOR=[['reeds-1',.12,.55],['reeds-2',.12,.65],['reeds-3',.1,.65],['lilypad-1',.1,.4],['lilypad-2',.08,.4]];
+function placeDecor(x,y){const h=((Math.imul(x+3,2654435761)^Math.imul(y+7,40503))>>>0)%1000/1000;let acc=0;
+  for(const[n,share,sz]of WATER_DECOR){acc+=share;if(h>=acc)continue;if(!ART_PNG.has('props/'+n))return;
+    const im=document.createElement('img'),c=scrC(x,y),w=Math.round(T*sz),lily=n.startsWith('lily');im.className='prop';im.alt='';im.dataset.k=key(x,y);im.dataset.p='decor';im.src='art/props/'+n+'.png';
+    Object.assign(im.style,{left:c.x-w/2+(lily?((x*5+y*3)%7-3)*2:0)+'px',top:c.y+(lily?w/2:6)-w+'px',width:w+'px',height:w+'px',zIndex:(x+y)*4+2});boardEl.appendChild(im);return}}
 /* two boulders side by side are drawn as one big rock across both tiles (REGION_BIG: the wide rock per region) */
-const REGION_BIG={desert:'sand-rock',snow:'ice-block',forest:'moss-rock',swamp:'moss-rock'};
+const REGION_BIG={desert:'sand-rock',forest:'moss-rock',swamp:'moss-rock'};
 let bigRocks=null,bigFor=null;
 /* pairs adjacent boulders, scanning row by row: {anchor key: partner [x,y]}, and each partner key -> 'skip' */
 function boulderPairs(){if(bigFor===MAP)return bigRocks;bigFor=MAP;bigRocks={};const isB=(x,y)=>MAP[y]&&TER[MAP[y][x]]&&TER[MAP[y][x]].k==='boulder';
