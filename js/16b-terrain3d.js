@@ -12,7 +12,7 @@ function propArt(k,used){if(OVER_T.includes(k))return tileArt(k,used,true);if(k=
   return art('tiles/'+k+'-bare',()=>PROP_BIO1.includes(k)?bioTile_draw(k,'f'):bioTile2_draw(k,'f'))}
 function propGroundArt(k){return art('tiles/'+k+'-ground',()=>PROP_BIO1.includes(k)?bioTile_draw(k,'g'):bioTile2_draw(k,'g'))}
 /* the ground class: the shared features (trees, chests, boulders...) sit on the map's usual ground, region features on their own */
-const propGround=(k,gk)=>OVER_T.includes(k)||k==='boulder'?'t-'+gk:'t-g-'+k;
+const propGround=(k,gk)=>OVER_T.includes(k)||k==='boulder'||k==='curse'?'t-'+gk:'t-g-'+k;
 texStyle.textContent+=Object.keys(PROPS).filter(k=>!OVER_T.includes(k)&&k!=='boulder').map(k=>`.t-g-${k}{background:url(${propGroundArt(k)}) 0 0/100% 100%}`).join('');
 /* stand a prop on tile x,y (called by buildBoard). Its base sits a little below the tile's centre */
 /* the Sunless Isle's boulders are a mix of rocks, rubble, skulls, dead trees and crystal (art/props/sunless-*, scale × the boulder's size) */
@@ -23,6 +23,9 @@ const REGION_ROCKS={desert:[['sand-rock',1.1]],snow:[['ice-block',.9],['snow-pea
 /* ROCK_W: widest a single rock prop is drawn, in px (a tile is 68 wide) */
 const ROCK_W=54;
 const KIND_ROCKS={sandstone:[['sand-rock',1.1],['sunless-rock',.95],['sunless-rocks',.9]],
+  /* the Cursed Woodland: Dead Wood (f) is bare dead trees; the Cursed Thicket (y) is a bramble bush or a dark mushroom tree */
+  forest:[['wood-deadtree-1',1],['wood-deadtree-2',1],['wood-deadtree-3',.95]],
+  curse:[['wood-bush',.8],['wood-shroom-1',.9],['wood-shroom-2',.9],['wood-shroom-3',.9]],
   /* the swamp's Mangrove Roots: rooted swamp trees */
   mangrove:[['swamp-tree-1',1.25],['swamp-tree-2',1.25],['swamp-tree-3',1.3],['swamp-tree-4',1.3]]};
 /* decoration on shallow water: reeds and lily pads on some tiles (no effect on play). [art, share of tiles, size × a tile] */
