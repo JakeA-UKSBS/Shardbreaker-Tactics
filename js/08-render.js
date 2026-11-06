@@ -150,7 +150,6 @@ function skillBlock(u){
   return`<div class="sskill"><div class="skh"><span class="sl">Skills</span>${cap}</div>${u.team==='p'?`<div class="capbar"><i style="width:${capUsed(u)/capOf(u)*100}%"></i></div>`:''}<div class="skl">${rows||'<small class="capn">None</small>'}</div></div>`;
 }
 function rngTxt(r){return r[0]===r[1]?r[0]:r[0]+'–'+r[1]}
-const BRKN={blade:'claws, fangs and blades',heavy:'slams, axes and heavy blows',art:'sigils and magic',pole:'polearms'};
 function itemInfo(u,k){
   const x=IT[k];
   if(x.t==="item")return`<b>${x.n}</b> · Restores ${salveAmt(k)} HP and cures poison. Usable on the map between fights too.`;
@@ -158,7 +157,7 @@ function itemInfo(u,k){
   if(x.t==='scroll'){const sk=SKILLS[x.skill];return`<b>${x.n}</b> · Teaches ${sk.n} (cost ${sk.cost}). ${sk.d} Use it from the Items menu.`}
   if(x.t==='crest')return`<b>${x.n}</b> · Lets a unit at Lv ${PROMO_LV}+ ascend to a stronger class, with +${PROMO_CAP} skill capacity.`;
   if(x.t==='spirit')return`<b>${x.n}</b> · ${TN.spirit} · Heals ${x.amt} HP · Rng ${rngTxt(x.r)}`+(canUse(u,k)?'':` · ${u.name} can't use this.`);
-  return`<b>${x.n}</b> · ${TN[x.t]}${x.el?' · '+ELN[x.el]:''} · Mt ${x.mt} · Hit ${x.hit} · Crit ${x.crit||0} · Wt ${x.wt||0} · Rng ${rngTxt(x.r)}${x.brk?` · +50 Hit and Avoid against ${BRKN[x.brk]}`:''}${x.wt&&u.str!=null&&wtOver(u,x)?` · ${u.name} loses ${wtOver(u,x)} Spd`:''}${x.mag?' · Uses Mag':''}${x.thrown?' · Thrown':''}${effOf(x).length?` · <span class="effv">Effective vs ${effOf(x).map(t=>TAGS[t].n).join(', ')}</span>`:''}`+(canUse(u,k)?'':` · ${u.name} can't wield this.`);
+  return`<b>${x.n}</b> · ${TN[x.t]}${x.el?' · '+ELN[x.el]:''} · Mt ${x.mt} · Hit ${x.hit} · Crit ${x.crit||0} · Wt ${x.wt||0} · Rng ${rngTxt(x.r)}${x.wt&&u.str!=null&&wtOver(u,x)?` · ${u.name} loses ${wtOver(u,x)} Spd`:''}${x.mag?' · Uses Mag':''}${x.thrown?' · Thrown':''}${effOf(x).length?` · <span class="effv">Effective vs ${effOf(x).map(t=>TAGS[t].n).join(', ')}</span>`:''}`+(canUse(u,k)?'':` · ${u.name} can't wield this.`);
 }
 function drawSheet(){
   const u=byId(sheetU),el=sheetEl();if(!u){closeSheet();return}

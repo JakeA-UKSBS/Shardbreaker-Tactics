@@ -18,7 +18,6 @@ const RELICS={
   spurs:{n:'Golden Spurs',r:'u',x:4,d:'Mounted and flying units gain +1 Move and +10 Avoid.'},
   bulwark:{n:'Iron Bulwark',r:'u',x:4,d:'Armoured units take 2 less damage.'},
   anvil:{n:'Pocket Anvil',r:'r',x:6,d:'The Wandering Smith reforges twice.'},
-  hawk:{n:'Falconer’s Whistle',r:'u',d:'A hawk fights beside you in every battle. If it falls, it’s back for the next one.'},
   mirror:{n:'Mirror Charm',r:'r',x:6,d:'Enemies get −10 Hit against your units.'},
   ironrose:{n:'Iron Rose',r:'u',d:'Units below half HP take 3 less damage.'},
   aventurine:{n:'Aventurine',r:'c',d:'All units gain +10 Avoid and +5 Crit.'},

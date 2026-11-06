@@ -42,13 +42,6 @@ const relicOpen=k=>!RELICS[k].x||prof.runs>=RELICS[k].x;
 const ASC_MAX=5;
 const ASC=['Normal','Enemies are 1 level higher.','Bosses and elite leaders are much tougher.','No early ease, you start with no gold, and units recover only 5 HP after a fight.','Enemies are another level higher, with one more in each battle.','Every enemy knows a combat skill.'];
 const A=n=>!!(run&&(run.asc||0)>=n);
-async function ascPick(){
-  if(!prof.asc||!unl('ascension'))return 0;
-  const m=await modal(`<div class="eyebrow">New run</div><h2>Ascension</h2><p>Each level adds to the ones before it. Win at your highest level to open the next.</p>
-    <div class="inv">${Array.from({length:prof.asc+1},(_,i)=>`<button type="button" class="it" data-m="a${i}"><span><b>${i?'Ascension '+i:'Normal'}</b> · ${i?ASC[i]:'The standard run.'}</span></button>`).join('')}</div>
-    <div class="mbtns"><button type="button" data-m="back">Back</button></div>`);
-  return m==='back'?null:+m.slice(1);
-}
 /* called once when a run ends; returns lines describing anything new */
 function endRun(won){
   (prof.hist=prof.hist||[]).unshift({date:Date.now(),seed:run.seed,won,asc:run.asc||0,act:run.act||1,floor:run.n,regions:run.biomes,squad:(run.roster||[]).map(u=>({n:u.name,c:CLS[u.cls].n,lv:u.lv,items:(u.items||[]).map(i=>i.k),skills:[u.skill,...(u.skills||[]).map(x=>x.id)].filter(Boolean)}))/* items and skills kept for a future run-detail view */,fallen:run.fallen||[],relics:run.relics||[]});prof.hist.length=Math.min(prof.hist.length,30);

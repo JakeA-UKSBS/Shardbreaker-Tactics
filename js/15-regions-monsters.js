@@ -34,7 +34,6 @@ SKILLS.venom={n:'Venom',cost:15,d:'On a hit, poisons the target: it loses 3 HP a
 IT.scroll_venom={n:'Venom Scroll',t:'scroll',kind:'scroll',skill:'venom',uses:1,key:'scroll_venom'};
 /* fields: see the CLASSES key in 01-data.js */
 Object.assign(CLS,{
-  Hawk:{n:'Hawk',w:['blade'],body:'hawk',mov:7,fly:true},
   MudMonster:{n:'Mud Monster',w:['heavy'],body:'mud',mov:4,wade:true},Krondis:{n:'Alligator',w:['heavy'],body:'gator',mov:4,wade:true},
   CursedStag:{n:'Cursed Stag',w:['pole'],body:'beast',mov:6},HollowStag:{n:'Hollow Stag',w:['pole'],body:'beast',mov:4},
   BoulderGolem:{n:'Magma Golem',w:['heavy'],body:'golem',mov:4},FireSprite:{n:'Fire Sprite',w:['art'],body:'flame',mov:5,lava:true},MagmaDragon:{n:'Magma Dragon',w:['art','heavy'],body:'dragon',mov:0,lava:true},
@@ -48,7 +47,6 @@ Object.assign(CLS,{
 CLS.Lamia.wade=true;
 /* fields: see the ENEMY STATS key in 01-data.js (b/g order: HP, Str, Mag, Skl, Spd, Lck, Def, Res) */
 Object.assign(FOE,{
-  Hawk:{b:[12,4,0,6,9,3,1,2],g:[.4,.3,0,.3,.4,.2,.1,.1],items:['talons'],look:{}},
   MudMonster:{b:[26,6,0,2,1,0,6,0],g:[.9,.4,0,.2,.1,0,.3,0],items:['slam'],look:{}},
   CursedStag:{b:[17,6,0,5,8,2,2,2],g:[.6,.4,0,.35,.45,.15,.1,.15],items:['antlers'],look:{}},
   BoulderGolem:{b:[24,7,0,2,1,0,10,0],g:[.8,.4,0,.2,.05,0,.4,0],items:['slam'],look:{}},
