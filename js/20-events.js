@@ -1,4 +1,4 @@
-/* Event scenes, events, woes and event helpers */
+/* Event scenes, events and event helpers */
 /* ---- events: a scene of what's happening, a short text, and choices. Each choice's go() returns the outcome text, or null to step back. ---- */
 /* REG_SKY: event-scene sky per region, 3 bands top to bottom (hex). REG_GROUND: the ground colour under it. */
 const REG_SKY={heart:['#0e0408','#2e0c16','#4e1424'],swamp:['#1a2a24','#2e4a3a','#4a6a4a'],forest:['#1a221c','#2e3a2e','#4a5240'],
@@ -190,16 +190,8 @@ const EVENTS={
     {l:'Take the crown',sub:'Gain the Crystal Crown: +3 damage, but enemies get +10 Hit against you',need:()=>!R('gemcrown'),go:async()=>{run.relics.push('gemcrown');sfx('dark');return`The crown is lighter than it looks. Under the jewels, crystal has grown into the gold, and it pulses faintly in your hands. <b>${RELICS.gemcrown.n}</b>: ${RELICS.gemcrown.d}`}},
     {l:'Break the crown',sub:'Every unit gains 10 EXP',go:async()=>{await expAll(run.roster,10);sfx('broke');return'The gems crack, and something inside them screams thinly before going quiet. Better no one wears it. Every unit gains 10 EXP.'}}]}}
 };
-/* ---- woes: bad luck from events that lasts a fight or two (shown on the map in red) ---- */
-const WOES={wound:{n:'Wounded',d:'Every unit starts the next fight 5 HP down'},weary:{n:'Weary Legs',d:'Every unit has −1 Move'},halfhp:{n:'Scratched Up',d:'Starts the next fight at half HP'}};
-const Wo=id=>!!(run&&run.woes&&run.woes.some(w=>w.id===id&&w.n>0));
-function addWoe(id,n,u){(run.woes=run.woes||[]).push({id,n,u:u&&u.id,nm:u&&u.name})}
-const woeText=w=>`<b>${WOES[w.id].n}${w.nm?': '+w.nm:''}.</b> ${WOES[w.id].d} for ${w.n} more fight${w.n>1?'s':''}.`;
-function woeArt_draw(id){const c='WO|'+id;if(sprCache[c])return sprCache[c];const p=Px(16,16);
-  if(id==='wound'){p.line(3,13,13,3,'#c8322e',2);p.line(3,3,13,13,'#c8322e',2);p.ell(8,8,2,2,'#ff8a7a')}
-  if(id==='weary'){p.rect(3,6,4,7,'#7a5230');p.rect(3,11,6,3,'#7a5230');p.rect(10,3,2,6,'#c8322e');p.poly([[8,9],[14,9],[11,13]],'#c8322e')}
-  if(id==='halfhp'){p.ell(8,8,6,6,'#5a2a2a');p.ell(8,8,6,6,'#c8322e',(x,y)=>y>=8)}
-  p.outline(OUT);return sprCache[c]=p.url()}
+/* hurt: knock HP off every unit now (never below 1); HP carries into the next fight */
+const hurtAll=n=>run.roster.forEach(u=>u.hp=Math.max(1,u.hp-n));
 /* ---- event helpers ---- */
 async function expAll(us,n){evEl.hidden=true;for(const u of us){let left=n;while(left>0){const g=gainExp(u,Math.min(100,left));left-=100;if(g&&g.gains)await levelUp(u,g)}}}
 function bump(u,s,n){if(s==='hp'){u.maxhp+=n;u.hp+=n}else u[s]+=n}
@@ -216,7 +208,7 @@ Object.assign(EVENTS,{
   /* only turns up when Corvin is in the squad, and the sigil is his */
   stormaltar:{t:'The Storm Altar',art:'stormaltar',ok:()=>run.roster.some(u=>u.cast==='corvin'),d:'Lightning strikes the same black altar again and again. A sigil sits in the scorch mark, crackling.',o:[
     {l:'Take the Thunderhead Sigil',sub:'A high-crit lightning sigil for Corvin',go:async()=>{const u=run.roster.find(u=>u.cast==='corvin');if(!u||!await stow(u,'thunderheadSigil'))return null;sfx('item');return`${u.name} snatches the <b>Thunderhead Sigil</b> between strikes.`}},
-    {l:'Everyone touches the stone',sub:'Every unit +1 Spd; Wounded next fight (−5 HP)',go:async()=>{run.roster.forEach(u=>u.spd++);addWoe('wound',1);sfx('thunder');return'The jolt knocks everyone flat. Faster for it (+1 Spd), but still singed for the next fight.'}}]},
+    {l:'Everyone touches the stone',sub:'Every unit +1 Spd and loses 5 HP',go:async()=>{run.roster.forEach(u=>u.spd++);hurtAll(5);sfx('thunder');return'The jolt knocks everyone flat. Faster for it (+1 Spd), but singed (−5 HP).'}}]},
   cache:{t:'The Specialist’s Cache',art:'cache',d:'A sealed quartermaster’s cache. Each crate is stencilled for a different trade.',o:null,
     make:()=>{const has=f=>run.roster.some(f),o=[];
       if(has(u=>CLS[u.cls].w.includes('bow')))o.push('longbow');if(has(u=>isRoleU(u,'rogue')))o.push('throwingKnives');if(has(u=>isRoleU(u,'support')))o.push('farStaff');
@@ -230,17 +222,17 @@ Object.assign(EVENTS,{
     {l:'Everyone leaves an offering',sub:'Every unit +1 Def',go:async()=>{run.roster.forEach(u=>u.def++);sfx('ding');return'The stone seems to nod. Every unit gains 1 Def.'}}]},
   toll:{t:'The Toll Bridge',art:'bridge',d:'Armed thugs block the only bridge. “Forty gold for the lot of you.”',o:[
     {l:'Pay the toll',sub:'40 gold',cost:40,go:async()=>{spend(40);return'They step aside, grinning.'}},
-    {l:'Fight through',sub:'Every unit gains 30 EXP; Wounded next fight (−5 HP)',go:async()=>{await expAll(run.roster,30);addWoe('wound',1);return'You clear the bridge. Everyone gains 30 EXP, but the squad is still bruised for the next fight.'}}]},
+    {l:'Fight through',sub:'Every unit gains 30 EXP and loses 5 HP',go:async()=>{await expAll(run.roster,30);hurtAll(5);return'You clear the bridge. Everyone gains 30 EXP, but the squad is bruised (−5 HP).'}}]},
   witch:{t:'The Bog Witch',art:'witch',fig:['witch','cauldron'],d:'A crooked hut, a bubbling pot, and a woman who already knows your names. “At least stay for a cup of tea, won’t you?”',o:[
     {l:'Rest for a while',sub:'Every unit heals to full HP',go:async()=>{run.roster.forEach(u=>u.hp=u.maxhp);sfx('heal');return'You doze by the fire while the pot bubbles. Everyone wakes up fully healed.'}},
     {l:'Stay for a drink',sub:'One unit +1 Res and +2 max HP for good',go:async()=>{const u=await pickUnit('Who drinks?','+1 Res and +2 max HP for good.');if(!u)return null;bump(u,'res',1);bump(u,'hp',2);sfx('heal');return`${u.name} gags it down. +1 Res, +2 max HP.`}},
     {l:'Back away',go:async()=>'“Another time, then.”'}]},
   fog:{t:'The Strange Fog',art:'fog',d:'A thick white fog rolls over the road. There’s a shortcut through it, if you trust your feet.',o:[
-    {l:'Take the shortcut',sub:'Every unit gains 40 EXP; Weary Legs for 2 fights (−1 Move)',go:async()=>{await expAll(run.roster,40);addWoe('weary',2);return'You stumble out the far side hours later. Everyone gains 40 EXP, but the squad is footsore for 2 fights.'}},
-    {l:'Send a scout ahead',sub:'One unit gains 80 EXP, but starts the next fight at half HP',go:async()=>{const u=await pickUnit('Who scouts ahead?','+80 EXP, but half HP next fight.');if(!u)return null;await expAll([u],80);addWoe('halfhp',1,u);return`${u.name} vanishes into the white and returns at dusk, scratched up but sharper for it.`}},
+    {l:'Take the shortcut',sub:'Every unit gains 40 EXP and loses 5 HP',go:async()=>{await expAll(run.roster,40);hurtAll(5);return'You stumble out the far side hours later. Everyone gains 40 EXP, but the squad is battered (−5 HP).'}},
+    {l:'Send a scout ahead',sub:'One unit gains 80 EXP, but drops to half HP',go:async()=>{const u=await pickUnit('Who scouts ahead?','+80 EXP, but drops to half HP.');if(!u)return null;await expAll([u],80);u.hp=Math.min(u.hp,Math.ceil(u.maxhp/2));return`${u.name} vanishes into the white and returns at dusk, scratched up but sharper for it.`}},
     {l:'Wait for it to lift',go:async()=>'By noon the road is clear.'}]},
   chest:{t:'A Suspicious Chest',art:'chest',fig:'chest',d:'A fine chest sits alone in the middle of the road. Nobody around. Nobody at all.',o:[
-    {l:'Open it',sub:'Gold, or an ambush',go:async()=>{if(rand()<.65){run.gold=gold()+70;sfx('fanfare');return'70 gold, and no catch. Lucky.'}addWoe('wound',1);sfx('broke');return'It’s a trap. Everyone starts the next fight 5 HP down.'}},
+    {l:'Open it',sub:'Gold, or an ambush',go:async()=>{if(rand()<.65){run.gold=gold()+70;sfx('fanfare');return'70 gold, and no catch. Lucky.'}hurtAll(5);sfx('broke');return'It’s a trap. Everyone loses 5 HP.'}},
     {l:'Leave it',go:async()=>'You give it a wide berth.'}]},
   library:{t:'The Ruined Library',art:'library',d:'Half the roof is gone, but the shelves still stand. Rain has spared a few tomes.',o:[
     {l:'Study the tomes',sub:'Casters, Menders and Summoners gain 60 EXP; others 20',go:async()=>{evEl.hidden=true;const m=run.roster.filter(u=>CLS[u.cls].w.includes('art')||CLS[u.cls].w.includes('spirit'));await expAll(m,60);await expAll(run.roster.filter(u=>!m.includes(u)),20);return'A long afternoon of reading. The spellcasters gain 60 EXP, everyone else 20.'}},
@@ -252,7 +244,7 @@ Object.assign(EVENTS,{
   spire:{t:'The Storm Spire',act:2,art:'spire',d:'A tower that drinks lightning. At the top, a sigil and a staff hang in the air, waiting.',o:[
     {l:'Take Heaven’s Bolt',sub:'Corvin only: long-range lightning sigil, Rng 3–10, 5 uses',need:()=>run.roster.some(u=>u.cast==='corvin'),go:async()=>{const u=run.roster.find(u=>u.cast==='corvin');if(!await stow(u,'heavensBolt'))return null;sfx('item');return `${u.name} takes <b>Heaven’s Bolt</b>. The sky rumbles.`}},
     {l:'Take the Far Charm',sub:'Menders only: a ranged heal, Rng 1–10',need:()=>run.roster.some(u=>isRoleU(u,'support')),go:async()=>{const u=await pickUnit('Who takes the Far Charm?',itemText('farStaff'),u=>isRoleU(u,'support')?null:'Menders only');if(!u||!await stow(u,'farStaff'))return null;sfx('item');return `${u.name} takes the <b>Far Charm</b>.`}},
-    {l:'Climb to the top',sub:'Every unit +1 Spd and +1 Luck; Wounded next fight',go:async()=>{run.roster.forEach(u=>{u.spd++;u.lck++});addWoe('wound',1);sfx('thunder');return'Struck, all of you. Every unit gains 1 Spd and 1 Luck, and starts the next fight singed.'}}]},
+    {l:'Climb to the top',sub:'Every unit +1 Spd and +1 Luck, and loses 5 HP',go:async()=>{run.roster.forEach(u=>{u.spd++;u.lck++});hurtAll(5);sfx('thunder');return'Struck, all of you. Every unit gains 1 Spd and 1 Luck, but is singed (−5 HP).'}}]},
   oracle:{t:'The Oracle',act:2,art:'oracle',d:'A blindfolded oracle turns a crystal in her hands. “I see what each of you lacks.”',o:[
     {l:'Hear your weakness',sub:'Every unit +1 to their lowest stat',go:async()=>{const t=run.roster.map(u=>{const s=shown(u).filter(k=>k!=='hp').sort((a,b)=>u[a]-u[b])[0];bump(u,s,1);return`${u.name} +1 ${SN[s]}`});sfx('ding');return t.join(', ')+'.'}},
     {l:'A full reading',sub:'One unit levels up',cost:50,go:async()=>{const u=await pickUnit('Whose fortune?','They gain a level.',u=>u.lv>=20?'Max level':null);if(!u)return null;spend(50);await expAll([u],100-u.exp);return`The oracle smiles at ${u.name}.`}}]},
@@ -286,7 +278,7 @@ Object.assign(EVENTS,{
 /* ---- act 3 events: only these appear on the road to the Crystal Heart ---- */
 Object.assign(EVENTS,{
   echo:{t:'Ithren’s Echo',act:3,art:'sage',d:'The air shivers, and Ithren’s voice comes through the crystal, faint and far away. “You’re close now. I can give you one thing. Choose.”',o:[
-    {l:'“Mend us”',sub:'Everyone heals fully, and your woes are lifted',go:async()=>{run.roster.forEach(u=>u.hp=u.maxhp);run.woes=[];sfx('heal');return'Warmth runs through the squad. Every wound closes, and the weight you were carrying lifts.'}},
+    {l:'“Mend us”',sub:'Everyone heals fully',go:async()=>{run.roster.forEach(u=>u.hp=u.maxhp);sfx('heal');return'Warmth runs through the squad, and every wound closes.'}},
     {l:'“Sharpen us”',sub:'Every unit +1 Str and +1 Mag',go:async()=>{run.roster.forEach(u=>{bump(u,'str',1);bump(u,'mag',1)});sfx('ding');return'Your hands steady. Every unit gains 1 Str and 1 Mag.'}},
     {l:'“Shield us”',sub:'Every unit +2 Res',go:async()=>{run.roster.forEach(u=>bump(u,'res',2));sfx('ding');return'A pale light settles over the squad. Every unit gains 2 Res.'}}]},
   fallen:{t:'Those Who Came Before',act:3,art:'battlefield',d:'Another squad got this far. Their gear lies where they fell, half grown over with red crystal.',o:null,make:()=>{
@@ -308,4 +300,3 @@ async function eventNode(){
 
 /* PNG art: each of these uses art/<key>.png when it exists, else the drawing code above (see art() in 03-pixel-art.js) */
 function cageBarsArt(){return art('scenes/cage-bars',()=>cageBarsArt_draw())}
-function woeArt(id){return art('woes/'+id,()=>woeArt_draw(id))}

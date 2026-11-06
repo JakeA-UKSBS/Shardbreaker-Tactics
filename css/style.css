@@ -400,7 +400,7 @@ button.it.sel{border-color:var(--gold)}
 .nd.cur{opacity:1;box-shadow:0 0 0 3px var(--gold)}
 .nd.ok{opacity:1;animation:pulse 1.2s infinite}
 .nd.pick{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 25%,var(--panel2))}
-.nm-relics{display:flex;gap:4px;flex-wrap:wrap}.rl.wo{border-color:#c8322e}.rl.wo i{color:#ff8a7a}.rl.ml{position:relative}.rl.ml i{position:absolute;right:1px;bottom:0;font:700 10px var(--body);font-style:normal;color:var(--gold)}
+.nm-relics{display:flex;gap:4px;flex-wrap:wrap}.rl.ml{position:relative}.rl.ml i{position:absolute;right:1px;bottom:0;font:700 10px var(--body);font-style:normal;color:var(--gold)}
 .gold{color:#f0c850;font-weight:700}
 .devtag{display:inline-block;margin-left:6px;padding:1px 6px;border-radius:4px;background:#7a3a2a;color:#ffd8c8;font:700 11px var(--body);letter-spacing:.04em;vertical-align:middle;text-transform:uppercase}
 .trade{display:grid;grid-template-columns:1fr 1fr;gap:8px}.tcol{min-width:0;display:flex;flex-direction:column;gap:4px}@media (max-width:520px){.trade{grid-template-columns:1fr}}
@@ -500,14 +500,14 @@ button.it.sel{border-color:var(--gold)}
 .cap.over{--n:#e05a4a;box-shadow:0 0 0 1.5px #e05a4a}.capn{font-size:11px;color:var(--muted);margin-right:4px;font-variant-numeric:tabular-nums}
 /* high-res units: 64px art, feet on the tile's bottom edge, overflowing upward like FE map sprites */
 .unit img.hi{width:64px!important;height:64px!important;margin:-15px 0 0 -8px;max-width:none}
-/* run panel on the node map (PC): gold, relics with what they do, meals and woes */
+/* run panel on the node map (PC): gold, relics with what they do, meals */
 .nm-side{display:none}
 @media (min-width:1200px){
   .nm-side{display:block;position:absolute;left:max(16px,calc(50% - 380px - 300px));top:96px;width:280px;max-height:calc(100% - 200px);overflow:auto;background:rgba(18,16,24,.82);border:1px solid var(--line);border-radius:10px;padding:12px 14px;box-sizing:border-box}
   .nmap .nm-relics{display:none}
 }
 .ns-gold{display:flex;align-items:center;gap:8px;font-weight:700;color:var(--gold);font-size:16px;margin-bottom:6px}.ns-gold img{width:22px;height:22px;image-rendering:pixelated}
-.ns-h{font-family:var(--display);letter-spacing:.06em;font-size:14px;color:var(--fg);margin:10px 0 4px;text-transform:uppercase}.ns-h.woe{color:#ff8a7a}
+.ns-h{font-family:var(--display);letter-spacing:.06em;font-size:14px;color:var(--fg);margin:10px 0 4px;text-transform:uppercase}
 .ns-row{display:flex;gap:8px;align-items:flex-start;padding:5px 0;border-top:1px solid rgba(255,255,255,.05);font-size:13px;line-height:1.3;color:var(--muted)}
 .ns-row img{width:28px;height:28px;image-rendering:pixelated;flex:none}.ns-row b{display:block;color:var(--fg);font-size:13px}.ns-none{font-size:13px;color:var(--muted);margin:2px 0}
 @media (min-width:1200px){.nm-side.nm-unit{left:auto;right:max(16px,calc(50% - 380px - 300px))}}

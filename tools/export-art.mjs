@@ -46,7 +46,7 @@ const keys = await page.evaluate(() => {
   each(IT, k => { if (!k.includes('~')) iconArt(k) });
   try { castArtAll() } catch (_) {}
   monsterClasses().forEach(c => { try { monsterArt(c, false); monsterArt(c, true) } catch (_) {} });
-  each(TAGS, tagArt); each(RELICS, relicArt); each(MEALS, mealArt); each(WOES, woeArt);
+  each(TAGS, tagArt); each(RELICS, relicArt); each(MEALS, mealArt);
   [mugArt, tavernArt, counterArt, musterArt, flagArt, sageRoomArt, sageTableArt, sageBallArt, mapIconArt, coinArt,
    swordsArt, eliteArt, campArt, chestArt, eventArt, titleCrystalArt, cageBarsArt, boulderArt, mudArt, shipSideArt, shipWingArt,
    () => BIG.crystal({}, false), () => BIG.crystal({}, true)].forEach(f => { try { f() } catch (_) {} });

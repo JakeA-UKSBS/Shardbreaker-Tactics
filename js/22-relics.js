@@ -96,7 +96,7 @@ function relicCalc(x,xw,y){
   }
   return o;
 }
-const relicMov=u=>u.team!=='p'?0:(R('boots')?1:0)+(R('spurs')&&CLS[u.cls].mnt?1:0)+(M('stew')?1:0)-(Wo('weary')?1:0);
+const relicMov=u=>u.team!=='p'?0:(R('boots')?1:0)+(R('spurs')&&CLS[u.cls].mnt?1:0)+(M('stew')?1:0);
 
 /* PNG art: each of these uses art/<key>.png when it exists, else the drawing code above (see art() in 03-pixel-art.js) */
 function relicArt(k){return art('relics/'+k,()=>relicArt_draw(k))}

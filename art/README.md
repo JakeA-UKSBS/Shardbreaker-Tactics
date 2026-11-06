@@ -16,7 +16,7 @@ You only need to rebuild the manifest when you **add** or **delete** a PNG: `nod
 |---|---|---|
 | `tiles/` | Map tiles. Files ending `-bare` are features drawn over the region's ground (transparent around them); `-used` is a visited village or opened chest | 16×16 |
 | `icons/` | Item and weapon icons | 16×16 |
-| `relics/`, `meals/`, `woes/`, `tags/`, `nodes/`, `ui/` | Small icons (relics, tavern meals, woes, body-type tags, map rooms, coin/map/mug) | 16×16 |
+| `relics/`, `meals/`, `tags/`, `nodes/`, `ui/` | Small icons (relics, tavern meals, body-type tags, map rooms, coin/map/mug) | 16×16 |
 | `backdrops/` | Fight-scene backdrop per region (horizon at y 63) | 160×90 |
 | `scenes/` | Tavern, Crossroads, Ithren's tent, cage bars, the Bog Witch's hut (`witch-hut`, 640×360, used instead of the code-drawn witch scene), the Healing Fountain's courtyard (`fountain`, 576×324), the Caged Traveller's village (`village`, 576×324) | 160×90 (`tavern-counter` is 160×34) |
 | `title/` | Title-screen crystal | 120×120 |
