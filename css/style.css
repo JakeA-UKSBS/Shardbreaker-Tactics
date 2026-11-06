@@ -50,7 +50,7 @@ button.mini{padding:4px 8px;font-size:12px}
 .unit{position:absolute;width:48px;height:48px;pointer-events:none;transition:left .26s ease,top .26s ease,transform .15s ease,opacity .35s}
 .unit img{width:48px;height:48px;image-rendering:pixelated;display:block}
 .unit.e img{transform:scaleX(-1)}
-.unit.boss img{filter:drop-shadow(0 0 2px var(--gold))}
+.unit.boss img{filter:var(--hf,) drop-shadow(0 0 2px var(--gold))}.unit.boss.threat img{filter:var(--hf,) drop-shadow(0 0 2px #ff3b2f) drop-shadow(0 0 3px #ff3b2f)}
 .unit.done img{filter:grayscale(.9) brightness(.65)}
 .unit.flash img{filter:brightness(3)}
 .hpb{position:absolute;left:8px;right:8px;bottom:2px;height:3px;background:rgba(0,0,0,.6);border-radius:2px}
@@ -434,11 +434,11 @@ button.it.sel{border-color:var(--gold)}
 .mu:hover{transform:translateX(-50%) translateY(-3px) scale(var(--s,1))}
 .mu.on{transform:translateX(-50%) translateY(-6px) scale(var(--s,1))}.mu.on img{filter:drop-shadow(0 0 3px #f0c850) drop-shadow(0 0 6px #f0c850)}.mu.on span{background:#f0c850;color:#1a1408}
 .sg .sg-sage{left:62.5%;bottom:9%;width:16.25%;transform:translateX(-50%)}
-/* the crystal ball floats under the Ascension picker, bobbing and flickering between Rhi's two frames */
+/* the crystal ball floats under the Ascension picker, bobbing; it reddens with Ascension (see tint() in sageScene) */
 .sg-orb{position:absolute;left:49%;top:37%;width:10.83%;aspect-ratio:52/51;transform:translateX(-50%);animation:orbbob 3s ease-in-out infinite}
-.tv-scene .sg-orb img{inset:0;width:100%;height:100%;animation:orbglow2 2.6s ease-in-out infinite}.tv-scene .sg-orb .sg-orb2{animation:orbglow2 2.6s ease-in-out infinite,orbflick .9s steps(1) infinite}
-@keyframes orbbob{50%{transform:translate(-50%,-8%)}}@keyframes orbflick{50%{opacity:0}}
-.sg-diff{position:absolute;left:50%;top:17%;transform:translateX(-50%);display:flex;align-items:center;gap:8px;background:rgba(18,10,24,.8);border:1px solid #6a4a8a;border-radius:8px;padding:4px 6px;max-width:80%}.sg-diff span{display:flex;flex-direction:column;align-items:center;text-align:center;color:#ead9ff;min-width:150px}.sg-diff small{font-size:11px;color:#b8a8d0}.sg-diff button{background:#2e1e3e;border-color:#6a4a8a;color:#e0c8ff;padding:4px 10px}.sg-diff button[disabled]{opacity:.35}
+.tv-scene .sg-orb img{inset:0;width:100%;height:100%;filter:drop-shadow(0 0 6px rgba(176,122,232,.6))}
+@keyframes orbbob{50%{transform:translate(-50%,-8%)}}
+.sg-diff{position:absolute;left:50%;top:17%;transform:translateX(-50%);display:flex;align-items:center;gap:5px;background:rgba(18,10,24,.8);border:1px solid #6a4a8a;border-radius:6px;padding:2px 4px;max-width:80%;font-size:13px}.sg-diff span{display:flex;flex-direction:column;align-items:center;text-align:center;color:#ead9ff;min-width:115px}.sg-diff small{font-size:10px;color:#b8a8d0}.sg-diff button{background:#2e1e3e;border-color:#6a4a8a;color:#e0c8ff;padding:4px 10px}.sg-diff button[disabled]{opacity:.35}
 @keyframes orbglow2{50%{filter:drop-shadow(0 0 8px rgba(176,122,232,.85))}}
 .ms-sage{position:absolute;right:3%;bottom:30%;width:11%;display:flex;flex-direction:column;align-items:center;gap:2px}.tv-scene .ms-sage img{position:static;width:100%;image-rendering:pixelated;transform:scaleX(-1);filter:drop-shadow(0 2px 0 rgba(0,0,0,.45)) drop-shadow(0 0 4px rgba(176,122,232,.6));animation:orbglow 2.4s ease-in-out infinite}
 @keyframes orbglow{50%{filter:drop-shadow(0 2px 0 rgba(0,0,0,.45)) drop-shadow(0 0 9px rgba(176,122,232,.9))}}.ms-sage span{font-size:12px;font-weight:700;color:#cfe0ff;background:rgba(20,12,8,.75);border-radius:4px;padding:1px 6px}
@@ -746,7 +746,7 @@ button.it.sel{border-color:var(--gold)}
 :is(.nmap,.nmap *)::-webkit-scrollbar-thumb:horizontal{border-image:url(../art/ui/scroll-h.png) 0 12 fill / 0 24px stretch;image-rendering:pixelated}
 :is(.nmap,.nmap *)::-webkit-scrollbar-button{display:none}
 /* Ascension arrows over the crystal ball: gold arrowheads (art/ui/arrow-l, arrow-r), 3x */
-.sg-diff button{width:36px;height:21px;padding:0;border:0;border-radius:0;font-size:0;background:url(../art/ui/arrow-l.png) 0 0/100% 100%;image-rendering:pixelated}
+.sg-diff button{width:27px;height:16px;padding:0;border:0;border-radius:0;font-size:0;background:url(../art/ui/arrow-l.png) 0 0/100% 100%;image-rendering:pixelated}
 .sg-diff button[data-d="1"]{background-image:url(../art/ui/arrow-r.png)}
 .sg-diff button:hover:not([disabled]){filter:brightness(1.3)}
 /* Rhi's tavern mug on the node map, sized like her chest */

@@ -15,18 +15,41 @@ const CAST_CLASSES={
   /* base classes */
   'Archer':'skirm.foot.bow.1','Brawler':'bruiser.foot.heavy.1','Cultist':'caster.foot.art.1','Elemental Mage':'caster.foot.art.1',
   'Knight':'knight.armour.pole.1','Mender':'support.foot.spirit.1','Rogue':'rogue.foot.blade.1','Shieldmaiden':'shield.foot.blade.1',
-  'Adventurer':'shield.foot.blade.1','Cavalier':'tank.mounted.pole.1','Crossbowman':'skirm.foot.bow.1','Drake Rider':'bruiser.flying.pole.1',
-  'Horse Archer':'skirm.mounted.bow.1','Swordsman':'sword.foot.blade.1','Pyromancer':'caster.foot.art.1','Minstrel':'support.foot.spirit.1',
+  'Adventurer':'shield.foot.blade.1','Cavalier':'tank.mounted.pole.1','Crossbowman':'skirm.foot.bow.1','Drake Rider':'bruiser.flying.pole.2',
+  'Horse Archer':'skirm.mounted.bow.2','Swordsman':'sword.foot.blade.1','Pyromancer':'caster.foot.art.1','Minstrel':'support.foot.spirit.1',
   /* advanced classes */
   'Sniper':'skirm.foot.bow.2','Bow Cavalry':'skirm.mounted.bow.2','Berserker':'bruiser.foot.heavy.2','Witch':'caster.foot.art.2',
   'Shaman':'caster.foot.art.2','Archmage':'caster.foot.art.2','Stormlord':'caster.foot.art.2','Juggernaut':'knight.armour.heavy.2',
   'Paladin':'knight.mounted.pole.2','Saint':'support.foot.spirit.2','Crusader':'shield.armour.blade.2','Duelist':'sword.foot.blade.2',
   'Assassin':'rogue.foot.blade.2','Valkyrie':'shield.flying.pole.2','Aegis':'shield.armour.blade.2','Hero':'shield.foot.blade.2',
   'Warlord':'tank.mounted.heavy.2','Artillery':'tank.armour.bow.2','Swordmaster':'sword.foot.blade.2','Pyrolord':'caster.foot.art.2',
-  'Summoner':'summoner.foot.art.2','Mercenary':'sword.foot.blade.2','Warlock':'caster.foot.art.2'
+  'Summoner':'summoner.foot.art.2','Bard':'support.foot.spirit.2','Mercenary':'sword.foot.blade.2','Warlock':'caster.foot.art.2'
 };
+/* ASC_BONUS: stats each advanced cast class adds on ascending (and joiners who start advanced get them too), in stat order */
+const ASC_BONUS={
+  'Sniper':[2,3,0,0,2,5,1,1],
+  'Bow Cavalry':[3,2,0,0,4,2,1,1],
+  'Artillery':[5,4,0,0,0,2,4,1],
+  'Berserker':[6,5,0,0,2,2,1,0],
+  'Witch':[2,0,4,0,2,2,0,4],
+  'Shaman':[4,0,3,0,1,1,2,4],
+  'Archmage':[2,0,5,0,1,2,1,4],
+  'Stormlord':[3,0,4,0,4,1,0,2],
+  'Pyrolord':[4,0,5,0,1,1,2,1],
+  'Juggernaut':[7,4,0,0,0,0,5,1],
+  'Paladin':[5,3,0,0,2,1,3,2],
+  'Warlord':[6,4,0,0,1,1,3,1],
+  'Saint':[3,0,4,0,1,2,0,5],
+  'Crusader':[5,3,1,0,0,1,4,2],
+  'Duelist':[3,3,0,0,3,3,2,1],
+  'Assassin':[2,3,0,0,4,5,0,1],
+  'Valkyrie':[3,3,0,0,3,1,1,4],
+  'Aegis':[6,2,0,0,0,0,5,3],
+  'Hero':[4,3,0,0,3,2,2,1],
+  'Swordmaster':[2,3,0,0,5,4,0,1],
+  'Bard':[3,0,3,0,3,3,1,2]};
 const castCls=n=>`G.${CAST_CLASSES[n]}.${n.replace(/ /g,'')}`;
-for(const n in CAST_CLASSES){const base=ensureCls('G.'+CAST_CLASSES[n]);const C=Object.assign({},CLS[base],{n});delete C.promo;CLS[castCls(n)]=C}
+for(const n in CAST_CLASSES){const base=ensureCls('G.'+CAST_CLASSES[n]);const C=Object.assign({},CLS[base],{n});delete C.promo;if(ASC_BONUS[n])C.bonus=ASC_BONUS[n];CLS[castCls(n)]=C}
 
 /* ---- the characters ----
    cls: their class, wk: the weapon they hold, look: their look.
@@ -77,7 +100,8 @@ const CAST=[
   {id:'ash',name:'Ash',cls:'Pyromancer',wk:'emberSigil',joins:'run',look:{style:'short',hair:'#3a2a20',skin:'#e8b98f',cloth:'#a8322a',sash:'#e2b553',collar:'#a8322a',gear:'circlet',hand:true,eye:'#6a3a2a'},
     asc:{'Pyrolord':{look:{capeC:'#5a1a1a',el:'#ffb03c',style:'wild',hair:'#8a2a22',body:'robe',hem:'#ff8a3c'}},
          'Archmage':{wk:'meteorSigil',look:{capeC:'#3a1a3a',cloth:'#7a2a4a',collar:'#7a2a4a'}}}},
-  {id:'lysander',name:'Lysander',cls:'Minstrel',wk:null,joins:'event',look:{body:'tunic',prop:'lyre',style:'short',hair:'#a8743a',skin:'#f3cfa6',cloth:'#8a5a7a',pants:'#4a3a4a',sash:'#efe6cf',gear:'cap',eye:'#3a5a8a'}},
+  {id:'lysander',name:'Lysander',cls:'Minstrel',wk:null,joins:'event',look:{body:'tunic',prop:'lyre',style:'short',hair:'#a8743a',skin:'#f3cfa6',cloth:'#8a5a7a',pants:'#4a3a4a',sash:'#efe6cf',gear:'cap',eye:'#3a5a8a'},
+    asc:{'Bard':{look:{cape:true,capeC:'#5a3a5a',feather:['#c8322e','#efe6cf']}}}},/* placeholder Bard look until his art is drawn */
   /* ---- join after Act 1, already advanced ---- */
   {id:'nyx',name:'Nyx',cls:'Assassin',wk:'dirk',joins:'act1',look:{fem:true,style:'long',hair:'#1d1a24',skin:'#e8b98f',cloth:'#1e1a22',pants:'#141018',sash:'#5a4a7a',gear:'hood',mask:'#4a4656',capeC:'#1e1a22',jag:true,eye:'#9a6ad8'}},
   {id:'roark',name:'Roark',cls:'Berserker',wk:'reaverAxe',joins:'act1',look:{style:'wild',beard:true,hair:'#9a9aa2',skin:'#e8b98f',cloth:'#6a6a72',pants:'#3a3a40',sash:'#a8322a',capeC:'#8a2a22',scar:true,dblAxe:true,stance:'shoulder',eye:'#6a3a2a'}},
@@ -119,10 +143,10 @@ function castArtAll(){for(const c of CAST)for(const cls of[c.cls,...Object.keys(
 function castUnit(id,lv){
   const c=castDef(id),[,role,mv,,t]=c.cls.split('.'),R=ROLES[role],M=MOVES[mv];
   if(t==='2')lv=1; /* already-advanced characters always join at Lv 1 */
-  const s=R.b.slice();if(M.st)M.st.forEach((d,i)=>s[i]=Math.max(0,s[i]+d));if(t==='2'&&R.bonus)R.bonus.forEach((d,i)=>s[i]+=d);
+  const s=R.b.slice();if(M.st)M.st.forEach((d,i)=>s[i]=Math.max(0,s[i]+d));if(t==='2'&&CLS[c.cls].bonus)CLS[c.cls].bonus.forEach((d,i)=>s[i]+=d);
   const g=R.gr.map(([a,b])=>Math.round((a+b)/2)),items=[];
   if(c.wk)items.push({k:c.wk,u:IT[c.wk].uses});
-  if(role==='support'&&c.wk!=='mendingStaff'&&c.cls!=='Minstrel')/* Lysander sings rather than heals */items.push({k:'mendingStaff',u:IT.mendingStaff.uses});
+  if(role==='support'&&c.wk!=='mendingStaff'&&CLS[c.cls].n!=='Minstrel')/* Lysander sings rather than carrying a staff */items.push({k:'mendingStaff',u:IT.mendingStaff.uses});
   items.push({k:'salve',u:IT.salve.uses});
   const u={id:'c'+(run.uid++),cast:id,name:c.name,cls:c.cls,team:'p',lv:1,exp:0,skill:KITS[id]?KITS[id].passive:pick(R.skills),skills:[],cap:BASE_CAP,look:clone(c.look),g,mov:CLS[c.cls].mov,items,acted:false,x:0,y:0};
   ST.forEach((k,i)=>u[k]=s[i]);u.maxhp=u.hp;
