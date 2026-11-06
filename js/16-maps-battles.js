@@ -139,7 +139,7 @@ Object.assign(MAPS,{
   heartCore:{n:'Heart Chamber',map:["KSSSSSSSSK","SSYSSSSUSS","SSSSSSSSSS","SGSSSSSSPS","SSSSSSSSSS","KSUSSSSYSK","SSSSGSSSSS","SSPSSSSUSS","SSSSSSSSSS","SSSSSSSSSS","SSSSSSSSSS"],start:[[4,10],[5,10],[3,10],[6,10],[4,9],[5,9]],boss:[4,1]}
 });
 Object.assign(MAPS,{
-  dunes:{n:"Shifting Dunes",map:["knffzznnnw","knnnzznwwk","wwzznnnnnn","nwwwnnnnnn","nzzwwnffzz","nnnnnnnfzz","nn..nnnnzn","nnnnnnknzn","knnnnnnnnn","knnnnnnnnn"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
+  dunes:{n:"Shifting Dunes",map:["knffzznnnw","knnnzznwwk","wwzznnnnnn","nwwwnnnnnn","nzzwwnffzz","nnnnnnnfzz","nnnnnnnnzn","nnnnnnknzn","knnnnnnnnn","knnnnnnnnn"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   oasis:{n:"Oasis",map:["nnnnwwnnnn","nnnwwwwnnn","knnnwwnnnk","nnnnnnnnnn","zznnknnzzn","zznnnnnzzn","nnnnnnnnnn","nknnnnnnkn","nnnnnnnnnn","nnnnnnnnnn"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   canyon:{n:"Sandstone Canyon",map:["nnnnzznnnn","nnknnnnknn","nnknnnnknn","nnnnnnnnnn","zznnkknnzz","nnnnkknnnn","nknnnnnnkn","nnnnnnnnnn","nnnnnnnnnn","nnnnnnnnnn"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   sunTemple:{n:"Temple of the Sun",map:["knnnnnnnnk","nnnnnnnnnn","nknnnnnnkn","nnnnzznnnn","nnnnzznnnn","knnnnnnnnk","nnnknnknnn","nnnnnnnnnn","nnnnnnnnnn","nnnnnnnnnn"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]],boss:[5,0]},
