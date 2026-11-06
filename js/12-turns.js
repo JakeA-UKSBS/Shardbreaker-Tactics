@@ -5,7 +5,7 @@
    SELECTING AND MOVING: select a unit, show its reach, click to move
    ================================================================== */
 function clearSel(){sel=null;moveSet=null;fringe=null;targets=[];pending=null;inspect=null;itemSel=null;abSel=null;abT=null;aimSet=null}
-function select(u){clearSel();sel=u.id;pre=clone(state);origin={x:u.x,y:u.y};moveSet=reach(u);fringe=fringeOf(u,moveSet);ui='move';render()}
+function select(u){clearSel();sel=u.id;origin={x:u.x,y:u.y};moveSet=reach(u);fringe=fringeOf(u,moveSet);ui='move';render()}
 function cancelMove(){const u=sel&&byId(sel);if(u&&origin){u.x=origin.x;u.y=origin.y}clearSel();ui='idle';render()}
 function freeNear(x,y,taken,u){const seen=new Set([key(x,y)]),q=[[x,y]];
   while(q.length){const[cx,cy]=q.shift(),k=key(cx,cy),c=u?mcost(u,cx,cy):ter(cx,cy).c;if(c<99&&!taken.has(k))return{x:cx,y:cy};
@@ -54,7 +54,7 @@ function tap(x,y){
 /* ==================================================================
    ENDING AN ACTION: commit the move, finish, prompt to end the turn
    ================================================================== */
-function commit(){history.push(pre);const u=byId(sel);if(u)u.acted=true}
+function commit(){const u=byId(sel);if(u)u.acted=true}
 function finishAction(){clearSel();ui='idle';render();checkEnd();if(over)return;saveGame();promptEnd()}
 function promptEnd(){setTimeout(async()=>{
   if(phase!=='player'||over||busy||!modalEl.hidden||!state.units.filter(u=>u.team==='p').every(u=>u.acted))return;
@@ -186,7 +186,7 @@ function aiPlan(e){
   return{tile:bt};
 }
 async function enemyPhase(){
-  history.push(clone(state));clearSel();ui='idle';phase='enemy';busy=true;tickSt('p','end');render();
+  clearSel();ui='idle';phase='enemy';busy=true;tickSt('p','end');render();
   for(const u of state.units)if(u.team==='p')u.stone=0;
   banner('Enemy Phase','e');await sleep(950);
   phaseHeal('e');tickSt('e','start');burnTick('e');render();await runAI('e');tickSt('e','end');

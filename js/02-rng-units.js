@@ -1,8 +1,8 @@
 /* Seeded random numbers and the basic unit constructors */
 /* ================= STATE ================= */
-let state,history=[],rewinds=3,chStart=null,MAP=[],HM=[],MW=8,MH=11;
-let ui='idle',sel=null,pre=null,origin=null,moveSet=null,fringe=null,targets=[],tmode='atk',pending=null,pendW=0,phase='player',busy=false,over=null,inspect=null,danger=false,details=false,itemSel=null,terInfo='';
-let settings={anim:true,sound:true,tips:false,seen:[],rewind:false,dev:false,theme:'tavern'};
+let state,chStart=null,MAP=[],HM=[],MW=8,MH=11;
+let ui='idle',sel=null,origin=null,moveSet=null,fringe=null,targets=[],tmode='atk',pending=null,pendW=0,phase='player',busy=false,over=null,inspect=null,danger=false,details=false,itemSel=null,terInfo='';
+let settings={anim:true,sound:true,tips:false,seen:[],dev:false,theme:'tavern'};
 /* colour schemes: tavern (warm wood and gold, like the story scenes) or jade (Obsidian & Jade) */
 const THEMES={tavern:'Tavern',jade:'Obsidian & Jade'};
 function applyTheme(){const t=THEMES[settings.theme]?settings.theme:'tavern';for(const k in THEMES)document.documentElement.classList.toggle('th-'+k,k===t)}

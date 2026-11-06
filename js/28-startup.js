@@ -37,7 +37,6 @@ $('#btnEnd').addEventListener('click',async()=>{if(busy||over||phase!=='player'|
   const left=state.units.filter(u=>u.team==='p'&&!u.acted).length;
   const m=await modal(`<h2>End your turn?</h2><p>${left?`${left} unit${left>1?'s have':' has'} not moved yet.`:'Every unit has moved.'}</p><div class="mbtns"><button type="button" data-m="no">No</button><button class="go" type="button" data-m="end">Yes, end turn</button></div>`);
   if(m==='end'&&!busy&&!over&&phase==='player')enemyPhase()});
-$('#btnRewind').addEventListener('click',rewind);
 $('#btnDanger').addEventListener('click',()=>{danger=!danger;render();if(danger)tip('danger','Danger zone','Red tiles are where enemies can strike next turn. Click a tile, or move a unit onto one, to see which enemies they are.')});
 /* the cog: options from anywhere (not while a dialog is open or a fight is playing out) */
 $('#cog').addEventListener('click',()=>{if(!modalEl.hidden)return;const screen=[...document.querySelectorAll('.nmap,.tav')].some(e=>!e.hidden);if(busy&&!screen&&titleEl.hidden)return;sfx('tick');optionsMenu(!titleEl.hidden)});
@@ -58,7 +57,7 @@ function start(data){
   seedRng(7);run={seed:7,n:1,uid:1,roster:[]};run.roster=shuffle(CAST.filter(c=>c.joins==='start')).slice(0,3).map(c=>castUnit(c.id,1));BATTLE=genBattle(1);setupBattle(run.roster);run=null;
   titleScreen();
 }
-window.claude?.hot?.snapshot?.(()=>({state,history,rewinds,chStart,run,def:BATTLE,rng:rngS}));
+window.claude?.hot?.snapshot?.(()=>({state,chStart,run,def:BATTLE,rng:rngS}));
 window.claude?.hot?.ready?window.claude.hot.ready(start):start(window.claude?.hot?.data??{});
 
 /* PNG art: each of these uses art/<key>.png when it exists, else the drawing code above (see art() in 03-pixel-art.js) */

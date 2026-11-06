@@ -3,7 +3,7 @@
 const SAVE='sbtactics.save.v2'/* v2: items, skills and monsters renamed to match their in-game names; v1 runs are dropped */,OPTS='sbtactics.opts';
 /* SAVES_ON: run saves are switched off while the game is changing a lot (removed content kept breaking old saves). Set true to bring Continue back. */
 const SAVES_ON=false;
-function saveGame(){if(!SAVES_ON||!run)return;const map=run.phase==='map';try{localStorage.setItem(SAVE,JSON.stringify({state:map?null:state,rewinds,chStart:map?null:chStart,run,def:map?null:BATTLE,rng:rngS}))}catch(_){}}
+function saveGame(){if(!SAVES_ON||!run)return;const map=run.phase==='map';try{localStorage.setItem(SAVE,JSON.stringify({state:map?null:state,chStart:map?null:chStart,run,def:map?null:BATTLE,rng:rngS}))}catch(_){}}
 /* dropGone: strips skills and items that no longer exist (e.g. Pierce and Lifetaker, and their scrolls) from a save, so older runs still load */
 function dropGone(o){if(!o||typeof o!=='object')return;
   if(Array.isArray(o.skills))o.skills=o.skills.filter(x=>!x||!x.id||SKILLS[x.id]);
@@ -20,7 +20,7 @@ function setupBattle(roster){
   heroes.forEach((h,i)=>{const st=c.start[i]||c.start.at(-1),p=freeNear(st[0],st[1],taken,h);h.x=p.x;h.y=p.y;taken.add(key(p.x,p.y))});
   abReset(heroes);
   state={turn:1,units:[...heroes,...fs]};
-  history=[];rewinds=3;chStart=clone(state);enterMap();
+  chStart=clone(state);enterMap();
 }
 /* heights: a map's own h rows (one digit per tile), else hills and rubble sit 1 level up */
 function heightsOf(c){return c.h?c.h.map(r=>[...r].map(Number)):c.map.map(r=>[...r].map(ch=>TER[ch]&&TER[ch].k==='hill'?1:0))}

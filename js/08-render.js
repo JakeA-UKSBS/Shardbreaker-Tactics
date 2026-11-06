@@ -79,7 +79,7 @@ function render(){
   $('#turn').textContent=`Floor ${run?run.n:1} · Turn ${state.turn}`+(phase==='enemy'?' · Enemy':'');
   $('#obj').innerHTML=`<div><b>Goal</b>${goalShort()}</div><div><b>Lose</b>${loseText()}</div>`;
   const idle=phase==='player'&&!busy&&!over;
-  $('#btnRewind').hidden=!rwOn();$('#btnRewind').textContent='Rewind '+rewinds;$('#btnRewind').disabled=!(idle&&rewinds>0&&history.length);
+
   $('#btnEnd').disabled=!idle;
   $('#btnEnd').classList.toggle('pulse',idle&&state.units.filter(u=>u.team==='p').every(u=>u.acted));
   $('#btnDanger').classList.toggle('on',danger);
