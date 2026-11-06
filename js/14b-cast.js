@@ -15,15 +15,15 @@ const CAST_CLASSES={
   /* base classes */
   'Archer':'skirm.foot.bow.1','Brawler':'bruiser.foot.heavy.1','Cultist':'caster.foot.art.1','Elemental Mage':'caster.foot.art.1',
   'Knight':'knight.armour.pole.1','Mender':'support.foot.spirit.1','Rogue':'rogue.foot.blade.1','Shieldmaiden':'shield.foot.blade.1',
-  'Adventurer':'shield.foot.blade.1','Cavalier':'tank.mounted.pole.1','Crossbowman':'skirm.foot.bow.1','Drake Rider':'bruiser.flying.pole.1',
-  'Horse Archer':'skirm.mounted.bow.1','Swordsman':'sword.foot.blade.1','Pyromancer':'caster.foot.art.1','Minstrel':'support.foot.spirit.1',
+  'Adventurer':'shield.foot.blade.1','Cavalier':'tank.mounted.pole.1','Crossbowman':'skirm.foot.bow.1','Drake Rider':'bruiser.flying.pole.2',
+  'Horse Archer':'skirm.mounted.bow.2','Swordsman':'sword.foot.blade.1','Pyromancer':'caster.foot.art.1','Minstrel':'support.foot.spirit.1',
   /* advanced classes */
   'Sniper':'skirm.foot.bow.2','Bow Cavalry':'skirm.mounted.bow.2','Berserker':'bruiser.foot.heavy.2','Witch':'caster.foot.art.2',
   'Shaman':'caster.foot.art.2','Archmage':'caster.foot.art.2','Stormlord':'caster.foot.art.2','Juggernaut':'knight.armour.heavy.2',
   'Paladin':'knight.mounted.pole.2','Saint':'support.foot.spirit.2','Crusader':'shield.armour.blade.2','Duelist':'sword.foot.blade.2',
   'Assassin':'rogue.foot.blade.2','Valkyrie':'shield.flying.pole.2','Aegis':'shield.armour.blade.2','Hero':'shield.foot.blade.2',
   'Warlord':'tank.mounted.heavy.2','Artillery':'tank.armour.bow.2','Swordmaster':'sword.foot.blade.2','Pyrolord':'caster.foot.art.2',
-  'Summoner':'summoner.foot.art.2','Mercenary':'sword.foot.blade.2','Warlock':'caster.foot.art.2'
+  'Summoner':'summoner.foot.art.2','Bard':'support.foot.spirit.2','Mercenary':'sword.foot.blade.2','Warlock':'caster.foot.art.2'
 };
 const castCls=n=>`G.${CAST_CLASSES[n]}.${n.replace(/ /g,'')}`;
 for(const n in CAST_CLASSES){const base=ensureCls('G.'+CAST_CLASSES[n]);const C=Object.assign({},CLS[base],{n});delete C.promo;CLS[castCls(n)]=C}
@@ -77,7 +77,8 @@ const CAST=[
   {id:'ash',name:'Ash',cls:'Pyromancer',wk:'emberSigil',joins:'run',look:{style:'short',hair:'#3a2a20',skin:'#e8b98f',cloth:'#a8322a',sash:'#e2b553',collar:'#a8322a',gear:'circlet',hand:true,eye:'#6a3a2a'},
     asc:{'Pyrolord':{look:{capeC:'#5a1a1a',el:'#ffb03c',style:'wild',hair:'#8a2a22',body:'robe',hem:'#ff8a3c'}},
          'Archmage':{wk:'meteorSigil',look:{capeC:'#3a1a3a',cloth:'#7a2a4a',collar:'#7a2a4a'}}}},
-  {id:'lysander',name:'Lysander',cls:'Minstrel',wk:null,joins:'event',look:{body:'tunic',prop:'lyre',style:'short',hair:'#a8743a',skin:'#f3cfa6',cloth:'#8a5a7a',pants:'#4a3a4a',sash:'#efe6cf',gear:'cap',eye:'#3a5a8a'}},
+  {id:'lysander',name:'Lysander',cls:'Minstrel',wk:null,joins:'event',look:{body:'tunic',prop:'lyre',style:'short',hair:'#a8743a',skin:'#f3cfa6',cloth:'#8a5a7a',pants:'#4a3a4a',sash:'#efe6cf',gear:'cap',eye:'#3a5a8a'},
+    asc:{'Bard':{look:{cape:true,capeC:'#5a3a5a',feather:['#c8322e','#efe6cf']}}}},/* placeholder Bard look until his art is drawn */
   /* ---- join after Act 1, already advanced ---- */
   {id:'nyx',name:'Nyx',cls:'Assassin',wk:'dirk',joins:'act1',look:{fem:true,style:'long',hair:'#1d1a24',skin:'#e8b98f',cloth:'#1e1a22',pants:'#141018',sash:'#5a4a7a',gear:'hood',mask:'#4a4656',capeC:'#1e1a22',jag:true,eye:'#9a6ad8'}},
   {id:'roark',name:'Roark',cls:'Berserker',wk:'reaverAxe',joins:'act1',look:{style:'wild',beard:true,hair:'#9a9aa2',skin:'#e8b98f',cloth:'#6a6a72',pants:'#3a3a40',sash:'#a8322a',capeC:'#8a2a22',scar:true,dblAxe:true,stance:'shoulder',eye:'#6a3a2a'}},
