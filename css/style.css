@@ -76,7 +76,7 @@ button.mini{padding:4px 8px;font-size:12px}
 .uc.p .ch b{color:var(--blue)}.uc.e .ch b{color:var(--red)}.uc.g .ch b{color:var(--green)}
 .uc.g .por{background:#1d2d22}
 .unit.g .hpb i{background:var(--green)}
-.unit.stone img{filter:grayscale(1) brightness(.9) contrast(1.15)}
+.unit.stone img{filter:grayscale(1) sepia(.35) brightness(1.15) contrast(1.4) drop-shadow(0 0 2px #e8e0cc) drop-shadow(0 0 4px #8a8070)}.stonet{color:#d8cfb8}
 .side.r.g{background:#16301f;border-color:var(--green)}
 .hp,.xp{display:flex;align-items:center;gap:8px;font-variant-numeric:tabular-nums;font-size:12px}
 .hp .bar,.xp .bar{flex:1;height:6px;background:#0d0f15;border-radius:3px;display:block}

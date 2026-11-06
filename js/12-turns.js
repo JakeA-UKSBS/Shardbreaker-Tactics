@@ -25,6 +25,14 @@ function bestApproach(u,o){
   return best;
 }
 
+/* the best tile in reach to heal ally o from (staying put if possible) */
+function healApproach(u,o){
+  let best=null,bs2=-1e9;
+  for(const k of moveSet){const[x,y]=k.split(',').map(Number);if(spiritFor({...u,x,y},o)<0)continue;
+    const s=(x===origin.x&&y===origin.y?100:0)+ter(x,y).av-(Math.abs(x-origin.x)+Math.abs(y-origin.y));if(s>bs2){bs2=s;best={x,y}}}
+  return best;
+}
+
 /* ==================================================================
    TAPS ON THE MAP: what a click does in each ui state (idle, move, menu, target, confirm)
    ================================================================== */
@@ -35,6 +43,7 @@ function tap(x,y){
     const u=byId(sel);
     if(moveSet.has(k)){stepSfx(u,x,y);u.x=x;u.y=y;if(u.tumbled){u.tumbled=0;fringe=null}afterMove(u);return}
     if(o&&o.team==='e'&&fringe.has(k)){const t=bestApproach(u,o);if(t){if(t.x!==u.x||t.y!==u.y)stepSfx(u,t.x,t.y);u.x=t.x;u.y=t.y;targets=atkTargets(u);tmode='atk';openConfirm(o);return}}
+    if(o&&o.team==='p'&&o!==u&&o.hp<o.maxhp&&staffIdx(u)>=0){const t=healApproach(u,o);if(t){if(t.x!==u.x||t.y!==u.y)stepSfx(u,t.x,t.y);u.x=t.x;u.y=t.y;targets=healTargets(u);tmode='heal';openConfirm(o);return}}
     if(o&&o.team==='p'&&!o.acted&&o!==u){cancelMove();select(o);return}
     cancelMove();return;
   }
@@ -113,7 +122,7 @@ async function fight(a,ai,d){
   for(const[u,i,n]of[[a,ai,res.used.a],[d,res.f.di,res.used.d]]){if(i<0||!n)continue;const it=u.items[i];if(endless(it.k))continue;it.u-=n;if(it.u<=0){u.items.splice(i,1);sfx('broke');toast(`${u.name}'s ${IT[it.k].n} shattered`)}}
   const p=a.team==='p'?a:d.team==='p'?d:null,o=p===a?d:a;
   for(const e of res.ev)if(e.psn){const t=e.by==='a'?d:a;if(t.team==='p'&&M('soup'))continue;if(t.hp>0){t.psn=3;pop(t,'Poisoned','crit')}}
-  for(const e of res.ev)if(e.stone){const t=e.by==='a'?d:a;if(t.hp>0&&!t.boss){t.stone=1;pop(t,'Stone!','crit');sfx('earth')}}
+  for(const e of res.ev)if(e.stone){const t=e.by==='a'?d:a;if(t.hp>0&&!t.boss){t.stone=1;pop(t,'Stone!','crit');sfx('earth');toast(`${t.name} is turned to stone and loses ${t.team==='p'?'their':'its'} next turn`)}}
   /* a summon's EXP goes to the unit that summoned it */
   const ep=p&&p.summon?state.units.find(x=>x.id===p.owner&&x.hp>0):p;
   if(p&&p.hp>0&&ep){const dealt=res.ev.some(e=>(e.by==='a')===(p===a)&&e.dmg>0);const g=gainExp(ep,Math.min(100,Math.round(expFor(ep,o,dealt,o.hp<=0)*EXP_RATE*(R('tome')?1.5:1)*(has(ep,'quickStudy')?2:1))));if(ep!==p&&g)toast(`${ep.name} gains ${g.amt} EXP`);await showExp(ep,g);if(g&&g.gains)await levelUp(ep,g)}

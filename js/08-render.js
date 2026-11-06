@@ -147,7 +147,7 @@ function skillBlock(u){
 function rngTxt(r){return r[0]===r[1]?r[0]:r[0]+'–'+r[1]}
 function itemInfo(u,k){
   const x=IT[k];
-  if(x.t==="item")return`<b>${x.n}</b> · Restores ${salveAmt(k)} HP and cures poison. Usable on the map between fights too.`;
+  if(x.t==="item")return`<b>${x.n}</b> · Restores ${salveAmt(k)} HP. Usable on the map between fights too.`;
   if(x.t==='gear')return`<b>${x.n}</b> · Gear · ${gearText(x)} while carried. Can be traded.`;
   if(x.t==='spirit')return`<b>${x.n}</b> · ${TN.spirit} · Heals ${x.amt} HP · Rng ${rngTxt(x.r)}`+(canUse(u,k)?'':` · ${u.name} can't use this.`);
   return`<b>${x.n}</b> · ${TN[x.t]}${x.el?' · '+ELN[x.el]:''} · Mt ${x.mt} · Hit ${x.hit} · Crit ${x.crit||0} · Wt ${x.wt||0} · Rng ${rngTxt(x.r)}${x.wt&&u.str!=null&&wtOver(u,x)?` · ${u.name} loses ${wtOver(u,x)} Spd`:''}${x.mag?' · Uses Mag':''}${x.thrown?' · Thrown':''}${effOf(x).length?` · <span class="effv">Effective vs ${effOf(x).map(t=>TAGS[t].n).join(', ')}</span>`:''}`+(canUse(u,k)?'':` · ${u.name} can't wield this.`);
