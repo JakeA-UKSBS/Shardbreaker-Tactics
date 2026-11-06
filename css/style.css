@@ -436,7 +436,7 @@ button.it.sel{border-color:var(--gold)}
 .sg .sg-sage{left:62.5%;bottom:9%;width:16.25%;transform:translateX(-50%)}
 /* the crystal ball floats under the Ascension picker, bobbing; it reddens with Ascension (see tint() in sageScene) */
 .sg-orb{position:absolute;left:49%;top:37%;width:10.83%;aspect-ratio:52/51;transform:translateX(-50%);animation:orbbob 3s ease-in-out infinite}
-.tv-scene .sg-orb img{inset:0;width:100%;height:100%;animation:orbglow2 2.6s ease-in-out infinite}
+.tv-scene .sg-orb img{inset:0;width:100%;height:100%;filter:drop-shadow(0 0 6px rgba(176,122,232,.6))}
 @keyframes orbbob{50%{transform:translate(-50%,-8%)}}
 .sg-diff{position:absolute;left:50%;top:17%;transform:translateX(-50%);display:flex;align-items:center;gap:8px;background:rgba(18,10,24,.8);border:1px solid #6a4a8a;border-radius:8px;padding:4px 6px;max-width:80%}.sg-diff span{display:flex;flex-direction:column;align-items:center;text-align:center;color:#ead9ff;min-width:150px}.sg-diff small{font-size:11px;color:#b8a8d0}.sg-diff button{background:#2e1e3e;border-color:#6a4a8a;color:#e0c8ff;padding:4px 10px}.sg-diff button[disabled]{opacity:.35}
 @keyframes orbglow2{50%{filter:drop-shadow(0 0 8px rgba(176,122,232,.85))}}
