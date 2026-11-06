@@ -30,6 +30,7 @@ function sageBallArt_draw(){const c='SAGEBALL';if(sprCache[c])return sprCache[c]
   p.outline('#120a18');return sprCache[c]=p.url()}
 const sgEl=document.createElement('div');sgEl.className='tav sg';sgEl.hidden=true;document.body.appendChild(sgEl);
 async function sageScene(){
+  sgEl.innerHTML='';/* fresh tent each run */
   const B1=BIOMES[run.biomes[0]],B2=BIOMES[run.biomes[1]],sage='art/scenes/ithren.png';/* Rhi's Ithren and tent */
   const lines=['Ah, you came. Sit, sit. Look into the glass with me.',
     'A blight has taken root in these lands: malignant crystals. They grow through living creatures and twist them into something cruel.',
@@ -39,8 +40,10 @@ async function sageScene(){
   /* difficulty: arrows over the crystal ball, only once Ascension is unlocked */
   let asc=0;const diffHTML=()=>prof.asc?`<div class="sg-diff"><button type="button" data-d="-1" aria-label="Easier"${asc<=0?' disabled':''}>◀</button><span><b>${asc?'Ascension '+asc:'Normal'}</b><small>${asc?ASC[asc]:'The standard run.'}</small></span><button type="button" data-d="1" aria-label="Harder"${asc>=prof.asc?' disabled':''}>▶</button></div>`:'';
   const tint=()=>{const f=sgEl.querySelector('.sg-fg');if(f)f.style.filter=asc?`hue-rotate(${asc*20}deg) saturate(${1+asc*.12})`:''/* violet at Normal, a step nearer red each level, red at Ascension 5 */};
-  const show=(text,opts)=>{sgEl.innerHTML=`<div class="tv-scene"><img class="tv-bg" src="${sageRoomArt()}" alt=""><img class="sg-sage" src="${sage}" alt=""><div class="sg-fg sg-orb"><img src="art/scenes/sage-orb-1.png" alt=""></div>${diffHTML()}</div>
-    <div class="tv-box"><div class="tv-name">Ithren the Sage</div><p class="tv-text">“${text}”</p><div class="tv-opts">${opts.map(([k,l])=>`<button type="button" class="tv-o" data-s="${k}">${l}</button>`).join('')}</div></div>`;
+  /* the tent is built once so the ball keeps bobbing; each line only swaps the dialogue box */
+  const boxHTML=(text,opts)=>`<div class="tv-name">Ithren the Sage</div><p class="tv-text">“${text}”</p><div class="tv-opts">${opts.map(([k,l])=>`<button type="button" class="tv-o" data-s="${k}">${l}</button>`).join('')}</div>`;
+  const show=(text,opts)=>{const box=sgEl.querySelector('.sg-box');if(box)box.innerHTML=boxHTML(text,opts);else sgEl.innerHTML=`<div class="tv-scene"><img class="tv-bg" src="${sageRoomArt()}" alt=""><img class="sg-sage" src="${sage}" alt=""><div class="sg-fg sg-orb"><img src="art/scenes/sage-orb-1.png" alt=""></div>${diffHTML()}</div>
+    <div class="tv-box sg-box">${boxHTML(text,opts)}</div>`;
     sgEl.hidden=false;tint();return new Promise(res=>{sgEl.onclick=e=>{const d=e.target.closest('[data-d]');if(d&&!d.disabled){asc=Math.max(0,Math.min(prof.asc,asc+ +d.dataset.d));sfx('tick');sgEl.querySelector('.sg-diff').outerHTML=diffHTML();tint();return}
       const b=e.target.closest('[data-s]');if(!b)return;sfx('tick');res(b.dataset.s)}})};
   /* after the first full telling, a Skip jumps straight to the difficulty on the orb */

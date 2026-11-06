@@ -50,7 +50,7 @@ button.mini{padding:4px 8px;font-size:12px}
 .unit{position:absolute;width:48px;height:48px;pointer-events:none;transition:left .26s ease,top .26s ease,transform .15s ease,opacity .35s}
 .unit img{width:48px;height:48px;image-rendering:pixelated;display:block}
 .unit.e img{transform:scaleX(-1)}
-.unit.boss img{filter:drop-shadow(0 0 2px var(--gold))}
+.unit.boss img{filter:var(--hf,) drop-shadow(0 0 2px var(--gold))}.unit.boss.threat img{filter:var(--hf,) drop-shadow(0 0 2px #ff3b2f) drop-shadow(0 0 3px #ff3b2f)}
 .unit.done img{filter:grayscale(.9) brightness(.65)}
 .unit.flash img{filter:brightness(3)}
 .hpb{position:absolute;left:8px;right:8px;bottom:2px;height:3px;background:rgba(0,0,0,.6);border-radius:2px}
