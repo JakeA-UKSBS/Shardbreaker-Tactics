@@ -31,7 +31,7 @@ function buildBoard(){
 }
 /* ground variants: art/tiles/<kind>-2.png, -3... are mixed in with the main tile, the same pattern every time.
    The main tile still shows on about half the tiles. Add a kind here once its variant PNGs exist. */
-const TILE_VARS={plain:['plain-2','plain-3','plain-4','plain-5','plain-6'],sand:['sand-2','sand-3','sand-4'],snow:['snow-2'],ice:['ice-2','ice-3','ice-4'],water:['water-2','water-3','water-4'],basalt:['basalt-2']};
+const TILE_VARS={plain:['plain-2','plain-3','plain-6'],sand:['sand-2','sand-3','sand-4'],snow:['snow-2'],ice:['ice-2','ice-3','ice-4'],water:['water-2','water-3','water-4'],basalt:['basalt-2']};
 function tileVariant(k,x,y){const vs=(TILE_VARS[k]||[]).filter(v=>ART_PNG.has('tiles/'+v));if(!vs.length)return null;
   const h=(Math.imul(x+1,73856093)^Math.imul(y+1,19349663))>>>0,i=h%(vs.length*2);return i<vs.length?'art/tiles/'+vs[i]+'.png':null}
 const SIDEC={};
@@ -233,4 +233,3 @@ function renderPanel(){
     mEl.classList.toggle('dl',mid>vb().w/2);mEl.classList.toggle('dr',mid<=vb().w/2)}else mEl.hidden=true;
 }
 panel.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||busy)return;act(b.dataset.act)});
-

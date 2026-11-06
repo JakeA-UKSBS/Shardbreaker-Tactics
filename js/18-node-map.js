@@ -76,11 +76,10 @@ function mapScreen(preview){
     +`<button type="button" class="nd n-start ${run.pos?'vis':'cur'}" style="left:50%;top:${Y(-1)}px" data-start="1" aria-label="Start"><img src="${flagArt()}" alt=""></button>`;
   mapEl.innerHTML=`<div class="nm-head"><div class="eyebrow">Act ${run.act||1} of ${ACTS} · ${seedTag(run.seed)}${run.asc?` · Ascension ${run.asc}`:''} · <span class="gold">${gold()} gold</span></div><h2>${actBiome().n}</h2>${anyRoom?'<div class="eyebrow gold">Dev: pick any room</div>':''}${preview?`<button type="button" class="go nm-close" data-close="1">${typeof preview==='string'?preview:'Back to the Crossroads'}</button>`:''}</div>
     <div class="nm-scroll"><div class="nm-board" style="height:${H}px"><svg viewBox="0 0 100 ${H}" preserveAspectRatio="none" width="100%" height="${H}">${lines}</svg>${nodes}</div></div>
-    ${(run.relics||[]).length||(run.meals||[]).length||(run.woes||[]).length?`<div class="nm-relics">${(run.relics||[]).map(k=>`<button type="button" class="rl" data-rel="${k}" aria-label="${RELICS[k].n}"><img src="${relicArt(k)}" alt=""></button>`).join('')}${(run.meals||[]).map(x=>`<button type="button" class="rl ml" data-meal="${x.id}" aria-label="${MEALS[x.id].n}"><img src="${mealArt(x.id)}" alt=""><i>${x.n}</i></button>`).join('')}${(run.woes||[]).map((w,i)=>`<button type="button" class="rl ml wo" data-woe="${i}" aria-label="${WOES[w.id].n}"><img src="${woeArt(w.id)}" alt=""><i>${w.n}</i></button>`).join('')}</div>`:''}
+    ${(run.relics||[]).length||(run.meals||[]).length?`<div class="nm-relics">${(run.relics||[]).map(k=>`<button type="button" class="rl" data-rel="${k}" aria-label="${RELICS[k].n}"><img src="${relicArt(k)}" alt=""></button>`).join('')}${(run.meals||[]).map(x=>`<button type="button" class="rl ml" data-meal="${x.id}" aria-label="${MEALS[x.id].n}"><img src="${mealArt(x.id)}" alt=""><i>${x.n}</i></button>`).join('')}</div>`:''}
     <aside class="nm-side"><div class="ns-gold"><img src="${coinArt()}" alt="">${gold()} gold</div>
       <div class="ns-h gold">Relics${(run.relics||[]).length?` · ${run.relics.length}`:''}</div>${(run.relics||[]).map(k=>`<div class="ns-row"><img src="${relicArt(k)}" alt=""><span><b>${RELICS[k].n}</b>${RELICS[k].d}</span></div>`).join('')||''}
-      ${(run.meals||[]).length?`<div class="ns-h">Meals</div>${run.meals.map(x=>`<div class="ns-row"><img src="${mealArt(x.id)}" alt=""><span><b>${MEALS[x.id].n}</b>${MEALS[x.id].d} · ${x.n} fight${x.n>1?'s':''} left</span></div>`).join('')}`:''}
-      ${(run.woes||[]).length?`<div class="ns-h woe">Woes</div>${run.woes.map(w=>`<div class="ns-row"><img src="${woeArt(w.id)}" alt=""><span>${woeText(w)}</span></div>`).join('')}`:''}</aside>
+      ${(run.meals||[]).length?`<div class="ns-h">Meals</div>${run.meals.map(x=>`<div class="ns-row"><img src="${mealArt(x.id)}" alt=""><span><b>${MEALS[x.id].n}</b>${MEALS[x.id].d} · ${x.n} fight${x.n>1?'s':''} left</span></div>`).join('')}`:''}</aside>
     <div class="nm-info"></div>
     <aside class="nm-side nm-unit" hidden></aside>
     <div class="nm-squad">${run.roster.map((u,ui)=>`<div data-u="${ui}" role="button" tabindex="0"><img src="${uSpr(u)}" alt=""><span>${u.name}</span><small>Lv ${u.lv}</small>${squadHp(u)}</div>`).join('')}</div>`;
@@ -106,7 +105,6 @@ function mapScreen(preview){
     const su=e.target.closest('[data-u]');if(su){const u=run.roster[+su.dataset.u],box=mapEl.querySelector('.nm-unit');sfx('select');
       if(su.classList.contains('on')&&!box.hidden){closeUnit();return}
       mapEl.querySelectorAll('.nm-squad .on').forEach(x=>x.classList.remove('on'));su.classList.add('on');box.hidden=false;box.innerHTML=unitBox(u);return}
-    const wo=e.target.closest('[data-woe]');if(wo){mapEl.querySelector('.nm-info').innerHTML=woeText(run.woes[+wo.dataset.woe]);return}
     const ml=e.target.closest('[data-meal]');if(ml){const X=MEALS[ml.dataset.meal],n=run.meals.find(m=>m.id===ml.dataset.meal).n;mapEl.querySelector('.nm-info').innerHTML=`<b>${X.n}.</b> ${X.d} for ${n} more fight${n>1?'s':''}.`;return}
     const rl=e.target.closest('[data-rel]');if(rl){const X=RELICS[rl.dataset.rel];mapEl.querySelector('.nm-info').innerHTML=`<b>${X.n}.</b> ${X.d}`;return}
     const b=e.target.closest('.nd.ok');if(b){const[r,i]=b.dataset.n.split(',').map(Number),t=M[r][i].t;

@@ -18,10 +18,10 @@ Each run picks 2 of these 6 as its acts (`BIOMES`, `ACTS`). Each has 2-3 battle 
 | --- | --- | --- | --- |
 | Sobek’s Mire | Bog Lurkers, Lamias, Mud Monsters | Starting a turn in ankle-deep water or mangrove roots costs 1 Move; sand is solid | Krondis the alligator |
 | Cursed Woodland | Wolves, Cursed Stags, Blighted Treants | Cursed thickets: +25 Avoid, 2 Move to enter | The Hollow Bear |
-| Volcanic Isle | Boulder Golems, Fire Sprites | Magma blocks foot units; fliers and fire creatures cross it | Pyraxis, the Magma Dragon |
+| Volcanic Isle | Magma* Golems, Fire Sprites | Magma blocks foot units; fliers and fire creatures cross it | Pyraxis, the Magma Dragon |
 | Sandstone Desert | Jackals, Sand Worms, Sandstone Golems | Quicksand costs 1 Move next turn; sandstone outcrops (cream feldspar with smoky quartz) give cover | The Pyrite Colossus |
-| Frostveil Reaches | Frost Wolves, Frost Sprites, Agate Golems | Deep snow costs 1 Move next turn (snow creatures ignore it); frozen lakes −10 Avoid; blue agate gives cover | Glacius, the Agate Wyrm |
-| Gemstone Caverns | Gremlins, Gemsnails, Gem Golems | Chests everywhere: gold, or worthless pyrite; emerald, ruby and sapphire clusters give cover; walls are iridescent rock | Amethyra, the Amethyst Turtle |
+| Frostveil Reaches | Frost Wolves, Frost Sprites, Agate Golems, Ice Trolls? | Deep snow costs 1 Move next turn (snow creatures ignore it); frozen lakes −10 Avoid; blue agate gives cover | Yeti |
+| Gemstone Caverns | Gemsnails, Gem Golems | Emerald, ruby and sapphire clusters give cover; walls are iridescent rock | Amethyra, the Amethyst Turtle |
 
 Only creatures are enemies; there are no human foes.
 
@@ -49,7 +49,7 @@ Defend fights: from floor 2, a quarter of normal battles are a settlement to hol
 - Nodes: Battle; Elite (Elder leader, always drops a relic (1 of 2) and a jade weapon for a unit you choose); Recruit (pick 1 of 3; team caps at 6, `TEAM_CAP`); Rest (train one unit +1 level); Treasure (pick 1 of 3 items); Event (`EVENTS`); Tavern; Boss.
 - Gold: 30 to start, then 25 per battle, 45 per elite, 80 per boss (`GOLDWIN`). Spent at taverns.
 - Tavern (`tavernNode()`): talk to Marla the innkeeper and pick as many options as you can afford before leaving. Drinks (`DRINKS`): a round of ale (+30 EXP for everyone) or a spirit for one unit (+1 to a stat for good). Food (`MEALS`): squad-wide buffs for 2-3 fights (+2 damage, +15 Hit, +2 Def/Res, +1 Move, poison immunity), counted down after each won fight and shown on the map. Sellswords: 3 units for hire at 40 + 15 per level. Rumours: a hint about the region's boss and rule. Music slot: `music/tavern.mp3`.
-- Events, Act 2 events and Woes: see [docs/EVENTS.md](docs/EVENTS.md).
+- Events and Act 2 events: see [docs/EVENTS.md](docs/EVENTS.md).
 - Special weapons from events: Jade weapons (Jian, Fang, Spear, Axe, Bow; Crit 30-35), Spark and Thunderhead lightning sigils, Longbow (Rng 2-3), Throwing Knives (Rng 1-2), Far Charm (heals at Rng 1-10), and in Act 2 Meteor Sigil and Heaven's Bolt (Rng 3-10, 5 uses). A unit carrying several charms heals with whichever one reaches.
 - Forged weapons use keys like `ironAxe~2` (+2 Mt and +5 Hit per level; charms heal +5), built on demand by `ensureIt()`.
 - Enemy strength climbs with floor and act (floors are scaled to a 10-floor curve by `flScale()`, so a longer map doesn't make enemies tougher): Lv 1 on Act 1 floor 1, about Lv 6 by floor 9, Lv 7+ in Act 2. Numbers grow with the floor too. Each region's `pool` lists its monsters with the floor they start appearing on (all are open in Act 2). Elites use the region's tougher `elitePool`, are led by an Elder of its strongest monster, and fight 2 levels higher with one extra enemy.

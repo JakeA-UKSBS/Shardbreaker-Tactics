@@ -116,7 +116,7 @@ function horseUnder(p,L,TC,cloth,strike){
 }
 const sprCache={};
 /* ---- PNG art ----
-   Fixed art (tiles, item icons, relics, meals, woes, map nodes, scenes, battle backdrops, the title crystal) loads from
+   Fixed art (tiles, item icons, relics, meals, map nodes, scenes, battle backdrops, the title crystal) loads from
    art/<key>.png when art/manifest.js lists it. The drawing code stays as the generator: tools/export-art.mjs runs it
    to make the PNGs (it never overwrites an existing one unless told to), and it's the fallback for any key without a PNG.
    Units and monsters are still drawn in code. Add ?codeart to the page URL to see the code-drawn versions. */

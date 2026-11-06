@@ -22,7 +22,7 @@ function mealArt_draw(id){const c='ML|'+id;if(sprCache[c])return sprCache[c];con
   if(id==='soup'){p.ell(8,9,5.5,2.5,'#7a5a3a');p.ell(8,8,4.5,1.6,'#c9a070');p.ell(6,7,1.6,1,'#d8483a');p.ell(10,8,1.4,1,'#d8483a')}
   p.outline(OUT);return sprCache[c]=p.url()}
 function mugArt_draw(){const c='MUG';if(sprCache[c])return sprCache[c];const p=Px(16,16);p.rect(4,5,7,9,'#a8743a');p.rect(4,5,7,1,'#7a5230');p.rect(4,10,7,1,'#7a5230');p.ring(12,9,2.4,'#7a5230');p.ell(7.5,4,4.5,2,'#f3f0e8');p.ell(5,3,1.5,1,'#ffffff');p.rect(5,6,1,7,'#c98a4a');p.outline(OUT);return sprCache[c]=p.url()}
-function afterFightMeals(){if(!run)return;for(const k of['meals','woes']){if(!run[k])continue;run[k].forEach(m=>m.n--);run[k]=run[k].filter(m=>m.n>0)}}
+function afterFightMeals(){if(!run)return;if(run.meals){run.meals.forEach(m=>m.n--);run.meals=run.meals.filter(m=>m.n>0)}}
 
 /* ---- the tavern ---- */
 /* KEEPER: the innkeeper's name and sprite colours */
