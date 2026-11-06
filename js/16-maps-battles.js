@@ -9,6 +9,9 @@ Object.assign(CLS,{
   GemGolem:{n:'Gem Golem',w:['heavy'],body:'golem',mov:4},Gemsnail:{n:'Gemsnail',w:['art'],body:'snail',mov:3},
   AmethystTurtle:{n:'Amethyst Turtle',w:['heavy','art'],body:'turtle',mov:0},
   HollowBear:{n:'Hollow Bear',w:['heavy'],body:'bear',mov:4},
+  /* placeholders until they get their own art: the Ice Troll is a humanoid brute, the Yeti a white golem body */
+  IceTroll:{n:'Ice Troll',w:['heavy'],body:'vest',mov:4,wade:true,crit:5},
+  Yeti:{n:'Yeti',w:['heavy'],body:'golem',mov:4,wade:true},
   PebbleGolem:{n:'Pebble Golem',w:['heavy'],body:'golem',mov:4,lava:true},
   WyvernMatriarch:{n:'Wyvern Matriarch',w:['heavy','art'],body:'dragon',mov:3,fly:true},
   Sage:{n:'Sage',w:['art'],body:'robe',mov:0}
@@ -24,6 +27,7 @@ Object.assign(FOE,{
   PebbleGolem:{b:[16,6,0,3,2,0,6,1],g:[.6,.35,0,.2,.1,0,.3,.05],items:['slam'],look:{mini:true}},
   FrostWolf:{b:[16,5,0,4,7,1,2,2],g:[.55,.35,0,.3,.45,.1,.15,.15],items:['fangs'],look:{}},
   AgateGolem:{b:[22,6,0,2,1,0,8,4],g:[.75,.4,0,.2,.05,0,.3,.2],items:['slam'],look:{}},
+  IceTroll:{b:[24,8,0,3,3,0,5,1],g:[.8,.5,0,.25,.2,.05,.3,.05],items:['slam'],look:{}},
   FrostSprite:{b:[14,0,5,5,7,2,1,4],g:[.5,0,.4,.35,.45,.15,.05,.3],items:['tideSigil'],look:{}},
   GemGolem:{b:[22,7,0,3,2,0,9,3],g:[.75,.4,0,.25,.1,0,.35,.15],items:['slam'],look:{}},
   Gemsnail:{b:[20,0,5,4,2,2,6,6],g:[.65,0,.35,.3,.1,.1,.3,.3],items:['crystalShards'],look:{}}
@@ -36,6 +40,7 @@ Object.assign(MONLOOK,{
   SandstoneGolem:()=>({body:pick(['#c9945a','#b8824a','#d8a46a']),eye:'#ffd23f'}),
   FrostWolf:()=>({crysSmall:true,fur:pick(['#e8eef8','#c8d8ec','#b0c4e0']),eye:'#7fe3ff'}),
   AgateGolem:()=>({body:pick(['#5a8ac8','#4a7ab8','#7aa8d8']),eye:'#e8f4ff'}),
+  IceTroll:()=>({style:'bald',skin:pick(['#9ab8d0','#8aa8c4','#a8c8dc']),cloth:'#4a5a6a',eye:'#7fe3ff'}),
   FrostSprite:()=>({crys:false,body:pick(['#9fd8ff','#7fc8ff','#b8e4ff'])}),
   GemGolem:()=>({body:pick(GEMS),eye:'#ffffff'}),
   Gemsnail:()=>({skin:'#8a8a9a',shell:pick(GEMS),eye:'#ffffff'})
@@ -92,11 +97,11 @@ Object.assign(BIOMES,{
     boss:{name:'The Pyrite Colossus',cls:'PyriteColossus',s:[42,13,0,5,3,2,12,3],items:['slam'],skill:'steadfast',look:{body:'#c9a83a',eye:'#fff2b0',crysAt:[{core:[14,19],col:'#3ad87a'}]}}},
   snow:{n:'Frostveil Reaches',bg:'#2a3a4e',town:['o','a'],townN:'Hill Village',d:'Snowfields studded with blue agate. Frost wolves hunt the drifts, and the golems are made of the agate itself.',
     tip:['snow','Deep snow','A unit that starts its turn in deep snow has 1 less Move (snow creatures ignore it). Frozen lakes give −10 Avoid; blue agate gives +20 Avoid and +2 Def.'],
-    maps:['tundra','frozenLake','agateField'],bossMap:'agateSpire',pool:[['FrostWolf',4],['FrostSprite',3,2],['AgateGolem',2,4]],elitePool:[['AgateGolem',3],['FrostWolf',2],['FrostSprite',2]],
-    boss:{name:'Glacius, the Agate Wyrm',cls:'AgateWyrm',s:[40,11,10,6,5,2,9,8],items:['frostBreath'],skill:'steadfast',look:{body:'#3a5a8a',glow:'#7fc8ff',glow2:'#e8f4ff',crysAt:[{gem:[14,17,3],col:'#e8f6ff'},{gem:[18,16,2],col:'#e8f6ff'}]}}},
-  cavern:{n:'Gemstone Caverns',bg:'#2a2436',town:['c','e'],townN:'Miners’ Camp',d:'Caves glittering with emerald, ruby and sapphire, and chests everywhere. Not everything that shines is gold.',
-    tip:['cavern','Chests','Open chests for gold, but some hold only pyrite. Gem clusters give +20 Avoid and +2 Def.'],
-    maps:['geode','mineshaft','glitter'],bossMap:'amethystHollow',pool:[['Gremlin',3],['Gemsnail',3,2],['GemGolem',2,4]],elitePool:[['GemGolem',3],['Gemsnail',2],['Gremlin',1]],
+    maps:['tundra','frozenLake','agateField'],bossMap:'agateSpire',pool:[['FrostWolf',4],['FrostSprite',3,2],['AgateGolem',2,4],['IceTroll',2,5]],elitePool:[['AgateGolem',3],['IceTroll',2],['FrostWolf',2],['FrostSprite',2]],
+    boss:{name:'The Yeti',cls:'Yeti',mov:4,s:[42,13,0,6,5,2,9,4],items:['slam'],skill:'wrath',look:{body:'#e8eef8',eye:'#7fe3ff'}}},
+  cavern:{n:'Gemstone Caverns',bg:'#2a2436',town:['c','e'],townN:'Miners’ Camp',d:'Caves glittering with emerald, ruby and sapphire. The snails here wear the gems as shells, and the golems are made of them.',
+    tip:['cavern','Gem clusters','Gem clusters give +20 Avoid and +2 Def. The cave walls can’t be crossed.'],
+    maps:['geode','mineshaft','glitter'],bossMap:'amethystHollow',pool:[['Gemsnail',4],['GemGolem',2,4]],elitePool:[['GemGolem',3],['Gemsnail',2]],
     boss:{name:'Amethyra, the Amethyst Turtle',cls:'AmethystTurtle',s:[46,11,8,5,2,3,14,8],items:['slam','crystalShards'],skill:'steadfast',look:{body:'#6a7a5a',shell:'#4a3a5a',gem:'#b07ae8',crys:false}}}
 });
 Object.assign(BIOMES.swamp,{town:['n','v'],townN:'Stilt Village'});Object.assign(BIOMES.forest,{town:['.','f'],townN:'Woodcutters’ Hamlet'});Object.assign(BIOMES.mountain,{town:['b','m'],townN:'Smelters’ Camp'});

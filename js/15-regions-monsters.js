@@ -37,7 +37,7 @@ Object.assign(CLS,{
   Hawk:{n:'Hawk',w:['blade'],body:'hawk',mov:7,fly:true},
   MudMonster:{n:'Mud Monster',w:['heavy'],body:'mud',mov:4,wade:true},Krondis:{n:'Alligator',w:['heavy'],body:'gator',mov:4,wade:true},
   CursedStag:{n:'Cursed Stag',w:['pole'],body:'beast',mov:6},HollowStag:{n:'Hollow Stag',w:['pole'],body:'beast',mov:4},
-  BoulderGolem:{n:'Boulder Golem',w:['heavy'],body:'golem',mov:4},FireSprite:{n:'Fire Sprite',w:['art'],body:'flame',mov:5,lava:true},MagmaDragon:{n:'Magma Dragon',w:['art','heavy'],body:'dragon',mov:0,lava:true},
+  BoulderGolem:{n:'Magma Golem',w:['heavy'],body:'golem',mov:4},FireSprite:{n:'Fire Sprite',w:['art'],body:'flame',mov:5,lava:true},MagmaDragon:{n:'Magma Dragon',w:['art','heavy'],body:'dragon',mov:0,lava:true},
   StormElemental:{n:'Storm Elemental',w:['art'],body:'storm',mov:3,fly:true},
   Beholder:{n:'Beholder',w:['art'],body:'eye',mov:4},
   CrystalHeart:{n:'Crystal Heart',w:['art'],body:'crystal',mov:0},

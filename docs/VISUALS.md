@@ -58,9 +58,9 @@ Basalt slopes cut by rivers of magma. Golems block the passes, and fire sprites 
 | --- | --- |
 | ![Pyraxis, the Magma Dragon](visuals/bosses/mountain.png) | ![Pyraxis, the Magma Dragon attacking](visuals/bosses/mountain_attack.png) |
 
-| Fire Sprite | Boulder Golem |
+| Fire Sprite | Magma Golem |
 | --- | --- |
-| ![Fire Sprite](visuals/monsters/FireSprite.png) | ![Boulder Golem](visuals/monsters/Boulder.png) |
+| ![Fire Sprite](visuals/monsters/FireSprite.png) | ![Magma Golem](visuals/monsters/Boulder.png) |
 
 ### The Labyrinth
 
@@ -102,9 +102,7 @@ Dunes and sandstone ruins under a white sun. Jackals run in packs, and the quick
 
 Snowfields studded with blue agate. Frost wolves hunt the drifts, and the golems are made of the agate itself. **Rule:** A unit that starts its turn in deep snow has 1 less Move (snow creatures ignore it). Frozen lakes give −10 Avoid; blue agate gives +20 Avoid and +2 Def.
 
-| Boss: Glacius, the Agate Wyrm | Attacking |
-| --- | --- |
-| ![Glacius, the Agate Wyrm](visuals/bosses/snow.png) | ![Glacius, the Agate Wyrm attacking](visuals/bosses/snow_attack.png) |
+**Boss:** The Yeti (placeholder: a white golem body until it has its own art). **Also:** Ice Trolls from floor 5 (placeholder: a blue-skinned humanoid brute).
 
 | Frost Wolf | Frost Sprite | Agate Golem |
 | --- | --- | --- |
@@ -112,15 +110,15 @@ Snowfields studded with blue agate. Frost wolves hunt the drifts, and the golems
 
 ### Gemstone Caverns
 
-Caves glittering with emerald, ruby and sapphire, and chests everywhere. Not everything that shines is gold. **Rule:** Open chests for gold, but some hold only pyrite. Gem clusters give +20 Avoid and +2 Def.
+Caves glittering with emerald, ruby and sapphire. The snails here wear the gems as shells, and the golems are made of them. **Rule:** Gem clusters give +20 Avoid and +2 Def. The cave walls can’t be crossed.
 
 | Boss: Amethyra, the Amethyst Turtle | Attacking |
 | --- | --- |
 | ![Amethyra, the Amethyst Turtle](visuals/bosses/cavern.png) | ![Amethyra, the Amethyst Turtle attacking](visuals/bosses/cavern_attack.png) |
 
-| Gremlin | Gemsnail | Gem Golem |
-| --- | --- | --- |
-| ![Gremlin](visuals/monsters/Gremlin.png) | ![Gemsnail](visuals/monsters/Gemsnail.png) | ![Gem Golem](visuals/monsters/GemGolem.png) |
+| Gemsnail | Gem Golem |
+| --- | --- |
+| ![Gemsnail](visuals/monsters/Gemsnail.png) | ![Gem Golem](visuals/monsters/GemGolem.png) |
 
 ## Familiars
 
