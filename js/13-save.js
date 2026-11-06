@@ -1,7 +1,9 @@
 /* Save/load and chapter setup */
 /* ================= CHAPTERS / SAVE ================= */
 const SAVE='sbtactics.save.v2'/* v2: items, skills and monsters renamed to match their in-game names; v1 runs are dropped */,OPTS='sbtactics.opts';
-function saveGame(){if(!run)return;const map=run.phase==='map';try{localStorage.setItem(SAVE,JSON.stringify({state:map?null:state,rewinds,chStart:map?null:chStart,run,def:map?null:CH[0],rng:rngS}))}catch(_){}}
+/* SAVES_ON: run saves are switched off while the game is changing a lot (removed content kept breaking old saves). Set true to bring Continue back. */
+const SAVES_ON=false;
+function saveGame(){if(!SAVES_ON||!run)return;const map=run.phase==='map';try{localStorage.setItem(SAVE,JSON.stringify({state:map?null:state,rewinds,chStart:map?null:chStart,run,def:map?null:CH[0],rng:rngS}))}catch(_){}}
 /* dropGone: strips skills and items that no longer exist (e.g. Pierce and Lifetaker, and their scrolls) from a save, so older runs still load */
 function dropGone(o){if(!o||typeof o!=='object')return;
   if(Array.isArray(o.skills))o.skills=o.skills.filter(x=>!x||!x.id||SKILLS[x.id]);
@@ -9,7 +11,7 @@ function dropGone(o){if(!o||typeof o!=='object')return;
   if(Array.isArray(o.relics))o.relics=o.relics.filter(k=>RELICS[k]);
   if(Array.isArray(o.units))o.units=o.units.filter(u=>!u||!u.cls||CLS[u.cls]);
   for(const v of Object.values(o))dropGone(v)}
-function loadGame(){try{const sv=JSON.parse(localStorage.getItem(SAVE));dropGone(sv);return sv}catch(_){return null}}
+function loadGame(){if(!SAVES_ON){try{localStorage.removeItem(SAVE)}catch(_){}return null}try{const sv=JSON.parse(localStorage.getItem(SAVE));dropGone(sv);return sv}catch(_){return null}}
 function setMap(){setMapFor(state.ch)}
 function setupChapter(ci,roster){
   foeSeq=0;const c=CH[ci];setMapFor(ci);
