@@ -58,11 +58,9 @@ Crossroads (`musterScene()`): Your candidates stand around a campfire, with the 
 - Events and Act 2 events: see [docs/EVENTS.md](docs/EVENTS.md).
 
   ## weapons
-- Special weapons from events: Jade weapons (Jian, Fang, Spear, Axe, Bow; Crit 30-35), Spark and Thunderhead lightning sigils, Longbow (Rng 2-3), Throwing Knives (Rng 1-2), Far Charm (heals at Rng 1-10), and in Act 2 Meteor Sigil and Heaven's Bolt (Rng 3-10, 5 uses). A unit carrying several charms heals with whichever one reaches.
 - Forged weapons use keys like `ironAxe~2` (+2 Mt and +5 Hit per level; charms heal +5), built on demand by `ensureIt()`.
-- Enemy strength climbs with floor and act (floors are scaled to a 10-floor curve by `flScale()`, so a longer map doesn't make enemies tougher): Lv 1 on Act 1 floor 1, about Lv 6 by floor 9, Lv 7+ in Act 2. Numbers grow with the floor too. Each region's `pool` lists its monsters with the floor they start appearing on (all are open in Act 2). Elites use the region's tougher `elitePool`, are led by an Elder of its strongest monster, and fight 2 levels higher with one extra enemy.
-- Saves cover both the map and battles, so Continue picks up wherever you left off.
-- Every run has a seed (shown on the draft and defeat screens). All rolls come from it.
+- Weapon weight (`WT`): each point of Wt above the wielder's Str (Mag for sigils) costs 1 attack speed (`AS()`), which is used for doubling and Avoid. Steel weapons hit harder but weigh more.
+- 
 
 ## Where things live
 `js/01-data.js` items, weapons, skills · `02-rng-units` random numbers, unit constructors · `03-pixel-art` sprite drawing (`Px`, `fig`, `BIG`) · `05-sound` · `06-rules` combat maths · `07-reach-camera` movement and camera · `08-render` board and unit sheet · `09-battle-scene` fight animation · `09b-battle-rig` posed battle sprites (Fighter, Swordsman) · `10-cutscenes` · `11-modals` · `12-turns` actions, AI, turn loop · `13-save` · `14-units` classes, looks, unit generation · `15-regions-monsters` · `16-maps-battles` maps and `genBattle()` · `17-ui-cards` · `18-node-map` · `19-items-treasure` · `20-events` · `21-progress` achievements and Ascension · `22-relics` · `23-promotion` · `24-tavern` · `25-crossroads-sage` · `26-gear-skills-summons` · `27-run-flow` · `28-startup`. A file can call anything from any other file at run time; only code that runs while the files load has to come after what it uses.
@@ -74,8 +72,6 @@ Crossroads (`musterScene()`): Your candidates stand around a campfire, with the 
 ## summoner [maybe make more generic]
 - Summoner role (`ROLES.summoner`, unlocked by the Apprentice achievement: finish a run with a Sigilist in the squad): a staff caster (Crook Staff: Rng 1, hits harder; Rune Staff: Rng 1-2; both use Mag) with a Summon action once per battle (twice once promoted). The minion is the Summoner's own bonded familiar (`FAMILIARS`, `u.familiar`, rolled when the unit is made): Spirit Wolf, Stone Warden, Wisp or Spirit Hawk.
 
-##weapons
-- Weapon weight (`WT`): each point of Wt above the wielder's Str (Mag for sigils) costs 1 attack speed (`AS()`), which is used for doubling and Avoid. Steel weapons hit harder but weigh more.
 
 ## monsters
 - Monsters: `Wolf`, `Lamia`, `Minotaur` in `CLS`/`FOE`, looks from `monLook()`. Wolves use the `beast` body in `fig()`.
