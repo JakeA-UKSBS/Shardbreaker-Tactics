@@ -434,11 +434,11 @@ button.it.sel{border-color:var(--gold)}
 .mu:hover{transform:translateX(-50%) translateY(-3px) scale(var(--s,1))}
 .mu.on{transform:translateX(-50%) translateY(-6px) scale(var(--s,1))}.mu.on img{filter:drop-shadow(0 0 3px #f0c850) drop-shadow(0 0 6px #f0c850)}.mu.on span{background:#f0c850;color:#1a1408}
 .sg .sg-sage{left:62.5%;bottom:9%;width:16.25%;transform:translateX(-50%)}
-/* the crystal ball floats under the Ascension picker, bobbing; it reddens with Ascension (see tint() in sageScene) */
-.sg-orb{position:absolute;left:49%;top:37%;width:10.83%;aspect-ratio:52/51;transform:translateX(-50%);animation:orbbob 3s ease-in-out infinite}
+/* the crystal ball floats beside Ithren, bobbing, with the Ascension picker on the floor below-left; it reddens with Ascension (see tint() in sageScene) */
+.sg-orb{position:absolute;left:49%;top:43%;width:10.83%;aspect-ratio:52/51;transform:translateX(-50%);animation:orbbob 3s ease-in-out infinite}
 .tv-scene .sg-orb img{inset:0;width:100%;height:100%;filter:drop-shadow(0 0 6px rgba(176,122,232,.6))}
 @keyframes orbbob{50%{transform:translate(-50%,-8%)}}
-.sg-diff{position:absolute;left:50%;top:17%;transform:translateX(-50%);display:flex;align-items:center;gap:5px;background:rgba(18,10,24,.8);border:1px solid #6a4a8a;border-radius:6px;padding:2px 4px;max-width:80%;font-size:13px}.sg-diff span{display:flex;flex-direction:column;align-items:center;text-align:center;color:#ead9ff;min-width:115px}.sg-diff small{font-size:10px;color:#b8a8d0}.sg-diff button{background:#2e1e3e;border-color:#6a4a8a;color:#e0c8ff;padding:4px 10px}.sg-diff button[disabled]{opacity:.35}
+.sg-diff{position:absolute;left:38%;top:78%;transform:translateX(-50%);display:flex;align-items:center;gap:5px;background:rgba(18,10,24,.8);border:1px solid #6a4a8a;border-radius:6px;padding:2px 4px;max-width:80%;font-size:13px}.sg-diff span{display:flex;flex-direction:column;align-items:center;text-align:center;color:#ead9ff;min-width:115px}.sg-diff small{font-size:10px;color:#b8a8d0}.sg-diff button{background:#2e1e3e;border-color:#6a4a8a;color:#e0c8ff;padding:4px 10px}.sg-diff button[disabled]{opacity:.35}
 @keyframes orbglow2{50%{filter:drop-shadow(0 0 8px rgba(176,122,232,.85))}}
 .ms-sage{position:absolute;right:3%;bottom:30%;width:11%;display:flex;flex-direction:column;align-items:center;gap:2px}.tv-scene .ms-sage img{position:static;width:100%;image-rendering:pixelated;transform:scaleX(-1);filter:drop-shadow(0 2px 0 rgba(0,0,0,.45)) drop-shadow(0 0 4px rgba(176,122,232,.6));animation:orbglow 2.4s ease-in-out infinite}
 @keyframes orbglow{50%{filter:drop-shadow(0 2px 0 rgba(0,0,0,.45)) drop-shadow(0 0 9px rgba(176,122,232,.9))}}.ms-sage span{font-size:12px;font-weight:700;color:#cfe0ff;background:rgba(20,12,8,.75);border-radius:4px;padding:1px 6px}
