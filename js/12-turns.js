@@ -158,7 +158,7 @@ async function fight(a,ai,d){
   for(const u of [a,d])if(u.turncoat&&u.team==='e'&&u.hp>0&&u.hp<=Math.ceil(u.maxhp/3)){u.team='p';u.turncoat=false;u.acted=true;state.freed=true;pop(u,'Freed!','heal');sfx('ding')}
   const p=a.team==='p'?a:d.team==='p'?d:null,o=p===a?d:a;
   for(const e of res.ev)if(e.psn){const t=e.by==='a'?d:a;if(t.team==='p'&&M('soup'))continue;if(t.hp>0){t.psn=3;pop(t,'Poisoned','crit')}}
-  for(const e of res.ev)if(e.stone){const t=e.by==='a'?d:a;if(t.hp>0&&!t.boss){t.stone=1;pop(t,'Stone!','crit');sfx('earth')}}
+  for(const e of res.ev)if(e.stone){const t=e.by==='a'?d:a;if(t.hp>0&&!t.boss){t.stone=1;pop(t,'Stone!','crit');sfx('earth');toast(`${t.name} is turned to stone and loses ${t.team==='p'?'their':'its'} next turn`)}}
   /* a summon's EXP goes to the unit that summoned it */
   const ep=p&&p.summon?state.units.find(x=>x.id===p.owner&&x.hp>0):p;
   if(p&&p.hp>0&&ep){const dealt=res.ev.some(e=>(e.by==='a')===(p===a)&&e.dmg>0);const g=gainExp(ep,Math.min(100,Math.round(expFor(ep,o,dealt,o.hp<=0)*EXP_RATE*(R('tome')?1.5:1)*(has(ep,'quickStudy')?2:1))));if(ep!==p&&g)toast(`${ep.name} gains ${g.amt} EXP`);await showExp(ep,g);if(g&&g.gains)await levelUp(ep,g)}

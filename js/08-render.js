@@ -106,7 +106,7 @@ function card(u){
    <div class="ch"><b>${u.name}</b><span>${CLS[u.cls].n} · Lv ${u.lv}</span></div>
    <div class="hp"><span class="bar"><i style="width:${u.bars?barsOf(u).frac*100:u.hp/u.maxhp*100}%${u.bars?`;background:${BAR_COL[barsOf(u).n]}`:''}"></i></span><span>${u.hp}/${u.maxhp} HP${u.bars?` · Bar ${barsOf(u).n}/${u.bars}`:''}</span></div>
    ${u.team==='p'?`<div class="xp"><span class="bar"><i style="width:${u.exp}%"></i></span><span>${u.exp} EXP</span></div>`:''}${mpLine(u)}${stChips(u)}
-   <div class="eq">${w?`<img src="${icon(w.key)}" alt="">${w.n} (Rng ${rngTxt(w.r)})`:'Unarmed'}${sk?` · <b class="sk">${sk.n}</b>`:''} · ${terrText(t)} · H${hOf(u.x,u.y)}${u.psn?` · <b class="psnt">Poisoned (${u.psn})</b>`:''}${(()=>{const g=gearOf(u),t=Object.entries(g).filter(([,v])=>v).map(([k,v])=>`${v>0?'+':''}${v} ${GEAR_N[k]}`);return t.length?` · Gear ${t.join(', ')}`:''})()}</div>
+   <div class="eq">${w?`<img src="${icon(w.key)}" alt="">${w.n} (Rng ${rngTxt(w.r)})`:'Unarmed'}${sk?` · <b class="sk">${sk.n}</b>`:''} · ${terrText(t)} · H${hOf(u.x,u.y)}${u.psn?` · <b class="psnt">Poisoned (${u.psn})</b>`:''}${u.stone?' · <b class="stonet">Stone: skips next turn</b>':''}${(()=>{const g=gearOf(u),t=Object.entries(g).filter(([,v])=>v).map(([k,v])=>`${v>0?'+':''}${v} ${GEAR_N[k]}`);return t.length?` · Gear ${t.join(', ')}`:''})()}</div>
    ${u.recruit?`<div class="eq sk">Can be recruited: move ${lordName()} next to ${u.name} and Talk.</div>`:''}
   </div><button class="mini" type="button" data-act="sheet:${u.id}">Details</button></div>
   <div class="ueq"><div class="ueq-h">Equipment</div>${itemRows(u,false)}</div>`;
