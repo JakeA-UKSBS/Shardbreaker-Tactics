@@ -12,17 +12,30 @@ function propArt(k,used){if(OVER_T.includes(k))return tileArt(k,used,true);if(k=
   return art('tiles/'+k+'-bare',()=>PROP_BIO1.includes(k)?bioTile_draw(k,'f'):bioTile2_draw(k,'f'))}
 function propGroundArt(k){return art('tiles/'+k+'-ground',()=>PROP_BIO1.includes(k)?bioTile_draw(k,'g'):bioTile2_draw(k,'g'))}
 /* the ground class: the shared features (trees, chests, boulders...) sit on the map's usual ground, region features on their own */
-const propGround=(k,gk)=>OVER_T.includes(k)||k==='boulder'?'t-'+gk:'t-g-'+k;
+const propGround=(k,gk)=>OVER_T.includes(k)||k==='boulder'||k==='curse'?'t-'+gk:'t-g-'+k;
 texStyle.textContent+=Object.keys(PROPS).filter(k=>!OVER_T.includes(k)&&k!=='boulder').map(k=>`.t-g-${k}{background:url(${propGroundArt(k)}) 0 0/100% 100%}`).join('');
 /* stand a prop on tile x,y (called by buildBoard). Its base sits a little below the tile's centre */
 /* the Sunless Isle's boulders are a mix of rocks, rubble, skulls, dead trees and crystal (art/props/sunless-*, scale × the boulder's size) */
 const SUNLESS_ROCKS=[['rock',1],['rocks',1],['rubble',1],['deadtree',1.1],['crystal',1],['skulls',.6]];
 /* other regions' boulders: CraftPix rocks (art/props/<name>.png, padded square, scale × the boulder's size). Regions not listed keep the plain boulder */
-const REGION_ROCKS={desert:[['sand-rock',1.1]],snow:[['ice-block',1.1],['snow-peaks',1.1]],forest:[['moss-rock',1.1]],swamp:[['moss-rock',1.1]],mountain:[['red-spire',1.1]],heart:[['red-spire',1.1]]};
+const REGION_ROCKS={desert:[['sand-rock',1.1]],snow:[['ice-block',.9],['snow-peaks',1.1]],forest:[['moss-rock',1.1]],swamp:[['moss-rock',1.1]],mountain:[['red-spire',1.1]],heart:[['red-spire',1.1]]};
 /* tile kinds drawn with CraftPix rocks in every region: the desert's Sandstone Rocks (k) mix the sand rock with the pale stone piles */
-const KIND_ROCKS={sandstone:[['sand-rock',1.1],['sunless-rock',.95],['sunless-rocks',.9]]};
+/* ROCK_W: widest a single rock prop is drawn, in px (a tile is 68 wide) */
+const ROCK_W=54;
+const KIND_ROCKS={sandstone:[['sand-rock',1.1],['sunless-rock',.95],['sunless-rocks',.9]],
+  /* the Cursed Woodland: Dead Wood (f) is bare dead trees; the Cursed Thicket (y) is a bramble bush or a dark mushroom tree */
+  forest:[['wood-deadtree-1',1],['wood-deadtree-2',1],['wood-deadtree-3',.95]],
+  curse:[['wood-bush',.8],['wood-shroom-1',.9],['wood-shroom-2',.9],['wood-shroom-3',.9]],
+  /* the swamp's Mangrove Roots: rooted swamp trees */
+  mangrove:[['swamp-tree-1',1.25],['swamp-tree-2',1.25],['swamp-tree-3',1.3],['swamp-tree-4',1.3]]};
+/* decoration on shallow water: reeds and lily pads on some tiles (no effect on play). [art, share of tiles, size × a tile] */
+const WATER_DECOR=[['reeds-1',.12,.55],['reeds-2',.12,.65],['reeds-3',.1,.65],['lilypad-1',.1,.4],['lilypad-2',.08,.4]];
+function placeDecor(x,y){const h=((Math.imul(x+3,2654435761)^Math.imul(y+7,40503))>>>0)%1000/1000;let acc=0;
+  for(const[n,share,sz]of WATER_DECOR){acc+=share;if(h>=acc)continue;if(!ART_PNG.has('props/'+n))return;
+    const im=document.createElement('img'),c=scrC(x,y),w=Math.round(T*sz),lily=n.startsWith('lily');im.className='prop';im.alt='';im.dataset.k=key(x,y);im.dataset.p='decor';im.src='art/props/'+n+'.png';
+    Object.assign(im.style,{left:c.x-w/2+(lily?((x*5+y*3)%7-3)*2:0)+'px',top:c.y+(lily?w/2:6)-w+'px',width:w+'px',height:w+'px',zIndex:(x+y)*4+2});boardEl.appendChild(im);return}}
 /* two boulders side by side are drawn as one big rock across both tiles (REGION_BIG: the wide rock per region) */
-const REGION_BIG={desert:'sand-rock',snow:'ice-block',forest:'moss-rock',swamp:'moss-rock'};
+const REGION_BIG={desert:'sand-rock',forest:'moss-rock',swamp:'moss-rock'};
 let bigRocks=null,bigFor=null;
 /* pairs adjacent boulders, scanning row by row: {anchor key: partner [x,y]}, and each partner key -> 'skip' */
 function boulderPairs(){if(bigFor===MAP)return bigRocks;bigFor=MAP;bigRocks={};const isB=(x,y)=>MAP[y]&&TER[MAP[y][x]]&&TER[MAP[y][x]].k==='boulder';
@@ -33,11 +46,13 @@ function placeProp(x,y,k){const im=document.createElement('img'),c=scrC(x,y);let
   if(k==='boulder'&&actBiome().id==='shadow'){const[n,sc]=SUNLESS_ROCKS[(x*7+y*13)%SUNLESS_ROCKS.length];if(ART_PNG.has('props/sunless-'+n)){src='art/props/sunless-'+n+'.png';w=Math.round(w*sc)}}
   else if(k==='boulder'&&REGION_ROCKS[actBiome().id]||KIND_ROCKS[k]){const rs=KIND_ROCKS[k]||REGION_ROCKS[actBiome().id],[n,sc]=rs[(x*7+y*13)%rs.length];if(ART_PNG.has('props/'+n)){src='art/props/'+n+'.png';w=Math.round(w*sc)}}
   let cx=c.x,cy=c.y,z=(x+y)*4+3;
+  /* single rocks sit inside their own diamond: no wider than ROCK_W and based nearer the tile's centre, so wide ones don't hang off the map's edge */
+  const rock=(k==='boulder'||k==='sandstone')&&src.startsWith('art/props/');let base=8;if(rock){w=Math.min(w,ROCK_W);base=3}
   const big=k==='boulder'&&REGION_BIG[actBiome().id]&&ART_PNG.has('props/'+REGION_BIG[actBiome().id])&&boulderPairs()[key(x,y)];
   if(big==='skip')return;/* drawn by its partner */
-  if(big){const c2=scrC(...big);cx=(c.x+c2.x)/2;cy=Math.max(c.y,c2.y);z=(big[0]+big[1])*4+3;src='art/props/'+REGION_BIG[actBiome().id]+'.png';w=Math.round(T*PROPS[k]*1.9)}
+  if(big){const c2=scrC(...big);cx=(c.x+c2.x)/2;cy=Math.max(c.y,c2.y);z=(big[0]+big[1])*4+3;src='art/props/'+REGION_BIG[actBiome().id]+'.png';w=Math.round(T*PROPS[k]*1.9);base=8}
   im.className='prop';im.alt='';im.dataset.k=key(x,y);im.dataset.p=k;im.src=src;
-  Object.assign(im.style,{left:cx-w/2+'px',top:cy+8-w+'px',width:w+'px',height:w+'px',zIndex:z});boardEl.appendChild(im)}
+  Object.assign(im.style,{left:cx-w/2+'px',top:cy+base-w+'px',width:w+'px',height:w+'px',zIndex:z});boardEl.appendChild(im)}
 /* each render: opened chests swap art, and tall props fade when a unit stands just behind them */
 function propsRender(){
   const occ=new Set(state.units.filter(u=>u.hp>0).flatMap(u=>cellsOf(u.x,u.y,u.sz||1).map(c=>key(...c))));
