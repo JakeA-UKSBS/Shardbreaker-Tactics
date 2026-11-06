@@ -20,6 +20,8 @@ const SUNLESS_ROCKS=[['rock',1],['rocks',1],['rubble',1],['deadtree',1.1],['crys
 /* other regions' boulders: CraftPix rocks (art/props/<name>.png, padded square, scale × the boulder's size). Regions not listed keep the plain boulder */
 const REGION_ROCKS={desert:[['sand-rock',1.1]],snow:[['ice-block',.9],['snow-peaks',1.1]],forest:[['moss-rock',1.1]],swamp:[['moss-rock',1.1]],mountain:[['red-spire',1.1]],heart:[['red-spire',1.1]]};
 /* tile kinds drawn with CraftPix rocks in every region: the desert's Sandstone Rocks (k) mix the sand rock with the pale stone piles */
+/* ROCK_W: widest a single rock prop is drawn, in px (a tile is 68 wide) */
+const ROCK_W=54;
 const KIND_ROCKS={sandstone:[['sand-rock',1.1],['sunless-rock',.95],['sunless-rocks',.9]],
   /* the swamp's Mangrove Roots: rooted swamp trees */
   mangrove:[['swamp-tree-1',1.25],['swamp-tree-2',1.25],['swamp-tree-3',1.3],['swamp-tree-4',1.3]]};
@@ -41,11 +43,13 @@ function placeProp(x,y,k){const im=document.createElement('img'),c=scrC(x,y);let
   if(k==='boulder'&&actBiome().id==='shadow'){const[n,sc]=SUNLESS_ROCKS[(x*7+y*13)%SUNLESS_ROCKS.length];if(ART_PNG.has('props/sunless-'+n)){src='art/props/sunless-'+n+'.png';w=Math.round(w*sc)}}
   else if(k==='boulder'&&REGION_ROCKS[actBiome().id]||KIND_ROCKS[k]){const rs=KIND_ROCKS[k]||REGION_ROCKS[actBiome().id],[n,sc]=rs[(x*7+y*13)%rs.length];if(ART_PNG.has('props/'+n)){src='art/props/'+n+'.png';w=Math.round(w*sc)}}
   let cx=c.x,cy=c.y,z=(x+y)*4+3;
+  /* single rocks sit inside their own diamond: no wider than ROCK_W and based nearer the tile's centre, so wide ones don't hang off the map's edge */
+  const rock=(k==='boulder'||k==='sandstone')&&src.startsWith('art/props/');let base=8;if(rock){w=Math.min(w,ROCK_W);base=3}
   const big=k==='boulder'&&REGION_BIG[actBiome().id]&&ART_PNG.has('props/'+REGION_BIG[actBiome().id])&&boulderPairs()[key(x,y)];
   if(big==='skip')return;/* drawn by its partner */
-  if(big){const c2=scrC(...big);cx=(c.x+c2.x)/2;cy=Math.max(c.y,c2.y);z=(big[0]+big[1])*4+3;src='art/props/'+REGION_BIG[actBiome().id]+'.png';w=Math.round(T*PROPS[k]*1.9)}
+  if(big){const c2=scrC(...big);cx=(c.x+c2.x)/2;cy=Math.max(c.y,c2.y);z=(big[0]+big[1])*4+3;src='art/props/'+REGION_BIG[actBiome().id]+'.png';w=Math.round(T*PROPS[k]*1.9);base=8}
   im.className='prop';im.alt='';im.dataset.k=key(x,y);im.dataset.p=k;im.src=src;
-  Object.assign(im.style,{left:cx-w/2+'px',top:cy+8-w+'px',width:w+'px',height:w+'px',zIndex:z});boardEl.appendChild(im)}
+  Object.assign(im.style,{left:cx-w/2+'px',top:cy+base-w+'px',width:w+'px',height:w+'px',zIndex:z});boardEl.appendChild(im)}
 /* each render: opened chests swap art, and tall props fade when a unit stands just behind them */
 function propsRender(){
   const occ=new Set(state.units.filter(u=>u.hp>0).flatMap(u=>cellsOf(u.x,u.y,u.sz||1).map(c=>key(...c))));
