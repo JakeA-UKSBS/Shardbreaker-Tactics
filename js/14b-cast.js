@@ -25,8 +25,31 @@ const CAST_CLASSES={
   'Warlord':'tank.mounted.heavy.2','Artillery':'tank.armour.bow.2','Swordmaster':'sword.foot.blade.2','Pyrolord':'caster.foot.art.2',
   'Summoner':'summoner.foot.art.2','Bard':'support.foot.spirit.2','Mercenary':'sword.foot.blade.2','Warlock':'caster.foot.art.2'
 };
+/* ASC_BONUS: stats each advanced cast class adds on ascending (and joiners who start advanced get them too), in stat order */
+const ASC_BONUS={
+  'Sniper':[2,3,0,0,2,5,1,1],
+  'Bow Cavalry':[3,2,0,0,4,2,1,1],
+  'Artillery':[5,4,0,0,0,2,4,1],
+  'Berserker':[6,5,0,0,2,2,1,0],
+  'Witch':[2,0,4,0,2,2,0,4],
+  'Shaman':[4,0,3,0,1,1,2,4],
+  'Archmage':[2,0,5,0,1,2,1,4],
+  'Stormlord':[3,0,4,0,4,1,0,2],
+  'Pyrolord':[4,0,5,0,1,1,2,1],
+  'Juggernaut':[7,4,0,0,0,0,5,1],
+  'Paladin':[5,3,0,0,2,1,3,2],
+  'Warlord':[6,4,0,0,1,1,3,1],
+  'Saint':[3,0,4,0,1,2,0,5],
+  'Crusader':[5,3,1,0,0,1,4,2],
+  'Duelist':[3,3,0,0,3,3,2,1],
+  'Assassin':[2,3,0,0,4,5,0,1],
+  'Valkyrie':[3,3,0,0,3,1,1,4],
+  'Aegis':[6,2,0,0,0,0,5,3],
+  'Hero':[4,3,0,0,3,2,2,1],
+  'Swordmaster':[2,3,0,0,5,4,0,1],
+  'Bard':[3,0,3,0,3,3,1,2]};
 const castCls=n=>`G.${CAST_CLASSES[n]}.${n.replace(/ /g,'')}`;
-for(const n in CAST_CLASSES){const base=ensureCls('G.'+CAST_CLASSES[n]);const C=Object.assign({},CLS[base],{n});delete C.promo;CLS[castCls(n)]=C}
+for(const n in CAST_CLASSES){const base=ensureCls('G.'+CAST_CLASSES[n]);const C=Object.assign({},CLS[base],{n});delete C.promo;if(ASC_BONUS[n])C.bonus=ASC_BONUS[n];CLS[castCls(n)]=C}
 
 /* ---- the characters ----
    cls: their class, wk: the weapon they hold, look: their look.
@@ -120,7 +143,7 @@ function castArtAll(){for(const c of CAST)for(const cls of[c.cls,...Object.keys(
 function castUnit(id,lv){
   const c=castDef(id),[,role,mv,,t]=c.cls.split('.'),R=ROLES[role],M=MOVES[mv];
   if(t==='2')lv=1; /* already-advanced characters always join at Lv 1 */
-  const s=R.b.slice();if(M.st)M.st.forEach((d,i)=>s[i]=Math.max(0,s[i]+d));if(t==='2'&&R.bonus)R.bonus.forEach((d,i)=>s[i]+=d);
+  const s=R.b.slice();if(M.st)M.st.forEach((d,i)=>s[i]=Math.max(0,s[i]+d));if(t==='2'&&CLS[c.cls].bonus)CLS[c.cls].bonus.forEach((d,i)=>s[i]+=d);
   const g=R.gr.map(([a,b])=>Math.round((a+b)/2)),items=[];
   if(c.wk)items.push({k:c.wk,u:IT[c.wk].uses});
   if(role==='support'&&c.wk!=='mendingStaff'&&CLS[c.cls].n!=='Minstrel')/* Lysander sings rather than carrying a staff */items.push({k:'mendingStaff',u:IT.mendingStaff.uses});
