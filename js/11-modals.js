@@ -5,7 +5,7 @@ async function levelUp(u,g){
   const rows=shown(u).map(s=>`<div data-s="${s}"><span>${SL[s]}</span><span><b class="v">${g.old[s]}</b><em></em></span></div>`).join('');
   const done=modal(`<div class="lvhead"><img src="${portrait(u)}" alt=""><div><div class="eyebrow">Growth</div><h2>${u.name}</h2><p class="lvn">Lv ${g.old.lv}</p></div></div><div class="lvl">${rows}</div><div class="mbtns"><button class="go" type="button" data-m="ok" disabled>Continue</button></div>`);
   /* quick: the level ticks over, then every stat that grew goes up together with one ding */
-  sfx('levelup');modalEl.querySelector('.lvn').textContent=`Lv ${g.old.lv} → ${u.lv}`;await sleep(fast?120:260);
+  modalEl.querySelector('.lvn').textContent=`Lv ${g.old.lv} → ${u.lv}`;await sleep(fast?120:260);
   for(const s of ST){if(!g.gains[s]||s==='learned')continue;const row=modalEl.querySelector(`[data-s="${s}"]`);if(!row)continue;
     row.classList.add('up');row.querySelector('.v').textContent=g.old[s]+1;row.querySelector('em').textContent='+1'}sfx('ding');
   if(g.gains.learned){const sk=SKILLS[g.gains.learned],row=document.createElement('div');row.className='lvsk';row.innerHTML=`<span>New skill</span><b>${sk.n}</b><small>${sk.d}</small>`;modalEl.querySelector('.lvl').after(row);sfx('fanfare')}
