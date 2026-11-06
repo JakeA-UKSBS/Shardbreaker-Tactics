@@ -231,7 +231,7 @@ function genBattle(n,kind){
   const roll=()=>{let r=rand()*tot;for(const[c,w]of pool){if((r-=w)<0)return c}return pool[0][0]};
   const count=bossFight?(B.id==='heart'?0:act>=2?5:4):town?Math.min(4,1+Math.floor(fl/4)+(act-1)):Math.min(7,2+Math.floor(fl/3)+(act-1)*2+(elite?1:0)+(A(4)?1:0)),list=elite?[B.elitePool[0][0]]:[];
   while(list.length<count){const c=roll();list.push(c);if(c==='Wolf'&&list.length<count&&rand()<.6)list.push('Wolf')}
-  const bossName=B.boss.name||pick(BOSSN)+' '+pick(BOSST),turns=town?ri(5,7):0;
+  const bossName=B.boss.name,turns=town?ri(5,7):0;
   const goal=bossFight?'boss':town?'defend':'rout';
   const def={biome:B.id,title:bossFight?(B.boss&&B.boss.name||'Boss Battle'):town?'Defend the Settlement':elite?'Elite Battle':'Battle',/* no map names in titles; bosses go by their own name */goal,turns,map:m.map,h:m.h,start:m.start,gifts:{},
     intro:bossFight&&B.boss.intro?B.boss.intro:bossFight?`${bossName} waits for you in the ${m.n}. Defeat it to clear ${theN(B)}.`:town?`Crystallised beasts are closing on the ${m.n.toLowerCase()}. Hold them off for ${turns} turns.`:elite?`A pack led by something old and strong holds the ${m.n.toLowerCase()}. Rout them all.`:`${count} monsters wait in the ${m.n.toLowerCase()}. Rout them.`};
