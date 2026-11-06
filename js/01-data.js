@@ -34,7 +34,7 @@ const TER={
    n = name, t = weapon type (blade/heavy/pole/bow/reach/art/spirit, or item/scroll/crest), kind = which icon/sprite shape to draw,
    mt = Might (added to Str or Mag for damage), hit = Hit %, crit = Crit %, r = [min, max] range in tiles, uses = durability (99 = unbreakable),
    wt = weight (set from WT below), el = element of a sigil, mag = uses Mag instead of Str, tint = steel/jade colouring,
-   key = icon art key (icons/<key>.png), brk = 'breaker' weapon type it beats, eff = effective against (×2 damage), amt = HP healed by a staff/salve. */
+   key = icon art key (icons/<key>.png), eff = effective against (×2 damage), amt = HP healed by a staff/salve. */
 const IT={
   wornSword:{n:'Worn Sword',t:'blade',kind:'sword',mt:5,hit:90,crit:0,r:[1,1],uses:40},
   twinDaggers:{n:'Twin Daggers',t:'blade',kind:'twindagger',mt:4,hit:95,crit:5,r:[1,1],uses:40},
@@ -79,9 +79,6 @@ for(const k in IT)IT[k].key=k;
 Object.assign(IT,{
   dirk:{n:'Dirk',t:'blade',kind:'dagger',mt:3,hit:95,crit:15,r:[1,1],uses:45,key:'dirk'},
   stiletto:{n:'Stiletto',t:'blade',kind:'dagger',thin:true,mt:4,hit:90,crit:25,r:[1,1],uses:30,key:'stiletto'},
-  spellbreaker:{n:'Spellbreaker',t:'blade',kind:'sword',mt:6,hit:80,crit:0,r:[1,1],uses:35,brk:'art',key:'spellbreaker'},
-  axebreaker:{n:'Axebreaker',t:'pole',kind:'spear',mt:7,hit:80,crit:0,r:[1,1],uses:35,brk:'heavy',key:'axebreaker'},
-  swordbreaker:{n:'Swordbreaker',t:'heavy',kind:'axe',mt:8,hit:75,crit:0,r:[1,1],uses:35,brk:'blade',key:'swordbreaker'},
   barbedSpear:{n:'Barbed Spear',t:'pole',kind:'spear',mt:8,hit:75,crit:30,r:[1,1],uses:20,tint:'killer',key:'barbedSpear'},
   reaverAxe:{n:'Reaver Axe',t:'heavy',kind:'axe',mt:10,hit:65,crit:30,r:[1,1],uses:20,tint:'killer',key:'reaverAxe'},
   hawkeyeBow:{n:'Hawkeye Bow',t:'bow',kind:'bow',mt:7,hit:80,crit:30,r:[2,2],uses:20,tint:'killer',key:'hawkeyeBow'}
@@ -89,7 +86,7 @@ Object.assign(IT,{
 /* WT: weapon weight. Weight above the wielder's Str (Mag for sigils) is taken off their attack speed (see wtOver/AS). */
 const WT={wornSword:4,twinDaggers:2,knightlySword:8,thornRapier:3,hookedBlade:6,moonglassEdge:6,greatsword:12,ironSpear:6,steelSpear:10,javelin:8,hatchet:7,cleaver:11,throwingAxe:9,halberd:9,labrys:13,
   shortBow:3,ironwoodBow:7,crossbow:6,thornWhip:3,chainSickle:5,warFan:3,boneParasol:5,emberSigil:2,tideSigil:3,stoneSigil:6,stormSigil:5,mirrorSigil:3,thornSigil:3,dawnSigil:2,umbralSigil:5,crookStaff:4,runeStaff:3,glimmer:1,
-  dirk:1,stiletto:2,spellbreaker:6,axebreaker:7,swordbreaker:8,barbedSpear:7,reaverAxe:9,hawkeyeBow:5};
+  dirk:1,stiletto:2,barbedSpear:7,reaverAxe:9,hawkeyeBow:5};
 for(const k in WT)IT[k].wt=WT[k];
 /* ---- special weapons from events: jade (killer) weapons, lightning sigils, long-range sigils and charms ---- */
 Object.assign(IT,{

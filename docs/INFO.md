@@ -143,9 +143,6 @@ Weapons never break (except the 5-use Meteor and Heaven's Bolt).
 | Labrys | Heavy | 12 | 75 | 10 | 13 | 1 |  |
 | Dirk | Blade | 3 | 95 | 15 | 1 | 1 |  |
 | Stiletto | Blade | 4 | 90 | 25 | 2 | 1 |  |
-| Spellbreaker | Blade | 6 | 80 | 0 | 6 | 1 |  |
-| Axebreaker | Polearm | 7 | 80 | 0 | 7 | 1 |  |
-| Swordbreaker | Heavy | 8 | 75 | 0 | 8 | 1 |  |
 | Barbed Spear | Polearm | 8 | 75 | 30 | 7 | 1 |  |
 | Reaver Axe | Heavy | 10 | 65 | 30 | 9 | 1 |  |
 | Hawkeye Bow | Bow | 7 | 80 | 30 | 5 | 2 | Flier |

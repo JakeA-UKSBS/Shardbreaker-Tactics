@@ -63,8 +63,8 @@ function calc(x,xw,y,yw,ctx){
   const yf=!!CLS[y.cls].fly;let df=(xw.mag?y.res+gy.res:y.def+gy.def)+(yf?0:t.df)+RB.df+SB.df;if(has(y,'steadfast')&&ctx.phase==='enemy'&&ctx.init!==y)df+=4;
   if(state.units.some(o=>o!==y&&o.team===y.team&&o.hp>0&&man(o,y)===1&&has(o,'guardian')))df+=2;const xm=CLS[x.cls].mnt||CLS[x.cls].fly,ym=CLS[y.cls].mnt||CLS[y.cls].fly;if(has(y,'pikeWall')&&xm)df+=4;
   const dead=has(x,'keenEye');
-  const acc=hd*10+xw.hit+x.lck*2+(xw.brk&&yw&&yw.t===xw.brk?50:0)+(has(x,'earlyEdge')&&state.turn<=5?20:0)+adv*15+aura(x)+(dead?20:0)+RB.acc+SB.acc+(has(x,'pikeWall')&&ym?10:0);
-  const avo=AS(y,yw)*2+y.lck+(yw&&yw.brk&&yw.brk===xw.t?50:0)+(has(y,'earlyEdge')&&state.turn<=5?20:0)+(dead||yf?0:t.av)+aura(y)+RB.avo+SB.avo;
+  const acc=hd*10+xw.hit+x.lck*2+(has(x,'earlyEdge')&&state.turn<=5?20:0)+adv*15+aura(x)+(dead?20:0)+RB.acc+SB.acc+(has(x,'pikeWall')&&ym?10:0);
+  const avo=AS(y,yw)*2+y.lck+(has(y,'earlyEdge')&&state.turn<=5?20:0)+(dead||yf?0:t.av)+aura(y)+RB.avo+SB.avo;
   let crit=RB.crit+SB.crit+(xw.crit||0)+(CLS[x.cls].crit||0)+Math.floor(x.lck/2)-Math.floor(y.lck/2);if(has(x,'focus')&&!state.units.some(o=>o!==x&&o.team===x.team&&o.hp>0&&man(o,x)===1))crit+=10;if(has(x,'wrath')&&x.hp*2<=x.maxhp)crit+=15;
   return{dmg:dmgMods(x,y,ctx,Math.max(0,pow-df)),pow,df,hit:clamp(acc-avo,0,100),crit:x.team==='e'?0:clamp(crit,0,100),n:AS(x,xw)+(has(x,'swiftstrike')&&ctx.init===x?3:0)-AS(y,yw)>=4?2:1,adv,eff,hd};
 }
