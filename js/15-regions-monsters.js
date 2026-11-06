@@ -96,8 +96,8 @@ const MONLOOK={
   BlightedTreant:()=>({body:pick(['#5a4a32','#4a3a2a','#6a5a3a']),eye:'#9aff6a',leaves:pick(['#3f7a42','#5a6a2a','#6a3a5a'])}),
   Beholder:()=>({body:pick(['#8a4a6a','#4a6a8a','#6a4a3a']),eye:pick(['#5fc2a0','#ffd23f','#ff5a3a'])})
 };
-/* regions switched off for now: still defined (art, maps, docs) but runs never pick them. The Flying Ship, Mycelia and the Labyrinth are off for now; delete them from this list to bring them back */
-const BIOMES_OFF=['ship','mushroom','labyrinth'],biomeIds=()=>Object.keys(BIOMES).filter(b=>!BIOMES_OFF.includes(b)&&b!=='heart');
+/* regions switched off for now: still defined (art, maps, docs) but runs never pick them. The Flying Ship, Mycelia, the Labyrinth and the Sunless Isle are off for now; delete them from this list to bring them back */
+const BIOMES_OFF=['ship','mushroom','labyrinth','shadow'],biomeIds=()=>Object.keys(BIOMES).filter(b=>!BIOMES_OFF.includes(b)&&b!=='heart');
 /* REGIONS: n = name, noThe = don't say 'the', bg = map-screen background colour, d = description, tip = [id, title, help text],
    maps = battle map ids (in MAPS), bossMap = the boss's map, town = [ground, cover] letters for Defend fights, townN = settlement name,
    pool / elitePool = enemies as [class id, weight, first floor it can appear on (default 1)]: weight is the relative chance of being picked,
