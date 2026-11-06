@@ -27,6 +27,14 @@ function bestApproach(u,o){
   return best;
 }
 
+/* the best tile in reach to heal ally o from (staying put if possible) */
+function healApproach(u,o){
+  let best=null,bs2=-1e9;
+  for(const k of moveSet){const[x,y]=k.split(',').map(Number);if(spiritFor({...u,x,y},o)<0)continue;
+    const s=(x===origin.x&&y===origin.y?100:0)+ter(x,y).av-(Math.abs(x-origin.x)+Math.abs(y-origin.y));if(s>bs2){bs2=s;best={x,y}}}
+  return best;
+}
+
 /* ==================================================================
    TAPS ON THE MAP: what a click does in each ui state (idle, move, menu, target, confirm)
    ================================================================== */
@@ -37,6 +45,7 @@ function tap(x,y){
     const u=byId(sel);
     if(moveSet.has(k)){stepSfx(u,x,y);u.x=x;u.y=y;springTrap(u);if(u.tumbled){u.tumbled=0;fringe=null}afterMove(u);return}
     if(o&&o.team==='e'&&fringe.has(k)){const t=bestApproach(u,o);if(t){if(t.x!==u.x||t.y!==u.y)stepSfx(u,t.x,t.y);u.x=t.x;u.y=t.y;targets=atkTargets(u);tmode='atk';openConfirm(o);return}}
+    if(o&&o.team==='p'&&o!==u&&o.hp<o.maxhp&&staffIdx(u)>=0){const t=healApproach(u,o);if(t){if(t.x!==u.x||t.y!==u.y)stepSfx(u,t.x,t.y);u.x=t.x;u.y=t.y;targets=healTargets(u);tmode='heal';openConfirm(o);return}}
     if(o&&o.team==='p'&&!o.acted&&o!==u){cancelMove();select(o);return}
     cancelMove();return;
   }
@@ -121,7 +130,7 @@ async function act(a){
   if(a==='summon'){if(!canSummon(u))return;commit();doSummon(u);finishAction();return}
   if(a==='learn'){const it=u.items[itemSel],k=IT[it.k].skill;if(learnBlock(u,k))return;(u.skills=u.skills||[]).push({id:k,src:'scroll'});u.items.splice(itemSel,1);itemSel=null;sfx('item');toast(`${u.name} learned ${SKILLS[k].n}`);saveGame();render();return}
   if(a==='ascend'){if(promoBlock(u))return;const to=await promoPick(u);if(!to){render();return}commit();u.items.splice(itemSel,1);itemSel=null;busy=true;clearSel();ui='idle';render();await ascend(u,to);busy=false;finishAction();return}
-  if(a==='use'){commit();const it=u.items[itemSel],amt=Math.min(salveAmt(it.k),u.maxhp-u.hp);u.hp+=amt;if(u.psn){u.psn=0;toast(`${u.name} is cured`)}it.u--;if(it.u<=0)u.items.splice(itemSel,1);pop(u,'+'+amt,'heal');finishAction();return}
+  if(a==='use'){commit();const it=u.items[itemSel],amt=Math.min(salveAmt(it.k),u.maxhp-u.hp);u.hp+=amt;it.u--;if(it.u<=0)u.items.splice(itemSel,1);pop(u,'+'+amt,'heal');finishAction();return}
   if(a==='gift'&&/^(gold:|pyrite)/.test(giftHere(u).item)){commit();const g=giftHere(u),n=g.item==='pyrite'?0:+g.item.slice(5);state.visited.push(g.k);run.gold=gold()+n;sfx(n?'item':'broke');clearSel();ui='idle';render();
     await modal(`<div class="itemget"><img src="${chestArt()}" alt=""><div class="eyebrow">${n?'Found':'Fool’s gold'}</div><h2>${n?n+' gold':'Pyrite'}</h2><p>${n?`${u.name} scoops up ${n} gold.`:'It glitters like gold, but it’s pyrite. Worthless.'}</p></div><div class="mbtns"><button class="go" type="button" data-m="ok">OK</button></div>`);
     finishAction();return}
@@ -149,7 +158,7 @@ async function fight(a,ai,d){
   for(const u of [a,d])if(u.turncoat&&u.team==='e'&&u.hp>0&&u.hp<=Math.ceil(u.maxhp/3)){u.team='p';u.turncoat=false;u.acted=true;state.freed=true;pop(u,'Freed!','heal');sfx('ding')}
   const p=a.team==='p'?a:d.team==='p'?d:null,o=p===a?d:a;
   for(const e of res.ev)if(e.psn){const t=e.by==='a'?d:a;if(t.team==='p'&&M('soup'))continue;if(t.hp>0){t.psn=3;pop(t,'Poisoned','crit')}}
-  for(const e of res.ev)if(e.stone){const t=e.by==='a'?d:a;if(t.hp>0&&!t.boss){t.stone=1;pop(t,'Stone!','crit');sfx('earth')}}
+  for(const e of res.ev)if(e.stone){const t=e.by==='a'?d:a;if(t.hp>0&&!t.boss){t.stone=1;pop(t,'Stone!','crit');sfx('earth');toast(`${t.name} is turned to stone and loses ${t.team==='p'?'their':'its'} next turn`)}}
   /* a summon's EXP goes to the unit that summoned it */
   const ep=p&&p.summon?state.units.find(x=>x.id===p.owner&&x.hp>0):p;
   if(p&&p.hp>0&&ep){const dealt=res.ev.some(e=>(e.by==='a')===(p===a)&&e.dmg>0);const g=gainExp(ep,Math.min(100,Math.round(expFor(ep,o,dealt,o.hp<=0)*EXP_RATE*(R('tome')?1.5:1)*(has(ep,'quickStudy')?2:1))));if(ep!==p&&g)toast(`${ep.name} gains ${g.amt} EXP`);await showExp(ep,g);if(g&&g.gains)await levelUp(ep,g)}

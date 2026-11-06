@@ -20,7 +20,7 @@ const ROLES={
     b:[17,0,6,5,5,3,2,5],gr:[[55,70],[0,10],[45,65],[35,50],[35,55],[20,40],[10,20],[35,55]],bonus:[3,0,3,2,1,0,1,3]},
   support:{n:'Mender',n2:'Lightbearer',w:['spirit'],body:'robe',skills:['renewal','spellWard','fleetFoot','quickStudy'],
     b:[17,0,3,4,6,5,1,6],gr:[[50,65],[0,10],[40,55],[30,45],[40,55],[40,60],[10,20],[40,60]],bonus:[4,0,2,1,2,0,1,3]},
-  rogue:{n:'Rogue',n2:'Assassin',w:['blade'],body:'tunic',crit:15,skills:['flurry','whirlwind','hitAndRun','wolfsbane','focus'],
+  rogue:{n:'Rogue',n2:'Assassin',w:['blade'],body:'tunic',crit:5,skills:['flurry','whirlwind','hitAndRun','wolfsbane','focus'],
     b:[16,5,0,7,9,6,2,1],gr:[[50,65],[30,45],[0,10],[45,60],[55,70],[40,60],[10,20],[10,25]],bonus:[3,2,0,3,3,2,1,1]},
   /* fast duelist: swords only, high Spd and crit */
   sword:{n:'Swordsman',n2:'Swordmaster',w:['blade'],body:'tunic',crit:10,skills:['swiftstrike','flurry','focus','wolfsbane','earlyEdge'],

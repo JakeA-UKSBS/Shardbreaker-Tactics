@@ -106,7 +106,7 @@ function card(u){
    <div class="ch"><b>${u.name}</b><span>${CLS[u.cls].n} · Lv ${u.lv}</span></div>
    <div class="hp"><span class="bar"><i style="width:${u.bars?barsOf(u).frac*100:u.hp/u.maxhp*100}%${u.bars?`;background:${BAR_COL[barsOf(u).n]}`:''}"></i></span><span>${u.hp}/${u.maxhp} HP${u.bars?` · Bar ${barsOf(u).n}/${u.bars}`:''}</span></div>
    ${u.team==='p'?`<div class="xp"><span class="bar"><i style="width:${u.exp}%"></i></span><span>${u.exp} EXP</span></div>`:''}${mpLine(u)}${stChips(u)}
-   <div class="eq">${w?`<img src="${icon(w.key)}" alt="">${w.n} (Rng ${rngTxt(w.r)})`:'Unarmed'}${sk?` · <b class="sk">${sk.n}</b>`:''} · ${terrText(t)} · H${hOf(u.x,u.y)}${u.psn?` · <b class="psnt">Poisoned (${u.psn})</b>`:''}${(()=>{const g=gearOf(u),t=Object.entries(g).filter(([,v])=>v).map(([k,v])=>`${v>0?'+':''}${v} ${GEAR_N[k]}`);return t.length?` · Gear ${t.join(', ')}`:''})()}</div>
+   <div class="eq">${w?`<img src="${icon(w.key)}" alt="">${w.n} (Rng ${rngTxt(w.r)})`:'Unarmed'}${sk?` · <b class="sk">${sk.n}</b>`:''} · ${terrText(t)} · H${hOf(u.x,u.y)}${u.psn?` · <b class="psnt">Poisoned (${u.psn})</b>`:''}${u.stone?' · <b class="stonet">Stone: skips next turn</b>':''}${(()=>{const g=gearOf(u),t=Object.entries(g).filter(([,v])=>v).map(([k,v])=>`${v>0?'+':''}${v} ${GEAR_N[k]}`);return t.length?` · Gear ${t.join(', ')}`:''})()}</div>
    ${u.recruit?`<div class="eq sk">Can be recruited: move ${lordName()} next to ${u.name} and Talk.</div>`:''}
   </div><button class="mini" type="button" data-act="sheet:${u.id}">Details</button></div>
   <div class="ueq"><div class="ueq-h">Equipment</div>${itemRows(u,false)}</div>`;
@@ -152,7 +152,7 @@ function skillBlock(u){
 function rngTxt(r){return r[0]===r[1]?r[0]:r[0]+'–'+r[1]}
 function itemInfo(u,k){
   const x=IT[k];
-  if(x.t==="item")return`<b>${x.n}</b> · Restores ${salveAmt(k)} HP and cures poison. Usable on the map between fights too.`;
+  if(x.t==="item")return`<b>${x.n}</b> · Restores ${salveAmt(k)} HP. Usable on the map between fights too.`;
   if(x.t==='gear')return`<b>${x.n}</b> · Gear · ${gearText(x)} while carried. Can be traded.`;
   if(x.t==='scroll'){const sk=SKILLS[x.skill];return`<b>${x.n}</b> · Teaches ${sk.n} (cost ${sk.cost}). ${sk.d} Use it from the Items menu.`}
   if(x.t==='crest')return`<b>${x.n}</b> · Lets a unit at Lv ${PROMO_LV}+ ascend to a stronger class, with +${PROMO_CAP} skill capacity.`;
@@ -200,7 +200,7 @@ function renderPanel(){
   else if(ui==='abil'||ui==='aim'){const r=abPanel(u);h=r.h;fm=r.fm}
   else if(ui==='items'){
     const it=itemSel!=null?u.items[itemSel]:null;let ops='';
-    if(it){if(isWpn(it.k)&&canUse(u,it.k)&&itemSel!==eqIdx(u))ops+='<button class="go" type="button" data-act="equip">Equip</button>';if(IT[it.k].t==='item'&&(u.hp<u.maxhp||u.psn))ops+='<button class="go" type="button" data-act="use">Use</button>';if(IT[it.k].t==='scroll'){const r=learnBlock(u,IT[it.k].skill);ops+=r?`<span class="hint">${r}</span>`:`<button class="go" type="button" data-act="learn">Learn ${SKILLS[IT[it.k].skill].n} (${SKILLS[IT[it.k].skill].cost})</button>`}if(IT[it.k].t==='crest'){const r=promoBlock(u);ops+=r?`<span class="hint">${r}</span>`:`<button class="go" type="button" data-act="ascend">Ascend…</button>`}if(isWpn(it.k)&&!canUse(u,it.k))ops+=`<span class="hint">${u.name} can't wield this.</span>`}
+    if(it){if(isWpn(it.k)&&canUse(u,it.k)&&itemSel!==eqIdx(u))ops+='<button class="go" type="button" data-act="equip">Equip</button>';if(IT[it.k].t==='item'&&u.hp<u.maxhp)ops+='<button class="go" type="button" data-act="use">Use</button>';if(IT[it.k].t==='scroll'){const r=learnBlock(u,IT[it.k].skill);ops+=r?`<span class="hint">${r}</span>`:`<button class="go" type="button" data-act="learn">Learn ${SKILLS[IT[it.k].skill].n} (${SKILLS[IT[it.k].skill].cost})</button>`}if(IT[it.k].t==='crest'){const r=promoBlock(u);ops+=r?`<span class="hint">${r}</span>`:`<button class="go" type="button" data-act="ascend">Ascend…</button>`}if(isWpn(it.k)&&!canUse(u,it.k))ops+=`<span class="hint">${u.name} can't wield this.</span>`}
     h=`<div class="ch"><b>${u.name}</b><span>Items · ${u.hp}/${u.maxhp} HP</span></div>`+itemRows(u,true)+`<div class="acts">${ops}<button type="button" data-act="menu">Back</button></div>`;
   }
   else if(ui==='target'){const gf=giftHere(u),tk=talkTarget(u),sw=tmode==='atk'?(healTargets(u).length?'<button class="go" type="button" data-act="heal">Heal</button>':''):(atkTargets(u).length?'<button class="go" type="button" data-act="attack">Attack</button>':'');h=card(u)+`<p class="hint">Click a highlighted ${tmode==='heal'?'ally to heal':'enemy to see the forecast'}, then click it again to ${tmode==='heal'?'heal':'attack'}.</p>`;fm=`<div class="acts">${sw}${tk?'<button class="go" type="button" data-act="talk">Talk</button>':''}${gf?`<button class="go" type="button" data-act="gift">${gf.kind}</button>`:''}${canSummon(u)?`<button class="go" type="button" data-act="summon">Summon ${famOf(u).n}</button>`:''}<button type="button" data-act="items">Items</button>${tradeMates(u).length?'<button type="button" data-act="trade">Trade</button>':''}<button type="button" data-act="wait">Wait</button><button type="button" data-act="menu">Back</button></div>`}
