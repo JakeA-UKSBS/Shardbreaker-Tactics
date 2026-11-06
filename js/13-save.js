@@ -6,6 +6,8 @@ function saveGame(){if(!run)return;const map=run.phase==='map';try{localStorage.
 function dropGone(o){if(!o||typeof o!=='object')return;
   if(Array.isArray(o.skills))o.skills=o.skills.filter(x=>!x||!x.id||SKILLS[x.id]);
   if(Array.isArray(o.items))o.items=o.items.filter(i=>!i||!i.k||IT[i.k]);
+  if(Array.isArray(o.relics))o.relics=o.relics.filter(k=>RELICS[k]);
+  if(Array.isArray(o.units))o.units=o.units.filter(u=>!u||!u.cls||CLS[u.cls]);
   for(const v of Object.values(o))dropGone(v)}
 function loadGame(){try{const sv=JSON.parse(localStorage.getItem(SAVE));dropGone(sv);return sv}catch(_){return null}}
 function setMap(){setMapFor(state.ch)}

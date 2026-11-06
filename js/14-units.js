@@ -133,7 +133,6 @@ function monLook(c){
 function monsterClasses(){const out=new Set();
   for(const B of Object.values(BIOMES)){for(const p of[...(B.pool||[]),...(B.elitePool||[])])out.add(p[0]);if(B.boss){if(B.boss.summon&&B.boss.summon!=='*')out.add(B.boss.summon);if(!BIG[CLS[B.boss.cls].body+(B.boss.look&&B.boss.look.bones?'_bones':'')])out.add(B.boss.cls)}}
   for(const f of Object.values(FAMILIARS))out.add(f.cls);
-  out.add('Hawk');/* the Hawk relic's ally */
   return[...out].filter(c=>CLS[c]).sort()}
 function monsterArt(c,strike){return art('monsters/'+c+(strike?'-strike':''),()=>{
   const boss=Object.values(BIOMES).find(B=>B.boss&&B.boss.cls===c),s0=rngS;seedRng(7);

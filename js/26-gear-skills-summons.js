@@ -1,4 +1,4 @@
-/* Gear, trading, skill allocation, summons and the hawk */
+/* Gear, trading, skill allocation and summons */
 /* ---- gear: non-weapon items that work while carried (one of each kind counts), and can be traded ---- */
 Object.assign(IT,{
   leatherArmour:{n:'Leather Armour',t:'gear',kind:'armor',uses:1,gear:{def:2},key:'leatherArmour'},
@@ -50,7 +50,7 @@ async function allocSkill(k,title){
   }
 }
 
-/* ---- summons and the hawk ---- */
+/* ---- summons ---- */
 const isSummoner=u=>u.cls.startsWith('G.summoner.');
 const canSummon=u=>isSummoner(u)&&(u.sumLeft||0)>0&&summonTile(u);
 /* ---- familiars: each Summoner is bonded to one spirit for life (u.familiar) ---- */
@@ -75,6 +75,5 @@ function sumBoost(m){const k=(run.act||1)-1;if(k<=0)return m;m.maxhp+=4*k;m.hp=m
 function doSummon(u){const F=famOf(u),t=summonTile(u);if(!t)return;u.sumLeft--;const m=sumBoost(allyMon(F.cls,sumLv(u),`${u.name}’s ${F.n}`,'sum'+(run.uid++)));m.x=t.x;m.y=t.y;m.acted=true;m.owner=u.id;state.units.push(m);sfx('rise');pop(m,'Summoned','heal')}
 function battleAllies(){
   for(const u of state.units)if(u.team==='p'&&isSummoner(u))u.sumLeft=CLS[u.cls].tier===2?2:1;
-  if(R('hawk')){const a=state.units.find(u=>u.team==='p'),taken=new Set(state.units.map(u=>key(u.x,u.y))),h=allyMon('Hawk',Math.max(1,(run.n||1)+((run.act||1)-1)*8),'Hawk','hawk');const t=freeNear(a.x,a.y,taken,h);h.x=t.x;h.y=t.y;state.units.push(h)}
 }
 

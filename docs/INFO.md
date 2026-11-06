@@ -232,7 +232,6 @@ Learned skills cost capacity (base 20, +5 when promoted). Personal skills are fr
 | Golden Spurs | Uncommon (after 4 runs) | Mounted and flying units gain +1 Move and +10 Avoid. |
 | Iron Bulwark | Uncommon (after 4 runs) | Armoured units take 2 less damage. |
 | Pocket Anvil | Rare (after 6 runs) | The Wandering Smith reforges twice. |
-| Falconer’s Whistle | Uncommon | A hawk fights beside you in every battle. If it falls, it’s back for the next one. |
 | Mirror Charm | Rare (after 6 runs) | Enemies get −10 Hit against your units. |
 | Iron Rose | Uncommon | Units below half HP take 3 less damage. |
 | Aventurine | Common | All units gain +10 Avoid and +5 Crit. |
