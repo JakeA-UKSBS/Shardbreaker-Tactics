@@ -10,14 +10,14 @@ function barsOf(u){if(!u.bars)return null;const per=u.maxhp/u.bars,n=Math.max(0,
 const uEls={};
 function buildBoard(){
   boardEl.innerHTML='';for(const id in uEls)delete uEls[id];
-  const c=CH[state.ch];boardEl.classList.toggle('bright',!!c.bright);boardEl.style.background=MAP.some(r=>r.includes('~'))?'linear-gradient(#26304a,#56668c 55%,#8e9ab8)':'';
+  const c=BATTLE;boardEl.classList.toggle('bright',!!c.bright);boardEl.style.background=MAP.some(r=>r.includes('~'))?'linear-gradient(#26304a,#56668c 55%,#8e9ab8)':'';
   /* isometric: each tile is its square art mapped onto a diamond (the top face), over a block of side faces down to the ground */
   const mx=Math.max(0,...MAP.flatMap((r,y)=>[...r].map((_,x)=>vhOf(x,y))));
   OX=MH*TW/2;OY=56+mx*HS;BW=(MW+MH)*TW/2;BH=OY+(MW+MH)*TH/2+HS+12;
   boardEl.classList.add('iso');boardEl.style.gridTemplateColumns='';boardEl.style.width=BW+'px';boardEl.style.height=BH+'px';
   /* features (trees, rocks, chests, shrines, tents, gems...) stand up as props (16b-terrain3d.js) on the map's usual ground */const gc={};for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const t=ter(x,y);if(t.c<99&&!OVER_T.includes(t.k)&&!PROPS[t.k])gc[t.k]=(gc[t.k]||0)+1}const gk=Object.keys(gc).sort((a,b)=>gc[b]-gc[a])[0]||'plain';
   const firstOf={};
-  for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const t=document.createElement('div'),tk=ter(x,y).k;const vol=CH[state.ch]&&CH[state.ch].biome==='mountain',ov=tk==='hill'&&vol?'crag':tk;
+  for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const t=document.createElement('div'),tk=ter(x,y).k;const vol=BATTLE&&BATTLE.biome==='mountain',ov=tk==='hill'&&vol?'crag':tk;
     t.className=PROPS[ov]?'tile '+propGround(ov,gk):'tile t-'+tk;t.dataset.k=key(x,y);
     if(!PROPS[ov]){const v=tileVariant(tk,x,y);if(v)t.style.backgroundImage=`url(${v})`}
     const vh=vhOf(x,y),p=tileTop(x,y,vh),z=(x+y)*4;
@@ -36,7 +36,7 @@ function tileVariant(k,x,y){const vs=(TILE_VARS[k]||[]).filter(v=>ART_PNG.has('t
   const h=(Math.imul(x+1,73856093)^Math.imul(y+1,19349663))>>>0,i=h%(vs.length*2);return i<vs.length?'art/tiles/'+vs[i]+'.png':null}
 const SIDEC={};
 function sideColor(src,cb){if(SIDEC[src])return cb(SIDEC[src]);const im=new Image();im.onload=()=>{const cv=document.createElement('canvas');cv.width=cv.height=1;const cx=cv.getContext('2d');cx.drawImage(im,0,0,1,1);let d;try{d=cx.getImageData(0,0,1,1).data}catch(_){return}/* opened from file://: PNG art can't be read back, keep the default */cb(SIDEC[src]=`rgb(${d[0]},${d[1]},${d[2]})`)};im.src=src}
-function threatMap(){const m=new Map();for(const e of state.units.filter(u=>u.team==='e'&&u.hp>0&&!u.recruit)){const ms=reach(e),all=new Set([...ms,...fringeOf(e,ms)]);for(const k of all){if(!m.has(k))m.set(k,[]);m.get(k).push(e.id)}}return m}
+function threatMap(){const m=new Map();for(const e of state.units.filter(u=>u.team==='e'&&u.hp>0)){const ms=reach(e),all=new Set([...ms,...fringeOf(e,ms)]);for(const k of all){if(!m.has(k))m.set(k,[]);m.get(k).push(e.id)}}return m}
 function threatLine(k){const ids=danger&&threatMap().get(k);if(!ids||!ids.length)return danger?'<p class="hint">No enemy can reach this tile next turn.</p>':'';return`<p class="hint" style="color:#f0a08a">In reach of ${ids.length} enem${ids.length>1?'ies':'y'}: <b>${ids.map(i=>byId(i).name).join(', ')}</b> (ringed in red).</p>`}
 /* 2x2 bosses: scale the art so the creature itself fills its whole 2x2 footprint (art has empty margins) */
 const FILLS={};
@@ -55,8 +55,6 @@ function render(){
   boardEl.querySelectorAll('.tile').forEach(t=>{
     const k=t.dataset.k;t.classList.remove('mv','atk','hl','dg','tg','cur');
     if(dg.has(k))t.classList.add('dg');
-    if(state.visited.includes(k))t.classList.add('vis');
-    t.classList.toggle('trap',!!(state.sprung&&state.sprung.includes(k)));
     if((ui==='move'||(ui==='idle'&&inspect))&&moveSet){if(moveSet.has(k))t.classList.add('mv');else if(fringe.has(k))t.classList.add(healer?'hl':'atk')}
     if((ui==='target'||ui==='confirm')&&tset.has(k))t.classList.add(tmode==='heal'?'hl':'atk','tg');
     {const ac=abTileCls(k);if(ac&&ac.length)t.classList.add(...ac)}
@@ -107,7 +105,6 @@ function card(u){
    <div class="hp"><span class="bar"><i style="width:${u.bars?barsOf(u).frac*100:u.hp/u.maxhp*100}%${u.bars?`;background:${BAR_COL[barsOf(u).n]}`:''}"></i></span><span>${u.hp}/${u.maxhp} HP${u.bars?` · Bar ${barsOf(u).n}/${u.bars}`:''}</span></div>
    ${u.team==='p'?`<div class="xp"><span class="bar"><i style="width:${u.exp}%"></i></span><span>${u.exp} EXP</span></div>`:''}${mpLine(u)}${stChips(u)}
    <div class="eq">${w?`<img src="${icon(w.key)}" alt="">${w.n} (Rng ${rngTxt(w.r)})`:'Unarmed'}${sk?` · <b class="sk">${sk.n}</b>`:''} · ${terrText(t)} · H${hOf(u.x,u.y)}${u.psn?` · <b class="psnt">Poisoned (${u.psn})</b>`:''}${(()=>{const g=gearOf(u),t=Object.entries(g).filter(([,v])=>v).map(([k,v])=>`${v>0?'+':''}${v} ${GEAR_N[k]}`);return t.length?` · Gear ${t.join(', ')}`:''})()}</div>
-   ${u.recruit?`<div class="eq sk">Can be recruited: move ${lordName()} next to ${u.name} and Talk.</div>`:''}
   </div><button class="mini" type="button" data-act="sheet:${u.id}">Details</button></div>
   <div class="ueq"><div class="ueq-h">Equipment</div>${itemRows(u,false)}</div>`;
   return h;
@@ -144,8 +141,7 @@ function cycleSheet(d){const u=byId(sheetU);if(!u)return;const L=sheetList(u);if
 function skillBlock(u){
   const row=(id,tag,dim)=>`<div class="skr${dim?' dim':''}"><b>${SKILLS[id].n}</b><span class="tag">${tag}</span><small>${SKILLS[id].d}</small></div>`;
   let rows=u.skill?row(u.skill,'Personal'):'';
-  (u.skills||[]).forEach((x,i)=>{rows+=row(x.id,x.src==='lv10'?'Lv 10':`${SKILLS[x.id].cost}${u.team==='p'?` <button type="button" class="${sheetRm===i?'warn':''}" data-s="rm${i}">${sheetRm===i?'Remove? Scroll is lost':'Remove'}</button>`:''}`)});
-  const h=u.team==='p'&&heroDef(u.id);if(h&&h.lv10&&!has(u,h.lv10)&&!CLS[u.cls].tier)rows+=row(h.lv10,`Learns at Lv ${PROMO_LV}`,true);
+  (u.skills||[]).forEach((x,i)=>{rows+=row(x.id,`${SKILLS[x.id].cost}${u.team==='p'?` <button type="button" class="${sheetRm===i?'warn':''}" data-s="rm${i}">${sheetRm===i?'Remove? Scroll is lost':'Remove'}</button>`:''}`)});
   const cap=u.team==='p'?`<span class="capn">Capacity ${capUsed(u)}/${capOf(u)}</span>`:'';
   return`<div class="sskill"><div class="skh"><span class="sl">Skills</span>${cap}</div>${u.team==='p'?`<div class="capbar"><i style="width:${capUsed(u)/capOf(u)*100}%"></i></div>`:''}<div class="skl">${rows||'<small class="capn">None</small>'}</div></div>`;
 }
@@ -168,8 +164,7 @@ function drawSheet(){
   if(sheetPg===0){
     pg=`<div class="sgrid">${shown(u).filter(s=>s!=='hp').map(s=>bar(SL[s],u[s])).join('')}</div>
     <div class="sinfo"><div><span class="sl">Move</span><b>${u.mov}</b></div><div><span class="sl">Terrain</span><b>${terrText(t)}</b></div><div class="wide"><span class="sl">Weapons</span><span class="wts">${wt}</span></div></div>
-    ${skillBlock(u)}
-    ${u.recruit?`<p class="srec">Can be recruited: move ${lordName()} next to ${u.name} and Talk.</p>`:''}`;
+    ${skillBlock(u)}`;
   }else{
     const atk=w?(w.mag?u.mag:u.str)+w.mt:'–',hit=w?w.hit+u.lck*2:'–',crit=w?(w.crit||0)+(CLS[u.cls].crit||0)+Math.floor(u.lck/2):'–';
     pg=`<div class="scmb">${[['Atk',atk],['Hit',hit],['Crit',crit],['Avo',AS(u,w)*2+u.lck],['AS',AS(u,w)],['Rng',w?rngTxt(w.r):'–']].map(([l,v])=>`<div><span class="sl">${l}</span><b>${v}</b></div>`).join('')}</div>
@@ -190,12 +185,12 @@ function drawSheet(){
    ================================================================== */
 function renderPanel(){
   let h='',fm='';const u=sel&&byId(sel);
-  if(over)h=`<p class="hint">${over==='win'?'Chapter cleared.':'The run has ended.'}</p>`;
+  if(over)h=`<p class="hint">${over==='win'?'Battle won.':'The run has ended.'}</p>`;
   else if(phase==='enemy')h='<p class="hint">The enemy is moving…</p>';
   else if(ui==='move')h=card(u)+`<p class="hint">Click a blue tile to move, or a red enemy to attack it from the best tile. Click ${u.name} to act in place.</p><div class="acts"><button type="button" data-act="cancel">Cancel</button></div>`;
   else if(ui==='menu'){
-    const at=atkTargets(u).length,ht=healTargets(u).length,gf=giftHere(u),tk=talkTarget(u);
-    h=card(u)+threatLine(key(u.x,u.y));fm=`<div class="acts">${abilOf(u).length?'<button class="go" type="button" data-act="abil">Abilities</button>':''}${tk?'<button class="go" type="button" data-act="talk">Talk</button>':''}${at?'<button class="go" type="button" data-act="attack">Attack</button>':''}${ht?'<button class="go" type="button" data-act="heal">Heal</button>':''}${gf?`<button class="go" type="button" data-act="gift">${gf.kind}</button>`:''}${canSummon(u)?`<button class="go" type="button" data-act="summon">Summon ${famOf(u).n}</button>`:''}<button type="button" data-act="items">Items</button>${tradeMates(u).length?'<button type="button" data-act="trade">Trade</button>':''}<button type="button" data-act="wait">Wait</button><button type="button" data-act="cancel">Back</button></div>`;
+    const at=atkTargets(u).length,ht=healTargets(u).length;
+    h=card(u)+threatLine(key(u.x,u.y));fm=`<div class="acts">${abilOf(u).length?'<button class="go" type="button" data-act="abil">Abilities</button>':''}${at?'<button class="go" type="button" data-act="attack">Attack</button>':''}${ht?'<button class="go" type="button" data-act="heal">Heal</button>':''}${canSummon(u)?`<button class="go" type="button" data-act="summon">Summon ${famOf(u).n}</button>`:''}<button type="button" data-act="items">Items</button>${tradeMates(u).length?'<button type="button" data-act="trade">Trade</button>':''}<button type="button" data-act="wait">Wait</button><button type="button" data-act="cancel">Back</button></div>`;
   }
   else if(ui==='abil'||ui==='aim'){const r=abPanel(u);h=r.h;fm=r.fm}
   else if(ui==='items'){
@@ -203,7 +198,7 @@ function renderPanel(){
     if(it){if(isWpn(it.k)&&canUse(u,it.k)&&itemSel!==eqIdx(u))ops+='<button class="go" type="button" data-act="equip">Equip</button>';if(IT[it.k].t==='item'&&(u.hp<u.maxhp||u.psn))ops+='<button class="go" type="button" data-act="use">Use</button>';if(IT[it.k].t==='scroll'){const r=learnBlock(u,IT[it.k].skill);ops+=r?`<span class="hint">${r}</span>`:`<button class="go" type="button" data-act="learn">Learn ${SKILLS[IT[it.k].skill].n} (${SKILLS[IT[it.k].skill].cost})</button>`}if(IT[it.k].t==='crest'){const r=promoBlock(u);ops+=r?`<span class="hint">${r}</span>`:`<button class="go" type="button" data-act="ascend">Ascend…</button>`}if(isWpn(it.k)&&!canUse(u,it.k))ops+=`<span class="hint">${u.name} can't wield this.</span>`}
     h=`<div class="ch"><b>${u.name}</b><span>Items · ${u.hp}/${u.maxhp} HP</span></div>`+itemRows(u,true)+`<div class="acts">${ops}<button type="button" data-act="menu">Back</button></div>`;
   }
-  else if(ui==='target'){const gf=giftHere(u),tk=talkTarget(u),sw=tmode==='atk'?(healTargets(u).length?'<button class="go" type="button" data-act="heal">Heal</button>':''):(atkTargets(u).length?'<button class="go" type="button" data-act="attack">Attack</button>':'');h=card(u)+`<p class="hint">Click a highlighted ${tmode==='heal'?'ally to heal':'enemy to see the forecast'}, then click it again to ${tmode==='heal'?'heal':'attack'}.</p>`;fm=`<div class="acts">${sw}${tk?'<button class="go" type="button" data-act="talk">Talk</button>':''}${gf?`<button class="go" type="button" data-act="gift">${gf.kind}</button>`:''}${canSummon(u)?`<button class="go" type="button" data-act="summon">Summon ${famOf(u).n}</button>`:''}<button type="button" data-act="items">Items</button>${tradeMates(u).length?'<button type="button" data-act="trade">Trade</button>':''}<button type="button" data-act="wait">Wait</button><button type="button" data-act="menu">Back</button></div>`}
+  else if(ui==='target'){const sw=tmode==='atk'?(healTargets(u).length?'<button class="go" type="button" data-act="heal">Heal</button>':''):(atkTargets(u).length?'<button class="go" type="button" data-act="attack">Attack</button>':'');h=card(u)+`<p class="hint">Click a highlighted ${tmode==='heal'?'ally to heal':'enemy to see the forecast'}, then click it again to ${tmode==='heal'?'heal':'attack'}.</p>`;fm=`<div class="acts">${sw}${canSummon(u)?`<button class="go" type="button" data-act="summon">Summon ${famOf(u).n}</button>`:''}<button type="button" data-act="items">Items</button>${tradeMates(u).length?'<button type="button" data-act="trade">Trade</button>':''}<button type="button" data-act="wait">Wait</button><button type="button" data-act="menu">Back</button></div>`}
   else if(ui==='confirm'){
     if(tmode==='heal'){const si=spiritFor(u,pending),w=IT[u.items[si].k],amt=Math.min(w.amt,pending.maxhp-pending.hp);
       h=`<div class="wsel"><img src="${icon(w.key)}" alt="">${w.n}</div><p class="hint">Heal <b>${pending.name}</b>: ${pending.hp} → ${pending.hp+amt} HP. Click ${pending.name} again or press Heal.</p><div class="acts"><button class="go" type="button" data-act="doheal">Heal</button><button type="button" data-act="back">Back</button></div>`}
@@ -222,7 +217,7 @@ function renderPanel(){
   }
   else if(inspect)h=card(inspect)+(inspect.team==='e'?'<p class="hint">Red tiles show where it can strike next turn.</p>':'');
   else if(ui==='terrain')h=terInfo;
-  else h=`<p class="hint"><b>${CH[state.ch].title}.</b> Click a blue unit to move it. Drag to pan the map, scroll to zoom.</p>`;
+  else h=`<p class="hint"><b>${BATTLE.title}.</b> Click a blue unit to move it. Drag to pan the map, scroll to zoom.</p>`;
   panel.innerHTML=h;
   /* the command menu and the forecast dock in a bottom corner of the map view, on the side away from the fight */
   let mEl=$('#umenu');if(!mEl||!mEl.isConnected){mEl=document.createElement('div');mEl.id='umenu';mEl.className='umenu';vp.appendChild(mEl);

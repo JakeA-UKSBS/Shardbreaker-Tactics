@@ -8,7 +8,7 @@ const endless=k=>(isWpn(k)&&IT[k].uses>5)||IT[k].t==='spirit';
 function mcost(u,x,y){const t=ter(x,y);if(CLS[u.cls].phase)return 1;if(t.k==='lava'&&CLS[u.cls].lava)return 1;if(CLS[u.cls].fly)return['wall','cliff','cavewall'].includes(t.k)?99:1;if(CLS[u.cls].mnt&&(t.k==='forest'||t.k==='hill'))return t.c+1;return t.c}
 /* Teams: p = player, e = enemy, g = green 'other' units that fight the enemy and can be recruited. */
 const hostile=(a,b)=>(a.team==='e')!==(b.team==='e');
-/* Skills: u.skill is the personal skill (takes PERSONAL_CAP). u.skills holds extras: {id,src:"lv10"} (free) or {id,src:"scroll"} (costs capacity). */
+/* Skills: u.skill is the personal skill (takes PERSONAL_CAP). u.skills holds extras: {id,src:"scroll"} (costs capacity). */
 const has=(u,id)=>u.skill===id||!!(u.skills&&u.skills.some(x=>x.id===id));
 /* skill capacity used: the personal skill always takes PERSONAL_CAP, scroll-learned skills take their cost */
 const PERSONAL_CAP=5;
@@ -127,7 +127,6 @@ function gainExp(u,amt){
     shown(u).forEach(s=>gains[s]=1);
     for(const s in gains){if(s==='learned')continue;if(s==='hp'){u.maxhp++;u.hp++}else u[s]++}
     if(u.lv>=20)u.exp=0;
-    if(u.team==='p'&&u.lv===PROMO_LV&&!CLS[u.cls].tier){const h=heroDef(u.id);if(h&&h.lv10&&!has(u,h.lv10)){(u.skills=u.skills||[]).push({id:h.lv10,src:'lv10'});gains.learned=h.lv10}}
   }
   return{from,amt,to:u.exp,gains,old};
 }

@@ -174,9 +174,6 @@ for(const k in SKILLS)if(k!=='command')IT['scroll_'+k]={n:SKILLS[k].n+' Scroll',
 IT.ascensionFragment={n:'Ascension Fragment',t:'crest',kind:'crest',uses:1,key:'ascensionFragment'};
 /* BASE_CAP: skill capacity a unit starts with. PROMO_CAP: extra capacity on promotion. PROMO_LV: level a unit can promote at. */
 const BASE_CAP=20,PROMO_CAP=5,PROMO_LV=5;
-const START_PARTY=['lord','maren','dax','oti','silas','kestrel'];
-const heroDef=id=>HEROES.find(h=>h.id===id);
-function lordName(){return'Your squad'}
 /* ENEMY STATS, keyed by class id (must also exist in CLS):
    b = base stats at level 1, g = growth per level (a fixed amount, not a % chance), both in stat order [HP, Str, Mag, Skl, Spd, Lck, Def, Res].
    A foe's stat = b + floor(g × (level − 1)), see foe() in 02-rng-units.js.
@@ -188,7 +185,6 @@ FOE.Gremlin={b:[14,4,0,5,8,2,1,1],g:[.5,.3,0,.4,.5,.2,.1,.1],items:['claws'],pic
 /* HAIRS: dark hair colours (hex) */
 const HAIRS=['#1d1a24','#2a2230','#3a2a20','#241c1c','#4a3a30'];
 
-/* Battles are generated per run (see RUN below). CH holds the current battle only. */
-const CH=[];
-const STORY={};
+/* BATTLE: the current battle (made by genBattle) */
+let BATTLE=null;
 

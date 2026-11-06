@@ -1,42 +1,4 @@
-/* Story scenes, title menu, dev menu and start() */
-/* ---- story scenes ---- */
-const storyEl=document.createElement('div');storyEl.className='story';storyEl.hidden=true;document.body.appendChild(storyEl);
-function speaker(id){
-  if(id==='narrator')return{name:'',img:null,side:'c'};
-  const u=state&&state.units.find(x=>x.id===id);
-  if(u)return{name:u.name,img:portrait(u),side:u.team==='p'?'l':'r'};
-  const h=heroDef(id);if(h)return{name:h.name,img:picOf(h),side:'l'};
-  return{name:id,img:null,side:'r'};
-}
-function playStory(lines){
-  if(!lines||!lines.length)return Promise.resolve();
-  return new Promise(res=>{
-    let i=0,typing=null,full='';
-    storyEl.innerHTML=`<button type="button" class="mini sskip">Skip</button>${settings.dev?'<button type="button" class="mini sback">◀ Back · Dev</button>':''}<div class="sstage"><img class="spor l" alt="" hidden><img class="spor r" alt="" hidden></div><div class="sbox"><b class="sname"></b><p class="stext"></p><span class="snext">Click to continue ▾</span></div>`;
-    storyEl.hidden=false;
-    const pl=storyEl.querySelector('.spor.l'),pr=storyEl.querySelector('.spor.r'),nm=storyEl.querySelector('.sname'),tx=storyEl.querySelector('.stext');
-    const finish=()=>{storyEl.hidden=true;storyEl.onclick=null;res()};
-    function show(){
-      if(i>=lines.length)return finish();
-      const[id,text]=lines[i],sp=speaker(id);full=text.replaceAll('{lord}',lordName());
-      nm.textContent=sp.name;nm.hidden=!sp.name;tx.classList.toggle('narr',sp.side==='c');
-      for(const[img,s]of[[pl,'l'],[pr,'r']]){
-        if(sp.side===s&&sp.img){if(img.dataset.src!==sp.img){img.src=sp.img;img.dataset.src=sp.img;img.animate([{opacity:0,translate:`${s==='l'?-30:30}px 0`},{opacity:1,translate:'0 0'}],{duration:260})}img.classList.add('on');img.hidden=false}
-        else img.classList.remove('on');
-      }
-      if(sp.side==='c'){pl.hidden=true;pr.hidden=true}
-      let n=0;tx.textContent='';clearInterval(typing);
-      typing=setInterval(()=>{n+=2;tx.textContent=full.slice(0,n);if(n%6===0)sfx('tick');if(n>=full.length){clearInterval(typing);typing=null}},28);
-    }
-    storyEl.onclick=e=>{
-      if(e.target.closest('.sskip')){clearInterval(typing);return finish()}
-      if(e.target.closest('.sback')){clearInterval(typing);typing=null;i=Math.max(0,i-1);show();return}
-      if(typing){clearInterval(typing);typing=null;tx.textContent=full;return}
-      i++;show();
-    };
-    show();
-  });
-}
+/* Title menu, dev menu and start() */
 
 const titleEl=document.createElement('div');titleEl.className='title';titleEl.hidden=true;document.body.appendChild(titleEl);
 /* the title scene: a great blighted crystal in the distance, its red veins spreading through the land */
@@ -93,10 +55,10 @@ function start(data){
   applyTheme();
   if(data&&data.run&&data.state){restore(data);return}
   /* A throwaway battle sits behind the title screen, with 3 of the starting cast. */
-  seedRng(7);run={seed:7,n:1,uid:1,roster:[]};run.roster=shuffle(CAST.filter(c=>c.joins==='start')).slice(0,3).map(c=>castUnit(c.id,1));CH.length=0;CH.push(genBattle(1));setupChapter(0,run.roster);run=null;
+  seedRng(7);run={seed:7,n:1,uid:1,roster:[]};run.roster=shuffle(CAST.filter(c=>c.joins==='start')).slice(0,3).map(c=>castUnit(c.id,1));BATTLE=genBattle(1);setupBattle(run.roster);run=null;
   titleScreen();
 }
-window.claude?.hot?.snapshot?.(()=>({state,history,rewinds,chStart,run,def:CH[0],rng:rngS}));
+window.claude?.hot?.snapshot?.(()=>({state,history,rewinds,chStart,run,def:BATTLE,rng:rngS}));
 window.claude?.hot?.ready?window.claude.hot.ready(start):start(window.claude?.hot?.data??{});
 
 /* PNG art: each of these uses art/<key>.png when it exists, else the drawing code above (see art() in 03-pixel-art.js) */
