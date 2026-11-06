@@ -119,54 +119,54 @@ const MAPS={
   glade:{n:'Glowcap Glade',map:[",q,,,,,qq,",",,,,,,^q^^","qq,,,F,,,,",",,,^^,,,,q",",,,q,,,,,,",",,,qq,,,,q",",^^,,,,,,,",",q,,,,,q,,",",,,,,,,,,,",",,,,,,,,,,"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   hollow:{n:'Spore Hollow',map:[",,,,qq,,,,",",,,,,,,,,,","ww=wwwww=w",",,,,,,,,,,","q,,,,q,,,,",",,,,,,,,q,",",,q,,,,,,,",",,,,,F,,,,",",,,,,,,,,,",",,,,,,,,,,"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   ring:{n:'Fairy Ring',map:[",,qqqqqq,,",",qq^,,,qq,","^q,,,,,,q,","^q,,F,^,q,",",q,,,,^,q^",",qq,,,,qq^",",,qqq,,qq,",",,,,,,,,,,","q,,,,,,,,q",",,,,,,,,,,"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  mushThrone:{n:'Mushroom Throne',map:["q,,,,T,,,q",",,,,,^,,,,",",,q,,,,q^,",",,,,,,,,,,","q,^,^,,,,q",",,,q,,q,,,",",,,,,,,,,,",",,,,,,,,,,",",,,,,,,,,,",",,,,,,,,,,"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
+  mushThrone:{n:'Mushroom Throne',map:["q,,,,,,,,q",",,,,,^,,,,",",,q,,,,q^,",",,,,,,,,,,","q,^,^,,,,q",",,,q,,q,,,",",,,,,,,,,,",",,,,,,,,,,",",,,,,,,,,,",",,,,,,,,,,"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]],boss:[5,0]},
   /* Sunless Isle */
   graveyard:{n:'Graveyard',map:[";t;;;;;;t;",";;;;t;;;;;","t;;;;;;^^t",";;^t;;t;;;",";;^;;;;;;^","t;;;;;;;;t",";;;t;;t;;^",";;;;;;;;;^",";;;;;;;;;;",";;;;;;;;;;"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   crypt:{n:'Crypt',map:["__#____#__","__________","##_####_##","____##____","_t______t_","____F_____","##_####_##","__________","__________","##########"],start:[[4,8],[5,8],[3,8],[6,8],[4,7],[5,7]]},
-  village:{n:'Haunted Churchyard',map:["C;;;;;;t;;",";;;t^;;;;;",";f;;^;;;f;",";;;;__;;;^","t;;__F__;C",";;;;__^^;;",";f;;;;;;f;",";;;t;;t;;;",";;;;;;;;;;",";;;;;;;;;;"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  chapel:{n:'Bone Chapel',map:["#############","#L___rTr___L#","#_t__rrr__t_#","#____rrr____#","#_#__rrr__#_#","#____rrr____#","#_t__rrr__t_#","#____rrr____#","#_#__rrr__#_#","#____rrr____#","#L___rrr___L#","#####___#####"],start:[[5,11],[6,11],[7,11],[5,10],[6,10],[7,10]]},
+  village:{n:'Haunted Churchyard',map:[";;;;;;;t;;",";;;t^;;;;;",";f;;^;;;f;",";;;;__;;;^","t;;__F__;;",";;;;__^^;;",";f;;;;;;f;",";;;t;;t;;;",";;;;;;;;;;",";;;;;;;;;;"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
+  chapel:{n:'Bone Chapel',map:["#############","#L___rrr___L#","#_t__rrr__t_#","#____rrr____#","#_#__rrr__#_#","#____rrr____#","#_t__rrr__t_#","#____rrr____#","#_#__rrr__#_#","#____rrr____#","#L___rrr___L#","#####___#####"],start:[[5,11],[6,11],[7,11],[5,10],[6,10],[7,10]],boss:[6,1]},
   /* Swamp */
   flats:{n:'Mangrove Flats',map:["sssnnssssv","vssnnsswws","ssssssswws","ssvsssssss","nssssvsssn","nssssssssn","ssswwsssss","vsswwssvss","sssssnnsss","ssssnnnsss"],start:[[4,9],[5,9],[6,9],[5,8],[6,8],[3,9]]},
   road:{n:'Sunken Road',map:["wssnnnnnss","ssvnsssnvs","ssnnsvsnns","ssnsssssns","vsnssssssn","ssnnsssnns","ssvnnnnnvs","wsssnnnsss","wwsssnsssw","sssssnssss"],start:[[5,9],[4,9],[6,9],[5,8],[4,7],[6,7]]},
   bog:{n:'Bog Pools',map:["vsswwwwssv","ssssnnssss","wsssnnssss","wssvssvssw","ssssssssss","nnsswwssnn","nnsswwssnn","svssssssvs","sssnnnnsss","ssssnnssss"],start:[[4,9],[5,9],[3,8],[4,8],[5,8],[6,8]]},
-  lair:{n:'Krondis’s Lair',map:["wssnnnnssw","sssnnTnnss","ssvssssvss","ssssssssss","vsswwwwssv","ssswwwwsss","snnssssnns","snnssssnns","sssnnnnsss","ssssnnssss"],start:[[4,9],[5,9],[3,8],[4,8],[5,8],[6,8]]},
+  lair:{n:'Krondis’s Lair',map:["wssnnnnssw","sssnnnnnss","ssvssssvss","ssssssssss","vsswwwwssv","ssswwwwsss","snnssssnns","snnssssnns","sssnnnnsss","ssssnnssss"],start:[[4,9],[5,9],[3,8],[4,8],[5,8],[6,8]],boss:[5,1]},
   /* Cursed Woodland */
   woodland:{n:'Cursed Woodland',map:["...y..f...","^f....y..f","y..f..^^.y","..f..f....","^....y..f.",".y.f.....y","f^.....f..","..y..f..y.","f.........",".........."],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   brook:{n:'Black Brook',map:[".f....y...","y..ff....f","...f..y...","w=wwwwww=w","...y..f...","f.....f..y","..f......f","y....y....","...f....f.",".........."],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   clearing:{n:'Hunter’s Clearing',map:["f........f",".^f....f..",".^.^..^...","f...F.....","....y.....",".....^^..f","..f....f..","..........","..........",".........."],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  heart:{n:'The Hollow Heart',map:["f..f.T.f.f","^^y.....y.","....f.f...","..y.....y.","f^..y.y..f","..f....^f.","y.........","...f...f..","..........",".........."],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
+  heart:{n:'The Hollow Heart',map:["f..f...f.f","^^y.....y.","....f.f...","..y.....y.","f^..y.y..f","..f....^f.","y.........","...f...f..","..........",".........."],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]],boss:[5,0]},
   /* Volcanic Isle */
   fields:{n:'Magma Fields',map:["bbbllbbbbR","mbbbllbbbb","bbbbbllbmb","bbbbbblbbb","bmbbbbbbbb","bbllbbbmbb","bbblllbbbb","mbbbbbbbbm","bbbbbbbbbb","bbbbbbbbbb"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   caldera:{n:'Caldera Pass',map:["bbmbllbmbb","bbbllllbbb","mbbllllbbm","bbbbllbbbb","bbbbbbbbbb","lbbmbbmbbl","bbbbbbbbbb","bmbbbbbbmb","bbbbFbbbbb","bbbbbbbbbb"],start:[[4,9],[5,9],[3,9],[6,9],[3,8],[5,8]]},
   ridge:{n:'Rockslide Ridge',map:["bbbbRbbbbl","mRbbbbbbbl","bbRbbbblll","bbRRbbRlbb","bbbbbbbbll","llbbmbbbbl","blbbbbbmbb","llbRbbbbbb","lbbbbbbbbb","lbbbbbbbbb"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  crater:{n:'Dragon’s Crater',map:["llbbbTbbll","lbbbbbbbbl","bbmbbbbmbb","bbbbllbbbb","bbbllllbbb","bbbbllbbbb","bmbbbbbbmb","bbbbbbbbbb","bbbbbbbbbb","bbbbbbbbbb"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
+  crater:{n:'Dragon’s Crater',map:["llbbbbbbll","lbbbbbbbbl","bbmbbbbmbb","bbbbllbbbb","bbbllllbbb","bbbbllbbbb","bmbbbbbbmb","bbbbbbbbbb","bbbbbbbbbb","bbbbbbbbbb"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]],boss:[5,0]},
   /* The Flying Ship */
   deck:{n:'Main Deck',map:["~~~~~~~~~~~","~~~~~d~~~~~","~~~~ddd~~~~","~~~ddddd~~~","~~~ddMdd~~~","~~ddddddd~~","~~ddddddd~~","~~dddMddd~~","~~ddddddd~~","~~ddddddd~~","~~dddMddd~~","~~ddddddd~~","~~~ddHdd~~~","~~~~ddd~~~~","~~~~~~~~~~~"],start:[[5,9],[4,9],[6,9],[3,8],[7,8],[4,11]]},
   galleon:{n:'Galleon Deck',map:["~~~~~~~~~~~~~","~~~~~~d~~~~~~","~~~~~ddd~~~~~","~~~~ddddd~~~~","~~~dddMddd~~~","~~ddddddddd~~","~~ddddddddd~~","~~dddMdMddd~~","~~ddddddddd~~","~~ddddddddd~~","~~~ddddddd~~~","~~~~ddHdd~~~~","~~~~~~~~~~~~~"],start:[[6,9],[5,9],[7,9],[4,8],[8,8],[6,10]]},
   /* The Labyrinth */
-  maze1:{n:'Labyrinth',map:["#############","#C_______#_C#","#_##_###C#_##","#___#___#___#","###_#_C_#_#_#","#___#___#_#_#","#_#####_###_#","#_m___#___F_#","#_###_#_###_#","#___#_m_#___#","#_#_#####_#_#","#C#___#___#C#","#_###___###_#","#_____#_____#","#############"],start:[[6,12],[5,12],[7,12],[5,13],[7,13],[4,13]]},
-  vaults:{n:'Vaults',map:["##############","#C__#C_C_#__C#","#___#____#___#","##_###__###_##","#____________#","#_##_m__m_##_#","#_#C______C#_#","#_##_m__m_##_#","#____________#","##_###__###_##","#C__#____#__C#","#___#_F__#___#","##############"],start:[[6,10],[5,10],[7,10],[8,10],[5,11],[6,11]]},
+  maze1:{n:'Labyrinth',map:["#############","#________#__#","#_##_###_#_##","#___#___#___#","###_#___#_#_#","#___#___#_#_#","#_#####_###_#","#_m___#___F_#","#_###_#_###_#","#___#_m_#___#","#_#_#####_#_#","#_#___#___#_#","#_###___###_#","#_____#_____#","#############"],start:[[6,12],[5,12],[7,12],[5,13],[7,13],[4,13]]},
+  vaults:{n:'Vaults',map:["##############","#___#____#___#","#___#____#___#","##_###__###_##","#____________#","#_##_m__m_##_#","#_#________#_#","#_##_m__m_##_#","#____________#","##_###__###_##","#___#____#___#","#___#_F__#___#","##############"],start:[[6,10],[5,10],[7,10],[8,10],[5,11],[6,11]]},
   pillars:{n:'Hall of Pillars',map:["#############","#___#___#___#","#_m_______m_#","#___#_#_#___#","##_##___##_##","#_____F_____#","##_##___##_##","#___#_#_#___#","#_m_______m_#","#___#___#___#","#####___#####","#___________#","#############"],start:[[5,11],[6,11],[7,11],[4,11],[8,11],[6,10]]},
-  mazeHeart:{n:'Labyrinth Heart',map:["#############","###_______###","##___#_#___##","#__m_____m__#","#_#___T___#_#","#___#___#___#","#__m_____m__#","##_#_____#_##","#____m_m____#","##__#___#__##","###___F___###","####_____####","#############"],start:[[6,11],[5,11],[7,11],[4,11],[8,11],[6,10]]}
+  mazeHeart:{n:'Labyrinth Heart',map:["#############","###_______###","##___#_#___##","#__m_____m__#","#_#_______#_#","#___#___#___#","#__m_____m__#","##_#_____#_##","#____m_m____#","##__#___#__##","###___F___###","####_____####","#############"],start:[[6,11],[5,11],[7,11],[4,11],[8,11],[6,10]],boss:[6,4]}
 };
 Object.assign(MAPS,{
   /* Act 3: the Heart of the Blight */
   heartHall:{n:'Hall of Veins',map:["SSKSSSSKSS","SYSSUSSGSS","SSSSSSSSPS","KSSGSSUSSK","SSSSKKSSSS","SPSSSSSSYS","SSSUSSGSSS","SSSSSSSSSS","SYSSSSSSUS","SSSSSSSSSS"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  heartCore:{n:'Heart Chamber',map:["KSSSSSSSSK","SSYSTSSUSS","SSSSSSSSSS","SGSSSSSSPS","SSSSSSSSSS","KSUSSSSYSK","SSSSGSSSSS","SSPSSSSUSS","SSSSSSSSSS","SSSSSSSSSS","SSSSSSSSSS"],start:[[4,10],[5,10],[3,10],[6,10],[4,9],[5,9]]}
+  heartCore:{n:'Heart Chamber',map:["KSSSSSSSSK","SSYSSSSUSS","SSSSSSSSSS","SGSSSSSSPS","SSSSSSSSSS","KSUSSSSYSK","SSSSGSSSSS","SSPSSSSUSS","SSSSSSSSSS","SSSSSSSSSS","SSSSSSSSSS"],start:[[4,10],[5,10],[3,10],[6,10],[4,9],[5,9]],boss:[4,1]}
 });
 Object.assign(MAPS,{
   dunes:{n:"Shifting Dunes",map:["knffzznnnw","knnnzznwwk","wwzznnnnnn","nwwwnnnnnn","nzzwwnffzz","nnnnnnnfzz","nn..nnnnzn","nnnnnnknzn","knnnnnnnnn","knnnnnnnnn"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   oasis:{n:"Oasis",map:["nnnnwwnnnn","nnnwwwwnnn","knnnwwnnnk","nnnnnnnnnn","zznnknnzzn","zznnnnnzzn","nnnnnnnnnn","nknnnnnnkn","nnnnnnnnnn","nnnnnnnnnn"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   canyon:{n:"Sandstone Canyon",map:["nnnnzznnnn","nnknnnnknn","nnknnnnknn","nnnnnnnnnn","zznnkknnzz","nnnnkknnnn","nknnnnnnkn","nnnnnnnnnn","nnnnnnnnnn","nnnnnnnnnn"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  sunTemple:{n:"Temple of the Sun",map:["knnnnTnnnk","nnnnnnnnnn","nknnnnnnkn","nnnnzznnnn","nnnnzznnnn","knnnnnnnnk","nnnknnknnn","nnnnnnnnnn","nnnnnnnnnn","nnnnnnnnnn"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
+  sunTemple:{n:"Temple of the Sun",map:["knnnnnnnnk","nnnnnnnnnn","nknnnnnnkn","nnnnzznnnn","nnnnzznnnn","knnnnnnnnk","nnnknnknnn","nnnnnnnnnn","nnnnnnnnnn","nnnnnnnnnn"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]],boss:[5,0]},
   tundra:{n:"Open Tundra",map:["ojjooooojj","ojjooaoooo","ooo^^ooooo","aoooojjooo","oo^ojjjooo","oooooooooo","ojjooa^oo^","ooooooojjo","oooooooooo","oooooooooo"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   frozenLake:{n:"Frozen Lake",map:["oooiiiiioo","ooiiiiiii^","aoiiiaiii^","ooiiiiiiio","oooiiiiioo","ojjoo^ojjo","^jjoaoojjo","oooooooooo","oooooooooo","oooooooooo"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   agateField:{n:"Agate Field",map:["ooooojjooo","oaaoo^^oaa","o^ooaaoooo","j^oo^ooooj","ooao^oooao","oooojjoooo","ao^oooooao","oooooooooo","oooooooooo","oooooooooo"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  agateSpire:{n:"Agate Spire",map:["aoooTooooa","oooo^ooooo","^jjoooojjo","ooooaaoo^o","jooooooooo","oaoooooaoo","oooooooooo","ojjoooojjo","oooooooooo","oooooooooo"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  geode:{n:"Geode Chamber",map:["CcceccuccC","cccccccccc","cpcxxxxcec","cccccccccc","xcccFcccxx","cuccccccpc","ccccxxcccc","cecccccccu","cccccccccc","cccccccccc"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  mineshaft:{n:"Old Mineshaft",map:["CcxcccxccC","ccxcecxcce","cccccccccc","xxcxxxxcxx","ccccuccccC","cecccccpcc","xccxxxxccx","cccccccccu","cccccccccc","cccccccccc"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  glitter:{n:"Glittering Hall",map:["CcecccuceC","cccccccccc","cuccpccecp","ccccccccc^","ecccCccccc","^ccp^ccucc","^ccccc^cce","cucccccccc","cccccccccc","cccccccccc"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  amethystHollow:{n:"Amethyst Hollow",map:["xxccTcccCx","xccccccuuc","pcccccccue","ppccxxccee","cccccccccc","xuccccccCx","xuucccccpp","cccccccccc","cccccccccx","xxccccccxx"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]}
+  agateSpire:{n:"Agate Spire",map:["aooooooooa","oooo^ooooo","^jjoooojjo","ooooaaoo^o","jooooooooo","oaoooooaoo","oooooooooo","ojjoooojjo","oooooooooo","oooooooooo"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]],boss:[4,0]},
+  geode:{n:"Geode Chamber",map:["ccceccuccc","cccccccccc","cpcxxxxcec","cccccccccc","xcccFcccxx","cuccccccpc","ccccxxcccc","cecccccccu","cccccccccc","cccccccccc"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
+  mineshaft:{n:"Old Mineshaft",map:["ccxcccxccc","ccxcecxcce","cccccccccc","xxcxxxxcxx","ccccuccccc","cecccccpcc","xccxxxxccx","cccccccccu","cccccccccc","cccccccccc"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
+  glitter:{n:"Glittering Hall",map:["ccecccucee","cccccccccc","cuccpccecp","ccccccccc^","eccccccccc","^ccp^ccucc","^ccccc^cce","cucccccccc","cccccccccc","cccccccccc"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
+  amethystHollow:{n:"Amethyst Hollow",map:["xxcccccccx","xccccccuuc","pcccccccue","ppccxxccee","cccccccccc","xucccccccx","xuucccccpp","cccccccccc","cccccccccx","xxccccccxx"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]],boss:[4,0]}
 });
 
 /* hand-made height maps (greybox): one digit per tile, 0 = ground. Maps without h get hills and rubble at 1. */
@@ -268,7 +268,7 @@ function genBattle(n,kind){
     list.forEach((c,i)=>{const lv=Math.max(1,lvBase+(rand()<.3?1:0)-(c==='Wolf'?1:0)+(elite?2:0)),u=mkMon(c,lv),t=tiles[i%tiles.length];u.x=t.x;u.y=t.y;
       if(elite&&i===0){u.name='Elder '+u.name;u.boss=true;const eb=A(2)?2:1;ST.forEach(k=>{if(k==='hp'){u.maxhp+=6*eb;u.hp+=6*eb}else u[k]+=2*eb});u.skill=u.skill||pick(['wrath','steadfast','swiftstrike','bulwark'])}
       if(rand()<.12){const k=pick(['salve','salve','salve','knightlySword','cleaver','steelSpear','ironwoodBow','javelin','throwingAxe','throwingKnives','leatherArmour','wardingCloak','travellersBoots'].filter(k=>!isWpn(k)||!wDrop&&!squadHas(k)));if(isWpn(k))wDrop=1;u.items.push({k,u:IT[k].uses,d:true})}out.push(u)});
-    if(bossFight){let bx=6,by=3;MAPS[mk].map.forEach((r,y)=>{const x=r.indexOf('T');if(x>=0){bx=x;by=y}});/* the altar marks where the boss stands */
+    if(bossFight){let[bx,by]=MAPS[mk].boss||[6,3];/* the map's boss:[x,y] is where the boss stands */
       const b=B.boss,up=[10,3,3,3,2,2,3,3].map((v,i)=>v*(act-1)+(A(2)?[8,2,2,1,1,0,2,2][i]:0));
       const bsz=b.sz||2,fits=(x,y)=>cellsOf(x,y,bsz).every(([cx,cy])=>cy>=0&&cx>=0&&cy<m.map.length&&cx<m.map[0].length&&TER[m.map[cy][cx]].c<99);
       for(const[dx,dy]of[[0,0],[-1,0],[0,-1],[-1,-1],[1,0],[0,1]])if(fits(bx+dx,by+dy)){bx+=dx;by+=dy;break}
@@ -283,7 +283,6 @@ function genBattle(n,kind){
   const W={};
   if(ship){const edge=skyEdge(m),fl=pool.map(p=>p[0]);let e=0;for(let t=2;t<=(bossFight?6:turns);t++)W[t]=Array.from({length:1+(t%2===0?1:0)+(act>=2?1:0)},()=>({c:pick(fl),lv:Math.max(1,lvBase-1),...edge[(e++)%edge.length]}))}
   if(town){const top=[];m.map.forEach((r,y)=>{if(y<=1)[...r].forEach((ch,x)=>{if(TER[ch].c<99)top.push({x,y})})});shuffle(top);let e=0;for(let t=2;t<=turns;t++)W[t]=Array.from({length:1+(t%2)+(act>=2?1:0)},()=>({c:roll(),lv:Math.max(1,lvBase-1),...top[(e++)%top.length]}))}
-  m.map.forEach((r,y)=>[...r].forEach((ch,x)=>{if(ch==='C')def.gifts[key(x,y)]=rand()<.3?'pyrite':'gold:'+ri(15,30)}));
   /* summoning bosses: two more every other turn. summon:'*' picks from the region's pool */
   if(bossFight&&B.boss.summon){const sc=()=>B.boss.summon==='*'?roll():B.boss.summon;for(const t of(B.id==='heart'?[3,5,7]:[3,5,7,9]))W[t]=[{c:sc(),lv:lvBase,x:6,y:3,ifBoss:1},{c:sc(),lv:lvBase,x:6,y:3,ifBoss:1}];def.summonTxt=B.boss.summonTxt}
   if(Object.keys(W).length)def.waves=W;

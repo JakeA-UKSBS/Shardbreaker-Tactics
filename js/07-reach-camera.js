@@ -23,7 +23,7 @@ function hitsFrom(u,x,y,nx,ny,d){return u.items.some(it=>{const w=IT[it.k];if(!(
 const atkTargets=u=>state.units.filter(o=>o.hp>0&&hostile(o,u)&&wpnsAt(u,man(u,o),o).length);
 function spiritFor(u,o){const d=man(u,o);return u.items.findIndex(it=>IT[it.k].t==='spirit'&&canUse(u,it.k)&&it.u>0&&d>=IT[it.k].r[0]&&d<=IT[it.k].r[1])}
 function healTargets(u){if(staffIdx(u)<0)return[];return state.units.filter(o=>o.hp>0&&o.team===u.team&&o!==u&&o.hp<o.maxhp&&spiritFor(u,o)>=0)}
-function giftHere(u){const k=key(u.x,u.y),c=MAP[u.y][u.x];if(u.team!=='p'||(c!=='V'&&c!=='C')||state.visited.includes(k)||!CH[state.ch].gifts[k])return null;return{k,kind:c==='V'?'Visit':'Open',item:CH[state.ch].gifts[k]}}
+function giftHere(u){const k=key(u.x,u.y),c=MAP[u.y][u.x];if(u.team!=='p'||c!=='V'||state.visited.includes(k)||!CH[state.ch].gifts[k])return null;return{k,kind:'Visit',item:CH[state.ch].gifts[k]}}
 function talkTarget(u){if(!u.lord)return null;return state.units.find(o=>o.recruit&&o.team!=='p'&&o.hp>0&&man(o,u)===1)||null}
 
 /* ================= ISOMETRIC PROJECTION ================= */
