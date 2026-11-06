@@ -12,7 +12,7 @@ function setMap(){setMapFor(state.ch)}
 function setupChapter(ci,roster){
   foeSeq=0;const c=CH[ci];setMapFor(ci);
   (c.join||[]).forEach(id=>{if(!roster.some(r=>r.id===id))roster.push(mkHero(heroDef(id)))});
-  let heroes=roster.map(h=>Object.assign(clone(h),{hp:Math.max(1,Math.min(h.maxhp,h.hp==null?h.maxhp:h.hp)),acted:false,stone:0,psn:0}));if(Wo('wound'))heroes.forEach(h=>h.hp=Math.max(1,h.hp-5));heroes.forEach(h=>{if(run.woes&&run.woes.some(w=>w.id==='halfhp'&&w.n>0&&w.u===h.id))h.hp=Math.min(h.hp,Math.ceil(h.maxhp/2))});
+  let heroes=roster.map(h=>Object.assign(clone(h),{hp:Math.max(1,Math.min(h.maxhp,h.hp==null?h.maxhp:h.hp)),acted:false,stone:0,psn:0}));
   const extra=[],fs=c.foes();let reserve=[],stage=2;
   if(c.goal==='duel'){const sl=heroes.find(h=>h.id==='silas');
     if(sl){heroes=heroes.filter(h=>h!==sl);reserve=heroes.filter(h=>!h.lord);heroes=heroes.filter(h=>h.lord);Object.assign(sl,{team:'e',x:c.duelist[0],y:c.duelist[1],turncoat:true});extra.push(sl);stage=1}

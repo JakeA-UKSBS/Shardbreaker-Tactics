@@ -600,6 +600,4 @@ const ART_FILES=["bosses/crystal-heart",
 "ui/map",
 "ui/mug",
 "ui/scroll-h",
-"ui/scroll-v",
-"woes/weary",
-"woes/wound"];
+"ui/scroll-v"];
