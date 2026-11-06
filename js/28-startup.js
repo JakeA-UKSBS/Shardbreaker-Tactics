@@ -92,8 +92,8 @@ function start(data){
   try{const o=JSON.parse(localStorage.getItem(OPTS));if(o){settings=Object.assign(settings,o);if(!settings.tipsV2){settings.tips=false;settings.tipsV2=1;saveOpts()}}}catch(_){}
   applyTheme();
   if(data&&data.run&&data.state){restore(data);return}
-  /* A throwaway battle sits behind the title screen. */
-  seedRng(7);run={seed:7,n:1,uid:1,roster:[]};run.roster=[genUnit(1),genUnit(1),genUnit(1)];CH.length=0;CH.push(genBattle(1));setupChapter(0,run.roster);run=null;
+  /* A throwaway battle sits behind the title screen, with 3 of the starting cast. */
+  seedRng(7);run={seed:7,n:1,uid:1,roster:[]};run.roster=shuffle(CAST.filter(c=>c.joins==='start')).slice(0,3).map(c=>castUnit(c.id,1));CH.length=0;CH.push(genBattle(1));setupChapter(0,run.roster);run=null;
   titleScreen();
 }
 window.claude?.hot?.snapshot?.(()=>({state,history,rewinds,chStart,run,def:CH[0],rng:rngS}));
