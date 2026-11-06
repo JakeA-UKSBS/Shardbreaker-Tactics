@@ -58,7 +58,6 @@ const IT={
   boneParasol:{n:'Bone Parasol',t:'reach',kind:'umbrella',mt:6,hit:80,crit:0,r:[1,2],uses:35},
   emberSigil:{n:'Ember Sigil',t:'art',kind:'talisman',el:'fire',mt:5,hit:90,crit:0,r:[1,2],uses:40,mag:true},
   tideSigil:{n:'Tide Sigil',t:'art',kind:'talisman',el:'water',mt:5,hit:90,crit:0,r:[1,2],uses:40,mag:true},
-  galeSigil:{n:'Gale Sigil',t:'art',kind:'talisman',el:'wind',mt:4,hit:95,crit:5,r:[1,2],uses:40,mag:true},
   stoneSigil:{n:'Stone Sigil',t:'art',kind:'talisman',el:'earth',mt:7,hit:75,crit:0,r:[1,2],uses:35,mag:true},
   stormSigil:{n:'Storm Sigil',t:'art',kind:'talisman',el:'lightning',mt:8,hit:80,crit:5,r:[1,2],uses:35,mag:true},
   mirrorSigil:{n:'Mirror Sigil',t:'art',kind:'talisman',el:'illusion',mt:6,hit:85,crit:0,r:[1,2],uses:40,mag:true},
@@ -89,7 +88,7 @@ Object.assign(IT,{
 });
 /* WT: weapon weight. Weight above the wielder's Str (Mag for sigils) is taken off their attack speed (see wtOver/AS). */
 const WT={wornSword:4,twinDaggers:2,knightlySword:8,thornRapier:3,hookedBlade:6,moonglassEdge:6,greatsword:12,ironSpear:6,steelSpear:10,javelin:8,hatchet:7,cleaver:11,throwingAxe:9,halberd:9,labrys:13,
-  shortBow:3,ironwoodBow:7,crossbow:6,thornWhip:3,chainSickle:5,warFan:3,boneParasol:5,emberSigil:2,tideSigil:3,galeSigil:2,stoneSigil:6,stormSigil:5,mirrorSigil:3,thornSigil:3,dawnSigil:2,umbralSigil:5,crookStaff:4,runeStaff:3,glimmer:1,
+  shortBow:3,ironwoodBow:7,crossbow:6,thornWhip:3,chainSickle:5,warFan:3,boneParasol:5,emberSigil:2,tideSigil:3,stoneSigil:6,stormSigil:5,mirrorSigil:3,thornSigil:3,dawnSigil:2,umbralSigil:5,crookStaff:4,runeStaff:3,glimmer:1,
   dirk:1,stiletto:2,spellbreaker:6,axebreaker:7,swordbreaker:8,barbedSpear:7,reaverAxe:9,hawkeyeBow:5};
 for(const k in WT)IT[k].wt=WT[k];
 /* ---- special weapons from events: jade (killer) weapons, lightning sigils, long-range sigils and charms ---- */

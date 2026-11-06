@@ -130,7 +130,6 @@ Weapons never break (except the 5-use Meteor and Heaven's Bolt).
 | Bone Parasol | Reach | 6 | 80 | 0 | 5 | 1–2 |  |
 | Ember Sigil | Sigil (Fire) | 5 | 90 | 0 | 2 | 1–2 | Plant |
 | Tide Sigil | Sigil (Water) | 5 | 90 | 0 | 3 | 1–2 |  |
-| Gale Sigil | Sigil (Wind) | 4 | 95 | 5 | 2 | 1–2 |  |
 | Stone Sigil | Sigil (Earth) | 7 | 75 | 0 | 6 | 1–2 |  |
 | Storm Sigil | Sigil (Lightning) | 8 | 80 | 5 | 5 | 1–2 |  |
 | Mirror Sigil | Sigil (Illusion) | 6 | 85 | 0 | 3 | 1–2 |  |
