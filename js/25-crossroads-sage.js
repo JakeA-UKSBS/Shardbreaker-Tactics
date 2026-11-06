@@ -31,12 +31,8 @@ function sageBallArt_draw(){const c='SAGEBALL';if(sprCache[c])return sprCache[c]
 const sgEl=document.createElement('div');sgEl.className='tav sg';sgEl.hidden=true;document.body.appendChild(sgEl);
 async function sageScene(){
   sgEl.innerHTML='';/* fresh tent each run */
-  const B1=BIOMES[run.biomes[0]],B2=BIOMES[run.biomes[1]],sage='art/scenes/ithren.png';/* Rhi's Ithren and tent */
-  const lines=['Ah, you came. Sit, sit. Look into the glass with me.',
-    'A blight has taken root in these lands: malignant crystals. They grow through living creatures and twist them into something cruel.',
-    'Worse, the crystallised beasts give off a scent that drives people to rage. The nearby kingdoms are already at each other’s throats.',
-    `The glass shows where the blight runs deepest: first ${theN(B1)}, then ${theN(B2)}. Beyond them lies its source, the Crystal Heart. Shatter it, and the scent will fade.`,
-    'An army would only feed the war. A small band can slip through. Travellers have gathered at the crossroads. Choose three to walk this road, and choose well: not all of them will come back.'];
+  const sage='art/scenes/ithren.png';/* Rhi's Ithren and tent */
+  const lines=['A vision of crystal. You will need to purge it from this land.'];
   /* difficulty: arrows over the crystal ball, only once Ascension is unlocked */
   let asc=0;const diffHTML=()=>prof.asc?`<div class="sg-diff"><button type="button" data-d="-1" aria-label="Easier"${asc<=0?' disabled':''}>◀</button><span><b>${asc?'Ascension '+asc:'Normal'}</b><small>${asc?ASC[asc]:'The standard run.'}</small></span><button type="button" data-d="1" aria-label="Harder"${asc>=prof.asc?' disabled':''}>▶</button></div>`:'';
   const tint=()=>{const f=sgEl.querySelector('.sg-fg');if(f)f.style.filter=asc?`hue-rotate(${asc*20}deg) saturate(${1+asc*.12})`:''/* violet at Normal, a step nearer red each level, red at Ascension 5 */};

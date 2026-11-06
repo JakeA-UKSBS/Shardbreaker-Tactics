@@ -84,6 +84,7 @@ const ABIL={
   shieldUp:{n:'Shield Up',cd:3,side:'self',self:[['guard',1],['shieldUp',1]],d:'Guard, and his counterattacks deal 1.3×, until your next turn.'},
   songOfValour:{n:'Song of Valour',mp:6,side:'self',shape:'burst2',give:['valour',2],others:1,d:'Allies within 2 tiles deal 20% more damage for 2 turns.'},
   lullaby:{n:'Lullaby',mp:8,side:'foe',r:[1,1],shape:'cone',aim:'dir',st:['stun',1,.5],d:'A cone of song (4 tiles): 50% chance to Stun each enemy hit.'},
+  soothingBallad:{n:'Soothing Ballad',cd:3,side:'self',shape:'burst1',heal:.6,d:'A gentle tune: allies around him heal 0.6× (Mag + 5). Ready again 3 turns later.'},
   encore:{n:'Encore',mp:15,once:1,side:'ally',r:[1,3],encore:1,d:'An ally up to 3 away who has already acted can act again this turn. Once a fight.'}
 };
 /* the kits: passive, MP pool (spellcasters) and abilities */
@@ -97,7 +98,7 @@ const KITS={
   rook:{passive:'slippery',mp:0,abil:['backstab','smokeBomb','tumble']},
   brynhildr:{passive:'bulwarkAura',mp:0,abil:['shieldBash','challenge','holdTheLine']},
   brin:{passive:'beginnersLuck',mp:0,abil:['rally','cleanCut','shieldUp']},
-  lysander:{passive:'audience',mp:24,abil:['songOfValour','lullaby','encore']}
+  lysander:{passive:'audience',mp:24,abil:['songOfValour','lullaby','soothingBallad','encore']}
 };
 const kitOf=u=>u&&u.cast&&KITS[u.cast]||null;
 const abilOf=u=>(kitOf(u)||{abil:[]}).abil;
