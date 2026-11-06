@@ -713,7 +713,7 @@ button.it.sel{border-color:var(--gold)}
 /* map squad: unit sprites at their native 64px (1x, crisp) */
 .nmap .nm-squad img{width:64px;height:64px}.nmap .nm-squad div{min-width:72px;font-size:12px}
 .ev-chest{left:41%;width:18%;bottom:12%}
-.nmap .nm-scroll .nd.n-treasure{width:66px;height:66px;margin:-33px 0 0 -33px}.nmap .nm-scroll .nd.n-treasure img{width:50px;height:50px;image-rendering:auto}
+.nmap .nm-scroll .nd.n-treasure img{width:24px;height:24px;image-rendering:pixelated}
 .t-water{background:url(../art/tiles/water.png) 0 0/100% 100%}
 
 /* framed UI: the Dark Ages UI frame (art/ui/frame), scaled 2x so its pixels stay square */
