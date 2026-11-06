@@ -38,8 +38,8 @@ async function sageScene(){
     'An army would only feed the war. A small band can slip through. Travellers have gathered at the crossroads. Choose three to walk this road, and choose well: not all of them will come back.'];
   /* difficulty: arrows over the crystal ball, only once Ascension is unlocked */
   let asc=0;const diffHTML=()=>prof.asc?`<div class="sg-diff"><button type="button" data-d="-1" aria-label="Easier"${asc<=0?' disabled':''}>◀</button><span><b>${asc?'Ascension '+asc:'Normal'}</b><small>${asc?ASC[asc]:'The standard run.'}</small></span><button type="button" data-d="1" aria-label="Harder"${asc>=prof.asc?' disabled':''}>▶</button></div>`:'';
-  const tint=()=>{const f=sgEl.querySelector('.sg-fg');if(f)f.style.filter=asc?`hue-rotate(${asc*18}deg) saturate(${1+asc*.15})`:''};
-  const show=(text,opts)=>{sgEl.innerHTML=`<div class="tv-scene"><img class="tv-bg" src="${sageRoomArt()}" alt=""><img class="sg-sage" src="${sage}" alt=""><div class="sg-fg sg-orb"><img src="art/scenes/sage-orb-1.png" alt=""><img class="sg-orb2" src="art/scenes/sage-orb-2.png" alt=""></div>${diffHTML()}</div>
+  const tint=()=>{const f=sgEl.querySelector('.sg-fg');if(f)f.style.filter=asc?`hue-rotate(${asc*20}deg) saturate(${1+asc*.12})`:''/* violet at Normal, a step nearer red each level, red at Ascension 5 */};
+  const show=(text,opts)=>{sgEl.innerHTML=`<div class="tv-scene"><img class="tv-bg" src="${sageRoomArt()}" alt=""><img class="sg-sage" src="${sage}" alt=""><div class="sg-fg sg-orb"><img src="art/scenes/sage-orb-1.png" alt=""></div>${diffHTML()}</div>
     <div class="tv-box"><div class="tv-name">Ithren the Sage</div><p class="tv-text">“${text}”</p><div class="tv-opts">${opts.map(([k,l])=>`<button type="button" class="tv-o" data-s="${k}">${l}</button>`).join('')}</div></div>`;
     sgEl.hidden=false;tint();return new Promise(res=>{sgEl.onclick=e=>{const d=e.target.closest('[data-d]');if(d&&!d.disabled){asc=Math.max(0,Math.min(prof.asc,asc+ +d.dataset.d));sfx('tick');sgEl.querySelector('.sg-diff').outerHTML=diffHTML();tint();return}
       const b=e.target.closest('[data-s]');if(!b)return;sfx('tick');res(b.dataset.s)}})};
