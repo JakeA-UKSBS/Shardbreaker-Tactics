@@ -132,9 +132,9 @@ Every generated unit is drawn from body parts (`js/09b-battle-rig.js`). The same
 
 ![Thrust: spears, javelins, rapiers](visuals/rigs/thrust.png)
 
-### Dagger: daggers, whips, chains
+### Dagger: daggers
 
-![Dagger: daggers, whips, chains](visuals/rigs/dagger.png)
+![Dagger: daggers](visuals/rigs/dagger.png)
 
 ### Bow: bows and crossbows
 

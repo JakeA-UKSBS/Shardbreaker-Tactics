@@ -85,7 +85,7 @@ Crossroads (`musterScene()`): Your candidates stand around a campfire, with the 
 - Relics (`RELICS`): team passives for the run. Elites offer 1 of 2, the Act 1 boss 1 of 3, treasure rooms sometimes hold one. Combat effects go through `relicCalc()`, move through `relicMov()`. Shown on the map; tap one to read it.
 
 
-- Trade: a unit next to an ally gets a Trade option. Salves, scrolls and gear can be passed across; weapons can't. Trading doesn't use the unit's action.
+- Trade: a unit next to an ally gets a Trade option. Salves and gear can be passed across; weapons can't. Trading doesn't use the unit's action.
 - Tutorials: off by default. Turn on Tutorial tips in Options to get a tip the first time you reach each screen; every tip has a Turn off tutorials button.
 
 
