@@ -433,26 +433,22 @@ function icon(k){const c='I|'+k;return sprCache[c]||(sprCache[c]=iconArt(k))}
    BASE TERRAIN TILES (16px)
    ================================================================== */
 /* bare=true: only the feature (no grass), so it can sit on any region's ground */
-const OVER_T=['forest','hill','village','fort','chest','tent','cliff','crag'];
+const OVER_T=['forest','hill','cliff','crag'];
 function tileArt_draw(kind,used,bare){
   const p=Px(16,16),o=Px(16,16),G='#4b5244',G2='#3e4439',G3='#5c6453';
   if(!bare)p.rect(0,0,16,16,G);if(!bare)[[2,3],[9,2],[13,6],[4,12],[11,13],[7,8],[14,11]].forEach(([x,y])=>{p.set(x,y,G2);p.set(x+1,y-1,G3)});
   if(kind==='forest'){[[4,15],[11,14]].forEach(([x,b])=>{const D='#2e2a2c',D2='#4a423d';o.line(x,b,x,4,D,2);o.line(x,8,x-3,4,D);o.line(x-3,4,x-4,1,D);o.line(x+1,6,x+4,2,D2);o.line(x+4,2,x+5,0,D2);o.line(x,4,x+1,0,D)})}
   if(kind==='hill'){o.poly([[0,16],[5,3],[10,16]],'#77736e');o.poly([[6,16],[11,5],[16,16]],'#8f8a83');o.line(5,3,3,9,'#b5b0a6');o.line(11,5,9,10,'#c4beb3');o.rect(4,3,2,1,'#e8e4dc');o.rect(10,5,2,1,'#e8e4dc')}
-  if(kind==='village'){o.rect(3,9,10,6,used?'#a9a39a':'#e3d6b6');o.poly([[0,9],[2,6],[14,6],[16,9],[13,8],[3,8]],used?'#55545a':'#33394a');o.rect(2,5,12,1,used?'#6a6a70':'#4a5266');o.rect(7,11,2,4,used?'#555':RED);o.rect(4,10,2,2,used?'#666':'#f4d36a');o.rect(10,10,2,2,used?'#666':'#f4d36a')}
-  if(kind==='fort'){o.rect(1,12,14,3,'#6f6c74');o.rect(2,4,3,8,'#8c8a90');o.rect(11,7,3,5,'#8c8a90');o.rect(2,3,5,1,'#a5a2aa');o.rect(5,10,6,2,'#55525a');o.ell(8,6,1.8,1.8,'#9fd8ff')}
-  if(kind==='chest'){if(used){o.rect(4,4,8,3,'#b5413a');o.rect(4,8,8,5,'#8a2a26');o.rect(5,8,6,2,'#24160c');o.rect(4,10,8,1,GOLD)}else{o.rect(4,7,8,6,'#8a2a26');o.rect(4,7,8,2,'#b5413a');o.rect(4,9,8,1,GOLD);o.rect(7,9,2,2,GOLD)}}
-  if(kind==='tent'){o.poly([[1,14],[8,2],[15,14]],'#8a7a5a');o.poly([[8,2],[11,14],[5,14]],'#5a4a34');o.line(8,2,8,14,'#3a2e20')}
   if(kind==='crag'){/* volcanic crag: dark basalt peaks with glowing seams */o.poly([[0,16],[4,4],[8,9],[11,2],[16,16]],'#2e2428');o.poly([[4,4],[8,9],[6,16],[1,16]],'#3e3236');o.line(11,2,9,9,'#4a3c40');o.line(10,9,12,14,'#ff7a2a');o.set(5,11,'#ff9a3c');o.set(11,3,'#6a5a5e');o.set(4,5,'#6a5a5e')}
   if(kind==='cliff'){o.poly([[0,16],[3,2],[7,6],[10,0],[14,7],[16,16]],'#3e3a44');o.line(3,2,5,10,'#5a5562');o.line(10,0,11,8,'#5a5562')}
   o.outline('#1a2414');for(let i=0;i<256;i++)if(o.g[i])p.g[i]=o.g[i];
   return p.url();
 }
 const texStyle=document.createElement('style');
-texStyle.textContent=`.t-fort{background:url(${tileArt('fort')}) 0 0/100% 100%;box-shadow:none}.t-plain{background:url(${tileArt('plain')}) 0 0/100% 100%}.t-forest{background:url(${tileArt('forest')}) 0 0/100% 100%}.t-hill{background:url(${tileArt('hill')}) 0 0/100% 100%}.t-village{background:url(${tileArt('village')}) 0 0/100% 100%}.t-village.vis{background:url(${tileArt('village',1)}) 0 0/100% 100%}.t-chest{background:url(${tileArt('chest')}) 0 0/100% 100%}.t-chest.vis{background:url(${tileArt('chest',1)}) 0 0/100% 100%}`;
-/* features drawn over the region's own ground (see buildBoard): no green grass under a chest in a cave */
-texStyle.textContent+=OVER_T.map(k=>`.tile.ov-${k}::before{inset:0;background:url(${tileArt(k,0,true)}) 0 0/100% 100%}`).join('')+`.tile.ov-village.vis::before{background-image:url(${tileArt('village',1,true)})}.tile.ov-chest.vis::before{background-image:url(${tileArt('chest',1,true)})}`;
-texStyle.textContent+=`.t-tent{background:url(${tileArt('tent')}) 0 0/100% 100%}.t-cliff{background:url(${tileArt('cliff')}) 0 0/100% 100%}`;
+texStyle.textContent=`.t-plain{background:url(${tileArt('plain')}) 0 0/100% 100%}.t-forest{background:url(${tileArt('forest')}) 0 0/100% 100%}.t-hill{background:url(${tileArt('hill')}) 0 0/100% 100%}`;
+/* features drawn over the region's own ground (see buildBoard) */
+texStyle.textContent+=OVER_T.map(k=>`.tile.ov-${k}::before{inset:0;background:url(${tileArt(k,0,true)}) 0 0/100% 100%}`).join('');
+texStyle.textContent+=`.t-cliff{background:url(${tileArt('cliff')}) 0 0/100% 100%}`;
 document.body.appendChild(texStyle);
 
 /* PNG art: each of these uses art/<key>.png when it exists, else the drawing code above (see art() in 03-pixel-art.js) */

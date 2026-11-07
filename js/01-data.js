@@ -19,17 +19,12 @@ const T=48;
 /* TERRAIN, keyed by the letter used in MAPS:
    n = name shown in the tile info, k = art key (tiles/<k>.png and CSS class t-<k>),
    c = Move cost to enter (99 = impassable), av = Avoid bonus, df = Def bonus,
-   heal = restores HP at the start of your turn, slow = −1 Move next turn for a unit that starts there. */
+   slow = −1 Move next turn for a unit that starts there. */
 const TER={
   '.':{n:'Ashgrass',k:'plain',c:1,av:0,df:0},'f':{n:'Dead Wood',k:'forest',c:2,av:20,df:1},'m':{n:'Rubble',k:'hill',c:3,av:30,df:2},
-  'w':{n:'Black Water',k:'water',c:99,av:0,df:0},'=':{n:'Bridge',k:'bridge',c:1,av:0,df:0},'F':{n:'Ruined Shrine',k:'fort',c:1,av:20,df:2,heal:true},
-  '_':{n:'Flagstones',k:'floor',c:1,av:0,df:0},'#':{n:'Wall',k:'wall',c:99,av:0,df:0},
-  'V':{n:'Ruined House',k:'village',c:1,av:10,df:0},
-  'X':{n:'Exit',k:'exit',c:1,av:0,df:0},'A':{n:'Tent',k:'tent',c:1,av:10,df:1,heal:true},
+  'w':{n:'Black Water',k:'water',c:99,av:0,df:0},'=':{n:'Bridge',k:'bridge',c:1,av:0,df:0},
   'R':{n:'Crag',k:'cliff',c:99,av:0,df:0}
 };
-/* Weapon types: blade > heavy > pole > blade. bow and reach are neutral.
-   Arts (t:'art'): fire > nature > water > fire, and light > dark. Dark is neutral to the rest but drains life (heals 25% of damage dealt). */
 /* ITEMS AND WEAPONS:
    n = name, t = weapon type (blade/heavy/pole/bow/art/spirit, or item/gear), kind = which icon/sprite shape to draw,
    mt = Might (added to Str or Mag for damage), hit = Hit %, crit = Crit %, r = [min, max] range in tiles, uses = durability (99 = unbreakable),
