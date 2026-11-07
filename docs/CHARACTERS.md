@@ -45,12 +45,12 @@ The cast, by when they can join. First names only for now. Kits are first drafts
 
 | Status | Effect |
 |---|---|
-| Poison | 3 damage a turn for 3 turns |
-| Burn | 4 damage a turn for 2 turns; ends on water |
-| Chill | −2 Move |
+| Poison | 2 damage a turn for 3 turns |
+| Burn | 2 damage a turn for 2 turns; ends on water |
+| Slow | −2 Move |
 | Root | Can't move (can still act) |
 | Stun | Skips their next turn |
-| Blind | −30 Hit |
+| Blind | −20 Hit |
 | Weak | Deals 30% less damage |
 | Guard (buff) | Takes 30% less damage |
 
@@ -113,7 +113,7 @@ A court magician's apprentice who walked out when her master started making weap
 - **Look:** dress and formal cloak, casts from her hand; lightning down the robe as a Stormlord.
 - **Passive: Attunement.** A spell of a different element from her last one costs 2 less MP.
 - **Flame Burst** (cross at range 3 · 5 MP): 0.9× Mag, 30% chance to Burn.
-- **Frost Wave** (cone 3 · 7 MP): 0.9× Mag and Chill.
+- **Frost Wave** (cone 3 · 7 MP): 0.9× Mag and Slow.
 - **Chain Lightning** (single, range 4 · 9 MP): 1.0× Mag, then jumps to up to 2 nearby enemies at 0.6×.
 
 ### Aldric: Knight
@@ -313,7 +313,7 @@ A white-haired militia veteran who has held more walls than he can count. Patien
 - **Look:** white hair, blue outfit, crossbow; his crossbow becomes a longbow when he ascends to Sniper.
 - **Passive: Braced.** +20 Hit and +2 damage if he didn’t move this turn.
 - **Bolt Through** (pierce 2 at range 2 · CD 2): 1.2× Str to both tiles.
-- **Crippling Shot** (single, range 2–3 · CD 3): 0.8× Str and Chill.
+- **Crippling Shot** (single, range 2–3 · CD 3): 0.8× Str and Slow.
 - **Overwatch** (self · CD 4): until his next turn, he shoots the first enemy that moves into his range.
 
 ### Sigrun: Drake Rider

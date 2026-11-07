@@ -102,7 +102,7 @@ function card(u){
   let h=`<div class="uc ${u.team}"><img class="por" src="${portrait(u)}" alt=""><div class="uci">
    <div class="ch"><b>${u.name}</b><span>${CLS[u.cls].n} · Lv ${u.lv}</span></div>
    <div class="hp"><span class="bar"><i style="width:${u.bars?barsOf(u).frac*100:u.hp/u.maxhp*100}%${u.bars?`;background:${BAR_COL[barsOf(u).n]}`:''}"></i></span><span>${u.hp}/${u.maxhp} HP${u.bars?` · Bar ${barsOf(u).n}/${u.bars}`:''}</span></div>
-   ${u.team==='p'?`<div class="xp"><span class="bar"><i style="width:${u.exp}%"></i></span><span>${u.exp} EXP</span></div>`:''}${mpLine(u)}${stChips(u)}
+   ${u.team==='p'?`<div class="xp"><span class="bar"><i style="width:${u.exp}%"></i></span><span>${u.exp} EXP</span></div>`:''}${mpLine(u)}${stChips(u)}${monMoves(u)}
    <div class="eq">${w?`<img src="${icon(w.key)}" alt="">${w.n} (Rng ${rngTxt(w.r)})`:'Unarmed'}${sk?` · <b class="sk">${sk.n}</b>`:''} · ${terrText(t)} · H${hOf(u.x,u.y)}${u.psn?` · <b class="psnt">Poisoned (${u.psn})</b>`:''}${(()=>{const g=gearOf(u),t=Object.entries(g).filter(([,v])=>v).map(([k,v])=>`${v>0?'+':''}${v} ${GEAR_N[k]}`);return t.length?` · Gear ${t.join(', ')}`:''})()}</div>
   </div><button class="mini" type="button" data-act="sheet:${u.id}">Details</button></div>
   <div class="ueq"><div class="ueq-h">Equipment</div>${itemRows(u,false)}</div>`;
@@ -161,7 +161,7 @@ function drawSheet(){
   if(sheetPg===0){
     pg=`<div class="sgrid">${shown(u).filter(s=>s!=='hp').map(s=>bar(SL[s],u[s])).join('')}</div>
     <div class="sinfo"><div><span class="sl">Move</span><b>${u.mov}</b></div><div><span class="sl">Terrain</span><b>${terrText(t)}</b></div><div class="wide"><span class="sl">Weapons</span><span class="wts">${wt}</span></div></div>
-    ${skillBlock(u)}`;
+    ${skillBlock(u)}${monSheet(u)}`;
   }else{
     const atk=w?(w.mag?u.mag:u.str)+w.mt:'–',hit=w?w.hit+u.lck*2:'–',crit=w?(w.crit||0)+(CLS[u.cls].crit||0)+Math.floor(u.lck/2):'–';
     pg=`<div class="scmb">${[['Atk',atk],['Hit',hit],['Crit',crit],['Avo',AS(u,w)*2+u.lck],['AS',AS(u,w)],['Rng',w?rngTxt(w.r):'–']].map(([l,v])=>`<div><span class="sl">${l}</span><b>${v}</b></div>`).join('')}</div>
@@ -183,7 +183,7 @@ function drawSheet(){
 function renderPanel(){
   let h='',fm='';const u=sel&&byId(sel);
   if(over)h=`<p class="hint">${over==='win'?'Battle won.':'The run has ended.'}</p>`;
-  else if(phase==='enemy')h='<p class="hint">The enemy is moving…</p>';
+  else if(phase==='enemy')h=(acting&&acting.hp>0?card(acting):'')+'<p class="hint">The enemy is moving…</p>';
   else if(ui==='move')h=card(u)+`<p class="hint">Click a blue tile to move, or a red enemy to attack it from the best tile. Click ${u.name} to act in place.</p><div class="acts"><button type="button" data-act="cancel">Cancel</button></div>`;
   else if(ui==='menu'){
     const at=atkTargets(u).length,ht=healTargets(u).length;

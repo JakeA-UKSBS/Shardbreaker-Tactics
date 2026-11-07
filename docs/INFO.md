@@ -156,3 +156,23 @@ Learned skills cost capacity (base 20, +5 when promoted). Personal skills are fr
 | Sandstone Desert | Jackal 4, Sand Worm 3 (fl 2+), Sandstone Golem 2 (fl 4+) | Sandstone Golem, Jackal, Sand Worm | The Pyrite Colossus |
 | Frostveil Reaches | Frost Wolf 4, Frost Sprite 3 (fl 2+), Agate Golem 2 (fl 4+), Ice Troll 2 (fl 5+) | Agate Golem, Ice Troll, Frost Wolf, Frost Sprite | The Yeti |
 | Gemstone Caverns | Gemsnail 4, Gem Golem 2 (fl 4+) | Gem Golem, Gemsnail | Amethyra, the Amethyst Turtle |
+
+## Monster moves
+
+Each monster has 2 moves on cooldowns (no MP). On its turn it scores every ready move from every tile it can reach (expected damage, +40 for a kill, plus a value for each status it lands) against its best normal attack, and uses whichever scores higher. Moves can't be countered. Its info card lists the moves and when they're ready.
+
+| Monster | Move 1 | Move 2 |
+|---|---|---|
+| Lamia | Stone Gaze (CD 4): melee, 0.5× magic, Stone | Constrict (CD 3): melee 0.8×, Root + Poison |
+| Mud Monster | Mud Spit (CD 3): range 2–3, 0.8×, Slow | Engulf (CD 3): melee 1.0×, Blind 2 turns |
+| Wolf | Howl (CD 4): allies within 2 Rallied 2 turns | Hamstring (CD 3): melee 0.8×, Slow |
+| Blighted Treant | Grasping Roots (CD 3): range 1–3, Root | Bark Skin (CD 4): Guard self |
+| The Hollow Bear | Maul (CD 3): melee 1.5×, Sunder 2 turns | Roar (CD 4): enemies within 2 Weak |
+| Fire Sprite | Fireball (CD 3): cross at range 2–3, 0.8× magic, Burn | Flicker (CD 3): blink up to 4 tiles (when hurt and next to a foe) |
+| Magma Golem | Molten Fist (CD 3): melee 1.2×, Burn | Eruption (CD 4): 0.8× to every enemy around it |
+| Pyraxis | Searing Breath (CD 3): cone, 1.0× magic, Burn | Wing Gust (CD 4): 0.5× and push 1 within 2 |
+| Sand Worm | Burrow (CD 3): tunnel up to 4 tiles, 1.0× to every enemy around the exit | Sand Blast (CD 3): cone, 0.8×, Blind |
+| Frost Wolf | Frost Bite (CD 3): melee 1.0×, Slow | Howl (CD 4) |
+| Ice Troll | Club Smash (CD 3): melee 1.5× | Regenerate (CD 4): heal 30% (below 60% HP) |
+
+**To do (moves not added yet):** Bog Lurker, Krondis, Cursed Stag, Jackal, Sandstone Golem, The Pyrite Colossus, Frost Sprite, Agate Golem, The Yeti, Gemsnail, Gem Golem, Amethyra, Shardling, Prism, Crystal Sentinel. Draft ideas: Bog Lurker Drag Under / Ambush; Krondis Death Roll / Tail Sweep; Cursed Stag Charge / Blight Antlers; Jackal Pounce / Scavenge; Sandstone Golem Boulder Toss / Sand Wall; Pyrite Colossus Gold Glare / Ground Slam; Frost Sprite Ice Shard / Hail; Agate Golem Crystal Shell / Shard Burst; Yeti Avalanche / Hurl; Gemsnail Retract / Glitter Spray; Gem Golem Prism Beam / Gem Shell; Amethyra Shell Spin / Amethyst Rain; Shardling Shard Lunge / Splinter; Prism Refract / Dazzle; Crystal Sentinel Bulwark / Crystal Slam.

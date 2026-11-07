@@ -166,7 +166,7 @@ function spawnWaves(t){const w=BATTLE.waves;if(!w||!w[t])return;const bo=state.u
   if(!fs.length)return;const taken=new Set(state.units.filter(u=>u.hp>0).flatMap(u=>cellsOf(u.x,u.y,u.sz).map(c=>key(...c))));
   for(const f of fs){const p=freeNear(f.x,f.y,taken,f);f.x=p.x;f.y=p.y;taken.add(key(p.x,p.y));state.units.push(f)}render();toast(bo&&BATTLE.waves[t][0]?.ifBoss?BATTLE.summonTxt||`${bo.name} raises the dead!`:'Enemy reinforcements!')}
 function phaseHeal(team){
-  for(const u of state.units)if(u.team===team&&u.psn>0){const d=Math.min(3,u.hp-1);if(d>0){u.hp-=d;pop(u,'-'+d,'crit')}u.psn--}
+  for(const u of state.units)if(u.team===team&&u.psn>0){const d=Math.min(2,u.hp-1);if(d>0){u.hp-=d;pop(u,'-'+d,'crit')}u.psn--}
   for(const c of state.units.filter(u=>u.team===team&&has(u,'renewal')))for(const u of state.units)if(u.team===team&&u!==c&&man(u,c)===1&&u.hp<u.maxhp){const a=Math.min(5,u.maxhp-u.hp);u.hp+=a;pop(u,'+'+a,'heal')}
   if(team==='p'&&R('sprig'))for(const u of state.units)if(u.team==='p'&&u.hp>0&&u.hp<u.maxhp){u.hp++;pop(u,'+1','heal')}
   if(team==='p'&&R('salvebag'))for(const u of state.units)if(u.team==='p'&&u.hp<u.maxhp){const a=Math.min(3,u.maxhp-u.hp);u.hp+=a;pop(u,'+'+a,'heal')}
@@ -189,6 +189,7 @@ function aiPlan(e){
     for(const wi of wpnsAt({...e,x,y},d,p)){const f=forecast({...e,x,y},wi,p),A=f.A,D=f.D;
       const s=A.dmg*A.n*A.hit/100+(A.dmg*A.n>=p.hp?40:0)-(D?D.dmg*D.n*D.hit/200:0)+ter(x,y).av/10+(has(p,'taunt')?25:0);
       if(!best||s>best.s)best={s,tile:{x,y},target:p,wi}}}
+  const ab=aiAbil(e,tiles,ps);if(ab&&(!best||ab.s>=best.s))return ab;
   if(best||e.hold||e.mov===0)return best||{};
   const F=field(ps,e);let bt=null,bv=1e9;for(const[x,y]of tiles){const v=(F[key(x,y)]??999)-ter(x,y).av/100;if(v<bv){bv=v;bt={x,y}}}
   return{tile:bt};
@@ -197,6 +198,7 @@ async function enemyPhase(){
   clearSel();ui='idle';phase='enemy';busy=true;tickSt('p','end');render();
   for(const u of state.units)if(u.team==='p')u.stone=0;
   banner('Enemy Phase','e');await sleep(950);
+  for(const u of state.units)if(u.team==='e')for(const k in u.cd||{})if(u.cd[k]>0)u.cd[k]--;
   phaseHeal('e');tickSt('e','start');burnTick('e');render();await runAI('e');tickSt('e','end');
   busy=false;if(over)return;
   spawnWaves(state.turn+1);
@@ -218,15 +220,40 @@ async function crystalStorm(e){
   for(const u of hit)if(u.hp<=0&&R('phoenix')&&!run.phx){u.hp=1;run.phx=1;pop(u,'Phoenix!','heal');toast(`The Phoenix Feather saves ${u.name}`)}
   state.units=state.units.filter(u=>u.hp>0);render();checkEnd();
 }
+/* monster moves: the best-scoring ready move from any tile it can reach (Burrow and Flicker only from where it stands).
+   Score = expected damage (+40 for a kill) + a value for each status it lands; buffs score when foes are near; Flicker
+   only when hurt and next to a foe; Regenerate only below 60% HP. A move is used if it scores at least as well as a normal attack. */
+const ST_VAL={stun:25,root:8,chill:8,blind:10,weak:12,sunder:10,burn:10,guard:12,rally:8};
+function aiAbil(e,tiles,ps){
+  if(e.team!=='e'||!MKITS[e.cls]||hasSt(e,'challenged'))return null;let best=null;
+  const near=(x,y,r)=>ps.filter(p=>man({x,y,sz:e.sz},p)<=r).length;
+  for(const id of MKITS[e.cls]){const a=ABIL[id];if((e.cd||{})[id]>0)continue;
+    const from=a.side==='tile'?[[e.x,e.y]]:tiles;
+    for(const[x,y]of from){const v={...e,x,y};
+      for(const k of aimTiles(v,id)){const[tx,ty]=k.split(',').map(Number);let s=ter(x,y).av/10;
+        if(a.side==='tile'&&!a.dmg){/* Flicker: escape to the tile furthest from the nearest foe */
+          if(e.hp*2>=e.maxhp||!near(e.x,e.y,1))continue;s+=15+Math.min(...ps.map(p=>man({x:tx,y:ty},p)))}
+        else{const lx=a.side==='tile'?tx:x,ly=a.side==='tile'?ty:y,w={...e,x:lx,y:ly},h=abHits(a.side==='tile'?w:v,id,tx,ty);
+          for(const t of h.foes){const V=a.dmg?abVs(w,id,t):abVs(w,id,t,0),hc=V.hit/100,dm=V.dmg*V.n;
+            s+=a.dmg?dm*hc+(dm>=t.hp?40*hc:0):0;if(a.st)s+=(ST_VAL[a.st[0]]||8)*hc;if(a.psn&&!t.psn)s+=8*hc;if(a.stone&&!t.boss)s+=25*hc}
+          for(const t of h.allies){if(a.give&&near(t.x,t.y,4))s+=ST_VAL[a.give[0]]||6;if(a.self&&near(lx,ly,3))s+=ST_VAL[a.self[0][0]]||6;
+            if(a.healPct&&t.hp<t.maxhp*.6)s+=healAmt(e,id,t)*1.2}
+          if(!h.foes.length&&!(a.give||a.self||a.healPct))continue}
+        if(s>0&&(!best||s>best.s))best={s,tile:{x:a.side==='tile'?e.x:x,y:a.side==='tile'?e.y:y},abil:id,aim:{x:tx,y:ty}}}}}
+  return best;
+}
+let acting=null;/* the unit whose turn it is during the enemy phase, shown in the side panel */
 async function runAI(team){
   for(const e of state.units.filter(u=>u.team===team)){
-    if(e.hp<=0||over)continue;if(e.stone){e.stone=0;render();continue}if(hasSt(e,'stun')){pop(e,'Stunned','miss');await sleep(300);continue}
+    if(e.hp<=0||over)continue;acting=e;render();if(e.stone){e.stone=0;render();continue}if(hasSt(e,'stun')){pop(e,'Stunned','miss');await sleep(300);continue}
     if(e.boss&&e.cls==='CrystalHeart'&&state.turn%2===0){await crystalStorm(e);if(over)break;continue}const plan=aiPlan(e);
     if(plan.tile&&(plan.tile.x!==e.x||plan.tile.y!==e.y)){if(ensureVisible(plan.tile.x,plan.tile.y))await sleep(300);stepSfx(e,plan.tile.x,plan.tile.y);e.x=plan.tile.x;e.y=plan.tile.y;render();await sleep(330)}
     /* Cover: the protector takes the hit instead, if the attacker can reach them from here */
     if(plan.target&&hasSt(plan.target,'cover')){const cv=byId(plan.target.st.cover.by);if(cv&&cv.hp>0&&cv!==plan.target){const wl=wpnsAt(e,man(e,cv),cv);if(wl.length){pop(cv,'Cover!','heal');plan.target=cv;plan.wi=wl[0];await sleep(250)}}}
+    if(plan.abil){if(ensureVisible(plan.aim.x,plan.aim.y))await sleep(300);toast(`${e.name} uses ${ABIL[plan.abil].n}`);await useAbility(e,plan.abil,plan.aim.x,plan.aim.y);busy=true}
     if(plan.target&&plan.target.hp>0){await fight(e,plan.wi,plan.target);busy=true}
     if(over)break;
   }
+  acting=null
 }
 
