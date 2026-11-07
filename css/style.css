@@ -274,6 +274,8 @@ button.it.sel{border-color:var(--gold)}
 .roster .dead img{filter:grayscale(1) brightness(.5)}
 .unit.sum img{filter:drop-shadow(0 0 3px #7fc8ff)}
 .unit.psn img{filter:drop-shadow(0 0 3px #b46ae0) saturate(.8)}.psnt{color:#c58aff}
+/* a unit that has acted stays greyed out even with a poison or summon glow */
+.unit.done.psn img{filter:grayscale(.9) brightness(.65) drop-shadow(0 0 3px #b46ae0)}.unit.done.sum img{filter:grayscale(.9) brightness(.65) drop-shadow(0 0 3px #7fc8ff)}
 /* PC: map left, command panel right */
 @media (min-width:960px){
   .wrap{max-width:1500px;height:100%;box-sizing:border-box;display:grid;grid-template-columns:minmax(0,1fr) 360px;grid-template-rows:auto auto minmax(0,1fr);column-gap:14px;padding-inline:20px;padding-block:12px}
@@ -617,3 +619,9 @@ button.it.sel{border-color:var(--gold)}
 /* node map: a flag planted on the current room */
 .nmap .nm-scroll .nd .nflag{position:absolute;left:50%;bottom:55%;width:40px;height:40px;margin-left:-8px;pointer-events:none;filter:drop-shadow(0 2px 2px rgba(50,28,8,.5));z-index:2}
 .nmap .nm-scroll .nd .nflag img{width:100%;height:100%;image-rendering:pixelated}
+.nmap .nm-scroll .nd.ok{opacity:1;filter:none;border-color:var(--gold);animation:npulse 1.1s ease-in-out infinite}
+@keyframes npulse{0%,100%{transform:scale(1);box-shadow:0 0 0 2px var(--gold),0 2px 4px rgba(50,28,8,.45)}50%{transform:scale(1.1);box-shadow:0 0 0 4px var(--gold),0 0 14px 4px color-mix(in srgb,var(--gold) 55%,transparent)}}
+@media (prefers-reduced-motion:reduce){.nmap .nm-scroll .nd.ok{animation:none;box-shadow:0 0 0 4px var(--gold)}}
+
+/* images (scene backdrops, portraits, icons) can't be picked up and dragged by the browser */
+img{-webkit-user-drag:none;user-select:none}
