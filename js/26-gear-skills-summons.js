@@ -55,14 +55,18 @@ const isSummoner=u=>u.cls.startsWith('G.summoner.');
 const canSummon=u=>isSummoner(u)&&(u.sumLeft||0)>0&&summonTile(u);
 /* ---- familiars: each Summoner is bonded to one spirit for life (u.familiar) ---- */
 const FAMILIARS={spiritWolf:{cls:'SpiritWolf',n:'Spirit Wolf',d:'fast, bites in melee'},stoneWarden:{cls:'StoneWarden',n:'Stone Warden',d:'slow and sturdy, a wall for the back line'},
-  wisp:{cls:'Wisp',n:'Wisp',d:'floats, casts light magic at range 1–2'},spiritHawk:{cls:'SpiritHawk',n:'Spirit Hawk',d:'flies, quick strikes'}};
+  wisp:{cls:'Wisp',n:'Wisp',d:'floats, casts light magic at range 1–2'},spiritHawk:{cls:'SpiritHawk',n:'Spirit Hawk',d:'flies, quick strikes'},
+  spiritFrog:{cls:'SpiritFrog',n:'Spirit Frog',d:'wades through water, lashes its tongue from 1–2 tiles'}};
 /* CLS / FOE fields: see the CLASSES and ENEMY STATS keys in 01-data.js */
 Object.assign(CLS,{SpiritWolf:{n:'Spirit Wolf',w:['blade'],body:'beast',mov:6},StoneWarden:{n:'Stone Warden',w:['heavy'],body:'golem',mov:4},
-  Wisp:{n:'Wisp',w:['art'],body:'flame',mov:5,fly:true},SpiritHawk:{n:'Spirit Hawk',w:['blade'],body:'hawk',mov:7,fly:true}});
+  Wisp:{n:'Wisp',w:['art'],body:'flame',mov:5,fly:true},SpiritHawk:{n:'Spirit Hawk',w:['blade'],body:'hawk',mov:7,fly:true},
+  SpiritFrog:{n:'Spirit Frog',w:['blade'],body:'beast',mov:5,wade:true}});
+IT.tongue={n:'Tongue',t:'blade',kind:'claw',mt:4,hit:90,crit:5,r:[1,2],uses:99,key:'fangs'};
 Object.assign(FOE,{SpiritWolf:{b:[16,5,0,5,8,2,2,2],g:[.5,.35,0,.35,.45,.15,.1,.15],items:['fangs'],look:{fur:'#8ad8ff',eye:'#ffffff',spirit:true}},
   StoneWarden:{b:[22,6,0,3,2,1,8,4],g:[.7,.35,0,.2,.1,.05,.35,.2],items:['slam'],look:{body:'#8ab0d0',eye:'#e8faff',spirit:true}},
   Wisp:{b:[14,0,6,6,6,3,1,6],g:[.45,0,.4,.35,.4,.2,.05,.35],items:['dawnSigil'],look:{body:'#9fe8ff',core:'#f3fdff',rim:'#3a88d8',spirit:true}},
-  SpiritHawk:{b:[13,5,0,7,10,3,1,3],g:[.4,.35,0,.35,.45,.2,.1,.15],items:['talons'],look:{body:'#7ac8f0',spirit:true}}});
+  SpiritHawk:{b:[13,5,0,7,10,3,1,3],g:[.4,.35,0,.35,.45,.2,.1,.15],items:['talons'],look:{body:'#7ac8f0',spirit:true}},
+  SpiritFrog:{b:[17,5,0,6,6,3,3,4],g:[.55,.35,0,.35,.35,.2,.15,.2],items:['tongue'],look:{body:'#7ad8b0',belly:'#e8fff4',eye:'#ffffff',spirit:true}}});
 const famOf=u=>FAMILIARS[u.familiar]||FAMILIARS.spiritWolf;
 function summonTile(u){const probe={cls:famOf(u).cls};let best=null,bd=1e9;
   for(const[dx,dy]of DIRS){const x=u.x+dx,y=u.y+dy;if(x<0||y<0||x>=MW||y>=MH||unitAt(x,y)||mcost(probe,x,y)>=99)continue;

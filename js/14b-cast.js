@@ -110,7 +110,7 @@ const CAST=[
   {id:'valen',name:'Valen',cls:'Swordsman',wk:'knightlySword',joins:'act1',look:{style:'mane',hair:'#d9b25a',skin:'#f3cfa6',cloth:'#6a1e2a',pants:'#3a2228',sash:'#c9c3b8',stance:'guard',boots:'#4a3426',eye:'#3a5a8a'},
     asc:{'Swordmaster':{wk:'hookedBlade',look:{capeC:'#4a1420',stance:'high',tails:'#c9c3b8',bracers:'#a8b4c8',lapels:'#c9c3b8',noCrown:true}}}},
   {id:'celestine',name:'Celestine',cls:'Paladin',wk:'ironSpear',joins:'act1',look:{fem:true,style:'long',hair:'#d9b25a',skin:'#f6dcc4',cloth:'#3a6ab0',metal:'#e4ecf6',shield:'kite',shieldC:'#3a6ab0',capeC:'#2a4a8a',horse:'#f3f0e8',eye:'#3a5a8a'}},
-  {id:'seren',name:'Seren',cls:'Summoner',wk:'runeStaff',joins:'run',look:{fem:true,style:'long',hair:'#1d1a24',skin:'#f3cfa6',cloth:'#4a8a9a',sash:'#cfe8f0',shawl:'#cfe8f0',capeC:'#2f6a7a',orb:'#9fe8ff',nature:true,eye:'#3a6a7a'},
+  {id:'seren',name:'Seren',cls:'Summoner',familiar:'spiritFrog',wk:'runeStaff',joins:'run',look:{fem:true,style:'long',hair:'#1d1a24',skin:'#f3cfa6',cloth:'#4a8a9a',sash:'#cfe8f0',shawl:'#cfe8f0',capeC:'#2f6a7a',orb:'#9fe8ff',nature:true,eye:'#3a6a7a'},
     asc:{'Grand Summoner':{look:{cloth:'#2f6a7a',capeC:'#1f4a5a',collar:'#cfe8f0',gear:'circlet',orb:'#c8f4ff'}}}},
   {id:'zwei',name:'Zwei',cls:'Mercenary',wk:'greatsword',joins:'act1',look:{fem:true,style:'bun',hair:'#1d1a24',skin:'#a8714a',cloth:'#efe6cf',pants:'#c9bfa0',sash:'#e2b553',collar:'#2a5aa8',capeC:'#2a5aa8',stance:'shoulder',eye:'#2a2230'}},
   {id:'kyul',name:'Kyul',cls:'Warlock',wk:'umbralSigil',joins:'act1',look:{gear:'hood',skin:'#c9b6a0',cloth:'#1e2a22',sash:'#3fae6a',capeC:'#141a16',mask:'#141a16',mist:'#2a2230',hand:true,el:'#5fe08a',eye:'#3fae6a'}}
@@ -154,7 +154,7 @@ function castUnit(id,lv){
   const u={id:'c'+(run.uid++),cast:id,name:c.name,cls:c.cls,team:'p',lv:1,exp:0,skill:KITS[id]?KITS[id].passive:pick(R.skills),skills:[],cap:BASE_CAP,look:clone(c.look),g,mov:CLS[c.cls].mov,items,acted:false,x:0,y:0};
   ST.forEach((k,i)=>u[k]=s[i]);u.maxhp=u.hp;
   for(;u.lv<lv;u.lv++)ST.forEach((k,i)=>{if(rand()*100<g[i]){if(k==='hp')u.maxhp++;else u[k]++}});
-  if(role==='summoner')u.familiar=pick(Object.keys(FAMILIARS));
+  if(role==='summoner')u.familiar=c.familiar||pick(Object.keys(FAMILIARS));
   u.hp=u.maxhp;return foldLuck(u);
 }
 /* who can turn up: where = 'recruit' (recruit node, cage), 'tavern' or 'act1' (the offer as Act 2 begins) */
