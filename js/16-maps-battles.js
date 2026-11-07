@@ -122,11 +122,11 @@ const MAPS={
   /* Cursed Woodland */
   woodland:{n:'Cursed Woodland',map:["...y..f...","^f....y..f","y..f..^^.y","..f..f....","^....y..f.",".y.f.....y","f^.....f..","..y..f..y.","f.........",".........."],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   brook:{n:'Black Brook',map:[".f....y...","y..ff....f","...f..y...","w=wwwwww=w","...y..f...","f.....f..y","..f......f","y....y....","...f....f.",".........."],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  clearing:{n:'Hunter’s Clearing',map:["f........f",".^f....f..",".^.^..^...","f...F.....","....y.....",".....^^..f","..f....f..","..........","..........",".........."],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
+  clearing:{n:'Hunter’s Clearing',map:["f........f",".^f....f..",".^.^..^...","f.........","....y.....",".....^^..f","..f....f..","..........","..........",".........."],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   heart:{n:'The Hollow Heart',map:["f..f...f.f","^^y.....y.","....f.f...","..y.....y.","f^..y.y..f","..f....^f.","y.........","...f...f..","..........",".........."],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]],boss:[5,0]},
   /* Volcanic Isle */
   fields:{n:'Magma Fields',map:["bbbllbbbbR","mbbbllbbbb","bbbbbllbmb","bbbbbblbbb","bmbbbbbbbb","bbllbbbmbb","bbblllbbbb","mbbbbbbbbm","bbbbbbbbbb","bbbbbbbbbb"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  caldera:{n:'Caldera Pass',map:["bbmbllbmbb","bbbllllbbb","mbbllllbbm","bbbbllbbbb","bbbbbbbbbb","lbbmbbmbbl","bbbbbbbbbb","bmbbbbbbmb","bbbbFbbbbb","bbbbbbbbbb"],start:[[4,9],[5,9],[3,9],[6,9],[3,8],[5,8]]},
+  caldera:{n:'Caldera Pass',map:["bbmbllbmbb","bbbllllbbb","mbbllllbbm","bbbbllbbbb","bbbbbbbbbb","lbbmbbmbbl","bbbbbbbbbb","bmbbbbbbmb","bbbbbbbbbb","bbbbbbbbbb"],start:[[4,9],[5,9],[3,9],[6,9],[3,8],[5,8]]},
   ridge:{n:'Rockslide Ridge',map:["bbbbRbbbbl","mRbbbbbbbl","bbRbbbblll","bbRRbbRlbb","bbbbbbbbll","llbbmbbbbl","blbbbbbmbb","llbRbbbbbb","lbbbbbbbbb","lbbbbbbbbb"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   crater:{n:'Dragon’s Crater',map:["llbbbbbbll","lbbbbbbbbl","bbmbbbbmbb","bbbbllbbbb","bbbllllbbb","bbbbllbbbb","bmbbbbbbmb","bbbbbbbbbb","bbbbbbbbbb","bbbbbbbbbb"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]],boss:[5,0]},
 };
@@ -144,7 +144,7 @@ Object.assign(MAPS,{
   frozenLake:{n:"Frozen Lake",map:["oooiiiiioo","ooiiiiiii^","aoiiiaiii^","ooiiiiiiio","oooiiiiioo","ojjoo^ojjo","^jjoaoojjo","oooooooooo","oooooooooo","oooooooooo"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   agateField:{n:"Agate Field",map:["ooooojjooo","oaaoo^^oaa","o^ooaaoooo","j^oo^ooooj","ooao^oooao","oooojjoooo","ao^oooooao","oooooooooo","oooooooooo","oooooooooo"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   agateSpire:{n:"Agate Spire",map:["aooooooooa","oooo^ooooo","^jjoooojjo","ooooaaoo^o","jooooooooo","oaoooooaoo","oooooooooo","ojjoooojjo","oooooooooo","oooooooooo"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]],boss:[4,0]},
-  geode:{n:"Geode Chamber",map:["ccceccuccc","cccccccccc","cpcxxxxcec","cccccccccc","xcccFcccxx","cuccccccpc","ccccxxcccc","cecccccccu","cccccccccc","cccccccccc"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
+  geode:{n:"Geode Chamber",map:["ccceccuccc","cccccccccc","cpcxxxxcec","cccccccccc","xcccccccxx","cuccccccpc","ccccxxcccc","cecccccccu","cccccccccc","cccccccccc"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   mineshaft:{n:"Old Mineshaft",map:["ccxcccxccc","ccxcecxcce","cccccccccc","xxcxxxxcxx","ccccuccccc","cecccccpcc","xccxxxxccx","cccccccccu","cccccccccc","cccccccccc"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   glitter:{n:"Glittering Hall",map:["ccecccucee","cccccccccc","cuccpccecp","ccccccccc^","eccccccccc","^ccp^ccucc","^ccccc^cce","cucccccccc","cccccccccc","cccccccccc"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
   amethystHollow:{n:"Amethyst Hollow",map:["xxcccccccx","xccccccuuc","pcccccccue","ppccxxccee","cccccccccc","xucccccccx","xuucccccpp","cccccccccc","cccccccccx","xxccccccxx"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]],boss:[4,0]}
@@ -183,12 +183,12 @@ MAPS.crater.h=["0034444300", "0233333320", "1222222221", "1111001111", "11100001
 /* settlements for Defend fights: one hand-made map per region, in its own terrain. Enemies arrive along the top two
    rows; tents (A) and the shrine (F) heal and give cover in the middle; you start along the bottom. */
 const TOWNS={
-  swamp:["ssssnnssss","svssnnssvs","ssnnnnnnss","wsnvnnvnsw","wsnnAnnnsw","ssnnnnnnss","snvnFnnvns","ssnnnnnnss","ssnnnnnnss","sssnnnnsss"],
-  desert:["nnnnnnnnnn","nknnnnnnkn","nnnnzznnnn","knnnnnnnnk","nnAnwwnAnn","nnnnwwnnnn","knnnnnnnnk","nnnnFnnnnn","nnnnnnnnnn","nnnnnnnnnn"],
-  forest:["..........",".f......f.","...^..^...","f..y..y..f","...A..A...",".f......f.","^...F....^","..y....y..","..........",".........."],
-  mountain:["bbbbbbbbbb","bmbbbbbbmb","bbbRbbRbbb","lbbbbbbbbl","bbAbmmbAbb","bbbbbbbbbb","RbbbFbbbbR","bbmbbbbmbb","bbbbbbbbbb","bbbbbbbbbb"],
-  snow:["oooooooooo","oaoojjooao","ooo^oo^ooo","jooooooooj","ooAoiioAoo","oooooooooo","^oooFoooo^","ooaooooaoo","oooooooooo","oooooooooo"],
-  cavern:["cccccccccc","cecccccccu","cccxccxccc","pccccccccp","ccAceccAcc","cccccccccc","xcccFccccx","ccuccccecc","cccccccccc","cccccccccc"]
+  swamp:["ssssnnssss","svssnnssvs","ssnnnnnnss","wsnvnnvnsw","wsnnnnnnsw","ssnnnnnnss","snvnnnnvns","ssnnnnnnss","ssnnnnnnss","sssnnnnsss"],
+  desert:["nnnnnnnnnn","nknnnnnnkn","nnnnzznnnn","knnnnnnnnk","nnnnwwnnnn","nnnnwwnnnn","knnnnnnnnk","nnnnnnnnnn","nnnnnnnnnn","nnnnnnnnnn"],
+  forest:["..........",".f......f.","...^..^...","f..y..y..f","..........",".f......f.","^........^","..y....y..","..........",".........."],
+  mountain:["bbbbbbbbbb","bmbbbbbbmb","bbbRbbRbbb","lbbbbbbbbl","bbbbmmbbbb","bbbbbbbbbb","RbbbbbbbbR","bbmbbbbmbb","bbbbbbbbbb","bbbbbbbbbb"],
+  snow:["oooooooooo","oaoojjooao","ooo^oo^ooo","jooooooooj","ooooiioooo","oooooooooo","^oooooooo^","ooaooooaoo","oooooooooo","oooooooooo"],
+  cavern:["cccccccccc","cecccccccu","cccxccxccc","pccccccccp","cccceccccc","cccccccccc","xccccccccx","ccuccccecc","cccccccccc","cccccccccc"]
 };
 for(const k in TOWNS)if(BIOMES[k])MAPS['town_'+k]={n:BIOMES[k].townN,map:TOWNS[k],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]};
 /* settlement height maps (made from the old generated ones, so they look the same; edit them with tools/map-editor.html) */
@@ -214,17 +214,17 @@ const ROCK_MAX=3;
 function genBattle(n,kind){
   const act=run&&run.act||1,B=actBiome(),bossFight=kind==='boss',elite=kind==='elite',town=!bossFight&&!elite&&MAPS['town_'+B.id]&&(run&&run.n||1)>=2&&rand()<.25;
   const mk=bossFight?B.bossMap:town?'town_'+B.id:pick(B.maps);let m=MAPS[mk];
-  /* tidy the hand-made map: no altars (T), tents (A), chests (C) or ruined shrines (F), and at most ROCK_MAX rocks
-     (boulders ^, sandstone k, crags R). What's removed becomes the map's most common ground. */
-  {const NO=['T','A','C','F'],ROCKS=['^','k','R'],rs=[],pair={};m.map.forEach((r,y)=>[...r].forEach((ch,x)=>{if(!ROCKS.includes(ch))return;
+  /* tidy the hand-made map: at most ROCK_MAX rocks (boulders ^, sandstone k, crags R).
+     What's removed becomes the map's most common ground. */
+  {const ROCKS=['^','k','R'],rs=[],pair={};m.map.forEach((r,y)=>[...r].forEach((ch,x)=>{if(!ROCKS.includes(ch))return;
      /* a boulder next to the one before it (left or above) is kept or dropped with it, so the pair can be drawn as one big rock */
      const solo=k=>pair[k]===k&&Object.values(pair).filter(v=>v===k).length===1,isB=([a,b])=>m.map[b]&&m.map[b][a]==='^';
      const p=ch==='^'&&[[x-1,y],[x,y-1]].filter(isB).map(([a,b])=>a+','+b).find(solo);
      if(p)pair[x+','+y]=p;else{pair[x+','+y]=x+','+y;rs.push(x+','+y)}}));
-   const cnt={};m.map.join('').split('').forEach(c=>{if(TER[c]&&TER[c].c<99&&!NO.includes(c))cnt[c]=(cnt[c]||0)+1});
+   const cnt={};m.map.join('').split('').forEach(c=>{if(TER[c]&&TER[c].c<99)cnt[c]=(cnt[c]||0)+1});
    const g=Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0][0],dropR=new Set(rs.length>ROCK_MAX?shuffle(rs.slice()).slice(ROCK_MAX):[]),drop=new Set(Object.keys(pair).filter(k=>dropR.has(pair[k])));
    const mud=B.id==='swamp';/* the swamp's water is deep mud instead */
-   m={...m,map:m.map.map((r,y)=>[...r].map((ch,x)=>NO.includes(ch)||drop.has(x+','+y)?g:mud&&ch==='w'?'D':ch).join(''))}}
+   m={...m,map:m.map.map((r,y)=>[...r].map((ch,x)=>drop.has(x+','+y)?g:mud&&ch==='w'?'D':ch).join(''))}}
   /* difficulty climbs with the floor and the act: act 1 floor 1 is Lv 1, act 1 floor 9 is Lv 6, act 2 starts at Lv 7 */
   const fl=flScale(run&&run.n),diff=(act-1)*10+fl,lvBase=1+Math.floor(diff*.6)+(A(1)?1:0)+(A(4)?1:0);
   const pool=(elite?B.elitePool:B.pool).filter(p=>act>=2||fl>=(p[2]||1)),tot=pool.reduce((a,p)=>a+p[1],0);

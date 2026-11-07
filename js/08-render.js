@@ -15,7 +15,7 @@ function buildBoard(){
   const mx=Math.max(0,...MAP.flatMap((r,y)=>[...r].map((_,x)=>vhOf(x,y))));
   OX=MH*TW/2;OY=56+mx*HS;BW=(MW+MH)*TW/2;BH=OY+(MW+MH)*TH/2+HS+12;
   boardEl.classList.add('iso');boardEl.style.gridTemplateColumns='';boardEl.style.width=BW+'px';boardEl.style.height=BH+'px';
-  /* features (trees, rocks, chests, shrines, tents, gems...) stand up as props (16b-terrain3d.js) on the map's usual ground */const gc={};for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const t=ter(x,y);if(t.c<99&&!OVER_T.includes(t.k)&&!PROPS[t.k])gc[t.k]=(gc[t.k]||0)+1}const gk=Object.keys(gc).sort((a,b)=>gc[b]-gc[a])[0]||'plain';
+  /* features (trees, rocks, gems...) stand up as props (16b-terrain3d.js) on the map's usual ground */const gc={};for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const t=ter(x,y);if(t.c<99&&!OVER_T.includes(t.k)&&!PROPS[t.k])gc[t.k]=(gc[t.k]||0)+1}const gk=Object.keys(gc).sort((a,b)=>gc[b]-gc[a])[0]||'plain';
   const firstOf={};
   for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const t=document.createElement('div'),tk=ter(x,y).k;const vol=BATTLE&&BATTLE.biome==='mountain',ov=tk==='hill'&&vol?'crag':tk;
     t.className=PROPS[ov]?'tile '+propGround(ov,gk):'tile t-'+tk;t.dataset.k=key(x,y);

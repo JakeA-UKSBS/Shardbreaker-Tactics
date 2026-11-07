@@ -56,7 +56,7 @@ function tap(x,y){
   if(o&&o.team==='p'&&!o.acted){sfx('select');select(o);return}
   if(o){sfx('select');inspect=o;moveSet=reach(o);fringe=fringeOf(o,moveSet);ui='idle';render();return}
   const t=ter(x,y);
-  terInfo=`<div class="ch"><b>${t.n}</b><span>Terrain · Height ${hOf(x,y)}</span></div><p class="hint">${t.c>=99?'Impassable.':'Move cost '+t.c+'.'}${t.df?' +'+t.df+' Def.':''}${t.av?' +'+t.av+' Avoid.':''}${t.heal?' Heals 10% HP each turn.':''}</p>`;
+  terInfo=`<div class="ch"><b>${t.n}</b><span>Terrain · Height ${hOf(x,y)}</span></div><p class="hint">${t.c>=99?'Impassable.':'Move cost '+t.c+'.'}${t.df?' +'+t.df+' Def.':''}${t.av?' +'+t.av+' Avoid.':''}</p>`;
   threatTile=k;terInfo+=threatLine(k);ui='terrain';render();
 }
 
@@ -167,7 +167,6 @@ function spawnWaves(t){const w=BATTLE.waves;if(!w||!w[t])return;const bo=state.u
   for(const f of fs){const p=freeNear(f.x,f.y,taken,f);f.x=p.x;f.y=p.y;taken.add(key(p.x,p.y));state.units.push(f)}render();toast(bo&&BATTLE.waves[t][0]?.ifBoss?BATTLE.summonTxt||`${bo.name} raises the dead!`:'Enemy reinforcements!')}
 function phaseHeal(team){
   for(const u of state.units)if(u.team===team&&u.psn>0){const d=Math.min(3,u.hp-1);if(d>0){u.hp-=d;pop(u,'-'+d,'crit')}u.psn--}
-  for(const u of state.units)if(u.team===team&&ter(u.x,u.y).heal&&u.hp<u.maxhp){const a=Math.min(Math.ceil(u.maxhp*.1),u.maxhp-u.hp);u.hp+=a;pop(u,'+'+a,'heal')}
   for(const c of state.units.filter(u=>u.team===team&&has(u,'renewal')))for(const u of state.units)if(u.team===team&&u!==c&&man(u,c)===1&&u.hp<u.maxhp){const a=Math.min(5,u.maxhp-u.hp);u.hp+=a;pop(u,'+'+a,'heal')}
   if(team==='p'&&R('sprig'))for(const u of state.units)if(u.team==='p'&&u.hp>0&&u.hp<u.maxhp){u.hp++;pop(u,'+1','heal')}
   if(team==='p'&&R('salvebag'))for(const u of state.units)if(u.team==='p'&&u.hp<u.maxhp){const a=Math.min(3,u.maxhp-u.hp);u.hp+=a;pop(u,'+'+a,'heal')}

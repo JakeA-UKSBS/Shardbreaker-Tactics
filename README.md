@@ -70,7 +70,7 @@ Crossroads (`musterScene()`): Your candidates stand around a campfire, with the 
 - Region bosses are 2×2 (`u.sz=2`, x/y is the top-left). `man()` measures between footprints and `unitAt()` checks every cell, so movement, range, the danger map and the AI all handle them. Their sprites are 64×64: hand-drawn in `BIG` 
 
 ## summoner [maybe make more generic]
-- Summoner role (`ROLES.summoner`, unlocked by the Apprentice achievement: finish a run with a Sigilist in the squad): a staff caster (Crook Staff: Rng 1, hits harder; Rune Staff: Rng 1-2; both use Mag) with a Summon action once per battle (twice once promoted). The minion is the Summoner's own bonded familiar (`FAMILIARS`, `u.familiar`, rolled when the unit is made): Spirit Wolf, Stone Warden, Wisp or Spirit Hawk.
+- Summoner role (`ROLES.summoner`): a staff caster (Crook Staff: Rng 1, hits harder; Rune Staff: Rng 1-2; both use Mag) with a Summon action once per battle (twice once promoted). The minion is the Summoner's own bonded familiar (`FAMILIARS`, `u.familiar`, rolled when the unit is made): Spirit Wolf, Stone Warden, Wisp or Spirit Hawk.
 
 
 ## monsters
