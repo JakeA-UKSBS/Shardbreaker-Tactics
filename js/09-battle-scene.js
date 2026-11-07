@@ -24,6 +24,9 @@ function mapPose(u,name,t,wk){const el=uEls[u.id];if(!el||u.sz>1)return;const im
   else if(isHi(u.cls,u.sz)){const k=['MP',u.cls,u.team,name,wk,JSON.stringify(u.look)].join('|');src=sprCache[k]||(sprCache[k]=hiArt(u.look,u.cls,u.team,wk,name,0,64))}
   else if(name==='swing'||name==='follow')src=sprite(u,'strike',wk);else return;
   img.src=src;img.dataset.s=src;
+  /* hand-drawn frames can be wider than 64px (an axe swung out in front): show them at full width, body still at the left,
+     and flip around the body's centre (32px) so it stays on its tile when facing left */
+  img.style.transformOrigin='32px 50%';img.onload=()=>{const w=img.naturalWidth;if(w>64)img.style.setProperty('width',w+'px','important');else img.style.removeProperty('width')};
   if(name==='idle'){img.style.transform='';return}
   if(t){const p=scrC(u.x,u.y,u.sz),q=scrC(t.x,t.y,t.sz);if(Math.abs(q.x-p.x)>1)img.style.transform=q.x<p.x?'scaleX(-1)':'scaleX(1)'}}
 /* one weapon strike on the map: wind up, swing (the lunge lands on it), then follow through. Resolves when the blow lands */
