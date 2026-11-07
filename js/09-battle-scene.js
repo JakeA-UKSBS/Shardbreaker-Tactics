@@ -37,7 +37,7 @@ async function swingAt(X,Y,w,crit,ranged){const wk=w&&w.key;
   const k=SLOW_SWING.has(X.cast)?1.4:1;
   mapPose(X,crit?'critup':'windup',Y,wk);await sleep(D((crit?120:150)*k));
   mapPose(X,'swing',Y,wk);if(ranged){lunge(X,Y,-6);await shoot(X,Y,w)}else{lunge(X,Y);slashFx(X,Y,w,crit);await sleep(D(110*k))}
-  setTimeout(()=>mapPose(X,'follow',Y,wk),D(90*k))}
+  setTimeout(()=>mapPose(X,'follow',Y,wk),D(90))}
 
 /* slash trail: a pale pixel-art arc sweeps across the target as the blow lands (swords and axes arc, lances thrust).
    4 frames of 32x32 drawn once per shape, shown at 2x over the target and flipped to face away from the attacker */
