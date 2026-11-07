@@ -181,7 +181,6 @@ As Act 2 begins, two of these offer to join; the rest turn up in the recruit and
 | Roark | Berserker | M |
 | Valen | Swordsman (ascends into Swordmaster) | M |
 | Celestine | Paladin | F |
-| Seren | Summoner | F |
 | Zwei | Mercenary | F |
 | Kyul | Warlock | M |
 
@@ -226,15 +225,6 @@ A templar whose order is preaching holy war. She came to prove them wrong.
 - **Lay on Hands** (single ally, adjacent · 8 MP): heals 1.5× Mag.
 - **Consecrate** (burst r1 · 10 MP): for 3 turns these tiles heal allies 10% a turn and hurt spectral creatures.
 
-### Seren: Summoner
-![Seren](visuals/cast/seren.png)
-
-A spirit-speaker who bargained with something old to save her village. Gentle, but what follows her isn't.
-- **Look:** long flowing teal robes and shawl, a tall leafy branch staff.
-- **Passive: Bond.** Her familiar levels with her and returns at full HP each fight.
-- **Summon Familiar** (summon, adjacent · 10 MP): calls her spirit drake.
-- **Empower** (familiar · 6 MP): the familiar's next attack deals double damage.
-- **Soul Swap** (familiar · 4 MP): she and the familiar swap places.
 
 ### Zwei: Mercenary
 ![Zwei](visuals/cast/zwei.png)
@@ -282,6 +272,7 @@ Recruited from recruit stops, the caged-traveller event and the tavern, alongsid
 | Kaya | Horse Archer | – | F |
 | Jun | Swordsman *(tavern)* | Swordmaster | M |
 | Ash | Pyromancer | Pyrolord or Archmage | M |
+| Seren | Summoner | – | F |
 
 ### Aletta: Mender
 ![Aletta](visuals/cast/aletta.png)
@@ -357,3 +348,13 @@ A lamplighter's son who set his first fire by accident and every one since on pu
 - **Fire Bolt** (single, range 3 · 4 MP): 1.1× Mag, 30% chance to Burn.
 - **Flame Wall** (line 3 · 8 MP): places fire on the tiles for 2 turns: 4 damage to anything entering or starting there.
 - **Inferno** (area r1 at range 3 · 12 MP): 1.0× Mag and Burn.
+
+### Seren: Summoner
+![Seren](visuals/cast/seren.png)
+
+A spirit-speaker who bargained with something old to save her village. Gentle, but what follows her isn't.
+- **Look:** long flowing teal robes and shawl, a tall leafy branch staff.
+- **Passive: Bond.** Her familiar levels with her and returns at full HP each fight.
+- **Summon Familiar** (summon, adjacent · 10 MP): calls her spirit drake.
+- **Empower** (familiar · 6 MP): the familiar's next attack deals double damage.
+- **Soul Swap** (familiar · 4 MP): she and the familiar swap places.
