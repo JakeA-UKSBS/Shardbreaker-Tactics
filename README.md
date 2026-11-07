@@ -37,18 +37,18 @@ Crossroads (`musterScene()`): Your candidates stand around a campfire, with the 
 
 ## branching
 - Each act is a branching node map (`genMap()` in `js/18-node-map.js`), following Slay the Spire's map: 15 floors on 4 lanes that cross now and then, then the boss on floor 16. Act 3 is a short straight road instead: tavern, elite, event, camp, then the Crystal Heart.
-- Fixed floors: 1 is a battle, 8 a treasure room, 15 a camp (rest) and 16 the boss. Every other floor is rolled. One random lane per map is the monster lane and rolls from `ROOM_W`; the other three roll from `ROOM_W_LIGHT`:
+- Fixed floors: 1 is a battle, 8 a treasure room, 15 a camp (rest) and 16 the boss. Every other floor is rolled. Two random lanes per map are monster lanes and roll from `ROOM_W`; the other two roll from `ROOM_W_LIGHT`:
 
-  | Room | Monster lane | Other lanes | Rules |
+  | Room | Monster lanes | Event lanes | Rules |
   | --- | --- | --- | --- |
-  | Battle | 45 | 28 | |
-  | Event | 23 | 35 | |
+  | Battle | 45 | 35 | |
+  | Event | 23 | 30 | |
   | Camp (rest) | 12 | 12 | Not before floor 6, not on floor 14, never twice in a row |
   | Elite | 10 | 10 | Not before floor 6, never twice in a row; shown as a horned skull |
-  | Tavern | 10 | 15 | Never twice in a row |
+  | Tavern | 10 | 13 | Never twice in a row |
 
   A roll that breaks a rule is rolled again, so on floors where a room isn't allowed (camps and elites before floor 6, say) the others come up a little more often.
-- On top of the odds, every route through floors 1-14 must have 6-9 fights (elites count) and at least one camp before the fixed one on 15 (`FIGHTS`, `routeOk()`). A lane that fails is rolled again. On top of that, the monster lane has 8-9 fights and the others 6-7, with at most one battle on floors 2-5.
+- On top of the odds, every route through floors 1-14 must have 6-9 fights (elites count) and at least one camp before the fixed one on 15 (`FIGHTS`, `routeOk()`). A lane that fails is rolled again. On top of that, the event lanes have 6-8 fights and at most two battles on floors 2-5.
 - Each map gets 6-8 crossings between neighbouring lanes, never on the same or neighbouring floors, and only where every route still passes those checks.
 - Nodes: Battle; Elite (Elder leader, always drops a relic (1 of 2) and a jade weapon for a unit you choose); Recruit (pick 1 of 3; team caps at 6, `TEAM_CAP`); Rest (train one unit +1 level); Treasure (pick 1 of 3 items); Event (`EVENTS`); Tavern; Boss.
 - Gold: 30 to start, then 25 per battle, 45 per elite, 80 per boss (`GOLDWIN`). Spent at taverns.
