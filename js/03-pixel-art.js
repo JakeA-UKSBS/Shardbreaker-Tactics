@@ -426,7 +426,8 @@ function tagArt_draw(t){const c='TAG|'+t;if(sprCache[c])return sprCache[c];const
 function mapWk(u){const i=u.items.findIndex(it=>WTYPES.includes(IT[it.k].t)||IT[it.k].t==='spirit');return i>=0?u.items[i].k:null}
 function sprite(u,pose,wk){{const png=typeof castPng==='function'&&castPng(u,pose==='strike'?'swing':'idle');if(png)return png}const k=[u.id,u.name,u.cls,u.team,pose,wk,u.sz||1,JSON.stringify(u.look)].join('|');return sprCache[k]||(sprCache[k]=fig(u.look,u.cls,u.team,pose,wk,u.sz))}
 function portraitArt(L,cls,team,sz){return fig(L,cls,team,'idle',null,sz)}
-function portrait(u){if(u.pic&&PICS[u.pic])return PICS[u.pic];const k='P|'+u.id+'|'+u.name+'|'+u.cls+'|'+u.team+'|'+JSON.stringify(u.look);return sprCache[k]||(sprCache[k]=portraitArt(u.look,u.cls,u.team,u.sz))}
+/* cast members use their idle PNG (hand-drawn, like Vaar, or exported from the rig) so portraits match the map sprite */
+function portrait(u){if(u.pic&&PICS[u.pic])return PICS[u.pic];if(u.cast&&typeof castPng==='function'){const c=castPng(u,'idle');if(c)return c}const k='P|'+u.id+'|'+u.name+'|'+u.cls+'|'+u.team+'|'+JSON.stringify(u.look);return sprCache[k]||(sprCache[k]=portraitArt(u.look,u.cls,u.team,u.sz))}
 function icon(k){const c='I|'+k;return sprCache[c]||(sprCache[c]=iconArt(k))}
 
 /* ==================================================================
