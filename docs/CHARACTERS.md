@@ -71,6 +71,7 @@ Each base class ascends into one or two advanced classes at Lv 5.
 | Rook | Rogue | Duelist or Assassin | M |
 | Brynhildr | Shieldmaiden | Valkyrie or Aegis | F |
 | Brin | Adventurer | Hero | M |
+| Trent | Cavalier | Paladin or Warlord | M |
 
 ### Kili: Archer
 ![Kili](visuals/cast/kili.png)
@@ -266,7 +267,6 @@ Recruited from recruit stops, the caged-traveller event and the tavern, alongsid
 | Name | Class | Ascends into | Gender |
 |---|---|---|---|
 | Aletta | Mender *(tavern)* | Saint or Crusader | F |
-| Trent | Cavalier | Paladin or Warlord | M |
 | Holt | Crossbowman | Sniper or Artillery | M |
 | Sigrun | Drake Rider | – | F |
 | Kaya | Horse Archer | – | F |
