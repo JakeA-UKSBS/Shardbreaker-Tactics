@@ -272,7 +272,7 @@ Recruited from recruit stops, the caged-traveller event and the tavern, alongsid
 | Kaya | Horse Archer | – | F |
 | Jun | Swordsman *(tavern)* | Swordmaster | M |
 | Ash | Pyromancer | Pyrolord or Archmage | M |
-| Seren | Summoner | – | F |
+| Seren | Summoner | Grand Summoner | F |
 
 ### Aletta: Mender
 ![Aletta](visuals/cast/aletta.png)
@@ -358,3 +358,4 @@ A spirit-speaker who bargained with something old to save her village. Gentle, b
 - **Summon Familiar** (summon, adjacent · 10 MP): calls her spirit drake.
 - **Empower** (familiar · 6 MP): the familiar's next attack deals double damage.
 - **Soul Swap** (familiar · 4 MP): she and the familiar swap places.
+- **Ascends into Grand Summoner** (from Lv 5): +4 HP, +5 Mag, +2 Spd, +2 Luck, +2 Def, +4 Res; summons twice a fight instead of once and her familiar is 3 levels higher. Darker teal robes with a pale collar and a circlet.
