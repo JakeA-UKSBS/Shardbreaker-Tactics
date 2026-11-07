@@ -4,28 +4,32 @@
    Fixed floors: 1 is a battle, 8 a treasure room and 15 a camp. Every other room is rolled from ROOM_W, with its rules:
    no elite or camp before floor 6, no camp on floor 14 (the camp on 15 is next), and no elite, camp or tavern twice in
    a row on any path. On top of the odds, every route (floors 1-14) must pass ROUTE_OK: 6-9 fights (elites count) and at
-   least one camp before the fixed one on 15, so no route is a slog or a walkover. Act 3 stays a short straight road. */
+   least one camp before the fixed one on 15, so no route is a slog or a walkover. One random lane per map is the
+   monster lane (ROOM_W odds, 8-9 fights); the other three roll from ROOM_W_LIGHT and hold 6-7 fights, so they lean on
+   events and taverns, with at most one battle on floors 2-5. Act 3 stays a short straight road. */
 const FLOORS=15,LANES=4,TREASURE_FL=8,ROWS=FLOORS-1,FIGHTS=[6,9];
 const routeOk=c=>(c.battle||0)+(c.elite||0)>=FIGHTS[0]&&(c.battle||0)+(c.elite||0)<=FIGHTS[1]&&(c.rest||0)>=1;
 /* does every route through the rolled floors pass routeOk? */
 function routesOk(rows){const walk=(r,i,c)=>{const t=rows[r][i].t;c={...c,[t]:(c[t]||0)+1};return r===rows.length-1?routeOk(c):rows[r][i].next.every(j=>walk(r+1,j,c))};
   return rows[0].every((_,i)=>walk(0,i,{}))}
 /* ROOM_W: relative chance of each room type when a floor is rolled (out of 100). NO_REPEAT: types that can't come twice in a row. */
-const ROOM_W={battle:45,event:23,rest:12,elite:10,tavern:10},NO_REPEAT=['elite','rest','tavern'];
+const ROOM_W={battle:45,event:23,rest:12,elite:10,tavern:10},ROOM_W_LIGHT={battle:28,event:35,rest:12,elite:10,tavern:15},NO_REPEAT=['elite','rest','tavern'];
 const NODE_N={tavern:'Tavern',battle:'Battle',elite:'Elite',recruit:'Recruit',rest:'Rest',event:'Event',treasure:'Treasure',boss:'Boss'};
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(rand()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 /* can room t go on floor fl, coming from a room of type prev? */
 function roomOk(t,fl,prev){if((t==='elite'||t==='rest')&&fl<6)return false;if(t==='rest'&&fl===FLOORS-1)return false;return!(prev===t&&NO_REPEAT.includes(t))}
-function rollRoom(fl,prev){
-  if(fl===1)return'battle';if(fl===TREASURE_FL)return'treasure';
-  for(let k=0;k<60;k++){let r=rand()*100,t='battle';for(const[x,w]of Object.entries(ROOM_W))if((r-=w)<0){t=x;break}if(roomOk(t,fl,prev))return t}
+function rollRoom(fl,prev,W=ROOM_W){
+  if(fl===1)return'battle';if(fl===TREASURE_FL)return'treasure';const tot=Object.values(W).reduce((a,b)=>a+b);
+  for(let k=0;k<60;k++){let r=rand()*tot,t='battle';for(const[x,w]of Object.entries(W))if((r-=w)<0){t=x;break}if(roomOk(t,fl,prev))return t}
   return'battle';
 }
 function genMap(){
   /* act 3 is a straight road: tavern, elite, an act-3 event, camp, then the Crystal Heart */
   if((run&&run.act||1)>=3){const rows=['tavern','elite','event','rest','boss'].map((t,r,a)=>[{t,x:50,next:r<a.length-1?[0]:[]}]);return{rows}}
   /* each lane is re-rolled until it passes routeOk on its own */
-  const lane=()=>{for(let k=0;k<500;k++){const a=[];for(let r=0;r<ROWS;r++)a.push(rollRoom(r+1,r?a[r-1]:null));const c={};a.forEach(t=>c[t]=(c[t]||0)+1);if(routeOk(c))return a}
+  const heavy=ri(0,LANES-1);
+  const lane=(_,i)=>{const W=i===heavy?ROOM_W:ROOM_W_LIGHT,F=i===heavy?[8,9]:[6,7];
+    for(let k=0;k<500;k++){const a=[];for(let r=0;r<ROWS;r++)a.push(rollRoom(r+1,r?a[r-1]:null,W));const c={};a.forEach(t=>c[t]=(c[t]||0)+1);const f=(c.battle||0)+(c.elite||0);if(routeOk(c)&&f>=F[0]&&f<=F[1]&&(i===heavy||a.slice(1,5).filter(t=>t==='battle').length<=1))return a}
     return['battle','event','battle','tavern','battle','rest','battle','treasure','event','battle','rest','battle','event','battle']};
   const lanes=Array.from({length:LANES},lane),rows=[];
   for(let r=0;r<ROWS;r++)rows.push(lanes.map((l,i)=>({t:l[r],next:r<ROWS-1?[i]:[]})));
