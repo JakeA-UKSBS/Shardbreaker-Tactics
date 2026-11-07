@@ -31,9 +31,11 @@ function mapPose(u,name,t,wk){const el=uEls[u.id];if(!el||u.sz>1)return;const im
   if(t){const p=scrC(u.x,u.y,u.sz),q=scrC(t.x,t.y,t.sz);if(Math.abs(q.x-p.x)>1)img.style.transform=q.x<p.x?'scaleX(-1)':'scaleX(1)'}}
 /* one weapon strike on the map: wind up, swing (the lunge lands on it), then follow through. Resolves when the blow lands */
 async function swingAt(X,Y,w,crit,ranged){const wk=w&&w.key;
-  mapPose(X,crit?'critup':'windup',Y,wk);await sleep(D(crit?120:150));
-  mapPose(X,'swing',Y,wk);if(ranged){lunge(X,Y,-6);await shoot(X,Y,w)}else{lunge(X,Y);slashFx(X,Y,w,crit);await sleep(D(110))}
-  setTimeout(()=>mapPose(X,'follow',Y,wk),D(90))}
+  /* hand-drawn attack frames (Vaar) hold each frame a little longer than the code-drawn rig, so the swing reads */
+  const k=castPng(X,'swing')?1.4:1;
+  mapPose(X,crit?'critup':'windup',Y,wk);await sleep(D((crit?120:150)*k));
+  mapPose(X,'swing',Y,wk);if(ranged){lunge(X,Y,-6);await shoot(X,Y,w)}else{lunge(X,Y);slashFx(X,Y,w,crit);await sleep(D(110*k))}
+  setTimeout(()=>mapPose(X,'follow',Y,wk),D(90*k))}
 
 /* slash trail: a pale pixel-art arc sweeps across the target as the blow lands (swords and axes arc, lances thrust).
    4 frames of 32x32 drawn once per shape, shown at 2x over the target and flipped to face away from the attacker */
