@@ -118,7 +118,7 @@ async function fight(a,ai,d){
   const res=resolve(a,ai,d);
   await quickPlay(a,d,res);
   a.hp=res.hpA;d.hp=res.hpD;
-  for(const u of[a,d])if(u.team==='p'&&u.hp<=0&&R('phoenix')&&!run.phx){u.hp=1;run.phx=1;pop(u,'Phoenix!','heal');sfx('rise');toast(`The Phoenix Feather saves ${u.name}`)}
+  for(const u of[a,d])if(u.team==='p'&&u.hp<=0&&R('phoenix')&&!run.phx){u.hp=Math.min(10,u.maxhp);run.phx=1;pop(u,'Phoenix!','heal');sfx('rise');toast(`The Phoenix Feather saves ${u.name}`)}
   for(const[u,i,n]of[[a,ai,res.used.a],[d,res.f.di,res.used.d]]){if(i<0||!n)continue;const it=u.items[i];if(endless(it.k))continue;it.u-=n;if(it.u<=0){u.items.splice(i,1);sfx('broke');toast(`${u.name}'s ${IT[it.k].n} shattered`)}}
   const p=a.team==='p'?a:d.team==='p'?d:null,o=p===a?d:a;
   for(const e of res.ev)if(e.psn){const t=e.by==='a'?d:a;if(t.team==='p'&&M('soup'))continue;if(t.hp>0){t.psn=3;pop(t,'Poisoned','crit')}}
@@ -217,7 +217,7 @@ async function crystalStorm(e){
   if(ensureVisible(t.x,t.y))await sleep(300);toast('The Crystal Heart unleashes a Crystal Storm!');sfx('critcharge');await sleep(D(500));shake();
   for(const u of hit){const c=calc(e,w,u,null,{init:e,phase}),d=Math.min(u.hp,dmgMods(e,u,{init:e},Math.max(0,c.pow-c.df)));u.hp-=d;sfx('broke');shatterFx(u);pop(u,'-'+d,'crit');flash(u)}
   render();await sleep(D(700));
-  for(const u of hit)if(u.hp<=0&&R('phoenix')&&!run.phx){u.hp=1;run.phx=1;pop(u,'Phoenix!','heal');toast(`The Phoenix Feather saves ${u.name}`)}
+  for(const u of hit)if(u.hp<=0&&R('phoenix')&&!run.phx){u.hp=Math.min(10,u.maxhp);run.phx=1;pop(u,'Phoenix!','heal');toast(`The Phoenix Feather saves ${u.name}`)}
   state.units=state.units.filter(u=>u.hp>0);render();checkEnd();
 }
 /* monster moves: the best-scoring ready move from any tile it can reach (Burrow and Flicker only from where it stands).

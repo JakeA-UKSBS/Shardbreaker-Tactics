@@ -8,7 +8,7 @@ function unitCard(u,on,add,exp){
   const S=shown(u),w=u.items.map(i=>IT[i.k]).filter(i=>i.t!=='item'),ls=(u.skills||[]).map(x=>SKILLS[x.id].n);
   return`<div class="dimg"><img src="${uSpr(u)}" alt=""></div><div class="dtxt"><b>${u.name}</b><span class="dcls">${CLS[u.cls].n} · Lv ${u.lv}${exp?`<span class="dexp"><i style="width:${u.exp||0}%"></i></span>${u.exp||0}/100 EXP`:''}</span>
   <span class="dst">${S.map(k=>`${SL[k]} <b>${k==='hp'?(u.hp!=null&&u.hp<u.maxhp?`${u.hp}/${u.maxhp}`:u.maxhp):u[k]}</b>`).join(' ')}</span>
-  <span class="dsk">${SKILLS[u.skill].n}${ls.length?', '+ls.join(', '):''} · ${w.map(i=>`<img src="${icon(i.key)}" alt="">${i.n}${i.r?` (Rng ${rngTxt(i.r)})`:''}`).join(' ')}</span></div><div class="dcap">${capPie(u,add)}</div>${on?'<span class="dtick">✓</span>':''}`;
+  <span class="dsk">${SKILLS[u.skill].n}${ls.length?', '+ls.join(', '):''} · ${w.map(i=>`<img src="${icon(i.key)}" alt="">${i.n}${i.r?` (Rng ${rngTxt(rngShow(u,i))})`:''}`).join(' ')}</span></div><div class="dcap">${capPie(u,add)}</div>${on?'<span class="dtick">✓</span>':''}`;
 }
 const canReroll=()=>unl('reroll')&&!(run.rr=run.rr||{})[run.act||1];
 async function recruitNode(where='recruit'){

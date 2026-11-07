@@ -269,7 +269,7 @@ async function useAbility(u,id,tx,ty){
     for(const it of o.items.filter(i=>i.d)){(state.loot=state.loot||[]).push(it.k);sfx('item');notify(`${IT[it.k].n} dropped`,'Added to the spoils: choose who takes it after the fight.',icon(it.k))}
     if(o.team==='e'&&!o.summon)dropGold()}
   if(u.team==='p'&&u.hp>0&&exp){const g=gainExp(u,Math.min(100,Math.round(Math.max(10,exp)*EXP_RATE*(R('tome')?1.5:1)*(has(u,'quickStudy')?2:1))));await showExp(u,g);if(g&&g.gains)await levelUp(u,g)}
-  for(const o of foes)if(o.team==='p'&&o.hp<=0&&R('phoenix')&&!run.phx){o.hp=1;run.phx=1;pop(o,'Phoenix!','heal');sfx('rise');toast(`The Phoenix Feather saves ${o.name}`)}
+  for(const o of foes)if(o.team==='p'&&o.hp<=0&&R('phoenix')&&!run.phx){o.hp=Math.min(10,o.maxhp);run.phx=1;pop(o,'Phoenix!','heal');sfx('rise');toast(`The Phoenix Feather saves ${o.name}`)}
   state.units=state.units.filter(o=>o.hp>0);busy=false;render();checkEnd();
 }
 /* Tumble: a free 2-tile move that ignores height, then back to the command menu */

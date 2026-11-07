@@ -27,6 +27,8 @@ const canUse=(u,k)=>CLS[u.cls].w.includes(IT[k].t)&&(IT[k].el!=='lightning'||u.c
 const JUMP=2,jumpOf=u=>(CLS[u.cls].jump??JUMP)-(has(u,'plate')?1:0);
 function canStep(u,fx,fy,tx,ty){const C=CLS[u.cls];if(C.fly||C.phase||(u.sz||1)>1)return true;return Math.abs(hOf(tx,ty)-hOf(fx,fy))<=jumpOf(u)}
 const hDiff=(a,b)=>clamp(hOf(a.x,a.y)-hOf(b.x,b.y),-3,3);
+/* the range shown on cards and sheets: the weapon's, plus Eagle Eye (height bonus only applies per target) */
+const rngShow=(u,w)=>[w.r[0],w.r[1]+(typeof eagle==='function'?eagle(u,w):0)];
 function rngBonus(w,a,b){return a&&b&&w.t==='bow'?clamp(Math.floor((hOf(a.x,a.y)-hOf(b.x,b.y))/2),0,2):0}
 /* o (the target) is optional: without it, height can't add bow range */
 function wpnsAt(u,dist,o){const out=[];u.items.forEach((it,i)=>{const w=IT[it.k];if(isWpn(it.k)&&canUse(u,it.k)&&it.u>0&&dist>=w.r[0]&&dist<=w.r[1]+rngBonus(w,u,o)+eagle(u,w))out.push(i)});return out}
