@@ -620,3 +620,6 @@ button.it.sel{border-color:var(--gold)}
 .nmap .nm-scroll .nd.ok{opacity:1;filter:none;border-color:var(--gold);animation:npulse 1.1s ease-in-out infinite}
 @keyframes npulse{0%,100%{transform:scale(1);box-shadow:0 0 0 2px var(--gold),0 2px 4px rgba(50,28,8,.45)}50%{transform:scale(1.1);box-shadow:0 0 0 4px var(--gold),0 0 14px 4px color-mix(in srgb,var(--gold) 55%,transparent)}}
 @media (prefers-reduced-motion:reduce){.nmap .nm-scroll .nd.ok{animation:none;box-shadow:0 0 0 4px var(--gold)}}
+
+/* images (scene backdrops, portraits, icons) can't be picked up and dragged by the browser */
+img{-webkit-user-drag:none;user-select:none}
