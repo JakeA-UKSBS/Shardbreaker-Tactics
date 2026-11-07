@@ -10,7 +10,7 @@ const RELICS={
   coin:{n:'Lucky Coin',r:'u',d:'All units gain +10 Crit.'},
   fang:{n:'Vampire Fang',r:'u',d:'Units heal 5 HP when they defeat an enemy.'},
   horn:{n:'War Horn',r:'u',d:'On turn 1 of each battle, units deal +3 damage.'},
-  phoenix:{n:'Phoenix Feather',r:'r',d:'Once per run, the first unit to fall survives with 1 HP.'},
+  phoenix:{n:'Phoenix Feather',r:'r',d:'Once per run, the first unit to fall survives with 10 HP.'},
   crown:{n:'Slayer’s Crown',r:'r',d:'Units deal +4 damage to bosses and elite leaders.'},
   lantern:{n:'Pathfinder’s Lantern',r:'r',d:'Recruit nodes offer 4 units, 1 level higher.'},
   quiver:{n:'Endless Quiver',r:'u',x:2,d:'Bows deal +3 damage.'},

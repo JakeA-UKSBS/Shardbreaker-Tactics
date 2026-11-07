@@ -103,7 +103,7 @@ function card(u){
    <div class="ch"><b>${u.name}</b><span>${CLS[u.cls].n} · Lv ${u.lv}</span></div>
    <div class="hp"><span class="bar"><i style="width:${u.bars?barsOf(u).frac*100:u.hp/u.maxhp*100}%${u.bars?`;background:${BAR_COL[barsOf(u).n]}`:''}"></i></span><span>${u.hp}/${u.maxhp} HP${u.bars?` · Bar ${barsOf(u).n}/${u.bars}`:''}</span></div>
    ${u.team==='p'?`<div class="xp"><span class="bar"><i style="width:${u.exp}%"></i></span><span>${u.exp} EXP</span></div>`:''}${mpLine(u)}${stChips(u)}${monMoves(u)}
-   <div class="eq">${w?`<img src="${icon(w.key)}" alt="">${w.n} (Rng ${rngTxt(w.r)})`:'Unarmed'}${sk?` · <b class="sk">${sk.n}</b>`:''} · ${terrText(t)} · H${hOf(u.x,u.y)}${u.psn?` · <b class="psnt">Poisoned (${u.psn})</b>`:''}${(()=>{const g=gearOf(u),t=Object.entries(g).filter(([,v])=>v).map(([k,v])=>`${v>0?'+':''}${v} ${GEAR_N[k]}`);return t.length?` · Gear ${t.join(', ')}`:''})()}</div>
+   <div class="eq">${w?`<img src="${icon(w.key)}" alt="">${w.n} (Rng ${rngTxt(rngShow(u,w))})`:'Unarmed'}${sk?` · <b class="sk">${sk.n}</b>`:''} · ${terrText(t)} · H${hOf(u.x,u.y)}${u.psn?` · <b class="psnt">Poisoned (${u.psn})</b>`:''}${(()=>{const g=gearOf(u),t=Object.entries(g).filter(([,v])=>v).map(([k,v])=>`${v>0?'+':''}${v} ${GEAR_N[k]}`);return t.length?` · Gear ${t.join(', ')}`:''})()}</div>
   </div><button class="mini" type="button" data-act="sheet:${u.id}">Details</button></div>
   <div class="ueq"><div class="ueq-h">Equipment</div>${itemRows(u,false)}</div>`;
   return h;
@@ -164,7 +164,7 @@ function drawSheet(){
     ${skillBlock(u)}${monSheet(u)}`;
   }else{
     const atk=w?(w.mag?u.mag:u.str)+w.mt:'–',hit=w?w.hit+u.lck*2:'–',crit=w?(w.crit||0)+(CLS[u.cls].crit||0)+Math.floor(u.lck/2):'–';
-    pg=`<div class="scmb">${[['Atk',atk],['Hit',hit],['Crit',crit],['Avo',AS(u,w)*2+u.lck],['AS',AS(u,w)],['Rng',w?rngTxt(w.r):'–']].map(([l,v])=>`<div><span class="sl">${l}</span><b>${v}</b></div>`).join('')}</div>
+    pg=`<div class="scmb">${[['Atk',atk],['Hit',hit],['Crit',crit],['Avo',AS(u,w)*2+u.lck],['AS',AS(u,w)],['Rng',w?rngTxt(rngShow(u,w)):'–']].map(([l,v])=>`<div><span class="sl">${l}</span><b>${v}</b></div>`).join('')}</div>
     <div class="sitems">${u.items.map((it,i)=>{const x=IT[it.k];return`<button type="button" class="srit${i===ei?' eqd':''}${sheetIt===i?' sel':''}${isWpn(it.k)&&!canUse(u,it.k)?' no':''}" data-s="i${i}"><span class="e">${i===ei?'E':''}</span><img src="${icon(it.k)}" alt="">${x.n}${it.d?' <em>drops</em>':''}<span class="u">${[x.r&&x.t!=='item'?`Rng ${rngTxt(x.r)}`:'',endless(it.k)?'':`${it.u}/${x.uses}`].filter(Boolean).join(' · ')}</span></button>`}).join('')||'<p class="sid">No items.</p>'}</div>
     ${sheetIt!=null&&u.items[sheetIt]?`<p class="sid">${itemInfo(u,u.items[sheetIt].k)}</p>`:(isHi(u.cls,u.sz)||u.team==='p'?'<p class="sid dim">Click an item to see its stats. E marks the equipped weapon.</p>':'<p class="sid dim">Click an attack to see its stats.</p>')}`;
   }
