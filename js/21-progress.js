@@ -13,8 +13,7 @@ const UNLOCKS={
   gourmet:{n:'Gourmet',d:'Tavern meals last 1 more fight.'},
   reroll:{n:'Second Look',d:'Once per act, reroll a recruit or treasure offer.'},
   draft6:{n:'Wider Draft',d:'The Crossroads offers 6 travellers instead of 5.'},
-  startRelic:{n:'Heirloom',d:'Start each run by choosing 1 of 2 relics, one of them always Waybread or the Sage’s Satchel.'},
-  veterans:{n:'Veterans',d:'Your Crossroads travellers start at Lv 3.'}
+  startRelic:{n:'Heirloom',d:'Start each run by choosing 1 of 2 relics, one of them always Waybread or the Sage’s Satchel.'}
 };
 /* achievements: checked when a run ends. sq = the squad still standing at the end */
 const isRole=(u,r)=>u.cls.startsWith(`G.${r}.`),wields=(u,t)=>CLS[u.cls].w.includes(t);
@@ -25,7 +24,6 @@ const ACH=[
   {id:'volley',n:'Volley',d:'Finish a run with 3 or more bow users in the squad.',win:1,ok:sq=>sq.filter(u=>wields(u,'bow')).length>=3,cnt:sq=>sq.filter(u=>wields(u,'bow')).length,need:3,rw:'draft6'},
   {id:'cavalry',n:'Cavalry Charge',d:'Finish a run with 3 or more mounted units in the squad.',win:1,ok:sq=>sq.filter(u=>CLS[u.cls].mnt&&!CLS[u.cls].fly).length>=3,cnt:sq=>sq.filter(u=>CLS[u.cls].mnt&&!CLS[u.cls].fly).length,need:3,rw:null},
   {id:'fullhouse',n:'Full House',d:'Finish a run with a full squad of 6.',win:1,ok:sq=>sq.length>=6,cnt:sq=>sq.length,need:6,rw:'reroll'},
-  {id:'untouched',n:'Not a Scratch',d:'Finish a run without losing a single unit.',win:1,ok:()=>!run.lost,rw:'veterans'},
   {id:'arcane',n:'Arcane Circle',d:'Finish a run with 3 or more sigil casters in the squad.',win:1,ok:sq=>sq.filter(u=>wields(u,'art')&&!isRole(u,'support')).length>=3,cnt:sq=>sq.filter(u=>wields(u,'art')&&!isRole(u,'support')).length,need:3,rw:null},
   {id:'lone',n:'Lone Survivor',d:'Defeat the Crystal Heart with only 1 unit left standing.',win:1,ok:sq=>sq.length===1,rw:null},
   {id:'feast',n:'Feast',d:'Eat a meal at 2 taverns in one run.',ok:()=>(run.ate||0)>=2,cnt:()=>run.ate||0,need:2,rw:'gourmet'},
@@ -64,7 +62,7 @@ const newsHTML=lines=>lines.length?`<div class="news">${lines.map(l=>`<p>${l}</p
 /* the Unlocks screen: each achievement shows the picture of what it unlocks; click one to see how to get it.
    Achievements with progress (best so far) are grouped first with a bar; finished ones go last. */
 function unlockArt(k){const c='UNL|'+k;if(sprCache[c])return sprCache[c];let u;
-  if(k==='startRelic')u=relicArt('waybread');else if(k==='veterans')u=icon('ascensionFragment');else if(k==='funds')u=coinArt();else if(k==='gourmet')u=mealArt('boar');else if(k==='draft6')u=campArt();
+  if(k==='startRelic')u=relicArt('waybread');else if(k==='funds')u=coinArt();else if(k==='gourmet')u=mealArt('boar');else if(k==='draft6')u=campArt();
   else{const p=Px(16,16);if(k==='ascension'){p.poly([[8,1],[13,7],[8,15],[3,7]],'#c8283a');p.poly([[8,1],[13,7],[8,8]],'#ff5a6a');p.line(8,2,8,14,'#ffb0b8')}
     if(k==='reroll'){p.rect(1,5,8,8,'#efe6cf');p.rect(7,2,8,8,'#e0d6bc');for(const[x,y]of[[3,7],[6,10],[9,4],[12,7]])p.set(x,y,INK)}if(k==='none'){p.ell(8,8,5,5,'#5a5466')}
     p.outline(OUT);u=p.url()}
