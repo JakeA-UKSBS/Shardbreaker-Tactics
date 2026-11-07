@@ -613,3 +613,10 @@ button.it.sel{border-color:var(--gold)}
 /* the tavern mug on the node map: regular node size, the 24px icon at its own size */
 .nmap .nm-scroll .nd.n-tavern img{width:24px;height:24px;image-rendering:pixelated}
 .fx-slash{position:absolute;pointer-events:none;image-rendering:pixelated;filter:drop-shadow(0 0 3px rgba(255,248,220,.7))}
+
+/* node map: a flag planted on the current room, and a stronger pulse on the rooms you can pick next */
+.nmap .nm-scroll .nd .nflag{position:absolute;left:50%;bottom:55%;width:40px;height:40px;margin-left:-8px;pointer-events:none;filter:drop-shadow(0 2px 2px rgba(50,28,8,.5));z-index:2}
+.nmap .nm-scroll .nd .nflag img{width:100%;height:100%;image-rendering:pixelated}
+.nmap .nm-scroll .nd.ok{opacity:1;filter:none;border-color:var(--gold);animation:npulse 1.1s ease-in-out infinite}
+@keyframes npulse{0%,100%{transform:scale(1);box-shadow:0 0 0 2px var(--gold),0 2px 4px rgba(50,28,8,.45)}50%{transform:scale(1.1);box-shadow:0 0 0 4px var(--gold),0 0 14px 4px color-mix(in srgb,var(--gold) 55%,transparent)}}
+@media (prefers-reduced-motion:reduce){.nmap .nm-scroll .nd.ok{animation:none;box-shadow:0 0 0 4px var(--gold)}}
