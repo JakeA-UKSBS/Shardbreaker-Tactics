@@ -192,7 +192,7 @@ function renderPanel(){
   else if(ui==='abil'||ui==='aim'){const r=abPanel(u);h=r.h;fm=r.fm}
   else if(ui==='items'){
     const it=itemSel!=null?u.items[itemSel]:null;let ops='';
-    if(it){if(isWpn(it.k)&&canUse(u,it.k)&&itemSel!==eqIdx(u))ops+='<button class="go" type="button" data-act="equip">Equip</button>';if(IT[it.k].t==='item'&&(u.hp<u.maxhp||u.psn))ops+='<button class="go" type="button" data-act="use">Use</button>';if(isWpn(it.k)&&!canUse(u,it.k))ops+=`<span class="hint">${u.name} can't wield this.</span>`}
+    if(it){if(isWpn(it.k)&&canUse(u,it.k)&&itemSel!==eqIdx(u))ops+='<button class="go" type="button" data-act="equip">Equip</button>';if(IT[it.k].t==='item'&&u.hp<u.maxhp)ops+='<button class="go" type="button" data-act="use">Use</button>';if(isWpn(it.k)&&!canUse(u,it.k))ops+=`<span class="hint">${u.name} can't wield this.</span>`}
     h=`<div class="ch"><b>${u.name}</b><span>Items · ${u.hp}/${u.maxhp} HP</span></div>`+itemRows(u,true)+`<div class="acts">${ops}<button type="button" data-act="menu">Back</button></div>`;
   }
   else if(ui==='target'){const sw=tmode==='atk'?(healTargets(u).length?'<button class="go" type="button" data-act="heal">Heal</button>':''):(atkTargets(u).length?'<button class="go" type="button" data-act="attack">Attack</button>':'');h=card(u)+`<p class="hint">Click a highlighted ${tmode==='heal'?'ally to heal':'enemy to see the forecast'}, then click it again to ${tmode==='heal'?'heal':'attack'}.</p>`;fm=`<div class="acts">${sw}${canSummon(u)?`<button class="go" type="button" data-act="summon">Summon ${famOf(u).n}</button>`:''}<button type="button" data-act="items">Items</button>${tradeMates(u).length?'<button type="button" data-act="trade">Trade</button>':''}<button type="button" data-act="wait">Wait</button><button type="button" data-act="menu">Back</button></div>`}
@@ -212,9 +212,9 @@ function renderPanel(){
       <div class="ufc-b"><button class="go" type="button" data-act="attack-go">Attack</button><button type="button" data-act="back">Back</button></div>`;
     }
   }
-  else if(inspect)h=card(inspect)+(inspect.team==='e'?'<p class="hint">Red tiles show where it can strike next turn.</p>':'');
+  else if(inspect)h=card(inspect)+(inspect.team==='e'?'<p class="hint">Red tiles show where it can strike next turn. Right-click enemies to see detailed stats.</p>':'');
   else if(ui==='terrain')h=terInfo;
-  else h=`<p class="hint"><b>${BATTLE.title}.</b> Click a blue unit to move it. Drag to pan the map, scroll to zoom.</p>`;
+  else h=`<p class="hint"><b>${BATTLE.title}.</b> Click a blue unit to move it. Right-click enemies to see detailed stats. Drag to pan the map, scroll to zoom.</p>`;
   panel.innerHTML=h;
   /* the command menu and the forecast dock in a bottom corner of the map view, on the side away from the fight */
   let mEl=$('#umenu');if(!mEl||!mEl.isConnected){mEl=document.createElement('div');mEl.id='umenu';mEl.className='umenu';vp.appendChild(mEl);
