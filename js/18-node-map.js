@@ -128,7 +128,7 @@ function unitDetail(u){const C=CLS[u.cls],sk=[u.skill,...(u.skills||[]).map(x=>x
   <div class="ns-h">Items</div>${u.items.map((it,ii,_a,ei=eqIdx(u))=>`<div class="ns-row${ii===ei?' eqd':''}"><img src="${icon(it.k)}" alt=""><span>${itemText(it.k).replace('</b> · ','</b>')}${IT[it.k].t==='item'?` <span class="uses">${it.u}/${IT[it.k].uses}</span>`:''}</span>${IT[it.k].t==='item'&&u.hp<u.maxhp?`<button type="button" class="mini go" data-salve="${ii}" data-uu="${run.roster.indexOf(u)}">Use</button>`:''}${ii===ei?'<span class="ns-eq">Equipped</span>':`${isWpn(it.k)&&canUse(u,it.k)?`<button type="button" class="mini go" data-equip="${ii}" data-uu="${run.roster.indexOf(u)}">Equip</button>`:''}<button type="button" class="mini ns-drop" data-drop="${ii}" data-uu="${run.roster.indexOf(u)}" aria-label="Drop ${IT[it.k].n}">Drop</button>`}</div>`).join('')||'<p class="ns-none">No items.</p>'}
   <div class="ns-h">Wields</div><p class="ns-none">${C.w.map(t=>TN[t]).join(', ')}</p>`}
 async function restNode(){
-  run.roster.forEach(u=>u.hp=u.maxhp);sfx('heal');
+  run.roster.forEach(u=>u.hp=u.maxhp);
   const train=R('bedroll')?100:50;
   if(R('kettle')){await expAll(run.roster,20);toast('Camp Kettle: everyone gains 20 EXP')}
   const m=await modal(`<div class="eyebrow">Rest</div><h2>A quiet camp</h2><p>Everyone rests and heals fully. Choose one unit to train: they gain ${train} EXP.</p><div class="draft">${run.roster.map((u,i)=>`<button type="button" class="dcard" data-m="t${i}">${unitCard(u,false,0,true)}</button>`).join('')}</div>`);
