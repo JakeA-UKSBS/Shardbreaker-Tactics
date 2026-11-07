@@ -9,11 +9,11 @@
    during your turn lasts through its next phase); 'start' ones count down at the start of it (so a Guard you put
    up lasts through the enemy's next phase). */
 const STATUS={
-  burn:{n:'Burn',tick:'end',bad:1,d:'Takes 4 damage at the start of each of its turns. Standing in water puts it out.'},
-  chill:{n:'Chill',tick:'end',bad:1,d:'−2 Move.'},
+  burn:{n:'Burn',tick:'end',bad:1,d:'Takes 2 damage at the start of each of its turns. Standing in water puts it out.'},
+  chill:{n:'Slow',tick:'end',bad:1,d:'−2 Move.'},
   root:{n:'Root',tick:'end',bad:1,d:'Can’t move, but can still act.'},
   stun:{n:'Stun',tick:'end',bad:1,d:'Skips its next turn.'},
-  blind:{n:'Blind',tick:'end',bad:1,d:'−30 Hit.'},
+  blind:{n:'Blind',tick:'end',bad:1,d:'−20 Hit.'},
   weak:{n:'Weak',tick:'end',bad:1,d:'Deals 30% less damage.'},
   sunder:{n:'Sundered',tick:'end',bad:1,d:'−3 Def.'},
   challenged:{n:'Challenged',tick:'end',bad:1,d:'Must attack whoever challenged it, if it can reach them.'},
@@ -29,7 +29,7 @@ const hasSt=(u,k)=>!!(u&&u.st&&u.st[k]&&u.st[k].n>0);
 function addSt(u,k,n,by){if(!u.st)u.st={};const o=u.st[k];u.st[k]={n:Math.max(n,o?o.n:0),by:by?by.id:(o&&o.by)};if(k==='stun'&&u.team==='p')u.acted=true}
 function tickSt(team,when){for(const u of state.units)if(u.team===team&&u.st){for(const k in u.st)if(STATUS[k]&&STATUS[k].tick===when){u.st[k].n--;if(u.st[k].n<=0)delete u.st[k]}}}
 /* at the start of a team's phase: burns hurt (but don't kill), water puts them out */
-function burnTick(team){for(const u of state.units)if(u.team===team&&hasSt(u,'burn')&&u.hp>0){if(['water','shallow'].includes(ter(u.x,u.y).k)){delete u.st.burn;pop(u,'Doused','heal');continue}const d=Math.min(4,u.hp-1);if(d>0){u.hp-=d;pop(u,'Burn -'+d,'crit')}}}
+function burnTick(team){for(const u of state.units)if(u.team===team&&hasSt(u,'burn')&&u.hp>0){if(['water','shallow'].includes(ter(u.x,u.y).k)){delete u.st.burn;pop(u,'Doused','heal');continue}const d=Math.min(2,u.hp-1);if(d>0){u.hp-=d;pop(u,'Burn -'+d,'crit')}}}
 const stList=u=>Object.keys(u.st||{}).filter(k=>hasSt(u,k)&&STATUS[k]);
 
 /* ---- kit passives (they become the character's personal skill) ---- */
@@ -65,7 +65,7 @@ const ABIL={
   hex:{n:'Hex',mp:5,mag:1,el:'dark',side:'foe',r:[1,3],st:['weak',2],d:'The target is Weak (deals 30% less damage) for 2 turns.'},
   darkPulse:{n:'Dark Pulse',mp:10,mag:1,el:'dark',side:'self',shape:'burst1',dmg:1,d:'1.0× magic damage to every enemy around her.'},
   flameBurst:{n:'Flame Burst',mp:5,mag:1,el:'fire',side:'foe',r:[1,3],shape:'cross',aim:'any',dmg:.9,st:['burn',2,.3],d:'A cross of fire up to 3 away: 0.9× magic damage, 30% chance to Burn.'},
-  frostWave:{n:'Frost Wave',mp:7,mag:1,el:'water',side:'foe',r:[1,1],shape:'cone',aim:'dir',dmg:.9,st:['chill',1],d:'A cone of frost (4 tiles): 0.9× magic damage and Chill (−2 Move).'},
+  frostWave:{n:'Frost Wave',mp:7,mag:1,el:'water',side:'foe',r:[1,1],shape:'cone',aim:'dir',dmg:.9,st:['chill',1],d:'A cone of frost (4 tiles): 0.9× magic damage and Slow (−2 Move).'},
   chainLightning:{n:'Chain Lightning',mp:9,mag:1,el:'lightning',side:'foe',r:[1,4],dmg:1,chain:[2,.6],d:'1.0× magic damage, then it jumps to up to 2 enemies near the target at 0.6×.'},
   sunder:{n:'Sunder',cd:2,side:'foe',r:[1,1],dmg:1.2,st:['sunder',2],d:'1.2× damage, and the target has −3 Def for 2 turns.'},
   valiantThrust:{n:'Valiant Thrust',cd:3,side:'foe',r:[1,1],shape:'pierce',aim:'dir',dmg:1,d:'A lunge through 2 tiles in a line: 1.0× damage to both.'},
@@ -74,7 +74,7 @@ const ABIL={
   circleOfRest:{n:'Circle of Rest',mp:8,side:'ally',r:[0,3],shape:'cross',aim:'any',heal:.8,cure:1,d:'Heals every ally in a cross for 0.8× (Mag + 5) and cures their bad statuses.'},
   sanctuary:{n:'Sanctuary',mp:10,side:'ally',r:[0,2],shape:'area',aim:'any',give:['guard',1],d:'Guard (30% less damage) on every ally in a 3×3 area until your next turn.'},
   backstab:{n:'Backstab',cd:2,side:'foe',r:[1,1],dmg:1,backstab:1,d:'1.0× damage, doubled from higher ground or when another ally is next to the target.'},
-  smokeBomb:{n:'Smoke Bomb',cd:4,side:'self',shape:'burst1',st:['blind',1],give:['smoke',1],d:'Enemies around him are Blinded (−30 Hit); he and allies around him get +30 Avoid until your next turn.'},
+  smokeBomb:{n:'Smoke Bomb',cd:4,side:'self',shape:'burst1',st:['blind',1],give:['smoke',1],d:'Enemies around him are Blinded (−20 Hit); he and allies around him get +30 Avoid until your next turn.'},
   tumble:{n:'Tumble',cd:2,side:'self',tumble:1,free:1,d:'Move up to 2 more tiles, ignoring height. Doesn’t use his action.'},
   shieldBash:{n:'Shield Bash',cd:2,side:'foe',r:[1,1],dmg:1,push:1,d:'1.0× damage and push 1.'},
   challenge:{n:'Challenge',cd:3,side:'self',shape:'burst2',st:['challenged',1],d:'Enemies within 2 tiles must attack her next turn, if they can reach her.'},
@@ -101,7 +101,42 @@ const KITS={
   lysander:{passive:'audience',mp:24,abil:['songOfValour','lullaby','soothingBallad','encore']}
 };
 const kitOf=u=>u&&u.cast&&KITS[u.cast]||null;
-const abilOf=u=>(kitOf(u)||{abil:[]}).abil;
+const abilOf=u=>u&&u.team==='e'&&MKITS[u.cls]?MKITS[u.cls]:(kitOf(u)||{abil:[]}).abil;
+
+/* ---- monster moves: 2 per monster, cooldowns only (no MP). Extra fields: stone (Stone, bosses immune), psn (Poison),
+   solo (a self move that only affects the user), healPct (heals this share of max HP). The enemy AI picks between
+   these and a normal attack by score (aiAbil in 12-turns.js). Monsters not listed here still only attack. */
+Object.assign(ABIL,{
+  stoneGaze:{n:'Stone Gaze',cd:4,mag:1,side:'foe',r:[1,3],dmg:.5,stone:1,d:'0.5× magic damage from up to 3 away, and the target is turned to Stone: it skips its next turn and can’t counter. Bosses are immune.'},
+  constrict:{n:'Constrict',cd:3,side:'foe',r:[1,1],dmg:.8,st:['root',1],psn:1,d:'0.8× damage; the target is Rooted and Poisoned.'},
+  mudSpit:{n:'Mud Spit',cd:3,side:'foe',r:[2,3],dmg:.8,st:['chill',1],d:'0.8× damage from 2–3 tiles away, and the target is Slowed.'},
+  engulf:{n:'Engulf',cd:3,side:'foe',r:[1,1],dmg:1,st:['blind',2],d:'1.0× damage, and the target is Blinded for 2 turns.'},
+  howl:{n:'Howl',cd:4,side:'self',shape:'burst2',give:['rally',2],others:1,d:'Allies within 2 tiles are Rallied (+2 Str, +2 Def) for 2 turns.'},
+  hamstring:{n:'Hamstring',cd:3,side:'foe',r:[1,1],dmg:.8,st:['chill',1],d:'0.8× damage, and the target is Slowed.'},
+  frostBite:{n:'Frost Bite',cd:3,side:'foe',r:[1,1],dmg:1,st:['chill',1],d:'1.0× damage, and the target is Slowed.'},
+  graspingRoots:{n:'Grasping Roots',cd:3,side:'foe',r:[1,3],st:['root',1],d:'Roots burst from the ground up to 3 away: the target is Rooted.'},
+  barkSkin:{n:'Bark Skin',cd:4,side:'self',solo:1,self:[['guard',1]],d:'Guard (30% less damage) until its next turn.'},
+  maul:{n:'Maul',cd:3,side:'foe',r:[1,1],dmg:1.5,st:['sunder',2],d:'1.5× damage, and the target is Sundered (−3 Def) for 2 turns.'},
+  roar:{n:'Roar',cd:4,side:'self',shape:'burst2',st:['weak',1],d:'Enemies within 2 tiles are Weakened (deal 30% less damage).'},
+  fireball:{n:'Fireball',cd:3,mag:1,el:'fire',side:'foe',r:[2,3],shape:'cross',aim:'any',dmg:.8,st:['burn',2],d:'A cross of fire 2–3 tiles away: 0.8× magic damage and Burn.'},
+  flicker:{n:'Flicker',cd:3,side:'tile',r:[1,4],d:'Blinks to an empty tile up to 4 away.'},
+  moltenFist:{n:'Molten Fist',cd:3,side:'foe',r:[1,1],dmg:1.2,st:['burn',2],d:'1.2× damage and Burn.'},
+  eruption:{n:'Eruption',cd:4,side:'self',shape:'burst1',dmg:.8,d:'0.8× damage to every enemy around it.'},
+  searingBreath:{n:'Searing Breath',cd:3,mag:1,el:'fire',side:'foe',r:[1,1],shape:'cone',aim:'dir',dmg:1,st:['burn',2],d:'A cone of fire (4 tiles): 1.0× magic damage and Burn.'},
+  wingGust:{n:'Wing Gust',cd:4,side:'self',shape:'burst2',dmg:.5,push:1,d:'0.5× damage and push 1 to every enemy within 2 tiles.'},
+  burrow:{n:'Burrow',cd:3,side:'tile',r:[1,4],shape:'area',dmg:1,d:'Tunnels to an empty tile up to 4 away and bursts out: 1.0× damage to every enemy around it.'},
+  sandBlast:{n:'Sand Blast',cd:3,side:'foe',r:[1,1],shape:'cone',aim:'dir',dmg:.8,st:['blind',2],d:'A cone of sand (4 tiles): 0.8× damage and Blind.'},
+  clubSmash:{n:'Club Smash',cd:3,side:'foe',r:[1,1],dmg:1.5,d:'1.5× damage.'},
+  regenerate:{n:'Regenerate',cd:4,side:'self',solo:1,healPct:.3,d:'Heals 30% of its max HP.'}
+});
+const MKITS={
+  Lamia:['stoneGaze','constrict'],MudMonster:['mudSpit','engulf'],
+  Wolf:['howl','hamstring'],BlightedTreant:['graspingRoots','barkSkin'],HollowBear:['maul','roar'],
+  FireSprite:['fireball','flicker'],BoulderGolem:['moltenFist','eruption'],MagmaDragon:['searingBreath','wingGust'],
+  SandWorm:['burrow','sandBlast'],FrostWolf:['frostBite','howl'],IceTroll:['clubSmash','regenerate']
+};
+/* the moves line on an enemy's info card */
+function monMoves(u){const l=u.team==='e'?MKITS[u.cls]:null;if(!l)return'';return`<div class="eq">Moves: ${l.map(id=>{const cd=(u.cd||{})[id]||0;return`<b class="sk" title="${ABIL[id].d}">${ABIL[id].n}</b>${cd?` (ready in ${cd})`:''}`}).join(' · ')}</div>`}
 const mpMax=u=>(kitOf(u)||{mp:0}).mp;
 const MP_REGEN=2;
 /* abilities are a little less accurate than a basic attack */
@@ -123,7 +158,7 @@ function dmgMods(x,y,ctx,dmg){
 function stCalc(x,xw,y){
   const phys=!xw.mag,fx=x.hp>=x.maxhp,fy=y.hp>=y.maxhp;
   return{pow:(hasSt(x,'rally')&&phys?2:0),df:(phys&&hasSt(y,'rally')?2:0)-(phys&&hasSt(y,'sunder')?3:0)+(phys&&has(y,'plate')?2:0),
-    acc:(hasSt(x,'blind')?-30:0)+(state.units.some(o=>o!==x&&o.hp>0&&o.team===x.team&&has(o,'audience')&&man(o,x)<=2)?10:0),avo:(hasSt(y,'smoke')?30:0)+(has(y,'beginnersLuck')&&fy?10:0),crit:(has(x,'beginnersLuck')&&fx?10:0)};
+    acc:(hasSt(x,'blind')?-20:0)+(state.units.some(o=>o!==x&&o.hp>0&&o.team===x.team&&has(o,'audience')&&man(o,x)<=2)?10:0),avo:(hasSt(y,'smoke')?30:0)+(has(y,'beginnersLuck')&&fy?10:0),crit:(has(x,'beginnersLuck')&&fx?10:0)};
 }
 const eagle=(u,w)=>w&&w.t==='bow'&&has(u,'eagleEye')?1:0;
 const stMov=u=>hasSt(u,'chill')?2:0;
@@ -134,7 +169,7 @@ function abRange(u,id){const a=ABIL[id];if(a.r!=='wpn')return a.r;let r0=9,r1=0;
 /* the tiles an ability touches when aimed at (tx,ty) */
 function shapeTiles(u,id,tx,ty){
   const a=ABIL[id],sh=a.shape||'one',out=[];const add=(x,y)=>{if(inB(x,y))out.push([x,y])};
-  if(a.side==='self'){const R=sh==='burst2'?2:1;for(let dy=-R;dy<=R;dy++)for(let dx=-R;dx<=R;dx++){if(!dx&&!dy)continue;if(sh==='burst2'?Math.abs(dx)+Math.abs(dy)<=2:true)add(u.x+dx,u.y+dy)}return out}
+  if(a.side==='self'){const R=sh==='burst2'?2:1,z=u.sz||1;for(let y=u.y-R;y<u.y+z+R;y++)for(let x=u.x-R;x<u.x+z+R;x++){const d=man(u,{x,y});if(!d)continue;if(sh==='burst2'?d<=2:Math.max(Math.max(0,u.x-x,x-(u.x+z-1)),Math.max(0,u.y-y,y-(u.y+z-1)))<=1)add(x,y)}return out}
   if(sh==='one')add(tx,ty);
   else if(sh==='cross'){add(tx,ty);for(const[dx,dy]of DIRS)add(tx+dx,ty+dy)}
   else if(sh==='area'){for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++)add(tx+dx,ty+dy)}
@@ -149,6 +184,7 @@ function abHits(u,id,tx,ty){
   for(const[x,y]of ts){const o=unitAt(x,y);if(!o||o.hp<=0||seen.has(o.id))continue;seen.add(o.id);if(hostile(o,u))foes.push(o);else if(o!==u)allies.push(o)}
   if(a.side==='ally'&&ts.some(([x,y])=>x===u.x&&y===u.y))allies.unshift(u);
   if(a.side==='self'&&(a.give||a.self)&&!a.others&&!allies.includes(u))allies.unshift(u);
+  if(a.solo)return{foes:[],allies:[u]};
   return{foes:a.side==='ally'?[]:foes,allies:a.side==='foe'||a.side==='tile'?[]:allies};
 }
 /* where an ability can be aimed: a Set of tile keys */
@@ -174,7 +210,7 @@ function abVs(u,id,t,mult){
   const a=ABIL[id],w=abWeapon(u,a),c=calc(u,w,t,null,{init:u,phase});let m=(mult||a.dmg||0);if(a.backstab&&abBackstab(u,t))m*=2;
   return{dmg:dmgMods(u,t,{init:u},Math.max(0,Math.round(c.pow*m)-c.df)),hit:clamp(c.hit+(a.hit||0)+ABIL_HIT,0,100),n:a.hits||1,eff:c.eff};
 }
-function healAmt(u,id,t){const a=ABIL[id];let h=Math.round((u.mag+5)*a.heal);if(has(u,'lastLight')&&t.hp*2<t.maxhp)h=Math.round(h*1.5);return Math.min(h,t.maxhp-t.hp)}
+function healAmt(u,id,t){const a=ABIL[id];let h=a.healPct?Math.round(t.maxhp*a.healPct):Math.round((u.mag+5)*a.heal);if(has(u,'lastLight')&&t.hp*2<t.maxhp)h=Math.round(h*1.5);return Math.min(h,t.maxhp-t.hp)}
 /* who Chain Lightning jumps to */
 function chainTo(u,id,t){const a=ABIL[id];return state.units.filter(o=>o!==t&&o.hp>0&&hostile(o,u)&&man(o,t)<=2).sort((p,q)=>man(p,t)-man(q,t)).slice(0,a.chain[0])}
 
@@ -211,16 +247,18 @@ async function useAbility(u,id,tx,ty){
         if((rn()+rn())/2<V2.hit){const d=Math.min(V2.dmg,c.hp);c.hp-=d;pop(c,'-'+d,'dmg');flash(c);exp+=expFor(u,c,true,c.hp<=0);if(c.hp<=0)killed.push(c)}else pop(c,'Miss','miss');render();await sleep(D(260))}
       if(t.hp<=0){killed.push(t);continue}}
     if(a.st&&landed&&t.hp>0&&(!a.st[2]||rn()<a.st[2]*100)){addSt(t,a.st[0],a.st[1],u);pop(t,STATUS[a.st[0]].n,'crit');await sleep(D(200))}
+    if(a.psn&&landed&&t.hp>0&&!(t.team==='p'&&M('soup'))){t.psn=3;pop(t,'Poisoned','crit');await sleep(D(200))}
+    if(a.stone&&landed&&t.hp>0&&!t.boss){t.stone=1;pop(t,'Stone!','crit');sfx('earth');toast(`${t.name} is turned to stone and loses ${t.team==='p'?'their':'its'} next turn`);await sleep(D(200))}
     if(!a.dmg)exp+=10;
   }
   /* healing, buffs, cures */
   for(const t of allies){
-    if(a.heal){const h=healAmt(u,id,t);if(h){t.hp+=h;pop(t,'+'+h,'heal')}exp+=12}
+    if(a.heal||a.healPct){const h=healAmt(u,id,t);if(h){t.hp+=h;pop(t,'+'+h,'heal')}exp+=12}
     if(a.cure&&t.st)for(const k of Object.keys(t.st))if(STATUS[k]&&STATUS[k].bad){delete t.st[k];pop(t,'Cured','heal')}
     if(a.give){addSt(t,a.give[0],a.give[1],u);pop(t,STATUS[a.give[0]].n,'heal');exp+=6}
     if(a.encore){t.acted=false;pop(t,'Encore!','heal');exp+=10}
   }
-  if(a.heal||a.give||a.cure||a.encore)sfx('heal');
+  if(a.heal||a.healPct||a.give||a.cure||a.encore)sfx('heal');
   for(const[k,n]of a.self||[]){addSt(u,k,n,u);pop(u,STATUS[k].n,'heal')}
   render();await sleep(D(300));
   /* defeated enemies: relic heal, drops and gold, as in a normal fight */
@@ -228,6 +266,7 @@ async function useAbility(u,id,tx,ty){
     for(const it of o.items.filter(i=>i.d)){(state.loot=state.loot||[]).push(it.k);sfx('item');notify(`${IT[it.k].n} dropped`,'Added to the spoils: choose who takes it after the fight.',icon(it.k))}
     if(o.team==='e'&&!o.summon)dropGold()}
   if(u.team==='p'&&u.hp>0&&exp){const g=gainExp(u,Math.min(100,Math.round(Math.max(10,exp)*EXP_RATE*(R('tome')?1.5:1)*(has(u,'quickStudy')?2:1))));await showExp(u,g);if(g&&g.gains)await levelUp(u,g)}
+  for(const o of foes)if(o.team==='p'&&o.hp<=0&&R('phoenix')&&!run.phx){o.hp=1;run.phx=1;pop(o,'Phoenix!','heal');sfx('rise');toast(`The Phoenix Feather saves ${o.name}`)}
   state.units=state.units.filter(o=>o.hp>0);busy=false;render();checkEnd();
 }
 /* Tumble: a free 2-tile move that ignores height, then back to the command menu */

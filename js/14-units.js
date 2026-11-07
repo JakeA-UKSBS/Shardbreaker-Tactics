@@ -90,6 +90,5 @@ function monsterArt(c,strike){return art('monsters/'+c+(strike?'-strike':''),()=
   const L=boss?clone(boss.boss.look||{}):monLook(c);rngS=s0;
   return fig(L,c,FOE[c]&&FOE[c].look&&FOE[c].look.spirit?'p':'e',strike?'strike':'idle',FOE[c]&&FOE[c].items[0],1)})}
 function mkMon(c,lv){const u=foe(c,lv,0,0);u.look=monLook(c);
-  if(c==='Lamia')u.skill='stoneGaze';
   return u}
 
