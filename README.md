@@ -17,7 +17,7 @@ Each run picks 2 of these 6 as its acts (`BIOMES`, `ACTS`). Each has 2-3 battle 
 | Region | Monsters | Rule | Boss |
 | --- | --- | --- | --- |
 | Sobek’s Mire | Bog Lurkers, Lamias, Mud Monsters | Starting a turn in ankle-deep water or mangrove roots costs 1 Move; sand is solid | Krondis the alligator |
-| Cursed Woodland | Wolves, Cursed Stags, Blighted Treants | Cursed thickets: +25 Avoid, 2 Move to enter | The Hollow Bear |
+| Cursed Woodland | Wolves, Cursed Stags, Blighted Treants | Cursed thickets: +10 Avoid, 2 Move to enter | The Hollow Bear |
 | Volcanic Isle | Magma Golems, Fire Sprites | Magma blocks foot units; fliers and fire creatures cross it | Pyraxis, the Magma Dragon |
 | Sandstone Desert | Jackals, Sand Worms, Sandstone Golems | Quicksand costs 1 Move next turn; sandstone outcrops (cream feldspar with smoky quartz) give cover | The Pyrite Colossus |
 | Frostveil Reaches | Frost Wolves, Frost Sprites, Agate Golems, Ice Trolls (placeholder art) | Deep snow costs 1 Move next turn (snow creatures ignore it); frozen lakes −10 Avoid; blue agate gives cover | The Yeti (placeholder art) |
