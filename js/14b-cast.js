@@ -17,13 +17,14 @@ const CAST_CLASSES={
   'Knight':'knight.armour.pole.1','Mender':'support.foot.spirit.1','Rogue':'rogue.foot.blade.1','Shieldmaiden':'shield.foot.blade.1',
   'Adventurer':'shield.foot.blade.1','Cavalier':'tank.mounted.pole.1','Crossbowman':'skirm.foot.bow.1','Drake Rider':'bruiser.flying.pole.2',
   'Horse Archer':'skirm.mounted.bow.2','Swordsman':'sword.foot.blade.1','Pyromancer':'caster.foot.art.1','Minstrel':'support.foot.spirit.1',
+  'Summoner':'summoner.foot.art.1',
   /* advanced classes */
   'Sniper':'skirm.foot.bow.2','Bow Cavalry':'skirm.mounted.bow.2','Berserker':'bruiser.foot.heavy.2','Witch':'caster.foot.art.2',
   'Shaman':'caster.foot.art.2','Archmage':'caster.foot.art.2','Stormlord':'caster.foot.art.2','Juggernaut':'knight.armour.heavy.2',
   'Paladin':'knight.mounted.pole.2','Saint':'support.foot.spirit.2','Crusader':'shield.armour.blade.2','Duelist':'sword.foot.blade.2',
   'Assassin':'rogue.foot.blade.2','Valkyrie':'shield.flying.pole.2','Aegis':'shield.armour.blade.2','Hero':'shield.foot.blade.2',
   'Warlord':'tank.mounted.heavy.2','Artillery':'tank.armour.bow.2','Swordmaster':'sword.foot.blade.2','Pyrolord':'caster.foot.art.2',
-  'Summoner':'summoner.foot.art.2','Bard':'support.foot.spirit.2','Mercenary':'sword.foot.blade.2','Warlock':'caster.foot.art.2'
+  'Grand Summoner':'summoner.foot.art.2','Bard':'support.foot.spirit.2','Mercenary':'sword.foot.blade.2','Warlock':'caster.foot.art.2'
 };
 /* ASC_BONUS: stats each advanced cast class adds on ascending (and joiners who start advanced get them too), in stat order */
 const ASC_BONUS={
@@ -47,7 +48,8 @@ const ASC_BONUS={
   'Aegis':[6,2,0,0,0,0,5,3],
   'Hero':[4,3,0,0,3,2,2,1],
   'Swordmaster':[2,3,0,0,5,4,0,1],
-  'Bard':[3,0,3,0,3,3,1,2]};
+  'Bard':[3,0,3,0,3,3,1,2],
+  'Grand Summoner':[4,0,5,0,2,2,2,4]};
 const castCls=n=>`G.${CAST_CLASSES[n]}.${n.replace(/ /g,'')}`;
 for(const n in CAST_CLASSES){const base=ensureCls('G.'+CAST_CLASSES[n]);const C=Object.assign({},CLS[base],{n});delete C.promo;if(ASC_BONUS[n])C.bonus=ASC_BONUS[n];CLS[castCls(n)]=C}
 
@@ -108,7 +110,8 @@ const CAST=[
   {id:'valen',name:'Valen',cls:'Swordsman',wk:'knightlySword',joins:'act1',look:{style:'mane',hair:'#d9b25a',skin:'#f3cfa6',cloth:'#6a1e2a',pants:'#3a2228',sash:'#c9c3b8',stance:'guard',boots:'#4a3426',eye:'#3a5a8a'},
     asc:{'Swordmaster':{wk:'hookedBlade',look:{capeC:'#4a1420',stance:'high',tails:'#c9c3b8',bracers:'#a8b4c8',lapels:'#c9c3b8',noCrown:true}}}},
   {id:'celestine',name:'Celestine',cls:'Paladin',wk:'ironSpear',joins:'act1',look:{fem:true,style:'long',hair:'#d9b25a',skin:'#f6dcc4',cloth:'#3a6ab0',metal:'#e4ecf6',shield:'kite',shieldC:'#3a6ab0',capeC:'#2a4a8a',horse:'#f3f0e8',eye:'#3a5a8a'}},
-  {id:'seren',name:'Seren',cls:'Summoner',wk:'runeStaff',joins:'run',look:{fem:true,style:'long',hair:'#1d1a24',skin:'#f3cfa6',cloth:'#4a8a9a',sash:'#cfe8f0',shawl:'#cfe8f0',capeC:'#2f6a7a',orb:'#9fe8ff',nature:true,eye:'#3a6a7a'}},
+  {id:'seren',name:'Seren',cls:'Summoner',wk:'runeStaff',joins:'run',look:{fem:true,style:'long',hair:'#1d1a24',skin:'#f3cfa6',cloth:'#4a8a9a',sash:'#cfe8f0',shawl:'#cfe8f0',capeC:'#2f6a7a',orb:'#9fe8ff',nature:true,eye:'#3a6a7a'},
+    asc:{'Grand Summoner':{look:{cloth:'#2f6a7a',capeC:'#1f4a5a',collar:'#cfe8f0',gear:'circlet',orb:'#c8f4ff'}}}},
   {id:'zwei',name:'Zwei',cls:'Mercenary',wk:'greatsword',joins:'act1',look:{fem:true,style:'bun',hair:'#1d1a24',skin:'#a8714a',cloth:'#efe6cf',pants:'#c9bfa0',sash:'#e2b553',collar:'#2a5aa8',capeC:'#2a5aa8',stance:'shoulder',eye:'#2a2230'}},
   {id:'kyul',name:'Kyul',cls:'Warlock',wk:'umbralSigil',joins:'act1',look:{gear:'hood',skin:'#c9b6a0',cloth:'#1e2a22',sash:'#3fae6a',capeC:'#141a16',mask:'#141a16',mist:'#2a2230',hand:true,el:'#5fe08a',eye:'#3fae6a'}}
 ];
