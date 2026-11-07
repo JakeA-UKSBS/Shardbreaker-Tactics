@@ -89,6 +89,6 @@ function monsterArt(c,strike){return art('monsters/'+c+(strike?'-strike':''),()=
   const boss=Object.values(BIOMES).find(B=>B.boss&&B.boss.cls===c),s0=rngS;seedRng(7);
   const L=boss?clone(boss.boss.look||{}):monLook(c);rngS=s0;
   return fig(L,c,FOE[c]&&FOE[c].look&&FOE[c].look.spirit?'p':'e',strike?'strike':'idle',FOE[c]&&FOE[c].items[0],1)})}
-function mkMon(c,lv){const u=foe(c,lv,0,0);u.look=monLook(c);
+function mkMon(c,lv){const u=foe(c,lv,0,0);u.look=monLook(c);/* monsters move 1 less than their class (4+ only), so they rarely reach you on turn 1 */if(u.mov>=4)u.mov--;
   return u}
 
