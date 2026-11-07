@@ -62,3 +62,6 @@ window.claude?.hot?.ready?window.claude.hot.ready(start):start(window.claude?.ho
 
 /* PNG art: each of these uses art/<key>.png when it exists, else the drawing code above (see art() in 03-pixel-art.js) */
 function titleCrystalArt(){return art('title/crystal',()=>titleCrystalArt_draw())}
+
+/* stop the browser's image drag (the ghost copy you can pull off scene backdrops); CSS covers Chrome/Safari, this covers Firefox */
+document.addEventListener('dragstart',e=>{if(e.target&&e.target.tagName==='IMG')e.preventDefault()});
