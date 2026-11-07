@@ -142,7 +142,7 @@ const EVENTS={
   merchant:{t:'Travelling Merchant',art:'merchant',d:'A covered wagon, a tired mule and a merchant who is very pleased to see paying customers.',o:null,
     make:()=>{const stock=shuffle(['warHammer','huntingSpear','giantslayer','holySword','claymore','flamberge','knightlySword','steelSpear','cleaver','ironwoodBow','javelin','throwingAxe','throwingKnives','galeSword','arbalest','leatherArmour','wardingCloak','travellersBoots','ironGauntlets','dawnStaff','stiletto']).slice(0,3),price=k=>IT[k].t==='gear'?40:IT[k].crit>=20?55:45;
       return[...stock.map(k=>({l:`${IT[k].n} · ${price(k)}g`,sub:itemText(k),cost:price(k),go:async()=>{
-        const u=await pickUnit(`Who takes the ${IT[k].n}?`,'If their bag is full, you can swap something out.',u=>isWpn(k)&&!canUse(u,k)?'Can’t wield it':null);if(!u)return null;
+        const u=await pickUnit(`Who takes the ${IT[k].n}?`,'If their bag is full, you can swap something out.',u=>(isWpn(k)||IT[k].t==='spirit')&&!canUse(u,k)?(IT[k].t==='spirit'?'Can’t use staves':'Can’t wield it'):null);if(!u)return null;
         if(!await stow(u,k))return null;spend(price(k));return`${u.name} takes the <b>${IT[k].n}</b>. “Pleasure doing business.”`}})),{l:'Just looking',go:async()=>'The merchant shrugs and waves you on.'}]}},
   gamble:{t:'Gambler’s Table',art:'gamble',d:'A grinning stranger rattles two dice in a cup. “Double or nothing, friend?”',o:[
     {l:'Bet 30 gold',sub:'Even odds to win 60',cost:30,go:async()=>{spend(30);if(rand()<.5){run.gold+=60;sfx('fanfare');return'Two sixes. The stranger laughs and pays out 60 gold.'}sfx('broke');return'Snake eyes. The stranger pockets your 30 gold.'}},
@@ -201,7 +201,7 @@ const isRoleU=(u,r)=>u.cls.startsWith(`G.${r}.`);
 const canAny=k=>run.roster.some(u=>canUse(u,k));
 /* the jade (killer) weapon that suits a unit, if any */
 /* every item the squad gains goes through this picker; found=true shows it as "Found: X" with a Leave it option */
-async function giveTo(k,why,found){for(;;){const u=await pickUnit(found?`Found: ${IT[k].n}`:`Who takes the ${IT[k].n}?`,found?`${why?why+' ':''}${itemText(k)}`:why||itemText(k),u=>isWpn(k)&&!canUse(u,k)?'Can’t wield it':null,found?'Leave it':'Cancel');if(!u)return null;if(!await stow(u,k))continue;sfx('item');return u}}
+async function giveTo(k,why,found){for(;;){const u=await pickUnit(found?`Found: ${IT[k].n}`:`Who takes the ${IT[k].n}?`,found?`${why?why+' ':''}${itemText(k)}`:why||itemText(k),u=>(isWpn(k)||IT[k].t==='spirit')&&!canUse(u,k)?(IT[k].t==='spirit'?'Can’t use staves':'Can’t wield it'):null,found?'Leave it':'Cancel');if(!u)return null;if(!await stow(u,k))continue;sfx('item');return u}}
 Object.assign(EVENTS,{
   /* only turns up when Corvin is in the squad, and the sigil is his */
   stormaltar:{t:'The Storm Altar',art:'stormaltar',ok:()=>run.roster.some(u=>u.cast==='corvin'),d:'Lightning strikes the same black altar again and again. A sigil sits in the scorch mark, crackling.',o:[
