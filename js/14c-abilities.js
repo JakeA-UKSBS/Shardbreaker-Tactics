@@ -107,7 +107,7 @@ const abilOf=u=>u&&u.team==='e'&&MKITS[u.cls]?MKITS[u.cls]:(kitOf(u)||{abil:[]})
    solo (a self move that only affects the user), healPct (heals this share of max HP). The enemy AI picks between
    these and a normal attack by score (aiAbil in 12-turns.js). Monsters not listed here still only attack. */
 Object.assign(ABIL,{
-  stoneGaze:{n:'Stone Gaze',cd:4,mag:1,side:'foe',r:[1,3],dmg:.5,stone:1,d:'0.5× magic damage from up to 3 away, and the target is turned to Stone: it skips its next turn and can’t counter. Bosses are immune.'},
+  stoneGaze:{n:'Stone Gaze',cd:4,mag:1,side:'foe',r:[1,1],dmg:.5,stone:1,d:'0.5× magic damage, and the target is turned to Stone: it skips its next turn and can’t counter. Bosses are immune.'},
   constrict:{n:'Constrict',cd:3,side:'foe',r:[1,1],dmg:.8,st:['root',1],psn:1,d:'0.8× damage; the target is Rooted and Poisoned.'},
   mudSpit:{n:'Mud Spit',cd:3,side:'foe',r:[2,3],dmg:.8,st:['chill',1],d:'0.8× damage from 2–3 tiles away, and the target is Slowed.'},
   engulf:{n:'Engulf',cd:3,side:'foe',r:[1,1],dmg:1,st:['blind',2],d:'1.0× damage, and the target is Blinded for 2 turns.'},

@@ -163,7 +163,7 @@ Each monster has 2 moves on cooldowns (no MP). On its turn it scores every ready
 
 | Monster | Move 1 | Move 2 |
 |---|---|---|
-| Lamia | Stone Gaze (CD 4): range 1–3, 0.5× magic, Stone | Constrict (CD 3): melee 0.8×, Root + Poison |
+| Lamia | Stone Gaze (CD 4): melee, 0.5× magic, Stone | Constrict (CD 3): melee 0.8×, Root + Poison |
 | Mud Monster | Mud Spit (CD 3): range 2–3, 0.8×, Slow | Engulf (CD 3): melee 1.0×, Blind 2 turns |
 | Wolf | Howl (CD 4): allies within 2 Rallied 2 turns | Hamstring (CD 3): melee 0.8×, Slow |
 | Blighted Treant | Grasping Roots (CD 3): range 1–3, Root | Bark Skin (CD 4): Guard self |
