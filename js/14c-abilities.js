@@ -23,10 +23,13 @@ const STATUS={
   cover:{n:'Covered',tick:'start',d:'Attacks on this unit hit its protector instead, if they can.'},
   steady:{n:'Steady',tick:'start',d:'Can’t be pushed.'},
   shieldUp:{n:'Shield Up',tick:'start',d:'Counterattacks deal 1.3×.'},
-  valour:{n:'Valour',tick:'start',d:'Deals 20% more damage.'}
+  valour:{n:'Valour',tick:'start',d:'Deals 20% more damage.'},
+  anthem:{n:'Anthem',tick:'start',d:'Deals 30% more damage and +10 Hit.'}
 };
 const hasSt=(u,k)=>!!(u&&u.st&&u.st[k]&&u.st[k].n>0);
-function addSt(u,k,n,by){if(!u.st)u.st={};const o=u.st[k];u.st[k]={n:Math.max(n,o?o.n:0),by:by?by.id:(o&&o.by)};if(k==='stun'&&u.team==='p')u.acted=true}
+/* status immunities: Rook (Slippery) can't be Rooted; an Aegis can't be turned to Stone (nor can bosses) */
+function stImmune(u,k){if(!u)return false;if(k==='root'&&has(u,'slippery'))return true;if(k==='stone')return!!u.boss||CLS[u.cls]&&CLS[u.cls].n==='Aegis';return false}
+function addSt(u,k,n,by){if(stImmune(u,k))return;if(!u.st)u.st={};const o=u.st[k];u.st[k]={n:Math.max(n,o?o.n:0),by:by?by.id:(o&&o.by)};if(k==='stun'&&u.team==='p')u.acted=true}
 function tickSt(team,when){for(const u of state.units)if(u.team===team&&u.st){for(const k in u.st)if(STATUS[k]&&STATUS[k].tick===when){u.st[k].n--;if(u.st[k].n<=0)delete u.st[k]}}}
 /* at the start of a team's phase: burns hurt (but don't kill), water puts them out */
 function burnTick(team){for(const u of state.units)if(u.team===team&&hasSt(u,'burn')&&u.hp>0){if(['water','shallow'].includes(ter(u.x,u.y).k)){delete u.st.burn;pop(u,'Doused','heal');continue}const d=Math.min(2,u.hp-1);if(d>0){u.hp-=d;pop(u,'Burn -'+d,'crit')}}}
@@ -40,7 +43,7 @@ Object.assign(SKILLS,{
   attunement:{n:'Attunement',cost:5,kit:1,d:'A spell of a different element from her last one costs 2 less MP.'},
   plate:{n:'Plate',cost:5,kit:1,d:'Physical hits deal 2 less damage to him; −1 Jump.'},
   lastLight:{n:'Last Light',cost:5,kit:1,d:'Her heals restore 50% more on allies below half HP.'},
-  slippery:{n:'Slippery',cost:5,kit:1,d:'Can move through enemy tiles.'},
+  slippery:{n:'Slippery',cost:5,kit:1,d:'Can move through enemy tiles, and can’t be Rooted.'},
   bulwarkAura:{n:'Bulwark',cost:5,kit:1,d:'Allies next to her take 30% less damage from ranged attacks.'},
   beginnersLuck:{n:'Beginner’s Luck',cost:5,kit:1,d:'+10 Crit and +10 Avoid while at full HP.'},
   audience:{n:'Audience',cost:5,kit:1,d:'Allies within 2 tiles of him get +10 Hit.'}
@@ -72,6 +75,7 @@ const ABIL={
   cover:{n:'Cover',cd:3,side:'ally',r:[1,1],give:['cover',1],d:'Until his next turn, attacks on an adjacent ally hit him instead.'},
   mend:{n:'Mend',mp:4,side:'ally',r:[0,3],heal:1.2,d:'Heal an ally up to 3 away (or herself): 1.2× (Mag + 5).'},
   circleOfRest:{n:'Circle of Rest',mp:8,side:'ally',r:[0,3],shape:'cross',aim:'any',heal:.8,cure:1,d:'Heals every ally in a cross for 0.8× (Mag + 5) and cures their bad statuses.'},
+  purify:{n:'Purify',mp:3,side:'ally',r:[0,3],cure:1,d:'Cures every bad status on an ally up to 3 away (or herself): Poison and Stone too.'},
   sanctuary:{n:'Sanctuary',mp:10,side:'ally',r:[0,2],shape:'area',aim:'any',give:['guard',1],d:'Guard (30% less damage) on every ally in a 3×3 area until your next turn.'},
   backstab:{n:'Backstab',cd:2,side:'foe',r:[1,1],dmg:1,backstab:1,d:'1.0× damage, doubled from higher ground or when another ally is next to the target.'},
   smokeBomb:{n:'Smoke Bomb',cd:4,side:'self',shape:'burst1',st:['blind',1],give:['smoke',1],d:'Enemies around him are Blinded (−20 Hit); he and allies around him get +30 Avoid until your next turn.'},
@@ -85,6 +89,10 @@ const ABIL={
   songOfValour:{n:'Song of Valour',mp:6,side:'self',shape:'burst2',give:['valour',2],others:1,d:'Allies within 2 tiles deal 20% more damage for 2 turns.'},
   lullaby:{n:'Lullaby',mp:8,side:'foe',r:[1,1],shape:'cone',aim:'dir',st:['stun',1,.5],d:'A cone of song (4 tiles): 50% chance to Stun each enemy hit.'},
   soothingBallad:{n:'Soothing Ballad',cd:3,side:'self',shape:'burst1',heal:.6,d:'A gentle tune: allies around him heal 0.6× (Mag + 5). Ready again 3 turns later.'},
+  /* Bard versions of Lysander's songs (KITS.lysander.asc) */
+  anthem:{n:'Anthem of Valour',mp:6,side:'self',shape:'burst2',give:['anthem',2],others:1,d:'Allies within 2 tiles deal 30% more damage and get +10 Hit for 2 turns.'},
+  grandLullaby:{n:'Lullaby',mp:6,side:'foe',r:[1,1],shape:'cone',aim:'dir',st:['stun',1,.65],d:'A cone of song (4 tiles): 65% chance to Stun each enemy hit.'},
+  soothingHymn:{n:'Soothing Hymn',cd:2,side:'self',shape:'burst1',heal:.8,cure:1,d:'Allies around him heal 0.8× (Mag + 5) and are cured of bad statuses. Ready again 2 turns later.'},
   encore:{n:'Encore',mp:15,once:1,side:'ally',r:[1,3],encore:1,d:'An ally up to 3 away who has already acted can act again this turn. Once a fight.'}
 };
 /* the kits: passive, MP pool (spellcasters) and abilities */
@@ -94,20 +102,22 @@ const KITS={
   morrigan:{passive:'siphon',mp:24,abil:['drainTouch','hex','darkPulse']},
   corvin:{passive:'attunement',mp:28,abil:['flameBurst','frostWave','chainLightning']},
   aldric:{passive:'plate',mp:0,abil:['sunder','valiantThrust','cover']},
-  maelis:{passive:'lastLight',mp:26,abil:['mend','circleOfRest','sanctuary']},
+  maelis:{passive:'lastLight',mp:26,abil:['mend','purify','circleOfRest','sanctuary']},
+  aletta:{mp:12,abil:['purify']},/* no kit passive yet: keeps her random skill */
   rook:{passive:'slippery',mp:0,abil:['backstab','smokeBomb','tumble']},
   brynhildr:{passive:'bulwarkAura',mp:0,abil:['shieldBash','challenge','holdTheLine']},
   brin:{passive:'beginnersLuck',mp:0,abil:['rally','cleanCut','shieldUp']},
-  lysander:{passive:'audience',mp:24,abil:['songOfValour','lullaby','soothingBallad','encore']}
+  lysander:{passive:'audience',mp:24,abil:['songOfValour','lullaby','soothingBallad','encore'],
+    asc:{'Bard':{songOfValour:'anthem',lullaby:'grandLullaby',soothingBallad:'soothingHymn'}}}/* as a Bard: stronger songs, shorter waits */
 };
 const kitOf=u=>u&&u.cast&&KITS[u.cast]||null;
-const abilOf=u=>u&&u.team==='e'&&MKITS[u.cls]?MKITS[u.cls]:(kitOf(u)||{abil:[]}).abil;
+const abilOf=u=>{if(u&&u.team==='e'&&MKITS[u.cls])return MKITS[u.cls];const k=kitOf(u);if(!k)return[];const sw=k.asc&&k.asc[CLS[u.cls].n];return sw?k.abil.map(id=>sw[id]||id):k.abil};
 
 /* ---- monster moves: 2 per monster, cooldowns only (no MP). Extra fields: stone (Stone, bosses immune), psn (Poison),
    solo (a self move that only affects the user), healPct (heals this share of max HP). The enemy AI picks between
    these and a normal attack by score (aiAbil in 12-turns.js). Monsters not listed here still only attack. */
 Object.assign(ABIL,{
-  stoneGaze:{n:'Stone Gaze',cd:4,mag:1,side:'foe',r:[1,1],dmg:.5,stone:1,d:'0.5× magic damage, and the target is turned to Stone: it skips its next turn and can’t counter. Bosses are immune.'},
+  stoneGaze:{n:'Stone Gaze',cd:4,mag:1,side:'foe',r:[1,1],dmg:.5,stone:1,d:'0.5× magic damage, and the target is turned to Stone: it skips its next turn and can’t counter. Bosses and an Aegis are immune.'},
   constrict:{n:'Constrict',cd:3,side:'foe',r:[1,1],dmg:.8,st:['root',1],psn:1,d:'0.8× damage; the target is Rooted and Poisoned.'},
   mudSpit:{n:'Mud Spit',cd:3,side:'foe',r:[2,3],dmg:.8,st:['chill',1],d:'0.8× damage from 2–3 tiles away, and the target is Slowed.'},
   engulf:{n:'Engulf',cd:3,side:'foe',r:[1,1],dmg:1,st:['blind',2],d:'1.0× damage, and the target is Blinded for 2 turns.'},
@@ -153,7 +163,7 @@ function abBlock(u,id){const a=ABIL[id],cd=(u.cd||{})[id]||0;if(a.once&&cd>0)ret
 /* ---- combat hooks (called from calc, reach and the turn loop) ---- */
 /* the last step of every damage roll: Weak, Guard, Bulwark, Shield Up */
 function dmgMods(x,y,ctx,dmg){
-  let m=1;if(hasSt(x,'weak'))m*=.7;if(hasSt(x,'valour'))m*=1.2;if(hasSt(y,'guard'))m*=.7;if(hasSt(x,'shieldUp')&&ctx&&ctx.init!==x)m*=1.3;
+  let m=1;if(hasSt(x,'weak'))m*=.7;if(hasSt(x,'anthem'))m*=1.3;else if(hasSt(x,'valour'))m*=1.2;if(hasSt(y,'guard'))m*=.7;if(hasSt(x,'shieldUp')&&ctx&&ctx.init!==x)m*=1.3;
   if(man(x,y)>1&&state.units.some(o=>o!==y&&o.hp>0&&o.team===y.team&&man(o,y)===1&&has(o,'bulwarkAura')))m*=.7;
   return Math.max(0,Math.round(dmg*m));
 }
@@ -161,7 +171,7 @@ function dmgMods(x,y,ctx,dmg){
 function stCalc(x,xw,y){
   const phys=!xw.mag,fx=x.hp>=x.maxhp,fy=y.hp>=y.maxhp;
   return{pow:(hasSt(x,'rally')&&phys?2:0),df:(phys&&hasSt(y,'rally')?2:0)-(phys&&hasSt(y,'sunder')?3:0)+(phys&&has(y,'plate')?2:0),
-    acc:(hasSt(x,'blind')?-20:0)+(state.units.some(o=>o!==x&&o.hp>0&&o.team===x.team&&has(o,'audience')&&man(o,x)<=2)?10:0),avo:(hasSt(y,'smoke')?30:0)+(has(y,'beginnersLuck')&&fy?10:0),crit:(has(x,'beginnersLuck')&&fx?10:0)};
+    acc:(hasSt(x,'blind')?-20:0)+(hasSt(x,'anthem')?10:0)+(state.units.some(o=>o!==x&&o.hp>0&&o.team===x.team&&has(o,'audience')&&man(o,x)<=2)?10:0),avo:(hasSt(y,'smoke')?30:0)+(has(y,'beginnersLuck')&&fy?10:0),crit:(has(x,'beginnersLuck')&&fx?10:0)};
 }
 const eagle=(u,w)=>w&&w.t==='bow'&&has(u,'eagleEye')?1:0;
 const stMov=u=>hasSt(u,'chill')?2:0;
@@ -249,15 +259,15 @@ async function useAbility(u,id,tx,ty){
       if(a.chain&&t.hp>0||a.chain)for(const c of chainTo(u,id,t)){const V2=abVs(u,id,c,a.chain[1]);sfx('thunder');burst(c,EL_COL.lightning);
         if((rn()+rn())/2<V2.hit){const d=Math.min(V2.dmg,c.hp);c.hp-=d;pop(c,'-'+d,'dmg');flash(c);exp+=expFor(u,c,true,c.hp<=0);if(c.hp<=0)killed.push(c)}else pop(c,'Miss','miss');render();await sleep(D(260))}
       if(t.hp<=0){killed.push(t);continue}}
-    if(a.st&&landed&&t.hp>0&&(!a.st[2]||rn()<a.st[2]*100)){addSt(t,a.st[0],a.st[1],u);pop(t,STATUS[a.st[0]].n,'crit');await sleep(D(200))}
+    if(a.st&&landed&&t.hp>0&&!stImmune(t,a.st[0])&&(!a.st[2]||rn()<a.st[2]*100)){addSt(t,a.st[0],a.st[1],u);pop(t,STATUS[a.st[0]].n,'crit');await sleep(D(200))}
     if(a.psn&&landed&&t.hp>0&&!(t.team==='p'&&M('soup'))){t.psn=3;pop(t,'Poisoned','crit');await sleep(D(200))}
-    if(a.stone&&landed&&t.hp>0&&!t.boss){t.stone=1;pop(t,'Stone!','crit');sfx('earth');toast(`${t.name} is turned to stone and loses ${t.team==='p'?'their':'its'} next turn`);await sleep(D(200))}
+    if(a.stone&&landed&&t.hp>0&&!stImmune(t,'stone')){t.stone=1;pop(t,'Stone!','crit');sfx('earth');toast(`${t.name} is turned to stone and loses ${t.team==='p'?'their':'its'} next turn`);await sleep(D(200))}
     if(!a.dmg)exp+=10;
   }
   /* healing, buffs, cures */
   for(const t of allies){
     if(a.heal||a.healPct){const h=healAmt(u,id,t);if(h){t.hp+=h;pop(t,'+'+h,'heal')}exp+=12}
-    if(a.cure&&t.st)for(const k of Object.keys(t.st))if(STATUS[k]&&STATUS[k].bad){delete t.st[k];pop(t,'Cured','heal')}
+    if(a.cure){let c=0;if(t.st)for(const k of Object.keys(t.st))if(STATUS[k]&&STATUS[k].bad){delete t.st[k];c=1}if(t.psn){t.psn=0;c=1}if(t.stone){t.stone=0;c=1}if(c){pop(t,'Cured','heal');exp+=6}}
     if(a.give){addSt(t,a.give[0],a.give[1],u);pop(t,STATUS[a.give[0]].n,'heal');exp+=6}
     if(a.encore){t.acted=false;pop(t,'Encore!','heal');exp+=10}
   }
@@ -301,7 +311,7 @@ function abForecast(u,id,tx,ty){
   for(const t of foes){let txt='';if(a.dmg){const V=abVs(u,id,t),tot=V.dmg*V.n;txt=`<b>${V.dmg}${V.n>1?' ×'+V.n:''}</b> dmg · <b>${V.hit}%</b> · ${t.hp}→${Math.max(0,t.hp-tot)} HP${V.eff?' · <span class="effv">Effective</span>':''}`;
       if(a.chain)txt+=` · jumps to ${chainTo(u,id,t).map(c=>`${c.name} (${abVs(u,id,c,a.chain[1]).dmg})`).join(', ')||'nobody'}`;if(a.push)txt+=canPush(t)?` · push ${a.push}`:' · can’t be pushed'}
     if(a.st)txt+=`${txt?' · ':''}${STATUS[a.st[0]].n}${a.st[2]?` (${a.st[2]*100}%)`:''}${a.dmg?'':` · <b>${abVs(u,id,t).hit}%</b>`}`;if(!txt)continue;rows.push(`<div class="abf-r"><span class="ec">${t.name}</span>${txt}</div>`)}
-  for(const t of allies){let txt='';if(a.heal)txt=`+<b>${healAmt(u,id,t)}</b> HP → ${t.hp+healAmt(u,id,t)}/${t.maxhp}`;if(a.cure&&stList(t).some(k=>STATUS[k].bad))txt+=`${txt?' · ':''}cures ${stList(t).filter(k=>STATUS[k].bad).map(k=>STATUS[k].n).join(', ')}`;if(a.give)txt+=`${txt?' · ':''}${STATUS[a.give[0]].n}`;if(!txt&&!a.heal)continue;rows.push(`<div class="abf-r"><span class="pc">${t.name}</span>${txt||'–'}</div>`)}
+  for(const t of allies){let txt='';if(a.heal)txt=`+<b>${healAmt(u,id,t)}</b> HP → ${t.hp+healAmt(u,id,t)}/${t.maxhp}`;if(a.cure){const c=[...stList(t).filter(k=>STATUS[k].bad).map(k=>STATUS[k].n),...(t.psn?['Poison']:[]),...(t.stone?['Stone']:[])];if(c.length)txt+=`${txt?' · ':''}cures ${c.join(', ')}`;else if(!a.heal)txt='nothing to cure'}if(a.give)txt+=`${txt?' · ':''}${STATUS[a.give[0]].n}`;if(!txt&&!a.heal)continue;rows.push(`<div class="abf-r"><span class="pc">${t.name}</span>${txt||'–'}</div>`)}
   for(const[k]of a.self||[])rows.push(`<div class="abf-r"><span class="pc">${u.name}</span>${STATUS[k].n}: ${STATUS[k].d}</div>`);
   if(a.side==='tile')rows.unshift(`<div class="abf-r"><span class="pc">${u.name}</span>leaps here</div>`);
   if(a.tumble)rows.push(`<div class="abf-r"><span class="pc">${u.name}</span>moves up to 2 tiles, then can still act</div>`);

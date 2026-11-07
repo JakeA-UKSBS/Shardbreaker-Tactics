@@ -49,26 +49,28 @@ async function sageScene(){
   /* the tent stays up behind Ithren's gift until the Crossroads replaces it, so the title's throwaway battle never shows through */
   sgEl.onclick=null;return asc;
 }
-async function musterScene(opts,need){
+/* the Crossroads: pick need of opts. late = the second Crossroads after Act 1 (pick 1 of 2 veterans, no going back) */
+async function musterScene(opts,need,late){
   const chosen=[],B1=BIOMES[run.biomes[0]],B2=BIOMES[run.biomes[1]],n=opts.length;
+  const signs=late?[['Act 2',B2.n],['Beyond',BIOMES.heart.n]]:[['Act 1',B1.n],['Act 2',B2.n]];
   /* stand the travellers in an arc around the campfire: the far ones behind it, smaller */
   const ang=i=>Math.PI*(1-i/(n-1)),pos=i=>50+38*Math.cos(ang(i)),up=i=>8+24*Math.sin(ang(i)),sc=i=>1-.22*Math.sin(ang(i));
   musEl.innerHTML=`<div class="tv-scene"><img class="tv-bg" src="${musterArt()}" alt=""><img class="ms-fire" src="${campArt()}" alt="">
-      <div class="ms-post" aria-label="Signpost"><span class="ms-sign"><small>Act 1</small>${B1.n}</span><span class="ms-sign"><small>Act 2</small>${B2.n}</span></div>
+      <div class="ms-post" aria-label="Signpost">${signs.map(([a,b])=>`<span class="ms-sign"><small>${a}</small>${b}</span>`).join('')}</div>
       ${opts.map((u,i)=>`<button type="button" class="mu" data-u="${i}" style="left:${pos(i)}%;bottom:${up(i)}%;--s:${sc(i)};z-index:${10-Math.round(Math.sin(ang(i))*5)}" aria-label="${u.name}"><img src="${uSpr(u)}" alt=""${pos(i)>50?' class="fl"':''}><span>${u.name}</span></button>`).join('')}
       <button type="button" class="ms-map" data-g="map" aria-label="Look at the map" title="Look at the map"><img src="${mapIconArt()}" alt="">Map</button><span class="tv-gold">Seed ${run.seed}</span></div>
     <div class="tv-box"><div class="ms-head"><b class="ms-count"></b><button type="button" class="mini ms-info" data-g="info" aria-expanded="false">ⓘ What do stats do?</button></div>${statHelpHTML()}
       <div class="ms-cards"></div>
-      <div class="mbtns"><button type="button" data-g="back">Back</button><button type="button" class="go" data-g="go" disabled>Set out</button></div></div>`;
+      <div class="mbtns">${late?'':'<button type="button" data-g="back">Back</button>'}<button type="button" class="go" data-g="go" disabled>Set out</button></div></div>`;
   musEl.hidden=false;sgEl.hidden=true;
-  tip('muster','Choose your squad','Click 3 travellers to bring them along. Their cards show stats, weapon and skill, and “What do stats do?” explains the numbers. Units who fall are gone for the rest of the run.');
+  if(!late)tip('muster','Choose your squad','Click 3 travellers to bring them along. Their cards show stats, weapon and skill, and “What do stats do?” explains the numbers. Units who fall are gone for the rest of the run.');
   const draw=()=>{musEl.querySelectorAll('.mu').forEach(b=>b.classList.toggle('on',chosen.includes(+b.dataset.u)));
     const g=musEl.querySelector('[data-g="go"]');g.disabled=chosen.length!==need;g.textContent=`Set out (${chosen.length}/${need})`;
-    musEl.querySelector('.ms-count').textContent=chosen.length===need?'Your squad is ready.':`Click ${need-chosen.length===need?need:need-chosen.length} more traveller${need-chosen.length===1?'':'s'} to bring along.`;
+    musEl.querySelector('.ms-count').textContent=chosen.length===need?'Your squad is ready.':late?'Two veterans wait at the crossroads. Choose one to join you.':`Click ${need-chosen.length===need?need:need-chosen.length} more traveller${need-chosen.length===1?'':'s'} to bring along.`;
     musEl.querySelector('.ms-cards').innerHTML=chosen.map(i=>{const u=opts[i],sk=SKILLS[u.skill];return`<div class="dcard on">${unitCard(u)}<button type="button" class="mini ms-x" data-u="${i}" aria-label="Remove ${u.name}">✕</button><p class="ms-sk"><b>${sk.n}:</b> ${sk.d}${isSummoner(u)?` <b>Familiar:</b> ${famOf(u).n}, ${famOf(u).d}. Called once per battle.`:''}</p></div>`}).join('')};
   draw();
   return new Promise(res=>{musEl.onclick=e=>{
-    const u=e.target.closest('[data-u]');if(u){const i=+u.dataset.u,k=chosen.indexOf(i);if(k>=0)chosen.splice(k,1);else if(chosen.length<need)chosen.push(i);else toast(`Only ${need} can come. Remove someone first.`);sfx('tick');draw();return}
+    const u=e.target.closest('[data-u]');if(u){const i=+u.dataset.u,k=chosen.indexOf(i);if(k>=0)chosen.splice(k,1);else if(chosen.length<need)chosen.push(i);else if(need===1)chosen.splice(0,1,i);else toast(`Only ${need} can come. Remove someone first.`);sfx('tick');draw();return}
     const g=e.target.closest('[data-g]');if(!g||g.disabled)return;
     if(g.dataset.g==='map'){musEl.hidden=true;sfx('select');mapScreen(true).then(()=>{musEl.hidden=false});return}
     if(g.dataset.g==='info'){const h=musEl.querySelector('.stathelp');h.hidden=!h.hidden;g.setAttribute('aria-expanded',String(!h.hidden));return}

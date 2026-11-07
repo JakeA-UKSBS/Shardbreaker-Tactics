@@ -55,7 +55,7 @@ async function winScreen(){
     try{localStorage.removeItem(SAVE)}catch(_){}run=null;titleScreen();return}
   if(bossWin){run.act=(run.act||1)+1;run.map=genMap();run.pos=null;run.path=[];const B=actBiome();
     await modal(`<div class="eyebrow">Act ${run.act}</div><h2>${B.n}</h2><p>${B.d}</p><div class="mbtns"><button class="go" type="button" data-m="ok">Press on</button></div>`)
-    if(run.act===2)await recruitNode('act1')}
+    if(run.act===2)await actCrossroads()}
   await mapStep();
 }
 async function loseScreen(){

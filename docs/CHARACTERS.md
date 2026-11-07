@@ -12,7 +12,7 @@ The cast, by when they can join. First names only for now. Kits are first drafts
 - **The Crossroads:** 5 starting-roster characters picked at random each run (6 with the draft unlock); there's no guaranteed Mender. Take 3.
 - **Recruit stops, the caged traveller and the tavern:** offer cast characters who haven't joined yet, all equally likely. Anyone offered earlier in the act is held back until there aren't enough new faces to fill the offer.
 - **Lysander:** joins only through his event, The Wandering Minstrel.
-- **Act 2:** as it begins, two of the advanced characters offer to join (take one). From then on they're in the recruit and tavern pools too.
+- **Act 2:** as it begins, a second Crossroads: two of the advanced characters wait by the fire and you take one. From then on they're in the recruit and tavern pools too.
 - **Once a run:** each character joins at most once a run.
 - **Weapons:** each character only ever wields the weapon type they start with (Menders: charms and arts), including after they ascend. They keep their weapon when they ascend, with two exceptions: Holt's crossbow becomes a longbow when he ascends to Sniper, and Crusaders are given a holy sword alongside their staff or charm.
 - **Sprites:** every character and ascension is drawn by the unit rig; see the Named cast section of `VISUALS.md`. Their looks are set in `js/14b-cast.js`.
@@ -136,6 +136,7 @@ A hospice nun who has sat with too many dying soldiers. Calm, with gallows humou
 - **Look:** white gown and shawl, gold staff.
 - **Passive: Last Light.** Her heals restore 50% more on allies below half HP.
 - **Mend** (single ally, range 3 · 4 MP): heals 1.2× Mag.
+- **Purify** (single ally, range 3 · 3 MP): cures every bad status, Poison and Stone included.
 - **Circle of Rest** (cross · 8 MP): heals 0.8× Mag and cures statuses.
 - **Sanctuary** (area r1 · 10 MP): Guard on all allies in the area.
 
@@ -145,7 +146,7 @@ A hospice nun who has sat with too many dying soldiers. Calm, with gallows humou
 A street thief working off a debt to Ithren. Quick-mouthed and not as selfish as he pretends.
 - **Ascends into:** Duelist or Assassin.
 - **Look:** dark leathers, wrapped hands, jagged twin daggers.
-- **Passive: Slippery.** Can move through enemy tiles.
+- **Passive: Slippery.** Can move through enemy tiles, and can't be Rooted.
 - **Backstab** (single, adjacent · CD 2): 1.0× Str, doubled from higher ground or when another ally is next to the target (flanking).
 - **Smoke Bomb** (burst r1 · CD 4): Blinds enemies in the area; allies in it get +30 Avoid for 1 turn.
 - **Tumble** (self · CD 2): move up to 2 more tiles, ignoring height; doesn't use his action.
@@ -156,6 +157,7 @@ A street thief working off a debt to Ithren. Quick-mouthed and not as selfish as
 A city guardswoman who deserted rather than march on the neighbouring kingdom. Steady, dry and protective.
 - **Ascends into:** Valkyrie or Aegis.
 - **Look:** olive outfit, sword and decorated shield; a great bronze shield as Aegis, a pegasus as Valkyrie.
+- **As Aegis:** immune to Stone (Stone Gaze).
 - **Passive: Bulwark.** Allies next to her take 30% less damage from ranged attacks.
 - **Shield Bash** (single, adjacent · CD 2): 1.0× Str, push 1.
 - **Challenge** (burst r2 · CD 3): enemies in range must target her next turn.
@@ -258,6 +260,8 @@ A travelling bard who joined for the songs he'll write about it. Vain, charming,
 - **Song of Valour** (burst r2 · 6 MP): allies deal 20% more damage for 2 turns.
 - **Lullaby** (cone 3 · 8 MP): 50% chance to Stun each enemy hit.
 - **Encore** (single ally, range 3 · 15 MP, once per fight): an ally who has already acted acts again this turn.
+- **Soothing Ballad** (burst r1 · CD 3): allies around him heal 0.6× Mag.
+- **As a Bard:** Song of Valour becomes **Anthem of Valour** (30% more damage and +10 Hit for 2 turns), Lullaby costs 6 MP with a 65% Stun chance, and Soothing Ballad becomes **Soothing Hymn** (CD 2, heals 0.8× Mag and cures statuses).
 - He carries no staff and can't heal or attack: he sings.
 
 ## Found during the run
@@ -285,6 +289,7 @@ The tavern-keeper's niece, who patches up every brawler in the bar and is tired 
 - **Mend** (single ally, range 2 · 4 MP): heals 1.0× Mag.
 - **Triage** (single ally, adjacent · 6 MP): heals 1.6× Mag, but only on allies below half HP.
 - **Smelling Salts** (single ally, adjacent · 5 MP): removes Stun and gives +2 Move this turn.
+- **In the game so far:** just **Purify** (single ally, range 3 · 3 MP, 12 MP pool), alongside her mending staff and random skill.
 
 ### Trent: Cavalier
 ![Trent](visuals/cast/trent.png)
