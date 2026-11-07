@@ -11,6 +11,14 @@ function unitCard(u,on,add,exp){
   <span class="dsk">${SKILLS[u.skill].n}${ls.length?', '+ls.join(', '):''} · ${w.map(i=>`<img src="${icon(i.key)}" alt="">${i.n}${i.r?` (Rng ${rngTxt(rngShow(u,i))})`:''}`).join(' ')}</span></div><div class="dcap">${capPie(u,add)}</div>${on?'<span class="dtick">✓</span>':''}`;
 }
 const canReroll=()=>unl('reroll')&&!(run.rr=run.rr||{})[run.act||1];
+/* the second Crossroads, as Act 2 begins: 2 already-advanced veterans wait by the fire and one joins */
+async function actCrossroads(){
+  if(!castPool('act1').length)return;const lv=Math.max(1,Math.round(run.roster.reduce((a,u)=>a+u.lv,0)/run.roster.length));
+  const pick=await musterScene(castOffer(2,lv,'act1'),1,true),nu=pick&&pick[0];if(!nu)return;
+  if(run.roster.length>=TEAM_CAP){const d=await modal(`<h2>Who leaves?</h2><p>Your squad is full (${TEAM_CAP}). ${nu.name} takes their place.</p><div class="draft">${run.roster.map((u,i)=>`<button type="button" class="dcard" data-m="d${i}">${unitCard(u)}</button>`).join('')}</div><div class="mbtns"><button type="button" data-m="skip">Keep my squad</button></div>`);
+    if(d==='skip')return;run.roster.splice(+d.slice(1),1)}
+  run.roster.push(nu);castJoined(nu);sfx('item');toast(`${nu.name} joins the squad`);
+}
 async function recruitNode(where='recruit'){
   const lv=Math.max(1,Math.round(run.roster.reduce((a,u)=>a+u.lv,0)/run.roster.length))+(R('lantern')?1:0),mk=()=>castOffer(where==='act1'?2:R('lantern')?4:3,lv,where);if(where==='act1'&&!castPool('act1').length)return;
   let opts=mk();const full=run.roster.length>=TEAM_CAP;

@@ -50,6 +50,8 @@ const ASC_BONUS={
   'Swordmaster':[2,3,0,0,5,4,0,1],
   'Bard':[3,0,3,0,3,3,1,2],
   'Grand Summoner':[4,0,5,0,2,2,2,4]};
+/* BASE_ADJ: small per-class tweaks on top of the role's base stats, in stat order */
+const BASE_ADJ={'Mender':[0,0,0,0,0,0,1,0]};
 const castCls=n=>`G.${CAST_CLASSES[n]}.${n.replace(/ /g,'')}`;
 for(const n in CAST_CLASSES){const base=ensureCls('G.'+CAST_CLASSES[n]);const C=Object.assign({},CLS[base],{n});delete C.promo;if(ASC_BONUS[n])C.bonus=ASC_BONUS[n];CLS[castCls(n)]=C}
 
@@ -146,12 +148,12 @@ function castArtAll(){for(const c of CAST)for(const cls of[c.cls,...Object.keys(
 function castUnit(id,lv){
   const c=castDef(id),[,role,mv,,t]=c.cls.split('.'),R=ROLES[role],M=MOVES[mv];
   if(t==='2')lv=1; /* already-advanced characters always join at Lv 1 */
-  const s=R.b.slice();if(M.st)M.st.forEach((d,i)=>s[i]=Math.max(0,s[i]+d));if(t==='2'&&CLS[c.cls].bonus)CLS[c.cls].bonus.forEach((d,i)=>s[i]+=d);
+  const s=R.b.slice();if(BASE_ADJ[CLS[c.cls].n])BASE_ADJ[CLS[c.cls].n].forEach((d,i)=>s[i]+=d);if(M.st)M.st.forEach((d,i)=>s[i]=Math.max(0,s[i]+d));if(t==='2'&&CLS[c.cls].bonus)CLS[c.cls].bonus.forEach((d,i)=>s[i]+=d);
   const g=R.gr.map(([a,b])=>Math.round((a+b)/2)),items=[];
   if(c.wk)items.push({k:c.wk,u:IT[c.wk].uses});
   if(role==='support'&&c.wk!=='mendingStaff'&&CLS[c.cls].n!=='Minstrel')/* Lysander sings rather than carrying a staff */items.push({k:'mendingStaff',u:IT.mendingStaff.uses});
   items.push({k:'salve',u:IT.salve.uses});
-  const u={id:'c'+(run.uid++),cast:id,name:c.name,cls:c.cls,team:'p',lv:1,exp:0,skill:KITS[id]?KITS[id].passive:pick(R.skills),skills:[],cap:BASE_CAP,look:clone(c.look),g,mov:CLS[c.cls].mov,items,acted:false,x:0,y:0};
+  const u={id:'c'+(run.uid++),cast:id,name:c.name,cls:c.cls,team:'p',lv:1,exp:0,skill:KITS[id]&&KITS[id].passive||pick(R.skills),skills:[],cap:BASE_CAP,look:clone(c.look),g,mov:CLS[c.cls].mov,items,acted:false,x:0,y:0};
   ST.forEach((k,i)=>u[k]=s[i]);u.maxhp=u.hp;
   for(;u.lv<lv;u.lv++)ST.forEach((k,i)=>{if(rand()*100<g[i]){if(k==='hp')u.maxhp++;else u[k]++}});
   if(role==='summoner')u.familiar=c.familiar||pick(Object.keys(FAMILIARS));

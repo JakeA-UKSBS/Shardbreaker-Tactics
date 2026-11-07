@@ -104,7 +104,7 @@ async function act(a){
   if(a==='wprev'||a==='wnext'){const l=wpnsAt(u,man(u,pending),pending),i=l.indexOf(pendW);pendW=l[(i+(a==='wnext'?1:l.length-1))%l.length];render();return}
   if(a==='wait'){commit();finishAction();return}
   if(a==='summon'){if(!canSummon(u))return;commit();doSummon(u);finishAction();return}
-  if(a==='use'){commit();const it=u.items[itemSel],amt=Math.min(salveAmt(it.k),u.maxhp-u.hp);u.hp+=amt;it.u--;if(it.u<=0)u.items.splice(itemSel,1);pop(u,'+'+amt,'heal');finishAction();return}
+  if(a==='use'){commit();const it=u.items[itemSel],amt=Math.min(salveAmt(it.k),u.maxhp-u.hp);u.hp+=amt;it.u--;if(it.u<=0)u.items.splice(itemSel,1);pop(u,'+'+amt,'heal');if(u.psn){u.psn=0;pop(u,'Cured','heal')}finishAction();return}
   if(a==='doheal'){commit();const t=pending,si=spiritFor(u,t),w=IT[u.items[si].k],amt=Math.min(w.amt,t.maxhp-t.hp);t.hp+=amt;if(!endless(u.items[si].k)){u.items[si].u--;if(u.items[si].u<=0){toast(w.n+' shattered');u.items.splice(si,1)}}pop(t,'+'+amt,'heal');sfx('heal');clearSel();ui='idle';busy=true;render();
     const g=gainExp(u,Math.round(15*EXP_RATE));await showExp(u,g);if(g&&g.gains)await levelUp(u,g);busy=false;finishAction();return}
   if(a==='attack-go'){commit();const t=pending,it=u.items.splice(pendW,1)[0];u.items.unshift(it);clearSel();ui='idle';await fight(u,0,t);saveGame();promptEnd();return}
@@ -122,7 +122,7 @@ async function fight(a,ai,d){
   for(const[u,i,n]of[[a,ai,res.used.a],[d,res.f.di,res.used.d]]){if(i<0||!n)continue;const it=u.items[i];if(endless(it.k))continue;it.u-=n;if(it.u<=0){u.items.splice(i,1);sfx('broke');toast(`${u.name}'s ${IT[it.k].n} shattered`)}}
   const p=a.team==='p'?a:d.team==='p'?d:null,o=p===a?d:a;
   for(const e of res.ev)if(e.psn){const t=e.by==='a'?d:a;if(t.team==='p'&&M('soup'))continue;if(t.hp>0){t.psn=3;pop(t,'Poisoned','crit')}}
-  for(const e of res.ev)if(e.stone){const t=e.by==='a'?d:a;if(t.hp>0&&!t.boss){t.stone=1;pop(t,'Stone!','crit');sfx('earth');toast(`${t.name} is turned to stone and loses ${t.team==='p'?'their':'its'} next turn`)}}
+  for(const e of res.ev)if(e.stone){const t=e.by==='a'?d:a;if(t.hp>0&&!stImmune(t,'stone')){t.stone=1;pop(t,'Stone!','crit');sfx('earth');toast(`${t.name} is turned to stone and loses ${t.team==='p'?'their':'its'} next turn`)}}
   /* a summon's EXP goes to the unit that summoned it */
   const ep=p&&p.summon?state.units.find(x=>x.id===p.owner&&x.hp>0):p;
   if(p&&p.hp>0&&ep){const dealt=res.ev.some(e=>(e.by==='a')===(p===a)&&e.dmg>0);const g=gainExp(ep,Math.min(100,Math.round(expFor(ep,o,dealt,o.hp<=0)*EXP_RATE*(R('tome')?1.5:1)*(has(ep,'quickStudy')?2:1))));if(ep!==p&&g)toast(`${ep.name} gains ${g.amt} EXP`);await showExp(ep,g);if(g&&g.gains)await levelUp(ep,g)}
@@ -237,7 +237,7 @@ function aiAbil(e,tiles,ps,canAtk){
           if(e.hp*2>=e.maxhp||!near(e.x,e.y,1))continue;s+=15+Math.min(...ps.map(p=>man({x:tx,y:ty},p)))}
         else{const lx=a.side==='tile'?tx:x,ly=a.side==='tile'?ty:y,w={...e,x:lx,y:ly},h=abHits(a.side==='tile'?w:v,id,tx,ty);
           for(const t of h.foes){const V=a.dmg?abVs(w,id,t):abVs(w,id,t,0),hc=V.hit/100,dm=V.dmg*V.n;
-            s+=a.dmg?dm*hc+(dm>=t.hp?40*hc:0):0;if(a.st)s+=(ST_VAL[a.st[0]]||8)*hc;if(a.psn&&!t.psn)s+=8*hc;if(a.stone&&!t.boss)s+=25*hc}
+            s+=a.dmg?dm*hc+(dm>=t.hp?40*hc:0):0;if(a.st&&!stImmune(t,a.st[0]))s+=(ST_VAL[a.st[0]]||8)*hc;if(a.psn&&!t.psn)s+=8*hc;if(a.stone&&!stImmune(t,'stone'))s+=25*hc}
           for(const t of h.allies){if(a.give&&near(t.x,t.y,4))s+=ST_VAL[a.give[0]]||6;if(a.self&&near(lx,ly,3))s+=ST_VAL[a.self[0][0]]||6;
             if(a.healPct&&t.hp<t.maxhp*.6)s+=healAmt(e,id,t)*1.2}
           if(buff)s-=.5*Math.min(...ps.map(p=>man({x,y,sz:e.sz},p)))
