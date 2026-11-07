@@ -4,8 +4,8 @@
    terrain rule and music. Map letters for region terrain: s ankle-deep water (−1 Move next turn) · n sand · v mangrove roots · y cursed thicket · b basalt · l magma. */
 /* fields: see the TERRAIN key in 01-data.js */
 Object.assign(TER,{
-  's':{n:'Ankle-deep Water',k:'shallow',c:1,av:0,df:0,slow:true},'n':{n:'Sand',k:'sand',c:1,av:0,df:0},'v':{n:'Mangrove Roots',k:'mangrove',c:2,av:20,df:1,slow:true},
-  'y':{n:'Cursed Thicket',k:'curse',c:2,av:25,df:1},'b':{n:'Basalt',k:'basalt',c:1,av:0,df:0},'l':{n:'Magma',k:'lava',c:99,av:0,df:0}
+  's':{n:'Ankle-deep Water',k:'shallow',c:1,av:0,df:0,slow:true},'n':{n:'Sand',k:'sand',c:1,av:0,df:0},'v':{n:'Mangrove Roots',k:'mangrove',c:2,av:10,df:1,slow:true},
+  'y':{n:'Cursed Thicket',k:'curse',c:2,av:10,df:1},'b':{n:'Basalt',k:'basalt',c:1,av:0,df:0},'l':{n:'Magma',k:'lava',c:99,av:0,df:0}
 });
 function bioTile_draw(k,part){
   const p=Px(16,16),o=Px(16,16),dots=(c,pts)=>pts.forEach(([x,y])=>p.set(x,y,c)),S=[[2,3],[9,2],[13,6],[4,12],[11,13],[7,8],[14,11]];
