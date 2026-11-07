@@ -242,9 +242,10 @@ function aiAbil(e,tiles,ps){
         if(s>0&&(!best||s>best.s))best={s,tile:{x:a.side==='tile'?e.x:x,y:a.side==='tile'?e.y:y},abil:id,aim:{x:tx,y:ty}}}}}
   return best;
 }
+let acting=null;/* the unit whose turn it is during the enemy phase, shown in the side panel */
 async function runAI(team){
   for(const e of state.units.filter(u=>u.team===team)){
-    if(e.hp<=0||over)continue;if(e.stone){e.stone=0;render();continue}if(hasSt(e,'stun')){pop(e,'Stunned','miss');await sleep(300);continue}
+    if(e.hp<=0||over)continue;acting=e;render();if(e.stone){e.stone=0;render();continue}if(hasSt(e,'stun')){pop(e,'Stunned','miss');await sleep(300);continue}
     if(e.boss&&e.cls==='CrystalHeart'&&state.turn%2===0){await crystalStorm(e);if(over)break;continue}const plan=aiPlan(e);
     if(plan.tile&&(plan.tile.x!==e.x||plan.tile.y!==e.y)){if(ensureVisible(plan.tile.x,plan.tile.y))await sleep(300);stepSfx(e,plan.tile.x,plan.tile.y);e.x=plan.tile.x;e.y=plan.tile.y;render();await sleep(330)}
     /* Cover: the protector takes the hit instead, if the attacker can reach them from here */
@@ -253,5 +254,6 @@ async function runAI(team){
     if(plan.target&&plan.target.hp>0){await fight(e,plan.wi,plan.target);busy=true}
     if(over)break;
   }
+  acting=null
 }
 

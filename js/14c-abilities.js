@@ -135,6 +135,9 @@ const MKITS={
   FireSprite:['fireball','flicker'],BoulderGolem:['moltenFist','eruption'],MagmaDragon:['searingBreath','wingGust'],
   SandWorm:['burrow','sandBlast'],FrostWolf:['frostBite','howl'],IceTroll:['clubSmash','regenerate']
 };
+/* the Moves block on an enemy's Details sheet */
+function monSheet(u){const l=u.team==='e'?MKITS[u.cls]:null;if(!l)return'';
+  return`<div class="sskill"><div class="skh"><span class="sl">Moves</span></div><div class="skl">${l.map(id=>{const a=ABIL[id],cd=(u.cd||{})[id]||0;return`<div class="skr"><b>${a.n}</b><span class="tag">${cd?`Ready in ${cd}`:'Ready'} · CD ${a.cd}</span><small>${a.d}</small></div>`}).join('')}</div></div>`}
 /* the moves line on an enemy's info card */
 function monMoves(u){const l=u.team==='e'?MKITS[u.cls]:null;if(!l)return'';return`<div class="eq">Moves: ${l.map(id=>{const cd=(u.cd||{})[id]||0;return`<b class="sk" title="${ABIL[id].d}">${ABIL[id].n}</b>${cd?` (ready in ${cd})`:''}`}).join(' · ')}</div>`}
 const mpMax=u=>(kitOf(u)||{mp:0}).mp;
