@@ -89,7 +89,7 @@ const CAST=[
   {id:'aletta',name:'Aletta',cls:'Mender',wk:'mendingStaff',joins:'run',look:{fem:true,style:'bun',hair:'#a8743a',skin:'#f3cfa6',cloth:'#5a8a5a',sash:'#efe6cf',shawl:'#dfe8d0',gear:'nursecap',eye:'#3a6a3a'},
     asc:{'Saint':{wk:'dawnStaff',look:{gear:'circlet',capeC:'#dfe8d0',staff:'#e2b553',orb:'#9fe8c0'}},
          'Crusader':{wk:'holySword',gain:'holySword',look:{gear:null,metal:'#b8d0b0',shield:'kite',shieldC:'#5a8a5a',capeC:'#3f6a3f',shawl:null}}}},
-  {id:'trent',name:'Trent',cls:'Cavalier',wk:'ironSpear',joins:'run',look:{style:'short',hair:'#3a2a20',skin:'#e8b98f',cloth:'#3f7a4a',metal:'#a9c4a2',horse:'#4a3426',eye:'#3a6a3a'},
+  {id:'trent',name:'Trent',cls:'Cavalier',wk:'ironSpear',joins:'start',look:{style:'short',hair:'#3a2a20',skin:'#e8b98f',cloth:'#3f7a4a',metal:'#a9c4a2',horse:'#4a3426',eye:'#3a6a3a'},
     asc:{'Paladin':{look:{capeC:'#3f7a4a',metal:'#c4dcbc',shield:'kite',shieldC:'#3f7a4a'}},
          'Warlord':{look:{capeC:'#25603a',metal:'#7a9a72',beard:true,barding:'#1e3a24',joust:true,lanceC:'#e8e2d0'}}}},
   {id:'holt',name:'Holt',cls:'Crossbowman',wk:'crossbow',joins:'run',look:{style:'short',hair:'#e8e2d0',skin:'#e8b98f',cloth:'#3a5a8a',pants:'#3a3a4a',sash:'#c9c3b8',eye:'#3a5a8a'},
