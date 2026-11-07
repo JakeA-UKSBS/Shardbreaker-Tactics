@@ -274,6 +274,8 @@ button.it.sel{border-color:var(--gold)}
 .roster .dead img{filter:grayscale(1) brightness(.5)}
 .unit.sum img{filter:drop-shadow(0 0 3px #7fc8ff)}
 .unit.psn img{filter:drop-shadow(0 0 3px #b46ae0) saturate(.8)}.psnt{color:#c58aff}
+/* a unit that has acted stays greyed out even with a poison or summon glow */
+.unit.done.psn img{filter:grayscale(.9) brightness(.65) drop-shadow(0 0 3px #b46ae0)}.unit.done.sum img{filter:grayscale(.9) brightness(.65) drop-shadow(0 0 3px #7fc8ff)}
 /* PC: map left, command panel right */
 @media (min-width:960px){
   .wrap{max-width:1500px;height:100%;box-sizing:border-box;display:grid;grid-template-columns:minmax(0,1fr) 360px;grid-template-rows:auto auto minmax(0,1fr);column-gap:14px;padding-inline:20px;padding-block:12px}
