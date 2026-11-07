@@ -355,7 +355,7 @@ A lamplighter's son who set his first fire by accident and every one since on pu
 A spirit-speaker who bargained with something old to save her village. Gentle, but what follows her isn't.
 - **Look:** long flowing teal robes and shawl, a tall leafy branch staff.
 - **Passive: Bond.** Her familiar levels with her and returns at full HP each fight.
-- **Summon Familiar** (summon, adjacent · 10 MP): calls her spirit drake.
+- **Summon Familiar** (summon, adjacent · 10 MP): calls her Spirit Frog (the same familiar in every region): wades through water and lashes its tongue from 1–2 tiles.
 - **Empower** (familiar · 6 MP): the familiar's next attack deals double damage.
 - **Soul Swap** (familiar · 4 MP): she and the familiar swap places.
 - **Ascends into Grand Summoner** (from Lv 5): +4 HP, +5 Mag, +2 Spd, +2 Luck, +2 Def, +4 Res; summons twice a fight instead of once and her familiar is 3 levels higher. Darker teal robes with a pale collar and a circlet.
