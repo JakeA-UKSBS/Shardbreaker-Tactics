@@ -5,12 +5,12 @@ The cast, by when they can join. First names only for now. Kits are first drafts
 - **Starting roster:** base classes you pick your opening squad from. Whoever you don't pick can still turn up later in the run.
 - **After Act 1:** characters who join already in an advanced class.
 - **Event only:** joins through one specific event.
-- **Found during the run:** recruited from recruit stops, the caged-traveller event and the tavern, plus any starting-roster characters you didn't pick. Characters marked *(tavern)* only turn up at the tavern.
+- **Found during the run:** recruited from recruit stops, the caged-traveller event and the tavern, plus any starting-roster characters you didn't pick.
 
 ## How they join a run
 
-- **The Crossroads:** Maelis plus 4 other starting-roster characters, picked at random each run (5 with the draft unlock). Take 3. Maelis is always there so there's always a Mender.
-- **Recruit stops, the caged traveller and the tavern:** offer cast characters who haven't joined yet. Random travellers only fill in once the cast has run out.
+- **The Crossroads:** 5 starting-roster characters picked at random each run (6 with the draft unlock); there's no guaranteed Mender. Take 3.
+- **Recruit stops, the caged traveller and the tavern:** offer cast characters who haven't joined yet, all equally likely. Anyone offered earlier in the act is held back until there aren't enough new faces to fill the offer.
 - **Lysander:** joins only through his event, The Wandering Minstrel.
 - **Act 2:** as it begins, two of the advanced characters offer to join (take one). From then on they're in the recruit and tavern pools too.
 - **Once a run:** each character joins at most once a run.
@@ -265,19 +265,19 @@ Recruited from recruit stops, the caged-traveller event and the tavern, alongsid
 
 | Name | Class | Ascends into | Gender |
 |---|---|---|---|
-| Aletta | Mender *(tavern)* | Saint or Crusader | F |
+| Aletta | Mender | Saint or Crusader | F |
 | Trent | Cavalier | Paladin or Warlord | M |
 | Holt | Crossbowman | Sniper or Artillery | M |
 | Sigrun | Drake Rider | – | F |
 | Kaya | Horse Archer | – | F |
-| Jun | Swordsman *(tavern)* | Swordmaster | M |
+| Jun | Swordsman | Swordmaster | M |
 | Ash | Pyromancer | Pyrolord or Archmage | M |
 | Seren | Summoner | Grand Summoner | F |
 
 ### Aletta: Mender
 ![Aletta](visuals/cast/aletta.png)
 
-The tavern-keeper's niece, who patches up every brawler in the bar and is tired of doing it for free. Brisk and practical. Found at the tavern.
+The tavern-keeper's niece, who patches up every brawler in the bar and is tired of doing it for free. Brisk and practical.
 - **Ascends into:** Saint or Crusader.
 - **Look:** green gown and pale shawl, a small nurse’s cap.
 - **Passive: Field Dressing.** Allies she heals also lose one status effect.
@@ -330,7 +330,7 @@ A steppe rider with white-and-violet hair who trades arrows for passage. Laughs 
 ### Jun: Swordsman
 ![Jun](visuals/cast/jun.png)
 
-A wandering swordsman from a mountain temple, working off his bar tab. Quiet, and very fast. Found at the tavern.
+A wandering swordsman from a mountain temple, working off his bar tab. Quiet, and very fast.
 - **Ascends into:** Swordmaster.
 - **Look:** blue Taoist robes, hair in a bun, sword held low; wristguards and lapels as a Swordmaster.
 - **Passive: Flowing Blade.** +15 Avoid on the turn after he attacks.
