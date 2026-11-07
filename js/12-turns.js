@@ -221,15 +221,15 @@ async function crystalStorm(e){
   state.units=state.units.filter(u=>u.hp>0);render();checkEnd();
 }
 /* monster moves: the best-scoring ready move from any tile it can reach (Burrow and Flicker only from where it stands).
-   Score = expected damage (+40 for a kill) + a value for each status it lands; buffs (Howl, Bark Skin) only when it can't attack, from the tile nearest the foes; Flicker
+   Score = expected damage (+40 for a kill) + a value for each status it lands; buffs (Howl, Bark Skin) only when it can't attack or on 1 turn in 4, from the tile nearest the foes; Flicker
    only when hurt and next to a foe; Regenerate only below 60% HP. A move is used if it scores at least as well as a normal attack. */
 const ST_VAL={stun:25,root:8,chill:8,blind:10,weak:12,sunder:10,burn:10,guard:12,rally:8};
 function aiAbil(e,tiles,ps,canAtk){
   if(e.team!=='e'||!MKITS[e.cls]||hasSt(e,'challenged'))return null;let best=null;
   const near=(x,y,r)=>ps.filter(p=>man({x,y,sz:e.sz},p)<=r).length;
   for(const id of MKITS[e.cls]){const a=ABIL[id];if((e.cd||{})[id]>0)continue;
-    /* pure buffs (Howl, Bark Skin) only when it can't attack this turn, and from the tile nearest the foes */
-    const buff=a.side==='self'&&!a.dmg&&!a.st&&!a.healPct;if(buff&&canAtk)continue;
+    /* pure buffs (Howl, Bark Skin): always considered when it can't attack, otherwise only 1 turn in 4; from the tile nearest the foes */
+    const buff=a.side==='self'&&!a.dmg&&!a.st&&!a.healPct;if(buff&&canAtk&&rand()>.25)continue;
     const from=a.side==='tile'?[[e.x,e.y]]:tiles;
     for(const[x,y]of from){const v={...e,x,y};
       for(const k of aimTiles(v,id)){const[tx,ty]=k.split(',').map(Number);let s=ter(x,y).av/10;
