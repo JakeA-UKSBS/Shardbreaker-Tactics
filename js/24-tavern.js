@@ -20,7 +20,7 @@ function afterFightMeals(){if(!run)return;if(run.meals){run.meals.forEach(m=>m.n
 const KEEPER={name:'Marla',look:{style:'bun',hair:'#8a2a22',skin:'#e8b98f',cloth:'#5a6a3a',sash:'#7a5230',eye:'#3a5a8a',apron:true}};
 /* p = price in gold, d = effect, all = affects the whole squad, st = which stat(s) the chosen unit gains */
 const DRINKS={
-  ale:{n:'A round of ale',p:25,d:'Every unit gains 30 EXP.',all:true},
+  ale:{n:'A round of ale',p:25,d:'Every unit gains 15 EXP.',all:true},
   whiskey:{n:'Dragonfire Whiskey',p:45,d:'One unit gains +1 Str or Mag (whichever is higher).',st:u=>u.mag>u.str?'mag':'str'},
   cordial:{n:'Moonberry Cordial',p:45,d:'One unit gains +1 Spd.',st:()=>'spd'},
   stout:{n:'Ironbark Stout',p:45,d:'One unit gains +1 Def.',st:()=>'def'},
@@ -54,7 +54,7 @@ async function tavernNode(){
     if(m==='drink'){
       for(;;){const d=await tavShow('“Here’s what I’m pouring tonight.”',[...Object.entries(DRINKS).map(([k,x])=>[k,`<img class="tv-ic" src="${mugArt()}" alt="">${x.n} · ${x.p}g`,x.d+(bought.has(k)?' (sold out)':''),bought.has(k)||gold()<x.p]),['back','Back','']]);
         if(d==='back')break;const x=DRINKS[d];
-        if(x.all){spend(x.p);bought.add(d);done.drink=1;tavEl.hidden=true;for(const u of run.roster){const g=gainExp(u,30);if(g&&g.gains)await levelUp(u,g)}tavEl.hidden=false;text='“To the road!” The whole squad drinks, and tells each other stories that get bigger with every round.';break}
+        if(x.all){spend(x.p);bought.add(d);done.drink=1;tavEl.hidden=true;for(const u of run.roster){const g=gainExp(u,15);if(g&&g.gains)await levelUp(u,g)}tavEl.hidden=false;text='“To the road!” The whole squad drinks, and tells each other stories that get bigger with every round.';break}
         tavEl.hidden=true;const u=await pickUnit(`Who drinks the ${x.n}?`,x.d);tavEl.hidden=false;if(!u)continue;
         spend(x.p);bought.add(d);done.drink=1;const ss=[].concat(x.st(u));ss.forEach(s=>{if(s==='hp'){u.maxhp++;u.hp++}else u[s]++});
         text=`${u.name} downs the ${x.n}. ${ss.map(s=>SL[s]+' +1').join(', ')}. “Steady now.”`;break}
