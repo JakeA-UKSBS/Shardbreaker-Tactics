@@ -83,7 +83,7 @@ Object.assign(IT,{
   jadeSpear:{n:'Jade Spear',t:'pole',kind:'spear',mt:9,hit:75,crit:30,r:[1,1],uses:25,tint:'jade',wt:8},
   jadeAxe:{n:'Jade Axe',t:'heavy',kind:'axe',mt:11,hit:65,crit:30,r:[1,1],uses:25,tint:'jade',wt:10},
   jadeBow:{n:'Jade Bow',t:'bow',kind:'bow',mt:8,hit:75,crit:30,r:[2,2],uses:25,tint:'jade',wt:5},
-  longbow:{n:'Longbow',t:'bow',kind:'bow',mt:6,hit:70,crit:0,r:[2,3],uses:30,wt:6},
+  longbow:{n:'Longbow',t:'bow',kind:'bow',mt:6,hit:75,crit:0,r:[2,3],uses:30,wt:6},
   /* steel-tier ranged variants (reach 1–2, the arbalest 2–3): trade-ups for the javelin, throwing axe, throwing knives and crossbow */
   pilum:{n:'Pilum',t:'pole',kind:'javelin',mt:9,hit:70,crit:0,r:[1,2],uses:20,thrown:true,wt:9,tint:'steel'},
   tomahawk:{n:'Tomahawk',t:'heavy',kind:'axe',mt:10,hit:65,crit:0,r:[1,2],uses:20,thrown:true,wt:9,tint:'steel'},
@@ -111,7 +111,7 @@ for(const k in IT)IT[k].key=k;
 
 /* WTYPES: weapon types. ELN: element display names. */
 const WTYPES=['blade','heavy','pole','bow','art'];
-const ELN={light:'Light',dark:'Dark',fire:'Fire',nature:'Nature',water:'Water',wind:'Wind',earth:'Earth',lightning:'Lightning',illusion:'Illusion'};
+const ELN={light:'Light',dark:'Dark',fire:'Fire',nature:'Nature',water:'Water',wind:'Wind',earth:'Earth',lightning:'Lightning',illusion:'Illusion',crystal:'Neutral'};
 /* CLASSES, keyed by class id (shared by player classes and monsters):
    n = class name shown in game, w = weapon types it can use, body = which sprite body fig() draws (tunic/robe/vest/armor/beast/golem...),
    mov = Move, crit = bonus Crit %, promo = class it promotes to, tier = 2 for promoted classes, bonus = stats added on promotion (stat order above),

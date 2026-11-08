@@ -17,10 +17,11 @@ texStyle.textContent+=Object.keys(PROPS).filter(k=>!OVER_T.includes(k)&&k!=='bou
 /* stand a prop on tile x,y (called by buildBoard). Its base sits a little below the tile's centre */
 /* other regions' boulders: CraftPix rocks (art/props/<name>.png, padded square, scale × the boulder's size). Regions not listed keep the plain boulder */
 const REGION_ROCKS={desert:[['sand-rock',1.1]],snow:[['ice-block',.9],['snow-peaks',1.1]],forest:[['moss-rock',1.1]],swamp:[['moss-rock',1.1]],mountain:[['red-spire',1.1]],heart:[['red-spire',1.1]]};
-/* tile kinds drawn with CraftPix rocks in every region: the desert's Sandstone Rocks (k) mix the sand rock with the pale stone piles */
+/* tile kinds drawn with CraftPix rocks in every region: the desert's Sandstone Rocks (k) are the upright sand rock, mirrored on every other tile
+   (the pale stone piles were drawn from above, so they looked like they were lying flat) */
 /* ROCK_W: widest a single rock prop is drawn, in px (a tile is 68 wide) */
 const ROCK_W=54;
-const KIND_ROCKS={sandstone:[['sand-rock',1.1],['stone-rock',.95],['stone-rocks',.9]],
+const KIND_ROCKS={sandstone:[['sand-rock',1.1]],
   /* the Cursed Woodland: Dead Wood (f) is bare dead trees; the Cursed Thicket (y) is a bramble bush or a dark mushroom tree */
   forest:[['wood-deadtree-1',1],['wood-deadtree-2',1],['wood-deadtree-3',.95]],
   curse:[['wood-bush',.8],['wood-shroom-1',.9],['wood-shroom-2',.9],['wood-shroom-3',.9]],
@@ -48,7 +49,7 @@ function placeProp(x,y,k){const im=document.createElement('img'),c=scrC(x,y);let
   const big=k==='boulder'&&REGION_BIG[actBiome().id]&&ART_PNG.has('props/'+REGION_BIG[actBiome().id])&&boulderPairs()[key(x,y)];
   if(big==='skip')return;/* drawn by its partner */
   if(big){const c2=scrC(...big);cx=(c.x+c2.x)/2;cy=Math.max(c.y,c2.y);z=(big[0]+big[1])*4+3;src='art/props/'+REGION_BIG[actBiome().id]+'.png';w=Math.round(T*PROPS[k]*1.9);base=8}
-  im.className='prop';im.alt='';im.dataset.k=key(x,y);im.dataset.p=k;im.src=src;
+  im.className='prop';im.alt='';im.dataset.k=key(x,y);im.dataset.p=k;im.src=src;if(k==='sandstone'&&(x+y)%2)im.style.transform='scaleX(-1)';
   Object.assign(im.style,{left:cx-w/2+'px',top:cy+base-w+'px',width:w+'px',height:w+'px',zIndex:z});boardEl.appendChild(im)}
 /* each render: tall props fade when a unit stands just behind them */
 function propsRender(){

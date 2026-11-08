@@ -1,5 +1,5 @@
-/* bosses with health bars (the Crystal Heart): HP split into equal bars, each its own colour; the crystal shifts colour as each one breaks */
-const BAR_COL=[null,'#bfe6ff','#b46cff','#ff4d5e'],BAR_HF=[null,'hue-rotate(-160deg) saturate(.6) brightness(1.25)','hue-rotate(-80deg)',''];
+/* bosses with health bars (the Crystal Heart): HP split into equal bars, each its own colour; the crystal starts blue, turns purple, and ends red on its last bar */
+const BAR_COL=[null,'#ff4d5e','#b46cff','#bfe6ff'],BAR_HF=[null,'','hue-rotate(-80deg)','hue-rotate(-160deg) saturate(.6) brightness(1.25)'];
 function barsOf(u){if(!u.bars)return null;const per=u.maxhp/u.bars,n=Math.max(0,Math.ceil(u.hp/per));return{n,frac:n?(u.hp-(n-1)*per)/per:0}}
 /* Board rendering, unit cards and the unit sheet */
 /* ================= RENDER ================= */
@@ -159,8 +159,10 @@ function drawSheet(){
   const wt=CLS[u.cls].w.map(tp=>{const k=Object.keys(IT).find(k=>IT[k].t===tp);return`<span class="wt">${k?`<img src="${icon(k)}" alt="">`:''}${TN[tp]}</span>`}).join('');
   let pg;
   if(sheetPg===0){
+    /* immunities: can't be pushed (bosses, big monsters, Iron Body, Steady), Stone, Root */
+    const imm=[...(canPush(u)?[]:['Knockback']),...(stImmune(u,'stone')?['Stone']:[]),...(stImmune(u,'root')?['Root']:[])];
     pg=`<div class="sgrid">${shown(u).filter(s=>s!=='hp').map(s=>bar(SL[s],u[s])).join('')}</div>
-    <div class="sinfo"><div><span class="sl">Move</span><b>${u.mov}</b></div><div><span class="sl">Terrain</span><b>${terrText(t)}</b></div><div class="wide"><span class="sl">Weapons</span><span class="wts">${wt}</span></div></div>
+    <div class="sinfo"><div><span class="sl">Move</span><b>${u.mov}</b></div><div><span class="sl">Terrain</span><b>${terrText(t)}</b></div><div class="wide"><span class="sl">Weapons</span><span class="wts">${wt}</span></div>${imm.length?`<div class="wide"><span class="sl">Immune</span><b>${imm.join(', ')}</b></div>`:''}</div>
     ${skillBlock(u)}${monSheet(u)}`;
   }else{
     const atk=w?(w.mag?u.mag:u.str)+w.mt:'–',hit=w?w.hit+u.lck*2:'–',crit=w?(w.crit||0)+(CLS[u.cls].crit||0)+Math.floor(u.lck/2):'–';
@@ -219,7 +221,7 @@ function renderPanel(){
   /* the command menu and the forecast dock in a bottom corner of the map view, on the side away from the fight */
   let mEl=$('#umenu');if(!mEl||!mEl.isConnected){mEl=document.createElement('div');mEl.id='umenu';mEl.className='umenu';vp.appendChild(mEl);
     for(const ev of['pointerdown','pointerup','wheel'])mEl.addEventListener(ev,e=>e.stopPropagation());mEl.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||busy)return;act(b.dataset.act)})}
-  const pop=ui==='confirm'&&tmode==='atk'&&pending||ui==='aim'&&abT&&ABIL[abSel].side!=='self'&&unitAt(abT.x,abT.y);mEl.classList.toggle('ufc',!!pop||ui==='aim'&&!!abT);
+  const pop=ui==='confirm'&&tmode==='atk'&&pending||ui==='aim'&&abT&&ABIL[abSel].side!=='self'&&unitAt(abT.x,abT.y);mEl.classList.toggle('ufc',!!pop||ui==='aim'&&!!abT);mEl.classList.toggle('aim',ui==='aim');
   if(fm&&(pop||u)){mEl.innerHTML=fm;mEl.hidden=false;const xs=[u,pop?pending:null].filter(Boolean).map(o=>{const r=uBox(o);return cam.x+(r.l+r.w/2)*cam.s}),mid=xs.reduce((a,x)=>a+x,0)/xs.length;
     mEl.classList.toggle('dl',mid>vb().w/2);mEl.classList.toggle('dr',mid<=vb().w/2)}else mEl.hidden=true;
 }

@@ -7,7 +7,7 @@ function musterArt_draw(){const c='MUS';if(sprCache[c])return sprCache[c];const 
   p.rect(0,60,W,30,'#3e4a2e');for(let i=0;i<60;i++)p.set((i*37)%W,62+(i*13)%28,i%2?'#4e5a3a':'#34402a');
   p.poly([[66,90],[94,90],[86,60],[74,60]],'#6a5a3e');p.poly([[74,60],[86,60],[83,52],[77,52]],'#5a4a34');
   /* the campfire itself is Rhi's sprite (nodes/rest), laid over the path in musterScene */
-  p.rect(18,66,10,7,'#7a5a3a');p.rect(16,64,14,3,'#5a3a22');p.rect(112,70,12,6,'#5a4a3a');
+  /* (the two crates that sat either side of the path are gone) */
   return sprCache[c]=p.url()}
 function flagArt_draw(){const c='FLAG';if(sprCache[c])return sprCache[c];const p=Px(16,16);p.rect(4,1,1,14,'#8a6040');p.poly([[5,2],[14,4],[5,8]],'#d8483a');p.line(5,3,11,4,'#f0c850');p.rect(2,14,5,1,'#5a3a22');p.outline(OUT);return sprCache[c]=p.url()}
 const musEl=document.createElement('div');musEl.className='tav mus';musEl.hidden=true;document.body.appendChild(musEl);
@@ -66,7 +66,7 @@ async function musterScene(opts,need,late){
   if(!late)tip('muster','Choose your squad','Click 3 travellers to bring them along. Their cards show stats, weapon and skill, and “What do stats do?” explains the numbers. Units who fall are gone for the rest of the run.');
   const draw=()=>{musEl.querySelectorAll('.mu').forEach(b=>b.classList.toggle('on',chosen.includes(+b.dataset.u)));
     const g=musEl.querySelector('[data-g="go"]');g.disabled=chosen.length!==need;g.textContent=`Set out (${chosen.length}/${need})`;
-    musEl.querySelector('.ms-count').textContent=chosen.length===need?'Your squad is ready.':late?'Two veterans wait at the crossroads. Choose one to join you.':`Click ${need-chosen.length===need?need:need-chosen.length} more traveller${need-chosen.length===1?'':'s'} to bring along.`;
+    musEl.querySelector('.ms-count').textContent=chosen.length===need?'Your squad is ready.':late?'Two veterans wait at the crossroads. Only one can join you.':`Click ${need-chosen.length===need?need:need-chosen.length} more traveller${need-chosen.length===1?'':'s'} to bring along.`;
     musEl.querySelector('.ms-cards').innerHTML=chosen.map(i=>{const u=opts[i],sk=SKILLS[u.skill];return`<div class="dcard on">${unitCard(u)}<button type="button" class="mini ms-x" data-u="${i}" aria-label="Remove ${u.name}">✕</button><p class="ms-sk"><b>${sk.n}:</b> ${sk.d}${isSummoner(u)?` <b>Familiar:</b> ${famOf(u).n}, ${famOf(u).d}. Called once per battle.`:''}</p></div>`}).join('')};
   draw();
   return new Promise(res=>{musEl.onclick=e=>{
