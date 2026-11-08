@@ -280,10 +280,12 @@ Object.assign(EVENTS,{
     ...(last?[{l:`Take ${last.n}’s keepsake`,sub:'Pick 1 of 2 relics',go:async()=>{const k=await relicPick(2,['u','r'],`${last.n}’s keepsake`,'They carried it this far. It can go a little further.');return k&&`You take <b>${RELICS[k].n}</b> from ${last.n}’s pack. It feels right that it goes on.`}}]:[]),
     {l:'Bury them',sub:'Every unit gains 50 EXP',go:async()=>{await expAll(run.roster,50);return'You do what you can for them. The squad goes on quieter (+50 EXP).'}}]}}
 });
+/* a sound as an event opens, for the events that have one */
+const EV_SFX={smith:'anvil',dwarf:'anvil',weaponmaster:'anvil',enchanter:'book',library:'book',gnome:'book',chest:'chestopen',cache:'chestopen',icecache:'chestopen',armoury:'chestopen',spring:'pour',witch:'pour',cage:'lever',merchant:'paper',tailor:'paper'};
 async function eventNode(){
   /* act 3 only draws act-3 events; acts 1 and 2 never do */
   const A3=(run.act||1)>=3,ks=Object.keys(EVENTS).filter(k=>(A3?EVENTS[k].act===3:!EVENTS[k].act||EVENTS[k].act===(run.act||1))&&(!EVENTS[k].ok||EVENTS[k].ok())),seen=run.seenEv=run.seenEv||[],fresh=ks.filter(k=>!seen.includes(k)),ek=pick(fresh.length?fresh:ks),E=EVENTS[ek],opts=(E.card=null,E.o||E.make());seen.push(ek);
-  music(actBiome().id);
+  music(actBiome().id);sfx(EV_SFX[ek]);
   for(;;){
     const m=await evShow(E,E.d,opts.map((x,i)=>{const poor=x.cost&&gold()<x.cost,none=x.need&&!x.need();return[String(i),x.l,(x.sub||'')+(poor?' (not enough gold)':none?' (nobody can use it)':''),poor||none]}));
     const r=await opts[+m].go();evEl.hidden=false;

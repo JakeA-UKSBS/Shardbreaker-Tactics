@@ -53,10 +53,10 @@ async function tavernNode(){
     if(m==='rumour'){text=pick([`“They say ${B.boss.name||'a minotaur lord'} is waiting at the end of ${theN(B)}. ${B.tip[2]}”`,`“A traveller came through last week, white as milk. Said ${theN(B)} is no place for the unprepared. ${B.tip[2]}”`]);continue}
     if(m==='drink'){
       for(;;){const d=await tavShow('“Here’s what I’m pouring tonight.”',[...Object.entries(DRINKS).map(([k,x])=>[k,`<img class="tv-ic" src="${mugArt()}" alt="">${x.n} · ${x.p}g`,x.d+(bought.has(k)?' (sold out)':''),bought.has(k)||gold()<x.p]),['back','Back','']]);
-        if(d==='back')break;const x=DRINKS[d];
+        if(d==='back')break;const x=DRINKS[d];if(x.all)sfx('pour');
         if(x.all){spend(x.p);bought.add(d);done.drink=1;tavEl.hidden=true;for(const u of run.roster){const g=gainExp(u,30);if(g&&g.gains)await levelUp(u,g)}tavEl.hidden=false;text='“To the road!” The whole squad drinks, and tells each other stories that get bigger with every round.';break}
         tavEl.hidden=true;const u=await pickUnit(`Who drinks the ${x.n}?`,x.d);tavEl.hidden=false;if(!u)continue;
-        spend(x.p);bought.add(d);done.drink=1;const ss=[].concat(x.st(u));ss.forEach(s=>{if(s==='hp'){u.maxhp++;u.hp++}else u[s]++});
+        spend(x.p);sfx('pour');bought.add(d);done.drink=1;const ss=[].concat(x.st(u));ss.forEach(s=>{if(s==='hp'){u.maxhp++;u.hp++}else u[s]++});
         text=`${u.name} downs the ${x.n}. ${ss.map(s=>SL[s]+' +1').join(', ')}. “Steady now.”`;break}
       continue}
     if(m==='food'){

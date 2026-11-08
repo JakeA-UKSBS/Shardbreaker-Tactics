@@ -125,7 +125,7 @@ async function restNode(){
   await expAll([run.roster[+m.slice(1)]],train);
 }
 async function mapStep(){
-  run.phase='map';saveGame();music(actBiome().id);
+  run.phase='map';saveGame();music(actBiome().id);ambience(null);
   const pos=await mapScreen(),N=run.map.rows[pos.r][pos.i];
   run.pos=pos;(run.path=run.path||[]).push(pos);run.n=pos.r+1;run.kind=N.t;
   if(N.t==='recruit'){await recruitNode();return mapStep()}
