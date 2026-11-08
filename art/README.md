@@ -23,7 +23,7 @@ You only need to rebuild the manifest when you **add** or **delete** a PNG: `nod
 | `bosses/` | The Crystal Heart (act 3 boss, 3×3 tiles): idle and `-strike` | 96×96 |
 | `cast/<character>/` | The named cast: `<class>-<pose>.png` for their starting class and each ascension. Poses: `idle`, and the attack frames `windup`, `swing`, `follow`, `critup`. Drawn with the character's listed weapon, so weapon upgrades don't change the picture | 64×64 |
 | `monsters/` | Every monster, region boss (except the big hand-drawn ones in `bosses/`) and summon: `<Class>.png` standing and `<Class>-strike.png` attacking. One fixed look each, so a monster no longer gets random colours | 32×32 |
-| `bosses/hollow-bear`, `bosses/krondis` | The Hollow Bear and Krondis (2×2 bosses), facing right; add `<name>-strike` for an attack pose | 128×128 |
+| `bosses/hollow-bear`, `bosses/krondis`, `bosses/yeti` | The Hollow Bear, Krondis and the Yeti (2×2 bosses), facing right; add `<name>-strike` for an attack pose | 128×128 |
 
 ## The code-drawn versions
 
