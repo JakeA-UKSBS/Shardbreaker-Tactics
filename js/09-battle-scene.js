@@ -21,7 +21,7 @@ function flash(u){const el=uEls[u.id];if(!el)return;el.classList.add('flash');se
 function mapPose(u,name,t,wk){const el=uEls[u.id];if(!el)return;
   /* bosses (2+ tiles): just swap between the idle and strike frames, refitted to their box */
   if(u.sz>1){if(name!=='idle'&&name!=='swing'&&name!=='follow')return;const img=el.firstChild,src=sprite(u,name==='idle'?'idle':'strike',mapWk(u));if(img.dataset.s===src)return;
-    img.src=src;img.dataset.s=src;img.style.transform='';img.style.transformOrigin='';if(u.sz===2||src.startsWith('data:'))fillBox(img,src,u.team==='e');return}const img=el.firstChild;wk=wk||mapWk(u);let src;
+    img.src=src;img.dataset.s=src;if(u.sz===2||src.startsWith('data:'))fillBox(img,src,u.team==='e');return}/* keeps the current fit until the new frame's is measured, so it doesn't jump the first time */const img=el.firstChild;wk=wk||mapWk(u);let src;
   if(name==='idle')src=sprite(u,'idle',mapWk(u));
   else if(castPng(u,name))src=castPng(u,name);
   else if(isHi(u.cls,u.sz)){const k=['MP',u.cls,u.team,name,wk,JSON.stringify(u.look)].join('|');src=sprCache[k]||(sprCache[k]=hiArt(u.look,u.cls,u.team,wk,name,0,64))}
@@ -96,6 +96,8 @@ async function quickPlay(a,d,res){
   for(const e of res.ev){const X=e.by==='a'?a:d,Y=X===a?d:a,w=wOf(X)||{t:'blade'},ranged=w.t==='bow'||(w.t==='art'&&f.dist>1)||(w.thrown&&f.dist>1)||f.dist>1;
     if(e.proc)pop(X,e.proc,'crit');
     if(e.crit){sfx('critcharge');const el=uEls[X.id];if(el)el.animate([{filter:'none'},{filter:'brightness(2.2) drop-shadow(0 0 6px #fff)'},{filter:'none'}],{duration:D(320)});await sleep(D(260))}
+    /* Krondis opens his jaws (strike frame) and holds it before the sound and the swing */
+    if(X.cls==='Krondis'){mapPose(X,'swing',Y);await sleep(D(500))}
     sfx(X.cls==='Krondis'?'sandswipe':hitSfx(w,ranged));
     await swingAt(X,Y,w,e.crit,ranged);
     if(e.hit){sfx(e.crit?(w.t==='art'?'crit':'swordcrit'):'hit');/* weapon crits use the recorded sword crit */Y.hp=Y===a?e.hpA:e.hpD;pop(Y,(e.crit?'Crit ':'')+'-'+e.dmg,e.crit?'crit':'dmg');flash(Y);lunge(Y,X,-6);mapPose(Y,'hit',X);

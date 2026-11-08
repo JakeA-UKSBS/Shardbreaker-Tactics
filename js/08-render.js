@@ -69,7 +69,7 @@ function render(){
     const ub=uBox(u);el.style.left=ub.l+'px';el.style.top=ub.t+'px';el.style.zIndex=unitZ(u);{const w=ub.w+'px';if(el.style.width!==w){el.style.width=el.style.height=w;el.firstChild.style.width=el.firstChild.style.height=w}}
     if(u.hp<=0&&!el.dataset.dead&&el.isConnected&&el.style.opacity!==''){el.dataset.dead=1;dieFx(el,boardEl,ub.l+ub.w/2,ub.t+ub.h/2,u,1)}else if(u.hp>0)delete el.dataset.dead;
     el.style.opacity=u.hp>0?1:0;
-    const src=sprite(u,'idle',mapWk(u)),img=el.firstChild;if(img.dataset.s!==src){img.src=src;img.dataset.s=src;img.style.transform='';img.style.transformOrigin='';if(u.sz===2||u.sz>1&&src.startsWith('data:'))fillBox(img,src,u.team==='e')}img.classList.toggle('hi',isHi(u.cls,u.sz));
+    const src=sprite(u,'idle',mapWk(u)),img=el.firstChild;if(img.dataset.s!==src){img.src=src;img.dataset.s=src;img.style.transform='';img.style.transformOrigin='';if(u.sz===2||u.sz>1&&src.startsWith('data:'))fillBox(img,src,u.team==='e');/* bosses: load and measure the strike frame now so the first attack shows it */if(u.sz>1){const s2=sprite(u,'strike',mapWk(u));if(!FILLS[s2])fillBox(new Image(),s2)}}img.classList.toggle('hi',isHi(u.cls,u.sz));
     {const bi=el.querySelector('.hpb i'),bb=barsOf(u);bi.style.width=(bb?bb.frac:u.hp/u.maxhp)*100+'%';
      if(bb){bi.style.background=BAR_COL[bb.n]||'';bi.parentNode.style.background=bb.n>1?BAR_COL[bb.n-1]:'';el.style.setProperty('--hf',BAR_HF[bb.n]||'');
       const was=+el.dataset.bars||u.bars;el.dataset.bars=bb.n;if(bb.n<was&&u.hp>0){pop(u,'The shell shatters!','dmg');sfx('broke');toast(`${u.name} cracks: ${bb.n} bar${bb.n===1?'':'s'} left`)}}}
