@@ -22,8 +22,8 @@ const RELICS={
   ironrose:{n:'Iron Rose',r:'u',d:'Units below half HP take 3 less damage.'},
   aventurine:{n:'Aventurine',r:'c',d:'All units gain +10 Avoid and +5 Crit.'},
   trophies:{n:'Hunter’s Trophies',r:'u',d:'Effective hits deal 2 more damage.'},
-  bedroll:{n:'Traveller’s Bedroll',r:'c',d:'Training at a camp gives 100 EXP instead of 50.'},
-  kettle:{n:'Camp Kettle',r:'u',d:'At every camp, all units gain 20 EXP.'},
+  bedroll:{n:'Traveller’s Bedroll',r:'c',d:'Training at a camp gives 60 EXP instead of 30.'},
+  kettle:{n:'Camp Kettle',r:'u',d:'At every camp, all units gain 10 EXP.'},
   plenty:{n:'Horn of Plenty',r:'u',d:'+15 gold after every won fight, and tavern meals last 1 fight longer.'},
   /* ev: only from its event (the Empty Throne), never in the relic pools */
   gemcrown:{n:'The Crystal Crown',r:'r',ev:1,d:'Units deal +3 damage, but the crystals call to monsters: enemies get +10 Hit against your units.'},

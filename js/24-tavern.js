@@ -20,7 +20,7 @@ function afterFightMeals(){if(!run)return;if(run.meals){run.meals.forEach(m=>m.n
 const KEEPER={name:'Marla',look:{style:'bun',hair:'#8a2a22',skin:'#e8b98f',cloth:'#5a6a3a',sash:'#7a5230',eye:'#3a5a8a',apron:true}};
 /* p = price in gold, d = effect, all = affects the whole squad, st = which stat(s) the chosen unit gains */
 const DRINKS={
-  ale:{n:'A round of ale',p:25,d:'Every unit gains 30 EXP.',all:true},
+  ale:{n:'A round of ale',p:25,d:'Every unit gains 15 EXP.',all:true},
   whiskey:{n:'Dragonfire Whiskey',p:45,d:'One unit gains +1 Str or Mag (whichever is higher).',st:u=>u.mag>u.str?'mag':'str'},
   cordial:{n:'Moonberry Cordial',p:45,d:'One unit gains +1 Spd.',st:()=>'spd'},
   stout:{n:'Ironbark Stout',p:45,d:'One unit gains +1 Def.',st:()=>'def'},

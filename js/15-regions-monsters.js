@@ -68,20 +68,20 @@ const BIOMES={
   swamp:{n:'Sobek’s Mire',noThe:1,bg:'#22362c',d:'Mangrove roots and ankle-deep water. Lurkers and lamias hunt the shallows; the sand banks are solid ground.',
     tip:['swamp','Ankle-deep water','A unit that starts its turn in the water or the mangrove roots has 1 less Move. Sand is solid ground. Fliers and swamp creatures ignore this.'],
     maps:['flats','road','bog'],bossMap:'lair',pool:[['BogLurker',3],['Lamia',3,2],['MudMonster',2,4]],elitePool:[['MudMonster',3],['Lamia',2],['BogLurker',2]],
-    boss:{name:'Krondis',cls:'Krondis',mov:4,s:[40,13,0,5,5,2,10,1],items:['bite'],skill:'wrath',look:{body:'#5a6a86',belly:'#5a7a4a',crown:true}}},
+    boss:{name:'Krondis',cls:'Krondis',mov:4,s:[40,13,0,5,5,2,10,5],items:['bite'],skill:'wrath',look:{body:'#5a6a86',belly:'#5a7a4a',crown:true}}},
   forest:{n:'Cursed Woodland',bg:'#26302a',d:'A dead forest under a curse. The deer here have gone wrong, wolves hunt in packs, and the trees themselves are waking up.',
     tip:['woods','Cursed thickets','Cursed thickets give +10 Avoid and +1 Def, but cost 2 Move to enter. Stags are fast: keep your back line covered.'],
     maps:['woodland','brook','clearing'],bossMap:'heart',pool:[['Wolf',4],['CursedStag',3,2],['BlightedTreant',2,5]],elitePool:[['BlightedTreant',3],['CursedStag',3],['Wolf',2]],
-    boss:{name:'The Hollow Bear',cls:'HollowBear',mov:4,s:[38,13,0,6,5,3,8,3],items:['slam'],skill:'wrath',look:{fur:'#3a2a24',eye:'#ff3a3a',core:'#ff6aa8'}}},
+    boss:{name:'The Hollow Bear',cls:'HollowBear',mov:4,s:[38,13,0,6,5,3,8,7],items:['slam'],skill:'wrath',look:{fur:'#3a2a24',eye:'#ff3a3a',core:'#ff6aa8'}}},
   mountain:{n:'Volcanic Isle',bg:'#3a2420',d:'Basalt slopes cut by rivers of magma. Golems block the passes, and fire sprites float over the lava.',
     tip:['lava','Magma','Magma can’t be crossed on foot. Fliers and fire creatures move over it freely.'],
     maps:['fields','caldera','ridge'],bossMap:'crater',pool:[['FireSprite',3],['BoulderGolem',3,3]],elitePool:[['BoulderGolem',3],['FireSprite',2]],
-    boss:{name:'Pyraxis, the Magma Dragon',cls:'MagmaDragon',s:[42,12,10,6,4,2,10,6],items:['magmaBreath'],skill:'steadfast',look:{body:'#4a2420',magma:true,big:true,crysSmall:true,crysCol:'#3a2a4a'}}},
+    boss:{name:'Pyraxis, the Magma Dragon',cls:'MagmaDragon',s:[42,12,10,6,4,2,10,9],items:['magmaBreath'],skill:'steadfast',look:{body:'#4a2420',magma:true,big:true,crysSmall:true,crysCol:'#3a2a4a'}}},
   /* Act 3, the end of every run: not in the region draw (biomeIds). Its monsters are the Heart's own crystal creatures */
   heart:{n:'The Heart of the Blight',noThe:1,bg:'#3a1018',d:'Scorched ground split by veins of glowing gem. Every crystal in these lands grew from what waits here.',
     tip:['heart','The Crystal Heart','The Heart never moves, but it strikes from 2 to 6 tiles away. Get next to it: it can’t hit what’s beside it. On even turns it hurls a Crystal Storm at your toughest unit and everyone next to them, so spread out. It calls more blighted monsters on turns 3, 5 and 7.'],
     maps:['heartHall'],bossMap:'heartCore',pool:[['Shardling',4],['Prism',3],['CrystalSentinel',2]],elitePool:[['CrystalSentinel',3],['Shardling',2],['Prism',2]],
-    boss:{name:'The Crystal Heart',cls:'CrystalHeart',sz:3,mov:0,s:[56,0,8,8,0,0,8,8],items:['shatter','crystalSpikes'],skill:'focus',summon:'*',bars:3,summonTxt:'The Crystal Heart calls the blighted!',intro:'The Crystal Heart beats at the centre of the chamber, and every crystal in these lands beats with it. Shatter it to end the blight.',look:{crys:false}}}
+    boss:{name:'The Crystal Heart',cls:'CrystalHeart',sz:3,mov:0,s:[56,0,8,8,0,0,8,11],items:['shatter','crystalSpikes'],skill:'focus',summon:'*',bars:3,summonTxt:'The Crystal Heart calls the blighted!',intro:'The Crystal Heart beats at the centre of the chamber, and every crystal in these lands beats with it. Shatter it to end the blight.',look:{crys:false}}}
 };
 
 /* PNG art (art/<key>.png, see art() in 03-art.js) */
