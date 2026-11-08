@@ -1,17 +1,19 @@
 /* Sound effects */
 /* ================= SOUND ================= */
 const AU={ctx:null,nb:null};
+/* master volume for every sound effect (music has its own, in music()) */
+const SFX_VOL=.7;
 function audio(){
   if(!settings.sound)return null;
-  if(!AU.ctx){try{AU.ctx=new(window.AudioContext||window.webkitAudioContext)();const n=AU.ctx.sampleRate,b=AU.ctx.createBuffer(1,n,n),d=b.getChannelData(0);for(let i=0;i<n;i++)d[i]=Math.random()*2-1;AU.nb=b}catch(_){return null}}
+  if(!AU.ctx){try{AU.ctx=new(window.AudioContext||window.webkitAudioContext)();AU.out=AU.ctx.createGain();AU.out.gain.value=SFX_VOL;AU.out.connect(AU.ctx.destination);const n=AU.ctx.sampleRate,b=AU.ctx.createBuffer(1,n,n),d=b.getChannelData(0);for(let i=0;i<n;i++)d[i]=Math.random()*2-1;AU.nb=b}catch(_){return null}}
   if(!AU.buf){AU.buf={};for(const n in SFX_FILE)fetch(SFX_FILE[n][0]).then(r=>r.arrayBuffer()).then(b=>AU.ctx.decodeAudioData(b)).then(d=>{AU.buf[n]=d}).catch(()=>{})}/* recorded sounds load once; until then (or offline) the synth versions play */
   if(AU.ctx.state==='suspended')AU.ctx.resume();return AU.ctx;
 }
 /* recorded sounds (sfx/, Helton Yan's Pixel Combat pack): name -> [file, volume]. These replace the synth sound of the same name once loaded */
 const SFX_FILE={heal:['sfx/healing-gusts.mp3',.7],sandswipe:['sfx/sand-swipe.mp3',.8],levelup:['sfx/aura-up.mp3',.5],step:['sfx/boots-grass.mp3',.45],swordcrit:['sfx/sword-crit.mp3',.8],jump:['sfx/retro-jump.mp3',.5]};
-function playBuf(n,delay=0,rate=1){const c=AU.ctx,s=c.createBufferSource(),g=c.createGain();s.buffer=AU.buf[n];s.playbackRate.value=rate;g.gain.value=SFX_FILE[n][1];s.connect(g).connect(c.destination);s.start(c.currentTime+delay)}
-function tone(f,dur,o={}){const c=audio();if(!c)return;const t=c.currentTime+(o.delay||0),os=c.createOscillator(),g=c.createGain();os.type=o.type||'sine';os.frequency.setValueAtTime(f,t);if(o.slide)os.frequency.exponentialRampToValueAtTime(o.slide,t+dur);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(o.vol||.2,t+.006);g.gain.exponentialRampToValueAtTime(.0001,t+dur);os.connect(g).connect(c.destination);os.start(t);os.stop(t+dur+.03)}
-function noise(dur,o={}){const c=audio();if(!c)return;const t=c.currentTime+(o.delay||0),s=c.createBufferSource(),fl=c.createBiquadFilter(),g=c.createGain();s.buffer=AU.nb;fl.type=o.type||'bandpass';fl.frequency.setValueAtTime(o.f||1200,t);if(o.slide)fl.frequency.exponentialRampToValueAtTime(o.slide,t+dur);fl.Q.value=o.q||1;g.gain.setValueAtTime(o.vol||.3,t);g.gain.exponentialRampToValueAtTime(.0001,t+dur);s.connect(fl).connect(g).connect(c.destination);s.start(t);s.stop(t+dur+.03)}
+function playBuf(n,delay=0,rate=1){const c=AU.ctx,s=c.createBufferSource(),g=c.createGain();s.buffer=AU.buf[n];s.playbackRate.value=rate;g.gain.value=SFX_FILE[n][1];s.connect(g).connect(AU.out);s.start(c.currentTime+delay)}
+function tone(f,dur,o={}){const c=audio();if(!c)return;const t=c.currentTime+(o.delay||0),os=c.createOscillator(),g=c.createGain();os.type=o.type||'sine';os.frequency.setValueAtTime(f,t);if(o.slide)os.frequency.exponentialRampToValueAtTime(o.slide,t+dur);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(o.vol||.2,t+.006);g.gain.exponentialRampToValueAtTime(.0001,t+dur);os.connect(g).connect(AU.out);os.start(t);os.stop(t+dur+.03)}
+function noise(dur,o={}){const c=audio();if(!c)return;const t=c.currentTime+(o.delay||0),s=c.createBufferSource(),fl=c.createBiquadFilter(),g=c.createGain();s.buffer=AU.nb;fl.type=o.type||'bandpass';fl.frequency.setValueAtTime(o.f||1200,t);if(o.slide)fl.frequency.exponentialRampToValueAtTime(o.slide,t+dur);fl.Q.value=o.q||1;g.gain.setValueAtTime(o.vol||.3,t);g.gain.exponentialRampToValueAtTime(.0001,t+dur);s.connect(fl).connect(g).connect(AU.out);s.start(t);s.stop(t+dur+.03)}
 const SFX={
   select:()=>tone(988,.05,{type:'square',vol:.04}),
   move:()=>tone(587,.07,{type:'square',vol:.04,slide:880}),
