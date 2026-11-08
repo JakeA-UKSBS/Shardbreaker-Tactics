@@ -1,5 +1,5 @@
-/* bosses with health bars (the Crystal Heart): HP split into equal bars, each its own colour; the crystal shifts colour as each one breaks */
-const BAR_COL=[null,'#bfe6ff','#b46cff','#ff4d5e'],BAR_HF=[null,'hue-rotate(-160deg) saturate(.6) brightness(1.25)','hue-rotate(-80deg)',''];
+/* bosses with health bars (the Crystal Heart): HP split into equal bars, each its own colour; the crystal starts blue, turns purple, and ends red on its last bar */
+const BAR_COL=[null,'#ff4d5e','#b46cff','#bfe6ff'],BAR_HF=[null,'','hue-rotate(-80deg)','hue-rotate(-160deg) saturate(.6) brightness(1.25)'];
 function barsOf(u){if(!u.bars)return null;const per=u.maxhp/u.bars,n=Math.max(0,Math.ceil(u.hp/per));return{n,frac:n?(u.hp-(n-1)*per)/per:0}}
 /* Board rendering, unit cards and the unit sheet */
 /* ================= RENDER ================= */
@@ -27,8 +27,14 @@ function buildBoard(){
     sd.innerHTML=`<svg width="${TW}" height="${TH+D}"><polygon points="0,${TH/2} ${TW/2},${TH} ${TW/2},${TH+D} 0,${TH/2+D}" fill="var(--c)"/><polygon points="0,${TH/2} ${TW/2},${TH} ${TW/2},${TH+D} 0,${TH/2+D}" fill="#000" opacity=".3"/><polygon points="${TW/2},${TH} ${TW},${TH/2} ${TW},${TH/2+D} ${TW/2},${TH+D}" fill="var(--c)"/><polygon points="${TW/2},${TH} ${TW},${TH/2} ${TW},${TH/2+D} ${TW/2},${TH+D}" fill="#000" opacity=".5"/><path d="M0 ${TH/2}L${TW/2} ${TH}L${TW} ${TH/2}" stroke="#fff" stroke-opacity=".32" fill="none"/></svg>`;
     boardEl.appendChild(sd);boardEl.appendChild(t);firstOf[sk]=firstOf[sk]||t;if(PROPS[ov])placeProp(x,y,ov);else if(tk==='shallow')placeDecor(x,y)}
   /* side faces take the average colour of their tile's art */
-  for(const k in firstOf){const m=/url\("?(.*?)"?\)/.exec(getComputedStyle(firstOf[k]).backgroundImage);if(!m)continue;sideColor(m[1],c=>boardEl.querySelectorAll(`.blk[data-t="${k}"]`).forEach(e=>e.style.setProperty('--c',c)))}
+  for(const k in firstOf){const m=/url\("?(.*?)"?\)/.exec(getComputedStyle(firstOf[k]).backgroundImage);if(!m)continue;sideColor(m[1],c=>boardEl.querySelectorAll(`.blk[data-t="${k}"]`).forEach(e=>e.style.setProperty('--c',c)));
+    if(TEX_SIDES.includes(k))boardEl.querySelectorAll(`.blk[data-t="${k}"]`).forEach(e=>texSides(e,m[1]))}
 }
+/* kinds whose side faces show their own art (skewed to the slope) instead of a flat colour: the Gemstone Caverns' Iridescent Rock reads as crystal walls all round */
+const TEX_SIDES=['t-cavewall'];let texN=0;
+function texSides(e,src){const sv=e.querySelector('svg'),ps=sv.querySelectorAll('polygon'),n=++texN,w=TW/2,ang=Math.atan2(TH/2,TW/2)*180/Math.PI;
+  sv.insertAdjacentHTML('afterbegin',`<defs>${[['l',ang],['r',-ang]].map(([sd,a])=>`<pattern id="tx${n}${sd}" patternUnits="userSpaceOnUse" width="${w}" height="${w}" patternTransform="skewY(${a})"><image href="${src}" width="${w}" height="${w}" preserveAspectRatio="none" style="image-rendering:pixelated"/></pattern>`).join('')}</defs>`);
+  ps[0].setAttribute('fill',`url(#tx${n}l)`);ps[2].setAttribute('fill',`url(#tx${n}r)`)}
 /* ground variants: art/tiles/<kind>-2.png, -3... are mixed in with the main tile, the same pattern every time.
    The main tile still shows on about half the tiles. Add a kind here once its variant PNGs exist. */
 const TILE_VARS={plain:['plain-2','plain-3','plain-6'],sand:['sand-2','sand-3','sand-4'],snow:['snow-2'],ice:['ice-2','ice-3','ice-4'],water:['water-2','water-3','water-4'],basalt:['basalt-2']};
@@ -159,8 +165,10 @@ function drawSheet(){
   const wt=CLS[u.cls].w.map(tp=>{const k=Object.keys(IT).find(k=>IT[k].t===tp);return`<span class="wt">${k?`<img src="${icon(k)}" alt="">`:''}${TN[tp]}</span>`}).join('');
   let pg;
   if(sheetPg===0){
+    /* immunities: can't be pushed (bosses, big monsters, Iron Body, Steady), Stone, Root */
+    const imm=[...(canPush(u)?[]:['Knockback']),...(stImmune(u,'stone')?['Stone']:[]),...(stImmune(u,'root')?['Root']:[])];
     pg=`<div class="sgrid">${shown(u).filter(s=>s!=='hp').map(s=>bar(SL[s],u[s])).join('')}</div>
-    <div class="sinfo"><div><span class="sl">Move</span><b>${u.mov}</b></div><div><span class="sl">Terrain</span><b>${terrText(t)}</b></div><div class="wide"><span class="sl">Weapons</span><span class="wts">${wt}</span></div></div>
+    <div class="sinfo"><div><span class="sl">Move</span><b>${u.mov}</b></div><div><span class="sl">Terrain</span><b>${terrText(t)}</b></div><div class="wide"><span class="sl">Weapons</span><span class="wts">${wt}</span></div>${imm.length?`<div class="wide"><span class="sl">Immune</span><b>${imm.join(', ')}</b></div>`:''}</div>
     ${skillBlock(u)}${monSheet(u)}`;
   }else{
     const atk=w?(w.mag?u.mag:u.str)+w.mt:'–',hit=w?w.hit+u.lck*2:'–',crit=w?(w.crit||0)+(CLS[u.cls].crit||0)+Math.floor(u.lck/2):'–';
@@ -219,7 +227,7 @@ function renderPanel(){
   /* the command menu and the forecast dock in a bottom corner of the map view, on the side away from the fight */
   let mEl=$('#umenu');if(!mEl||!mEl.isConnected){mEl=document.createElement('div');mEl.id='umenu';mEl.className='umenu';vp.appendChild(mEl);
     for(const ev of['pointerdown','pointerup','wheel'])mEl.addEventListener(ev,e=>e.stopPropagation());mEl.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||busy)return;act(b.dataset.act)})}
-  const pop=ui==='confirm'&&tmode==='atk'&&pending||ui==='aim'&&abT&&ABIL[abSel].side!=='self'&&unitAt(abT.x,abT.y);mEl.classList.toggle('ufc',!!pop||ui==='aim'&&!!abT);
+  const pop=ui==='confirm'&&tmode==='atk'&&pending||ui==='aim'&&abT&&ABIL[abSel].side!=='self'&&unitAt(abT.x,abT.y);mEl.classList.toggle('ufc',!!pop||ui==='aim'&&!!abT);mEl.classList.toggle('aim',ui==='aim');
   if(fm&&(pop||u)){mEl.innerHTML=fm;mEl.hidden=false;const xs=[u,pop?pending:null].filter(Boolean).map(o=>{const r=uBox(o);return cam.x+(r.l+r.w/2)*cam.s}),mid=xs.reduce((a,x)=>a+x,0)/xs.length;
     mEl.classList.toggle('dl',mid>vb().w/2);mEl.classList.toggle('dr',mid<=vb().w/2)}else mEl.hidden=true;
 }

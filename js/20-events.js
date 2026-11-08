@@ -144,6 +144,13 @@ const EVENTS={
       return[...stock.map(k=>({l:`${IT[k].n} · ${price(k)}g`,sub:itemText(k),cost:price(k),go:async()=>{
         const u=await pickUnit(`Who takes the ${IT[k].n}?`,'If their bag is full, you can swap something out.',u=>(isWpn(k)||IT[k].t==='spirit')&&!canUse(u,k)?(IT[k].t==='spirit'?'Can’t use staves':'Can’t wield it'):null);if(!u)return null;
         if(!await stow(u,k))return null;spend(price(k));return`${u.name} takes the <b>${IT[k].n}</b>. “Pleasure doing business.”`}})),{l:'Just looking',go:async()=>'The merchant shrugs and waves you on.'}]}},
+  /* Buckthor Moccasin: a dwarf cobbler selling shoes (any region) */
+  cobbler:{t:'Buckthor Moccasin, Cobbler',art:'merchant',d:'A stout dwarf sits on an upturned crate, surrounded by boots of every size. His painted sign reads <i>BUCKTHOR MOCCASIN · FINE FOOTWEAR</i>. “Hunting crystal beasts in those? Your feet deserve better.”',o:null,
+    make:()=>{const stock=[['featherstep',35],['hobnailBoots',35],['travellersBoots',40]];
+      return[...stock.map(([k,c])=>({l:`${IT[k].n} · ${c}g`,sub:itemText(k),cost:c,go:async()=>{
+        const u=await pickUnit(`Who wears the ${IT[k].n}?`,'If their bag is full, you can swap something out.',u=>u.items.some(i=>i.k===k)?'Already has a pair':null);if(!u)return null;
+        if(!await stow(u,k))return null;spend(c);return`${u.name} laces up the <b>${IT[k].n}</b>. Buckthor nods. “Walk a mile in those and tell me I’m wrong.”`}})),
+        {l:'Just looking',go:async()=>'“Bare feet and crystal shards. Your funeral.”'}]}},
   gamble:{t:'Gambler’s Table',art:'gamble',d:'A grinning stranger rattles two dice in a cup. “Double or nothing, friend?”',o:[
     {l:'Bet 30 gold',sub:'Even odds to win 60',cost:30,go:async()=>{spend(30);if(rand()<.5){run.gold+=60;sfx('fanfare');return'Two sixes. The stranger laughs and pays out 60 gold.'}sfx('broke');return'Snake eyes. The stranger pockets your 30 gold.'}},
     {l:'Walk away',go:async()=>'“Suit yourself.”'}]},

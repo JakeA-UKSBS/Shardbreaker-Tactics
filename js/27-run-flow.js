@@ -23,7 +23,7 @@ async function titleScreen(){
   for(;;){
     const sv=loadGame(),items=[];
     if(sv&&sv.run)items.push(['cont','Continue']);
-    items.push(['new','New Run'],['records',`Unlocks · ${prof.ach.length}/${ACH.length}`],['hist','Run History'],['opts','Options']);
+    items.push(['new','New Run'],...(ACH_ON?[['records',`Unlocks · ${prof.ach.length}/${ACH.length}`]]:[]),['hist','Run History'],['opts','Options']);
     const m=await titleMenu(items);
     if(m==='opts'){await optionsMenu(true);continue}
     if(m==='records'){await recordsScreen();continue}
@@ -51,7 +51,7 @@ async function winScreen(){
     for(;;){const u=await pickUnit('A weapon from the Elder’s hoard',`Who takes it? They get the one that suits them: ${steelList()}.`,u=>!steelFor(u)?'Nothing for them':u.items.some(it=>it.k===steelFor(u))?'Already has one':null,'Leave it');
       if(!u)break;const k=steelFor(u);if(!await stow(u,k))continue;sfx('item');toast(`${u.name} takes the ${IT[k].n}`);break}}
   if(bossWin&&!final)await relicPick(3,['u','r'],'The boss’s hoard','');
-  if(final){const news=endRun(true);sfx('fanfare');await modal(`<div class="endban win">Victory</div><div class="eyebrow">${seedTag(run.seed)}${run.asc?` · Ascension ${run.asc}`:''}</div><h2>The blight is broken</h2><p>${run.roster.length} of your squad made it to the end.</p>${newsHTML(news)}<div class="roster">${run.roster.map(u=>`<div><img src="${portrait(u)}" alt="">${u.name}<span class="hint">${CLS[u.cls].n}</span></div>`).join('')}</div><div class="mbtns"><button class="go" type="button" data-m="ok">Back to title</button></div>`);
+  if(final){const news=endRun(true);sfx('fanfare');await modal(`<div class="endban win">Victory</div><div class="eyebrow">${seedTag(run.seed)}${run.asc?` · Ascension ${run.asc}`:''}</div><h2>The blight is broken</h2>${newsHTML(news)}<div class="roster">${run.roster.map(u=>`<div><img src="${portrait(u)}" alt="">${u.name}<span class="hint">${CLS[u.cls].n}</span></div>`).join('')}</div><div class="mbtns"><button class="go" type="button" data-m="ok">Back to title</button></div>`);
     try{localStorage.removeItem(SAVE)}catch(_){}run=null;titleScreen();return}
   if(bossWin){run.act=(run.act||1)+1;run.map=genMap();run.pos=null;run.path=[];const B=actBiome();
     await modal(`<div class="eyebrow">Act ${run.act}</div><h2>${B.n}</h2><p>${B.d}</p><div class="mbtns"><button class="go" type="button" data-m="ok">Press on</button></div>`)

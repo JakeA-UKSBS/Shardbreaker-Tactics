@@ -5,7 +5,9 @@ let prof={un:[],runs:0,wins:0,asc:0,ach:[],bosses:[]};
 function loadProf(){try{const p=JSON.parse(localStorage.getItem(PROF));if(p)prof=Object.assign(prof,p)}catch(_){}
   /* drop achievements and unlocks that no longer exist */prof.ach=prof.ach.filter(id=>ACH.some(a=>a.id===id));prof.un=prof.un.filter(k=>UNLOCKS[k])}
 function saveProf(){try{localStorage.setItem(PROF,JSON.stringify(prof))}catch(_){}}
-const unl=k=>prof.un.includes(k);
+/* achievements are switched off for now: none are earned, their unlocks don't apply and the Unlocks screen is hidden. Set to true to bring them back */
+const ACH_ON=false;
+const unl=k=>ACH_ON&&prof.un.includes(k);
 /* rewards that achievements hand out */
 const UNLOCKS={
   ascension:{n:'Difficulty',d:'Choose an Ascension level when you start a run.'},
@@ -42,7 +44,7 @@ function endRun(won){
   prof.runs++;if(won){prof.wins++;if((run.asc||0)>=prof.asc&&prof.asc<ASC_MAX){prof.asc++;out.push(`<b>Ascension ${prof.asc}</b> is open: ${ASC[prof.asc]}`)}}
   /* best progress so far on counted achievements (shown as bars on the Unlocks screen) */
   prof.best=prof.best||{};for(const a of ACH)if(a.cnt&&(!a.win||won))prof.best[a.id]=Math.max(prof.best[a.id]||0,a.cnt(sq));
-  for(const a of ACH){if(prof.ach.includes(a.id)||(a.win&&!won)||!a.ok(sq))continue;prof.ach.push(a.id);
+  if(ACH_ON)for(const a of ACH){if(prof.ach.includes(a.id)||(a.win&&!won)||!a.ok(sq))continue;prof.ach.push(a.id);
     out.push(`Achievement: <b>${a.n}</b>${a.rw&&!unl(a.rw)?` · unlocks <b>${UNLOCKS[a.rw].n}</b> (${UNLOCKS[a.rw].d})`:''}`);if(a.rw&&!unl(a.rw))prof.un.push(a.rw)}
   const fresh=Object.keys(RELICS).filter(k=>relicOpen(k)&&!before.has(k));if(fresh.length)out.push(`New relics join the pool: ${fresh.map(k=>`<b>${RELICS[k].n}</b>`).join(', ')}`);
   saveProf();return out;

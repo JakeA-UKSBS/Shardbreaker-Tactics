@@ -49,9 +49,14 @@ const ASC_BONUS={
   'Hero':[4,3,0,0,3,2,2,1],
   'Swordmaster':[2,3,0,0,5,4,0,1],
   'Bard':[3,0,3,0,3,3,1,2],
-  'Grand Summoner':[4,0,5,0,2,2,2,4]};
+  'Grand Summoner':[4,0,5,0,2,2,2,4],
+  /* classes that only ever join already advanced (Zwei, Kyul, Sigrun, Kaya) */
+  'Mercenary':[4,4,0,0,2,2,2,0],
+  'Warlock':[3,0,5,0,1,1,1,3],
+  'Drake Rider':[5,4,0,0,2,1,3,0],
+  'Horse Archer':[3,2,0,0,4,2,1,1]};
 /* BASE_ADJ: small per-class tweaks on top of the role's base stats, in stat order */
-const BASE_ADJ={'Mender':[0,0,0,0,0,0,1,0]};
+const BASE_ADJ={'Mender':[0,0,0,0,0,0,1,0],'Shieldmaiden':[0,0,0,0,0,0,-1,0]};
 const castCls=n=>`G.${CAST_CLASSES[n]}.${n.replace(/ /g,'')}`;
 for(const n in CAST_CLASSES){const base=ensureCls('G.'+CAST_CLASSES[n]);const C=Object.assign({},CLS[base],{n});delete C.promo;if(ASC_BONUS[n])C.bonus=ASC_BONUS[n];CLS[castCls(n)]=C}
 
@@ -150,14 +155,19 @@ function castUnit(id,lv){
   if(t==='2')lv=1; /* already-advanced characters always join at Lv 1 */
   const s=R.b.slice();if(BASE_ADJ[CLS[c.cls].n])BASE_ADJ[CLS[c.cls].n].forEach((d,i)=>s[i]+=d);if(M.st)M.st.forEach((d,i)=>s[i]=Math.max(0,s[i]+d));if(t==='2'&&CLS[c.cls].bonus)CLS[c.cls].bonus.forEach((d,i)=>s[i]+=d);
   const g=R.gr.map(([a,b])=>Math.round((a+b)/2)),items=[];
+  /* advanced joiners start at Lv 1 but with the average growth of Lv 1 to 5, so they match a unit that ascended at Lv 5 */
+  if(t==='2')g.forEach((p,i)=>s[i]+=Math.round(p*(PROMO_LV-1)/100));
   if(c.wk)items.push({k:c.wk,u:IT[c.wk].uses});
   if(role==='support'&&c.wk!=='mendingStaff'&&CLS[c.cls].n!=='Minstrel')/* Lysander sings rather than carrying a staff */items.push({k:'mendingStaff',u:IT.mendingStaff.uses});
   items.push({k:'salve',u:IT.salve.uses});
-  const u={id:'c'+(run.uid++),cast:id,name:c.name,cls:c.cls,team:'p',lv:1,exp:0,skill:KITS[id]&&KITS[id].passive||pick(R.skills),skills:[],cap:BASE_CAP,look:clone(c.look),g,mov:CLS[c.cls].mov,items,acted:false,x:0,y:0};
+  const u={id:'c'+(run.uid++),cast:id,name:c.name,cls:c.cls,team:'p',lv:1,exp:0,skill:KITS[id]&&KITS[id].passive||pick(R.skills),skills:[],cap:BASE_CAP+(t==='2'?PROMO_CAP:0)/* advanced joiners have the ascension's extra capacity too */,look:clone(c.look),g,mov:CLS[c.cls].mov,items,acted:false,x:0,y:0};
   ST.forEach((k,i)=>u[k]=s[i]);u.maxhp=u.hp;
   for(;u.lv<lv;u.lv++)ST.forEach((k,i)=>{if(rand()*100<g[i]){if(k==='hp')u.maxhp++;else u[k]++}});
   if(role==='summoner')u.familiar=c.familiar||pick(Object.keys(FAMILIARS));
-  u.hp=u.maxhp;return foldLuck(u);
+  u.hp=u.maxhp;foldLuck(u);
+  /* base-class characters who join from Act 2 on arrive ascended, into a random one of their classes (stats kept, bonus added) */
+  if(t!=='2'&&run&&(run.act||1)>=2&&CLS[c.cls].asc){const k=pick(CLS[c.cls].asc),l=castLook(u,k);if(l)u.look=l;promote(u,k);u.hp=u.maxhp}
+  return u;
 }
 /* who can turn up: where = 'recruit' (recruit node, cage), 'tavern' or 'act1' (the offer as Act 2 begins) */
 function castPool(where){
