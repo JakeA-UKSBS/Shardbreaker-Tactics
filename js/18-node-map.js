@@ -119,8 +119,8 @@ function unitDetail(u){const C=CLS[u.cls],sk=[u.skill,...(u.skills||[]).map(x=>x
   <div class="ns-h">Wields</div><p class="ns-none">${C.w.map(t=>TN[t]).join(', ')}</p>`}
 async function restNode(){
   run.roster.forEach(u=>u.hp=u.maxhp);
-  const train=R('bedroll')?100:50;
-  if(R('kettle')){await expAll(run.roster,20);toast('Camp Kettle: everyone gains 20 EXP')}
+  const train=R('bedroll')?60:30;
+  if(R('kettle')){await expAll(run.roster,10);toast('Camp Kettle: everyone gains 10 EXP')}
   const m=await modal(`<div class="eyebrow">Rest</div><h2>A quiet camp</h2><p>Everyone rests and heals fully. Choose one unit to train: they gain ${train} EXP.</p><div class="draft">${run.roster.map((u,i)=>`<button type="button" class="dcard" data-m="t${i}">${unitCard(u,false,0,true)}</button>`).join('')}</div>`);
   await expAll([run.roster[+m.slice(1)]],train);
 }
