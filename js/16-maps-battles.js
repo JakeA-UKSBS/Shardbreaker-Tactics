@@ -9,7 +9,7 @@ Object.assign(CLS,{
   GemGolem:{n:'Gem Golem',w:['heavy'],body:'golem',mov:4},Gemsnail:{n:'Gemsnail',w:['art'],body:'snail',mov:3},
   AmethystTurtle:{n:'Amethyst Turtle',w:['heavy','art'],body:'turtle',mov:0},
   HollowBear:{n:'Hollow Bear',w:['heavy'],body:'bear',mov:4},
-  /* placeholders until they get their own art: the Ice Troll is a humanoid brute, the Yeti a white golem body */
+  /* the Ice Troll is a placeholder humanoid brute until it gets its own art; the Yeti keeps the golem body for rules, its art is Rhi's art/bosses/yeti.png */
   IceTroll:{n:'Ice Troll',w:['heavy'],body:'vest',mov:4,wade:true,crit:5},
   Yeti:{n:'Yeti',w:['heavy'],body:'golem',mov:4,wade:true},
   Sage:{n:'Sage',w:['art'],body:'robe',mov:0}

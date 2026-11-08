@@ -143,7 +143,7 @@ function crystallise(P,cls,big,small,sc){if(small){const W=32,g=P.g;let h=0;for(
 }
 function fig(L,cls,team,pose,wk,sz){
   if(typeof isHi==='function'&&isHi(cls,sz))return hiFig(L||{},cls,team,pose,wk);
-  if(sz>=2){const B=BIG[CLS[cls].body];if(B)return B(L,pose==='strike')}
+  if(sz>=2){const B=BIG[cls]||BIG[CLS[cls].body],r=B&&B(L,pose==='strike');if(r)return r}
   /* monsters: art/monsters/<Class>.png (and <Class>-strike.png for the attack pose) replaces the code-drawn sprite, see monsterArt() */
   {const k='monsters/'+cls;if(ART_PNG.has(k))return'art/'+k+(pose==='strike'&&ART_PNG.has(k+'-strike')?'-strike':'')+'.png'}
   if(sz>=2)pxScale=2;
@@ -214,6 +214,8 @@ BIG.bear=(L,strike)=>{const p=Px(64,64),c=L.fur||'#3a2a24',c2=shade(c,.68),c3=sh
    (else the idle one is used for attacks too). Drawn facing right; enemies are flipped to face left in game. */
 function bigPng(body,name){const draw=BIG[body],k='bosses/'+name;BIG[body]=(L,strike)=>{if(!ART_PNG.has(k))return draw(L,strike);return'art/'+k+(strike&&ART_PNG.has(k+'-strike')?'-strike':'')+'.png'}}
 bigPng('bear','hollow-bear');
+/* the Yeti shares the golem body for tags/rules, so its PNG is keyed by class; without the PNG it falls back to the white golem */
+BIG.Yeti=()=>{};bigPng('Yeti','yeti');
 /* ==================================================================
    32px SPRITES (fig0): one branch per monster body type, then the generic
    humanoid body (tunic, robe, armour, vest, serpent) for anything else.
