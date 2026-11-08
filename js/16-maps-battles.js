@@ -78,6 +78,9 @@ const ACTS=3;
 const MUSIC={title:'music/title.mp3',tavern:'music/tavern.mp3'};for(const k in BIOMES)MUSIC[k]=`music/${k}.mp3`;
 let bgm=null,bgmKey='';
 /* Background music: drop mp3s into music/ (title.mp3, swamp.mp3, forest.mp3, mountain.mp3, desert.mp3, snow.mp3, cavern.mp3, heart.mp3). Missing files are skipped. */
+/* ambience loops quietly under a region's battles (on top of its music) */
+const AMBIENCE={swamp:'sfx/swamp-ambience.mp3'};let amb=null,ambKey='';
+function ambience(k){k=k||'';if(k===ambKey&&amb)return;ambKey=k;try{if(amb)amb.pause();amb=null;if(!settings.sound||!AMBIENCE[k])return;amb=new Audio(AMBIENCE[k]);amb.loop=true;amb.volume=.35;amb.play().catch(()=>{})}catch(_){}}
 function music(k){if(k===bgmKey&&bgm)return;bgmKey=k;try{if(bgm)bgm.pause();bgm=null;if(!settings.sound||!MUSIC[k])return;bgm=new Audio(MUSIC[k]);bgm.loop=true;bgm.volume=.45;bgm.play().catch(()=>{})}catch(_){}}
 
 /* BATTLE MAPS: n = name, map = rows of terrain letters (top row first, see TER for each letter), start = [x, y] tiles your units deploy on. */

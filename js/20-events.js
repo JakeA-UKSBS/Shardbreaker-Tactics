@@ -234,7 +234,7 @@ Object.assign(EVENTS,{
   /* Act 2 only */
   star:{t:'The Fallen Star',act:2,ok:()=>run.roster.some(u=>u.cast==='ash'),art:'crater',fig:'meteor',d:'A crater, still smoking. At its heart a sigil has burned itself into the star-iron.',o:[
     {l:'Take the Meteor Sigil',sub:'Ash takes it: Rng 3–10, 5 uses, huge damage',go:async()=>{const u=run.roster.find(u=>u.cast==='ash');if(!await stow(u,'meteorSigil'))return null;sfx('item');return `${u.name} pries the <b>Meteor Sigil</b> free. It’s warm to the touch.`}},
-    {l:'Sell the star-iron',sub:'+80 gold',go:async()=>{run.gold=gold()+80;sfx('item');return'The iron fetches 80 gold in the next town.'}}]},
+    {l:'Sell the star-iron',sub:'+80 gold',go:async()=>{run.gold=gold()+80;sfx('buy');return'The iron fetches 80 gold in the next town.'}}]},
   spire:{t:'The Storm Spire',act:2,art:'spire',d:'A tower that drinks lightning. At the top, a sigil and a staff hang in the air, waiting.',o:[
     {l:'Take Heaven’s Bolt',sub:'Corvin only: long-range lightning sigil, Rng 3–10, 5 uses',need:()=>run.roster.some(u=>u.cast==='corvin'),go:async()=>{const u=run.roster.find(u=>u.cast==='corvin');if(!await stow(u,'heavensBolt'))return null;sfx('item');return `${u.name} takes <b>Heaven’s Bolt</b>. The sky rumbles.`}},
     {l:'Take the Far Charm',sub:'Menders only: a ranged heal, Rng 1–10',need:()=>run.roster.some(u=>isRoleU(u,'support')),go:async()=>{const u=await pickUnit('Who takes the Far Charm?',itemText('farStaff'),u=>isRoleU(u,'support')?null:'Menders only');if(!u||!await stow(u,'farStaff'))return null;sfx('item');return `${u.name} takes the <b>Far Charm</b>.`}},
@@ -280,10 +280,12 @@ Object.assign(EVENTS,{
     ...(last?[{l:`Take ${last.n}’s keepsake`,sub:'Pick 1 of 2 relics',go:async()=>{const k=await relicPick(2,['u','r'],`${last.n}’s keepsake`,'They carried it this far. It can go a little further.');return k&&`You take <b>${RELICS[k].n}</b> from ${last.n}’s pack. It feels right that it goes on.`}}]:[]),
     {l:'Bury them',sub:'Every unit gains 30 EXP',go:async()=>{await expAll(run.roster,30);return'You do what you can for them. The squad goes on quieter (+30 EXP).'}}]}}
 });
+/* a sound as an event opens, for the events that have one */
+const EV_SFX={smith:'anvil',dwarf:'anvil',weaponmaster:'anvil',enchanter:'book',library:'book',gnome:'book',chest:'chestopen',cache:'chestopen',icecache:'chestopen',armoury:'chestopen',spring:'pour',witch:'pour',cage:'lever',merchant:'paper',tailor:'paper'};
 async function eventNode(){
   /* act 3 only draws act-3 events; acts 1 and 2 never do */
   const A3=(run.act||1)>=3,ks=Object.keys(EVENTS).filter(k=>(A3?EVENTS[k].act===3:!EVENTS[k].act||EVENTS[k].act===(run.act||1))&&(!EVENTS[k].ok||EVENTS[k].ok())),seen=run.seenEv=run.seenEv||[],fresh=ks.filter(k=>!seen.includes(k)),ek=pick(fresh.length?fresh:ks),E=EVENTS[ek],opts=(E.card=null,E.o||E.make());seen.push(ek);
-  music(actBiome().id);
+  music(actBiome().id);sfx(EV_SFX[ek]);
   for(;;){
     const m=await evShow(E,E.d,opts.map((x,i)=>{const poor=x.cost&&gold()<x.cost,none=x.need&&!x.need();return[String(i),x.l,(x.sub||'')+(poor?' (not enough gold)':none?' (nobody can use it)':''),poor||none]}));
     const r=await opts[+m].go();evEl.hidden=false;

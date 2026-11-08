@@ -91,16 +91,16 @@ async function act(a){
   const u=sel&&byId(sel);
   if(a.startsWith('sheet:')){openSheet(byId(a.slice(6)));return}
   if(a==='chart'){effChart();return}
-  if(a==='cancel'){cancelMove();return}
+  if(a==='cancel'){sfx('decline');cancelMove();return}
   if(a==='abil'||a.startsWith('ab:')||a==='abuse'){await abAct(u,a);return}
   if(a==='menu'){pending=null;targets=[];itemSel=null;ui='menu';render();return}
   if(a==='attack'){targets=atkTargets(u);tmode='atk';pending=null;ui='target';render();return}
   if(a==='heal'){targets=healTargets(u);tmode='heal';pending=null;ui='target';render();return}
-  if(a==='back'){pending=null;ui='target';render();return}
+  if(a==='back'){sfx('decline');pending=null;ui='target';render();return}
   if(a==='items'){itemSel=null;ui='items';render();return}
   if(a==='trade'){busy=true;await tradeWith(u);busy=false;render();return}
   if(a.startsWith('item:')){itemSel=+a.slice(5);render();return}
-  if(a==='equip'){const it=u.items.splice(itemSel,1)[0];u.items.unshift(it);itemSel=0;render();return}
+  if(a==='equip'){sfx('equip');const it=u.items.splice(itemSel,1)[0];u.items.unshift(it);itemSel=0;render();return}
   if(a==='wprev'||a==='wnext'){const l=wpnsAt(u,man(u,pending),pending),i=l.indexOf(pendW);pendW=l[(i+(a==='wnext'?1:l.length-1))%l.length];render();return}
   if(a==='wait'){commit();finishAction();return}
   if(a==='summon'){if(!canSummon(u))return;commit();doSummon(u);finishAction();return}
@@ -121,7 +121,7 @@ async function fight(a,ai,d){
   for(const u of[a,d])if(u.team==='p'&&u.hp<=0&&R('phoenix')&&!run.phx){u.hp=Math.min(10,u.maxhp);run.phx=1;pop(u,'Phoenix!','heal');sfx('rise');toast(`The Phoenix Feather saves ${u.name}`)}
   for(const[u,i,n]of[[a,ai,res.used.a],[d,res.f.di,res.used.d]]){if(i<0||!n)continue;const it=u.items[i];if(endless(it.k))continue;it.u-=n;if(it.u<=0){u.items.splice(i,1);sfx('broke');toast(`${u.name}'s ${IT[it.k].n} shattered`)}}
   const p=a.team==='p'?a:d.team==='p'?d:null,o=p===a?d:a;
-  for(const e of res.ev)if(e.psn){const t=e.by==='a'?d:a;if(t.team==='p'&&M('soup'))continue;if(t.hp>0){t.psn=3;pop(t,'Poisoned','crit')}}
+  for(const e of res.ev)if(e.psn){const t=e.by==='a'?d:a;if(t.team==='p'&&M('soup'))continue;if(t.hp>0){t.psn=3;sfx('poison');pop(t,'Poisoned','crit')}}
   for(const e of res.ev)if(e.stone){const t=e.by==='a'?d:a;if(t.hp>0&&!stImmune(t,'stone')){t.stone=1;pop(t,'Stone!','crit');sfx('earth');toast(`${t.name} is turned to stone and loses ${t.team==='p'?'their':'its'} next turn`)}}
   /* a summon's EXP goes to the unit that summoned it */
   const ep=p&&p.summon?state.units.find(x=>x.id===p.owner&&x.hp>0):p;

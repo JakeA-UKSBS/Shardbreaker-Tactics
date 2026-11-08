@@ -64,7 +64,10 @@ function slashFx(X,Y,w,crit){if(!w||!['blade','heavy'].includes(w.t))return;/* l
 let fast=false;
 const D=ms=>ms*(fast?.3:1);
 const EL_COL={fire:'#ff8a3c',water:'#5ab4ff',wind:'#8ae8b0',earth:'#c8a060',lightning:'#ffe14a',illusion:'#b46aff',light:'#fff2b0',crystal:'#ff5a6a',nature:'#7ad85a',dark:'#b46aff'};
-function hitSfx(w,ranged){return w.kind==='staff'&&!ranged?'swing':w.t==='art'?null/* magic attacks are silent for now */:w.t==='bow'?'arrow':ranged?'throw':'swing'}
+/* element attacks have their own sound; other magic (light, dark, nature) is silent for now */
+const EL_SFX={fire:'fire',water:'water',lightning:'thunder',wind:'wind',ice:'ice'};
+const CLAW_SFX=['Claws','Fangs','Talons','Bite'];
+function hitSfx(w,ranged){return w.kind==='staff'&&!ranged?'swing':w.t==='art'?EL_SFX[w.el]||null:w.t==='bow'?'arrow':ranged?'throw':CLAW_SFX.includes(w.n)?'claw':w.t==='blade'?'slash':'swing'}
 /* a projectile flies from X to Y: arrows and thrown weapons arc (higher when shooting downhill), sigils fly straight and glow */
 async function shoot(X,Y,w){
   const a=uBox(X),b=uBox(Y),sx=a.l+a.w/2,sy=a.t+a.h*.45,ex=b.l+b.w/2,ey=b.t+b.h*.5,arc=w.t==='art'?0:30+Math.max(0,sy-ey)*.3;
@@ -100,7 +103,7 @@ async function quickPlay(a,d,res){
     sfx(X.cls==='Krondis'?'sandswipe':hitSfx(w,ranged));
     await swingAt(X,Y,w,e.crit,ranged);
     if(e.hit){sfx(e.crit?(w.t==='art'?'crit':'swordcrit'):'hit');/* weapon crits use the recorded sword crit */Y.hp=Y===a?e.hpA:e.hpD;pop(Y,(e.crit?'Crit ':'')+'-'+e.dmg,e.crit?'crit':'dmg');flash(Y);lunge(Y,X,-6);
-      if(w.t==='art')burst(Y,EL_COL[w.el]||'#c8b8ff');if(w.el==='crystal')shatterFx(Y);if(e.crit){shake();burst(Y,'#fff')}if(e.guard)pop(Y,e.guard,'heal');
+      if(w.t==='art')burst(Y,EL_COL[w.el]||'#c8b8ff');if(w.el==='crystal')shatterFx(Y);if(e.crit){shake();burst(Y,'#fff')}if(e.guard){pop(Y,e.guard,'heal');if(e.guard!==SKILLS.retaliate.n)sfx('block')}
       if(e.heal){X.hp=X===a?e.hpA:e.hpD;pop(X,'+'+e.heal,'heal')}}
     else{sfx('miss');pop(Y,'Miss','miss');lunge(Y,X,-10)}
     await sleep(D(240));mapPose(X,'idle');mapPose(Y,'idle');render();await sleep(D(200))}

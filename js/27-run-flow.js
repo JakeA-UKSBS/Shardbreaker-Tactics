@@ -2,7 +2,7 @@
 /* ---- flow ---- */
 async function beginBattle(){
   run.fights=(run.fights||0)+1;const def=genBattle(run.fights,run.kind);BATTLE=def;
-  setupBattle(run.roster);battleAllies();saveGame();music(def.biome);await battleIntro();
+  setupBattle(run.roster);battleAllies();saveGame();music(def.biome);ambience(def.biome);await battleIntro();
 }
 async function newRun(){
   const seed=(Date.now()^Math.floor(Math.random()*1e9))>>>0;seedRng(seed);
@@ -19,7 +19,7 @@ const squad=await musterScene(opts,3);if(!squad)return false;
   await mapStep();return true;
 }
 async function titleScreen(){
-  music('title');
+  music('title');ambience(null);
   for(;;){
     const sv=loadGame(),items=[];
     if(sv&&sv.run)items.push(['cont','Continue']);
