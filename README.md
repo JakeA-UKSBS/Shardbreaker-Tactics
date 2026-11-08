@@ -1,15 +1,11 @@
 # Shardbreaker Tactics
 
-An isometric, height-based fork of Shardbreaker (FFTA / Tactics Ogre style) with inspiration from GBA Fire emblem games. See [docs/DESIGN.md](docs/DESIGN.md) for where it's heading and what's built so far. Below is the original Shardbreaker readme.
+An isometric, height based tactics game with inspiration from GBA Fire emblem and FFTA. See [docs/DESIGN.md](docs/DESIGN.md)
 
-See [docs/VISUALS.md](docs/VISUALS.md) for pictures of every region, boss, monster, class, weapon, tile and scene, and [docs/INFO.md](docs/INFO.md) for the numbers: recruit odds, base stats and growths, weapons, effectiveness, skills, relics and regions.
+See [docs/INFO.md](docs/INFO.md) for the numbers: recruit odds, base stats and growths, weapons, effectiveness, skills, relics and regions.
 
-## Run it
-Open `index.html` in a browser (or serve the folder, e.g. VS Code's Live Server). `index.html` is just the page shell; the styles are in `css/style.css` and the game is split into numbered files in `js/`, loaded in order (plain scripts sharing one global scope, no build step). On PC: Esc or right-click backs out of a move or menu, E ends the turn, the mouse wheel zooms.
 
-The fixed art (tiles, icons, relics, scenes, backdrops) loads from PNGs in `art/`: edit them in any pixel editor and refresh. See [art/README.md](art/README.md) for sizes and the export tool.
-
-## Music
+## Music and art*** [add info]
 Drop mp3 files into a `music/` folder next to `index.html`: `title.mp3`, `tavern.mp3`, `swamp.mp3`, `forest.mp3`, `mountain.mp3`, `desert.mp3`, `snow.mp3`, `cavern.mp3`, `heart.mp3` (Act 3). Each loops while you're in that region (map and battles). Missing files are skipped. "Sound and music" in Options turns it off.
 
 ## Regions
@@ -22,18 +18,6 @@ Each run picks 2 of these 6 as its acts (`BIOMES`, `ACTS`). Each has 2-3 battle 
 | Sandstone Desert | Jackals, Sand Worms, Sandstone Golems | Quicksand costs 1 Move next turn; sandstone outcrops (cream feldspar with smoky quartz) give cover | The Pyrite Colossus |
 | Frostveil Reaches | Frost Wolves, Frost Sprites, Agate Golems, Ice Trolls (placeholder art) | Deep snow costs 1 Move next turn (snow creatures ignore it); frozen lakes −10 Avoid; blue agate gives cover | The Yeti (placeholder art) |
 | Gemstone Caverns | Gemsnails, Gem Golems | Emerald, ruby and sapphire clusters give cover; walls are iridescent rock | Amethyra, the Amethyst Turtle |
-
-Only creatures are enemies; there are no human foes.
-
-Defend fights: from floor 2, a quarter of normal battles are a settlement to hold for 5-7 turns, with monsters arriving from the top of the map each turn (`TOWN`, `town_<region>` maps, each region's `town` ground and cover). 
-
-
-## A run
-- Title subtitle: "Break the blight". Battle titles say what the fight is ("Battle", "Elite Battle", "Defend the Settlement"); boss fights use the boss's name.
-- Early ease: in Act 1, enemies deal 3 less damage on floors 1-3, 2 less on 4-6 and 1 less on 7-9; the first two floors have 2 enemies.
-
-Crossroads (`musterScene()`): Your candidates stand around a campfire, with the run's two regions on the signpost. Travellers start at Lv 2. Tap travellers to see their card and choose 3, then Set out. Each act's map starts from a flag node at the bottom. Fallen units are gone for the rest of the run; you only lose when the whole squad falls.
-
 
 ## branching
 - Each act is a branching node map (`genMap()` in `js/18-node-map.js`), following Slay the Spire's map: 15 floors on 4 lanes that cross now and then, then the boss on floor 16. Act 3 is a short straight road instead: tavern, elite, event, camp, then the Crystal Heart.
@@ -69,10 +53,6 @@ Crossroads (`musterScene()`): Your candidates stand around a campfire, with the 
 ## bosses
 - Region bosses are 2×2 (`u.sz=2`, x/y is the top-left). `man()` measures between footprints and `unitAt()` checks every cell, so movement, range, the danger map and the AI all handle them. Their sprites are 64×64: hand-drawn in `BIG` 
 
-## summoner [maybe make more generic]
-- Summoner role (`ROLES.summoner`): a staff caster (Crook Staff: Rng 1, hits harder; Rune Staff: Rng 1-2; both use Mag) with a Summon action once per battle (twice once promoted). The minion is the Summoner's own bonded familiar (`FAMILIARS`, `u.familiar`, rolled when the unit is made): Spirit Wolf, Stone Warden, Wisp or Spirit Hawk.
-
-
 ## monsters
 - Monsters: `Wolf`, `Lamia` in `CLS`/`FOE`, looks from `monLook()`. Wolves use the `beast` body in `fig()`.
 - `MAPS`: battle maps, grouped by region. `genBattle()` picks a map and enemies from the act's region. Region terrain letters are listed at the top of the REGIONS section; tile art is `bioTile()`.
@@ -82,11 +62,6 @@ Crossroads (`musterScene()`): Your candidates stand around a campfire, with the 
 
 ## calcs
 - EXP is 1.5× the Fire Emblem formula (`EXP_RATE`), so units evolve during Act 1.
-- Relics (`RELICS`): team passives for the run. Elites offer 1 of 2, the Act 1 boss 1 of 3, treasure rooms sometimes hold one. Combat effects go through `relicCalc()`, move through `relicMov()`. Shown on the map; tap one to read it.
+- Relics (`RELICS`): team passives for the run. Elites offer 1 of 2, the Act 1 boss 1 of 3, treasure rooms sometimes hold one. Combat effects go through `relicCalc()`, move through `relicMov()`.
 
-
-- Trade: a unit next to an ally gets a Trade option. Salves and gear can be passed across; weapons can't. Trading doesn't use the unit's action.
-- Tutorials: off by default. Turn on Tutorial tips in Options to get a tip the first time you reach each screen; every tip has a Turn off tutorials button.
-
-
-
+p
