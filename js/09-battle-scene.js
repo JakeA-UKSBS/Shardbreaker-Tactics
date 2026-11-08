@@ -96,6 +96,8 @@ async function quickPlay(a,d,res){
   for(const e of res.ev){const X=e.by==='a'?a:d,Y=X===a?d:a,w=wOf(X)||{t:'blade'},ranged=w.t==='bow'||(w.t==='art'&&f.dist>1)||(w.thrown&&f.dist>1)||f.dist>1;
     if(e.proc)pop(X,e.proc,'crit');
     if(e.crit){sfx('critcharge');const el=uEls[X.id];if(el)el.animate([{filter:'none'},{filter:'brightness(2.2) drop-shadow(0 0 6px #fff)'},{filter:'none'}],{duration:D(320)});await sleep(D(260))}
+    /* bosses open up (strike frame) and hold it before the sound and the swing */
+    if(X.sz>1){mapPose(X,'swing',Y);await sleep(D(500))}
     sfx(X.cls==='Krondis'?'sandswipe':hitSfx(w,ranged));
     await swingAt(X,Y,w,e.crit,ranged);
     if(e.hit){sfx(e.crit?(w.t==='art'?'crit':'swordcrit'):'hit');/* weapon crits use the recorded sword crit */Y.hp=Y===a?e.hpA:e.hpD;pop(Y,(e.crit?'Crit ':'')+'-'+e.dmg,e.crit?'crit':'dmg');flash(Y);lunge(Y,X,-6);mapPose(Y,'hit',X);
