@@ -13,7 +13,9 @@ function audio(){
 const SFX_FILE={sandswipe:['sfx/sand-swipe.mp3',.8],levelup:['sfx/aura-up.mp3',.5],step:['sfx/boots-grass.mp3',.45],swordcrit:['sfx/sword-crit.mp3',.8],jump:['sfx/retro-jump.mp3',.5],
   /* RPG Essentials Free pack: element attacks and poisoning */
   fire:['sfx/fire-explosion.mp3',.6],water:['sfx/water.mp3',.6],thunder:['sfx/thunder.mp3',.6],wind:['sfx/wind.mp3',.6],ice:['sfx/ice-explosion.mp3',.6],poison:['sfx/poison.mp3',.6],
-  heal:['sfx/heal.mp3',.5],debuff:['sfx/debuff.mp3',.55],claw:['sfx/claw.mp3',.8],block:['sfx/block.mp3',.9],slash:['sfx/slash.mp3',.7]};
+  heal:['sfx/heal.mp3',.5],debuff:['sfx/debuff.mp3',.55],claw:['sfx/claw.mp3',.8],block:['sfx/block.mp3',.9],slash:['sfx/slash.mp3',.7],
+  /* UI */
+  select:['sfx/confirm.mp3',.5],hover:['sfx/hover.mp3',.3],decline:['sfx/decline.mp3',.6],equip:['sfx/equip.mp3',.7],buy:['sfx/buy.mp3',.6]};
 function playBuf(n,delay=0,rate=1){const c=AU.ctx,s=c.createBufferSource(),g=c.createGain();s.buffer=AU.buf[n];s.playbackRate.value=rate;g.gain.value=SFX_FILE[n][1];s.connect(g).connect(AU.out);s.start(c.currentTime+delay)}
 function tone(f,dur,o={}){const c=audio();if(!c)return;const t=c.currentTime+(o.delay||0),os=c.createOscillator(),g=c.createGain();os.type=o.type||'sine';os.frequency.setValueAtTime(f,t);if(o.slide)os.frequency.exponentialRampToValueAtTime(o.slide,t+dur);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(o.vol||.2,t+.006);g.gain.exponentialRampToValueAtTime(.0001,t+dur);os.connect(g).connect(AU.out);os.start(t);os.stop(t+dur+.03)}
 function noise(dur,o={}){const c=audio();if(!c)return;const t=c.currentTime+(o.delay||0),s=c.createBufferSource(),fl=c.createBiquadFilter(),g=c.createGain();s.buffer=AU.nb;fl.type=o.type||'bandpass';fl.frequency.setValueAtTime(o.f||1200,t);if(o.slide)fl.frequency.exponentialRampToValueAtTime(o.slide,t+dur);fl.Q.value=o.q||1;g.gain.setValueAtTime(o.vol||.3,t);g.gain.exponentialRampToValueAtTime(.0001,t+dur);s.connect(fl).connect(g).connect(AU.out);s.start(t);s.stop(t+dur+.03)}
@@ -52,9 +54,11 @@ const SFX={
   earth:()=>{noise(.5,{vol:.55,f:180,type:'lowpass'});tone(70,.4,{type:'triangle',vol:.4,slide:40})},
 };
 /* synth stand-ins for recorded-only sounds */
-Object.assign(SFX,{jump:()=>tone(330,.12,{type:'square',vol:.04,slide:660}),swordcrit:()=>SFX.crit(),ice:()=>SFX.water(),poison:()=>SFX.dark(),debuff:()=>SFX.dark(),claw:()=>SFX.swing(),slash:()=>SFX.swing(),block:()=>SFX.broke(),sandswipe:()=>SFX.swing(),levelup:()=>{}});
+Object.assign(SFX,{jump:()=>tone(330,.12,{type:'square',vol:.04,slide:660}),swordcrit:()=>SFX.crit(),ice:()=>SFX.water(),poison:()=>SFX.dark(),debuff:()=>SFX.dark(),claw:()=>SFX.swing(),slash:()=>SFX.swing(),block:()=>SFX.broke(),hover:()=>{},decline:()=>SFX.ephase(),equip:()=>SFX.tick(),buy:()=>SFX.item(),sandswipe:()=>SFX.swing(),levelup:()=>{}});
 function sfx(n){if(!n||!settings.sound)return;try{if(audio()&&AU.buf[n]){if(n==='step')[0,.16].forEach((d,i)=>playBuf(n,d,i?.92:1.04));/* two footfalls */else playBuf(n)}else SFX[n]()}catch(_){}}
 /* tx,ty: where the unit is going; walkers (not fliers) also hop when it's higher ground */
 function stepSfx(u,tx,ty){if(settings.steps===false)return;const C=CLS[u.cls]||{};sfx(C.fly?'flap':C.mnt?'hoof':'step');if(!C.fly&&tx!=null&&hOf(tx,ty)>hOf(u.x,u.y))sfx('jump')}
 document.addEventListener('pointerdown',()=>{if(settings.sound)audio()},{capture:true});
+/* a soft hover sound on enabled buttons (once per button entered; only after audio has started, as browsers need a click first) */
+let hoverB=null;document.addEventListener('pointerover',e=>{const b=e.target.closest&&e.target.closest('button:not(:disabled)');if(b===hoverB)return;hoverB=b;if(b&&AU.ctx&&e.pointerType==='mouse')sfx('hover')});
 

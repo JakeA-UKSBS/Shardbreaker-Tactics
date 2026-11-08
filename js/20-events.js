@@ -234,7 +234,7 @@ Object.assign(EVENTS,{
   /* Act 2 only */
   star:{t:'The Fallen Star',act:2,ok:()=>run.roster.some(u=>u.cast==='ash'),art:'crater',fig:'meteor',d:'A crater, still smoking. At its heart a sigil has burned itself into the star-iron.',o:[
     {l:'Take the Meteor Sigil',sub:'Ash takes it: Rng 3–10, 5 uses, huge damage',go:async()=>{const u=run.roster.find(u=>u.cast==='ash');if(!await stow(u,'meteorSigil'))return null;sfx('item');return `${u.name} pries the <b>Meteor Sigil</b> free. It’s warm to the touch.`}},
-    {l:'Sell the star-iron',sub:'+80 gold',go:async()=>{run.gold=gold()+80;sfx('item');return'The iron fetches 80 gold in the next town.'}}]},
+    {l:'Sell the star-iron',sub:'+80 gold',go:async()=>{run.gold=gold()+80;sfx('buy');return'The iron fetches 80 gold in the next town.'}}]},
   spire:{t:'The Storm Spire',act:2,art:'spire',d:'A tower that drinks lightning. At the top, a sigil and a staff hang in the air, waiting.',o:[
     {l:'Take Heaven’s Bolt',sub:'Corvin only: long-range lightning sigil, Rng 3–10, 5 uses',need:()=>run.roster.some(u=>u.cast==='corvin'),go:async()=>{const u=run.roster.find(u=>u.cast==='corvin');if(!await stow(u,'heavensBolt'))return null;sfx('item');return `${u.name} takes <b>Heaven’s Bolt</b>. The sky rumbles.`}},
     {l:'Take the Far Charm',sub:'Menders only: a ranged heal, Rng 1–10',need:()=>run.roster.some(u=>isRoleU(u,'support')),go:async()=>{const u=await pickUnit('Who takes the Far Charm?',itemText('farStaff'),u=>isRoleU(u,'support')?null:'Menders only');if(!u||!await stow(u,'farStaff'))return null;sfx('item');return `${u.name} takes the <b>Far Charm</b>.`}},

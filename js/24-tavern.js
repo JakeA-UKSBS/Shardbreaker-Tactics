@@ -35,7 +35,7 @@ function tavShow(text,opts){
   tavEl.querySelector('.tv-opts').innerHTML=opts.map(([k,l,sub,dis])=>`<button type="button" class="tv-o" data-t="${k}"${dis?' disabled':''}>${l}${sub?`<span>${sub}</span>`:''}</button>`).join('');
   return new Promise(res=>{tavEl.onclick=e=>{const b=e.target.closest('[data-t]');if(!b||b.disabled)return;sfx('tick');res(b.dataset.t)}});
 }
-function spend(n){run.gold=gold()-n;sfx('item')}
+function spend(n){run.gold=gold()-n;sfx('buy')}
 function keeperArt(){return art('npcs/innkeeper')}
 async function tavernNode(){
   const look={...KEEPER.look},keeper=keeperArt(),bought=new Set(),done={},B=actBiome();

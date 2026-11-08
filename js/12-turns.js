@@ -91,16 +91,16 @@ async function act(a){
   const u=sel&&byId(sel);
   if(a.startsWith('sheet:')){openSheet(byId(a.slice(6)));return}
   if(a==='chart'){effChart();return}
-  if(a==='cancel'){cancelMove();return}
+  if(a==='cancel'){sfx('decline');cancelMove();return}
   if(a==='abil'||a.startsWith('ab:')||a==='abuse'){await abAct(u,a);return}
   if(a==='menu'){pending=null;targets=[];itemSel=null;ui='menu';render();return}
   if(a==='attack'){targets=atkTargets(u);tmode='atk';pending=null;ui='target';render();return}
   if(a==='heal'){targets=healTargets(u);tmode='heal';pending=null;ui='target';render();return}
-  if(a==='back'){pending=null;ui='target';render();return}
+  if(a==='back'){sfx('decline');pending=null;ui='target';render();return}
   if(a==='items'){itemSel=null;ui='items';render();return}
   if(a==='trade'){busy=true;await tradeWith(u);busy=false;render();return}
   if(a.startsWith('item:')){itemSel=+a.slice(5);render();return}
-  if(a==='equip'){const it=u.items.splice(itemSel,1)[0];u.items.unshift(it);itemSel=0;render();return}
+  if(a==='equip'){sfx('equip');const it=u.items.splice(itemSel,1)[0];u.items.unshift(it);itemSel=0;render();return}
   if(a==='wprev'||a==='wnext'){const l=wpnsAt(u,man(u,pending),pending),i=l.indexOf(pendW);pendW=l[(i+(a==='wnext'?1:l.length-1))%l.length];render();return}
   if(a==='wait'){commit();finishAction();return}
   if(a==='summon'){if(!canSummon(u))return;commit();doSummon(u);finishAction();return}

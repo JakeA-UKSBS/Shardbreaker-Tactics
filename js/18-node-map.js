@@ -86,8 +86,8 @@ function mapScreen(preview){
     if(e.target.closest('[data-ux]')){closeUnit();return}
     if(!e.target.closest('.nm-unit,[data-u]'))closeUnit();
     if(preview&&e.target.closest('[data-equip],[data-drop],[data-salve]'))return;/* no changing kit while only looking */
-    if(e.target.closest('[data-close]')){mapEl.onclick=null;mapEl.hidden=true;sfx('select');return res(null)}
-    const eq=e.target.closest('[data-equip]');if(eq){const u=run.roster[+eq.dataset.uu],it=u.items.splice(+eq.dataset.equip,1)[0];u.items.unshift(it);sfx('tick');saveGame();
+    if(e.target.closest('[data-close]')){mapEl.onclick=null;mapEl.hidden=true;sfx('decline');return res(null)}
+    const eq=e.target.closest('[data-equip]');if(eq){const u=run.roster[+eq.dataset.uu],it=u.items.splice(+eq.dataset.equip,1)[0];u.items.unshift(it);sfx('equip');saveGame();
       const side=eq.closest('.nm-side,.nm-info');if(side)side.innerHTML=unitBox(u);toast(`${u.name} equips the ${IT[it.k].n}`);return}
     const dr=e.target.closest('[data-drop]');if(dr){const u=run.roster[+dr.dataset.uu],i=+dr.dataset.drop,it=u.items[i],side=dr.closest('.nm-side,.nm-info');
       modal(`<h2>Drop the ${IT[it.k].n}?</h2><p>${u.name} leaves it behind. It’s gone for good.</p><div class="mbtns"><button type="button" data-m="no">Keep it</button><button type="button" class="go" data-m="yes">Drop it</button></div>`).then(m=>{
