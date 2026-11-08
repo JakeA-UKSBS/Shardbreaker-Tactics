@@ -21,7 +21,7 @@ function flash(u){const el=uEls[u.id];if(!el)return;el.classList.add('flash');se
 function mapPose(u,name,t,wk){const el=uEls[u.id];if(!el)return;
   /* bosses (2+ tiles): just swap between the idle and strike frames, refitted to their box */
   if(u.sz>1){if(name!=='idle'&&name!=='swing'&&name!=='follow')return;const img=el.firstChild,src=sprite(u,name==='idle'?'idle':'strike',mapWk(u));if(img.dataset.s===src)return;
-    img.src=src;img.dataset.s=src;img.style.transform='';img.style.transformOrigin='';if(u.sz===2||src.startsWith('data:'))fillBox(img,src,u.team==='e');return}const img=el.firstChild;wk=wk||mapWk(u);let src;
+    img.src=src;img.dataset.s=src;if(u.sz===2||src.startsWith('data:'))fillBox(img,src,u.team==='e');return}/* keeps the current fit until the new frame's is measured, so it doesn't jump the first time */const img=el.firstChild;wk=wk||mapWk(u);let src;
   if(name==='idle')src=sprite(u,'idle',mapWk(u));
   else if(castPng(u,name))src=castPng(u,name);
   else if(isHi(u.cls,u.sz)){const k=['MP',u.cls,u.team,name,wk,JSON.stringify(u.look)].join('|');src=sprCache[k]||(sprCache[k]=hiArt(u.look,u.cls,u.team,wk,name,0,64))}
