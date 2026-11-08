@@ -88,7 +88,7 @@ Dunes and sandstone ruins under a white sun. Jackals run in packs, and the quick
 
 ### Frostveil Reaches
 
-Snowfields studded with blue agate. Frost wolves hunt the drifts, and the golems are made of the agate itself. **Rule:** A unit that starts its turn in deep snow has 1 less Move (snow creatures ignore it). Frozen lakes give −10 Avoid; blue agate gives +20 Avoid and +2 Def.
+Snowfields studded with blue agate. Frost wolves hunt the drifts, and the golems are made of the agate itself. **Rule:** A unit that starts its turn in deep snow has 1 less Move (snow creatures ignore it). Frozen lakes give −10 Avoid; blue agate gives +10 Avoid and +2 Def.
 
 **Boss:** The Yeti (placeholder: a white golem body until it has its own art). **Also:** Ice Trolls from floor 5 (placeholder: a blue-skinned humanoid brute).
 
@@ -98,7 +98,7 @@ Snowfields studded with blue agate. Frost wolves hunt the drifts, and the golems
 
 ### Gemstone Caverns
 
-Caves glittering with emerald, ruby and sapphire. The snails here wear the gems as shells, and the golems are made of them. **Rule:** Gem clusters give +20 Avoid and +2 Def. The cave walls can’t be crossed.
+Caves glittering with emerald, ruby and sapphire. The snails here wear the gems as shells, and the golems are made of them. **Rule:** Gem clusters give +10 Avoid and +2 Def. The cave walls can’t be crossed.
 
 | Boss: Amethyra, the Amethyst Turtle | Attacking |
 | --- | --- |
