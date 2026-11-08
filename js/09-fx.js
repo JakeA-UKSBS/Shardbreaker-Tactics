@@ -64,7 +64,9 @@ function slashFx(X,Y,w,crit){if(!w||!['blade','heavy'].includes(w.t))return;/* l
 let fast=false;
 const D=ms=>ms*(fast?.3:1);
 const EL_COL={fire:'#ff8a3c',water:'#5ab4ff',wind:'#8ae8b0',earth:'#c8a060',lightning:'#ffe14a',illusion:'#b46aff',light:'#fff2b0',crystal:'#ff5a6a',nature:'#7ad85a',dark:'#b46aff'};
-function hitSfx(w,ranged){return w.kind==='staff'&&!ranged?'swing':w.t==='art'?null/* magic attacks are silent for now */:w.t==='bow'?'arrow':ranged?'throw':'swing'}
+/* element attacks have their own sound; other magic (light, dark, nature) is silent for now */
+const EL_SFX={fire:'fire',water:'water',lightning:'thunder',wind:'wind',ice:'ice'};
+function hitSfx(w,ranged){return w.kind==='staff'&&!ranged?'swing':w.t==='art'?EL_SFX[w.el]||null:w.t==='bow'?'arrow':ranged?'throw':'swing'}
 /* a projectile flies from X to Y: arrows and thrown weapons arc (higher when shooting downhill), sigils fly straight and glow */
 async function shoot(X,Y,w){
   const a=uBox(X),b=uBox(Y),sx=a.l+a.w/2,sy=a.t+a.h*.45,ex=b.l+b.w/2,ey=b.t+b.h*.5,arc=w.t==='art'?0:30+Math.max(0,sy-ey)*.3;

@@ -254,12 +254,12 @@ async function useAbility(u,id,tx,ty){
   if(a.mp){u.mp-=abCost(u,id);if(a.el)u.lastEl=a.el}if(a.cd)(u.cd=u.cd||{})[id]=a.cd;if(a.once)(u.cd=u.cd||{})[id]=99;
   pop(u,a.n,'heal');await sleep(D(350));
   if(a.side==='tile'){stepSfx(u,tx,ty);u.x=tx;u.y=ty;render();await sleep(D(250));sfx('earth');shake()}
-  const{foes,allies}=abHits(u,id,tx,ty),w=abWeapon(u,a),killed=[];let exp=0;
+  const{foes,allies}=abHits(u,id,tx,ty),w=abWeapon(u,a),killed=[];let exp=0,elSnd=a.mag?(/^frost/.test(id)?'ice':hitSfx(w,true)):null;
   /* damage */
   for(const t of foes){
     const ranged=a.mag||man(u,t)>1;let landed=true;if(!a.dmg){/* status only: still has to hit */if(a.st){landed=(rn()+rn())/2<abVs(u,id,t).hit;if(!landed){sfx('miss');pop(t,'Miss','miss');mapPose(t,'dodge',u);await sleep(D(220));mapPose(t,'idle')}}}
     else{const n=a.hits||1,V=abVs(u,id,t);let total=0;
-      for(let k=0;k<n&&t.hp>0;k++){sfx(ranged?(a.mag?hitSfx(w,true):'arrow'):'swing');if(ranged&&(a.shape||'one')==='one'||!ranged)await swingAt(u,t,w,false,ranged);else mapPose(u,'swing',t);
+      for(let k=0;k<n&&t.hp>0;k++){if(a.mag){sfx(elSnd);elSnd=null}else sfx(ranged?'arrow':'swing');if(ranged&&(a.shape||'one')==='one'||!ranged)await swingAt(u,t,w,false,ranged);else mapPose(u,'swing',t);
         if((rn()+rn())/2<V.hit){const d=Math.min(V.dmg,t.hp);t.hp-=d;total+=d;sfx('hit');pop(t,'-'+d,'dmg');flash(t);if(a.mag)burst(t,EL_COL[a.el]||'#c8b8ff')}else{sfx('miss');pop(t,'Miss','miss');mapPose(t,'dodge',u)}
         await sleep(D(n>1?160:220));mapPose(u,'idle');mapPose(t,'idle');render();await sleep(D(n>1?60:110))}
       landed=total>0;
@@ -270,7 +270,7 @@ async function useAbility(u,id,tx,ty){
         if((rn()+rn())/2<V2.hit){const d=Math.min(V2.dmg,c.hp);c.hp-=d;pop(c,'-'+d,'dmg');flash(c);exp+=expFor(u,c,true,c.hp<=0);if(c.hp<=0)killed.push(c)}else pop(c,'Miss','miss');render();await sleep(D(260))}
       if(t.hp<=0){killed.push(t);continue}}
     if(a.st&&landed&&t.hp>0&&!stImmune(t,a.st[0])&&(!a.st[2]||rn()<a.st[2]*100)){addSt(t,a.st[0],a.st[1],u);pop(t,STATUS[a.st[0]].n,'crit');await sleep(D(200))}
-    if(a.psn&&landed&&t.hp>0&&!(t.team==='p'&&M('soup'))){t.psn=3;pop(t,'Poisoned','crit');await sleep(D(200))}
+    if(a.psn&&landed&&t.hp>0&&!(t.team==='p'&&M('soup'))){t.psn=3;sfx('poison');pop(t,'Poisoned','crit');await sleep(D(200))}
     if(a.stone&&landed&&t.hp>0&&!stImmune(t,'stone')){t.stone=1;pop(t,'Stone!','crit');sfx('earth');toast(`${t.name} is turned to stone and loses ${t.team==='p'?'their':'its'} next turn`);await sleep(D(200))}
     if(!a.dmg)exp+=10;
   }
