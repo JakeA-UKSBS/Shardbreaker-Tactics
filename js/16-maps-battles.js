@@ -46,12 +46,12 @@ Object.assign(MONLOOK,{
 Object.assign(TER,{
   'D':{n:'Deep Mud',k:'mud',c:99,av:0,df:0},/* the swamp's impassable ground: its maps' water (w) becomes this */
   'k':{n:'Sandstone Rocks',k:'sandstone',c:99,av:0,df:0},'^':{n:'Boulders',k:'boulder',c:99,av:0,df:0},'z':{n:'Quicksand',k:'quicksand',c:1,av:0,df:0,slow:true},
-  'o':{n:'Snow',k:'snow',c:1,av:0,df:0},'j':{n:'Deep Snow',k:'deepsnow',c:1,av:0,df:0,slow:true},'a':{n:'Blue Agate',k:'agate',c:2,av:20,df:2},'i':{n:'Frozen Lake',k:'ice',c:1,av:-10,df:0},
-  'c':{n:'Cave Floor',k:'cave',c:1,av:0,df:0},'x':{n:'Iridescent Rock',k:'cavewall',c:99,av:0,df:0},'g':{n:'Malachite',k:'malachite',c:2,av:20,df:2},
-  'e':{n:'Emerald Cluster',k:'emerald',c:2,av:20,df:2},'u':{n:'Ruby Cluster',k:'ruby',c:2,av:20,df:2},'p':{n:'Sapphire Cluster',k:'sapphire',c:2,av:20,df:2},
+  'o':{n:'Snow',k:'snow',c:1,av:0,df:0},'j':{n:'Deep Snow',k:'deepsnow',c:1,av:0,df:0,slow:true},'a':{n:'Blue Agate',k:'agate',c:2,av:10,df:2},'i':{n:'Frozen Lake',k:'ice',c:1,av:-10,df:0},
+  'c':{n:'Cave Floor',k:'cave',c:1,av:0,df:0},'x':{n:'Iridescent Rock',k:'cavewall',c:99,av:0,df:0},'g':{n:'Malachite',k:'malachite',c:2,av:10,df:2},
+  'e':{n:'Emerald Cluster',k:'emerald',c:2,av:10,df:2},'u':{n:'Ruby Cluster',k:'ruby',c:2,av:10,df:2},'p':{n:'Sapphire Cluster',k:'sapphire',c:2,av:10,df:2},
   /* the Heart of the Blight: scorched ground with glowing gem veins, blighted gem clusters and crystal spires */
-  'S':{n:'Scorched Ground',k:'scorch',c:1,av:0,df:0},'G':{n:'Blighted Emerald',k:'bgem-g',c:2,av:20,df:2},'U':{n:'Blighted Ruby',k:'bgem-r',c:2,av:20,df:2},
-  'P':{n:'Blighted Sapphire',k:'bgem-b',c:2,av:20,df:2},'Y':{n:'Blighted Amethyst',k:'bgem-v',c:2,av:20,df:2},'K':{n:'Crystal Spire',k:'spire',c:99,av:0,df:0}
+  'S':{n:'Scorched Ground',k:'scorch',c:1,av:0,df:0},'G':{n:'Blighted Emerald',k:'bgem-g',c:2,av:10,df:2},'U':{n:'Blighted Ruby',k:'bgem-r',c:2,av:10,df:2},
+  'P':{n:'Blighted Sapphire',k:'bgem-b',c:2,av:10,df:2},'Y':{n:'Blighted Amethyst',k:'bgem-v',c:2,av:10,df:2},'K':{n:'Crystal Spire',k:'spire',c:99,av:0,df:0}
 });
 function bioTile2_draw(k,part){
   const p=Px(16,16),o=Px(16,16),dots=(c,pts)=>pts.forEach(([x,y])=>p.set(x,y,c)),S=[[2,3],[9,2],[13,6],[4,12],[11,13],[7,8],[14,11]];
@@ -93,11 +93,11 @@ Object.assign(BIOMES,{
     maps:['dunes','oasis','canyon'],bossMap:'sunTemple',pool:[['Jackal',4],['SandWorm',3,2],['SandstoneGolem',2,4]],elitePool:[['SandstoneGolem',3],['Jackal',2],['SandWorm',2]],
     boss:{name:'The Pyrite Colossus',cls:'PyriteColossus',s:[42,13,0,5,3,2,12,3],items:['slam'],skill:'steadfast',look:{body:'#c9a83a',eye:'#fff2b0',crysAt:[{core:[14,19],col:'#3ad87a'}]}}},
   snow:{n:'Frostveil Reaches',bg:'#2a3a4e',town:['o','a'],townN:'Hill Village',d:'Snowfields studded with blue agate. Frost wolves hunt the drifts, and the golems are made of the agate itself.',
-    tip:['snow','Deep snow','A unit that starts its turn in deep snow has 1 less Move (snow creatures ignore it). Frozen lakes give −10 Avoid; blue agate gives +20 Avoid and +2 Def.'],
+    tip:['snow','Deep snow','A unit that starts its turn in deep snow has 1 less Move (snow creatures ignore it). Frozen lakes give −10 Avoid; blue agate gives +10 Avoid and +2 Def.'],
     maps:['tundra','frozenLake','agateField'],bossMap:'agateSpire',pool:[['FrostWolf',4],['FrostSprite',3,2],['AgateGolem',2,4],['IceTroll',2,5]],elitePool:[['AgateGolem',3],['IceTroll',2],['FrostWolf',2],['FrostSprite',2]],
     boss:{name:'The Yeti',cls:'Yeti',mov:4,s:[42,13,0,6,5,2,9,4],items:['slam'],skill:'wrath',look:{body:'#e8eef8',eye:'#7fe3ff'}}},
   cavern:{n:'Gemstone Caverns',bg:'#2a2436',town:['c','e'],townN:'Miners’ Camp',d:'Caves glittering with emerald, ruby and sapphire. The snails here wear the gems as shells, and the golems are made of them.',
-    tip:['cavern','Gem clusters','Gem clusters give +20 Avoid and +2 Def. The cave walls can’t be crossed.'],
+    tip:['cavern','Gem clusters','Gem clusters give +10 Avoid and +2 Def. The cave walls can’t be crossed.'],
     maps:['geode','mineshaft','glitter'],bossMap:'amethystHollow',pool:[['Gemsnail',4],['GemGolem',2,4]],elitePool:[['GemGolem',3],['Gemsnail',2]],
     boss:{name:'Amethyra, the Amethyst Turtle',cls:'AmethystTurtle',s:[46,11,8,5,2,3,14,8],items:['slam','crystalShards'],skill:'steadfast',look:{body:'#6a7a5a',shell:'#4a3a5a',gem:'#b07ae8',crys:false}}}
 });
