@@ -1,16 +1,9 @@
-# Shardbreaker Tactics — design notes
 
-Where this fork is heading, and why. It started as a straight copy of Shardbreaker (the GBA Fire Emblem-style roguelike). This file holds the ideas. When one is decided, move it to **Decided**. When one is built, say so.
+## The reason to fight
 
-Inspiration to look at: Final Fantasy Tactics Advance, Tactics Ogre, Fell Seal: Arbiter's Mark, Crawl Tactics.
+In Shardbreaker you just kill crystallised monsters. *add exposition - a crystal has become sentient from mana and is corrupting the land and creatures.?* 
 
-## Decided
 
-- **Separate repo.** Shardbreaker stays as it is, and the big changes are tried here.
-- **Fixed roster.** There is a pool of named characters instead of random recruits, so players can have favourites. The opening squad is picked from a starting roster of base classes. Advanced-class characters join after Act 1, one is event-only, and everyone else is found during the run. The longlist is in [CHARACTERS.md](CHARACTERS.md).
-- **Height maps.** Maps use Ogre-style height levels. Height should matter for range, damage or hit, and movement (jump/climb). *Built as a greybox, see below.*
-- **Roguelike runs with a named cast.** Runs stay, but the units are named characters rather than random recruits. The story comes out between runs (Hades-style): breaking bigger crystals unlocks scenes and new characters.
-- **No side-on battle scenes.** Attacks play on the map, FFTA-style. Side-on scenes fight with height, and every named character would need a second full sprite set. *Built.*
 
 ## Built: the isometric greybox
 
@@ -24,16 +17,7 @@ A first pass to test whether height makes fights more interesting before any art
   - **Bows:** +1 range for every 2 levels above the target (max +2).
 - **On-map attacks** (09-battle-scene.js `quickPlay`): melee hops toward the target, bows and thrown weapons fire an arcing projectile, sigils fly straight and burst in their element's colour, crits flash and shake the map, crystal weapons shatter shards. The battle scene, its backdrops and the battle-frame rig are gone. The Options toggle is now just "Animations" (it still covers the promotion scene).
 
-## The reason to fight
-
-In Shardbreaker you just kill crystallised monsters. There's no reason to defend places or people. The idea for this fork:
-
-- Things the crystals could corrupt, each giving an objective type:
-  - **The land itself.** Tiles slowly turn to crystal. A cleansing NPC has to channel at a shrine for N turns while you protect them.
-  - **People.** Infected villagers turn into crystal zombies if you don't reach them in time. That's a rescue objective.
-  - **Creatures.** Crystals zombify animals and monsters. Fought with normal attacks: no separate gem-breaking.
-- Objective mix to aim for: rout, defend or escort a cleanser, rescue, survive N turns, and reach the exit.
-
+ 
 ## Classes and abilities (FFTA / Fell Seal style)
 
 Decided:
@@ -46,34 +30,12 @@ Decided:
 
 Still to flesh out: the story scenes, and narrowing the longlist into roles that make sense together.
 
+## combat *calc etc 
+
 ## Maps
 
 - **Set rooms in rotation** instead of procedural maps. They're hand-made (needed for height to work well), with random elements: enemy placement, hazards and loot.
-- **Hazards:** crystal growth, lava, collapsing ledges, gusts that push units, and so on.
-- **Chests:** walking away from fights to open chests felt odd in Shardbreaker. Possible fixes: put loot in the reward screen, or tie chests to the objective (a chest sits next to a crystal node, and cleansing it opens the chest).
+- **Hazards:** crystal growth, lava, collapsing ledges, gusts that push units etc.
+- 
 
-## Open questions
 
-- Does level-5 promotion stay alongside signature kits, or go?
-- With a fixed roster, does permadeath stay? One option: a fallen character is out for the rest of the run but back for the next one.
-- Sprites need two facings (front-diagonal and back-diagonal, mirrored) to read properly in isometric. Units still use the front-facing map sprites.
-
-## Future
-
-- Weapons should look a little different depending on what they are and whether they're upgraded: iron, steel, jade and reforged (+1 to +3) versions of each weapon drawn differently on the unit sprites and icons (blade colour, size, trim, a glow at +3).
-
-- Maps: battle maps are hand-made per region already (only enemies and loot are rolled each fight). The aim is a set of hand-made maps for every fight type, with height maps; the defend maps are now one per region (TOWNS in js/16-maps-battles.js), and only the Cursed Woodland maps have hand-made heights so far.
-
-- Victory screen: let you see each surviving unit's items (e.g. on hover or click on their portrait), and show the unlocks differently from the current plain list of achievements, Ascension and new relics.
-
-- Run History: click a Victory or Defeat card to open that run and see each unit's items and skills. Runs saved from Nov 2026 on already store them (`prof.hist[].squad[].items`, `.skills`); older entries only have name, class and level.
-
-- Sobek’s Mire (the swamp region, renamed from Bog of Eternal Stench): give it Egyptian-themed monsters to match the name (e.g. mummified lurkers, scarab swarms, jackal-headed guards), with Krondis as a crocodile-god boss.
-
-- Ascension: at higher Ascension levels, Crossroads travellers start at Lv 1 instead of 2 (to be sorted with the rest of the Ascension changes).
-
-- Music for the end of a run: a victory track and a defeat track (e.g. victory.mp3 and defeat.mp3), played on the win and wipe screens.
-
-## Carried over from Shardbreaker
-
-Everything in the copy works as it did at the fork point: body tags and effectiveness, relics, the tavern, events, Ascension and the hi-res unit sprites. docs/VISUALS.md and docs/INFO.md describe that starting point.

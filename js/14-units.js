@@ -1,5 +1,4 @@
-/* Run state, class building, names, random looks, unit generation */
-/* ================= RUN (roguelike) ================= */
+/* Run state, class building,
 /* Act 1: a branching node map of ROWS floors, then the boss on floor RUN_LEN (both defined with the map below). Units, classes, looks, maps and enemies all come from the run's seed. */
 /* TEAM_CAP: max units in the squad */
 const TEAM_CAP=6;
@@ -52,7 +51,6 @@ function ensureCls(k){
   if(t2)Object.assign(CLS[k],{tier:2,bonus:R.bonus});else{CLS[k].promo=`G.${r}.${m}.${w}.2`;ensureCls(CLS[k].promo)}
   return k;
 }
-
 
 /* colour palettes (hex) for random monster looks */
 const HAIRC=['#1d1a24','#3a2a20','#6b4226','#a8743a','#d9b25a','#e8e2d0','#8a2a22','#3a4a6a','#c9c3cf','#4a2a4a'];

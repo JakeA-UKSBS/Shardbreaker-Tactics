@@ -176,3 +176,5 @@ Each monster has 2 moves on cooldowns (no MP). On its turn it scores every ready
 | Ice Troll | Club Smash (CD 3): melee 1.5× | Regenerate (CD 4): heal 30% (below 60% HP) |
 
 **To do (moves not added yet):** Bog Lurker, Krondis, Cursed Stag, Jackal, Sandstone Golem, The Pyrite Colossus, Frost Sprite, Agate Golem, The Yeti, Gemsnail, Gem Golem, Amethyra, Shardling, Prism, Crystal Sentinel. Draft ideas: Bog Lurker Drag Under / Ambush; Krondis Death Roll / Tail Sweep; Cursed Stag Charge / Blight Antlers; Jackal Pounce / Scavenge; Sandstone Golem Boulder Toss / Sand Wall; Pyrite Colossus Gold Glare / Ground Slam; Frost Sprite Ice Shard / Hail; Agate Golem Crystal Shell / Shard Burst; Yeti Avalanche / Hurl; Gemsnail Retract / Glitter Spray; Gem Golem Prism Beam / Gem Shell; Amethyra Shell Spin / Amethyst Rain; Shardling Shard Lunge / Splinter; Prism Refract / Dazzle; Crystal Sentinel Bulwark / Crystal Slam.
+
+- With a fixed roster, does permadeath stay? One option: a fallen character is out for the rest of the run but back for the next one.
