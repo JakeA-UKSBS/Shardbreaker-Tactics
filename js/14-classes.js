@@ -72,4 +72,3 @@ function monLook(c){
 }
 function mkMon(c,lv){const u=foe(c,lv,0,0);u.look=monLook(c);/* monsters move 1 less than their class (4+ only), so they rarely reach you on turn 1 */if(u.mov>=4)u.mov--;
   return u}
-
