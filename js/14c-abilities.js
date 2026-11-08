@@ -128,7 +128,7 @@ Object.assign(ABIL,{
   barkSkin:{n:'Bark Skin',cd:4,side:'self',solo:1,self:[['guard',1]],d:'Guard (30% less damage) until its next turn.'},
   maul:{n:'Maul',cd:3,side:'foe',r:[1,1],dmg:1.5,st:['sunder',2],d:'1.5× damage, and the target is Sundered (−3 Def) for 2 turns.'},
   roar:{n:'Roar',cd:4,side:'self',shape:'burst2',st:['weak',1],d:'Enemies within 2 tiles are Weakened (deal 30% less damage).'},
-  fireball:{n:'Fireball',cd:3,mag:1,el:'fire',side:'foe',r:[2,3],shape:'cross',aim:'any',dmg:.8,st:['burn',2],d:'A cross of fire 2–3 tiles away: 0.8× magic damage and Burn.'},
+  fireball:{n:'Fireball',cd:3,mag:1,el:'fire',side:'foe',r:[2,3],dmg:.8,st:['burn',2],d:'A fireball from 2–3 tiles away: 0.8× magic damage and Burn.'},
   flicker:{n:'Flicker',cd:3,side:'tile',r:[1,4],d:'Blinks to an empty tile up to 4 away.'},
   moltenFist:{n:'Molten Fist',cd:3,side:'foe',r:[1,1],dmg:1.2,st:['burn',2],d:'1.2× damage and Burn.'},
   eruption:{n:'Eruption',cd:4,side:'self',shape:'burst1',dmg:.8,d:'0.8× damage to every enemy around it.'},

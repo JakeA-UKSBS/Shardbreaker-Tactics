@@ -18,7 +18,10 @@ function lunge(a,d,k=14){const el=uEls[a.id];if(!el)return;const p=scrC(a.x,a.y,
 function flash(u){const el=uEls[u.id];if(!el)return;el.classList.add('flash');setTimeout(()=>el.classList.remove('flash'),120)}
 /* swap a map sprite to one of the rig's poses (windup, critup, swing, follow, hit, dodge, idle), the same frames the
    side-on battle in Shardbreaker uses. t: turn to face that unit. Rigged units get every pose; older sprites only swing. */
-function mapPose(u,name,t,wk){const el=uEls[u.id];if(!el||u.sz>1)return;const img=el.firstChild;wk=wk||mapWk(u);let src;
+function mapPose(u,name,t,wk){const el=uEls[u.id];if(!el)return;
+  /* bosses (2+ tiles): just swap between the idle and strike frames, refitted to their box */
+  if(u.sz>1){if(name!=='idle'&&name!=='swing'&&name!=='follow')return;const img=el.firstChild,src=sprite(u,name==='idle'?'idle':'strike',mapWk(u));if(img.dataset.s===src)return;
+    img.src=src;img.dataset.s=src;img.style.transform='';img.style.transformOrigin='';if(u.sz===2||src.startsWith('data:'))fillBox(img,src,u.team==='e');return}const img=el.firstChild;wk=wk||mapWk(u);let src;
   if(name==='idle')src=sprite(u,'idle',mapWk(u));
   else if(castPng(u,name))src=castPng(u,name);
   else if(isHi(u.cls,u.sz)){const k=['MP',u.cls,u.team,name,wk,JSON.stringify(u.look)].join('|');src=sprCache[k]||(sprCache[k]=hiArt(u.look,u.cls,u.team,wk,name,0,64))}

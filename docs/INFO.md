@@ -168,7 +168,7 @@ Each monster has 2 moves on cooldowns (no MP). On its turn it scores every ready
 | Wolf | Howl (CD 4): allies within 2 Rallied 2 turns | Hamstring (CD 3): melee 0.8×, Slow |
 | Blighted Treant | Grasping Roots (CD 3): range 1–3, Root | Bark Skin (CD 4): Guard self |
 | The Hollow Bear | Maul (CD 3): melee 1.5×, Sunder 2 turns | Roar (CD 4): enemies within 2 Weak |
-| Fire Sprite | Fireball (CD 3): cross at range 2–3, 0.8× magic, Burn | Flicker (CD 3): blink up to 4 tiles (when hurt and next to a foe) |
+| Fire Sprite | Fireball (CD 3): single target at range 2–3, 0.8× magic, Burn | Flicker (CD 3): blink up to 4 tiles (when hurt and next to a foe) |
 | Magma Golem | Molten Fist (CD 3): melee 1.2×, Burn | Eruption (CD 4): 0.8× to every enemy around it |
 | Pyraxis | Searing Breath (CD 3): cone, 1.0× magic, Burn | Wing Gust (CD 4): 0.5× and push 1 within 2 |
 | Sand Worm | Burrow (CD 3): tunnel up to 4 tiles, 1.0× to every enemy around the exit | Sand Blast (CD 3): cone, 0.8×, Blind |
