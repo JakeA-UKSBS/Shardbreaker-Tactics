@@ -25,6 +25,7 @@ You only need to rebuild the manifest when you **add** or **delete** a PNG: `nod
 | `cast/<character>/` | The named cast: `<class>-<pose>.png` for their starting class and each ascension. Poses: `idle`, and the attack frames `windup`, `swing`, `follow`, `critup`. Drawn with the character's listed weapon, so weapon upgrades don't change the picture | 64×64 |
 | `monsters/` | Every monster, region boss (except the big hand-drawn ones in `bosses/`) and summon: `<Class>.png` standing and `<Class>-strike.png` attacking. One fixed look each, so a monster no longer gets random colours | 32×32 |
 | `bosses/hollow-bear`, `bosses/krondis`, `bosses/yeti` | The Hollow Bear, Krondis and the Yeti (2×2 bosses), facing right; add `<name>-strike` for an attack pose | 128×128 |
+| `bosses/krondis-roll` | Krondis's Death Roll: 8 frames side by side, facing left, his body in the left 128px of each frame | 2400×128 (300×128 a frame) |
 
 ## No code-drawn fallback
 
