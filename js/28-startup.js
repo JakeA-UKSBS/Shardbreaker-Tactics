@@ -1,15 +1,6 @@
 /* Title menu, dev menu and start() */
 
 const titleEl=document.createElement('div');titleEl.className='title';titleEl.hidden=true;document.body.appendChild(titleEl);
-/* the title scene: a great blighted crystal in the distance, its red veins spreading through the land */
-function titleCrystalArt_draw(){const c='TCRYS';if(sprCache[c])return sprCache[c];const W=120,p=Px(W,W),D='#4a0614',M='#8a1224',R='#c8283a',L='#ff5a6a',H='#ffb0b8';
-  const spire=(x,base,top,w,lean)=>{const t=[x+lean,top],bl=[x-w,base],br=[x+w,base],ml=[x-w*.8+lean*.3,top+(base-top)*.25],mr=[x+w*.8+lean*.3,top+(base-top)*.25];
-    p.poly([t,mr,br,bl,ml],R);p.poly([t,ml,bl,[x+lean*.2,base]],M);p.poly([t,[x+lean*.2,base],br,mr],L);p.line(Math.round(t[0]),Math.round(t[1]),Math.round(x+lean*.2),base,H);
-    for(let k=0;k<3;k++){const y=top+(base-top)*(.35+k*.2);p.line(Math.round(x-w*.6),Math.round(y),Math.round(x+lean*.1),Math.round(y+6),D)}};
-  spire(30,104,62,9,-10);spire(92,104,56,10,9);spire(44,106,40,10,-5);spire(78,106,36,11,5);spire(60,108,6,16,0);
-  p.poly([[8,108],[24,98],[44,104],[60,100],[78,104],[98,97],[114,108],[114,120],[8,120]],'#1a0c14');p.line(20,104,52,110,D,2);p.line(70,110,104,103,D,2);
-  for(const[x,y]of[[58,30],[64,52],[57,72],[47,60],[80,62]])p.set(x,y,'#fff0f2');
-  p.outline('#14060c');return sprCache[c]=p.url()}
 /* TITLE_MULTI: a maybe — two smaller crystals either side, with more veins between them */
 let TITLE_MULTI=false;
 function titleVeins(srcs=[[50,1]]){/* branching veins from each crystal's foot, drawn as SVG so they can pulse */
@@ -60,8 +51,8 @@ function start(data){
 window.claude?.hot?.snapshot?.(()=>({state,chStart,run,def:BATTLE,rng:rngS}));
 window.claude?.hot?.ready?window.claude.hot.ready(start):start(window.claude?.hot?.data??{});
 
-/* PNG art: each of these uses art/<key>.png when it exists, else the drawing code above (see art() in 03-pixel-art.js) */
-function titleCrystalArt(){return art('title/crystal',()=>titleCrystalArt_draw())}
+/* PNG art (art/<key>.png, see art() in 03-art.js) */
+function titleCrystalArt(){return art('title/crystal')}
 
 /* stop the browser's image drag (the ghost copy you can pull off scene backdrops); CSS covers Chrome/Safari, this covers Firefox */
 document.addEventListener('dragstart',e=>{if(e.target&&e.target.tagName==='IMG')e.preventDefault()});

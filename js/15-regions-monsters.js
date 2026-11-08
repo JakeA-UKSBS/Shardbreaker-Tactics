@@ -7,18 +7,6 @@ Object.assign(TER,{
   's':{n:'Ankle-deep Water',k:'shallow',c:1,av:0,df:0,slow:true},'n':{n:'Sand',k:'sand',c:1,av:0,df:0},'v':{n:'Mangrove Roots',k:'mangrove',c:2,av:10,df:1,slow:true},
   'y':{n:'Cursed Thicket',k:'curse',c:2,av:10,df:1},'b':{n:'Basalt',k:'basalt',c:1,av:0,df:0},'l':{n:'Magma',k:'lava',c:99,av:0,df:0}
 });
-function bioTile_draw(k,part){
-  const p=Px(16,16),o=Px(16,16),dots=(c,pts)=>pts.forEach(([x,y])=>p.set(x,y,c)),S=[[2,3],[9,2],[13,6],[4,12],[11,13],[7,8],[14,11]];
-  if(k==='shallow'||k==='mangrove'){p.rect(0,0,16,16,'#3f5a4a');[[1,3],[8,6],[3,11],[11,12]].forEach(([x,y])=>p.line(x,y,x+3,y,'#5f7f6a'));p.set(13,3,'#7a9a6a');p.line(6,14,6,11,'#6a8a4a')}
-  if(k==='mangrove'){o.line(2,15,5,8,'#5a3a24',2);o.line(13,15,10,8,'#5a3a24',2);o.line(7,15,7,8,'#4a2e1c',2);o.ell(8,5,7,4.5,'#2f5a32');o.ell(5,4,3,2,'#3f7a42');o.ell(11,5,3,2,'#3f7a42')}
-  if(k==='sand'){p.rect(0,0,16,16,'#b8a070');dots('#a08858',S);dots('#d0bc8c',[[3,2],[10,1],[14,5],[5,11],[12,12]])}
-  if(k==='curse'){p.rect(0,0,16,16,'#3e4436');o.line(1,14,6,3,'#3a2a3a',2);o.line(14,14,9,2,'#3a2a3a',2);o.line(4,9,12,5,'#4a2e4a');o.line(3,6,13,11,'#4a2e4a');o.set(6,3,'#c77dff');o.set(9,2,'#c77dff');o.set(12,5,'#8a3a6a')}
-  if(k==='basalt'){p.rect(0,0,16,16,'#3a3034');p.line(2,4,6,7,'#2a2226');p.line(6,7,5,12,'#2a2226');p.line(10,2,13,9,'#2a2226');p.set(6,8,'#ff7a2a');p.set(12,6,'#c84a1a')}
-  if(k==='lava'){p.rect(0,0,16,16,'#c8401a');p.ell(5,5,3,2,'#ff9a2e');p.ell(11,11,3.5,2.5,'#ff9a2e');p.ell(5,5,1.2,.8,'#ffe14a');p.ell(11,11,1.5,1,'#ffe14a');p.line(0,9,7,9,'#7a2010');p.line(9,2,15,4,'#7a2010')}
-  /* part 'g': the ground alone; 'f': the feature alone (a standing prop, see 16b-terrain3d.js) */
-  o.outline('#1a1414');if(part==='f')return o.url();if(part!=='g')for(let i=0;i<256;i++)if(o.g[i])p.g[i]=o.g[i];
-  return p.url();
-}
 texStyle.textContent+=['shallow','mangrove','sand','curse','basalt','lava'].map(k=>`.t-${k}{background:url(${bioTile(k)}) 0 0/100% 100%}`).join('');
 
 /* ---- monsters ---- */
@@ -96,5 +84,5 @@ const BIOMES={
     boss:{name:'The Crystal Heart',cls:'CrystalHeart',sz:3,mov:0,s:[56,0,8,8,0,0,8,8],items:['shatter','crystalSpikes'],skill:'focus',summon:'*',bars:3,summonTxt:'The Crystal Heart calls the blighted!',intro:'The Crystal Heart beats at the centre of the chamber, and every crystal in these lands beats with it. Shatter it to end the blight.',look:{crys:false}}}
 };
 
-/* PNG art: each of these uses art/<key>.png when it exists, else the drawing code above (see art() in 03-pixel-art.js) */
-function bioTile(k){return art('tiles/'+k,()=>bioTile_draw(k))}
+/* PNG art (art/<key>.png, see art() in 03-art.js) */
+function bioTile(k){return art('tiles/'+k)}

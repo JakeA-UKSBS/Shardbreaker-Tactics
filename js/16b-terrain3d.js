@@ -6,11 +6,10 @@
 const PROPS={forest:1.3,hill:1,cliff:1.1,crag:1.1,boulder:1.15,
   mangrove:1.25,curse:1.15,sandstone:1,agate:1,emerald:1,ruby:1,sapphire:1,malachite:.9,
   'bgem-g':1,'bgem-r':1,'bgem-b':1,'bgem-v':1,spire:1.45};
-const PROP_BIO1=['mangrove','curse'];
 /* the feature alone (transparent round it), and the ground under it */
 function propArt(k,used){if(OVER_T.includes(k))return tileArt(k,used,true);if(k==='boulder')return boulderArt();
-  return art('tiles/'+k+'-bare',()=>PROP_BIO1.includes(k)?bioTile_draw(k,'f'):bioTile2_draw(k,'f'))}
-function propGroundArt(k){return art('tiles/'+k+'-ground',()=>PROP_BIO1.includes(k)?bioTile_draw(k,'g'):bioTile2_draw(k,'g'))}
+  return art('tiles/'+k+'-bare')}
+function propGroundArt(k){return art('tiles/'+k+'-ground')}
 /* the ground class: the shared features (trees, boulders...) sit on the map's usual ground, region features on their own */
 const propGround=(k,gk)=>OVER_T.includes(k)||k==='boulder'||k==='curse'?'t-'+gk:'t-g-'+k;
 texStyle.textContent+=Object.keys(PROPS).filter(k=>!OVER_T.includes(k)&&k!=='boulder').map(k=>`.t-g-${k}{background:url(${propGroundArt(k)}) 0 0/100% 100%}`).join('');

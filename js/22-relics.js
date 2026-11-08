@@ -43,8 +43,6 @@ const RELICS={
 const RC={c:'#9fd8ff',u:'#c58aff',r:'#ffd23f',s:'#9fe8a0',h:'#e8b87a'},RN={c:'Common',u:'Uncommon',r:'Rare',s:'Starter',h:'Heirloom'};
 const salveAmt=k=>IT[k].amt+(R('poultice')?2:0);
 const R=id=>!!(run&&run.relics&&run.relics.includes(id));
-function relicArt_draw(k){const c='R|'+k;if(sprCache[c])return sprCache[c];const p=Px(16,16),col=RC[RELICS[k].r];
-  p.line(4,1,8,6,GOLD);p.line(12,1,8,6,GOLD);p.poly([[8,5],[13,9],[8,15],[3,9]],col);p.poly([[8,5],[13,9],[8,9]],shade(col,1.25));p.set(7,8,'#ffffff');p.outline(OUT);return sprCache[c]=p.url()}
 /* gold dropped by defeated enemies: about 15g a battle (10g from Ascension 3), handed out over the kills, with
    whatever is left dropping from the last enemy. It goes to state.gold and is paid out with the win. */
 const GOLD_DROPS=()=>A(3)?10:15;
@@ -97,5 +95,5 @@ function relicCalc(x,xw,y){
 }
 const relicMov=u=>u.team!=='p'?0:(R('boots')?1:0)+(R('spurs')&&CLS[u.cls].mnt?1:0)+(M('stew')?1:0);
 
-/* PNG art: each of these uses art/<key>.png when it exists, else the drawing code above (see art() in 03-pixel-art.js) */
-function relicArt(k){return art('relics/'+k,()=>relicArt_draw(k))}
+/* PNG art (art/<key>.png, see art() in 03-art.js) */
+function relicArt(k){return art('relics/'+k)}

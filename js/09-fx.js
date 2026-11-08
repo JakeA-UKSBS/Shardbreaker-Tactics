@@ -16,17 +16,16 @@ function banner(t,c){sfx(c==='e'?'ephase':'phase');const b=document.createElemen
 /* the attacker hops toward its target on the map (screen direction, so it reads right in isometric) */
 function lunge(a,d,k=14){const el=uEls[a.id];if(!el)return;const p=scrC(a.x,a.y,a.sz),q=scrC(d.x,d.y,d.sz),n=Math.hypot(q.x-p.x,q.y-p.y)||1;el.style.transform=`translate(${(q.x-p.x)/n*k}px,${(q.y-p.y)/n*k}px)`;setTimeout(()=>el.style.transform='',150)}
 function flash(u){const el=uEls[u.id];if(!el)return;el.classList.add('flash');setTimeout(()=>el.classList.remove('flash'),120)}
-/* swap a map sprite to one of the rig's poses (windup, critup, swing, follow, hit, dodge, idle), the same frames the
-   side-on battle in Shardbreaker uses. t: turn to face that unit. Rigged units get every pose; older sprites only swing. */
+/* swap a map sprite to one of its attack frames (windup, critup, swing, follow) or back to idle. t: turn to face that unit.
+   Cast members have a PNG per frame; monsters only have idle and strike. */
 function mapPose(u,name,t,wk){const el=uEls[u.id];if(!el)return;
   /* bosses (2+ tiles): just swap between the idle and strike frames, refitted to their box */
   if(u.sz>1){if(name!=='idle'&&name!=='swing'&&name!=='follow')return;const img=el.firstChild,src=sprite(u,name==='idle'?'idle':'strike',mapWk(u));if(img.dataset.s===src)return;
     img.src=src;img.dataset.s=src;if(u.sz===2||src.startsWith('data:'))fillBox(img,src,u.team==='e');return}/* keeps the current fit until the new frame's is measured, so it doesn't jump the first time */const img=el.firstChild;wk=wk||mapWk(u);let src;
   if(name==='idle')src=sprite(u,'idle',mapWk(u));
-  else if(castPng(u,name))src=castPng(u,name);
-  else if(isHi(u.cls,u.sz)){const k=['MP',u.cls,u.team,name,wk,JSON.stringify(u.look)].join('|');src=sprCache[k]||(sprCache[k]=hiArt(u.look,u.cls,u.team,wk,name,0,64))}
-  else if(name==='swing'||name==='follow')src=sprite(u,'strike',wk);else return;
-  img.src=src;img.dataset.s=src;
+  else if(u.cast)src=castPng(u,name);
+  else if(name==='swing'||name==='follow')src=sprite(u,'strike');
+  if(!src)return;img.src=src;img.dataset.s=src;
   /* hand-drawn frames can be wider than 64px (an axe swung out in front): show them at full width, body still at the left,
      and flip around the body's centre (32px) so it stays on its tile when facing left */
   img.style.transformOrigin='32px 50%';img.onload=()=>{const w=img.naturalWidth;if(w>64)img.style.setProperty('width',w+'px','important');else img.style.removeProperty('width')};
@@ -100,10 +99,10 @@ async function quickPlay(a,d,res){
     if(X.cls==='Krondis'){mapPose(X,'swing',Y);await sleep(D(500))}
     sfx(X.cls==='Krondis'?'sandswipe':hitSfx(w,ranged));
     await swingAt(X,Y,w,e.crit,ranged);
-    if(e.hit){sfx(e.crit?(w.t==='art'?'crit':'swordcrit'):'hit');/* weapon crits use the recorded sword crit */Y.hp=Y===a?e.hpA:e.hpD;pop(Y,(e.crit?'Crit ':'')+'-'+e.dmg,e.crit?'crit':'dmg');flash(Y);lunge(Y,X,-6);mapPose(Y,'hit',X);
+    if(e.hit){sfx(e.crit?(w.t==='art'?'crit':'swordcrit'):'hit');/* weapon crits use the recorded sword crit */Y.hp=Y===a?e.hpA:e.hpD;pop(Y,(e.crit?'Crit ':'')+'-'+e.dmg,e.crit?'crit':'dmg');flash(Y);lunge(Y,X,-6);
       if(w.t==='art')burst(Y,EL_COL[w.el]||'#c8b8ff');if(w.el==='crystal')shatterFx(Y);if(e.crit){shake();burst(Y,'#fff')}if(e.guard)pop(Y,e.guard,'heal');
       if(e.heal){X.hp=X===a?e.hpA:e.hpD;pop(X,'+'+e.heal,'heal')}}
-    else{sfx('miss');pop(Y,'Miss','miss');lunge(Y,X,-10);mapPose(Y,'dodge',X)}
+    else{sfx('miss');pop(Y,'Miss','miss');lunge(Y,X,-10)}
     await sleep(D(240));mapPose(X,'idle');mapPose(Y,'idle');render();await sleep(D(200))}
 }
 async function showExp(u,g){

@@ -1,6 +1,6 @@
 // Export the named cast (js/14b-cast.js) as preview PNGs in docs/visuals/cast/:
 //   <id>.png / <id>_<ascension>.png   the 64px map sprite at 3x, for the base class and each ascension
-//   <id>..._poses.png                  the 96px battle frames: idle, wind-up, strike, follow-through, hit
+//   <id>..._poses.png                  the 96px battle frames: idle, wind-up, strike, follow-through, crit wind-up
 //   cast_sheet.png                     every character with their ascensions
 // Run: node tools/export-cast.mjs   (needs Node and Playwright, like export-art.mjs)
 import { createRequire } from 'node:module';
@@ -13,17 +13,17 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'docs', 'visuals', 'cast');
 fs.mkdirSync(OUT, { recursive: true });
 
-const browser = await chromium.launch();
+const browser = await chromium.launch(process.env.CHROME ? { executablePath: process.env.CHROME } : {});
 const page = await browser.newPage();
 page.on('pageerror', e => console.warn('page error:', e.message));
 await page.route('**/music/**', r => r.abort());
-await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href + '?codeart');
+await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href);
 await page.waitForTimeout(500);
 
 const files = await page.evaluate(async () => {
   const load = src => new Promise(r => { const i = new Image(); i.onload = () => r(i); i.src = src; });
   const canvas = (w, h) => { const c = document.createElement('canvas'); c.width = w; c.height = h; const x = c.getContext('2d'); x.imageSmoothingEnabled = false; return [c, x]; };
-  const out = {}, S = 3, POSE = ['idle', 'windup', 'swing', 'follow', 'hit'];
+  const out = {}, S = 3, POSE = ['idle', 'windup', 'swing', 'follow', 'critup'];
   const rows = [];
   for (const c of CAST) {
     // every form: the base class, then each ascension
