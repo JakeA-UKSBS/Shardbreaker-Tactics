@@ -11,7 +11,6 @@ const propFig=prop=>PROP_FIG[prop]&&ART_PNG.has('scenes/'+PROP_FIG[prop])?PROP_F
 function eventScene(prop){
   if(prop==='witch'&&ART_PNG.has('scenes/witch-hut'))return'art/scenes/witch-hut.png';/* Rhi's hut, drawn at 640x360 */
   if(prop==='cage'&&ART_PNG.has('scenes/village'))return'art/scenes/village.png';/* CraftPix abandoned village, 576x324; the cage bars are laid over it */
-  if(prop==='spring'&&ART_PNG.has('scenes/fountain'))return'art/scenes/fountain.png';/* CraftPix castle courtyard fountain, 576x324 */
   const B=actBiome(),c='EV|'+prop+'|'+B.id;if(sprCache[c])return sprCache[c];
   const W=160,H=90,p=Px(W,H),sky=REG_SKY[B.id]||REG_SKY.forest,gr=REG_GROUND[B.id]||'#3e4436';
   if(['smith','spar','witch','library','armoury','study','chapel','throne'].includes(prop)){const wl=prop==='witch'?'#3a3028':'#4a4038',wl2=shade(wl,.8);p.rect(0,0,W,64,wl);for(let y=0;y<64;y+=8)for(let x=(y/8%2)*8;x<W;x+=16)p.rect(x,y,15,7,wl2);
