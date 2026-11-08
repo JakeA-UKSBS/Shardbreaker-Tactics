@@ -1,4 +1,4 @@
-/* Run state, class building, names, random looks, unit generation */
+/* Run state, classes built from role + movement + weapon (the cast's classes), and monster setup */
 /* ================= RUN (roguelike) ================= */
 /* Act 1: a branching node map of ROWS floors, then the boss on floor RUN_LEN (both defined with the map below). Units, classes, looks, maps and enemies all come from the run's seed. */
 /* TEAM_CAP: max units in the squad */
@@ -53,12 +53,6 @@ function ensureCls(k){
   return k;
 }
 
-
-/* colour palettes (hex) for random monster looks */
-const HAIRC=['#1d1a24','#3a2a20','#6b4226','#a8743a','#d9b25a','#e8e2d0','#8a2a22','#3a4a6a','#c9c3cf','#4a2a4a'];
-const CLOTH=['#3a7cc0','#4a8a5a','#8a3a3a','#6a4a8a','#a8743a','#3a6a7a','#7a6a4a','#8a5a7a','#4a5a3a','#5a6a8a','#2f4f6f','#9a4a2a'];
-
-
 /* ---- monsters ---- */
 /* fields: see the CLASSES key in 01-data.js */
 Object.assign(CLS,{
@@ -74,21 +68,8 @@ Object.assign(FOE,{
 });
 function monLook(c){
   if(MONLOOK[c])return MONLOOK[c]();
-  if(c==='Wolf')return{crysSmall:true,fur:pick(['#8a8f9a','#6b5a48','#3a3640','#c9c3b8','#9a7a52']),eye:'#ffd23f'};
-  if(c==='Lamia')return{style:pick(['long','tail','wild']),hair:pick(HAIRC),tail:pick(['#4f8a5a','#3a7a7a','#7a5aa0','#8a7a3a']),cloth:pick(CLOTH),skin:pick(['#d6c0a0','#b8c8a8','#c9b6a0']),eye:'#ffd23f'};
   return clone(FOE[c].look||{});
 }
-/* ---- monster PNGs (art/monsters/) ----
-   monsterClasses(): every monster the game can spawn (region pools, bosses, summons, familiars). Bosses drawn as big 64px art (BIG) are left out.
-   monsterArt(): the code-drawn sprite with one fixed look, for tools/export-art.mjs to save as the starting PNG. */
-function monsterClasses(){const out=new Set();
-  for(const B of Object.values(BIOMES)){for(const p of[...(B.pool||[]),...(B.elitePool||[])])out.add(p[0]);if(B.boss){if(B.boss.summon&&B.boss.summon!=='*')out.add(B.boss.summon);if(!BIG[CLS[B.boss.cls].body+(B.boss.look&&B.boss.look.bones?'_bones':'')])out.add(B.boss.cls)}}
-  for(const f of Object.values(FAMILIARS))out.add(f.cls);
-  return[...out].filter(c=>CLS[c]).sort()}
-function monsterArt(c,strike){return art('monsters/'+c+(strike?'-strike':''),()=>{
-  const boss=Object.values(BIOMES).find(B=>B.boss&&B.boss.cls===c),s0=rngS;seedRng(7);
-  const L=boss?clone(boss.boss.look||{}):monLook(c);rngS=s0;
-  return fig(L,c,FOE[c]&&FOE[c].look&&FOE[c].look.spirit?'p':'e',strike?'strike':'idle',FOE[c]&&FOE[c].items[0],1)})}
 function mkMon(c,lv){const u=foe(c,lv,0,0);u.look=monLook(c);/* monsters move 1 less than their class (4+ only), so they rarely reach you on turn 1 */if(u.mov>=4)u.mov--;
   return u}
 

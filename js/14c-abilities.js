@@ -58,42 +58,52 @@ Object.assign(SKILLS,{
    st: [status, turns, chance] on the enemies hit; give: [status, turns] on the allies in the shape; self: statuses on the user.
    heal: × (Mag + 5); cure: removes bad statuses; push: tiles pushed back; once: once a fight; encore: the ally can act again. */
 const ABIL={
+  /* Kili (Archer) */
   aimedShot:{n:'Aimed Shot',cd:2,side:'foe',r:[2,5],dmg:1.5,hit:10,d:'A careful shot from range 2–5: 1.5× damage, as accurate as a normal attack.'},
   pinningArrow:{n:'Pinning Arrow',cd:3,side:'foe',r:'wpn',dmg:.8,st:['root',1],d:'0.8× damage, and the target is Rooted (can’t move) next turn.'},
   volley:{n:'Volley',cd:4,side:'foe',r:[3,5],shape:'area',aim:'any',dmg:.7,d:'Arrows rain on a 3×3 area 3–5 tiles away: 0.7× damage to every enemy in it.'},
+  /* Vaar (Brawler) */
   palmStrike:{n:'Palm Strike',cd:1,side:'foe',r:[1,1],dmg:1,push:2,d:'1.0× damage and push 2. Slamming into a wall or unit hurts more; falling off a ledge hurts too.'},
   flurry:{n:'Flurry',cd:3,side:'foe',r:[1,1],dmg:.5,hits:3,d:'3 quick strikes of 0.5×.'},
   leap:{n:'Leap',cd:4,side:'tile',r:[1,3],shape:'area',dmg:1.2,d:'Leap to an empty tile up to 3 away, ignoring height, and slam down: 1.2× damage to every enemy around the landing.'},
+  /* Morrigan (Cultist) */
   drainTouch:{n:'Drain Touch',mp:4,mag:1,el:'dark',side:'foe',r:[1,1],dmg:1.2,d:'1.2× magic damage to an adjacent enemy.'},
   hex:{n:'Hex',mp:5,mag:1,el:'dark',side:'foe',r:[1,3],st:['weak',2],d:'The target is Weak (deals 30% less damage) for 2 turns.'},
   darkPulse:{n:'Dark Pulse',mp:10,mag:1,el:'dark',side:'self',shape:'burst1',dmg:1,d:'1.0× magic damage to every enemy around her.'},
+  /* Corvin (Elemental Mage) */
   flameBurst:{n:'Flame Burst',mp:5,mag:1,el:'fire',side:'foe',r:[1,3],shape:'cross',aim:'any',dmg:.9,st:['burn',2,.3],d:'A cross of fire up to 3 away: 0.9× magic damage, 30% chance to Burn.'},
   frostWave:{n:'Frost Wave',mp:7,mag:1,el:'water',side:'foe',r:[1,1],shape:'cone',aim:'dir',dmg:.9,st:['chill',1],d:'A cone of frost (4 tiles): 0.9× magic damage and Slow (−2 Move).'},
   chainLightning:{n:'Chain Lightning',mp:9,mag:1,el:'lightning',side:'foe',r:[1,4],dmg:1,chain:[2,.6],d:'1.0× magic damage, then it jumps to up to 2 enemies near the target at 0.6×.'},
+  /* Aldric (Knight) */
   sunder:{n:'Sunder',cd:2,side:'foe',r:[1,1],dmg:1.2,st:['sunder',2],d:'1.2× damage, and the target has −3 Def for 2 turns.'},
   valiantThrust:{n:'Valiant Thrust',cd:3,side:'foe',r:[1,1],shape:'pierce',aim:'dir',dmg:1,d:'A lunge through 2 tiles in a line: 1.0× damage to both.'},
   cover:{n:'Cover',cd:3,side:'ally',r:[1,1],give:['cover',1],d:'Until his next turn, attacks on an adjacent ally hit him instead.'},
+  /* Maelis (Mender); Purify is also Aletta’s */
   mend:{n:'Mend',mp:4,side:'ally',r:[0,3],heal:1.2,d:'Heal an ally up to 3 away (or herself): 1.2× (Mag + 5).'},
   circleOfRest:{n:'Circle of Rest',mp:8,side:'ally',r:[0,3],shape:'cross',aim:'any',heal:.8,cure:1,d:'Heals every ally in a cross for 0.8× (Mag + 5) and cures their bad statuses.'},
   purify:{n:'Purify',mp:3,side:'ally',r:[0,3],cure:1,d:'Cures every bad status on an ally up to 3 away (or herself): Poison and Stone too.'},
   sanctuary:{n:'Sanctuary',mp:10,side:'ally',r:[0,2],shape:'area',aim:'any',give:['guard',1],d:'Guard (30% less damage) on every ally in a 3×3 area until your next turn.'},
+  /* Rook (Rogue) */
   backstab:{n:'Backstab',cd:2,side:'foe',r:[1,1],dmg:1,backstab:1,d:'1.0× damage, doubled from higher ground or when another ally is next to the target.'},
   smokeBomb:{n:'Smoke Bomb',cd:4,side:'self',shape:'burst1',st:['blind',1],give:['smoke',1],d:'Enemies around him are Blinded (−20 Hit); he and allies around him get +30 Avoid until your next turn.'},
   tumble:{n:'Tumble',cd:2,side:'self',tumble:1,free:1,d:'Move up to 2 more tiles, ignoring height. Doesn’t use his action.'},
+  /* Brynhildr (Shieldmaiden) */
   shieldBash:{n:'Shield Bash',cd:2,side:'foe',r:[1,1],dmg:1,push:1,d:'1.0× damage and push 1.'},
   challenge:{n:'Challenge',cd:3,side:'self',shape:'burst2',st:['challenged',1],d:'Enemies within 2 tiles must attack her next turn, if they can reach her.'},
   holdTheLine:{n:'Hold the Line',cd:4,side:'self',self:[['guard',1],['steady',1]],d:'Guard (30% less damage), and she can’t be pushed, until your next turn.'},
+  /* Brin (Adventurer) */
   rally:{n:'Rally',cd:3,side:'self',shape:'burst1',give:['rally',2],others:1,d:'Allies around him get +2 Str and +2 Def for 2 turns.'},
   cleanCut:{n:'Clean Cut',cd:2,side:'foe',r:[1,1],dmg:1.2,hit:10,d:'1.2× damage, as accurate as a normal attack.'},
   shieldUp:{n:'Shield Up',cd:3,side:'self',self:[['guard',1],['shieldUp',1]],d:'Guard, and his counterattacks deal 1.3×, until your next turn.'},
+  /* Lysander (Minstrel) */
   songOfValour:{n:'Song of Valour',mp:6,side:'self',shape:'burst2',give:['valour',2],others:1,d:'Allies within 2 tiles deal 20% more damage for 2 turns.'},
   lullaby:{n:'Lullaby',mp:8,side:'foe',r:[1,1],shape:'cone',aim:'dir',st:['stun',1,.5],d:'A cone of song (4 tiles): 50% chance to Stun each enemy hit.'},
   soothingBallad:{n:'Soothing Ballad',cd:3,side:'self',shape:'burst1',heal:.6,d:'A gentle tune: allies around him heal 0.6× (Mag + 5). Ready again 3 turns later.'},
+  encore:{n:'Encore',mp:15,once:1,side:'ally',r:[1,3],encore:1,d:'An ally up to 3 away who has already acted can act again this turn. Once a fight.'},
   /* Bard versions of Lysander's songs (KITS.lysander.asc) */
   anthem:{n:'Anthem of Valour',mp:6,side:'self',shape:'burst2',give:['anthem',2],others:1,d:'Allies within 2 tiles deal 30% more damage and get +10 Hit for 2 turns.'},
   grandLullaby:{n:'Lullaby',mp:6,side:'foe',r:[1,1],shape:'cone',aim:'dir',st:['stun',1,.65],d:'A cone of song (4 tiles): 65% chance to Stun each enemy hit.'},
   soothingHymn:{n:'Soothing Hymn',cd:2,side:'self',shape:'burst1',heal:.8,cure:1,d:'Allies around him heal 0.8× (Mag + 5) and are cured of bad statuses. Ready again 2 turns later.'},
-  encore:{n:'Encore',mp:15,once:1,side:'ally',r:[1,3],encore:1,d:'An ally up to 3 away who has already acted can act again this turn. Once a fight.'}
 };
 /* the kits: passive, MP pool (spellcasters) and abilities */
 const KITS={
@@ -250,7 +260,7 @@ async function useAbility(u,id,tx,ty){
     const ranged=a.mag||man(u,t)>1;let landed=true;if(!a.dmg){/* status only: still has to hit */if(a.st){landed=(rn()+rn())/2<abVs(u,id,t).hit;if(!landed){sfx('miss');pop(t,'Miss','miss');mapPose(t,'dodge',u);await sleep(D(220));mapPose(t,'idle')}}}
     else{const n=a.hits||1,V=abVs(u,id,t);let total=0;
       for(let k=0;k<n&&t.hp>0;k++){sfx(ranged?(a.mag?hitSfx(w,true):'arrow'):'swing');if(ranged&&(a.shape||'one')==='one'||!ranged)await swingAt(u,t,w,false,ranged);else mapPose(u,'swing',t);
-        if((rn()+rn())/2<V.hit){const d=Math.min(V.dmg,t.hp);t.hp-=d;total+=d;sfx('hit');pop(t,'-'+d,'dmg');flash(t);mapPose(t,'hit',u);if(a.mag)burst(t,EL_COL[a.el]||'#c8b8ff')}else{sfx('miss');pop(t,'Miss','miss');mapPose(t,'dodge',u)}
+        if((rn()+rn())/2<V.hit){const d=Math.min(V.dmg,t.hp);t.hp-=d;total+=d;sfx('hit');pop(t,'-'+d,'dmg');flash(t);if(a.mag)burst(t,EL_COL[a.el]||'#c8b8ff')}else{sfx('miss');pop(t,'Miss','miss');mapPose(t,'dodge',u)}
         await sleep(D(n>1?160:220));mapPose(u,'idle');mapPose(t,'idle');render();await sleep(D(n>1?60:110))}
       landed=total>0;
       if(total&&has(u,'siphon')&&a.el==='dark'){const h=Math.min(Math.ceil(total/4),u.maxhp-u.hp);if(h){u.hp+=h;pop(u,'+'+h,'heal')}}

@@ -1,4 +1,4 @@
-/* Seeded random numbers and the basic unit constructors */
+/* Game state, seeded random numbers, small helpers, and the enemy constructors (foe, boss) */
 /* ================= STATE ================= */
 let state,chStart=null,MAP=[],HM=[],MW=8,MH=11;
 let ui='idle',sel=null,origin=null,moveSet=null,fringe=null,targets=[],tmode='atk',pending=null,pendW=0,phase='player',busy=false,over=null,inspect=null,danger=false,details=false,itemSel=null,terInfo='';

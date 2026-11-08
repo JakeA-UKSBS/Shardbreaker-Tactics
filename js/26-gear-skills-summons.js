@@ -27,12 +27,6 @@ async function tradeWith(u){
     const[from,to]=m[0]==='g'?[u,o]:[o,u],it=from.items.splice(+m.slice(1),1)[0];to.items.push(it);sfx('item');
   }
 }
-function gearArt(p,kd,c){
-  if(kd==='armor'){p.poly([[3,3],[6,2],[10,2],[13,3],[13,13],[8,15],[3,13]],c.tint==='steel'?'#b3d0f0':'#8a5a32');p.rect(7,3,2,11,c.tint==='steel'?'#7f889b':'#5a3a22');p.rect(3,6,10,1,c.tint==='steel'?'#7f889b':'#6a4428')}
-  if(kd==='cloak'){p.poly([[5,2],[11,2],[14,15],[2,15]],'#4a5a8a');p.poly([[5,2],[8,2],[6,15],[2,15]],'#3a4870');p.ell(8,3,2,1.5,GOLD)}
-  if(kd==='boots'){p.rect(3,4,4,8,'#7a5230');p.rect(3,11,7,3,'#7a5230');p.rect(9,4,4,8,'#8a6040');p.rect(9,11,6,3,'#8a6040');p.rect(3,4,4,1,GOLD);p.rect(9,4,4,1,GOLD)}
-  if(kd==='gauntlet'){p.rect(4,6,8,8,'#9aa3b5');p.rect(4,3,2,4,'#9aa3b5');p.rect(7,2,2,5,'#9aa3b5');p.rect(10,3,2,4,'#9aa3b5');p.rect(4,12,8,2,'#6a7385')}
-}
 
 /* ---- skill rewards: pick who learns it; a unit without room can forget a learned skill ---- */
 const SKILL_POOL=()=>Object.keys(SKILLS).filter(k=>!['command','venom','stoneGaze'].includes(k)&&!SKILLS[k].kit);

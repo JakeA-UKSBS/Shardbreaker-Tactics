@@ -1,9 +1,11 @@
-// Export the code-drawn art to PNGs in art/, and rebuild art/manifest.js.
+// Make cast PNGs from the unit rig (js/09b-unit-rig.js), and rebuild art/manifest.js.
+// The game draws nothing in code: every picture is a PNG in art/. The rig is kept so a new character (or a new class
+// for one) can be added in js/14b-cast.js with a `look` and exported here as a starting set of PNGs to paint over.
 //
-//   node tools/export-art.mjs              write PNGs for keys that have no PNG yet, then rebuild the manifest
-//   node tools/export-art.mjs --force icons/ironJian tiles/   also redraw these keys (or key prefixes), overwriting
+//   node tools/export-art.mjs              write PNGs for cast frames that have no PNG yet, then rebuild the manifest
+//   node tools/export-art.mjs --force cast/kili/   also redraw these keys (or key prefixes), overwriting
 //   node tools/export-art.mjs --manifest   only rebuild the manifest (after adding or deleting PNGs by hand)
-//   node tools/export-art.mjs --list       print every key the game knows about
+//   node tools/export-art.mjs --list       print every cast key
 //
 // Existing PNGs are never overwritten unless named in --force, so hand-edited art is safe.
 // Needs Node and Playwright:  npm i -D playwright && npx playwright install chromium
@@ -38,20 +40,10 @@ if (onlyManifest) { writeManifest(); process.exit(0); }
 const browser = await chromium.launch(process.env.CHROME ? { executablePath: process.env.CHROME } : {}); // CHROME=/path/to/chrome to use an installed browser
 const page = await browser.newPage();
 await page.route('**/music/**', r => r.abort());
-await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href + '?codeart');
+await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href);
 await page.waitForTimeout(500);
-// call every parametrised art function once per value, so each key registers in ART_GEN
-const keys = await page.evaluate(() => {
-  const each = (o, f) => Object.keys(o).forEach(k => { try { f(k) } catch (_) {} });
-  each(IT, k => { if (!k.includes('~')) iconArt(k) });
-  try { castArtAll() } catch (_) {}
-  monsterClasses().forEach(c => { try { monsterArt(c, false); monsterArt(c, true) } catch (_) {} });
-  each(TAGS, tagArt); each(RELICS, relicArt); each(MEALS, mealArt);
-  [mugArt, tavernArt, counterArt, musterArt, flagArt, sageRoomArt, sageTableArt, sageBallArt, mapIconArt, coinArt,
-   swordsArt, eliteArt, campArt, chestArt, eventArt, titleCrystalArt, cageBarsArt, boulderArt, mudArt, shipSideArt, shipWingArt,
-   () => BIG.crystal({}, false), () => BIG.crystal({}, true)].forEach(f => { try { f() } catch (_) {} });
-  return Object.keys(ART_GEN).sort();
-});
+// register every cast frame (base class and each ascension, every pose) in ART_GEN
+const keys = await page.evaluate(() => { castArtAll(); return Object.keys(ART_GEN).sort(); });
 if (listOnly) { console.log(keys.join('\n')); await browser.close(); process.exit(0); }
 
 const have = new Set(pngsOnDisk());

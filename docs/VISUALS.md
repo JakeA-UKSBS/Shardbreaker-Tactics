@@ -118,7 +118,7 @@ Each Summoner is bonded to one familiar for life and calls it once per battle (t
 
 ## Battle sprites
 
-Every generated unit is drawn from body parts (`js/09b-battle-rig.js`). The same drawing is the 64px map sprite and the 96px battle frames. Each weapon kind uses one pose set; each set has the same eight frames: two idle breaths, wind-up, crit wind-up, swing (the hit frame), follow-through, hit flinch and dodge. Mounts move with the rider (horses rear on the wind-up and gallop on the strike).
+Every generated unit is drawn from body parts (`js/09b-unit-rig.js`). The same drawing is the 64px map sprite and the 96px battle frames. Each weapon kind uses one pose set; each set has the same eight frames: two idle breaths, wind-up, crit wind-up, swing (the hit frame), follow-through, hit flinch and dodge. Mounts move with the rider (horses rear on the wind-up and gallop on the strike).
 
 ### Heavy: axes, halberds, hammers, greatswords
 
@@ -345,7 +345,7 @@ Images are exported from the game with a headless browser (`fig()`, `icon()`, `b
 
 ## High-res units
 
-Every generated unit is built from body parts (js/09b-battle-rig.js). Map sprites are 64px and battle frames are 96px.
+Every generated unit is built from body parts (js/09b-unit-rig.js). Map sprites are 64px and battle frames are 96px.
 
 ![Map sprites: classes, weapons and mounts](visuals/units/map_sprites.png)
 
@@ -370,7 +370,7 @@ A possible variant with three crystals and more veins (`TITLE_MULTI=true` in js/
 
 ## Battle backdrops
 
-The side-on fight scene uses a backdrop for the current region (`battleBgArt` in js/09-battle-scene.js, 160×90, horizon at y 63). Regions without one fall back to the old terrain gradients. `heart` is Act 3.
+The side-on fight scene uses a backdrop for the current region (`battleBgArt` in js/09-fx.js, 160×90, horizon at y 63). Regions without one fall back to the old terrain gradients. `heart` is Act 3.
 
 ![Battle backdrops](visuals/scenes/battle_backdrops.png)
 

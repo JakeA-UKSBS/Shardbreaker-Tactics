@@ -1,6 +1,6 @@
-/* High-res units: every generated unit (G.* classes) is drawn from body parts (legs, torso, arms, head, hair, gear,
-   weapon, mount) at a higher resolution than the 32px monster art. The same drawing makes the map sprite (64x64, idle)
-   and the battle frames (96x96, posed and animated), so a unit looks the same everywhere.
+/* The unit rig: draws a cast member (G.* classes) from body parts (legs, torso, arms, head, hair, gear, weapon, mount)
+   using the `look` in js/14b-cast.js. The game itself never calls it: every sprite is a PNG in art/cast/. It's kept so
+   tools/export-art.mjs can make a starting set of PNGs for a new character or class (64x64 map frames).
    Poses are joint angles in degrees (0 = right, 90 = down, -90 = up). bx/by shift the body, lean tips the torso forward,
    arm/fore = weapon arm (upper arm, forearm), wpn = weapon angle, back/backFore = the other arm, step = front foot. */
 const isHi=(cls,sz)=>!sz&&typeof cls==='string'&&cls.startsWith('G.');
@@ -8,8 +8,8 @@ const isHi=(cls,sz)=>!sz&&typeof cls==='string'&&cls.startsWith('G.');
 /* ==================================================================
    POSES
    Every pose set has the same frames: idle (2 breathing frames), windup,
-   critup (the bigger wind-up before a crit), swing (the hit lands),
-   follow (follow-through), hit (recoil when struck) and dodge.
+   critup (the bigger wind-up before a crit), swing (the hit lands)
+   and follow (follow-through).
    Extra flags: draw = bowstring pulled back, glow = magic glow at the hand
    (1 small, 2 big), flap = wing/mane flap and mount head-bob.
    ================================================================== */
@@ -25,9 +25,7 @@ const POSES={
     windup:pose({lean:-4,arm:-100,fore:-125,wpn:-150,back:130,step:-2}),
     critup:pose({lean:-3,by:-4,arm:-95,fore:-105,wpn:-100,back:-100,backFore:-95,step:-3,spread:6}),
     swing:pose({bx:3,lean:6,arm:25,fore:45,wpn:40,back:55,backFore:40,step:6,spread:7,flap:1}),
-    follow:pose({bx:4,lean:7,arm:70,fore:95,wpn:120,back:80,backFore:90,step:6,spread:7}),
-    hit:pose({bx:-3,lean:-6,arm:85,fore:70,wpn:-40,back:80,tilt:-2}),
-    dodge:pose({bx:-6,lean:-7,arm:40,fore:-20,wpn:-80,back:60,step:-5,spread:2})},
+    follow:pose({bx:4,lean:7,arm:70,fore:95,wpn:120,back:80,backFore:90,step:6,spread:7})},
 
   /* ============================================================
      BLADE: swords, scimitars, twin blades. Raised slash across the body.
@@ -36,9 +34,7 @@ const POSES={
     windup:pose({lean:-3,arm:-80,fore:-100,wpn:-160,back:140,step:-1}),
     critup:pose({lean:-3,by:-3,arm:-100,fore:-115,wpn:-95,back:-110,backFore:-100,step:-2,spread:6}),
     swing:pose({bx:4,lean:6,arm:5,fore:10,wpn:15,back:160,backFore:175,step:7,spread:8,flap:1}),
-    follow:pose({bx:5,lean:7,arm:50,fore:70,wpn:95,back:150,step:7,spread:8}),
-    hit:pose({bx:-3,lean:-6,arm:70,fore:40,wpn:-20,back:80,tilt:-2}),
-    dodge:pose({bx:-7,lean:-8,arm:20,fore:-30,wpn:-60,back:50,step:-6,spread:2})},
+    follow:pose({bx:5,lean:7,arm:50,fore:70,wpn:95,back:150,step:7,spread:8})},
 
   /* ============================================================
      THRUST: spears, javelins, rapiers. Pull back, then a straight lunge.
@@ -47,9 +43,7 @@ const POSES={
     windup:pose({bx:-2,lean:-4,arm:135,fore:0,wpn:-4,back:40,backFore:10,step:-2}),
     critup:pose({bx:-3,lean:-5,by:-2,arm:150,fore:-10,wpn:-12,back:30,backFore:0,step:-3,spread:6}),
     swing:pose({bx:5,lean:6,arm:0,fore:0,wpn:0,back:20,backFore:10,step:7,spread:8,flap:1}),
-    follow:pose({bx:5,lean:6,arm:8,fore:6,wpn:6,back:40,backFore:30,step:7,spread:8}),
-    hit:pose({bx:-3,lean:-6,arm:80,fore:-10,wpn:-60,back:80,tilt:-2}),
-    dodge:pose({bx:-7,lean:-8,arm:60,fore:-30,wpn:-75,back:50,step:-6,spread:2})},
+    follow:pose({bx:5,lean:6,arm:8,fore:6,wpn:6,back:40,backFore:30,step:7,spread:8})},
 
   /* ============================================================
      DAGGER: daggers, twin daggers, whips, chains. A quick low stab.
@@ -58,9 +52,7 @@ const POSES={
     windup:pose({lean:-2,arm:120,fore:60,wpn:-30,back:30,backFore:-20,step:-1}),
     critup:pose({lean:-3,by:-3,arm:-70,fore:-90,wpn:80,back:40,backFore:-30,step:-2,spread:6}),
     swing:pose({bx:6,lean:8,arm:-5,fore:0,wpn:0,back:150,backFore:170,step:8,spread:8,flap:1}),
-    follow:pose({bx:6,lean:8,arm:20,fore:30,wpn:30,back:140,step:8,spread:8}),
-    hit:pose({bx:-3,lean:-6,arm:80,fore:50,wpn:20,back:80,tilt:-2}),
-    dodge:pose({bx:-8,lean:-8,arm:40,fore:0,wpn:0,back:50,step:-6,spread:2})},
+    follow:pose({bx:6,lean:8,arm:20,fore:30,wpn:30,back:140,step:8,spread:8})},
 
   /* ============================================================
      BOW: bows and crossbows. windup draws the string, swing releases.
@@ -69,9 +61,7 @@ const POSES={
     windup:pose({lean:-1,arm:0,fore:0,wpn:0,back:5,backFore:178,draw:1}),
     critup:pose({lean:-2,by:-2,arm:-8,fore:-8,wpn:-8,back:-3,backFore:172,draw:1,spread:6}),
     swing:pose({lean:-1,arm:0,fore:0,wpn:0,back:165,backFore:175,flap:1}),
-    follow:pose({lean:0,arm:3,fore:3,wpn:3,back:150,backFore:160}),
-    hit:pose({bx:-3,lean:-6,arm:80,fore:60,wpn:60,back:80,tilt:-2}),
-    dodge:pose({bx:-7,lean:-8,arm:50,fore:30,wpn:40,back:50,step:-6,spread:2})},
+    follow:pose({lean:0,arm:3,fore:3,wpn:3,back:150,backFore:160})},
 
   /* ============================================================
      CAST: sigils, staves, charms, orbs, fans. Raise the hand, then throw
@@ -81,9 +71,7 @@ const POSES={
     windup:pose({lean:-3,arm:-60,fore:-85,wpn:-90,back:120,step:-1,glow:1}),
     critup:pose({lean:-3,by:-3,arm:-95,fore:-95,wpn:-90,back:-100,backFore:-95,step:-2,spread:6,glow:2}),
     swing:pose({bx:3,lean:4,arm:-12,fore:-8,wpn:-40,back:150,backFore:170,step:5,spread:7,glow:2,flap:1}),
-    follow:pose({bx:3,lean:4,arm:5,fore:5,wpn:-30,back:140,step:5,spread:7,glow:1}),
-    hit:pose({bx:-3,lean:-6,arm:80,fore:40,wpn:-50,back:80,tilt:-2}),
-    dodge:pose({bx:-7,lean:-8,arm:50,fore:10,wpn:-60,back:50,step:-6,spread:2})}
+    follow:pose({bx:3,lean:4,arm:5,fore:5,wpn:-30,back:140,step:5,spread:7,glow:1})}
 };
 
 /* which pose set each weapon kind uses */
@@ -331,4 +319,3 @@ function drawHiWeapon(p,kind,w,c,h,a,P,hb,pt,limb,L={}){
    ENTRY POINTS
    hiFig: the 64px map/card sprite (cached).
    ================================================================== */
-function hiFig(L,cls,team,pose,wk){const k=['HI',cls,team,pose,wk,JSON.stringify(L)].join('|');return sprCache[k]||(sprCache[k]=hiArt(L,cls,team,wk,pose==='strike'?'swing':'idle',0,64))}

@@ -13,15 +13,6 @@ const MEALS={
   soup:{n:'Mushroom Soup',p:20,f:3,d:'Immune to poison'}
 };
 const M=id=>!!(run&&run.meals&&run.meals.some(m=>m.id===id&&m.n>0));
-function mealArt_draw(id){const c='ML|'+id;if(sprCache[c])return sprCache[c];const p=Px(16,16);
-  p.ell(8,12,7,3,'#d8d0bc');p.ell(8,11,6,2,'#efe6cf');
-  if(id==='boar'){p.ell(8,8,5,3.5,'#8a4a2a');p.ell(7,7,2,1,'#b06a3a');p.line(12,6,15,3,'#efe6cf')}
-  if(id==='bread'){p.ell(8,8,5,3,'#c98a3a');p.line(5,7,7,9,'#8a5a2a');p.line(8,7,10,9,'#8a5a2a');p.ell(11,5,2,1.5,'#ffd23f')}
-  if(id==='pie'){p.ell(8,9,5.5,2.6,'#c9a050');p.ell(8,8,5,2,'#e0bc6a');p.poly([[12,6],[15,4],[14,8]],'#7a9ab8')}
-  if(id==='stew'){p.ell(8,9,5.5,2.5,'#5a3a2a');p.ell(8,8,4.5,1.6,'#c8322e');p.set(6,8,'#7fd36a');p.set(10,7,'#ffd23f')}
-  if(id==='soup'){p.ell(8,9,5.5,2.5,'#7a5a3a');p.ell(8,8,4.5,1.6,'#c9a070');p.ell(6,7,1.6,1,'#d8483a');p.ell(10,8,1.4,1,'#d8483a')}
-  p.outline(OUT);return sprCache[c]=p.url()}
-function mugArt_draw(){const c='MUG';if(sprCache[c])return sprCache[c];const p=Px(16,16);p.rect(4,5,7,9,'#a8743a');p.rect(4,5,7,1,'#7a5230');p.rect(4,10,7,1,'#7a5230');p.ring(12,9,2.4,'#7a5230');p.ell(7.5,4,4.5,2,'#f3f0e8');p.ell(5,3,1.5,1,'#ffffff');p.rect(5,6,1,7,'#c98a4a');p.outline(OUT);return sprCache[c]=p.url()}
 function afterFightMeals(){if(!run)return;if(run.meals){run.meals.forEach(m=>m.n--);run.meals=run.meals.filter(m=>m.n>0)}}
 
 /* ---- the tavern ---- */
@@ -36,22 +27,6 @@ const DRINKS={
   tea:{n:'Sage Tea',p:35,d:'One unit gains +1 Res and +1 Luck.',st:()=>['res','lck']}
 };
 const GREET=['“Mind the step, it’s been loose for years. What’ll it be?”','“Sit anywhere that isn’t sticky. What can I get you?”','“You look like you’ve walked through worse than rain. Drink?”','“Another band of heroes. Coin first, stories after.”'];
-function tavernArt_draw(){const c='TAV';if(sprCache[c])return sprCache[c];const W=160,H=90,p=Px(W,H);
-  p.rect(0,0,W,H,'#4a3020');for(let x=0;x<W;x+=12)p.rect(x,0,1,H,'#3a2418');for(let x=6;x<W;x+=12)for(let y=6;y<60;y+=20)p.set(x,y,'#6a4a30');
-  p.rect(8,10,28,22,'#2a1a10');p.rect(10,12,24,18,'#1a2240');p.rect(21,12,2,18,'#2a1a10');p.rect(10,20,24,2,'#2a1a10');[[13,14],[28,15],[16,25],[30,26],[25,13]].forEach(([x,y])=>p.set(x,y,'#f3f0e8'));p.ell(31,16,2,2,'#f3e6b0');
-  for(const sy of[24,44]){p.rect(46,sy,106,3,'#2a1a10');p.rect(46,sy,106,1,'#6a4a30');
-    for(let i=0;i<11;i++){const x=50+i*9,col=['#3a6a3a','#7a2a2a','#2a4a6a','#a8743a','#5a3a6a'][(i+sy)%5],h=7+(i*3+sy)%5;
-      if((i+sy)%4===3){p.rect(x-1,sy-6,7,6,'#c9a070');p.rect(x-1,sy-6,7,1,'#a8743a');continue}
-      p.rect(x,sy-h,5,h,col);p.rect(x+1,sy-h-3,3,3,col);p.rect(x+1,sy-h-4,3,1,'#c9a070');p.rect(x+1,sy-h+2,1,h-4,shade(col,1.4))}}
-  p.ell(150,10,9,9,'#5a3a24');p.ell(150,10,4,5,'#ffd27a');p.ell(150,10,2,3,'#fff6d0');p.line(150,0,150,4,'#2a1a10');
-  p.ell(14,62,8,10,'#7a5230');p.rect(6,56,16,2,'#4a2e1a');p.rect(6,66,16,2,'#4a2e1a');p.ell(14,52,8,2,'#8a6040');
-  p.rect(0,70,W,20,'#2a1a12');for(let x=0;x<W;x+=20)p.rect(x,70,1,20,'#1e120c');
-  return sprCache[c]=p.url()}
-function counterArt_draw(){const c='CTR';if(sprCache[c])return sprCache[c];const p=Px(160,34);
-  p.rect(0,8,160,26,'#5a3a22');p.rect(0,8,160,5,'#8a5a32');p.rect(0,8,160,1,'#b07a42');for(let x=10;x<160;x+=20){p.rect(x,14,1,20,'#4a2e1a');p.rect(x+2,16,16,1,'#6a4428')}
-  for(const x of[28,44,118]){p.rect(x,1,7,8,'#a8743a');p.ell(x+3.5,1,4,1.5,'#f3f0e8');p.ring(x+8,4,2,'#7a5230')}
-  p.rect(132,2,6,7,'#3a6a3a');p.rect(133,0,4,2,'#3a6a3a');
-  return sprCache[c]=p.url()}
 const tavEl=document.createElement('div');tavEl.className='tav';tavEl.hidden=true;document.body.appendChild(tavEl);
 function tavShow(text,opts){
   /* opts: [key,label,sub?,disabled?] -> resolves with the chosen key */
@@ -61,8 +36,9 @@ function tavShow(text,opts){
   return new Promise(res=>{tavEl.onclick=e=>{const b=e.target.closest('[data-t]');if(!b||b.disabled)return;sfx('tick');res(b.dataset.t)}});
 }
 function spend(n){run.gold=gold()-n;sfx('item')}
+function keeperArt(){return art('npcs/innkeeper')}
 async function tavernNode(){
-  const look={...KEEPER.look},keeper=fig(look,'Villager','g','idle',null),bought=new Set(),done={},B=actBiome();
+  const look={...KEEPER.look},keeper=keeperArt(),bought=new Set(),done={},B=actBiome();
   const hires=castOffer(3,Math.max(1,Math.round(run.roster.reduce((a,u)=>a+u.lv,0)/run.roster.length)),'tavern');
   /* hires who join already advanced (Lv 1 but strong: Sigrun, Kaya, and the after-Act-1 cast) cost 45 more */
   const price=u=>40+15*u.lv+(CLS[u.cls].tier===2?45:0);
@@ -99,8 +75,8 @@ async function tavernNode(){
   }
 }
 
-/* PNG art: each of these uses art/<key>.png when it exists, else the drawing code above (see art() in 03-pixel-art.js) */
-function mealArt(id){return art('meals/'+id,()=>mealArt_draw(id))}
-function mugArt(){return art('ui/mug',()=>mugArt_draw())}
-function tavernArt(){return art('scenes/tavern',()=>tavernArt_draw())}
-function counterArt(){return art('scenes/tavern-counter',()=>counterArt_draw())}
+/* PNG art (art/<key>.png, see art() in 03-art.js) */
+function mealArt(id){return art('meals/'+id)}
+function mugArt(){return art('ui/mug')}
+function tavernArt(){return art('scenes/tavern')}
+function counterArt(){return art('scenes/tavern-counter')}

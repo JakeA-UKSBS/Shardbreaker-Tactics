@@ -113,7 +113,7 @@ for(const k in IT)IT[k].key=k;
 const WTYPES=['blade','heavy','pole','bow','art'];
 const ELN={light:'Light',dark:'Dark',fire:'Fire',nature:'Nature',water:'Water',wind:'Wind',earth:'Earth',lightning:'Lightning',illusion:'Illusion',crystal:'Neutral'};
 /* CLASSES, keyed by class id (shared by player classes and monsters):
-   n = class name shown in game, w = weapon types it can use, body = which sprite body fig() draws (tunic/robe/vest/armor/beast/golem...),
+   n = class name shown in game, w = weapon types it can use, body = body type (tunic/robe/vest/armor/beast/golem...: used by the unit rig, tags and the boss PNG lookup),
    mov = Move, crit = bonus Crit %, promo = class it promotes to, tier = 2 for promoted classes, bonus = stats added on promotion (stat order above),
    fly = flier (ignores terrain, weak to bows), mnt = mounted, wade = ignores water slowdown, phase = walks through walls, lava = can cross magma,
    jump = how high a step it can climb (default 2). */
@@ -158,7 +158,7 @@ Object.assign(SKILLS,{
 const BASE_CAP=20,PROMO_CAP=5,PROMO_LV=5;
 /* ENEMY STATS, keyed by class id (must also exist in CLS):
    b = base stats at level 1, g = growth per level (a fixed amount, not a % chance), both in stat order [HP, Str, Mag, Skl, Spd, Lck, Def, Res].
-   A foe's stat = b + floor(g × (level − 1)), see foe() in 02-rng-units.js.
+   A foe's stat = b + floor(g × (level − 1)), see foe() in 02-state-rng.js.
    items = weapons/attacks it carries (keys in IT), pic = portrait art key, look = sprite options (colours are hex: skin, eye, hair, cloth, wing, shell...).
    Monsters with an entry in MONLOOK get a random look from there instead. */
 const FOE={};

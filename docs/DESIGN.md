@@ -22,7 +22,7 @@ A first pass to test whether height makes fights more interesting before any art
   - **Jump:** a unit can only step up or down 2 levels at a time (`JUMP`, or a class's own `jump`). Fliers and 2x2 bosses ignore it.
   - **High ground:** +10 Hit and +1 damage per level above the target (max 3); -10 Hit per level below. The forecast shows it.
   - **Bows:** +1 range for every 2 levels above the target (max +2).
-- **On-map attacks** (09-battle-scene.js `quickPlay`): melee hops toward the target, bows and thrown weapons fire an arcing projectile, sigils fly straight and burst in their element's colour, crits flash and shake the map, crystal weapons shatter shards. The battle scene, its backdrops and the battle-frame rig are gone. The Options toggle is now just "Animations" (it still covers the promotion scene).
+- **On-map attacks** (09-fx.js `quickPlay`): melee hops toward the target, bows and thrown weapons fire an arcing projectile, sigils fly straight and burst in their element's colour, crits flash and shake the map, crystal weapons shatter shards. The battle scene, its backdrops and the battle-frame rig are gone. The Options toggle is now just "Animations" (it still covers the promotion scene).
 
 ## The reason to fight
 

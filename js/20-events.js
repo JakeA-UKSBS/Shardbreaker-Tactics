@@ -96,8 +96,6 @@ function eventScene(prop){
   return sprCache[c]=p.url();
 }
 const evEl=document.createElement('div');evEl.className='tav ev';evEl.hidden=true;document.body.appendChild(evEl);
-/* the cage's bars, drawn over the traveller inside */
-function cageBarsArt_draw(){if(sprCache.CAGEBARS)return sprCache.CAGEBARS;const p=Px(160,90);for(let x=60;x<=100;x+=8){p.rect(x,33,1,34,METAL);p.rect(x+1,33,1,34,'#5a6070')}p.rect(58,30,44,3,METAL2);p.rect(58,30,44,1,METAL);p.rect(58,67,44,3,METAL2);p.ring(93,42,2.5,GOLD);p.set(93,45,GOLD);return sprCache.CAGEBARS=p.url()}
 function evShow(E,text,opts){
   evEl.innerHTML=`<div class="tv-scene"><img class="tv-bg" src="${eventScene(E.art)}" alt="">${[].concat(E.fig||[],propFig(E.art)||[]).filter(f=>ART_PNG.has('scenes/'+f)).map(f=>`<img class="ev-fig ev-${f}" src="art/scenes/${f}.png" alt="">`).join('')}${E.ov||''}<span class="tv-gold">${gold()} gold</span></div>
     <div class="tv-box"><div class="tv-name">${E.t}</div><p class="tv-text">${text}</p>${E.card&&opts.length>1?E.card:''}<div class="tv-opts">${opts.map(([k,l,sub,dis])=>`<button type="button" class="tv-o" data-t="${k}"${dis?' disabled':''}>${l}${sub?`<span>${sub}</span>`:''}</button>`).join('')}</div></div>`;
@@ -178,9 +176,9 @@ const EVENTS={
       let t=u?`${u.name} pulls a <b>${IT[k].n}</b> from the mud.`:`You leave the ${IT[k].n} in the mud.`;
       if(rand()<.35){const v=pick(run.roster);v.maxhp=Math.max(10,v.maxhp-2);v.hp=Math.min(v.hp,v.maxhp);t+=` ${v.name} is cut by old blades in the search (−2 max HP).`}sfx('item');return t}},
     {l:'Pay respects',sub:'Every unit gains 20 EXP',go:async()=>{evEl.hidden=true;for(const u of run.roster){const g=gainExp(u,20);if(g&&g.gains)await levelUp(u,g)}return'You bury what you can. The squad marches on quieter, and wiser (+20 EXP).'}}]},
-  /* the chapel's healer stands to the right of the window (a code-drawn figure, see .ev-healer) */
+  /* the chapel's healer stands to the right of the window (art/npcs/healer.png, see .ev-healer) */
   chapel:{t:'The Wayside Chapel',art:'chapel',fig:['stained-glass','banner'],d:'Light pours through a stained-glass window onto the pews. A healer in white looks up from her prayers. “Rest a while. I can mend you, or send you on with a blessing.”',o:null,
-    make:()=>{EVENTS.chapel.ov=`<img class="ev-ov2 ev-healer" src="${fig({style:'long',hair:'#8a5a3a',gear:'hood',cloth:'#efe6cf',skin:'#e0b090',sash:GOLD},'Sage','p','idle',null)}" alt="">`;return[
+    make:()=>{EVENTS.chapel.ov=`<img class="ev-ov2 ev-healer" src="${healerArt()}" alt="">`;return[
     {l:'Ask her to heal you',sub:'Every unit heals to full HP',go:async()=>{run.roster.forEach(u=>u.hp=u.maxhp);sfx('heal');return'She lays her hands on each of you in turn. Every wound closes.'}},
     {l:'Ask for her blessing',sub:'Choose a relic',go:async()=>{evEl.hidden=true;const k=await relicPick(3,['c','u'],'The healer’s blessing','She presses something into your hands. “Carry this, and come back to us.”');evEl.hidden=false;return k?`You leave with the <b>${RELICS[k].n}</b>.`:'She has nothing left to give.'}}]}},
   throne:{t:'The Empty Throne',art:'throne',d:'A throne room with no king. Dust lies thick on the red tiles, and a jewelled crown still rests on the seat.',o:null,
@@ -294,5 +292,6 @@ async function eventNode(){
   }
 }
 
-/* PNG art: each of these uses art/<key>.png when it exists, else the drawing code above (see art() in 03-pixel-art.js) */
-function cageBarsArt(){return art('scenes/cage-bars',()=>cageBarsArt_draw())}
+/* PNG art (art/<key>.png, see art() in 03-art.js) */
+function healerArt(){return art('npcs/healer')}
+function cageBarsArt(){return art('scenes/cage-bars')}

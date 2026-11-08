@@ -13,7 +13,7 @@ function promote(u,to){
   return{from,to,old,b,gift};
 }
 async function ascend(u,to){
-  const wk=mapWk(u),before=fig(u.look,u.cls,'p','idle',wk),r=promote(u,to),after=fig(u.look,u.cls,'p','idle',mapWk(u)),still=!settings.anim||matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const before=castPng(u,'idle'),r=promote(u,to),after=castPng(u,'idle'),still=!settings.anim||matchMedia('(prefers-reduced-motion: reduce)').matches;
   const el=document.createElement('div');el.className='asc';
   const parts=Array.from({length:36},()=>`<i class="asc-p" style="left:${10+Math.random()*80}%;--x:${(Math.random()*60-30).toFixed(0)}px;--d:${(1.6+Math.random()*1.8).toFixed(2)}s;--dl:${(Math.random()*2).toFixed(2)}s"></i>`).join('');
   el.innerHTML=`<div class="asc-stage"><div class="asc-pillar"></div><div class="asc-ring"></div><div class="asc-ring r2"></div>${parts}<div class="asc-wave"></div><img class="asc-spr" src="${before}" alt=""></div>

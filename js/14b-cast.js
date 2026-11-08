@@ -1,4 +1,4 @@
-/* The named cast: each character's class, weapon and fixed look, drawn by the unit rig (js/09b-battle-rig.js).
+/* The named cast: each character's class, weapon and fixed look, drawn by the unit rig (js/09b-unit-rig.js).
    Look fields on top of the random ones (hair, skin, cloth, sash, eye, style, gear, cape, beard, fem, shield, mount, horse):
    body (tunic/robe/vest/armor), pants, boot, metal (armour tint), capeC, shieldC, shawl, collar, feather (list of colours),
    tattoo, scar, wraps (hand wraps), mask, voidFace, mist (dark mist round the hand), hand (casts from the open hand), el (spell glow colour),
@@ -137,7 +137,7 @@ const castDef=id=>CAST.find(c=>c.id===id);
 const CAST_POSES=['idle','windup','swing','follow','critup'];
 const castPngKey=(id,cls,pose)=>'cast/'+id+'/'+CLS[cls].n.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'-'+pose;
 function castPng(u,pose){if(!u||!u.cast)return null;const k=castPngKey(u.cast,u.cls,pose);return ART_PNG.has(k)?'art/'+k+'.png':null}
-function castArt(id,cls,pose){const c=castDef(id),a=c.asc&&c.asc[cls];return art(castPngKey(id,cls,pose),()=>hiArt(clone(a?a.look:c.look),cls,'p',a?a.wk:c.wk,pose,0,64))}
+function castArt(id,cls,pose){const c=castDef(id),a=c.asc&&c.asc[cls];ART_GEN[castPngKey(id,cls,pose)]=()=>hiArt(clone(a?a.look:c.look),cls,'p',a?a.wk:c.wk,pose,0,64)}
 function castArtAll(){for(const c of CAST)for(const cls of[c.cls,...Object.keys(c.asc||{})])for(const p of CAST_POSES)castArt(c.id,cls,p)}
 /* weapon types: a cast class (and its ascensions) wields only the type its characters start with; Menders wield staves
    only (no sigils), and an ascension that gains a weapon (gain) adds that weapon's type (a Crusader: staves and blades) */

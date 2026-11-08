@@ -53,38 +53,6 @@ Object.assign(TER,{
   'S':{n:'Scorched Ground',k:'scorch',c:1,av:0,df:0},'G':{n:'Blighted Emerald',k:'bgem-g',c:2,av:10,df:2},'U':{n:'Blighted Ruby',k:'bgem-r',c:2,av:10,df:2},
   'P':{n:'Blighted Sapphire',k:'bgem-b',c:2,av:10,df:2},'Y':{n:'Blighted Amethyst',k:'bgem-v',c:2,av:10,df:2},'K':{n:'Crystal Spire',k:'spire',c:99,av:0,df:0}
 });
-function bioTile2_draw(k,part){
-  const p=Px(16,16),o=Px(16,16),dots=(c,pts)=>pts.forEach(([x,y])=>p.set(x,y,c)),S=[[2,3],[9,2],[13,6],[4,12],[11,13],[7,8],[14,11]];
-  const gem=(c)=>{o.poly([[3,14],[5,6],[7,14]],c);o.poly([[6,14],[9,2],[12,14]],c);o.poly([[10,14],[13,7],[14,14]],shade(c,.8));o.line(9,4,9,12,shade(c,1.4));o.set(5,8,shade(c,1.5))};
-  if(k==='sandstone'||k==='quicksand'){p.rect(0,0,16,16,'#b8a070');dots('#a08858',S)}
-  if(k==='sandstone'){const B='#ece2d0',B2='#cbbca4',B3='#a8987e',Q='#8a7c74',Q2='#c8bcb4',Q3='#5e524c';
-    o.rect(1,9,6,6,B);o.rect(1,9,6,1,'#f8f2e6');o.rect(6,9,1,6,B2);o.rect(1,14,6,1,B3);
-    o.rect(9,10,6,5,B);o.rect(9,10,6,1,'#f8f2e6');o.rect(14,10,1,5,B2);
-    o.poly([[4,10],[6,2],[9,10]],Q);o.line(6,3,6,9,Q2);o.set(8,9,Q3);o.poly([[9,11],[11,5],[13,11]],Q);o.set(11,6,Q2);
-    o.rect(6,12,3,3,B2);o.set(7,12,B);o.set(3,11,B2);o.set(12,12,B2)}
-  if(k==='quicksand'){p.ell(8,8,7.5,6.5,'#8a6a3e');p.ell(8,8,6,5,'#a08050');p.ring(8,8,4.6,'#7a5a30');p.ring(8.5,8,3,'#6a4a28');p.ell(8,8,1.8,1.4,'#4a3218');
-    p.line(3,6,5,4,'#c8ac78');p.line(11,4,13,6,'#c8ac78');p.line(12,11,10,13,'#c8ac78');p.set(6,8,'#c8ac78');p.set(9,6,'#c0a070');p.rect(12,8,2,1,'#5a3a22');p.set(4,11,'#e8dcc0')}
-  if(k==='snow'||k==='deepsnow'||k==='agate'){p.rect(0,0,16,16,'#e4ecf4');dots('#c8d4e4',S);dots('#ffffff',[[3,2],[10,1],[14,5],[5,11]])}
-  if(k==='deepsnow'){p.ell(5,6,5,3,'#f4f8ff');p.ell(11,11,5,3,'#f4f8ff');p.line(1,9,6,9,'#b8c8dc');p.line(8,14,14,14,'#b8c8dc')}
-  if(k==='agate')gem('#4a7ac8');
-  if(k==='ice'){p.rect(0,0,16,16,'#a8d0ec');p.line(2,3,9,5,'#e8f6ff');p.line(9,5,14,2,'#e8f6ff');p.line(5,12,12,10,'#d0ecff');p.set(12,6,'#ffffff')}
-  /* scorched ground: near-black, cracked, with veins of gem glowing in the cracks */
-  if(k==='scorch'||k.startsWith('bgem')||k==='spire'){p.rect(0,0,16,16,'#1e1416');S.forEach(([x,y])=>{p.set(x,y,'#140c0e');p.set(x+1,y-1,'#2c1e20')});
-    const V=k==='bgem-g'?'#3fd38a':k==='bgem-b'?'#4a7aff':k==='bgem-v'?'#b46aff':'#ff3a4a';
-    p.line(0,10,5,8,'#3a0c14');p.line(5,8,9,11,'#3a0c14');p.line(9,11,16,7,'#3a0c14');p.line(11,0,12,4,'#2e0a10');p.set(7,10,shade(V,.55));if(k!=='scorch')p.set(6,9,V)}
-  if(k==='bgem-g')gem('#2a9a5a');if(k==='bgem-r')gem('#b8202e');if(k==='bgem-b')gem('#2a4ab8');if(k==='bgem-v')gem('#7a3ab0');
-  if(k==='spire'){o.poly([[3,15],[6,3],[9,15]],'#6a0e1c');o.poly([[7,15],[11,0],[14,15]],'#8a1224');o.line(11,2,11,14,'#ff5a6a');o.line(6,5,6,14,'#c8283a');o.set(10,6,'#ffb0b8')}
-  if(k==='cave'||k==='emerald'||k==='ruby'||k==='sapphire'){p.rect(0,0,16,16,'#3a3444');S.forEach(([x,y])=>{p.set(x,y,'#2e2838');p.set(x+1,y-1,'#4a4456')})}
-  if(k==='emerald')gem('#3aa86a');if(k==='ruby')gem('#c8323a');if(k==='sapphire')gem('#3a5ac8');
-  if(k==='cavewall'){const IR=['#3a5ac8','#3a5ac8','#5a3ab0','#9a3aa0','#3a9a7a','#7aa83a','#3a5ac8'];
-    for(let y=0;y<16;y++)for(let x=0;x<16;x++){const n=((x*73+y*151+x*y*7)%97)/97,t=((x+y*1.3)/24)%1,c=IR[Math.floor(t*IR.length)];p.set(x,y,n<.14?'#141020':shade(c,.36+n*.26+(n>.93?.36:0)))}
-    p.line(0,11,7,8,'#141020');p.line(7,8,16,10,'#141020')}
-  if(k==='malachite'){p.rect(0,0,16,16,'#3a3444');S.forEach(([x,y])=>{p.set(x,y,'#2e2838');p.set(x+1,y-1,'#4a4456')});
-    const MB=['#14503a','#2f9a6a','#1f6a4a','#5fd3a0','#14503a','#2f9a6a','#7fe0b8'];MB.forEach((c,i)=>o.ell(8.5-i*.25,9+i*.2,7-i,5.5-i*.8,c));o.set(6,7,'#c8f8e0');o.set(5,8,'#c8f8e0')}
-  /* part 'g': the ground alone; 'f': the feature alone (a standing prop, see 16b-terrain3d.js) */
-  o.outline('#1a1414');if(part==='f')return o.url();if(part!=='g')for(let i=0;i<256;i++)if(o.g[i])p.g[i]=o.g[i];
-  return p.url();
-}
 texStyle.textContent+=['sandstone','quicksand','snow','deepsnow','agate','ice','cave','cavewall','emerald','ruby','sapphire','scorch','bgem-g','bgem-r','bgem-b','bgem-v','spire'].map(k=>`.t-${k}{background:url(${bioTile2(k)}) 0 0/100% 100%}`).join('');
 /* fields: see the REGIONS key in 15-regions-monsters.js */
 Object.assign(BIOMES,{
@@ -260,20 +228,10 @@ function genBattle(n,kind){
   return def;
 }
 
-/* boulders: an impassable pile of stones drawn over the map's own ground (see the tile builder in render) */
-function boulderArt_draw(){const o=Px(16,16),R1='#8a8478',R2='#a8a294',R3='#6a655c',R4='#c4bfb2';
-  o.ell(5.5,11,4.6,3.8,R1);o.ell(11.5,10.5,4,4.4,R3);o.ell(11,9.5,3.4,3.6,R1);o.ell(8,6.5,4.4,4,R2);o.ell(7,5.2,2.4,1.6,R4);o.ell(4.5,10,2,1.2,R2);
-  o.line(8,9,10,11,R3);o.line(3,13,7,14,R3);o.set(13,8,R2);o.set(6,4,'#e0dcd2');o.set(9,12,'#7a9a5a');o.set(10,13,'#6a8a4a');
-  o.outline('#1a1414');return o.url()}
 texStyle.textContent+=`.tile.boulder::before{inset:0;background:url(${boulderArt()}) 0 0/100% 100%}`;
 
-/* PNG art: each of these uses art/<key>.png when it exists, else the drawing code above (see art() in 03-pixel-art.js) */
-function bioTile2(k){return art('tiles/'+k,()=>bioTile2_draw(k))}
-/* Deep Mud: churned, wet brown mud with darker sinkholes and a little sheen (art/tiles/mud.png) */
-function mudArt_draw(){const p=Px(16,16),M='#4a3524',M2='#3a2818',M3='#5e4630',W='#7a6448';p.rect(0,0,16,16,M);
-  for(const[x,y,rx,ry]of[[4,4,3,2],[11,10,3.5,2.2],[12,3,2,1.4],[3,12,2.4,1.6]])p.ell(x,y,rx,ry,M2);
-  for(const[x,y]of[[7,7],[8,7],[1,8],[14,14],[6,14],[13,7],[9,1],[2,1]])p.set(x,y,M3);
-  for(const[x,y]of[[3,3],[10,9],[11,9],[12,2],[2,11]])p.set(x,y,W);return p.url()}
-function mudArt(){return art('tiles/mud',()=>mudArt_draw())}
+/* PNG art (art/<key>.png, see art() in 03-art.js) */
+function bioTile2(k){return art('tiles/'+k)}
+function mudArt(){return art('tiles/mud')}
 texStyle.textContent+=`.t-mud{background:url(${mudArt()}) 0 0/100% 100%}`;
-function boulderArt(){return art('tiles/boulder',()=>boulderArt_draw())}
+function boulderArt(){return art('tiles/boulder')}
