@@ -5,10 +5,7 @@ Object.assign(IT,{
   chainmail:{n:'Chainmail',t:'gear',kind:'armor',uses:1,gear:{def:4,spd:-1},tint:'steel',key:'chainmail'},
   wardingCloak:{n:'Warding Cloak',t:'gear',kind:'cloak',uses:1,gear:{res:3},key:'wardingCloak'},
   travellersBoots:{n:'Traveller’s Boots',t:'gear',kind:'boots',uses:1,gear:{mov:1},key:'travellersBoots'},
-  ironGauntlets:{n:'Iron Gauntlets',t:'gear',kind:'gauntlet',uses:1,gear:{str:2},key:'ironGauntlets'},
-  /* Buckthor Moccasin's shoes (the dwarf cobbler event) */
-  featherstep:{n:'Featherstep Moccasins',t:'gear',kind:'boots',uses:1,gear:{spd:2},tint:'moccasin',key:'featherstep'},
-  hobnailBoots:{n:'Hobnail Boots',t:'gear',kind:'boots',uses:1,gear:{def:2},tint:'hobnail',key:'hobnailBoots'}
+  ironGauntlets:{n:'Iron Gauntlets',t:'gear',kind:'gauntlet',uses:1,gear:{str:2},key:'ironGauntlets'}
 });
 const GEAR_N={def:'Def',res:'Res',spd:'Spd',mov:'Move',str:'Str'};
 function gearOf(u){const g={def:0,res:0,spd:0,mov:0,str:0},seen=new Set();
@@ -33,9 +30,7 @@ async function tradeWith(u){
 function gearArt(p,kd,c){
   if(kd==='armor'){p.poly([[3,3],[6,2],[10,2],[13,3],[13,13],[8,15],[3,13]],c.tint==='steel'?'#b3d0f0':'#8a5a32');p.rect(7,3,2,11,c.tint==='steel'?'#7f889b':'#5a3a22');p.rect(3,6,10,1,c.tint==='steel'?'#7f889b':'#6a4428')}
   if(kd==='cloak'){p.poly([[5,2],[11,2],[14,15],[2,15]],'#4a5a8a');p.poly([[5,2],[8,2],[6,15],[2,15]],'#3a4870');p.ell(8,3,2,1.5,GOLD)}
-  if(kd==='boots'){const[b1,b2,trim]=c.tint==='moccasin'?['#c9a070','#d8b080','#c8322e']:c.tint==='hobnail'?['#3a2e2a','#4a3c36','#9aa3b5']:['#7a5230','#8a6040',GOLD];
-    p.rect(3,4,4,8,b1);p.rect(3,11,7,3,b1);p.rect(9,4,4,8,b2);p.rect(9,11,6,3,b2);p.rect(3,4,4,1,trim);p.rect(9,4,4,1,trim);
-    if(c.tint==='hobnail')for(const x of[4,6,8,10,12,14])p.set(x,14,'#c8d0dc');if(c.tint==='moccasin')for(const[x,y]of[[4,7],[6,9],[10,7],[12,9]])p.set(x,y,'#3a8ac8')}
+  if(kd==='boots'){p.rect(3,4,4,8,'#7a5230');p.rect(3,11,7,3,'#7a5230');p.rect(9,4,4,8,'#8a6040');p.rect(9,11,6,3,'#8a6040');p.rect(3,4,4,1,GOLD);p.rect(9,4,4,1,GOLD)}
   if(kd==='gauntlet'){p.rect(4,6,8,8,'#9aa3b5');p.rect(4,3,2,4,'#9aa3b5');p.rect(7,2,2,5,'#9aa3b5');p.rect(10,3,2,4,'#9aa3b5');p.rect(4,12,8,2,'#6a7385')}
 }
 

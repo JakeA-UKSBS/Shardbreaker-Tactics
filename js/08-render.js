@@ -27,14 +27,8 @@ function buildBoard(){
     sd.innerHTML=`<svg width="${TW}" height="${TH+D}"><polygon points="0,${TH/2} ${TW/2},${TH} ${TW/2},${TH+D} 0,${TH/2+D}" fill="var(--c)"/><polygon points="0,${TH/2} ${TW/2},${TH} ${TW/2},${TH+D} 0,${TH/2+D}" fill="#000" opacity=".3"/><polygon points="${TW/2},${TH} ${TW},${TH/2} ${TW},${TH/2+D} ${TW/2},${TH+D}" fill="var(--c)"/><polygon points="${TW/2},${TH} ${TW},${TH/2} ${TW},${TH/2+D} ${TW/2},${TH+D}" fill="#000" opacity=".5"/><path d="M0 ${TH/2}L${TW/2} ${TH}L${TW} ${TH/2}" stroke="#fff" stroke-opacity=".32" fill="none"/></svg>`;
     boardEl.appendChild(sd);boardEl.appendChild(t);firstOf[sk]=firstOf[sk]||t;if(PROPS[ov])placeProp(x,y,ov);else if(tk==='shallow')placeDecor(x,y)}
   /* side faces take the average colour of their tile's art */
-  for(const k in firstOf){const m=/url\("?(.*?)"?\)/.exec(getComputedStyle(firstOf[k]).backgroundImage);if(!m)continue;sideColor(m[1],c=>boardEl.querySelectorAll(`.blk[data-t="${k}"]`).forEach(e=>e.style.setProperty('--c',c)));
-    if(TEX_SIDES.includes(k))boardEl.querySelectorAll(`.blk[data-t="${k}"]`).forEach(e=>texSides(e,m[1]))}
+  for(const k in firstOf){const m=/url\("?(.*?)"?\)/.exec(getComputedStyle(firstOf[k]).backgroundImage);if(!m)continue;sideColor(m[1],c=>boardEl.querySelectorAll(`.blk[data-t="${k}"]`).forEach(e=>e.style.setProperty('--c',c)))}
 }
-/* kinds whose side faces show their own art (skewed to the slope) instead of a flat colour: the Gemstone Caverns' Iridescent Rock reads as crystal walls all round */
-const TEX_SIDES=['t-cavewall'];let texN=0;
-function texSides(e,src){const sv=e.querySelector('svg'),ps=sv.querySelectorAll('polygon'),n=++texN,w=TW/2,ang=Math.atan2(TH/2,TW/2)*180/Math.PI;
-  sv.insertAdjacentHTML('afterbegin',`<defs>${[['l',ang],['r',-ang]].map(([sd,a])=>`<pattern id="tx${n}${sd}" patternUnits="userSpaceOnUse" width="${w}" height="${w}" patternTransform="skewY(${a})"><image href="${src}" width="${w}" height="${w}" preserveAspectRatio="none" style="image-rendering:pixelated"/></pattern>`).join('')}</defs>`);
-  ps[0].setAttribute('fill',`url(#tx${n}l)`);ps[2].setAttribute('fill',`url(#tx${n}r)`)}
 /* ground variants: art/tiles/<kind>-2.png, -3... are mixed in with the main tile, the same pattern every time.
    The main tile still shows on about half the tiles. Add a kind here once its variant PNGs exist. */
 const TILE_VARS={plain:['plain-2','plain-3','plain-6'],sand:['sand-2','sand-3','sand-4'],snow:['snow-2'],ice:['ice-2','ice-3','ice-4'],water:['water-2','water-3','water-4'],basalt:['basalt-2']};
