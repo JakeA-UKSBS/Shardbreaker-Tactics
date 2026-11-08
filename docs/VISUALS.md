@@ -40,7 +40,7 @@ Mangrove roots and ankle-deep water. Lurkers and lamias hunt the shallows; the s
 
 ### Cursed Woodland
 
-A dead forest under a curse. The deer here have gone wrong, wolves hunt in packs, and the trees themselves are waking up. **Rule:** Cursed thickets give +10 Avoid and +1 Def, but cost 2 Move to enter. Stags are fast: keep your back line covered.
+A dead forest under a curse. The deer here have gone wrong, wolves hunt in packs, and the trees themselves are waking up. **Rule:** Cursed thickets give +20 Avoid and +1 Def, but cost 2 Move to enter. Stags are fast: keep your back line covered.
 
 | Boss: The Hollow Bear | Attacking |
 | --- | --- |

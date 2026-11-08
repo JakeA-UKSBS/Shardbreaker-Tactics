@@ -4,8 +4,8 @@
    terrain rule and music. Map letters for region terrain: s ankle-deep water (−1 Move next turn) · n sand · v mangrove roots · y cursed thicket · b basalt · l magma. */
 /* fields: see the TERRAIN key in 01-data.js */
 Object.assign(TER,{
-  's':{n:'Ankle-deep Water',k:'shallow',c:1,av:0,df:0,slow:true},'n':{n:'Sand',k:'sand',c:1,av:0,df:0},'v':{n:'Mangrove Roots',k:'mangrove',c:2,av:10,df:1,slow:true},
-  'y':{n:'Cursed Thicket',k:'curse',c:2,av:10,df:1},'b':{n:'Basalt',k:'basalt',c:1,av:0,df:0},'l':{n:'Magma',k:'lava',c:99,av:0,df:0}
+  's':{n:'Ankle-deep Water',k:'shallow',c:1,av:0,df:0,slow:true},'n':{n:'Sand',k:'sand',c:1,av:0,df:0},'v':{n:'Mangrove Roots',k:'mangrove',c:2,av:20,df:1,slow:true},
+  'y':{n:'Cursed Thicket',k:'curse',c:2,av:20,df:1},'b':{n:'Basalt',k:'basalt',c:1,av:0,df:0},'l':{n:'Magma',k:'lava',c:99,av:0,df:0}
 });
 function bioTile_draw(k,part){
   const p=Px(16,16),o=Px(16,16),dots=(c,pts)=>pts.forEach(([x,y])=>p.set(x,y,c)),S=[[2,3],[9,2],[13,6],[4,12],[11,13],[7,8],[14,11]];
@@ -82,7 +82,7 @@ const BIOMES={
     maps:['flats','road','bog'],bossMap:'lair',pool:[['BogLurker',3],['Lamia',3,2],['MudMonster',2,4]],elitePool:[['MudMonster',3],['Lamia',2],['BogLurker',2]],
     boss:{name:'Krondis',cls:'Krondis',mov:4,s:[40,13,0,5,5,2,10,1],items:['bite'],skill:'wrath',look:{body:'#5a6a86',belly:'#5a7a4a',crown:true}}},
   forest:{n:'Cursed Woodland',bg:'#26302a',d:'A dead forest under a curse. The deer here have gone wrong, wolves hunt in packs, and the trees themselves are waking up.',
-    tip:['woods','Cursed thickets','Cursed thickets give +25 Avoid and +1 Def, but cost 2 Move to enter. Stags are fast: keep your back line covered.'],
+    tip:['woods','Cursed thickets','Cursed thickets give +20 Avoid and +1 Def, but cost 2 Move to enter. Stags are fast: keep your back line covered.'],
     maps:['woodland','brook','clearing'],bossMap:'heart',pool:[['Wolf',4],['CursedStag',3,2],['BlightedTreant',2,5]],elitePool:[['BlightedTreant',3],['CursedStag',3],['Wolf',2]],
     boss:{name:'The Hollow Bear',cls:'HollowBear',mov:4,s:[38,13,0,6,5,3,8,3],items:['slam'],skill:'wrath',look:{fur:'#3a2a24',eye:'#ff3a3a',core:'#ff6aa8'}}},
   mountain:{n:'Volcanic Isle',bg:'#3a2420',d:'Basalt slopes cut by rivers of magma. Golems block the passes, and fire sprites float over the lava.',

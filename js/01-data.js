@@ -21,7 +21,7 @@ const T=48;
    c = Move cost to enter (99 = impassable), av = Avoid bonus, df = Def bonus,
    slow = −1 Move next turn for a unit that starts there. */
 const TER={
-  '.':{n:'Ashgrass',k:'plain',c:1,av:0,df:0},'f':{n:'Dead Wood',k:'forest',c:2,av:10,df:1},'m':{n:'Rubble',k:'hill',c:3,av:30,df:2},
+  '.':{n:'Ashgrass',k:'plain',c:1,av:0,df:0},'f':{n:'Dead Wood',k:'forest',c:2,av:20,df:1},'m':{n:'Rubble',k:'hill',c:3,av:20,df:2},
   'w':{n:'Black Water',k:'water',c:99,av:0,df:0},'=':{n:'Bridge',k:'bridge',c:1,av:0,df:0},
   'R':{n:'Crag',k:'cliff',c:99,av:0,df:0}
 };
