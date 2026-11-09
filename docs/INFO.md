@@ -176,6 +176,9 @@ Each monster has 2 moves on cooldowns (no MP). On its turn it scores every ready
 | Frost Wolf | Frost Bite (CD 3): melee 1.0×, Slow | Howl (CD 4) |
 | Ice Worm | Burrow (CD 3) | Ice Spray (CD 3): 4-tile cone, 0.8×, Slow |
 | Hell Hound | Flame Bite (CD 3): melee 1.0×, Burn | Howl (CD 4) |
+| Jackal | Rip and Tear (CD 3): melee 1.0×, 1.2× on a target below 75% HP | — |
+| Bog Lurker | Slime (CD 3): range 1–2, 0.6×, Poison | — |
+| Gem Golem / Crystal Sentinel | Gem Rush (CD 3): melee 1.4×; takes 2 damage if it misses | — |
 | Ice Troll | Club Smash (CD 3): melee 1.5× | Regenerate (CD 4): heal 30% (below 60% HP) |
 | Krondis | Death Roll (CD 3): melee, 3 hits of 0.5× (Rhi's roll animation) | |
 | The Pyrite Colossus | Stalagmite (CD 3): range 1–3, 5 flat damage, Slow | |
@@ -185,7 +188,7 @@ Each monster has 2 moves on cooldowns (no MP). On its turn it scores every ready
 | Frost Sprite | Ice Blitz (CD 3): range 1–2, 3 hits of 0.4× magic | |
 | Amethyra | Hunker Down (once, below half HP): +2 Def and Res for the rest of the fight | |
 
-**To do (moves not added yet):** Bog Lurker, Jackal, Gem Golem, Shardling, Prism, Crystal Sentinel; second moves for Krondis, the Pyrite Colossus, the Yeti, the Cursed Stag, the Frost Sprite and Amethyra. Draft ideas: Bog Lurker Drag Under / Ambush; Krondis Death Roll / Tail Sweep; Cursed Stag Charge / Blight Antlers; Jackal Pounce / Scavenge; Sandstone Golem Boulder Toss / Sand Wall; Pyrite Colossus Gold Glare / Ground Slam; Frost Sprite Ice Shard / Hail; Yeti Avalanche / Hurl; Gemsnail Retract / Glitter Spray; Gem Golem Prism Beam / Gem Shell; Amethyra Shell Spin / Amethyst Rain; Shardling Shard Lunge / Splinter; Prism Refract / Dazzle; Crystal Sentinel Bulwark / Crystal Slam.
+**To do (moves not added yet):** Shardling, Prism; second moves for the Jackal, Bog Lurker, Gem Golem, Crystal Sentinel, Krondis, the Pyrite Colossus, the Yeti, the Cursed Stag, the Frost Sprite and Amethyra. Draft ideas: Bog Lurker Drag Under / Ambush; Krondis Death Roll / Tail Sweep; Cursed Stag Charge / Blight Antlers; Jackal Pounce / Scavenge; Sandstone Golem Boulder Toss / Sand Wall; Pyrite Colossus Gold Glare / Ground Slam; Frost Sprite Ice Shard / Hail; Yeti Avalanche / Hurl; Gemsnail Retract / Glitter Spray; Gem Golem Prism Beam / Gem Shell; Amethyra Shell Spin / Amethyst Rain; Shardling Shard Lunge / Splinter; Prism Refract / Dazzle; Crystal Sentinel Bulwark / Crystal Slam.
 
 ## Event maybes
 
