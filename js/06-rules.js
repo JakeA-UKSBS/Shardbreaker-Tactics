@@ -18,8 +18,8 @@ function learnBlock(u,k){if(has(u,k))return`${u.name} already knows ${SKILLS[k].
 const elv=u=>u.lv+(CLS[u.cls].tier===2?15:0);
 /* a few characters wield only certain kinds within their class's weapon types (Zwei: two-handed swords) */
 const ONLY_KIND={zwei:['greatsword']};
-/* some classes only take certain kinds of blade: rogues stick to daggers (Duelists add rapiers) */
-const DAGGERS=['dagger','twindagger'],CLASS_KIND={Rogue:DAGGERS,Poisoner:DAGGERS,Assassin:DAGGERS,Duelist:[...DAGGERS,'rapier']};
+/* some classes only take certain kinds of blade: rogues stick to daggers (Duelists add swords and rapiers) */
+const DAGGERS=['dagger','twindagger'],CLASS_KIND={Rogue:DAGGERS,Poisoner:DAGGERS,Assassin:DAGGERS,Duelist:[...DAGGERS,'sword','rapier']};
 const kindOk=(u,k)=>{const l=CLASS_KIND[CLS[u.cls].n];return!l||IT[k].t!=='blade'||l.includes(IT[k].kind)};
 /* signature elements: only Drecken wields lightning sigils, only Corvin ice ones */
 const EL_OWNER={lightning:'drecken',ice:'corvin'};
