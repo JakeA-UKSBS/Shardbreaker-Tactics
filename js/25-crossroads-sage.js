@@ -22,10 +22,10 @@ async function sageScene(){
   /* the tent stays up behind Ithren's gift until the Crossroads replaces it, so the title's throwaway battle never shows through */
   sgEl.onclick=null;return asc;
 }
-/* the Crossroads: pick need of opts. late = the second Crossroads after Act 1 (pick 1 of 2 veterans, no going back) */
+/* the Crossroads: pick need of opts. late = the Crossroads as Act 2 or Act 3 begins (pick 1 of 2 veterans, no going back) */
 async function musterScene(opts,need,late){
   const chosen=[],B1=BIOMES[run.biomes[0]],B2=BIOMES[run.biomes[1]],n=opts.length;
-  const signs=late?[['Act 2',B2.n],['Beyond',BIOMES.heart.n]]:[['Act 1',B1.n],['Act 2',B2.n]];
+  const signs=late?(run.act||1)>=3?[['Act 3',BIOMES.heart.n]]:[['Act 2',B2.n],['Beyond',BIOMES.heart.n]]:[['Act 1',B1.n],['Act 2',B2.n]];
   /* stand the travellers in an arc around the campfire: the far ones behind it, smaller */
   const ang=i=>Math.PI*(1-i/(n-1)),pos=i=>50+38*Math.cos(ang(i)),up=i=>8+24*Math.sin(ang(i)),sc=i=>1-.22*Math.sin(ang(i));
   musEl.innerHTML=`<div class="tv-scene"><img class="tv-bg" src="${musterArt()}" alt=""><img class="ms-fire" src="${campArt()}" alt="">

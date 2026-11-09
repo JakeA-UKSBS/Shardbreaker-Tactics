@@ -12,6 +12,7 @@ body{font-family:var(--body);font-size:15px;-webkit-tap-highlight-color:transpar
 .top{display:flex;align-items:baseline;gap:8px}
 h1{font-family:var(--display);font-size:20px;margin:0;letter-spacing:.04em;color:var(--gold);flex:1;min-width:0}
 .turn{font-family:var(--display);font-size:13px;color:var(--muted);letter-spacing:.06em}
+.runtime{margin-left:auto;font-variant-numeric:tabular-nums}
 .bar{display:flex;gap:6px;align-items:center}
 button{font:inherit;font-weight:700;border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:8px;padding:8px 10px;cursor:pointer;touch-action:manipulation;font-size:14px}
 button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}

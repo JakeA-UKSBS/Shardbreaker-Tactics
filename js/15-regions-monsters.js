@@ -84,7 +84,7 @@ const BIOMES={
   heart:{n:'The Heart of the Blight',noThe:1,bg:'#3a1018',d:'Scorched ground split by veins of glowing gem. Every crystal in these lands grew from what waits here.',
     tip:['heart','The Crystal Heart','The Heart never moves, but it strikes from 2 to 6 tiles away. Get next to it: it can’t hit what’s beside it. On even turns it hurls a Crystal Storm at your toughest unit and everyone next to them, so spread out. It calls more blighted monsters on turns 3, 5 and 7.'],
     maps:['heartHall'],bossMap:'heartCore',pool:[['Shardling',4],['Prism',3],['CrystalSentinel',2]],elitePool:[['CrystalSentinel',3],['Shardling',2],['Prism',2]],
-    boss:{name:'The Crystal Heart',cls:'CrystalHeart',sz:3,mov:0,s:[56,0,8,8,0,0,8,11],items:['shatter','crystalSpikes'],skill:'focus',summon:'*',bars:3,summonTxt:'The Crystal Heart calls the blighted!',intro:'The Crystal Heart beats at the centre of the chamber, and every crystal in these lands beats with it. Shatter it to end the blight.',look:{crys:false}}}
+    boss:{name:'The Crystal Heart',cls:'CrystalHeart',hp:200,sz:3,mov:0,s:[56,0,8,8,0,0,8,11],items:['shatter','crystalSpikes'],skill:'focus',summon:'*',bars:3,summonTxt:'The Crystal Heart calls the blighted!',intro:'The Crystal Heart beats at the centre of the chamber, and every crystal in these lands beats with it. Shatter it to end the blight.',look:{crys:false}}}
 };
 
 /* PNG art (art/<key>.png, see art() in 03-art.js) */

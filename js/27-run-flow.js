@@ -6,7 +6,7 @@ async function beginBattle(){
 }
 async function newRun(){
   const seed=(Date.now()^Math.floor(Math.random()*1e9))>>>0;seedRng(seed);
-  run={seed,n:0,uid:1,roster:[],pos:null,path:[],act:1,relics:[],rr:{},gold:30,meals:[],lost:0,ate:0};/* Act 1 is any region except the Gemstone Caverns (Act 2 only) */{const a1=pick(biomeIds().filter(b=>b!=='cavern'));run.biomes=[a1,...shuffle(biomeIds().filter(b=>b!==a1))].slice(0,ACTS)}
+  run={seed,n:0,uid:1,roster:[],pos:null,path:[],act:1,relics:[],rr:{},gold:30,meals:[],lost:0,ate:0};/* one region from each act's set (REGION_ACTS), then the Heart */run.biomes=REGION_ACTS.map(ids=>pick(ids.filter(b=>BIOMES[b])))
   /* the Crossroads: 5 random starting-roster characters (6 with the unlock); no guaranteed Mender */
   run.castUsed=[];const lv0=2,starters=shuffle(CAST.filter(c=>c.joins==='start'));
   const opts=starters.slice(0,unl('draft6')?6:5).map(c=>castUnit(c.id,lv0));
@@ -32,6 +32,9 @@ async function titleScreen(){
     if(await newRun())return;
   }
 }
+/* run timer: run.time counts seconds of play (from the sage on), paused while the tab is hidden or on the title screen. Kept in the save and in Run History */
+const fmtTime=t=>{t=Math.max(0,Math.floor(t||0));const h=Math.floor(t/3600),m=Math.floor(t/60)%60,s=t%60,p=n=>String(n).padStart(2,'0');return h?`${h}:${p(m)}:${p(s)}`:`${m}:${p(s)}`};
+setInterval(()=>{const el=$('#runTime');if(!run||!titleEl.hidden){if(el)el.textContent='';return}if(!document.hidden)run.time=(run.time||0)+1;if(el)el.textContent=fmtTime(run.time)},1000);
 /* HP carries between fights: survivors recover 5 HP after a win (3 from Ascension 3); camps heal fully, taverns do not */
 const afterHeal=()=>(A(3)?3:5)+(R('waybread')?3:0);
 async function winScreen(){
@@ -53,17 +56,17 @@ async function winScreen(){
     for(;;){const u=await pickUnit('A weapon from the Elder’s hoard',`Who takes it? They get the one that suits them: ${steelList()}.`,u=>!steelFor(u)?'Nothing for them':u.items.some(it=>it.k===steelFor(u))?'Already has one':null,'Leave it');
       if(!u)break;const k=steelFor(u);if(!await stow(u,k))continue;sfx('item');toast(`${u.name} takes the ${IT[k].n}`);break}}
   if(bossWin&&!final)await relicPick(3,['u','r'],'The boss’s hoard','');
-  if(final){const news=endRun(true);sfx('fanfare');await modal(`<div class="endban win">Victory</div><div class="eyebrow">${seedTag(run.seed)}${run.asc?` · Ascension ${run.asc}`:''}</div><h2>The blight is broken</h2>${newsHTML(news)}<div class="roster">${run.roster.map(u=>`<div><img src="${portrait(u)}" alt="">${u.name}<span class="hint">${CLS[u.cls].n}</span></div>`).join('')}</div><div class="mbtns"><button class="go" type="button" data-m="ok">Back to title</button></div>`);
+  if(final){const news=endRun(true);sfx('fanfare');await modal(`<div class="endban win">Victory</div><div class="eyebrow">${seedTag(run.seed)}${run.asc?` · Ascension ${run.asc}`:''} · ${fmtTime(run.time)}</div><h2>The blight is broken</h2>${newsHTML(news)}<div class="roster">${run.roster.map(u=>`<div><img src="${portrait(u)}" alt="">${u.name}<span class="hint">${CLS[u.cls].n}</span></div>`).join('')}</div><div class="mbtns"><button class="go" type="button" data-m="ok">Back to title</button></div>`);
     try{localStorage.removeItem(SAVE)}catch(_){}run=null;titleScreen();return}
   if(bossWin){run.act=(run.act||1)+1;run.map=genMap();run.pos=null;run.path=[];const B=actBiome();
     await modal(`<div class="eyebrow">Act ${run.act}</div><h2>${B.n}</h2><p>${B.d}</p><div class="mbtns"><button class="go" type="button" data-m="ok">Press on</button></div>`)
-    if(run.act===2)await actCrossroads()}
+    if(run.act===2||run.act===3)await actCrossroads()}
   await mapStep();
 }
 async function loseScreen(){
   await sleep(500);
   const sq=chStart.units.filter(u=>u.team==='p'&&!u.summon);
-  const m=await modal(`<div class="endban lose">Defeat</div><div class="eyebrow">${seedTag(run.seed)}${run.asc?` · Ascension ${run.asc}`:''}</div><h2>The run ends</h2><p>Your squad fell in Act ${run.act||1}, floor ${run.n} of ${RUN_LEN}, in ${TheN(actBiome()).replace(/^The /,'the ')}.</p><div class="roster">${sq.map(u=>`<div class="dead"><img src="${portrait(u)}" alt="">${u.name}<span class="hint">${CLS[u.cls].n} · Lv ${u.lv}</span></div>`).join('')}</div><div class="mbtns"><button class="go" type="button" data-m="title">Back to title</button></div>`);
+  const m=await modal(`<div class="endban lose">Defeat</div><div class="eyebrow">${seedTag(run.seed)}${run.asc?` · Ascension ${run.asc}`:''} · ${fmtTime(run.time)}</div><h2>The run ends</h2><p>Your squad fell in Act ${run.act||1}, floor ${run.n} of ${RUN_LEN}, in ${TheN(actBiome()).replace(/^The /,'the ')}.</p><div class="roster">${sq.map(u=>`<div class="dead"><img src="${portrait(u)}" alt="">${u.name}<span class="hint">${CLS[u.cls].n} · Lv ${u.lv}</span></div>`).join('')}</div><div class="mbtns"><button class="go" type="button" data-m="title">Back to title</button></div>`);
   const news=endRun(false);if(news.length)await modal(`<h2>Progress</h2>${newsHTML(news)}<div class="mbtns"><button class="go" type="button" data-m="ok">Back to title</button></div>`);
   try{localStorage.removeItem(SAVE)}catch(_){}run=null;titleScreen();
 }
