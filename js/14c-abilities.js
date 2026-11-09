@@ -141,7 +141,8 @@ const kitOf=u=>u&&u.cast&&KITS[u.cast]||null;
 const abilOf=u=>{if(u&&u.team==='e'&&MKITS[u.cls])return MKITS[u.cls];const k=kitOf(u);if(!k)return[];const sw=k.asc&&k.asc[CLS[u.cls].n];return sw?k.abil.map(id=>sw[id]||id):k.abil};
 
 /* ---- monster moves: 2 per monster, cooldowns only (no MP). Extra fields: stone (Stone, bosses immune), psn (Poison),
-   solo (a self move that only affects the user), healPct (heals this share of max HP). The enemy AI picks between
+   solo (a self move that only affects the user), healPct (heals this share of max HP),
+   wounded ([HP share, mult]: uses mult instead of dmg on a target below that share of its max HP), recoil (HP the user loses if every hit misses; never below 1). The enemy AI picks between
    these and a normal attack by score (aiAbil in 12-turns.js). Monsters not listed here still only attack. */
 Object.assign(ABIL,{
   stoneGaze:{n:'Stone Gaze',cd:4,mag:1,side:'foe',r:[1,1],dmg:.5,stone:1,d:'0.5× magic damage, and the target is turned to Stone: it skips its next turn and can’t counter. Bosses and an Aegis are immune.'},
@@ -173,6 +174,9 @@ Object.assign(ABIL,{
   iceBlitz:{n:'Ice Blitz',snd:'ice',cd:3,mag:1,el:'water',side:'foe',r:[1,2],dmg:.4,hits:3,d:'Three shards of ice from up to 2 away: three hits of 0.4× magic damage.'},
   iceSpray:{n:'Ice Spray',snd:'ice',cd:3,side:'foe',r:[1,1],shape:'cone',aim:'dir',dmg:.8,st:['chill',1],d:'A cone of ice (4 tiles): 0.8× damage and Slow.'},
   flameBite:{n:'Flame Bite',cd:3,side:'foe',r:[1,1],dmg:1,st:['burn',2],d:'1.0× damage and Burn.'},
+  ripAndTear:{n:'Rip and Tear',cd:3,side:'foe',r:[1,1],dmg:1,wounded:[.75,1.2],d:'1.0× damage, or 1.2× if the target is below 75% HP.'},
+  slime:{n:'Slime',cd:3,side:'foe',r:[1,2],dmg:.6,psn:1,d:'0.6× damage from up to 2 away, and the target is Poisoned.'},
+  gemRush:{n:'Gem Rush',cd:3,side:'foe',r:[1,1],dmg:1.4,recoil:2,d:'1.4× damage. If it misses, the user takes 2 damage.'},
   hunkerDown:{n:'Hunker Down',once:1,side:'self',solo:1,self:[['shell',99]],when:u=>u.hp*2<u.maxhp,d:'Below half HP: withdraws into her shell and her amethysts grow, +2 Def and +2 Res for the rest of the fight.'},
   regenerate:{n:'Regenerate',cd:4,side:'self',solo:1,healPct:.3,d:'Heals 30% of its max HP.'}
 });
@@ -180,7 +184,7 @@ const MKITS={
   Lamia:['stoneGaze','constrict'],MudMonster:['mudSpit','engulf'],
   Wolf:['howl','hamstring'],BlightedTreant:['graspingRoots','barkSkin'],HollowBear:['maul','roar'],
   FireSprite:['fireball','flicker'],BoulderGolem:['moltenFist','eruption'],MagmaDragon:['searingBreath','wingGust'],
-  SandWorm:['burrow','sandBlast'],Krondis:['deathRoll'],PyriteColossus:['stalagmite'],SandstoneGolem:['sandStream','sandBurn'],Yeti:['groundSlam'],CursedStag:['charge'],FrostSprite:['iceBlitz'],AmethystTurtle:['hunkerDown'],FrostWolf:['frostBite','howl'],IceWorm:['burrow','iceSpray'],HellHound:['flameBite','howl'],IceTroll:['clubSmash','regenerate']
+  SandWorm:['burrow','sandBlast'],Krondis:['deathRoll'],PyriteColossus:['stalagmite'],SandstoneGolem:['sandStream','sandBurn'],Yeti:['groundSlam'],CursedStag:['charge'],FrostSprite:['iceBlitz'],AmethystTurtle:['hunkerDown'],FrostWolf:['frostBite','howl'],Jackal:['ripAndTear'],BogLurker:['slime'],GemGolem:['gemRush'],CrystalSentinel:['gemRush'],IceWorm:['burrow','iceSpray'],HellHound:['flameBite','howl'],IceTroll:['clubSmash','regenerate']
 };
 /* the Moves block on an enemy's Details sheet */
 function monSheet(u){const l=u.team==='e'?MKITS[u.cls]:null;if(!l)return'';
@@ -261,7 +265,7 @@ function abWeapon(u,a){
 function abBackstab(u,t){return hDiff(u,t)>0||state.units.some(o=>o!==u&&o.team===u.team&&o.hp>0&&man(o,t)===1)}
 /* expected numbers against one target: {dmg (per strike), hit, n (strikes)} */
 function abVs(u,id,t,mult){
-  const a=ABIL[id],w=abWeapon(u,a),c=calc(u,w,t,null,{init:u,phase});let m=(mult||a.dmg||0);if(a.backstab&&abBackstab(u,t))m*=2;
+  const a=ABIL[id],w=abWeapon(u,a),c=calc(u,w,t,null,{init:u,phase});let m=(mult||a.dmg||0);if(a.backstab&&abBackstab(u,t))m*=2;if(!mult&&a.wounded&&t.hp<t.maxhp*a.wounded[0])m=a.wounded[1];
   return{dmg:a.flat||dmgMods(u,t,{init:u},Math.max(0,Math.round(c.pow*m)-c.df)),hit:a.sure?100:clamp(c.hit+(a.hit||0)+ABIL_HIT,0,100),n:a.hits||1,eff:c.eff,c,m};
 }
 function healAmt(u,id,t){const a=ABIL[id];let h=a.healPct?Math.round(t.maxhp*a.healPct):Math.round((u.mag+5)*a.heal);if(has(u,'lastLight')&&t.hp*2<t.maxhp)h=Math.round(h*1.5);return Math.min(h,t.maxhp-t.hp)}
@@ -298,6 +302,7 @@ async function useAbility(u,id,tx,ty){
         if((rn()+rn())/2<V.hit){const d=Math.min(V.dmg,t.hp);t.hp-=d;total+=d;sfx('hit');pop(t,'-'+d,'dmg');flash(t);if(a.mag)burst(t,EL_COL[a.el]||'#c8b8ff')}else{sfx('miss');pop(t,'Miss','miss');mapPose(t,'dodge',u)}
         await sleep(D(n>1?160:220));mapPose(u,'idle');mapPose(t,'idle');render();await sleep(D(n>1?60:110))}
       landed=total>0;
+      if(a.recoil&&!total&&u.hp>1){const d=Math.min(a.recoil,u.hp-1);u.hp-=d;pop(u,'-'+d,'dmg');flash(u);render();await sleep(D(200))}
       if(total&&has(u,'siphon')&&a.el==='dark'){const h=Math.min(Math.ceil(total/4),u.maxhp-u.hp);if(h){u.hp+=h;pop(u,'+'+h,'heal')}}
       exp+=expFor(u,t,total>0,t.hp<=0);
       if(t.hp>0&&total&&a.push){pushUnit(u,t,a.push);render();await sleep(D(250))}
