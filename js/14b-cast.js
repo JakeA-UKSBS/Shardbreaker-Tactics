@@ -56,6 +56,8 @@ const ASC_BONUS={
   'Drake Rider':[5,4,0,0,2,1,3,0],
   'Horse Archer':[3,2,0,0,4,2,1,1]};
 /* BASE_ADJ: small per-class tweaks on top of the role's base stats, in stat order */
+/* CAST_HIT: extra Hit a character always has */
+const CAST_HIT={kili:5};
 const BASE_ADJ={'Knight':[3,0,0,0,0,0,-2,0],'Mender':[0,0,0,0,0,0,1,0],'Shieldmaiden':[0,0,0,0,0,0,-1,0]};
 const castCls=n=>`G.${CAST_CLASSES[n]}.${n.replace(/ /g,'')}`;
 for(const n in CAST_CLASSES){const base=ensureCls('G.'+CAST_CLASSES[n]);const C=Object.assign({},CLS[base],{n});delete C.promo;if(ASC_BONUS[n])C.bonus=ASC_BONUS[n];CLS[castCls(n)]=C}
