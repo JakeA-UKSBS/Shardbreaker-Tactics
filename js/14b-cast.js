@@ -188,7 +188,7 @@ function castOffer(n,lv,where){const act=run.act||1,seen=((run.seen=run.seen||{}
   const pick=[...shuffle(pool.filter(c=>!seen.includes(c.id))),...shuffle(pool.filter(c=>seen.includes(c.id)))].slice(0,n);
   for(const c of pick)if(!seen.includes(c.id))seen.push(c.id);return pick.map(c=>castUnit(c.id,lv))}
 /* call when a unit joins the squad, so that character isn't offered again this run */
-function castJoined(u){if(u&&u.cast)(run.castUsed=run.castUsed||[]).push(u.cast)}
+function castJoined(u){artOfWar(u);if(u&&u.cast)(run.castUsed=run.castUsed||[]).push(u.cast)}
 /* the look a cast unit takes on ascending into class k */
 function castLook(u,k){const c=u.cast&&castDef(u.cast),a=c&&c.asc[k];return a?clone(a.look):null}
 /* on ascending: swap the listed weapon for the ascension's one (keeps the slot) */

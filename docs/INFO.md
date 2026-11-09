@@ -126,6 +126,7 @@ Learned skills cost capacity (base 20, +5 when promoted). Personal skills are fr
 | Iron Rose | Uncommon | Units below half HP take 3 less damage. |
 | Aventurine | Common | All units gain +10 Avoid and +5 Crit. |
 | Hunter’s Trophies | Uncommon | Effective hits deal 2 more damage. |
+| The Art of War | Uncommon | All units gain +1 max HP and +1 Skl, including anyone who joins later. |
 | Horn of Plenty | Uncommon | +15 gold after every won fight, and tavern meals last 1 fight longer. |
 | The Crystal Crown | Rare (Empty Throne only) | Units deal +3 damage, but enemies get +10 Hit against your units. |
 | Herbal Poultice | Starter | Salves heal 2 more HP. |

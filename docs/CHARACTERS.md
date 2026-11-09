@@ -253,6 +253,7 @@ A gravedigger who learned to listen to what the dead still want. Soft-spoken, an
 - **Soul Bolt** (single, range 4 · 5 MP): 1.2× Mag.
 - **Wither** (area r1 at range 3 · 8 MP): 0.8× Mag and Weak.
 - **Grasp of the Grave** (single, range 3 · 7 MP): 0.6× Mag and Root.
+- **Death Rune** (single, range 1–2 · 6 MP): 1.3× Mag and Weak for 2 turns. *(In game; the moves above aren't built yet.)*
 
 ## Event only
 
@@ -382,6 +383,7 @@ Bio to come.
 - **Passive: Venom.** Every hit poisons the target (2 HP a turn for 3 turns, never below 1).
 - **Poison Dart** (single, range 2–3 · cooldown 2): 0.6× damage and Poison.
 - **Noxious Cloud** (3×3 at range 3 · cooldown 4): 0.3× damage, Poison and Weak for a turn.
+- **Salt in the Wound** (single, adjacent · cooldown 2): 1.0× damage; against a Poisoned target, +4 damage and +10 Hit.
 - **Tumble** (cooldown 2): move up to 2 more tiles, ignoring height. Doesn't use her action.
 
 ### Raptor: Adventurer (tavern only)

@@ -398,6 +398,7 @@ const EVENTS = {
           const k = pick(relicPool(['r']));
           if (!k) return 'The plinth is empty.';
           run.relics.push(k);
+          relicGained(k);
           run.roster.forEach(u => {
             u.maxhp = Math.max(10, u.maxhp - 2);
             u.hp = Math.min(u.hp, u.maxhp);

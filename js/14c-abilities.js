@@ -60,6 +60,7 @@ Object.assign(SKILLS,{
    aim: 'any' = aim at any tile in range (area spells); 'dir' = pick a direction (an adjacent tile).
    dmg: × attack power; hit: + Hit; hits: number of strikes; mag: uses Mag (a spell); el: element (colour, Attunement).
    st: [status, turns, chance] on the enemies hit; give: [status, turns] on the allies in the shape; self: statuses on the user.
+   vsPsn: [damage, Hit] added against a Poisoned target;
    heal: × (Mag + 5); cure: removes bad statuses; push: tiles pushed back; once: once a fight; encore: the ally can act again. */
 const ABIL={
   /* Kili (Archer) */
@@ -85,6 +86,9 @@ const ABIL={
   /* Pepr (Poisoner) */
   poisonDart:{n:'Poison Dart',cd:2,side:'foe',r:[2,3],dmg:.6,psn:1,d:'0.6× damage from 2–3 tiles away, and the target is Poisoned.'},
   noxiousCloud:{n:'Noxious Cloud',cd:4,side:'foe',r:[1,3],shape:'area',aim:'any',dmg:.3,psn:1,st:['weak',1],d:'A 3×3 cloud up to 3 away: 0.3× damage, Poison and Weak (30% less damage) for a turn on every enemy in it.'},
+  saltInWound:{n:'Salt in the Wound',cd:2,side:'foe',r:[1,1],dmg:1,vsPsn:[4,10],d:'1.0× damage. Against a Poisoned target: +4 damage and +10 Hit.'},
+  /* Kyul (Warlock) */
+  deathRune:{n:'Death Rune',mp:6,mag:1,el:'dark',side:'foe',r:[1,2],dmg:1.3,st:['weak',2],d:'1.3× magic damage up to 2 away, and the target is Weak (deals 30% less damage) for 2 turns.'},
   /* unused for now (was Corvin's) */
   flameBurst:{n:'Flame Burst',mp:5,mag:1,el:'fire',side:'foe',r:[1,3],shape:'cross',aim:'any',dmg:.9,st:['burn',2,.3],d:'A cross of fire up to 3 away: 0.9× magic damage, 30% chance to Burn.'},
   frostWave:{n:'Frost Wave',mp:7,mag:1,el:'ice',side:'foe',r:[1,1],shape:'cone',aim:'dir',dmg:.9,st:['chill',1],d:'A cone of frost (4 tiles): 0.9× magic damage and Slow (−2 Move).'},
@@ -130,7 +134,8 @@ const KITS={
   aldric:{passive:'plate',mp:0,abil:['sunder','valiantThrust','cover']},
   maelis:{passive:'lastLight',mp:26,abil:['mend','purify','circleOfRest','sanctuary']},
   aletta:{mp:12,abil:['purify']},/* no kit passive yet: keeps her random skill */
-  pepr:{passive:'venom',mp:0,abil:['poisonDart','noxiousCloud','tumble']},
+  pepr:{passive:'venom',mp:0,abil:['poisonDart','noxiousCloud','saltInWound','tumble']},
+  kyul:{mp:24,abil:['deathRune']},/* no kit passive yet: keeps his random skill */
   rook:{passive:'slippery',mp:0,abil:['backstab','smokeBomb','tumble']},
   brynhildr:{passive:'bulwarkAura',mp:0,abil:['shieldBash','challenge','holdTheLine']},
   raptor:{passive:'beginnersLuck',mp:0,abil:['rally','cleanCut','shieldUp']},
@@ -265,8 +270,8 @@ function abWeapon(u,a){
 function abBackstab(u,t){return hDiff(u,t)>0||state.units.some(o=>o!==u&&o.team===u.team&&o.hp>0&&man(o,t)===1)}
 /* expected numbers against one target: {dmg (per strike), hit, n (strikes)} */
 function abVs(u,id,t,mult){
-  const a=ABIL[id],w=abWeapon(u,a),c=calc(u,w,t,null,{init:u,phase});let m=(mult||a.dmg||0);if(a.backstab&&abBackstab(u,t))m*=2;if(!mult&&a.wounded&&t.hp<t.maxhp*a.wounded[0])m=a.wounded[1];
-  return{dmg:a.flat||dmgMods(u,t,{init:u},Math.max(0,Math.round(c.pow*m)-c.df)),hit:a.sure?100:clamp(c.hit+(a.hit||0)+ABIL_HIT,0,100),n:a.hits||1,eff:c.eff,c,m};
+  const a=ABIL[id],w=abWeapon(u,a),c=calc(u,w,t,null,{init:u,phase});let m=(mult||a.dmg||0);if(a.backstab&&abBackstab(u,t))m*=2;if(!mult&&a.wounded&&t.hp<t.maxhp*a.wounded[0])m=a.wounded[1];const vp=a.vsPsn&&t.psn?a.vsPsn:[0,0];
+  return{dmg:a.flat||dmgMods(u,t,{init:u},Math.max(0,Math.round(c.pow*m)-c.df)+vp[0]),hit:a.sure?100:clamp(c.hit+(a.hit||0)+vp[1]+ABIL_HIT,0,100),n:a.hits||1,eff:c.eff,c,m};
 }
 function healAmt(u,id,t){const a=ABIL[id];let h=a.healPct?Math.round(t.maxhp*a.healPct):Math.round((u.mag+5)*a.heal);if(has(u,'lastLight')&&t.hp*2<t.maxhp)h=Math.round(h*1.5);return Math.min(h,t.maxhp-t.hp)}
 /* who Chain Lightning jumps to */

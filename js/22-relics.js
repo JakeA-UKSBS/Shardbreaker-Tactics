@@ -24,6 +24,7 @@ const RELICS={
   trophies:{n:'Hunter’s Trophies',r:'u',d:'Effective hits deal 2 more damage.'},
   bedroll:{n:'Traveller’s Bedroll',r:'c',d:'Training at a camp gives 60 EXP instead of 30.'},
   kettle:{n:'Camp Kettle',r:'u',d:'At every camp, all units gain 10 EXP.'},
+  artofwar:{n:'The Art of War',r:'u',d:'All units gain +1 max HP and +1 Skl, including anyone who joins later.'},
   plenty:{n:'Horn of Plenty',r:'u',d:'+15 gold after every won fight, and tavern meals last 1 fight longer.'},
   /* ev: only from its event (the Empty Throne), never in the relic pools */
   gemcrown:{n:'The Crystal Crown',r:'r',ev:1,d:'Units deal +3 damage, but the crystals call to monsters: enemies get +10 Hit against your units.'},
@@ -56,7 +57,7 @@ async function relicPick(n,rs,title,text,first){
   /* first: relics that are always offered (the Heirloom pick always has one heirloom relic) */
   const opts=[...(first||[]).filter(Boolean),...shuffle(relicPool(rs))].slice(0,n);if(!opts.length)return null;
   const m=await modal(`<div class="eyebrow">Relic</div><h2>${title}</h2>${text?`<p>${text}</p>`:''}<div class="inv big">${opts.map((k,i)=>`<button type="button" class="it" data-m="r${i}"><img src="${relicArt(k)}" alt=""><span><b>${RELICS[k].n}</b> · ${RELICS[k].d}</span><em>${RN[RELICS[k].r]}</em></button>`).join('')}</div>`);
-  const k=opts[+m.slice(1)];(run.relics=run.relics||[]).push(k);sfx('fanfare');toast(`${RELICS[k].n} obtained`);return k;
+  const k=opts[+m.slice(1)];(run.relics=run.relics||[]).push(k);relicGained(k);sfx('fanfare');toast(`${RELICS[k].n} obtained`);return k;
 }
 /* crystal creatures: enemies made of crystal or gem (for the Black Onyx Shard and the Gnome's notes) */
 const CRYS_CLS=['Shardling','Prism','CrystalSentinel','CrystalHeart','GemGolem','AmethystTurtle','PyriteColossus','AgateWyrm'],isCrys=u=>CRYS_CLS.includes(u.cls);
@@ -93,6 +94,9 @@ function relicCalc(x,xw,y){
   }
   return o;
 }
+/* relics that change stats for good: applied once per unit (on pickup, and to anyone who joins after) */
+function artOfWar(u){if(!u||u.aow||!R('artofwar'))return;u.aow=1;u.maxhp++;u.hp++;u.skl++}
+function relicGained(k){if(k==='artofwar')run.roster.forEach(artOfWar)}
 const relicMov=u=>u.team!=='p'?0:(R('boots')?1:0)+(R('spurs')&&CLS[u.cls].mnt?1:0)+(M('stew')?1:0);
 
 /* PNG art (art/<key>.png, see art() in 03-art.js) */

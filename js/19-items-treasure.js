@@ -47,7 +47,7 @@ async function treasureNode(){
     const m=await modal(`<div class="eyebrow">Treasure</div><h2>A sealed vault</h2><div class="inv big"><button type="button" class="it" data-m="take">${row}</button></div>${canReroll()?'<div class="mbtns"><button type="button" data-m="reroll">Reroll (once this act)</button></div>':''}`);
     if(m==='reroll'){run.rr[run.act||1]=1;k=mk();sfx('tick');continue}
     if(k.startsWith('skill:')){if(await allocSkill(k.slice(6)))return;continue}
-    if(k.startsWith('relic:')){const r=k.slice(6);(run.relics=run.relics||[]).push(r);sfx('fanfare');toast(`${RELICS[r].n} obtained`);return}
+    if(k.startsWith('relic:')){const r=k.slice(6);(run.relics=run.relics||[]).push(r);relicGained(r);sfx('fanfare');toast(`${RELICS[r].n} obtained`);return}
     const u=await pickUnit(`Who carries the ${IT[k].n}?`,'If their bag is full, you can swap something out.',u=>isWpn(k)&&!canUse(u,k)?'Can’t wield it':null,'Leave it');
     if(!u)return;if(!await stow(u,k))continue;sfx('item');toast(`${u.name} takes the ${IT[k].n}`);return;
   }
