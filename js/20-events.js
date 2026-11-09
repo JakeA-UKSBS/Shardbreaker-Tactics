@@ -1009,6 +1009,36 @@ Object.assign(EVENTS, {
     ]
   },
 
+  /* A wounded creature half-eaten by the crystal: put it down for EXP, or cut the crystal out for a relic (the cutter gets hurt). */
+  beast: {
+    t: 'The Crystal-Touched Beast',
+    art: 'beast',
+    ov: '<img class="ev-fig ev-beast" src="art/monsters/CursedStag.png" alt="">',
+    d: 'A stag stands swaying in the undergrowth, breathing hard. Crystal has grown through one of its antlers, and its eyes are starting to glaze. This is how it starts, Ithren said.',
+    o: [
+      {
+        l: 'End its suffering',
+        sub: 'Every unit gains 20 EXP',
+        go: async () => {
+          await expAll(run.roster, 20);
+          return 'It goes quietly. Nobody says much for the rest of the morning. Every unit gains 20 EXP.';
+        }
+      },
+      {
+        l: 'Cut the crystal out',
+        sub: 'Pick 1 of 2 relics; the one who cuts takes 5 damage',
+        go: async () => {
+          const u = await pickUnit('Who cuts it out?', 'They take 5 damage as the crystal splinters.');
+          if (!u) return null;
+          u.hp = Math.max(1, u.hp - 5);
+          const k = await relicPick(2, ['c', 'u'], 'The Crystal-Touched Beast', 'Something was growing inside the crystal.');
+          return `The crystal splinters and cuts ${u.name} (−5 HP), but the stag staggers up and bolts into the trees.${k ? ` In the shards you find <b>${RELICS[k].n}</b>.` : ''}`;
+        }
+      },
+      { l: 'Leave it', go: async () => 'You leave it be. It watches you go.' }
+    ]
+  },
+
   /* Act 2 only */
   star: {
     t: 'The Fallen Star',
