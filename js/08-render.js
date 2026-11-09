@@ -69,7 +69,7 @@ function render(){
     const ub=uBox(u);el.style.left=ub.l+'px';el.style.top=ub.t+'px';el.style.zIndex=unitZ(u);{const w=ub.w+'px';if(el.style.width!==w){el.style.width=el.style.height=w;el.firstChild.style.width=el.firstChild.style.height=w}}
     if(u.hp<=0&&!el.dataset.dead&&el.isConnected&&el.style.opacity!==''){el.dataset.dead=1;dieFx(el,boardEl,ub.l+ub.w/2,ub.t+ub.h/2,u,1)}else if(u.hp>0)delete el.dataset.dead;
     el.style.opacity=u.hp>0?1:0;
-    const src=sprite(u,'idle',mapWk(u)),img=el.firstChild;if(img.dataset.s!==src){img.src=src;img.dataset.s=src;img.style.transform='';img.style.transformOrigin='';if(u.sz===2||u.sz>1&&src.startsWith('data:'))fillBox(img,src,u.team==='e');/* bosses: load and measure the strike frame now so the first attack shows it */if(u.sz>1){const s2=sprite(u,'strike',mapWk(u));if(!FILLS[s2])fillBox(new Image(),s2)}}img.classList.toggle('hi',isHi(u.cls,u.sz));
+    const src=sprite(u,'idle',mapWk(u)),img=el.firstChild;if(img.dataset.s!==src){img.src=src;img.dataset.s=src;img.style.transform='';img.style.transformOrigin='';if(u.sz===2||u.sz>1&&src.startsWith('data:'))fillBox(img,src,u.team==='e');/* bosses: load and measure the strike frame now so the first attack shows it */if(u.sz>1){const s2=sprite(u,'strike',mapWk(u));if(!FILLS[s2])fillBox(new Image(),s2)}}img.classList.toggle('hi',isHi(u.cls,u.sz));img.classList.toggle('artl',artLeft(img.dataset.s));
     {const bi=el.querySelector('.hpb i'),bb=barsOf(u);bi.style.width=(bb?bb.frac:u.hp/u.maxhp)*100+'%';
      if(bb){bi.style.background=BAR_COL[bb.n]||'';bi.parentNode.style.background=bb.n>1?BAR_COL[bb.n-1]:'';el.style.setProperty('--hf',BAR_HF[bb.n]||'');
       const was=+el.dataset.bars||u.bars;el.dataset.bars=bb.n;if(bb.n<was&&u.hp>0){pop(u,'The shell shatters!','dmg');sfx('broke');toast(`${u.name} cracks: ${bb.n} bar${bb.n===1?'':'s'} left`)}}}
@@ -220,7 +220,7 @@ function renderPanel(){
   panel.innerHTML=h;
   /* the command menu and the forecast dock in a bottom corner of the map view, on the side away from the fight */
   let mEl=$('#umenu');if(!mEl||!mEl.isConnected){mEl=document.createElement('div');mEl.id='umenu';mEl.className='umenu';vp.appendChild(mEl);
-    for(const ev of['pointerdown','pointerup','wheel'])mEl.addEventListener(ev,e=>e.stopPropagation());mEl.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||busy)return;act(b.dataset.act)})}
+    for(const ev of['pointerdown','pointerup','wheel'])mEl.addEventListener(ev,e=>e.stopPropagation());mEl.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||busy)return;if(b.dataset.dev){settings.devMin=!settings.devMin;saveOpts();b.parentNode.classList.toggle('min',settings.devMin);b.textContent=settings.devMin?'Dev ▸':'▾';return}act(b.dataset.act)})}
   const pop=ui==='confirm'&&tmode==='atk'&&pending||ui==='aim'&&abT&&ABIL[abSel].side!=='self'&&unitAt(abT.x,abT.y);mEl.classList.toggle('ufc',!!pop||ui==='aim'&&!!abT);mEl.classList.toggle('aim',ui==='aim');
   if(fm&&(pop||u)){mEl.innerHTML=fm;mEl.hidden=false;const xs=[u,pop?pending:null].filter(Boolean).map(o=>{const r=uBox(o);return cam.x+(r.l+r.w/2)*cam.s}),mid=xs.reduce((a,x)=>a+x,0)/xs.length;
     mEl.classList.toggle('dl',mid>vb().w/2);mEl.classList.toggle('dr',mid<=vb().w/2)}else mEl.hidden=true;
@@ -240,5 +240,6 @@ function devBreak(X,Y,C,ab){
   ${ab?'':`<div class="dvs"><div class="dvt"><span>AS ${B.asx}${B.bonus?' +'+B.bonus:''} vs ${B.asy} (doubles at +4)</span><i>${C.n>1?'doubles':'single'}</i></div></div>`}`;
 }
 /* the breakdown floats beside the forecast */
-function devPanel(parts){const h=parts.filter(Boolean).join('<hr>');return h?`<div class="ufc-dev">${h}<div class="dvn">Rolled later: crit ×3, Bulwark/Iron Skin/Spell Ward halve, Whirlwind. Hit uses the average of two rolls.</div></div>`:''}
+/* dev breakdown can be shrunk to a small tab; settings.devMin remembers it between forecasts */
+function devPanel(parts){const h=parts.filter(Boolean).join('<hr>');return h?`<div class="ufc-dev${settings.devMin?' min':''}"><button type="button" class="dvx" data-dev="1" title="Show/hide breakdown">${settings.devMin?'Dev ▸':'▾'}</button>${h}<div class="dvn">Rolled later: crit ×3, Bulwark/Iron Skin/Spell Ward halve, Whirlwind. Hit uses the average of two rolls.</div></div>`:''}
 panel.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||busy)return;act(b.dataset.act)});

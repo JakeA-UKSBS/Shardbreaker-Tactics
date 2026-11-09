@@ -21,11 +21,11 @@ function flash(u){const el=uEls[u.id];if(!el)return;el.classList.add('flash');se
 function mapPose(u,name,t,wk){const el=uEls[u.id];if(!el)return;
   /* bosses (2+ tiles): just swap between the idle and strike frames, refitted to their box */
   if(u.sz>1){if(name!=='idle'&&name!=='swing'&&name!=='follow')return;const img=el.firstChild,src=sprite(u,name==='idle'?'idle':'strike',mapWk(u));if(img.dataset.s===src)return;
-    img.src=src;img.dataset.s=src;if(u.sz===2||src.startsWith('data:'))fillBox(img,src,u.team==='e');return}/* keeps the current fit until the new frame's is measured, so it doesn't jump the first time */const img=el.firstChild;wk=wk||mapWk(u);let src;
+    img.src=src;img.dataset.s=src;img.classList.toggle('artl',artLeft(src));if(u.sz===2||src.startsWith('data:'))fillBox(img,src,u.team==='e');return}/* keeps the current fit until the new frame's is measured, so it doesn't jump the first time */const img=el.firstChild;wk=wk||mapWk(u);let src;
   if(name==='idle')src=sprite(u,'idle',mapWk(u));
   else if(u.cast)src=castPng(u,name);
   else if(name==='swing'||name==='follow')src=sprite(u,'strike');
-  if(!src)return;img.src=src;img.dataset.s=src;
+  if(!src)return;img.src=src;img.dataset.s=src;img.classList.toggle('artl',artLeft(src));
   /* hand-drawn frames can be wider than 64px (an axe swung out in front): show them at full width, body still at the left,
      and flip around the body's centre (32px) so it stays on its tile when facing left */
   img.style.transformOrigin='32px 50%';img.onload=()=>{const w=img.naturalWidth;if(w>64)img.style.setProperty('width',w+'px','important');else img.style.removeProperty('width')};
