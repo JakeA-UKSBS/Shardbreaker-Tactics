@@ -25,6 +25,7 @@ Object.assign(CLS,{
   MudMonster:{n:'Mud Monster',w:['heavy'],body:'mud',mov:4,wade:true},Krondis:{n:'Alligator',w:['heavy'],body:'gator',mov:4,wade:true},
   CursedStag:{n:'Cursed Stag',w:['pole'],body:'beast',mov:6},
   BoulderGolem:{n:'Magma Golem',w:['heavy'],body:'golem',mov:4},FireSprite:{n:'Fire Sprite',w:['art'],body:'flame',mov:5,lava:true},MagmaDragon:{n:'Magma Dragon',w:['art','heavy'],body:'dragon',mov:0,lava:true},
+  HellHound:{n:'Hell Hound',w:['blade'],body:'beast',mov:6,lava:true},
   CrystalHeart:{n:'Crystal Heart',w:['art'],body:'crystal',mov:0},
   /* the Heart's own creatures (Act 3) */
   Shardling:{n:'Shardling',w:['blade'],body:'shardling',mov:5},Prism:{n:'Prism',w:['art'],body:'prism',mov:4,fly:true},CrystalSentinel:{n:'Crystal Sentinel',w:['heavy'],body:'sentinel',mov:3},
@@ -37,6 +38,7 @@ Object.assign(FOE,{
   CursedStag:{b:[17,6,0,5,8,2,2,2],g:[.6,.4,0,.35,.45,.15,.1,.15],items:['antlers'],look:{}},
   BoulderGolem:{b:[24,7,0,2,1,0,10,0],g:[.8,.4,0,.2,.05,0,.4,0],items:['slam'],look:{}},
   FireSprite:{b:[14,0,4,5,7,2,1,4],g:[.5,0,.4,.35,.45,.15,.05,.3],items:['emberSigil'],look:{}},
+  HellHound:{b:[16,6,0,4,7,1,2,1],g:[.55,.4,0,.3,.45,.1,.15,.1],items:['fangs'],look:{}},
   Shardling:{b:[16,6,0,5,8,0,3,1],g:[.55,.4,0,.35,.4,0,.2,.1],items:['claws'],look:{}},
   Prism:{b:[15,0,6,5,4,0,2,6],g:[.5,0,.4,.3,.25,0,.1,.35],items:['crystalShards'],look:{}},
   CrystalSentinel:{b:[24,7,0,3,2,0,9,2],g:[.8,.4,0,.25,.1,0,.4,.1],items:['slam'],look:{}},
@@ -52,6 +54,7 @@ const MONLOOK={
   CursedStag:()=>({fur:pick(['#4a3a4a','#5a4a3a','#3a3040']),eye:'#ff3a5a',antlers:'#d8d0bc',antler2:'#b07ae8',crys:false}),
   BoulderGolem:()=>({body:pick(['#7a746e','#6a625c','#8a8278']),eye:'#ff9a3c'}),
   FireSprite:()=>({crys:false,body:pick(['#ff8a3c','#ff6a2a','#ffaa3c'])}),
+  HellHound:()=>({fur:pick(['#4a2a26','#3a2422','#5a2e28']),eye:'#ff8a1a'}),
   /* crystal creatures: mostly blood red, sometimes another gem. crys:false = no extra crystals stuck on (they are crystal) */
   Shardling:()=>({crys:false,gem:pick(['#c8283a','#c8283a','#c8283a','#2a9a5a','#3a5ac8','#8a3ac0'])}),Prism:()=>({crys:false,gem:pick(['#c8283a','#c8283a','#3a5ac8','#8a3ac0'])}),CrystalSentinel:()=>({crys:false,gem:pick(['#a8202e','#a8202e','#2a8a4a','#7a3ab0'])}),
   BogLurker:()=>({crysSmall:true,body:pick(['#4a5a32','#3a4a3a','#5a5a3a'])}),
@@ -73,9 +76,9 @@ const BIOMES={
     tip:['woods','Cursed thickets','Cursed thickets give +10 Avoid and +1 Def, but cost 2 Move to enter. Stags are fast: keep your back line covered.'],
     maps:['woodland','brook','clearing'],bossMap:'heart',pool:[['Wolf',4],['CursedStag',3,2],['BlightedTreant',2,5]],elitePool:[['BlightedTreant',3],['CursedStag',3],['Wolf',2]],
     boss:{name:'The Hollow Bear',cls:'HollowBear',mov:4,s:[38,13,0,6,5,3,8,7],items:['slam'],skill:'wrath',look:{fur:'#3a2a24',eye:'#ff3a3a',core:'#ff6aa8'}}},
-  mountain:{n:'Volcanic Isle',bg:'#3a2420',d:'Basalt slopes cut by rivers of magma. Golems block the passes, and fire sprites float over the lava.',
+  mountain:{n:'Volcanic Isle',bg:'#3a2420',d:'Basalt slopes cut by rivers of magma. Hell hounds run the slopes, golems block the passes, and fire sprites float over the lava.',
     tip:['lava','Magma','Magma can’t be crossed on foot. Fliers and fire creatures move over it freely.'],
-    maps:['fields','caldera','ridge'],bossMap:'crater',pool:[['FireSprite',3],['BoulderGolem',3,3]],elitePool:[['BoulderGolem',3],['FireSprite',2]],
+    maps:['fields','caldera','ridge'],bossMap:'crater',pool:[['HellHound',4],['FireSprite',2,2],['BoulderGolem',3,3]],elitePool:[['BoulderGolem',3],['HellHound',2],['FireSprite',2]],
     boss:{name:'Pyraxis, the Magma Dragon',cls:'MagmaDragon',s:[42,12,10,6,4,2,10,9],items:['magmaBreath'],skill:'steadfast',look:{body:'#4a2420',magma:true,big:true,crysSmall:true,crysCol:'#3a2a4a'}}},
   /* Act 3, the end of every run: not in the region draw (biomeIds). Its monsters are the Heart's own crystal creatures */
   heart:{n:'The Heart of the Blight',noThe:1,bg:'#3a1018',d:'Scorched ground split by veins of glowing gem. Every crystal in these lands grew from what waits here.',

@@ -171,6 +171,8 @@ Object.assign(ABIL,{
   groundSlam:{n:'Ground Slam',cd:3,side:'self',shape:'burst1',dmg:.7,d:'0.7× damage to every enemy around it.'},
   charge:{n:'Charge',cd:3,side:'foe',r:[1,2],dmg:1.2,charge:1,d:'Charges a target up to 2 away (one tile further than it can reach): 1.2× damage.'},
   iceBlitz:{n:'Ice Blitz',snd:'ice',cd:3,mag:1,el:'water',side:'foe',r:[1,2],dmg:.4,hits:3,d:'Three shards of ice from up to 2 away: three hits of 0.4× magic damage.'},
+  iceSpray:{n:'Ice Spray',snd:'ice',cd:3,side:'foe',r:[1,1],shape:'cone',aim:'dir',dmg:.8,st:['chill',1],d:'A cone of ice (4 tiles): 0.8× damage and Slow.'},
+  flameBite:{n:'Flame Bite',cd:3,side:'foe',r:[1,1],dmg:1,st:['burn',2],d:'1.0× damage and Burn.'},
   hunkerDown:{n:'Hunker Down',once:1,side:'self',solo:1,self:[['shell',99]],when:u=>u.hp*2<u.maxhp,d:'Below half HP: withdraws into her shell and her amethysts grow, +2 Def and +2 Res for the rest of the fight.'},
   regenerate:{n:'Regenerate',cd:4,side:'self',solo:1,healPct:.3,d:'Heals 30% of its max HP.'}
 });
@@ -178,7 +180,7 @@ const MKITS={
   Lamia:['stoneGaze','constrict'],MudMonster:['mudSpit','engulf'],
   Wolf:['howl','hamstring'],BlightedTreant:['graspingRoots','barkSkin'],HollowBear:['maul','roar'],
   FireSprite:['fireball','flicker'],BoulderGolem:['moltenFist','eruption'],MagmaDragon:['searingBreath','wingGust'],
-  SandWorm:['burrow','sandBlast'],Krondis:['deathRoll'],PyriteColossus:['stalagmite'],SandstoneGolem:['sandStream','sandBurn'],Yeti:['groundSlam'],CursedStag:['charge'],FrostSprite:['iceBlitz'],AmethystTurtle:['hunkerDown'],FrostWolf:['frostBite','howl'],IceTroll:['clubSmash','regenerate']
+  SandWorm:['burrow','sandBlast'],Krondis:['deathRoll'],PyriteColossus:['stalagmite'],SandstoneGolem:['sandStream','sandBurn'],Yeti:['groundSlam'],CursedStag:['charge'],FrostSprite:['iceBlitz'],AmethystTurtle:['hunkerDown'],FrostWolf:['frostBite','howl'],IceWorm:['burrow','iceSpray'],HellHound:['flameBite','howl'],IceTroll:['clubSmash','regenerate']
 };
 /* the Moves block on an enemy's Details sheet */
 function monSheet(u){const l=u.team==='e'?MKITS[u.cls]:null;if(!l)return'';
