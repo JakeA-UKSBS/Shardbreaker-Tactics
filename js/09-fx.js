@@ -37,9 +37,32 @@ async function swingAt(X,Y,w,crit,ranged){const wk=w&&w.key;
   /* cast members with hand-drawn attack frames hold each frame a little longer than the code-drawn rig, so the swing reads.
      (Every cast member has PNGs, most exported from the rig, so this is a list rather than a check for a PNG.) */
   const k=SLOW_SWING.has(X.cast)?1.4:1;
+  /* casters with their own bolt strip (Morrigan): it charges at the hand, then flies to the target */
+  if(w&&w.t==='art'&&castPng(X,'bolt')){mapPose(X,crit?'critup':'windup',Y,wk);const ch=boltCharge(X,Y);await sleep(D((crit?120:150)*k));
+    mapPose(X,'swing',Y,wk);lunge(X,Y,-6);ch.remove();await boltShot(X,Y);setTimeout(()=>mapPose(X,'follow',Y,wk),D(90));return}
   mapPose(X,crit?'critup':'windup',Y,wk);await sleep(D((crit?120:150)*k));
   mapPose(X,'swing',Y,wk);if(ranged){lunge(X,Y,-6);await shoot(X,Y,w)}else{lunge(X,Y);slashFx(X,Y,w,crit);await sleep(D(110*k))}
   setTimeout(()=>mapPose(X,'follow',Y,wk),D(90))}
+
+/* a cast member's own spell projectile: art/cast/<id>/<class>-bolt.png, 3 frames of 64x64 side by side, facing right:
+   0 charging at the hand, 1 in flight, 2 the burst on the target. BOLT_AT is where the skull sits in each frame,
+   and BOLT_HAND where the casting hand is in the attack frames (both in the frame's own pixels) */
+const BOLT_AT=[[35,31],[37,27],[35,24]],BOLT_HAND={morrigan:[55,24]};
+function boltEl(src,f,x,y,flip){const d=document.createElement('div'),[ax,ay]=BOLT_AT[f];
+  Object.assign(d.style,{position:'absolute',left:'0',top:'0',width:'64px',height:'64px',backgroundImage:`url(${src})`,backgroundSize:'300% 100%',
+    backgroundPosition:f*50+'% 0',imageRendering:'pixelated',pointerEvents:'none',zIndex:9999,transformOrigin:`${ax}px ${ay}px`,transform:`translate(${x-ax}px,${y-ay}px)${flip?' scaleX(-1)':''}`});
+  boardEl.appendChild(d);return d}
+const boltFlip=(X,Y)=>scrC(Y.x,Y.y,Y.sz).x<scrC(X.x,X.y,X.sz).x;
+/* board position of the caster's hand (64px map frames sit 8px left of and 15px above the unit's box, flipped around x 32) */
+function boltHand(X,Y){const b=uBox(X),[hx,hy]=BOLT_HAND[X.cast]||[48,28],fl=boltFlip(X,Y);return[b.l-8+(fl?64-hx:hx),b.t-15+hy]}
+function boltCharge(X,Y){const[x,y]=boltHand(X,Y);return boltEl(castPng(X,'bolt'),0,x,y,boltFlip(X,Y))}
+async function boltShot(X,Y){const[sx,sy]=boltHand(X,Y),b=uBox(Y),ex=b.l+b.w/2,ey=b.t+b.h*.5,fl=boltFlip(X,Y),
+    d=boltEl(castPng(X,'bolt'),1,sx,sy,fl),rot=Math.atan2(ey-sy,(ex-sx)*(fl?-1:1))*180/Math.PI*(fl?-1:1),[ax,ay]=BOLT_AT[1];
+  const at=(x,y)=>({transform:`translate(${x-ax}px,${y-ay}px) rotate(${rot}deg)${fl?' scaleX(-1)':''}`});
+  await d.animate([at(sx,sy),at(ex,ey)],{duration:D(260+Math.hypot(ex-sx,ey-sy)*.6),easing:'ease-in'}).finished;d.remove()}
+/* the hit on the target: the caster's own bolt burst if it has one, otherwise a ring in the element's colour */
+function hitBurst(X,Y,col){const src=castPng(X,'bolt');if(!src)return burst(Y,col);const b=uBox(Y),d=boltEl(src,2,b.l+b.w/2,b.t+b.h*.5,boltFlip(X,Y));
+  d.animate([{opacity:1,offset:.6},{opacity:0}],{duration:D(380)}).finished.then(()=>d.remove())}
 
 /* Krondis's Death Roll: Rhi's 8-frame strip (art/bosses/krondis-roll.png, 300x128 a frame) played over his map sprite.
    The strip faces left (as he does as an enemy) with his body in the first 128px, so it lines up with his standing sprite
@@ -114,7 +137,7 @@ async function quickPlay(a,d,res){
     sfx(X.cls==='Krondis'?'sandswipe':hitSfx(w,ranged));
     await swingAt(X,Y,w,e.crit,ranged);
     if(e.hit){sfx(e.crit?(w.t==='art'?'crit':'swordcrit'):'hit');/* weapon crits use the recorded sword crit */Y.hp=Y===a?e.hpA:e.hpD;pop(Y,(e.crit?'Crit ':'')+'-'+e.dmg,e.crit?'crit':'dmg');flash(Y);lunge(Y,X,-6);
-      if(w.t==='art')burst(Y,EL_COL[w.el]||'#c8b8ff');if(w.el==='crystal')shatterFx(Y);if(e.crit){shake();burst(Y,'#fff')}if(e.guard){pop(Y,e.guard,'heal');if(e.guard!==SKILLS.retaliate.n)sfx('block')}
+      if(w.t==='art')hitBurst(X,Y,EL_COL[w.el]||'#c8b8ff');if(w.el==='crystal')shatterFx(Y);if(e.crit){shake();burst(Y,'#fff')}if(e.guard){pop(Y,e.guard,'heal');if(e.guard!==SKILLS.retaliate.n)sfx('block')}
       if(e.heal){X.hp=X===a?e.hpA:e.hpD;pop(X,'+'+e.heal,'heal')}}
     else{sfx('miss');pop(Y,'Miss','miss');lunge(Y,X,-10)}
     await sleep(D(240));mapPose(X,'idle');mapPose(Y,'idle');render();await sleep(D(200))}
