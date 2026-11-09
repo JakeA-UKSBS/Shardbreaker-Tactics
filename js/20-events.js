@@ -10,7 +10,7 @@ const REG_SKY={heart:['#0e0408','#2e0c16','#4e1424'],swamp:['#1a2a24','#2e4a3a',
   desert:['#c8783a','#e8a85a','#f3d08a'],snow:['#4a6a9a','#8aaad0','#c8daf0'],cavern:['#120e1a','#221a2e','#342a44']};
 const REG_GROUND={heart:'#1e1416',swamp:'#3f5a4a',forest:'#3e4436',mountain:'#3a3034',desert:'#c9a060',snow:'#e4ecf4',cavern:'#3a3444'};
 /* PROP_FIG: a scene prop's PNG laid over the scene (art/scenes/<png>.png). PROP_OWN: props whose PNG replaces the code-drawn one outright */
-const PROP_FIG={well:'well',smith:'anvil',shrine:'altar',library:'desk',study:'potions'},PROP_OWN=['well','smith','shrine'];
+const PROP_FIG={well:'well',smith:'anvil',shrine:'altar',bloodshrine:'blood-shrine',throne:'throne',library:'desk',study:'potions'},PROP_OWN=['well','smith','shrine','bloodshrine','throne'];
 const propFig=prop=>PROP_FIG[prop]&&ART_PNG.has('scenes/'+PROP_FIG[prop])?PROP_FIG[prop]:null;
 function eventScene(prop){
   if(prop==='witch'&&ART_PNG.has('scenes/witch-hut'))return'art/scenes/witch-hut.png';/* Rhi's hut, drawn at 640x360 */
@@ -71,7 +71,6 @@ function eventScene(prop){
     for(const x of[60,70,80,90])p.line(x,0,x+1,10,'#5a7a3a');for(const x of[60,70,80,90])p.ell(x+1,11,2,3,'#6a8a3a');
     p.ell(84,66,16,7,'#2a2630');p.ell(84,61,13,4,'#7fd36a');for(const[x,y]of[[78,55],[88,52],[83,48]])p.ell(x,y,2,2,'#a8f08a');S(70,70,4,6,INK);S(94,70,4,6,INK);}
     /* the witch herself is a hand-drawn PNG laid over the scene (art/scenes/witch.png, see EV_FIG) */
-  if(prop==='throne'){S(70,16,20,6,G);p.poly([[70,16],[80,8],[90,16]],G);p.ell(80,12,2,2,'#c8322e');S(70,22,20,30,'#7a2a2a');S(72,24,16,26,'#9a3a3a');S(66,44,28,8,G);S(66,52,4,14,G);S(90,52,4,14,G);S(68,46,24,4,'#9a3a3a')}
   if(prop==='fog'){S(76,30,2,30,WD);p.poly([[78,30],[90,33],[78,36]],'#efe6cf');p.line(40,62,60,40,'#5a4a3a');p.line(120,64,100,42,'#5a4a3a')}
   if(prop==='chest'){/* the chest itself is Rhi's PNG laid over the scene (art/scenes/chest.png, see EV_FIG) */for(const[x,y]of[[40,40],[120,36],[132,46],[28,48]]){p.set(x,y,'#ff3a3a');p.set(x+3,y,'#ff3a3a')}}
   if(prop==='library'){for(const x of[24,68,112]){S(x,22,26,46,WD2);for(let r=0;r<4;r++){S(x+1,25+r*10,24,1,WD);for(let b=0;b<8;b++)S(x+2+b*3,26+r*10,2,8,['#c8322e','#3a6a9a','#7fd36a','#c9a050','#8a4ab0'][(b+r+x)%5])}}
@@ -243,7 +242,7 @@ const EVENTS = {
   /* One unit gives 3 max HP for good to learn a random skill. */
   shrine: {
     t: 'Blood Shrine',
-    art: 'shrine',
+    art: 'bloodshrine',
     d: 'A cracked altar, still warm. Words cut into the stone: <i>blood for knowledge</i>.',
     o: [
       {
