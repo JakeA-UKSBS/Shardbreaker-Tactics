@@ -26,36 +26,37 @@ const CAST_CLASSES={
   'Warlord':'tank.mounted.heavy.2','Artillery':'tank.armour.bow.2','Swordmaster':'sword.foot.blade.2','Pyrolord':'caster.foot.art.2',
   'Grand Summoner':'summoner.foot.art.2','Bard':'support.foot.spirit.2','Mercenary':'sword.foot.blade.2','Warlock':'caster.foot.art.2'
 };
-/* ASC_BONUS: stats each advanced cast class adds on ascending (and joiners who start advanced get them too), in stat order */
+/* ASC_BONUS: stats each advanced cast class adds on ascending (and joiners who start advanced get them too), in stat order
+   (HP, Str, Mag, Skl, Spd, Lck, Def, Res) */
 const ASC_BONUS={
-  'Sniper':[2,3,0,0,2,5,1,1],
-  'Bow Cavalry':[3,2,0,0,4,2,1,1],
-  'Artillery':[5,4,0,0,0,2,4,1],
-  'Berserker':[6,5,0,0,2,2,1,0],
-  'Witch':[2,0,4,0,2,2,0,4],
-  'Shaman':[4,0,3,0,1,1,2,4],
-  'Archmage':[2,0,5,0,1,2,1,4],
-  'Frostlord':[4,0,4,0,0,1,2,4],
-  'Stormlord':[3,0,4,0,4,1,0,2],
-  'Pyrolord':[4,0,5,0,1,1,2,1],
-  'Juggernaut':[7,4,0,0,0,0,5,1],
-  'Paladin':[5,3,0,0,2,1,3,2],
-  'Warlord':[6,4,0,0,1,1,3,1],
-  'Saint':[3,0,4,0,1,2,0,5],
-  'Crusader':[5,3,1,0,0,1,4,2],
-  'Duelist':[3,3,0,0,3,3,2,1],
-  'Assassin':[2,3,0,0,4,5,0,1],
-  'Valkyrie':[3,3,0,0,3,1,1,4],
-  'Aegis':[6,2,0,0,0,0,5,3],
-  'Hero':[4,3,0,0,3,2,2,1],
-  'Swordmaster':[2,3,0,0,5,4,0,1],
-  'Bard':[3,0,3,0,3,3,1,2],
-  'Grand Summoner':[4,0,5,0,2,2,2,4],
+  'Sniper':[2,3,0,3,2,2,1,1],
+  'Bow Cavalry':[3,2,0,2,4,0,1,1],
+  'Artillery':[5,4,0,2,0,0,4,1],
+  'Berserker':[6,5,0,2,2,0,1,0],
+  'Witch':[2,0,4,2,2,0,0,4],
+  'Shaman':[4,0,3,1,1,0,2,4],
+  'Archmage':[2,0,5,2,1,0,1,4],
+  'Frostlord':[4,0,4,1,0,0,2,4],
+  'Stormlord':[3,0,4,1,4,0,0,2],
+  'Pyrolord':[4,0,5,1,1,0,2,1],
+  'Juggernaut':[7,4,0,1,0,0,5,1],
+  'Paladin':[5,3,0,1,2,0,3,2],
+  'Warlord':[6,4,0,1,1,0,3,1],
+  'Saint':[3,0,4,2,1,0,0,5],
+  'Crusader':[5,3,1,1,0,0,4,2],
+  'Duelist':[3,3,0,2,3,1,2,1],
+  'Assassin':[2,3,0,3,4,2,0,1],
+  'Valkyrie':[3,3,0,1,3,0,1,4],
+  'Aegis':[6,2,0,1,0,0,5,3],
+  'Hero':[4,3,0,2,3,0,2,1],
+  'Swordmaster':[2,3,0,3,5,1,0,1],
+  'Bard':[3,0,3,2,3,1,1,2],
+  'Grand Summoner':[4,0,5,2,2,0,2,4],
   /* classes that only ever join already advanced (Zwei, Kyul, Sigrun, Kaya) */
-  'Mercenary':[4,4,0,0,2,2,2,0],
-  'Warlock':[3,0,5,0,1,1,1,3],
-  'Drake Rider':[5,4,0,0,2,1,3,0],
-  'Horse Archer':[3,2,0,0,4,2,1,1]};
+  'Mercenary':[4,4,0,2,2,0,2,0],
+  'Warlock':[3,0,5,1,1,0,1,3],
+  'Drake Rider':[5,4,0,1,2,0,3,0],
+  'Horse Archer':[3,2,0,2,4,0,1,1]};
 /* BASE_ADJ: small per-class tweaks on top of the role's base stats, in stat order */
 /* CAST_HIT: extra Hit a character always has */
 const CAST_HIT={kili:5};
