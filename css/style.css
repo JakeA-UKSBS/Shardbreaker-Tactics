@@ -647,3 +647,6 @@ img{-webkit-user-drag:none;user-select:none}
 .ufc-dev .dvn{color:var(--muted);font-size:10px;margin-top:4px}
 .ufc-dev .dvx{float:right;margin:-3px -5px 0 6px;padding:0 6px;font-size:11px;line-height:16px;min-height:0;background:none;border:1px solid #6a5a7a;border-radius:4px;color:var(--gold);cursor:pointer}
 .ufc-dev.min{width:auto;padding:3px}.ufc-dev.min>:not(.dvx){display:none}.ufc-dev.min .dvx{float:none;margin:0}
+
+/* reward colour coding (fixed colours so themes don't recolour them) */
+.rw{font-weight:700}.rw-artifact{color:#5a9cf0}.rw-weapon{color:#e0604a}.rw-skill{color:#7ccf84}.rw-item{color:#f0c850}

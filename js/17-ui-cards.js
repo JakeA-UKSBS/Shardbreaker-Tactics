@@ -4,17 +4,17 @@ const uSpr=u=>sprite(u,'idle',mapWk(u));
 /* skill capacity as a small pie: gold = used by learned skills, pale = what a skill on offer would take */
 function capPie(u,add=0){const c=capOf(u),n=capUsed(u),a=Math.min(add,Math.max(0,c-n)),over=n+add>c;
   return`<span class="cap${over?' over':''}" title="Skill capacity: ${n} of ${c} used${add?`, this skill takes ${add}`:''}" style="--u:${n/c*100}%;--a:${(n+a)/c*100}%"></span><span class="capn">${n}${add?`+${add}`:''}/${c}</span>`}
-function unitCard(u,on,add,exp){
+function unitCard(u,on,add,exp,nopie){
   const S=shown(u),w=u.items.map(i=>IT[i.k]).filter(i=>i.t!=='item'),ls=(u.skills||[]).map(x=>SKILLS[x.id].n);
   return`<div class="dimg"><img src="${uSpr(u)}" alt=""></div><div class="dtxt"><b>${u.name}</b><span class="dcls">${CLS[u.cls].n} · Lv ${u.lv}${exp?`<span class="dexp"><i style="width:${u.exp||0}%"></i></span>${u.exp||0}/100 EXP`:''}</span>
   <span class="dst">${S.map(k=>`${SL[k]} <b>${k==='hp'?(u.hp!=null&&u.hp<u.maxhp?`${u.hp}/${u.maxhp}`:u.maxhp):u[k]}</b>`).join(' ')}</span>
-  <span class="dsk">${SKILLS[u.skill].n}${ls.length?', '+ls.join(', '):''} · ${w.map(i=>`<img src="${icon(i.key)}" alt="">${i.n}${i.r?` (Rng ${rngTxt(rngShow(u,i))})`:''}`).join(' ')}</span></div><div class="dcap">${capPie(u,add)}</div>${on?'<span class="dtick">✓</span>':''}`;
+  <span class="dsk">${SKILLS[u.skill].n}${ls.length?', '+ls.join(', '):''} · ${w.map(i=>`<img src="${icon(i.key)}" alt="">${i.n}${i.r?` (Rng ${rngTxt(rngShow(u,i))})`:''}`).join(' ')}</span></div>${nopie?'':`<div class="dcap">${capPie(u,add)}</div>`}${on?'<span class="dtick">✓</span>':''}`;
 }
 const canReroll=()=>unl('reroll')&&!(run.rr=run.rr||{})[run.act||1];
 /* the second Crossroads, as Act 2 begins: 2 already-advanced veterans wait by the fire and one joins */
 async function actCrossroads(){
   /* as Act 2 and Act 3 begin: 1 of 2 veterans. If the veterans have run out, anyone still unrecruited fills in */
-  const where=castPool('act1').length>=2?'act1':'recruit';if(!castPool(where).length)return;const lv=Math.max(1,Math.round(run.roster.reduce((a,u)=>a+u.lv,0)/run.roster.length));
+  const where=castPool('act1').length>=2?'act1':'recruit';if(!castPool(where).length)return;const lv=Math.max(1,Math.round(run.roster.reduce((a,u)=>a+u.lv,0)/run.roster.length))+(R('lantern')?1:0);
   const pick=await musterScene(castOffer(2,lv,where),1,true),nu=pick&&pick[0];if(!nu)return;
   if(run.roster.length>=TEAM_CAP){const d=await modal(`<h2>Who leaves?</h2><p>Your squad is full (${TEAM_CAP}). ${nu.name} takes their place.</p><div class="draft">${run.roster.map((u,i)=>`<button type="button" class="dcard" data-m="d${i}">${unitCard(u)}</button>`).join('')}</div><div class="mbtns"><button type="button" data-m="skip">Keep my squad</button></div>`);
     if(d==='skip')return;run.roster.splice(+d.slice(1),1)}

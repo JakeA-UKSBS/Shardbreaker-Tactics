@@ -116,7 +116,7 @@ Learned skills cost capacity (base 20, +5 when promoted). Personal skills are fr
 | War Horn | Uncommon | On turn 1 of each battle, units deal +3 damage. |
 | Phoenix Feather | Rare | Once per run, the first unit to fall survives with 10 HP. |
 | Slayer’s Crown | Rare | Units deal +4 damage to bosses and elite leaders. |
-| Pathfinder’s Lantern | Rare | Recruit nodes offer 4 units, 1 level higher. |
+| Pathfinder’s Lantern | Rare | Tavern hires and the crossroads offer units 1 level higher. |
 | Endless Quiver | Uncommon (after 2 runs) | Bows deal +3 damage. |
 | Focus Gem | Uncommon (after 2 runs) | Arts deal +2 damage and gain +10 Hit. |
 | Golden Spurs | Uncommon (after 4 runs) | Mounted and flying units gain +1 Move and +10 Avoid. |

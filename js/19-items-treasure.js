@@ -14,9 +14,12 @@ function tierUp(u,it){const B=IT[it.k],up=UPGRADE[B.base||it.k],f=B.forge||0;ret
 
 /* ---- shared pickers ---- */
 function itemText(k){return itemInfo({cls:'Villager',name:''},k).replace(/ · [^·]*can't (wield|use) this\./,'')}
-async function pickUnit(title,text,ok,skipLabel='Cancel',add){
+/* reward colours: artifact blue, weapon red, skill green, item yellow (css .rw-*) */
+const RWK={artifact:'Artifact',weapon:'Weapon',skill:'Skill',item:'Item'},rwTag=(k,t)=>`<span class="rw rw-${k}">${t||RWK[k]}</span>`;
+/* kind: one of RWK, shown as a coloured eyebrow. The skill pie only shows when a skill is being learned (add given) */
+async function pickUnit(title,text,ok,skipLabel='Cancel',add,kind){
   const L=run.roster.map((u,i)=>({u,i,why:ok?ok(u):null}));
-  const m=await modal(`<h2>${title}</h2><p>${text}</p><div class="draft">${L.map(({u,i,why})=>`<button type="button" class="dcard" data-m="u${i}"${why?' disabled':''}>${unitCard(u,false,add)}${why?`<span class="dno">${why}</span>`:''}</button>`).join('')}</div><div class="mbtns"><button type="button" data-m="skip">${skipLabel}</button></div>`);
+  const m=await modal(`${kind?`<div class="eyebrow">${rwTag(kind)}</div>`:''}<h2>${title}</h2>${text?`<p>${text}</p>`:''}<div class="draft">${L.map(({u,i,why})=>`<button type="button" class="dcard" data-m="u${i}"${why?' disabled':''}>${unitCard(u,false,add,false,add==null)}${why?`<span class="dno">${why}</span>`:''}</button>`).join('')}</div><div class="mbtns"><button type="button" data-m="skip">${skipLabel}</button></div>`);
   return m==='skip'?null:run.roster[+m.slice(1)];
 }
 const full=u=>u.items.length>=5?'Inventory full':null;
@@ -43,12 +46,12 @@ async function treasureNode(){
   const mk=()=>{const r=rand(),rp=relicPool(['c','u']);if(rp.length&&r<.2)return'relic:'+pick(rp);if(r<.3)return'skill:'+pick(SKILL_POOL());return pick(pool.filter(k=>!isWpn(k)&&IT[k].t!=='spirit'||run.roster.some(u=>canUse(u,k))&&!squadHas(k)))};
   let k=mk();
   for(;;){
-    const row=k.startsWith('skill:')?`<img src="${icon('ascensionFragment')}" alt=""><span><b>${SKILLS[k.slice(6)].n}</b> · Skill · ${SKILLS[k.slice(6)].d}</span>`:k.startsWith('relic:')?`<img src="${relicArt(k.slice(6))}" alt=""><span><b>${RELICS[k.slice(6)].n}</b> · Relic · ${RELICS[k.slice(6)].d}</span>`:`<img src="${icon(k)}" alt=""><span>${itemText(k)}</span>`;
+    const row=k.startsWith('skill:')?`<img src="${icon('ascensionFragment')}" alt=""><span><b>${SKILLS[k.slice(6)].n}</b> · ${rwTag('skill')} · ${SKILLS[k.slice(6)].d}</span>`:k.startsWith('relic:')?`<img src="${relicArt(k.slice(6))}" alt=""><span><b>${RELICS[k.slice(6)].n}</b> · ${rwTag('artifact')} · ${RELICS[k.slice(6)].d}</span>`:`<img src="${icon(k)}" alt=""><span>${itemText(k)}</span>`;
     const m=await modal(`<div class="eyebrow">Treasure</div><h2>A sealed vault</h2><div class="inv big"><button type="button" class="it" data-m="take">${row}</button></div>${canReroll()?'<div class="mbtns"><button type="button" data-m="reroll">Reroll (once this act)</button></div>':''}`);
     if(m==='reroll'){run.rr[run.act||1]=1;k=mk();sfx('tick');continue}
     if(k.startsWith('skill:')){if(await allocSkill(k.slice(6)))return;continue}
     if(k.startsWith('relic:')){const r=k.slice(6);(run.relics=run.relics||[]).push(r);sfx('fanfare');toast(`${RELICS[r].n} obtained`);return}
-    const u=await pickUnit(`Who carries the ${IT[k].n}?`,'If their bag is full, you can swap something out.',u=>isWpn(k)&&!canUse(u,k)?'Can’t wield it':null,'Leave it');
+    const kd=isWpn(k)?'weapon':'item',u=await pickUnit(`Who carries the ${rwTag(kd,IT[k].n)}?`,'If their bag is full, you can swap something out.',u=>isWpn(k)&&!canUse(u,k)?'Can’t wield it':null,'Leave it',undefined,kd);
     if(!u)return;if(!await stow(u,k))continue;sfx('item');toast(`${u.name} takes the ${IT[k].n}`);return;
   }
 }

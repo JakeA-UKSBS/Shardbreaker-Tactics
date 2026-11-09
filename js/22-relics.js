@@ -12,7 +12,7 @@ const RELICS={
   horn:{n:'War Horn',r:'u',d:'On turn 1 of each battle, units deal +3 damage.'},
   phoenix:{n:'Phoenix Feather',r:'r',d:'Once per run, the first unit to fall survives with 10 HP.'},
   crown:{n:'Slayer’s Crown',r:'r',d:'Units deal +4 damage to bosses and elite leaders.'},
-  lantern:{n:'Pathfinder’s Lantern',r:'r',d:'Recruit nodes offer 4 units, 1 level higher.'},
+  lantern:{n:'Pathfinder’s Lantern',r:'r',d:'Tavern hires and the crossroads offer units 1 level higher.'},
   quiver:{n:'Endless Quiver',r:'u',x:2,d:'Bows deal +3 damage.'},
   focusgem:{n:'Focus Gem',r:'u',x:2,d:'Arts deal +2 damage and gain +10 Hit.'},
   spurs:{n:'Golden Spurs',r:'u',x:4,d:'Mounted and flying units gain +1 Move and +10 Avoid.'},
@@ -60,7 +60,7 @@ function relicPool(rs){return Object.keys(RELICS).filter(k=>!R(k)&&!RELICS[k].ev
 async function relicPick(n,rs,title,text,first){
   /* first: relics that are always offered (the Heirloom pick always has one heirloom relic) */
   const opts=[...(first||[]).filter(Boolean),...shuffle(relicPool(rs))].slice(0,n);if(!opts.length)return null;
-  const m=await modal(`<div class="eyebrow">Relic</div><h2>${title}</h2>${text?`<p>${text}</p>`:''}<div class="inv big">${opts.map((k,i)=>`<button type="button" class="it" data-m="r${i}"><img src="${relicArt(k)}" alt=""><span><b>${RELICS[k].n}</b> · ${RELICS[k].d}</span><em>${RN[RELICS[k].r]}</em></button>`).join('')}</div>`);
+  const m=await modal(`<div class="eyebrow">${rwTag('artifact')}</div><h2>${title}</h2>${text?`<p>${text}</p>`:''}<div class="inv big">${opts.map((k,i)=>`<button type="button" class="it" data-m="r${i}"><img src="${relicArt(k)}" alt=""><span><b>${RELICS[k].n}</b> · ${RELICS[k].d}</span><em>${RN[RELICS[k].r]}</em></button>`).join('')}</div>`);
   const k=opts[+m.slice(1)];(run.relics=run.relics||[]).push(k);sfx('fanfare');toast(`${RELICS[k].n} obtained`);return k;
 }
 /* crystal creatures: enemies made of crystal or gem (for the Black Onyx Shard and the Gnome's notes) */

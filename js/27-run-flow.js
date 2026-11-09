@@ -53,8 +53,8 @@ async function winScreen(){
   if(run.pendSkill){const k=run.pendSkill;run.pendSkill=null;await allocSkill(k,`Found: ${SKILLS[k].n}`)}}
   else run.pendSkill=null;
   if(run.kind==='elite'){await relicPick(2,['c','u'],'The elite’s spoils','');
-    for(;;){const u=await pickUnit('A weapon from the Elder’s hoard',`Who takes it? They get the one that suits them: ${steelList()}.`,u=>!steelFor(u)?'Nothing for them':u.items.some(it=>it.k===steelFor(u))?'Already has one':null,'Leave it');
-      if(!u)break;const k=steelFor(u);if(!await stow(u,k))continue;sfx('item');toast(`${u.name} takes the ${IT[k].n}`);break}}
+    const u=await pickUnit(`Choose a unit for a ${rwTag('weapon')} upgrade +1`,'',u=>{const w=weaponOf(u);return!w?'No weapon':forgeLv(w)>=FORGE_MAX?'Already +3':null},'Leave it',undefined,'weapon');
+    if(u){const w=weaponOf(u);forge(w);if(R('anvil'))forge(w);sfx('item');toast(`${u.name}’s weapon is now the ${IT[w.k].n}`)}}
   if(bossWin&&!final)await relicPick(3,['u','r'],'The boss’s hoard','');
   if(final){const news=endRun(true);sfx('fanfare');await modal(`<div class="endban win">Victory</div><div class="eyebrow">${seedTag(run.seed)}${run.asc?` · Ascension ${run.asc}`:''} · ${fmtTime(run.time)}</div><h2>The blight is broken</h2>${newsHTML(news)}<div class="roster">${run.roster.map(u=>`<div><img src="${portrait(u)}" alt="">${u.name}<span class="hint">${CLS[u.cls].n}</span></div>`).join('')}</div><div class="mbtns"><button class="go" type="button" data-m="ok">Back to title</button></div>`);
     try{localStorage.removeItem(SAVE)}catch(_){}run=null;titleScreen();return}

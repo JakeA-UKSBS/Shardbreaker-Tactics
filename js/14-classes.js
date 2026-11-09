@@ -40,6 +40,8 @@ const MOVES={foot:{mov:5},armour:{pre:'Iron',mov:4,st:[2,1,0,0,-2,0,3,0]},
   /* Mounted: 7 move, slowed by forest and hills. Names replace the role word, e.g. Lance Cavalier. */
   flying:{mov:6,mnt:true,fly:true,st:[-1,0,0,0,1,1,-1,1],names:{bruiser:['Wyvern Rider','Wyvern Lord'],tank:['Wyvern Knight','Dragonmaster'],skirm:['Pegasus Knight','Falcon Knight'],caster:['Sky Mage','Storm Sage'],support:['Sky Mender','Seraph'],summoner:['Sky Caller','Storm Caller'],rogue:['Sky Raider','Sky Reaver'],sword:['Sky Blade','Sky Master'],shield:['Sky Shield','Valkyrie Knight'],knight:['Wyvern Knight','Dragonmaster']}},
   mounted:{mov:7,mnt:true,st:[1,0,0,0,1,0,0,-1],names:{bruiser:['Rider','Warlord'],tank:['Cavalier','Paladin'],skirm:['Outrider','Ranger'],caster:['Battlemage','Archmage'],support:['Troubadour','Valkyrie'],summoner:['Beastcaller','Beastmaster'],rogue:['Raider','Marauder'],sword:['Blade Rider','Blade Lord'],shield:['Shield Rider','Shield Lord'],knight:['Cavalier','Paladin']}}};
+/* MOV_SET: per-class Move overrides by class name (Cavalier 6, Warlord 7, Paladin 8) */
+const MOV_SET={Cavalier:6,Warlord:7,Paladin:8};
 /* WN: weapon type names. SEC: second weapon type gained on promotion. */
 const WN={blade:'Blade',heavy:'Axe',pole:'Lance',bow:'Bow'};
 const SEC={blade:'pole',heavy:'blade',pole:'heavy',bow:'blade',art:'spirit'};
@@ -49,6 +51,7 @@ function ensureCls(k){
   const[,r,m,w,t]=k.split('.'),R=ROLES[r],M=MOVES[m],t2=t==='2';
   const ws=w==='spirit'?['spirit']:(r==='shield'||r==='knight')?['blade','pole']:[w];if(t2&&SEC[w]&&!ws.includes(SEC[w])&&!['shield','knight','sword','rogue'].includes(r))ws.push(SEC[w]);
   CLS[k]={n:(M.pre&&r!=='knight'?M.pre+' ':'')+(WN[w]&&!['rogue','shield','knight','sword','bruiser'].includes(r)?WN[w]+' ':'')+(M.names?M.names[r][t2?1:0]:R.nw&&R.nw[w]?R.nw[w][t2?1:0]:t2?R.n2:R.n),w:ws,body:m==='armour'?'armor':R.body,mov:M.mov+(t2?1:0),crit:R.crit||0,mnt:!!M.mnt,fly:!!M.fly};
+  if(MOV_SET[CLS[k].n]!=null)CLS[k].mov=MOV_SET[CLS[k].n];
   if(t2)Object.assign(CLS[k],{tier:2,bonus:R.bonus});else{CLS[k].promo=`G.${r}.${m}.${w}.2`;ensureCls(CLS[k].promo)}
   return k;
 }
