@@ -53,7 +53,7 @@ function render(){
   const tk=danger&&phase==='player'?(ui==='terrain'?threatTile:(sel&&(ui==='menu'||ui==='target'||ui==='confirm'||ui==='items'))?key(byId(sel).x,byId(sel).y):null):null,thr=new Set(tk&&dg.get(tk)||[]);
   const tset=new Set(targets.flatMap(u=>cellsOf(u.x,u.y,u.sz||1).map(c=>key(...c)))),su=sel&&byId(sel),healer=su&&staffIdx(su)>=0&&!atkTargets(su).length&&eqIdx(su)<0;
   boardEl.querySelectorAll('.tile').forEach(t=>{
-    const k=t.dataset.k;t.classList.remove('mv','atk','hl','dg','tg','cur');
+    const k=t.dataset.k;t.classList.remove('mv','atk','hl','dg','tg','cur');t.classList.toggle('ice',!!(state.ice&&state.ice[k]));
     if(dg.has(k))t.classList.add('dg');
     if((ui==='move'||(ui==='idle'&&inspect))&&moveSet){if(moveSet.has(k))t.classList.add('mv');else if(fringe.has(k))t.classList.add(healer?'hl':'atk')}
     if((ui==='target'||ui==='confirm')&&tset.has(k))t.classList.add(tmode==='heal'?'hl':'atk','tg');

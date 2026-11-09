@@ -11,7 +11,10 @@ function dropGone(o){if(!o||typeof o!=='object')return;
   if(Array.isArray(o.relics))o.relics=o.relics.filter(k=>RELICS[k]);
   if(Array.isArray(o.units))o.units=o.units.filter(u=>!u||!u.cls||CLS[u.cls]);
   for(const v of Object.values(o))dropGone(v)}
-function loadGame(){if(!SAVES_ON){try{localStorage.removeItem(SAVE)}catch(_){}return null}try{const sv=JSON.parse(localStorage.getItem(SAVE));dropGone(sv);return sv}catch(_){return null}}
+/* renamed cast ids, so older saves keep their characters */
+const CAST_RENAMED={brin:'raptor',celestine:'celest'};
+function renameCast(o){if(!o||typeof o!=='object')return;if(CAST_RENAMED[o.cast])o.cast=CAST_RENAMED[o.cast];if(Array.isArray(o.castUsed))o.castUsed=o.castUsed.map(id=>CAST_RENAMED[id]||id);for(const v of Object.values(o))renameCast(v)}
+function loadGame(){if(!SAVES_ON){try{localStorage.removeItem(SAVE)}catch(_){}return null}try{const sv=JSON.parse(localStorage.getItem(SAVE));renameCast(sv);dropGone(sv);return sv}catch(_){return null}}
 function setupBattle(roster){
   foeSeq=0;const c=BATTLE;setMap();
   const heroes=roster.map(h=>Object.assign(clone(h),{hp:Math.max(1,Math.min(h.maxhp,h.hp==null?h.maxhp:h.hp)),acted:false,stone:0,psn:0}));

@@ -74,7 +74,7 @@ function slashFx(X,Y,w,crit){if(!w||!['blade','heavy'].includes(w.t))return;/* l
 /* ================= ON-MAP ATTACKS ================= */
 let fast=false;
 const D=ms=>ms*(fast?.3:1);
-const EL_COL={fire:'#ff8a3c',water:'#5ab4ff',wind:'#8ae8b0',earth:'#c8a060',lightning:'#ffe14a',illusion:'#b46aff',light:'#fff2b0',crystal:'#ff5a6a',nature:'#7ad85a',dark:'#b46aff'};
+const EL_COL={fire:'#ff8a3c',water:'#5ab4ff',ice:'#bfefff',wind:'#8ae8b0',earth:'#c8a060',lightning:'#ffe14a',illusion:'#b46aff',light:'#fff2b0',crystal:'#ff5a6a',nature:'#7ad85a',dark:'#b46aff'};
 /* element attacks have their own sound; other magic (light, dark, nature) is silent for now */
 const EL_SFX={fire:'fire',water:'water',lightning:'thunder',wind:'wind',ice:'ice'};
 const CLAW_SFX=['Claws','Fangs','Talons','Bite'];

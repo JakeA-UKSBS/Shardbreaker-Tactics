@@ -26,7 +26,8 @@ const STATUS={
   shell:{n:'Shell',tick:'start',d:'+2 Def and +2 Res.'},
   shieldUp:{n:'Shield Up',tick:'start',d:'Counterattacks deal 1.3×.'},
   valour:{n:'Valour',tick:'start',d:'Deals 20% more damage.'},
-  anthem:{n:'Anthem',tick:'start',d:'Deals 30% more damage and +10 Hit.'}
+  anthem:{n:'Anthem',tick:'start',d:'Deals 30% more damage and +10 Hit.'},
+  iceShield:{n:'Ice Shield',tick:'start',d:'+3 Def.'}
 };
 const hasSt=(u,k)=>!!(u&&u.st&&u.st[k]&&u.st[k].n>0);
 /* status immunities: Rook (Slippery) can't be Rooted; an Aegis can't be turned to Stone (nor can bosses) */
@@ -48,7 +49,8 @@ Object.assign(SKILLS,{
   slippery:{n:'Slippery',cost:5,kit:1,d:'Can move through enemy tiles, and can’t be Rooted.'},
   bulwarkAura:{n:'Bulwark',cost:5,kit:1,d:'Allies next to her take 30% less damage from ranged attacks.'},
   beginnersLuck:{n:'Beginner’s Luck',cost:5,kit:1,d:'+10 Crit and +10 Avoid while at full HP.'},
-  audience:{n:'Audience',cost:5,kit:1,d:'Allies within 2 tiles of him get +10 Hit.'}
+  audience:{n:'Audience',cost:5,kit:1,d:'Allies within 2 tiles of him get +10 Hit.'},
+  twinBolt:{n:'Lightning Strikes Twice',cost:5,kit:1,d:'With a lightning sigil: +3 Spd when checking for a double attack, but his second strike deals 0.8× damage.'}
 });
 
 /* ---- abilities ----
@@ -72,10 +74,21 @@ const ABIL={
   drainTouch:{n:'Drain Touch',mp:4,mag:1,el:'dark',side:'foe',r:[1,1],dmg:1.2,d:'1.2× magic damage to an adjacent enemy.'},
   hex:{n:'Hex',mp:5,mag:1,el:'dark',side:'foe',r:[1,3],st:['weak',2],d:'The target is Weak (deals 30% less damage) for 2 turns.'},
   darkPulse:{n:'Dark Pulse',mp:10,mag:1,el:'dark',side:'self',shape:'burst1',dmg:1,d:'1.0× magic damage to every enemy around her.'},
-  /* Corvin (Elemental Mage) */
+  /* Corvin (Ice Mage) */
+  iceShard:{n:'Ice Shard',mp:4,mag:1,el:'ice',side:'foe',r:[1,3],dmg:1,st:['chill',1],d:'1.0× magic damage up to 3 away, and Slow (−2 Move).'},
+  iceShield:{n:'Ice Shield',mp:5,el:'ice',side:'ally',r:[0,3],give:['iceShield',3],d:'An ally up to 3 away (or herself) gets +3 Def for 3 turns.'},
+  frostWall:{n:'Frost Wall',mp:8,el:'ice',side:'tile',wall:2,r:[1,3],shape:'wall',d:'Three tiles in a row, up to 3 away, freeze into ice walls for 2 enemy turns. Enemies can’t move through them; allies can.'},
+  blizzard:{n:'Blizzard',mp:10,mag:1,el:'ice',side:'foe',r:[1,3],shape:'area',aim:'any',dmg:.7,st:['chill',1],d:'A 3×3 storm of ice up to 3 away: 0.7× magic damage and Slow to every enemy in it.'},
+  /* Drecken (Storm Mage) */
+  spark:{n:'Spark',mp:4,mag:1,el:'lightning',side:'foe',r:[1,3],dmg:1,st:['stun',1,.15],d:'1.0× magic damage up to 3 away, 15% chance to Stun.'},
+  thunderclap:{n:'Thunderclap',mp:10,mag:1,el:'lightning',side:'self',shape:'burst1',dmg:1.1,st:['stun',1,.3],d:'1.1× magic damage to every enemy around him, 30% chance to Stun each.'},
+  /* Pepr (Poisoner) */
+  poisonDart:{n:'Poison Dart',cd:2,side:'foe',r:[2,3],dmg:.6,psn:1,d:'0.6× damage from 2–3 tiles away, and the target is Poisoned.'},
+  noxiousCloud:{n:'Noxious Cloud',cd:4,side:'foe',r:[1,3],shape:'area',aim:'any',dmg:.3,psn:1,st:['weak',1],d:'A 3×3 cloud up to 3 away: 0.3× damage, Poison and Weak (30% less damage) for a turn on every enemy in it.'},
+  /* unused for now (was Corvin's) */
   flameBurst:{n:'Flame Burst',mp:5,mag:1,el:'fire',side:'foe',r:[1,3],shape:'cross',aim:'any',dmg:.9,st:['burn',2,.3],d:'A cross of fire up to 3 away: 0.9× magic damage, 30% chance to Burn.'},
-  frostWave:{n:'Frost Wave',mp:7,mag:1,el:'water',side:'foe',r:[1,1],shape:'cone',aim:'dir',dmg:.9,st:['chill',1],d:'A cone of frost (4 tiles): 0.9× magic damage and Slow (−2 Move).'},
-  chainLightning:{n:'Chain Lightning',mp:9,mag:1,el:'lightning',side:'foe',r:[1,4],dmg:1,chain:[2,.6],d:'1.0× magic damage, then it jumps to up to 2 enemies near the target at 0.6×.'},
+  frostWave:{n:'Frost Wave',mp:7,mag:1,el:'ice',side:'foe',r:[1,1],shape:'cone',aim:'dir',dmg:.9,st:['chill',1],d:'A cone of frost (4 tiles): 0.9× magic damage and Slow (−2 Move).'},
+  chainLightning:{n:'Chain Lightning',mp:9,mag:1,el:'lightning',side:'foe',r:[1,4],dmg:1,chain:[2,.6],d:'1.0× magic damage, then it bounces up to 2 times, each to an enemy within 2 tiles of the last one hit, at 0.6×.'},
   /* Aldric (Knight) */
   sunder:{n:'Sunder',cd:2,side:'foe',r:[1,1],dmg:1.2,st:['sunder',2],d:'1.2× damage, and the target has −3 Def for 2 turns.'},
   valiantThrust:{n:'Valiant Thrust',cd:3,side:'foe',r:[1,1],shape:'pierce',aim:'dir',dmg:1,d:'A lunge through 2 tiles in a line: 1.0× damage to both.'},
@@ -93,7 +106,7 @@ const ABIL={
   shieldBash:{n:'Shield Bash',cd:2,side:'foe',r:[1,1],dmg:1,push:1,d:'1.0× damage and push 1.'},
   challenge:{n:'Challenge',cd:3,side:'self',shape:'burst2',st:['challenged',1],d:'Enemies within 2 tiles must attack her next turn, if they can reach her.'},
   holdTheLine:{n:'Hold the Line',cd:4,side:'self',self:[['guard',1],['steady',1]],d:'Guard (30% less damage), and she can’t be pushed, until your next turn.'},
-  /* Brin (Adventurer) */
+  /* Raptor (Adventurer) */
   rally:{n:'Rally',cd:3,side:'self',shape:'burst1',give:['rally',2],others:1,d:'Allies around him get +2 Str and +2 Def for 2 turns.'},
   cleanCut:{n:'Clean Cut',cd:2,side:'foe',r:[1,1],dmg:1.2,hit:10,d:'1.2× damage, as accurate as a normal attack.'},
   shieldUp:{n:'Shield Up',cd:3,side:'self',self:[['guard',1],['shieldUp',1]],d:'Guard, and his counterattacks deal 1.3×, until your next turn.'},
@@ -112,13 +125,15 @@ const KITS={
   kili:{passive:'eagleEye',mp:0,abil:['aimedShot','pinningArrow','volley']},
   vaar:{passive:'ironBody',mp:0,abil:['palmStrike','flurry','leap']},
   morrigan:{passive:'siphon',mp:24,abil:['drainTouch','hex','darkPulse']},
-  corvin:{passive:'attunement',mp:28,abil:['flameBurst','frostWave','chainLightning']},
+  corvin:{mp:28,abil:['iceShard','frostWave','blizzard','iceShield','frostWall']},/* no kit passive yet: keeps her random skill */
+  drecken:{passive:'twinBolt',mp:28,abil:['spark','chainLightning','thunderclap']},
   aldric:{passive:'plate',mp:0,abil:['sunder','valiantThrust','cover']},
   maelis:{passive:'lastLight',mp:26,abil:['mend','purify','circleOfRest','sanctuary']},
   aletta:{mp:12,abil:['purify']},/* no kit passive yet: keeps her random skill */
+  pepr:{passive:'venom',mp:0,abil:['poisonDart','noxiousCloud','tumble']},
   rook:{passive:'slippery',mp:0,abil:['backstab','smokeBomb','tumble']},
   brynhildr:{passive:'bulwarkAura',mp:0,abil:['shieldBash','challenge','holdTheLine']},
-  brin:{passive:'beginnersLuck',mp:0,abil:['rally','cleanCut','shieldUp']},
+  raptor:{passive:'beginnersLuck',mp:0,abil:['rally','cleanCut','shieldUp']},
   lysander:{passive:'audience',mp:24,abil:['songOfValour','lullaby','soothingBallad','encore'],
     asc:{'Bard':{songOfValour:'anthem',lullaby:'grandLullaby',soothingBallad:'soothingHymn'}}}/* as a Bard: stronger songs, shorter waits */
 };
@@ -190,7 +205,7 @@ function dmgMods(x,y,ctx,dmg){
 /* Pow/Def/Hit/Avoid/Crit changes from statuses and passives, added inside calc() */
 function stCalc(x,xw,y){
   const phys=!xw.mag,fx=x.hp>=x.maxhp,fy=y.hp>=y.maxhp;
-  return{pow:(hasSt(x,'rally')&&phys?2:0),df:(phys&&hasSt(y,'rally')?2:0)-(phys&&hasSt(y,'sunder')?3:0)+(hasSt(y,'shell')?2:0)+(phys&&has(y,'plate')?2:0),
+  return{pow:(hasSt(x,'rally')&&phys?2:0),df:(phys&&hasSt(y,'rally')?2:0)-(phys&&hasSt(y,'sunder')?3:0)+(hasSt(y,'shell')?2:0)+(phys&&has(y,'plate')?2:0)+(phys&&hasSt(y,'iceShield')?3:0),
     acc:(hasSt(x,'blind')?-20:0)+(hasSt(x,'sandEyes')?-10:0)+(hasSt(x,'anthem')?10:0)+(state.units.some(o=>o!==x&&o.hp>0&&o.team===x.team&&has(o,'audience')&&man(o,x)<=2)?10:0),avo:(hasSt(y,'smoke')?30:0)+(has(y,'beginnersLuck')&&fy?10:0),crit:(has(x,'beginnersLuck')&&fx?10:0)};
 }
 const eagle=(u,w)=>w&&w.t==='bow'&&has(u,'eagleEye')?1:0;
@@ -205,6 +220,7 @@ function shapeTiles(u,id,tx,ty){
   if(a.side==='self'){const R=sh==='burst2'?2:1,z=u.sz||1;for(let y=u.y-R;y<u.y+z+R;y++)for(let x=u.x-R;x<u.x+z+R;x++){const d=man(u,{x,y});if(!d)continue;if(sh==='burst2'?d<=2:Math.max(Math.max(0,u.x-x,x-(u.x+z-1)),Math.max(0,u.y-y,y-(u.y+z-1)))<=1)add(x,y)}return out}
   if(sh==='one')add(tx,ty);
   else if(sh==='cross'){add(tx,ty);for(const[dx,dy]of DIRS)add(tx+dx,ty+dy)}
+  else if(sh==='wall'){const ac=Math.abs(tx-u.x)>=Math.abs(ty-u.y);for(let s=-1;s<=1;s++)add(tx+(ac?0:s),ty+(ac?s:0))}
   else if(sh==='area'){for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++)add(tx+dx,ty+dy)}
   else{const dx=Math.sign(tx-u.x),dy=Math.sign(ty-u.y),px=-dy,py=dx;
     if(sh==='pierce'){add(u.x+dx,u.y+dy);add(u.x+2*dx,u.y+2*dy)}
@@ -245,7 +261,7 @@ function abVs(u,id,t,mult){
 }
 function healAmt(u,id,t){const a=ABIL[id];let h=a.healPct?Math.round(t.maxhp*a.healPct):Math.round((u.mag+5)*a.heal);if(has(u,'lastLight')&&t.hp*2<t.maxhp)h=Math.round(h*1.5);return Math.min(h,t.maxhp-t.hp)}
 /* who Chain Lightning jumps to */
-function chainTo(u,id,t){const a=ABIL[id];return state.units.filter(o=>o!==t&&o.hp>0&&hostile(o,u)&&man(o,t)<=2).sort((p,q)=>man(p,t)-man(q,t)).slice(0,a.chain[0])}
+function chainTo(u,id,t){const a=ABIL[id],out=[];let at=t;for(let i=0;i<a.chain[0];i++){const n=state.units.filter(o=>o!==t&&!out.includes(o)&&o.hp>0&&hostile(o,u)&&man(o,at)<=2).sort((p,q)=>man(p,at)-man(q,at))[0];if(!n)break;out.push(n);at=n}return out}
 
 /* ---- pushing ---- */
 const canPush=t=>!(t.sz>1)&&!t.boss&&!has(t,'ironBody')&&!hasSt(t,'steady');
@@ -263,7 +279,8 @@ async function useAbility(u,id,tx,ty){
   const a=ABIL[id];busy=true;
   if(a.mp){u.mp-=abCost(u,id);if(a.el)u.lastEl=a.el}if(a.cd)(u.cd=u.cd||{})[id]=a.cd;if(a.once)(u.cd=u.cd||{})[id]=99;
   pop(u,a.n,'heal');await sleep(D(350));
-  if(a.side==='tile'){stepSfx(u,tx,ty);u.x=tx;u.y=ty;render();await sleep(D(250));sfx('earth');shake()}
+  if(a.wall){(state.ice=state.ice||{});for(const[x,y]of shapeTiles(u,id,tx,ty))if(!unitAt(x,y)&&ter(x,y).c<99)state.ice[key(x,y)]=a.wall;sfx('ice');render();await sleep(D(250))}
+  else if(a.side==='tile'){stepSfx(u,tx,ty);u.x=tx;u.y=ty;render();await sleep(D(250));sfx('earth');shake()}
   /* Charge: run up next to the target first (the free tile beside it nearest the charger) */
   if(a.charge){const t=unitAt(tx,ty);if(t&&man(u,t)>1){const opts=DIRS.map(([dx,dy])=>({x:t.x+dx,y:t.y+dy})).filter(p=>p.x>=0&&p.y>=0&&p.x<MW&&p.y<MH&&!unitAt(p.x,p.y)&&mcost(u,p.x,p.y)<99).sort((p,q)=>man(u,p)-man(u,q));
     if(opts[0]){stepSfx(u,opts[0].x,opts[0].y);u.x=opts[0].x;u.y=opts[0].y;render();await sleep(D(200))}}}
@@ -312,7 +329,7 @@ function tumbleSet(u){const s=new Set([key(u.x,u.y)]);for(let dy=-2;dy<=2;dy++)f
 /* a battle starts: full MP, no cooldowns or statuses */
 function abReset(us){for(const u of us){u.mp=mpMax(u);u.cd={};u.st={};delete u.lastEl}}
 /* your phase starts: MP back, cooldowns tick, your buffs fade, burns hurt, stunned units sit out */
-function abPlayerStart(){for(const u of state.units)if(u.team==='p'){if(mpMax(u))u.mp=Math.min(mpMax(u),(u.mp||0)+MP_REGEN);for(const k in u.cd||{})if(u.cd[k]>0)u.cd[k]--}
+function abPlayerStart(){if(state.ice)for(const k in state.ice)if(--state.ice[k]<=0)delete state.ice[k];for(const u of state.units)if(u.team==='p'){if(mpMax(u))u.mp=Math.min(mpMax(u),(u.mp||0)+MP_REGEN);for(const k in u.cd||{})if(u.cd[k]>0)u.cd[k]--}
   tickSt('p','start');burnTick('p');for(const u of state.units)if(u.team==='p'&&hasSt(u,'stun')){u.acted=true;pop(u,'Stunned','miss')}}
 
 /* ---- the Abilities menu, aiming and the forecast ---- */
