@@ -545,6 +545,8 @@ button.it.sel{border-color:var(--gold)}
 .ev-well{left:34%;width:32%;bottom:12%}
 .ev-anvil{left:35%;width:30%;bottom:10%}
 .ev-altar{left:34%;width:32%;bottom:14%}
+.ev-blood-shrine{left:34%;width:34%;bottom:14%}
+.ev-throne{left:23%;width:45%;bottom:6%;z-index:1}
 .ev-desk{left:33%;width:34%;bottom:4%}
 .ev-potions{left:33%;width:34%;bottom:8%}
 .ev-stained-glass{left:40%;width:20%;top:4%;bottom:auto}
