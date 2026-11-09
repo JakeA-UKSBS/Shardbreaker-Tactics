@@ -48,6 +48,7 @@ const IT={
   crossbow:{n:'Crossbow',t:'bow',kind:'crossbow',mt:8,hit:80,crit:0,r:[2,2],uses:35},
   emberSigil:{n:'Ember Sigil',t:'art',kind:'talisman',el:'fire',mt:5,hit:90,crit:0,r:[1,2],uses:40,mag:true},
   tideSigil:{n:'Tide Sigil',t:'art',kind:'talisman',el:'water',mt:5,hit:90,crit:0,r:[1,2],uses:40,mag:true},
+  frostSigil:{n:'Frost Sigil',t:'art',kind:'talisman',el:'ice',mt:7,hit:85,crit:5,r:[1,2],uses:35,mag:true},
   stormSigil:{n:'Storm Sigil',t:'art',kind:'talisman',el:'lightning',mt:8,hit:80,crit:5,r:[1,2],uses:35,mag:true},
   thornSigil:{n:'Thorn Sigil',t:'art',kind:'talisman',el:'nature',mt:5,hit:90,crit:0,r:[1,2],uses:40,mag:true},
   dawnSigil:{n:'Dawn Sigil',t:'art',kind:'talisman',el:'light',mt:5,hit:90,crit:0,r:[1,2],uses:40,mag:true},
@@ -72,7 +73,7 @@ Object.assign(IT,{
 });
 /* WT: weapon weight. Weight above the wielder's Str (Mag for sigils) is taken off their attack speed (see wtOver/AS). */
 const WT={wornSword:4,twinDaggers:2,knightlySword:8,thornRapier:3,hookedBlade:6,moonglassEdge:6,greatsword:12,ironSpear:6,steelSpear:10,javelin:8,hatchet:7,cleaver:11,throwingAxe:9,halberd:9,labrys:13,
-  shortBow:3,ironwoodBow:7,crossbow:6,emberSigil:2,tideSigil:3,stormSigil:5,thornSigil:3,dawnSigil:2,umbralSigil:5,crookStaff:4,runeStaff:3,
+  shortBow:3,ironwoodBow:7,crossbow:6,emberSigil:2,tideSigil:3,frostSigil:4,stormSigil:5,thornSigil:3,dawnSigil:2,umbralSigil:5,crookStaff:4,runeStaff:3,
   dirk:1,stiletto:2,barbedSpear:7,reaverAxe:9,hawkeyeBow:5};
 for(const k in WT)IT[k].wt=WT[k];
 /* ---- special weapons from events: jade (killer) weapons, lightning sigils, long-range sigils and charms ---- */
@@ -110,7 +111,7 @@ for(const k in IT)IT[k].key=k;
 
 /* WTYPES: weapon types. ELN: element display names. */
 const WTYPES=['blade','heavy','pole','bow','art'];
-const ELN={light:'Light',dark:'Dark',fire:'Fire',nature:'Nature',water:'Water',wind:'Wind',earth:'Earth',lightning:'Lightning',illusion:'Illusion',crystal:'Neutral'};
+const ELN={light:'Light',dark:'Dark',fire:'Fire',nature:'Nature',water:'Water',ice:'Ice',wind:'Wind',earth:'Earth',lightning:'Lightning',illusion:'Illusion',crystal:'Neutral'};
 /* CLASSES, keyed by class id (shared by player classes and monsters):
    n = class name shown in game, w = weapon types it can use, body = body type (tunic/robe/vest/armor/beast/golem...: used by the unit rig, tags and the boss PNG lookup),
    mov = Move, crit = bonus Crit %, promo = class it promotes to, tier = 2 for promoted classes, bonus = stats added on promotion (stat order above),

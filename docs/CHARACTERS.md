@@ -65,12 +65,12 @@ Each base class ascends into one or two advanced classes at Lv 5.
 | Kili | Archer | Sniper or Bow Cavalry | M |
 | Vaar | Brawler | Berserker | M |
 | Morrigan | Cultist | Witch or Shaman | F |
-| Corvin | Elemental Mage | Archmage or Stormlord | F |
+| Corvin | Ice Mage | Archmage or Frostlord | F |
+| Drecken | Storm Mage | Stormlord | M |
 | Aldric | Knight | Juggernaut or Paladin | M |
 | Maelis | Mender | Saint or Crusader | F |
 | Rook | Rogue | Duelist or Assassin | M |
 | Brynhildr | Shieldmaiden | Valkyrie or Aegis | F |
-| Brin | Adventurer | Hero | M |
 | Trent | Cavalier | Paladin or Warlord | M |
 
 ### Kili: Archer
@@ -106,16 +106,29 @@ A witch-hunter's daughter who took up the dark arts to hunt the blight instead. 
 - **Hex** (single, range 3 · 5 MP): Weak for 2 turns.
 - **Dark Pulse** (burst r1 · 10 MP): 1.0× Mag to every adjacent enemy.
 
-### Corvin: Elemental Mage
+### Corvin: Ice Mage
 ![Corvin](visuals/cast/corvin.png)
 
-A court magician's apprentice who walked out when her master started making weapons for the war. Curious and methodical. Works in fire, frost and lightning.
-- **Ascends into:** Archmage or Stormlord.
-- **Look:** dress and formal cloak, casts from her hand; lightning down the robe as a Stormlord.
-- **Passive: Attunement.** A spell of a different element from her last one costs 2 less MP.
-- **Flame Burst** (cross at range 3 · 5 MP): 0.9× Mag, 30% chance to Burn.
+A court magician's apprentice who walked out when her master started making weapons for the war. Curious and methodical. Works in frost.
+- **Ascends into:** Archmage or Frostlord.
+- **Look:** dress and formal cloak, casts from her hand; pale ice-white robes as a Frostlord.
+- **Weapon:** Frost Sigil. Only Corvin can wield ice sigils.
+- **Passive:** none yet (keeps a random skill).
+- **Ice Shard** (single, range 3 · 4 MP): 1.0× Mag, 40% chance to Slow.
 - **Frost Wave** (cone 3 · 7 MP): 0.9× Mag and Slow.
+- **Blizzard** (3×3 at range 3 · 10 MP): 0.7× Mag and Slow to every enemy in it.
+
+### Drecken: Storm Mage
+![Drecken](visuals/cast/drecken.png)
+
+Bio to come.
+- **Ascends into:** Stormlord.
+- **Look:** dark storm-grey robes and cape, yellow sash, casts from his hand; lightning down the robe as a Stormlord.
+- **Weapon:** Storm Sigil. Only Drecken can wield lightning sigils (Spark, Thunderhead, Heaven's Bolt; the Storm Altar and Storm Spire events are his).
+- **Passive:** none yet (keeps a random skill).
+- **Spark** (single, range 3 · 4 MP): 1.0× Mag, 15% chance to Stun.
 - **Chain Lightning** (single, range 4 · 9 MP): 1.0× Mag, then jumps to up to 2 nearby enemies at 0.6×.
+- **Thunderclap** (burst r1 · 10 MP): 1.1× Mag to every adjacent enemy, 30% chance to Stun each.
 
 ### Aldric: Knight
 ![Aldric](visuals/cast/aldric.png)
@@ -163,17 +176,6 @@ A city guardswoman who deserted rather than march on the neighbouring kingdom. S
 - **Challenge** (burst r2 · CD 3): enemies in range must target her next turn.
 - **Hold the Line** (self · CD 4): Guard, and she can't be pushed until her next turn.
 
-### Brin: Adventurer
-![Brin](visuals/cast/brin.png)
-
-A farm boy who left home with a borrowed sword the day the beasts came. Eager, lucky, and better at this than anyone expected.
-- **Ascends into:** Hero.
-- **Look:** light armour in orange, sword and round shield.
-- **Passive: Beginner’s Luck.** +10 Crit and +10 Avoid while at full HP.
-- **Rally** (burst r1 · CD 3): adjacent allies get +2 Str and +2 Def for 2 turns.
-- **Clean Cut** (single, adjacent · CD 2): 1.2× Str, as accurate as a normal attack.
-- **Shield Up** (self · CD 3): Guard, and his counters deal 1.3× until your next turn.
-
 ## Joins after Act 1
 
 As Act 2 begins, two of these offer to join; the rest turn up in the recruit and tavern pools. All of them come already advanced, apart from Valen, who joins as a Swordsman and can still ascend to Swordmaster.
@@ -183,7 +185,7 @@ As Act 2 begins, two of these offer to join; the rest turn up in the recruit and
 | Nyx | Assassin | F |
 | Roark | Berserker | M |
 | Valen | Swordsman (ascends into Swordmaster) | M |
-| Celestine | Paladin | F |
+| Celest | Paladin | F |
 | Zwei | Mercenary | F |
 | Kyul | Warlock | M |
 
@@ -218,8 +220,8 @@ A noble fencing master whose student died to a crystallised beast. Proud and pre
 - **Disarm** (single, adjacent · CD 3): 0.7× Str and Weak.
 - **Feint** (single, adjacent · CD 2): 0.6× Str, and the target has −30 Avoid for 1 turn.
 
-### Celestine: Paladin
-![Celestine](visuals/cast/celestine.png)
+### Celest: Paladin
+![Celest](visuals/cast/celest.png)
 
 A templar whose order is preaching holy war. She came to prove them wrong.
 - **Look:** mounted, white armour with blues, lance and kite shield.
@@ -277,6 +279,8 @@ Recruited from recruit stops, the caged-traveller event and the tavern, alongsid
 | Kaya | Horse Archer | – | F |
 | Jun | Swordsman | Swordmaster | M |
 | Ash | Pyromancer | Pyrolord or Archmage | M |
+| Pepr | Poisoner | Assassin | F |
+| Raptor (tavern only) | Adventurer | Hero | M |
 | Seren | Summoner | Grand Summoner | F |
 
 ### Aletta: Mender
@@ -365,3 +369,25 @@ A spirit-speaker who bargained with something old to save her village. Gentle, b
 - **Empower** (familiar · 6 MP): the familiar's next attack deals double damage.
 - **Soul Swap** (familiar · 4 MP): she and the familiar swap places.
 - **Ascends into Grand Summoner** (from Lv 5): +4 HP, +5 Mag, +2 Spd, +2 Luck, +2 Def, +4 Res; summons twice a fight instead of once and her familiar is 3 levels higher. Darker teal robes with a pale collar and a circlet.
+
+### Pepr: Poisoner
+![Pepr](visuals/cast/pepr.png)
+
+Bio to come.
+- **Ascends into:** Assassin.
+- **Look:** dark green outfit and green cloak, purple hair, dirk; hooded and masked as an Assassin.
+- **Passive: Venom.** Every hit poisons the target (2 HP a turn for 3 turns, never below 1).
+- **Poison Dart** (single, range 2–3 · cooldown 2): 0.6× damage and Poison.
+- **Noxious Cloud** (3×3 at range 3 · cooldown 4): 0.3× damage, Poison and Weak for a turn.
+- **Tumble** (cooldown 2): move up to 2 more tiles, ignoring height. Doesn't use her action.
+
+### Raptor: Adventurer (tavern only)
+![Raptor](visuals/cast/raptor.png)
+
+A farm boy who left home with a borrowed sword the day the beasts came. Eager, lucky, and better at this than anyone expected.
+- **Ascends into:** Hero.
+- **Look:** light armour in orange, sword and round shield.
+- **Passive: Beginner’s Luck.** +10 Crit and +10 Avoid while at full HP.
+- **Rally** (burst r1 · CD 3): adjacent allies get +2 Str and +2 Def for 2 turns.
+- **Clean Cut** (single, adjacent · CD 2): 1.2× Str, as accurate as a normal attack.
+- **Shield Up** (self · CD 3): Guard, and his counters deal 1.3× until your next turn.

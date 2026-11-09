@@ -18,8 +18,9 @@ function learnBlock(u,k){if(has(u,k))return`${u.name} already knows ${SKILLS[k].
 const elv=u=>u.lv+(CLS[u.cls].tier===2?15:0);
 /* a few characters wield only certain kinds within their class's weapon types (Zwei: two-handed swords) */
 const ONLY_KIND={zwei:['greatsword']};
-/* lightning is Corvin's element: only Corvin can wield lightning sigils */
-const canUse=(u,k)=>CLS[u.cls].w.includes(IT[k].t)&&(IT[k].el!=='lightning'||u.cast==='corvin')&&(!u.cast||!ONLY_KIND[u.cast]||!WTYPES.includes(IT[k].t)||ONLY_KIND[u.cast].includes(IT[k].kind));
+/* signature elements: only Drecken wields lightning sigils, only Corvin ice ones */
+const EL_OWNER={lightning:'drecken',ice:'corvin'};
+const canUse=(u,k)=>CLS[u.cls].w.includes(IT[k].t)&&(!EL_OWNER[IT[k].el]||u.cast===EL_OWNER[IT[k].el])&&(!u.cast||!ONLY_KIND[u.cast]||!WTYPES.includes(IT[k].t)||ONLY_KIND[u.cast].includes(IT[k].kind));
 /* ---- height (Ogre/FFTA style) ----
    Each tile has a height level (hOf). A unit can only step up or down JUMP levels at a time (fliers ignore it).
    Attacking from above: +10 Hit and +1 damage per level (max 3); from below: -10 Hit per level.

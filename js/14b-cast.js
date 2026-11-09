@@ -13,14 +13,14 @@
    Its key is G.<rig>.<Name>, e.g. G.skirm.foot.bow.1.Archer, and CLS[key].n is the class name. */
 const CAST_CLASSES={
   /* base classes */
-  'Archer':'skirm.foot.bow.1','Brawler':'bruiser.foot.heavy.1','Cultist':'caster.foot.art.1','Elemental Mage':'caster.foot.art.1',
+  'Archer':'skirm.foot.bow.1','Brawler':'bruiser.foot.heavy.1','Cultist':'caster.foot.art.1','Ice Mage':'caster.foot.art.1','Storm Mage':'caster.foot.art.1','Poisoner':'rogue.foot.blade.1',
   'Knight':'knight.armour.pole.1','Mender':'support.foot.spirit.1','Rogue':'rogue.foot.blade.1','Shieldmaiden':'shield.foot.blade.1',
   'Adventurer':'shield.foot.blade.1','Cavalier':'tank.mounted.pole.1','Crossbowman':'skirm.foot.bow.1','Drake Rider':'bruiser.flying.pole.2',
   'Horse Archer':'skirm.mounted.bow.2','Swordsman':'sword.foot.blade.1','Pyromancer':'caster.foot.art.1','Minstrel':'support.foot.spirit.1',
   'Summoner':'summoner.foot.art.1',
   /* advanced classes */
   'Sniper':'skirm.foot.bow.2','Bow Cavalry':'skirm.mounted.bow.2','Berserker':'bruiser.foot.heavy.2','Witch':'caster.foot.art.2',
-  'Shaman':'caster.foot.art.2','Archmage':'caster.foot.art.2','Stormlord':'caster.foot.art.2','Juggernaut':'knight.armour.heavy.2',
+  'Shaman':'caster.foot.art.2','Archmage':'caster.foot.art.2','Frostlord':'caster.foot.art.2','Stormlord':'caster.foot.art.2','Juggernaut':'knight.armour.heavy.2',
   'Paladin':'knight.mounted.pole.2','Saint':'support.foot.spirit.2','Crusader':'shield.armour.blade.2','Duelist':'sword.foot.blade.2',
   'Assassin':'rogue.foot.blade.2','Valkyrie':'shield.flying.pole.2','Aegis':'shield.armour.blade.2','Hero':'shield.foot.blade.2',
   'Warlord':'tank.mounted.heavy.2','Artillery':'tank.armour.bow.2','Swordmaster':'sword.foot.blade.2','Pyrolord':'caster.foot.art.2',
@@ -35,6 +35,7 @@ const ASC_BONUS={
   'Witch':[2,0,4,0,2,2,0,4],
   'Shaman':[4,0,3,0,1,1,2,4],
   'Archmage':[2,0,5,0,1,2,1,4],
+  'Frostlord':[4,0,4,0,0,1,2,4],
   'Stormlord':[3,0,4,0,4,1,0,2],
   'Pyrolord':[4,0,5,0,1,1,2,1],
   'Juggernaut':[7,4,0,0,0,0,5,1],
@@ -77,9 +78,11 @@ const CAST=[
   {id:'morrigan',name:'Morrigan',cls:'Cultist',wk:'umbralSigil',joins:'start',look:{fem:true,style:'long',hair:'#c0282a',skin:'#f6dcc4',cloth:'#5a1a2a',sash:'#c8322e',cape:true,capeC:'#2a1420',hand:true,el:'#ff4a5a',eye:'#3a6a3a'},
     asc:{'Witch':{look:{cloth:'#2a1420',capeC:'#6a1a2a',collar:'#6a1a2a',gear:'hairpin',el:'#c060ff'}},
          'Shaman':{wk:'crookStaff',look:{hand:false,cloth:'#5a3a2a',shawl:'#8a6a4a',capeC:'#3a2a1e',feather:['#7a5230','#efe6cf'],staff:'#4f331d',orb:'#7fd36a'}}}},
-  {id:'corvin',name:'Corvin',cls:'Elemental Mage',wk:'stormSigil',joins:'start',look:{fem:true,style:'bun',hair:'#2a2230',skin:'#f3cfa6',cloth:'#3a5a8a',sash:'#e2b553',cape:true,capeC:'#22284a',hand:true,eye:'#3a5a8a'},
-    asc:{'Archmage':{wk:'heavensBolt',look:{cloth:'#2a3a7a',capeC:'#3a2a6a',collar:'#2a3a7a',gear:'circlet'}},
-         'Stormlord':{look:{cloth:'#3a4a5a',capeC:'#1e2430',sash:'#9fd8ff',el:'#9fd8ff',style:'long',bolt:'#ffe14a'}}}},
+  {id:'corvin',name:'Corvin',cls:'Ice Mage',wk:'frostSigil',joins:'start',look:{el:'#bfefff',fem:true,style:'bun',hair:'#2a2230',skin:'#f3cfa6',cloth:'#3a5a8a',sash:'#e2b553',cape:true,capeC:'#22284a',hand:true,eye:'#3a5a8a'},
+    asc:{'Archmage':{look:{cloth:'#2a3a7a',capeC:'#3a2a6a',collar:'#2a3a7a',gear:'circlet'}},
+         'Frostlord':{look:{cloth:'#cfe8f6',capeC:'#2a4a6a',sash:'#9fd8ff',collar:'#9fd8ff',el:'#bfefff',style:'long',hem:'#9fd8ff'}}}},
+  {id:'drecken',name:'Drecken',cls:'Storm Mage',wk:'stormSigil',joins:'start',look:{style:'wild',hair:'#3a3a48',skin:'#e8b98f',cloth:'#3a4a5a',pants:'#2a2a34',sash:'#ffe14a',cape:true,capeC:'#1e2430',hand:true,el:'#ffe14a',eye:'#6a8ab0'},
+    asc:{'Stormlord':{look:{capeC:'#141a24',sash:'#9fd8ff',el:'#9fd8ff',style:'long',bolt:'#ffe14a',collar:'#ffe14a'}}}},
   {id:'aldric',name:'Aldric',cls:'Knight',wk:'ironSpear',joins:'start',look:{style:'short',hair:'#6b4226',skin:'#e8b98f',cloth:'#b8322e',shield:'kite',shieldC:'#b8322e',eye:'#6a3a2a'},
     asc:{'Juggernaut':{look:{metal:'#9aa2b2',capeC:'#8a2420',shield:'tower',shieldC:'#8a2420',beard:true}},
          'Paladin':{look:{capeC:'#b8322e',horse:'#e8e2d0'}}}},
@@ -92,7 +95,7 @@ const CAST=[
   {id:'brynhildr',name:'Brynhildr',cls:'Shieldmaiden',wk:'wornSword',joins:'start',look:{fem:true,style:'tail',hair:'#d9b25a',skin:'#f6dcc4',cloth:'#5a6a3a',pants:'#3f4a2a',sash:'#a8743a',shield:'kite',shieldC:'#2f5a4a',eye:'#3a5a8a'},
     asc:{'Valkyrie':{look:{horse:'#f3f0e8',capeC:'#2f5a4a',feather:['#ffffff','#e8e2d0']}},
          'Aegis':{look:{metal:'#b8c0a8',shield:'aegis',capeC:'#3f4a2a'}}}},
-  {id:'brin',name:'Brin',cls:'Adventurer',wk:'wornSword',joins:'start',look:{style:'short',hair:'#6b4226',skin:'#f3cfa6',cloth:'#c8682a',pants:'#5a4a3a',sash:'#7a5230',shield:'round',shieldC:'#c8682a',eye:'#3a6a3a'},
+  {id:'raptor',name:'Raptor',cls:'Adventurer',wk:'wornSword',joins:'tavern',look:{style:'short',hair:'#6b4226',skin:'#f3cfa6',cloth:'#c8682a',pants:'#5a4a3a',sash:'#7a5230',shield:'round',shieldC:'#c8682a',eye:'#3a6a3a'},
     asc:{'Hero':{wk:'knightlySword',look:{capeC:'#c8682a',shield:'kite',shieldC:'#a8501e',gear:'headband'}}}},
   /* ---- found during the run (joins:'tavern' only at the tavern, 'event' only through their own event) ---- */
   {id:'aletta',name:'Aletta',cls:'Mender',wk:'mendingStaff',joins:'run',look:{fem:true,style:'bun',hair:'#a8743a',skin:'#f3cfa6',cloth:'#5a8a5a',sash:'#efe6cf',shawl:'#dfe8d0',gear:'nursecap',eye:'#3a6a3a'},
@@ -111,6 +114,8 @@ const CAST=[
   {id:'ash',name:'Ash',cls:'Pyromancer',wk:'emberSigil',joins:'run',look:{style:'short',hair:'#3a2a20',skin:'#e8b98f',cloth:'#a8322a',sash:'#e2b553',collar:'#a8322a',gear:'circlet',hand:true,eye:'#6a3a2a'},
     asc:{'Pyrolord':{look:{capeC:'#5a1a1a',el:'#ffb03c',style:'wild',hair:'#8a2a22',body:'robe',hem:'#ff8a3c'}},
          'Archmage':{wk:'meteorSigil',look:{capeC:'#3a1a3a',cloth:'#7a2a4a',collar:'#7a2a4a'}}}},
+  {id:'pepr',name:'Pepr',cls:'Poisoner',wk:'dirk',joins:'run',look:{fem:true,style:'bun',hair:'#5a2a6a',skin:'#e8b98f',cloth:'#1f3a22',pants:'#162a18',sash:'#8acd3a',cape:true,capeC:'#3f7a3a',wraps:'#a8c48a',wpnArt:'dagger',stance:'lowguard',eye:'#8acd3a'},
+    asc:{'Assassin':{wk:'stiletto',look:{gear:'hood',mask:'#1f3a22',capeC:'#2f6a2f',cloth:'#162a18'}}}},
   {id:'lysander',name:'Lysander',cls:'Minstrel',wk:null,joins:'event',look:{body:'tunic',prop:'lyre',style:'short',hair:'#a8743a',skin:'#f3cfa6',cloth:'#8a5a7a',pants:'#4a3a4a',sash:'#efe6cf',gear:'cap',eye:'#3a5a8a'},
     asc:{'Bard':{look:{cape:true,capeC:'#5a3a5a',feather:['#c8322e','#efe6cf']}}}},/* placeholder Bard look until his art is drawn */
   /* ---- join after Act 1, already advanced ---- */
@@ -118,7 +123,7 @@ const CAST=[
   {id:'roark',name:'Roark',cls:'Berserker',wk:'reaverAxe',joins:'act1',look:{style:'wild',beard:true,hair:'#9a9aa2',skin:'#e8b98f',cloth:'#6a6a72',pants:'#3a3a40',sash:'#a8322a',capeC:'#8a2a22',scar:true,dblAxe:true,stance:'shoulder',eye:'#6a3a2a'}},
   {id:'valen',name:'Valen',cls:'Swordsman',wk:'knightlySword',joins:'act1',look:{style:'mane',hair:'#d9b25a',skin:'#f3cfa6',cloth:'#6a1e2a',pants:'#3a2228',sash:'#c9c3b8',stance:'guard',boots:'#4a3426',eye:'#3a5a8a'},
     asc:{'Swordmaster':{wk:'hookedBlade',look:{capeC:'#4a1420',stance:'high',tails:'#c9c3b8',bracers:'#a8b4c8',lapels:'#c9c3b8',noCrown:true}}}},
-  {id:'celestine',name:'Celestine',cls:'Paladin',wk:'ironSpear',joins:'act1',look:{fem:true,style:'long',hair:'#d9b25a',skin:'#f6dcc4',cloth:'#3a6ab0',metal:'#e4ecf6',shield:'kite',shieldC:'#3a6ab0',capeC:'#2a4a8a',horse:'#f3f0e8',eye:'#3a5a8a'}},
+  {id:'celest',name:'Celest',cls:'Paladin',wk:'ironSpear',joins:'act1',look:{fem:true,style:'long',hair:'#d9b25a',skin:'#f6dcc4',cloth:'#3a6ab0',metal:'#e4ecf6',shield:'kite',shieldC:'#3a6ab0',capeC:'#2a4a8a',horse:'#f3f0e8',eye:'#3a5a8a'}},
   {id:'seren',name:'Seren',cls:'Summoner',familiar:'spiritFrog',wk:'runeStaff',joins:'run',look:{fem:true,style:'long',hair:'#1d1a24',skin:'#f3cfa6',cloth:'#4a8a9a',sash:'#cfe8f0',shawl:'#cfe8f0',capeC:'#2f6a7a',orb:'#9fe8ff',nature:true,eye:'#3a6a7a'},
     asc:{'Grand Summoner':{look:{cloth:'#2f6a7a',capeC:'#1f4a5a',collar:'#cfe8f0',gear:'circlet',orb:'#c8f4ff'}}}},
   {id:'zwei',name:'Zwei',cls:'Mercenary',wk:'greatsword',joins:'act1',look:{fem:true,style:'bun',hair:'#1d1a24',skin:'#a8714a',cloth:'#efe6cf',pants:'#c9bfa0',sash:'#e2b553',collar:'#2a5aa8',capeC:'#2a5aa8',stance:'shoulder',eye:'#2a2230'}},

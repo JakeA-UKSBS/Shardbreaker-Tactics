@@ -747,18 +747,18 @@ async function giveTo(k, why, found) {
    MORE EVENTS (acts 1 and 2; star, spire, oracle and sage are act 2 only)
    ================================================================== */
 Object.assign(EVENTS, {
-  /* only turns up when Corvin is in the squad, and the sigil is his */
+  /* only turns up when Drecken is in the squad, and the sigil is his */
   stormaltar: {
     t: 'The Storm Altar',
     art: 'stormaltar',
-    ok: () => run.roster.some(u => u.cast === 'corvin'),
+    ok: () => run.roster.some(u => u.cast === 'drecken'),
     d: 'Lightning strikes the same black altar again and again. A sigil sits in the scorch mark, crackling.',
     o: [
       {
         l: 'Take the Thunderhead Sigil',
-        sub: 'A high-crit lightning sigil for Corvin',
+        sub: 'A high-crit lightning sigil for Drecken',
         go: async () => {
-          const u = run.roster.find(u => u.cast === 'corvin');
+          const u = run.roster.find(u => u.cast === 'drecken');
           if (!u || !(await stow(u, 'thunderheadSigil'))) return null;
           sfx('item');
           return `${u.name} snatches the <b>Thunderhead Sigil</b> between strikes.`;
@@ -1070,7 +1070,7 @@ Object.assign(EVENTS, {
     ]
   },
 
-  /* Heaven’s Bolt (Corvin), the Far Charm (Menders), or climb for +1 Spd and Luck at the cost of HP. */
+  /* Heaven’s Bolt (Drecken), the Far Charm (Menders), or climb for +1 Spd and Luck at the cost of HP. */
   spire: {
     t: 'The Storm Spire',
     act: 2,
@@ -1079,10 +1079,10 @@ Object.assign(EVENTS, {
     o: [
       {
         l: 'Take Heaven’s Bolt',
-        sub: 'Corvin only: long-range lightning sigil, Rng 3–10, 5 uses',
-        need: () => run.roster.some(u => u.cast === 'corvin'),
+        sub: 'Drecken only: long-range lightning sigil, Rng 3–10, 5 uses',
+        need: () => run.roster.some(u => u.cast === 'drecken'),
         go: async () => {
-          const u = run.roster.find(u => u.cast === 'corvin');
+          const u = run.roster.find(u => u.cast === 'drecken');
           if (!(await stow(u, 'heavensBolt'))) return null;
           sfx('item');
           return `${u.name} takes <b>Heaven’s Bolt</b>. The sky rumbles.`;
