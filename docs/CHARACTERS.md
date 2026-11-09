@@ -114,9 +114,12 @@ A court magician's apprentice who walked out when her master started making weap
 - **Look:** dress and formal cloak, casts from her hand; pale ice-white robes as a Frostlord.
 - **Weapon:** Frost Sigil. Only Corvin can wield ice sigils.
 - **Passive:** none yet (keeps a random skill).
-- **Ice Shard** (single, range 3 · 4 MP): 1.0× Mag, 40% chance to Slow.
+- Every attack spell Slows (−2 Move).
+- **Ice Shard** (single, range 3 · 4 MP): 1.0× Mag and Slow.
 - **Frost Wave** (cone 3 · 7 MP): 0.9× Mag and Slow.
 - **Blizzard** (3×3 at range 3 · 10 MP): 0.7× Mag and Slow to every enemy in it.
+- **Ice Shield** (ally or self, range 3 · 5 MP): +3 Def for 3 turns.
+- **Frost Wall** (3 tiles in a row, range 3 · 8 MP): the tiles freeze into ice walls for 2 enemy turns. Enemies can't move through them; allies can.
 
 ### Drecken: Storm Mage
 ![Drecken](visuals/cast/drecken.png)
@@ -125,9 +128,9 @@ Bio to come.
 - **Ascends into:** Stormlord.
 - **Look:** dark storm-grey robes and cape, yellow sash, casts from his hand; lightning down the robe as a Stormlord.
 - **Weapon:** Storm Sigil. Only Drecken can wield lightning sigils (Spark, Thunderhead, Heaven's Bolt; the Storm Altar and Storm Spire events are his).
-- **Passive:** none yet (keeps a random skill).
+- **Passive: Lightning Strikes Twice.** With a lightning sigil: +3 Spd when checking for a double attack, but his second strike deals 0.8×.
 - **Spark** (single, range 3 · 4 MP): 1.0× Mag, 15% chance to Stun.
-- **Chain Lightning** (single, range 4 · 9 MP): 1.0× Mag, then jumps to up to 2 nearby enemies at 0.6×.
+- **Chain Lightning** (single, range 4 · 9 MP): 1.0× Mag, then bounces up to 2 times, each to an enemy within 2 tiles of the last one hit, at 0.6×.
 - **Thunderclap** (burst r1 · 10 MP): 1.1× Mag to every adjacent enemy, 30% chance to Stun each.
 
 ### Aldric: Knight

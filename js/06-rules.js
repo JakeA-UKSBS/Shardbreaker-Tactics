@@ -5,7 +5,7 @@ const isWpn=k=>WTYPES.includes(IT[k].t);
 /* endless: never loses uses. Every weapon with more than 5 uses, and all healing staves; only Heaven's Bolt and Meteor Sigil (5) run out */
 const endless=k=>(isWpn(k)&&IT[k].uses>5)||IT[k].t==='spirit';
 /* Fliers cross sky and rough ground at cost 1, but not walls, masts or crags. */
-function mcost(u,x,y){const t=ter(x,y);if(CLS[u.cls].phase)return 1;if(t.k==='lava'&&CLS[u.cls].lava)return 1;if(CLS[u.cls].fly)return['wall','cliff','cavewall'].includes(t.k)?99:1;if(CLS[u.cls].mnt&&(t.k==='forest'||t.k==='hill'))return t.c+1;return t.c}
+function mcost(u,x,y){const t=ter(x,y);if(u.team==='e'&&state.ice&&state.ice[key(x,y)])return 99;if(CLS[u.cls].phase)return 1;if(t.k==='lava'&&CLS[u.cls].lava)return 1;if(CLS[u.cls].fly)return['wall','cliff','cavewall'].includes(t.k)?99:1;if(CLS[u.cls].mnt&&(t.k==='forest'||t.k==='hill'))return t.c+1;return t.c}
 /* Teams: p = player, e = enemy, g = green 'other' units that fight the enemy and can be recruited. */
 const hostile=(a,b)=>(a.team==='e')!==(b.team==='e');
 /* Skills: u.skill is the personal skill (takes PERSONAL_CAP). u.skills holds extras: {id,src:"scroll"} (costs capacity). */
@@ -63,7 +63,7 @@ function calc(x,xw,y,yw,ctx){
   const acc=hd*10+xw.hit+x.skl*2+Math.floor(x.lck/2)+(CAST_HIT[x.cast]||0)+(has(x,'earlyEdge')&&state.turn<=5?20:0)+aura(x)+(dead?20:0)+RB.acc+SB.acc+(has(x,'pikeWall')&&ym?10:0);
   const avo=AS(y,yw)*2+y.lck+(has(y,'earlyEdge')&&state.turn<=5?20:0)+(dead||yf?0:t.av)+aura(y)+RB.avo+SB.avo;
   let crit=RB.crit+SB.crit+(xw.crit||0)+(CLS[x.cls].crit||0)+Math.floor(x.skl/2)-Math.floor(y.lck/2);if(has(x,'focus')&&!state.units.some(o=>o!==x&&o.team===x.team&&o.hp>0&&man(o,x)===1))crit+=10;if(has(x,'wrath')&&x.hp*2<=x.maxhp)crit+=15;
-  return{dmg:dmgMods(x,y,ctx,Math.max(0,pow-df)),pow,df,hit:clamp(acc-avo,0,100),crit:x.team==='e'?0:clamp(crit,0,100),n:AS(x,xw)+(has(x,'swiftstrike')&&ctx.init===x?3:0)-AS(y,yw)>=4?2:1,eff,hd};
+  return{dmg:dmgMods(x,y,ctx,Math.max(0,pow-df)),pow,df,hit:clamp(acc-avo,0,100),crit:x.team==='e'?0:clamp(crit,0,100),n:AS(x,xw)+(has(x,'swiftstrike')&&ctx.init===x?3:0)+(has(x,'twinBolt')&&xw.el==='lightning'?3:0)-AS(y,yw)>=4?2:1,eff,hd};
 }
 /* forecast: the numbers for the combat preview, before anything is rolled.
    a attacks d with a's item at index ai. The defender counters with the first weapon that reaches
@@ -92,6 +92,8 @@ function resolve(a,ai,d){
     /* hit roll: the average of two rolls, as in the GBA games (high hit rates land more often than shown, low ones less) */
     if((rn()+rn())/2<S.hit){
       e.hit=true;let dmg=S.dmg;
+      /* Lightning Strikes Twice: Drecken's follow-up strike with a lightning sigil deals 0.8× */
+      if(used[s]>1&&has(X,'twinBolt')&&(s==='a'?f.aw:f.dw).el==='lightning')dmg=Math.round(dmg*.8);
       /* attacker skills: Whirlwind (Luck÷2%) turns this strike into five half-damage hits; then the crit roll (×3) */
       if(!whirled&&has(X,'whirlwind')&&rn()<X.lck/2){whirled=true;e.proc=SKILLS.whirlwind.n;dmg=Math.floor(S.dmg/2)*5}
       if(rn()<S.crit){e.crit=true;dmg*=3}

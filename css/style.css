@@ -630,3 +630,4 @@ button.it.sel{border-color:var(--gold)}
 
 /* images (scene backdrops, portraits, icons) can't be picked up and dragged by the browser */
 img{-webkit-user-drag:none;user-select:none}
+.tile.ice{box-shadow:inset 0 0 0 2px #e8faff,inset 0 0 0 999px rgba(190,235,255,.55)}
