@@ -25,7 +25,7 @@ Object.assign(FOE,{
   FrostWolf:{b:[16,5,0,4,7,1,2,2],g:[.55,.35,0,.3,.45,.1,.15,.15],items:['fangs'],look:{}},
   AgateGolem:{b:[22,6,0,2,1,0,8,4],g:[.75,.4,0,.2,.05,0,.3,.2],items:['slam'],look:{}},
   IceTroll:{b:[24,8,0,3,3,0,5,1],g:[.8,.5,0,.25,.2,.05,.3,.05],items:['slam'],look:{}},
-  FrostSprite:{b:[14,0,5,5,7,2,1,4],g:[.5,0,.4,.35,.45,.15,.05,.3],items:['tideSigil'],look:{}},
+  FrostSprite:{b:[14,0,4,5,7,2,1,4],g:[.5,0,.4,.35,.45,.15,.05,.3],items:['tideSigil'],look:{}},
   GemGolem:{b:[22,7,0,3,2,0,9,3],g:[.75,.4,0,.25,.1,0,.35,.15],items:['slam'],look:{}},
   Gemsnail:{b:[20,0,5,4,2,2,6,6],g:[.65,0,.35,.3,.1,.1,.3,.3],items:['crystalShards'],look:{}}
 });
