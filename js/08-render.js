@@ -36,7 +36,7 @@ function tileVariant(k,x,y){const vs=(TILE_VARS[k]||[]).filter(v=>ART_PNG.has('t
   const h=(Math.imul(x+1,73856093)^Math.imul(y+1,19349663))>>>0,i=h%(vs.length*2);return i<vs.length?'art/tiles/'+vs[i]+'.png':null}
 const SIDEC={};
 function sideColor(src,cb){if(SIDEC[src])return cb(SIDEC[src]);const im=new Image();im.onload=()=>{const cv=document.createElement('canvas');cv.width=cv.height=1;const cx=cv.getContext('2d');cx.drawImage(im,0,0,1,1);let d;try{d=cx.getImageData(0,0,1,1).data}catch(_){return}/* opened from file://: PNG art can't be read back, keep the default */cb(SIDEC[src]=`rgb(${d[0]},${d[1]},${d[2]})`)};im.src=src}
-function threatMap(){const m=new Map();for(const e of state.units.filter(u=>u.team==='e'&&u.hp>0)){const ms=reach(e),all=new Set([...ms,...fringeOf(e,ms)]);for(const k of all){if(!m.has(k))m.set(k,[]);m.get(k).push(e.id)}}return m}
+function threatMap(){const m=new Map();for(const e of state.units.filter(u=>u.team==='e'&&u.hp>0&&!u.fresh)){const ms=reach(e),all=new Set([...ms,...fringeOf(e,ms)]);for(const k of all){if(!m.has(k))m.set(k,[]);m.get(k).push(e.id)}}return m}
 function threatLine(k){const ids=danger&&threatMap().get(k);if(!ids||!ids.length)return danger?'<p class="hint">No enemy can reach this tile next turn.</p>':'';return`<p class="hint" style="color:#f0a08a">In reach of ${ids.length} enem${ids.length>1?'ies':'y'}: <b>${ids.map(i=>byId(i).name).join(', ')}</b> (ringed in red).</p>`}
 /* 2x2 bosses: scale the art so the creature itself fills its whole 2x2 footprint (art has empty margins) */
 const FILLS={};

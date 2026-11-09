@@ -164,6 +164,7 @@ function checkEnd(){if(over)return;
 function spawnWaves(t){const w=BATTLE.waves;if(!w||!w[t])return;const bo=state.units.find(u=>u.boss&&u.team==='e'&&u.id==='boss');
   const fs=typeof w[t]==='function'?w[t]():w[t].filter(d=>!d.ifBoss||bo).map((d,i)=>{const u=mkMon(d.c,d.lv);u.id=`w${t}_${i}`;u.x=d.ifBoss?bo.x:d.x;u.y=d.ifBoss?bo.y:d.y;return u});
   if(!fs.length)return;const taken=new Set(state.units.filter(u=>u.hp>0).flatMap(u=>cellsOf(u.x,u.y,u.sz).map(c=>key(...c))));
+  for(const f of fs)f.fresh=1;/* reinforcements can't attack on the enemy phase after they arrive */
   for(const f of fs){const p=freeNear(f.x,f.y,taken,f);f.x=p.x;f.y=p.y;taken.add(key(p.x,p.y));state.units.push(f)}render();toast(bo&&BATTLE.waves[t][0]?.ifBoss?BATTLE.summonTxt||`${bo.name} raises the dead!`:'Enemy reinforcements!')}
 function phaseHeal(team){
   for(const u of state.units)if(u.team===team&&u.psn>0){const d=Math.min(2,u.hp-1);if(d>0){u.hp-=d;pop(u,'-'+d,'crit')}u.psn--}
@@ -250,6 +251,8 @@ async function runAI(team){
   for(const e of state.units.filter(u=>u.team===team)){
     if(e.hp<=0||over)continue;acting=e;render();if(e.stone){e.stone=0;render();continue}if(hasSt(e,'stun')){pop(e,'Stunned','miss');await sleep(300);continue}
     if(e.boss&&e.cls==='CrystalHeart'&&state.turn%2===0){await crystalStorm(e);if(over)break;continue}const plan=aiPlan(e);
+    /* fresh reinforcements can move, but hold off attacking until the next enemy phase */
+    if(e.fresh){plan.target=null;plan.abil=null}
     if(plan.tile&&(plan.tile.x!==e.x||plan.tile.y!==e.y)){if(ensureVisible(plan.tile.x,plan.tile.y))await sleep(300);stepSfx(e,plan.tile.x,plan.tile.y);e.x=plan.tile.x;e.y=plan.tile.y;render();await sleep(330)}
     /* Cover: the protector takes the hit instead, if the attacker can reach them from here */
     if(plan.target&&hasSt(plan.target,'cover')){const cv=byId(plan.target.st.cover.by);if(cv&&cv.hp>0&&cv!==plan.target){const wl=wpnsAt(e,man(e,cv),cv);if(wl.length){pop(cv,'Cover!','heal');plan.target=cv;plan.wi=wl[0];await sleep(250)}}}
@@ -257,6 +260,7 @@ async function runAI(team){
     if(plan.target&&plan.target.hp>0){await fight(e,plan.wi,plan.target);busy=true}
     if(over)break;
   }
+  for(const u of state.units)if(u.team===team)delete u.fresh;
   acting=null
 }
 
