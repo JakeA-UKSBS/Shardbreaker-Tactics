@@ -197,9 +197,10 @@ function abBlock(u,id){const a=ABIL[id],cd=(u.cd||{})[id]||0;if(a.once&&cd>0)ret
 
 /* ---- combat hooks (called from calc, reach and the turn loop) ---- */
 /* the last step of every damage roll: Weak, Guard, Bulwark, Shield Up */
-function dmgMods(x,y,ctx,dmg){
-  let m=1;if(hasSt(x,'weak'))m*=.7;if(hasSt(x,'anthem'))m*=1.3;else if(hasSt(x,'valour'))m*=1.2;if(hasSt(y,'guard'))m*=.7;if(hasSt(x,'shieldUp')&&ctx&&ctx.init!==x)m*=1.3;
-  if(man(x,y)>1&&state.units.some(o=>o!==y&&o.hp>0&&o.team===y.team&&man(o,y)===1&&has(o,'bulwarkAura')))m*=.7;
+/* br (optional): collects [label, multiplier] for the dev-mode breakdown */
+function dmgMods(x,y,ctx,dmg,br){
+  let m=1;const f=(l,v)=>{m*=v;if(br)br.push([l,v])};if(hasSt(x,'weak'))f('Weak',.7);if(hasSt(x,'anthem'))f('Anthem',1.3);else if(hasSt(x,'valour'))f('Valour',1.2);if(hasSt(y,'guard'))f('Target on Guard',.7);if(hasSt(x,'shieldUp')&&ctx&&ctx.init!==x)f('Shield Up counter',1.3);
+  if(man(x,y)>1&&state.units.some(o=>o!==y&&o.hp>0&&o.team===y.team&&man(o,y)===1&&has(o,'bulwarkAura')))f('Bulwark aura vs ranged',.7);
   return Math.max(0,Math.round(dmg*m));
 }
 /* Pow/Def/Hit/Avoid/Crit changes from statuses and passives, added inside calc() */
@@ -257,7 +258,7 @@ function abBackstab(u,t){return hDiff(u,t)>0||state.units.some(o=>o!==u&&o.team=
 /* expected numbers against one target: {dmg (per strike), hit, n (strikes)} */
 function abVs(u,id,t,mult){
   const a=ABIL[id],w=abWeapon(u,a),c=calc(u,w,t,null,{init:u,phase});let m=(mult||a.dmg||0);if(a.backstab&&abBackstab(u,t))m*=2;
-  return{dmg:a.flat||dmgMods(u,t,{init:u},Math.max(0,Math.round(c.pow*m)-c.df)),hit:a.sure?100:clamp(c.hit+(a.hit||0)+ABIL_HIT,0,100),n:a.hits||1,eff:c.eff};
+  return{dmg:a.flat||dmgMods(u,t,{init:u},Math.max(0,Math.round(c.pow*m)-c.df)),hit:a.sure?100:clamp(c.hit+(a.hit||0)+ABIL_HIT,0,100),n:a.hits||1,eff:c.eff,c,m};
 }
 function healAmt(u,id,t){const a=ABIL[id];let h=a.healPct?Math.round(t.maxhp*a.healPct):Math.round((u.mag+5)*a.heal);if(has(u,'lastLight')&&t.hp*2<t.maxhp)h=Math.round(h*1.5);return Math.min(h,t.maxhp-t.hp)}
 /* who Chain Lightning jumps to */
@@ -299,7 +300,7 @@ async function useAbility(u,id,tx,ty){
       if(a.chain&&t.hp>0||a.chain)for(const c of chainTo(u,id,t)){const V2=abVs(u,id,c,a.chain[1]);sfx('thunder');burst(c,EL_COL.lightning);
         if((rn()+rn())/2<V2.hit){const d=Math.min(V2.dmg,c.hp);c.hp-=d;pop(c,'-'+d,'dmg');flash(c);exp+=expFor(u,c,true,c.hp<=0);if(c.hp<=0)killed.push(c)}else pop(c,'Miss','miss');render();await sleep(D(260))}
       if(t.hp<=0){killed.push(t);continue}}
-    if(a.st&&landed&&t.hp>0&&!stImmune(t,a.st[0])&&(!a.st[2]||rn()<a.st[2]*100)){addSt(t,a.st[0],a.st[1],u);if(STATUS[a.st[0]].bad)sfx('debuff');pop(t,STATUS[a.st[0]].n,'crit');await sleep(D(200))}
+    if(a.st&&landed&&t.hp>0&&!stImmune(t,a.st[0])&&(!a.st[2]||rn()<a.st[2]*100)){addSt(t,a.st[0],a.st[1],u);if(STATUS[a.st[0]].bad)sfx(a.st[0]==='chill'?'slow':'debuff');pop(t,STATUS[a.st[0]].n,'crit');await sleep(D(200))}
     if(a.psn&&landed&&t.hp>0&&!(t.team==='p'&&M('soup'))){t.psn=3;sfx('poison');pop(t,'Poisoned','crit');await sleep(D(200))}
     if(a.stone&&landed&&t.hp>0&&!stImmune(t,'stone')){t.stone=1;pop(t,'Stone!','crit');sfx('earth');toast(`${t.name} is turned to stone and loses ${t.team==='p'?'their':'its'} next turn`);await sleep(D(200))}
     if(!a.dmg)exp+=10;
@@ -357,7 +358,7 @@ function abForecast(u,id,tx,ty){
   if(a.side==='tile')rows.unshift(`<div class="abf-r"><span class="pc">${u.name}</span>leaps here</div>`);
   if(a.tumble)rows.push(`<div class="abf-r"><span class="pc">${u.name}</span>moves up to 2 tiles, then can still act</div>`);
   return`<div class="ufc-h"><span class="pc">${u.name}</span><b class="abfn">${a.n}</b><span class="abfc">${abCostTxt(u,id)}</span></div>${rows.join('')||'<div class="abf-r">Nobody is in the area.</div>'}
-    <div class="ufc-b"><button class="go" type="button" data-act="abuse">Use</button><button type="button" data-act="abil">Back</button></div>`;
+    <div class="ufc-b"><button class="go" type="button" data-act="abuse">Use</button><button type="button" data-act="abil">Back</button></div>`+(a.dmg?devPanel(foes.map(t=>{const V=abVs(u,id,t);return devBreak(u,t,V.c,{n:a.n,m:V.m,flat:a.flat,dmg:V.dmg,hit:V.hit,hitAdd:a.sure?0:(a.hit||0)+ABIL_HIT,sure:a.sure,hits:a.hits||1})})):'');
 }
 /* the panel and floating menu for the 'abil' and 'aim' states */
 function abPanel(u){

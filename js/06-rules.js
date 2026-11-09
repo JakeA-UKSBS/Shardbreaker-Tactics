@@ -54,16 +54,21 @@ const SLAYER={wolfsbane:'beast',stonebane:'armoured',spiritbane:'spectral'};
 function effHit(x,xw,y){if(x.team==='e')return 0;if(xw&&xw.el&&CLS[y.cls]&&CLS[y.cls].weak===xw.el)return 2;/* elemental weakness (Ice Troll: fire) */const tg=tagsOf(y);if(!tg.length)return 0;const e=effOf(xw);for(const k in SLAYER)if(has(x,k))e.push(SLAYER[k]);
   if(CLS[x.cls]&&/Paladin/.test(CLS[x.cls].n))e.push('spectral');
   const hit=tg.filter(t=>e.includes(t));if(!hit.length)return 0;return 2}
+/* br: every term that went into the numbers, as [label, value] lists, for the dev-mode breakdown panel */
 function calc(x,xw,y,yw,ctx){
   const t=ter(y.x,y.y),RB=relicCalc(x,xw,y),SB=stCalc(x,xw,y),gx=gearOf(x),gy=gearOf(y);
-  const eff=effHit(x,xw,y)||(xw.t==='bow'&&CLS[y.cls].fly?2:0);const hd=hDiff(x,y);let pow=Math.max(0,hd)+(xw.mag?x.mag:x.str)+xw.mt*(eff||1)+(eff&&R('trophies')?2:0)+RB.pow+SB.pow+(xw.mag?0:gx.str);if(has(x,'kindle')&&ctx.init===x)pow+=2;
-  const yf=!!CLS[y.cls].fly;let df=(xw.mag?y.res+gy.res:y.def+gy.def)+(yf?0:t.df)+RB.df+SB.df;if(has(y,'steadfast')&&ctx.phase==='enemy'&&ctx.init!==y)df+=4;
-  if(state.units.some(o=>o!==y&&o.team===y.team&&o.hp>0&&man(o,y)===1&&has(o,'guardian')))df+=2;const xm=CLS[x.cls].mnt||CLS[x.cls].fly,ym=CLS[y.cls].mnt||CLS[y.cls].fly;if(has(y,'pikeWall')&&xm)df+=4;
+  const bp=[],bd=[],ba=[],bv=[],bc=[],mods=[],add=(b,l,v)=>{if(v)b.push([l,v]);return v||0};
+  const eff=effHit(x,xw,y)||(xw.t==='bow'&&CLS[y.cls].fly?2:0);const hd=hDiff(x,y);
+  let pow=add(bp,'High ground',Math.max(0,hd))+add(bp,xw.mag?'Mag':'Str',xw.mag?x.mag:x.str)+add(bp,`${xw.n||'Weapon'} Mt${eff?` (${xw.mt}, ×${eff} effective)`:''}`,xw.mt*(eff||1))+add(bp,'Trophies',eff&&R('trophies')?2:0)+add(bp,'Relics, meals, early ease',RB.pow)+add(bp,'Statuses, passives',SB.pow)+add(bp,'Gear Str',xw.mag?0:gx.str);if(has(x,'kindle')&&ctx.init===x)pow+=add(bp,'Kindle',2);
+  const yf=!!CLS[y.cls].fly;let df=add(bd,xw.mag?'Res':'Def',xw.mag?y.res:y.def)+add(bd,xw.mag?'Gear Res':'Gear Def',xw.mag?gy.res:gy.def)+add(bd,t.n||'Terrain',yf?0:t.df)+add(bd,'Relics, meals',RB.df)+add(bd,'Statuses, passives',SB.df);if(has(y,'steadfast')&&ctx.phase==='enemy'&&ctx.init!==y)df+=add(bd,'Steadfast',4);
+  if(state.units.some(o=>o!==y&&o.team===y.team&&o.hp>0&&man(o,y)===1&&has(o,'guardian')))df+=add(bd,'Guardian ally',2);const xm=CLS[x.cls].mnt||CLS[x.cls].fly,ym=CLS[y.cls].mnt||CLS[y.cls].fly;if(has(y,'pikeWall')&&xm)df+=add(bd,'Pike Wall',4);
   const dead=has(x,'keenEye');
-  const acc=hd*10+xw.hit+x.skl*2+Math.floor(x.lck/2)+(CAST_HIT[x.cast]||0)+(has(x,'earlyEdge')&&state.turn<=5?20:0)+aura(x)+(dead?20:0)+RB.acc+SB.acc+(has(x,'pikeWall')&&ym?10:0);
-  const avo=AS(y,yw)*2+y.lck+(has(y,'earlyEdge')&&state.turn<=5?20:0)+(dead||yf?0:t.av)+aura(y)+RB.avo+SB.avo;
-  let crit=RB.crit+SB.crit+(xw.crit||0)+(CLS[x.cls].crit||0)+Math.floor(x.skl/2)-Math.floor(y.lck/2);if(has(x,'focus')&&!state.units.some(o=>o!==x&&o.team===x.team&&o.hp>0&&man(o,x)===1))crit+=10;if(has(x,'wrath')&&x.hp*2<=x.maxhp)crit+=15;
-  return{dmg:dmgMods(x,y,ctx,Math.max(0,pow-df)),pow,df,hit:clamp(acc-avo,0,100),crit:x.team==='e'?0:clamp(crit,0,100),n:AS(x,xw)+(has(x,'swiftstrike')&&ctx.init===x?3:0)+(has(x,'twinBolt')&&xw.el==='lightning'?3:0)-AS(y,yw)>=4?2:1,eff,hd};
+  const acc=add(ba,'Height',hd*10)+add(ba,'Weapon Hit',xw.hit)+add(ba,'Skl ×2',x.skl*2)+add(ba,'Lck /2',Math.floor(x.lck/2))+add(ba,'Character bonus',CAST_HIT[x.cast]||0)+add(ba,'Early Edge',has(x,'earlyEdge')&&state.turn<=5?20:0)+add(ba,'Command aura',aura(x))+add(ba,'Keen Eye',dead?20:0)+add(ba,'Relics, meals',RB.acc)+add(ba,'Statuses, passives',SB.acc)+add(ba,'Pike Wall vs mounted',has(x,'pikeWall')&&ym?10:0);
+  const avo=add(bv,'AS ×2',AS(y,yw)*2)+add(bv,'Lck',y.lck)+add(bv,'Early Edge',has(y,'earlyEdge')&&state.turn<=5?20:0)+add(bv,(t.n||'Terrain')+(dead?' (Keen Eye ignores)':''),dead||yf?0:t.av)+add(bv,'Command aura',aura(y))+add(bv,'Relics, meals',RB.avo)+add(bv,'Statuses, passives',SB.avo);
+  let crit=add(bc,'Relics, meals',RB.crit)+add(bc,'Statuses, passives',SB.crit)+add(bc,'Weapon Crit',xw.crit||0)+add(bc,'Class Crit',CLS[x.cls].crit||0)+add(bc,'Skl /2',Math.floor(x.skl/2))+add(bc,'Target Lck /2',-Math.floor(y.lck/2));if(has(x,'focus')&&!state.units.some(o=>o!==x&&o.team===x.team&&o.hp>0&&man(o,x)===1))crit+=add(bc,'Focus',10);if(has(x,'wrath')&&x.hp*2<=x.maxhp)crit+=add(bc,'Wrath',15);
+  const asx=AS(x,xw),bonus=(has(x,'swiftstrike')&&ctx.init===x?3:0)+(has(x,'twinBolt')&&xw.el==='lightning'?3:0),asy=AS(y,yw);
+  return{dmg:dmgMods(x,y,ctx,Math.max(0,pow-df),mods),pow,df,hit:clamp(acc-avo,0,100),crit:x.team==='e'?0:clamp(crit,0,100),n:asx+bonus-asy>=4?2:1,eff,hd,
+    br:{pow:bp,df:bd,acc:ba,avo:bv,crit:bc,mods,accT:acc,avoT:avo,critT:crit,noCrit:x.team==='e',asx,bonus,asy,mag:!!xw.mag}};
 }
 /* forecast: the numbers for the combat preview, before anything is rolled.
    a attacks d with a's item at index ai. The defender counters with the first weapon that reaches
