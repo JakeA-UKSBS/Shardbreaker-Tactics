@@ -141,6 +141,7 @@ Learned skills cost capacity (base 20, +5 when promoted). Personal skills are fr
 - **HP between fights:** survivors recover 5 HP after a win (3 from Ascension 3; Waybread +3). Taverns and the camp before the boss heal fully. Salves can be used on the road map.
 - **Early ease:** in Act 1, enemies deal 2 less damage on floors 1–3 and 1 less on 4–6 (off from Ascension 3).
 - **Bosses:** 2×2, move 2, Colossal.
+- **Zone of control:** a unit (yours or theirs) that starts its move next to an enemy has −1 Move. Fliers and cavalry too; Slippery ignores it. Doesn't stack with Slow (−2): the bigger penalty applies.
 - **Loot:** skill after 40% of fights (half of those are the region's slayer skill), Salve after 50%, slayer weapon after 15% of battles and 35% of elites (only if someone can wield it).
 - **Inn:** one drink, one meal and one hire per visit.
 - **Ascension levels:** 1: Enemies are 1 level higher. · 2: Bosses and elite leaders are much tougher. · 3: No early ease, you start with no gold, and units recover only 5 HP after a fight. · 4: Enemies are another level higher, with one more in each battle. · 5: Every enemy knows a combat skill, and fallen units are lost for good (below Ascension 5 they get back up at 1 HP after a win).
