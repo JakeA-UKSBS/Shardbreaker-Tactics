@@ -35,9 +35,23 @@ $('#cog').addEventListener('click',()=>{if(!modalEl.hidden)return;const screen=[
 $('#btnMap').addEventListener('click',()=>{if(!busy&&modalEl.hidden&&run&&run.map)mapScreen('Back to the battle')});
 $('#btnDev').addEventListener('click',()=>{if(!busy&&!over&&modalEl.hidden)devMenu()});
 /* Dev mode: win the current battle straight away. */
+/* dev: +1 level mid-fight, for balance testing. Allies gain +1 to every shown stat (like a level-up, no modal or ascension);
+   monsters regrow from their FOE growths; bosses (no growths) get +2 HP and +1 to their other non-zero stats */
+function devLvUp(u){
+  if(u.team==='p'){if(u.lv>=20)return;u.lv++;shown(u).forEach(s=>{if(s==='learned')return;if(s==='hp'){u.maxhp++;u.hp++}else u[s]++});return}
+  const t=FOE[u.cls];u.lv++;
+  ST.forEach((s,i)=>{const d=t?Math.floor(t.g[i]*(u.lv-1))-Math.floor(t.g[i]*(u.lv-2)):s==='hp'?2:u[s]>0?1:0;
+    if(s==='hp'){u.maxhp+=d;u.hp+=d}else u[s]+=d});
+}
 async function devMenu(){
-  const m=await modal(`<div class="eyebrow">Dev mode</div><h2>Skip ahead</h2><p>Win this battle straight away. ${run?seedTag(run.seed):'Seed -'}.</p><div class="mbtns"><button type="button" data-m="close">Close</button><button class="go" type="button" data-m="win">Win this battle</button></div>`);
-  if(m==='win'){cancelMove();over='win';render();winScreen()}
+  for(;;){
+    const side=t=>state.units.filter(u=>u.team===t&&u.hp>0&&!u.summon),avg=us=>us.length?(us.reduce((a,u)=>a+u.lv,0)/us.length).toFixed(1):'-';
+    const m=await modal(`<div class="eyebrow">Dev mode</div><h2>Testing</h2><p>${run?seedTag(run.seed):'Seed -'}. Allies avg Lv ${avg(side('p'))} · Enemies avg Lv ${avg(side('e'))}</p>
+      <div class="mbtns"><button type="button" data-m="lvP">Allies +1 Lv</button><button type="button" data-m="lvE">Enemies +1 Lv</button></div>
+      <div class="mbtns"><button type="button" data-m="close">Close</button><button class="go" type="button" data-m="win">Win this battle</button></div>`);
+    if(m==='lvP'||m==='lvE'){side(m==='lvP'?'p':'e').forEach(devLvUp);sfx('ding');render();continue}
+    if(m==='win'){cancelMove();over='win';render();winScreen()}
+    return}
 }
 function start(data){
   loadProf();

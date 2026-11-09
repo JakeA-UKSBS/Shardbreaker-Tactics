@@ -39,7 +39,7 @@ const ASC=['Normal','Enemies are 1 level higher.','Bosses and elite leaders are 
 const A=n=>!!(run&&(run.asc||0)>=n);
 /* called once when a run ends; returns lines describing anything new */
 function endRun(won){
-  (prof.hist=prof.hist||[]).unshift({date:Date.now(),seed:run.seed,won,asc:run.asc||0,act:run.act||1,floor:run.n,regions:run.biomes,squad:(run.roster||[]).map(u=>({n:u.name,c:CLS[u.cls].n,lv:u.lv,items:(u.items||[]).map(i=>i.k),skills:[u.skill,...(u.skills||[]).map(x=>x.id)].filter(Boolean)}))/* items and skills kept for a future run-detail view */,fallen:run.fallen||[],relics:run.relics||[]});prof.hist.length=Math.min(prof.hist.length,30);
+  (prof.hist=prof.hist||[]).unshift({date:Date.now(),seed:run.seed,won,asc:run.asc||0,time:run.time||0,act:run.act||1,floor:run.n,regions:run.biomes,squad:(run.roster||[]).map(u=>({n:u.name,c:CLS[u.cls].n,lv:u.lv,items:(u.items||[]).map(i=>i.k),skills:[u.skill,...(u.skills||[]).map(x=>x.id)].filter(Boolean)}))/* items and skills kept for a future run-detail view */,fallen:run.fallen||[],relics:run.relics||[]});prof.hist.length=Math.min(prof.hist.length,30);
   const out=[],sq=run.roster||[],before=new Set(Object.keys(RELICS).filter(relicOpen));
   prof.runs++;if(won){prof.wins++;if((run.asc||0)>=prof.asc&&prof.asc<ASC_MAX){prof.asc++;out.push(`<b>Ascension ${prof.asc}</b> is open: ${ASC[prof.asc]}`)}}
   /* best progress so far on counted achievements (shown as bars on the Unlocks screen) */
@@ -52,7 +52,7 @@ function endRun(won){
 /* run history: the last 30 runs, newest first. Old entries are drawn defensively, since relics, classes and regions can change between versions */
 async function historyScreen(){
   const H=prof.hist||[],d=t=>{try{return new Date(t).toLocaleDateString(undefined,{day:'numeric',month:'short'})+' '+new Date(t).toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'})}catch(_){return''}};
-  const card=h=>`<div class="hist ${h.won?'won':'lost'}"><div class="hh"><b>${h.won?'Victory':'Defeat'}</b><span>${d(h.date)}${h.asc?` · Ascension ${h.asc}`:''} · ${seedTag(h.seed)}</span></div>
+  const card=h=>`<div class="hist ${h.won?'won':'lost'}"><div class="hh"><b>${h.won?'Victory':'Defeat'}</b><span>${d(h.date)}${h.asc?` · Ascension ${h.asc}`:''}${h.time?` · ${fmtTime(h.time)}`:''} · ${seedTag(h.seed)}</span></div>
     <p>${h.won?'Cleared':'Fell in'} ${[...(h.regions||[]).slice(0,2),'heart'].slice(0,h.won?3:h.act||1).map(r=>BIOMES[r]?BIOMES[r].n:r).join(' → ')}${h.won?'':` · Act ${h.act||1}, floor ${h.floor||1} of ${RUN_LEN}`}</p>
     <div class="hsq">${(h.squad||[]).map(u=>`<span>${u.n} <small>${u.c} · Lv ${u.lv}</small></span>`).join('')}${(h.fallen||[]).map(u=>`<span class="dead">${u.n} <small>${u.c} · fell A${u.act} F${u.floor}</small></span>`).join('')}</div>
     ${(h.relics||[]).length?`<div class="hrel">${h.relics.filter(k=>RELICS[k]).map(k=>`<img src="${relicArt(k)}" alt="${RELICS[k].n}" title="${RELICS[k].n}: ${RELICS[k].d}">`).join('')}</div>`:''}</div>`;

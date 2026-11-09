@@ -73,6 +73,8 @@ for(const k in BIOMES)BIOMES[k].id=k;
 const theN=B=>B.noThe||/^The /.test(B.n)?B.n:'the '+B.n,TheN=B=>{const t=theN(B);return t[0].toUpperCase()+t.slice(1)};
 /* acts 1 and 2 are drawn from the regions; act 3 is always the Heart of the Blight */
 const ACTS=3;
+/* REGION_ACTS: the regions each act draws from, so monsters can be balanced for their act */
+const REGION_ACTS=[['forest','swamp','desert'],['mountain','snow','cavern']];
 const MUSIC={title:'music/title.mp3',tavern:'music/tavern.mp3'};for(const k in BIOMES)MUSIC[k]=`music/${k}.mp3`;
 let bgm=null,bgmKey='';
 /* Background music: drop mp3s into music/ (title.mp3, swamp.mp3, forest.mp3, mountain.mp3, desert.mp3, snow.mp3, cavern.mp3, heart.mp3). Missing files are skipped. */
@@ -180,6 +182,8 @@ function actBiome(){const a=run&&run.act||1;if(a>=3)return BIOMES.heart;
 const BOSS_MOV=2;
 /* ROCK_MAX: most rocks left on a battle map (the rest are cleared, see genBattle); two boulders side by side count as one */
 const ROCK_MAX=3;
+/* ACT2_UP: Act 2 monsters (not bosses, who scale on their own) are a little stronger: extra levels, HP, and Str/Mag for whichever they use */
+const ACT2_UP={lv:1,hp:2,atk:1};
 function genBattle(n,kind){
   const act=run&&run.act||1,B=actBiome(),bossFight=kind==='boss',elite=kind==='elite',town=!bossFight&&!elite&&MAPS['town_'+B.id]&&(run&&run.n||1)>=2&&rand()<.25;
   const mk=bossFight?B.bossMap:town?'town_'+B.id:pick(B.maps);let m=MAPS[mk];
@@ -206,7 +210,8 @@ function genBattle(n,kind){
     intro:bossFight&&B.boss.intro?B.boss.intro:bossFight?`${bossName} waits for you in the ${m.n}. Defeat it to clear ${theN(B)}.`:town?`Crystallised beasts are closing on the ${m.n.toLowerCase()}. Hold them off for ${turns} turns.`:elite?`A pack led by something old and strong holds the ${m.n.toLowerCase()}. Rout them all.`:`${count} monsters wait in the ${m.n.toLowerCase()}. Rout them.`};
   /* drops: 12% of enemies carry something, at most one weapon a battle, and never a weapon the squad already has */
   def.foes=()=>{const tiles=spawnTiles(m),out=[];let wDrop=0;
-    list.forEach((c,i)=>{const lv=Math.max(1,lvBase+(rand()<.3?1:0)-(c==='Wolf'?1:0)+(elite?2:0)),u=mkMon(c,lv),t=tiles[i%tiles.length];u.x=t.x;u.y=t.y;
+    list.forEach((c,i)=>{const lv=Math.max(1,lvBase+(rand()<.3?1:0)-(c==='Wolf'?1:0)+(elite?2:0)+(act===2?ACT2_UP.lv:0)),u=mkMon(c,lv),t=tiles[i%tiles.length];u.x=t.x;u.y=t.y;
+      if(act===2){u.maxhp+=ACT2_UP.hp;u.hp+=ACT2_UP.hp;if(u.str)u.str+=ACT2_UP.atk;if(u.mag)u.mag+=ACT2_UP.atk}
       if(elite&&i===0){u.name='Elder '+u.name;u.boss=true;const eb=A(2)?2:1;ST.forEach(k=>{if(k==='hp'){u.maxhp+=6*eb;u.hp+=6*eb}else u[k]+=2*eb});u.skill=u.skill||pick(['wrath','steadfast','swiftstrike','bulwark'])}
       if(rand()<.12){const k=pick(['salve','salve','salve','knightlySword','cleaver','steelSpear','ironwoodBow','javelin','throwingAxe','throwingKnives','leatherArmour','wardingCloak','travellersBoots'].filter(k=>!isWpn(k)||!wDrop&&!squadHas(k)));if(isWpn(k))wDrop=1;u.items.push({k,u:IT[k].uses,d:true})}out.push(u)});
     if(bossFight){let[bx,by]=MAPS[mk].boss||[6,3];/* the map's boss:[x,y] is where the boss stands */
@@ -215,6 +220,7 @@ function genBattle(n,kind){
       for(const[dx,dy]of[[0,0],[-1,0],[0,-1],[-1,-1],[1,0],[0,1]])if(fits(bx+dx,by+dy)){bx+=dx;by+=dy;break}
       const bu=boss({id:'boss',name:bossName,cls:b.cls,lv:6+6*(act-1),mov:b.mov!=null?b.mov:BOSS_MOV,x:bx,y:by,s:b.s.map((v,i)=>v+up[i]),items:b.items,skill:b.skill,look:b.look?clone(b.look):monLook(b.cls)});bu.sz=bsz;
       if(b.bars){bu.bars=b.bars;bu.maxhp=bu.hp=Math.ceil(bu.hp*2/b.bars)*b.bars}/* health bars: double HP split into equal bars */
+      if(b.hp)bu.maxhp=bu.hp=b.hp+(A(2)?16:0);/* a set HP (the Crystal Heart: 200 at Normal, the same Ascension 2 bonus as before) */
       const bc=new Set(cellsOf(bx,by,bsz).map(c=>key(...c))),tk=new Set([...bc,...out.map(u=>key(u.x,u.y))]);
       for(const u of out)if(bc.has(key(u.x,u.y))){let t=null;for(const s of spawnTiles(m))if(!tk.has(key(s.x,s.y))){t=s;break}if(t){u.x=t.x;u.y=t.y;tk.add(key(t.x,t.y))}}
       out.push(bu)}
