@@ -25,6 +25,9 @@ const RELICS={
   bedroll:{n:'Traveller’s Bedroll',r:'c',d:'Training at a camp gives 60 EXP instead of 30.'},
   kettle:{n:'Camp Kettle',r:'u',d:'At every camp, all units gain 10 EXP.'},
   plenty:{n:'Horn of Plenty',r:'u',d:'+15 gold after every won fight, and tavern meals last 1 fight longer.'},
+  Cook_book:{n:'Cook Book',r:'c',d:'Tavern meals last 1 fight longer.'},
+  Tinted_glasses:{n:'Tinted Glasses',r:'c',d:'Blind lasts 1 turn less on your units.'},
+  Lucky_cat:{n:'Lucky Cat',r:'u',d:'All units gain +1 Lck.'},
   /* ev: only from its event (the Empty Throne), never in the relic pools */
   gemcrown:{n:'The Crystal Crown',r:'r',ev:1,d:'Units deal +3 damage, but the crystals call to monsters: enemies get +10 Hit against your units.'},
   onyx:{n:'Black Onyx Shard',r:'u',ev:1,d:'Crystal creatures deal 1 less damage to your units.'},
@@ -43,6 +46,8 @@ const RELICS={
 const RC={c:'#9fd8ff',u:'#c58aff',r:'#ffd23f',s:'#9fe8a0',h:'#e8b87a'},RN={c:'Common',u:'Uncommon',r:'Rare',s:'Starter',h:'Heirloom'};
 const salveAmt=k=>IT[k].amt+(R('poultice')?2:0);
 const R=id=>!!(run&&run.relics&&run.relics.includes(id));
+/* a unit's Lck in a fight: the Lucky Cat gives your units +1 */
+const LK=u=>u.lck+(u.team==='p'&&R('Lucky_cat')?1:0);
 /* gold dropped by defeated enemies: about 15g a battle (10g from Ascension 3), handed out over the kills, with
    whatever is left dropping from the last enemy. It goes to state.gold and is paid out with the win. */
 const GOLD_DROPS=()=>A(3)?10:15;

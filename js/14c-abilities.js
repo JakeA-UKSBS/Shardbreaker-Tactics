@@ -32,7 +32,7 @@ const STATUS={
 const hasSt=(u,k)=>!!(u&&u.st&&u.st[k]&&u.st[k].n>0);
 /* status immunities: Rook (Slippery) can't be Rooted; an Aegis can't be turned to Stone (nor can bosses) */
 function stImmune(u,k){if(!u)return false;if(k==='root'&&has(u,'slippery'))return true;if(k==='stone')return!!u.boss||CLS[u.cls]&&CLS[u.cls].n==='Aegis';return false}
-function addSt(u,k,n,by){if(stImmune(u,k))return;if(!u.st)u.st={};const o=u.st[k];u.st[k]={n:Math.max(n,o?o.n:0),by:by?by.id:(o&&o.by)};if(k==='stun'&&u.team==='p')u.acted=true}
+function addSt(u,k,n,by){if(stImmune(u,k))return;if(k==='blind'&&u.team==='p'&&R('Tinted_glasses')&&--n<=0)return;if(!u.st)u.st={};const o=u.st[k];u.st[k]={n:Math.max(n,o?o.n:0),by:by?by.id:(o&&o.by)};if(k==='stun'&&u.team==='p')u.acted=true}
 function tickSt(team,when){for(const u of state.units)if(u.team===team&&u.st){for(const k in u.st)if(STATUS[k]&&STATUS[k].tick===when){u.st[k].n--;if(u.st[k].n<=0)delete u.st[k]}}}
 /* at the start of a team's phase: burns hurt (but don't kill), water puts them out */
 function burnTick(team){for(const u of state.units)if(u.team===team&&hasSt(u,'burn')&&u.hp>0){if(['water','shallow'].includes(ter(u.x,u.y).k)){delete u.st.burn;pop(u,'Doused','heal');continue}const d=Math.min(2,u.hp-1);if(d>0){u.hp-=d;pop(u,'Burn -'+d,'crit')}}}
