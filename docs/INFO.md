@@ -184,4 +184,14 @@ Each monster has 2 moves on cooldowns (no MP). On its turn it scores every ready
 
 **To do (moves not added yet):** Bog Lurker, Jackal, Agate Golem, Gem Golem, Shardling, Prism, Crystal Sentinel; second moves for Krondis, the Pyrite Colossus, the Yeti, the Cursed Stag, the Frost Sprite and Amethyra. Draft ideas: Bog Lurker Drag Under / Ambush; Krondis Death Roll / Tail Sweep; Cursed Stag Charge / Blight Antlers; Jackal Pounce / Scavenge; Sandstone Golem Boulder Toss / Sand Wall; Pyrite Colossus Gold Glare / Ground Slam; Frost Sprite Ice Shard / Hail; Agate Golem Crystal Shell / Shard Burst; Yeti Avalanche / Hurl; Gemsnail Retract / Glitter Spray; Gem Golem Prism Beam / Gem Shell; Amethyra Shell Spin / Amethyst Rain; Shardling Shard Lunge / Splinter; Prism Refract / Dazzle; Crystal Sentinel Bulwark / Crystal Slam.
 
-- With a fixed roster, does permadeath stay? One option: a fallen character is out for the rest of the run but back for the next one.
+## Event maybes
+
+Ideas, not built yet.
+
+- **Bandits:** not sure about adding yet.
+- **Fields of Plenty:** a Salve and every unit heals 2 HP, or the Fruit of Plenty, every unit +1 max HP.
+- **Jungle Maze:** left/right choices with odds, e.g. 40% a relic, 20% damage.
+- **Smoke Signal:** a choice between two characters who'd like to join (X or Y).
+- **Tablet of X:** boons that aren't weapons or EXP (still to think of).
+- **Relaxing Outcrop:** soak in the view, every unit +15 EXP; or find something (X).
+- **Uncorrupted gems:** inert gems untouched by the crystal (opal, sunstone, diamond, maybe tiger's eye).
