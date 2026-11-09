@@ -211,7 +211,7 @@ function renderPanel(){
       ${A.hd?`<div class="ufc-w hgt">${A.hd>0?`High ground: +${A.hd*10} Hit, +${A.hd} Dmg`:`Low ground: ${A.hd*10} Hit`}</div>`:''}
       <div class="ufc-g"><b>${u.hp}→${aft(u.hp,D)}</b><i>HP</i><b>${pending.hp}→${aft(pending.hp,A)}</b><b>${A.dmg}${A.n>1?' ×2':''}</b><i>DMG</i><b>${D?D.dmg+(D.n>1?' ×2':''):'–'}</b><b>${A.hit}%</b><i>HIT</i><b>${D?D.hit+'%':'–'}</b><b>${A.crit}%</b><i>CRT</i><b>${D?D.crit+'%':'–'}</b></div>
       ${A.eff?`<button type="button" class="effl" data-act="chart">${effT.map(t=>`<img src="${tagArt(t)}" alt="">`).join('')}Effective ×${A.eff}</button>`:''}
-      <div class="ufc-b"><button class="go" type="button" data-act="attack-go">Attack</button><button type="button" data-act="back">Back</button></div>`;
+      <div class="ufc-b"><button class="go" type="button" data-act="attack-go">Attack</button><button type="button" data-act="back">Back</button></div>`+devPanel([devBreak(u,pending,A),D&&devBreak(pending,u,D)]);
     }
   }
   else if(inspect)h=card(inspect)+(inspect.team==='e'?'<p class="hint">Red tiles show where it can strike next turn. Right-click enemies to see detailed stats.</p>':'');
@@ -225,4 +225,20 @@ function renderPanel(){
   if(fm&&(pop||u)){mEl.innerHTML=fm;mEl.hidden=false;const xs=[u,pop?pending:null].filter(Boolean).map(o=>{const r=uBox(o);return cam.x+(r.l+r.w/2)*cam.s}),mid=xs.reduce((a,x)=>a+x,0)/xs.length;
     mEl.classList.toggle('dl',mid>vb().w/2);mEl.classList.toggle('dr',mid<=vb().w/2)}else mEl.hidden=true;
 }
+/* dev mode: the full working behind a forecast, from calc()'s br. C = calc() result, X attacks Y.
+   ab (optional) = {n, m (damage multiplier), flat, hitAdd} for abilities */
+function devBreak(X,Y,C,ab){
+  if(!settings.dev||!C||!C.br)return'';const B=C.br,sg=v=>v<0?'−'+(-v):'+'+v;
+  const sec=(t,l,tot)=>`<div class="dvs"><b>${t}</b>${l.map(([k,v])=>`<div><span>${k}</span><i>${sg(v)}</i></div>`).join('')||'<div><span>nothing</span><i>0</i></div>'}<div class="dvt"><span>= ${t}</span><i>${tot}</i></div></div>`;
+  const powA=ab&&!ab.flat?Math.round(C.pow*ab.m):C.pow,base=Math.max(0,powA-C.df);
+  let d=ab&&ab.flat?`<div>${ab.n}: flat <i>${ab.flat}</i> (ignores Def)</div>`:`${ab&&ab.m!==1?`<div><span>${ab.n} ×${ab.m}</span><i>${C.pow} → ${powA}</i></div>`:''}<div><span>Pow − ${B.mag?'Res':'Def'}</span><i>${powA} − ${C.df} = ${base}</i></div>${B.mods.map(([k,v])=>`<div><span>${k}</span><i>×${v}</i></div>`).join('')}`;
+  const dmg=ab?ab.dmg:C.dmg,hitAdd=ab&&ab.hitAdd||0,hit=ab?ab.hit:C.hit;
+  return`<div class="dvh">${X.name} → ${Y.name}</div>${sec('Pow',B.pow,C.pow)}${sec(B.mag?'Res':'Def',B.df,C.df)}
+  <div class="dvs"><b>Damage</b>${d}<div class="dvt"><span>= per hit${!ab&&C.n>1?' (×2 strikes)':ab&&ab.hits>1?` (×${ab.hits} hits)`:''}</span><i>${dmg}</i></div></div>
+  ${sec('Hit',B.acc,B.accT)}${sec('Avoid',B.avo,B.avoT)}<div class="dvs"><div class="dvt"><span>Hit − Avoid${hitAdd?` ${sg(hitAdd)} ability`:''}${ab&&ab.sure?' (never misses)':''}</span><i>${hit}%</i></div></div>
+  ${sec('Crit',B.crit,B.critT)}${B.noCrit?'<div class="dvn">Enemies can’t crit → 0%</div>':''}
+  ${ab?'':`<div class="dvs"><div class="dvt"><span>AS ${B.asx}${B.bonus?' +'+B.bonus:''} vs ${B.asy} (doubles at +4)</span><i>${C.n>1?'doubles':'single'}</i></div></div>`}`;
+}
+/* the breakdown floats beside the forecast */
+function devPanel(parts){const h=parts.filter(Boolean).join('<hr>');return h?`<div class="ufc-dev">${h}<div class="dvn">Rolled later: crit ×3, Bulwark/Iron Skin/Spell Ward halve, Whirlwind. Hit uses the average of two rolls.</div></div>`:''}
 panel.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||busy)return;act(b.dataset.act)});

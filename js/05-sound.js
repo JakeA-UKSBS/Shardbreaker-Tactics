@@ -13,7 +13,7 @@ function audio(){
 const SFX_FILE={sandswipe:['sfx/sand-swipe.mp3',.8],levelup:['sfx/aura-up.mp3',.5],step:['sfx/boots-grass.mp3',.45],swordcrit:['sfx/sword-crit.mp3',.8],jump:['sfx/retro-jump.mp3',.5],
   /* RPG Essentials Free pack: element attacks and poisoning */
   fire:['sfx/fire-explosion.mp3',.6],water:['sfx/water.mp3',.6],thunder:['sfx/thunder.mp3',.6],wind:['sfx/wind.mp3',.6],ice:['sfx/ice-explosion.mp3',.6],poison:['sfx/poison.mp3',.6],
-  heal:['sfx/heal.mp3',.5],debuff:['sfx/debuff.mp3',.55],claw:['sfx/claw.mp3',.8],block:['sfx/block.mp3',.9],slash:['sfx/slash.mp3',.7],
+  heal:['sfx/heal.mp3',.5],debuff:['sfx/debuff.mp3',.55],slow:['sfx/debuff.mp3',.25],/* Slow landing: the debuff sound, quieter */claw:['sfx/claw.mp3',.8],block:['sfx/block.mp3',.9],slash:['sfx/slash.mp3',.7],
   /* UI */
   select:['sfx/confirm.mp3',.25],decline:['sfx/decline.mp3',.6],equip:['sfx/equip.mp3',.7],buy:['sfx/buy.mp3',.6],
   /* events */
@@ -56,7 +56,7 @@ const SFX={
   earth:()=>{noise(.5,{vol:.55,f:180,type:'lowpass'});tone(70,.4,{type:'triangle',vol:.4,slide:40})},
 };
 /* synth stand-ins for recorded-only sounds */
-Object.assign(SFX,{jump:()=>tone(330,.12,{type:'square',vol:.04,slide:660}),swordcrit:()=>SFX.crit(),ice:()=>SFX.water(),poison:()=>SFX.dark(),debuff:()=>SFX.dark(),claw:()=>SFX.swing(),slash:()=>SFX.swing(),block:()=>SFX.broke(),decline:()=>SFX.ephase(),equip:()=>SFX.tick(),buy:()=>SFX.item(),anvil:()=>{},book:()=>{},lever:()=>{},pour:()=>{},chestopen:()=>{},paper:()=>{},sandswipe:()=>SFX.swing(),levelup:()=>{}});
+Object.assign(SFX,{jump:()=>tone(330,.12,{type:'square',vol:.04,slide:660}),swordcrit:()=>SFX.crit(),ice:()=>SFX.water(),poison:()=>SFX.dark(),debuff:()=>SFX.dark(),slow:()=>tone(200,.45,{type:'sawtooth',vol:.03,slide:80}),claw:()=>SFX.swing(),slash:()=>SFX.swing(),block:()=>SFX.broke(),decline:()=>SFX.ephase(),equip:()=>SFX.tick(),buy:()=>SFX.item(),anvil:()=>{},book:()=>{},lever:()=>{},pour:()=>{},chestopen:()=>{},paper:()=>{},sandswipe:()=>SFX.swing(),levelup:()=>{}});
 /* click sounds switched off for now (left-click confirm, right-click decline) */
 const SFX_MUTED=new Set(['select','decline']);
 function sfx(n){if(!n||!settings.sound||SFX_MUTED.has(n))return;try{if(audio()&&AU.buf[n]){if(n==='step')[0,.16].forEach((d,i)=>playBuf(n,d,i?.92:1.04));/* two footfalls */else playBuf(n)}else SFX[n]()}catch(_){}}
