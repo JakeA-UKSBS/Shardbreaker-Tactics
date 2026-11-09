@@ -26,7 +26,7 @@ const DRINKS={
   stout:{n:'Ironbark Stout',p:45,d:'One unit gains +1 Def.',st:()=>'def'},
   tea:{n:'Sage Tea',p:35,d:'One unit gains +1 Res and +1 Luck.',st:()=>['res','lck']}
 };
-const GREET=['“Mind the step, it’s been loose for years. What’ll it be?”','“Sit anywhere that isn’t sticky. What can I get you?”','“You look like you’ve walked through worse than rain. Drink?”','“Another band of heroes. Coin first, stories after.”'];
+const GREET=['“Mind the step, it’s been loose for years. What’ll it be?”','“Sit anywhere that isn’t sticky. What can I get ya?”','“You look like you’ve walked through worse than rain. Drink?”','“Another band of heroes. Coin first, stories after.”'];
 const tavEl=document.createElement('div');tavEl.className='tav';tavEl.hidden=true;document.body.appendChild(tavEl);
 function tavShow(text,opts){
   /* opts: [key,label,sub?,disabled?] -> resolves with the chosen key */
@@ -46,7 +46,7 @@ async function tavernNode(){
     <div class="tv-box"><div class="tv-name">${KEEPER.name}, the innkeeper</div><p class="tv-text"></p><div class="tv-opts"></div></div>`;
   tavEl.hidden=false;music('tavern');
   tip('tavern','The tavern','Spend the gold you earn from fights: one drink, one meal and one hire per visit. Food lasts a few fights; drink boosts are permanent.');
-  let text=pick(GREET)+' (A night’s rest here heals everyone fully.)';
+  let text=pick(GREET);
   for(;;){
     const m=await tavShow(text,[['drink','Drinks at the bar',done.drink?'You’ve had your drink':'Ale, spirits and tea',done.drink],['food','Something to eat',done.food?'You’ve eaten':`Buffs for a few fights${(run.meals||[]).length?` · ${run.meals.length} active`:''}`,done.food],['hire','Anyone looking for work?',done.hire?'You’ve hired someone':`${hires.length} sellsword${hires.length===1?'':'s'} at the tables`,done.hire],/*['rumour','Heard any rumours?',''],*/['leave','Head back out','']]);
     if(m==='leave'){tavEl.hidden=true;tavEl.onclick=null;music(B.id);return}
