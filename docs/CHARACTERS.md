@@ -250,10 +250,10 @@ A sellsword from the southern deserts who fights for whoever pays, and right now
 A gravedigger who learned to listen to what the dead still want. Soft-spoken, and the mist follows him.
 - **Look:** black and green soul robes, hood and face covering, dark mist round his casting hand.
 - **Passive: Soul Harvest.** When an enemy dies within 3 tiles, he restores 4 MP.
-- **Soul Bolt** (single, range 4 · 5 MP): 1.2× Mag.
-- **Wither** (area r1 at range 3 · 8 MP): 0.8× Mag and Weak.
-- **Grasp of the Grave** (single, range 3 · 7 MP): 0.6× Mag and Root.
-- **Death Rune** (single, range 1–2 · 6 MP): 1.3× Mag and Weak for 2 turns. *(In game; the moves above aren't built yet.)*
+- **Death Rune** (single, range 1–2 · 6 MP): 1.5× Mag.
+- **Wither** (3×3 at range 3 · 8 MP): 1.2× Mag and Weak for 2 turns.
+- **Blood Rune** (single, range 1–2 · 5 MP): 0.8× Mag, and he heals the full amount dealt.
+- **Grasp of the Grave** (single, range 3 · 7 MP): 0.6× Mag and Root. *(Not built yet.)*
 
 ## Event only
 

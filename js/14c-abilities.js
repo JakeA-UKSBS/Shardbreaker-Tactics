@@ -60,7 +60,7 @@ Object.assign(SKILLS,{
    aim: 'any' = aim at any tile in range (area spells); 'dir' = pick a direction (an adjacent tile).
    dmg: × attack power; hit: + Hit; hits: number of strikes; mag: uses Mag (a spell); el: element (colour, Attunement).
    st: [status, turns, chance] on the enemies hit; give: [status, turns] on the allies in the shape; self: statuses on the user.
-   vsPsn: [damage, Hit] added against a Poisoned target;
+   vsPsn: [damage, Hit] added against a Poisoned target; drain: heals the user this share of the damage dealt;
    heal: × (Mag + 5); cure: removes bad statuses; push: tiles pushed back; once: once a fight; encore: the ally can act again. */
 const ABIL={
   /* Kili (Archer) */
@@ -88,7 +88,9 @@ const ABIL={
   noxiousCloud:{n:'Noxious Cloud',cd:4,side:'foe',r:[1,3],shape:'area',aim:'any',dmg:.3,psn:1,st:['weak',1],d:'A 3×3 cloud up to 3 away: 0.3× damage, Poison and Weak (30% less damage) for a turn on every enemy in it.'},
   saltInWound:{n:'Salt in the Wound',cd:2,side:'foe',r:[1,1],dmg:1,vsPsn:[4,10],d:'1.0× damage. Against a Poisoned target: +4 damage and +10 Hit.'},
   /* Kyul (Warlock) */
-  deathRune:{n:'Death Rune',mp:6,mag:1,el:'dark',side:'foe',r:[1,2],dmg:1.3,st:['weak',2],d:'1.3× magic damage up to 2 away, and the target is Weak (deals 30% less damage) for 2 turns.'},
+  deathRune:{n:'Death Rune',mp:6,mag:1,el:'dark',side:'foe',r:[1,2],dmg:1.5,d:'1.5× magic damage up to 2 away.'},
+  wither:{n:'Wither',mp:8,mag:1,el:'dark',side:'foe',r:[1,3],shape:'area',aim:'any',dmg:1.2,st:['weak',2],d:'A 3×3 area up to 3 away: 1.2× magic damage and Weak (deals 30% less damage) for 2 turns on every enemy in it.'},
+  bloodRune:{n:'Blood Rune',mp:5,mag:1,el:'dark',side:'foe',r:[1,2],dmg:.8,drain:1,d:'0.8× magic damage up to 2 away, and he heals the full amount dealt.'},
   /* unused for now (was Corvin's) */
   flameBurst:{n:'Flame Burst',mp:5,mag:1,el:'fire',side:'foe',r:[1,3],shape:'cross',aim:'any',dmg:.9,st:['burn',2,.3],d:'A cross of fire up to 3 away: 0.9× magic damage, 30% chance to Burn.'},
   frostWave:{n:'Frost Wave',mp:7,mag:1,el:'ice',side:'foe',r:[1,1],shape:'cone',aim:'dir',dmg:.9,st:['chill',1],d:'A cone of frost (4 tiles): 0.9× magic damage and Slow (−2 Move).'},
@@ -135,7 +137,7 @@ const KITS={
   maelis:{passive:'lastLight',mp:26,abil:['mend','purify','circleOfRest','sanctuary']},
   aletta:{mp:12,abil:['purify']},/* no kit passive yet: keeps her random skill */
   pepr:{passive:'venom',mp:0,abil:['poisonDart','noxiousCloud','saltInWound','tumble']},
-  kyul:{mp:24,abil:['deathRune']},/* no kit passive yet: keeps his random skill */
+  kyul:{mp:24,abil:['deathRune','wither','bloodRune']},/* no kit passive yet: keeps his random skill */
   rook:{passive:'slippery',mp:0,abil:['backstab','smokeBomb','tumble']},
   brynhildr:{passive:'bulwarkAura',mp:0,abil:['shieldBash','challenge','holdTheLine']},
   raptor:{passive:'beginnersLuck',mp:0,abil:['rally','cleanCut','shieldUp']},
@@ -308,6 +310,7 @@ async function useAbility(u,id,tx,ty){
         await sleep(D(n>1?160:220));mapPose(u,'idle');mapPose(t,'idle');render();await sleep(D(n>1?60:110))}
       landed=total>0;
       if(a.recoil&&!total&&u.hp>1){const d=Math.min(a.recoil,u.hp-1);u.hp-=d;pop(u,'-'+d,'dmg');flash(u);render();await sleep(D(200))}
+      if(total&&a.drain){const h=Math.min(Math.round(total*a.drain),u.maxhp-u.hp);if(h){u.hp+=h;pop(u,'+'+h,'heal')}}
       if(total&&has(u,'siphon')&&a.el==='dark'){const h=Math.min(Math.ceil(total/4),u.maxhp-u.hp);if(h){u.hp+=h;pop(u,'+'+h,'heal')}}
       exp+=expFor(u,t,total>0,t.hp<=0);
       if(t.hp>0&&total&&a.push){pushUnit(u,t,a.push);render();await sleep(D(250))}
