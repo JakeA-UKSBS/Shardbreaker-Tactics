@@ -3,13 +3,12 @@
 const PICS={};
 
 /* STAT ORDER: every 8-number stat array in the game (b, g, s, bonus, st, gr) uses this order:
-   [HP, Str, Mag, Skl, Spd, Lck, Def, Res]. Skl is folded into Luck for display (see foldLuck). */
+   [HP, Str, Mag, Skl, Spd, Lck, Def, Res]. */
 const ST=['hp','str','mag','skl','spd','lck','def','res'];
 const SL={hp:'HP',str:'Str',mag:'Mag',skl:'Skl',spd:'Spd',lck:'Luck',def:'Def',res:'Res'};
-/* the stats a unit shows and levels: HP, Str or Mag (by class), Luck, Spd, Def, Res. Skl is folded into Luck. */
+/* the stats a unit shows and levels: HP, Str or Mag (by class), Skl, Luck, Spd, Def, Res. */
 const usesMag=u=>CLS[u.cls].w.every(t=>t==='art'||t==='spirit');
-const shown=u=>['hp',usesMag(u)?'mag':'str','lck','spd','def','res'];
-const foldLuck=u=>{u.lck=Math.max(u.lck||0,u.skl||0);return u};
+const shown=u=>['hp',usesMag(u)?'mag':'str','skl','lck','spd','def','res'];
 /* attack speed (FE9): weight above your Str (Mag for sigils) slows doubling and dodging */
 const wtOver=(u,w)=>Math.max(0,(w&&w.wt||0)-(w&&w.mag?u.mag:u.str));
 const AS=(u,w)=>Math.max(0,u.spd+gearOf(u).spd-wtOver(u,w));

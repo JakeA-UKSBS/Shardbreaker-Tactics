@@ -2,7 +2,7 @@
 /* ---- gear: non-weapon items that work while carried (one of each kind counts), and can be traded ---- */
 Object.assign(IT,{
   leatherArmour:{n:'Leather Armour',t:'gear',kind:'armor',uses:1,gear:{def:2},key:'leatherArmour'},
-  chainmail:{n:'Chainmail',t:'gear',kind:'armor',uses:1,gear:{def:4,spd:-1},tint:'steel',key:'chainmail'},
+  chainmail:{n:'Chainmail',t:'gear',kind:'armor',uses:1,gear:{def:3},tint:'steel',key:'chainmail'},
   wardingCloak:{n:'Warding Cloak',t:'gear',kind:'cloak',uses:1,gear:{res:3},key:'wardingCloak'},
   travellersBoots:{n:'Traveller’s Boots',t:'gear',kind:'boots',uses:1,gear:{mov:1},key:'travellersBoots'},
   ironGauntlets:{n:'Iron Gauntlets',t:'gear',kind:'gauntlet',uses:1,gear:{str:2},key:'ironGauntlets'}

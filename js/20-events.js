@@ -717,7 +717,7 @@ function bump(u, s, n) {
     u.hp += n;
   } else u[s] += n;
 }
-const SN = { hp: 'max HP', str: 'Str', mag: 'Mag', lck: 'Luck', spd: 'Spd', def: 'Def', res: 'Res' };
+const SN = { hp: 'max HP', str: 'Str', mag: 'Mag', skl: 'Skl', lck: 'Luck', spd: 'Spd', def: 'Def', res: 'Res' };
 const powS = u => (usesMag(u) ? 'mag' : 'str');
 const isRoleU = (u, r) => u.cls.startsWith(`G.${r}.`);
 const canAny = k => run.roster.some(u => canUse(u, k));

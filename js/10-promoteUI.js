@@ -9,7 +9,7 @@ function promote(u,to){
   if(u._nl){u.look=u._nl;delete u._nl}
   castSwap(u,to);
   u.cls=to;u.lv=1;u.exp=0;u.cap=capOf(u)+PROMO_CAP;u.mov=CLS[to].mov;
-  ST.forEach((s,i)=>{if(s==='hp'){u.maxhp+=b[i];u.hp+=b[i]}else u[s]+=b[i]});u.lck+=b[3];
+  ST.forEach((s,i)=>{if(s==='hp'){u.maxhp+=b[i];u.hp+=b[i]}else u[s]+=b[i]});
   return{from,to,old,b,gift};
 }
 async function ascend(u,to){
@@ -31,7 +31,7 @@ async function ascend(u,to){
   }
   spr.src=after;el.classList.remove('charge');el.classList.add('burst');sfx('burst');
   await w(still?0:900);el.querySelector('.asc-box').hidden=false;
-  for(const s of shown(u)){const inc=s==='lck'?r.b[3]+r.b[5]:r.b[ST.indexOf(s)];if(!inc)continue;const row=el.querySelector(`[data-s="${s}"]`);row.classList.add('up');row.querySelector('.v').textContent=r.old[s]+inc;row.querySelector('em').textContent='+'+inc;sfx('ding');await w(220)}
+  for(const s of shown(u)){const inc=r.b[ST.indexOf(s)];if(!inc)continue;const row=el.querySelector(`[data-s="${s}"]`);row.classList.add('up');row.querySelector('.v').textContent=r.old[s]+inc;row.querySelector('em').textContent='+'+inc;sfx('ding');await w(220)}
   const btn=el.querySelector('[data-m]');btn.disabled=false;btn.focus();
   await new Promise(res=>btn.addEventListener('click',res,{once:true}));
   el.classList.add('out');await sleep(250);el.remove();

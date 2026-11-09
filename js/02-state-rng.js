@@ -34,8 +34,8 @@ function foe(cls,lv,x,y,o={}){
   const t=FOE[cls],u={id:'f'+(foeSeq++),name:o.name||CLS[cls].n,cls,team:'e',lv,exp:0,x,y,acted:false,hold:!!o.hold,mov:CLS[cls].mov,skill:o.skill||null,pic:t.pic};
   ST.forEach((s,i)=>u[s]=t.b[i]+Math.floor(t.g[i]*(lv-1)));u.maxhp=u.hp;
   u.items=(o.items||t.items).map(k=>({k,u:IT[k].uses}));if(o.carry)u.items.push({k:o.carry,u:IT[o.carry].uses,d:true});
-  u.look=Object.assign({hair:HAIRS[foeSeq%HAIRS.length]},t.look);return foldLuck(u);
+  u.look=Object.assign({hair:HAIRS[foeSeq%HAIRS.length]},t.look);return u;
 }
-function boss(b){return foldLuck(boss0(b))}
+function boss(b){return boss0(b)}
 function boss0(b){const u={id:b.id,name:b.name,cls:b.cls,team:'e',lv:b.lv,exp:0,x:b.x,y:b.y,acted:false,boss:true,mov:b.mov||0,skill:b.skill,look:b.look,pic:b.pic};ST.forEach((s,i)=>u[s]=b.s[i]);u.maxhp=u.hp;u.items=b.items.map(k=>({k,u:IT[k].uses}));if(b.carry)u.items.push({k:b.carry,u:IT[b.carry].uses,d:true});return u}
 

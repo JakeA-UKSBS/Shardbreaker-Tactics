@@ -166,7 +166,7 @@ function castUnit(id,lv){
   ST.forEach((k,i)=>u[k]=s[i]);u.maxhp=u.hp;
   for(;u.lv<lv;u.lv++)ST.forEach((k,i)=>{if(rand()*100<g[i]){if(k==='hp')u.maxhp++;else u[k]++}});
   if(role==='summoner')u.familiar=c.familiar||pick(Object.keys(FAMILIARS));
-  u.hp=u.maxhp;foldLuck(u);
+  u.hp=u.maxhp;
   /* base-class characters who join from Act 2 on arrive ascended, into a random one of their classes (stats kept, bonus added) */
   if(t!=='2'&&run&&(run.act||1)>=2&&CLS[c.cls].asc){const k=pick(CLS[c.cls].asc),l=castLook(u,k);if(l)u.look=l;promote(u,k);u.hp=u.maxhp}
   return u;
