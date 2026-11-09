@@ -147,13 +147,14 @@ Object.assign(ABIL,{
   burrow:{n:'Burrow',cd:3,side:'tile',r:[1,4],shape:'area',dmg:1,d:'Tunnels to an empty tile up to 4 away and bursts out: 1.0× damage to every enemy around it.'},
   sandBlast:{n:'Sand Blast',cd:3,side:'foe',r:[1,1],shape:'cone',aim:'dir',dmg:.8,st:['blind',2],d:'A cone of sand (4 tiles): 0.8× damage and Blind.'},
   clubSmash:{n:'Club Smash',cd:3,side:'foe',r:[1,1],dmg:1.5,d:'1.5× damage.'},
+  deathRoll:{n:'Death Roll',snd:'water',fx:krondisRollFx,cd:3,side:'foe',r:[1,1],dmg:1.3,st:['root',1],d:'Grabs and rolls: 1.3× damage, and the target is Rooted.'},
   regenerate:{n:'Regenerate',cd:4,side:'self',solo:1,healPct:.3,d:'Heals 30% of its max HP.'}
 });
 const MKITS={
   Lamia:['stoneGaze','constrict'],MudMonster:['mudSpit','engulf'],
   Wolf:['howl','hamstring'],BlightedTreant:['graspingRoots','barkSkin'],HollowBear:['maul','roar'],
   FireSprite:['fireball','flicker'],BoulderGolem:['moltenFist','eruption'],MagmaDragon:['searingBreath','wingGust'],
-  SandWorm:['burrow','sandBlast'],FrostWolf:['frostBite','howl'],IceTroll:['clubSmash','regenerate']
+  SandWorm:['burrow','sandBlast'],Krondis:['deathRoll'],FrostWolf:['frostBite','howl'],IceTroll:['clubSmash','regenerate']
 };
 /* the Moves block on an enemy's Details sheet */
 function monSheet(u){const l=u.team==='e'?MKITS[u.cls]:null;if(!l)return'';
@@ -259,7 +260,7 @@ async function useAbility(u,id,tx,ty){
   for(const t of foes){
     const ranged=a.mag||man(u,t)>1;let landed=true;if(!a.dmg){/* status only: still has to hit */if(a.st){landed=(rn()+rn())/2<abVs(u,id,t).hit;if(!landed){sfx('miss');pop(t,'Miss','miss');mapPose(t,'dodge',u);await sleep(D(220));mapPose(t,'idle')}}}
     else{const n=a.hits||1,V=abVs(u,id,t);let total=0;
-      for(let k=0;k<n&&t.hp>0;k++){if(a.mag||a.snd){sfx(elSnd);elSnd=null}else sfx(ranged?'arrow':hitSfx(w,false));if(ranged&&(a.shape||'one')==='one'||!ranged)await swingAt(u,t,w,false,ranged);else mapPose(u,'swing',t);
+      for(let k=0;k<n&&t.hp>0;k++){if(a.mag||a.snd){sfx(elSnd);elSnd=null}else sfx(ranged?'arrow':hitSfx(w,false));if(a.fx)await a.fx(u,t);else if(ranged&&(a.shape||'one')==='one'||!ranged)await swingAt(u,t,w,false,ranged);else mapPose(u,'swing',t);
         if((rn()+rn())/2<V.hit){const d=Math.min(V.dmg,t.hp);t.hp-=d;total+=d;sfx('hit');pop(t,'-'+d,'dmg');flash(t);if(a.mag)burst(t,EL_COL[a.el]||'#c8b8ff')}else{sfx('miss');pop(t,'Miss','miss');mapPose(t,'dodge',u)}
         await sleep(D(n>1?160:220));mapPose(u,'idle');mapPose(t,'idle');render();await sleep(D(n>1?60:110))}
       landed=total>0;

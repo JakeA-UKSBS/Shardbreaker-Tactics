@@ -32,7 +32,7 @@ function mapPose(u,name,t,wk){const el=uEls[u.id];if(!el)return;
   if(name==='idle'){img.style.transform='';return}
   if(t){const p=scrC(u.x,u.y,u.sz),q=scrC(t.x,t.y,t.sz);if(Math.abs(q.x-p.x)>1)img.style.transform=q.x<p.x?'scaleX(-1)':'scaleX(1)'}}
 /* one weapon strike on the map: wind up, swing (the lunge lands on it), then follow through. Resolves when the blow lands */
-const SLOW_SWING=new Set(['vaar']);
+const SLOW_SWING=new Set(['vaar','morrigan']);
 async function swingAt(X,Y,w,crit,ranged){const wk=w&&w.key;
   /* cast members with hand-drawn attack frames hold each frame a little longer than the code-drawn rig, so the swing reads.
      (Every cast member has PNGs, most exported from the rig, so this is a list rather than a check for a PNG.) */
@@ -40,6 +40,17 @@ async function swingAt(X,Y,w,crit,ranged){const wk=w&&w.key;
   mapPose(X,crit?'critup':'windup',Y,wk);await sleep(D((crit?120:150)*k));
   mapPose(X,'swing',Y,wk);if(ranged){lunge(X,Y,-6);await shoot(X,Y,w)}else{lunge(X,Y);slashFx(X,Y,w,crit);await sleep(D(110*k))}
   setTimeout(()=>mapPose(X,'follow',Y,wk),D(90))}
+
+/* Krondis's Death Roll: Rhi's 8-frame strip (art/bosses/krondis-roll.png, 300x128 a frame) played over his map sprite.
+   The strip faces left (as he does as an enemy) with his body in the first 128px, so it lines up with his standing sprite
+   and the roll stretches out behind him */
+async function krondisRollFx(u){const img=uEls[u.id]&&uEls[u.id].firstChild;if(!img)return;
+  const r=img.getBoundingClientRect(),w=r.width*300/128,flip=u.team!=='e',d=document.createElement('div');
+  Object.assign(d.style,{position:'fixed',left:(flip?r.right-w:r.left)+'px',top:r.top+'px',width:w+'px',height:r.height+'px',backgroundImage:'url(art/bosses/krondis-roll.png)',
+    backgroundSize:'800% 100%',imageRendering:'pixelated',pointerEvents:'none',zIndex:9999,transform:flip?'scaleX(-1)':''});
+  document.body.appendChild(d);img.style.visibility='hidden';
+  for(let i=0;i<8;i++){d.style.backgroundPosition=i/7*100+'% 0';await sleep(D(i>1&&i<7?90:160))}
+  d.remove();img.style.visibility=''}
 
 /* slash trail: a pale pixel-art arc sweeps across the target as the blow lands (swords and axes arc, lances thrust).
    4 frames of 32x32 drawn once per shape, shown at 2x over the target and flipped to face away from the attacker */
