@@ -15,7 +15,7 @@ const SFX_FILE={sandswipe:['sfx/sand-swipe.mp3',.8],levelup:['sfx/aura-up.mp3',.
   fire:['sfx/fire-explosion.mp3',.6],water:['sfx/water.mp3',.6],thunder:['sfx/thunder.mp3',.6],wind:['sfx/wind.mp3',.6],ice:['sfx/ice-explosion.mp3',.6],poison:['sfx/poison.mp3',.6],
   heal:['sfx/heal.mp3',.5],debuff:['sfx/debuff.mp3',.55],claw:['sfx/claw.mp3',.8],block:['sfx/block.mp3',.9],slash:['sfx/slash.mp3',.7],
   /* UI */
-  select:['sfx/confirm.mp3',.5],decline:['sfx/decline.mp3',.6],equip:['sfx/equip.mp3',.7],buy:['sfx/buy.mp3',.6],
+  select:['sfx/confirm.mp3',.25],decline:['sfx/decline.mp3',.6],equip:['sfx/equip.mp3',.7],buy:['sfx/buy.mp3',.6],
   /* events */
   anvil:['sfx/anvil.mp3',.45],book:['sfx/book.mp3',.5],lever:['sfx/lever.mp3',.4],pour:['sfx/pour.mp3',.45],chestopen:['sfx/chest-open.mp3',.45],paper:['sfx/paper.mp3',.7]};
 function playBuf(n,delay=0,rate=1){const c=AU.ctx,s=c.createBufferSource(),g=c.createGain();s.buffer=AU.buf[n];s.playbackRate.value=rate;g.gain.value=SFX_FILE[n][1];s.connect(g).connect(AU.out);s.start(c.currentTime+delay)}
