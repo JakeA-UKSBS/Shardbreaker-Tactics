@@ -38,10 +38,12 @@ async function winScreen(){
   await sleep(600);
   const survivors=state.units.filter(u=>u.team==='p'&&!u.summon),fallen=chStart.units.filter(s=>s.team==='p'&&!survivors.some(u=>u.id===s.id));
   run.roster=survivors.map(u=>{const r=clone(u);r.hp=Math.min(r.maxhp,r.hp+afterHeal());r.acted=false;r.stone=0;return r});
+  /* permadeath is Ascension 5 only: below that, fallen units get back up at 1 HP after a win (as they were when the fight started) */
+  const perma=A(5);if(!perma)run.roster.push(...fallen.filter(s=>!s.summon).map(s=>{const r=clone(s);r.hp=1;r.acted=false;r.stone=0;r.psn=0;r.st={};return r}));
   const bossWin=run.kind==='boss',final=bossWin&&(run.act||1)>=ACTS,rw=battleRewards();
-  run.lost=(run.lost||0)+fallen.length;(run.fallen=run.fallen||[]).push(...fallen.map(u=>({n:u.name,c:CLS[u.cls].n,act:run.act||1,floor:run.n})));if(bossWin&&!prof.bosses.includes(actBiome().id)){prof.bosses.push(actBiome().id);saveProf()}
+  if(perma){run.lost=(run.lost||0)+fallen.length;(run.fallen=run.fallen||[]).push(...fallen.map(u=>({n:u.name,c:CLS[u.cls].n,act:run.act||1,floor:run.n})))}if(bossWin&&!prof.bosses.includes(actBiome().id)){prof.bosses.push(actBiome().id);saveProf()}
   const gg=(GOLDWIN[run.kind]||GOLDWIN.battle)+(R('plenty')?15:0)+(rw.gold||0);run.gold=gold()+gg;afterFightMeals();
-  const ro=survivors.map(u=>`<div><img src="${portrait(u)}" alt="">${u.name}<span class="hint">Lv ${u.lv} · ${Math.min(u.maxhp,u.hp+afterHeal())}/${u.maxhp} HP</span></div>`).join('')+fallen.map(u=>`<div class="dead"><img src="${portrait(u)}" alt="">${u.name}<span class="hint">Fallen</span></div>`).join('');
+  const ro=survivors.map(u=>`<div><img src="${portrait(u)}" alt="">${u.name}<span class="hint">Lv ${u.lv} · ${Math.min(u.maxhp,u.hp+afterHeal())}/${u.maxhp} HP</span></div>`).join('')+fallen.map(u=>`<div class="dead"><img src="${portrait(u)}" alt="">${u.name}<span class="hint">${perma?'Fallen':'Back up at 1 HP'}</span></div>`).join('');
   /* beating the Crystal Heart ends the run: straight to Victory, no floor summary, loot or skills */
   if(!final){await modal(`<div class="eyebrow">Act ${run.act||1} · Floor ${run.n} of ${actLen()} won · Turn ${state.turn}</div><h2>${BATTLE.title}</h2><p>${final?'The run is complete.':bossWin?`${TheN(actBiome())} is cleared. The road leads on to ${theN(run.act>=2?BIOMES.heart:BIOMES[run.biomes[run.act]])}.`:`Survivors recover ${afterHeal()} HP. Camps heal fully.`}</p><div class="roster">${ro}</div><p>${rw.length?`Found: ${rw.map(k=>`<b>${IT[k].n}</b>`).join(', ')}. `:''}<span class="gold">+${gg} gold</span></p><div class="mbtns"><button class="go" type="button" data-m="next">${final?'Finish':'Press on'}</button></div>`);
   for(const k of rw)await giveTo(k,'From the battlefield.',true);

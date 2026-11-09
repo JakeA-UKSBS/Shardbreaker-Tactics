@@ -62,7 +62,7 @@ An effective hit multiplies weapon Mt ×2. Only your side deals them for now.
 | Monster type | Who has it | Beaten by |
 |---|---|---|
 | Flier | Hawk, Prism, Wisp, Spirit Hawk | Bows |
-| Armoured | Magma Golem, Crystal Sentinel, Sandstone Golem, Pyrite Colossus, Agate Golem, Gem Golem, Gemsnail, Amethyst Turtle, Stone Warden, Yeti | War Hammer, Stonebane |
+| Armoured | Magma Golem, Crystal Sentinel, Sandstone Golem, Pyrite Colossus, Agate Golem, Gem Golem, Amethyst Turtle, Stone Warden, Yeti | War Hammer, Stonebane |
 | Beast | Wolf, Hawk, Alligator, Cursed Stag, Magma Dragon, Bog Lurker, Jackal, Sand Worm, Frost Wolf, Agate Wyrm, Hollow Bear, Spirit Wolf, Spirit Hawk | Hunting Spear, Wolfsbane |
 | Colossal | Every 2×2 boss | Giantslayer |
 | Spectral | Fire Sprite, Frost Sprite, Wisp | Light sigils, Holy Sword, Spiritbane, Paladins |
@@ -143,7 +143,7 @@ Learned skills cost capacity (base 20, +5 when promoted). Personal skills are fr
 - **Bosses:** 2×2, move 2, Colossal.
 - **Loot:** skill after 40% of fights (half of those are the region's slayer skill), Salve after 50%, slayer weapon after 15% of battles and 35% of elites (only if someone can wield it).
 - **Inn:** one drink, one meal and one hire per visit.
-- **Ascension levels:** 1: Enemies are 1 level higher. · 2: Bosses and elite leaders are much tougher. · 3: No early ease, you start with no gold, and units recover only 5 HP after a fight. · 4: Enemies are another level higher, with one more in each battle. · 5: Every enemy knows a combat skill.
+- **Ascension levels:** 1: Enemies are 1 level higher. · 2: Bosses and elite leaders are much tougher. · 3: No early ease, you start with no gold, and units recover only 5 HP after a fight. · 4: Enemies are another level higher, with one more in each battle. · 5: Every enemy knows a combat skill, and fallen units are lost for good (below Ascension 5 they get back up at 1 HP after a win).
 
 ## Regions
 
@@ -155,7 +155,7 @@ Learned skills cost capacity (base 20, +5 when promoted). Personal skills are fr
 | The Heart of the Blight | Shardling 4, Prism 3, Crystal Sentinel 2 | Crystal Sentinel, Shardling, Prism | The Crystal Heart |
 | Sandstone Desert | Jackal 4, Sand Worm 3 (fl 2+), Sandstone Golem 2 (fl 4+) | Sandstone Golem, Jackal, Sand Worm | The Pyrite Colossus |
 | Frostveil Reaches | Frost Wolf 4, Frost Sprite 3 (fl 2+), Agate Golem 2 (fl 4+), Ice Troll 2 (fl 5+) | Agate Golem, Ice Troll, Frost Wolf, Frost Sprite | The Yeti |
-| Gemstone Caverns | Gemsnail 4, Gem Golem 2 (fl 4+) | Gem Golem, Gemsnail | Amethyra, the Amethyst Turtle |
+| Gemstone Caverns | Gem Golem | Gem Golem | Amethyra, the Amethyst Turtle |
 
 ## Monster moves
 
@@ -174,7 +174,24 @@ Each monster has 2 moves on cooldowns (no MP). On its turn it scores every ready
 | Sand Worm | Burrow (CD 3): tunnel up to 4 tiles, 1.0× to every enemy around the exit | Sand Blast (CD 3): cone, 0.8×, Blind |
 | Frost Wolf | Frost Bite (CD 3): melee 1.0×, Slow | Howl (CD 4) |
 | Ice Troll | Club Smash (CD 3): melee 1.5× | Regenerate (CD 4): heal 30% (below 60% HP) |
+| Krondis | Death Roll (CD 3): melee, 3 hits of 0.5× (Rhi's roll animation) | |
+| The Pyrite Colossus | Stalagmite (CD 3): range 1–3, 5 flat damage, Slow | |
+| Sandstone Golem | Sand Stream (CD 3): range 1–3, −10 Hit for 2 turns | Sand Burn (CD 3): range 1–2, 0.6×, Burn |
+| The Yeti | Ground Slam (CD 3): 0.7× to every enemy around it | |
+| Cursed Stag | Charge (CD 3): runs up to a target 2 away, 1.2× | |
+| Frost Sprite | Ice Blitz (CD 3): range 1–2, 3 hits of 0.4× magic | |
+| Amethyra | Hunker Down (once, below half HP): +2 Def and Res for the rest of the fight | |
 
-**To do (moves not added yet):** Bog Lurker, Krondis, Cursed Stag, Jackal, Sandstone Golem, The Pyrite Colossus, Frost Sprite, Agate Golem, The Yeti, Gemsnail, Gem Golem, Amethyra, Shardling, Prism, Crystal Sentinel. Draft ideas: Bog Lurker Drag Under / Ambush; Krondis Death Roll / Tail Sweep; Cursed Stag Charge / Blight Antlers; Jackal Pounce / Scavenge; Sandstone Golem Boulder Toss / Sand Wall; Pyrite Colossus Gold Glare / Ground Slam; Frost Sprite Ice Shard / Hail; Agate Golem Crystal Shell / Shard Burst; Yeti Avalanche / Hurl; Gemsnail Retract / Glitter Spray; Gem Golem Prism Beam / Gem Shell; Amethyra Shell Spin / Amethyst Rain; Shardling Shard Lunge / Splinter; Prism Refract / Dazzle; Crystal Sentinel Bulwark / Crystal Slam.
+**To do (moves not added yet):** Bog Lurker, Jackal, Agate Golem, Gem Golem, Shardling, Prism, Crystal Sentinel; second moves for Krondis, the Pyrite Colossus, the Yeti, the Cursed Stag, the Frost Sprite and Amethyra. Draft ideas: Bog Lurker Drag Under / Ambush; Krondis Death Roll / Tail Sweep; Cursed Stag Charge / Blight Antlers; Jackal Pounce / Scavenge; Sandstone Golem Boulder Toss / Sand Wall; Pyrite Colossus Gold Glare / Ground Slam; Frost Sprite Ice Shard / Hail; Agate Golem Crystal Shell / Shard Burst; Yeti Avalanche / Hurl; Gemsnail Retract / Glitter Spray; Gem Golem Prism Beam / Gem Shell; Amethyra Shell Spin / Amethyst Rain; Shardling Shard Lunge / Splinter; Prism Refract / Dazzle; Crystal Sentinel Bulwark / Crystal Slam.
 
-- With a fixed roster, does permadeath stay? One option: a fallen character is out for the rest of the run but back for the next one.
+## Event maybes
+
+Ideas, not built yet.
+
+- **Bandits:** not sure about adding yet.
+- **Fields of Plenty:** a Salve and every unit heals 2 HP, or the Fruit of Plenty, every unit +1 max HP.
+- **Jungle Maze:** left/right choices with odds, e.g. 40% a relic, 20% damage.
+- **Smoke Signal:** a choice between two characters who'd like to join (X or Y).
+- **Tablet of X:** boons that aren't weapons or EXP (still to think of).
+- **Relaxing Outcrop:** soak in the view, every unit +15 EXP; or find something (X).
+- **Uncorrupted gems:** inert gems untouched by the crystal (opal, sunstone, diamond, maybe tiger's eye).

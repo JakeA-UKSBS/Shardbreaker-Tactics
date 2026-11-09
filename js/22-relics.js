@@ -59,7 +59,7 @@ async function relicPick(n,rs,title,text,first){
   const k=opts[+m.slice(1)];(run.relics=run.relics||[]).push(k);sfx('fanfare');toast(`${RELICS[k].n} obtained`);return k;
 }
 /* crystal creatures: enemies made of crystal or gem (for the Black Onyx Shard and the Gnome's notes) */
-const CRYS_CLS=['Shardling','Prism','CrystalSentinel','CrystalHeart','GemGolem','Gemsnail','AmethystTurtle','PyriteColossus','AgateGolem','AgateWyrm'],isCrys=u=>CRYS_CLS.includes(u.cls);
+const CRYS_CLS=['Shardling','Prism','CrystalSentinel','CrystalHeart','GemGolem','AmethystTurtle','PyriteColossus','AgateGolem','AgateWyrm'],isCrys=u=>CRYS_CLS.includes(u.cls);
 /* combat hooks, called from calc(): only your units benefit */
 function relicCalc(x,xw,y){
   const o={pow:0,df:0,acc:0,avo:0,crit:0};if(!run)return o;
