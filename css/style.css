@@ -33,10 +33,11 @@ button.mini{padding:4px 8px;font-size:12px}
 .t-bridge{background:repeating-linear-gradient(90deg,#7a5a39 0 6px,#5e432a 6px 7px)}
 .t-throne{background:linear-gradient(90deg,transparent 30%,#6a2b4f 30% 70%,transparent 70%),#5d5a66}
 .t-throne::before{left:28%;right:28%;top:14%;bottom:30%;background:#d8b15a;border:2px solid #3b2a12;border-radius:6px 6px 2px 2px}
+/* danger first, so a selected or inspected unit's move/attack range draws over it (the red outline still shows) */
+.dg::after{background:color-mix(in srgb,var(--red) 26%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--red) 60%,transparent)}
 .mv::after{background:color-mix(in srgb,var(--blue) 50%,transparent)}
 .atk::after{background:color-mix(in srgb,var(--red) 42%,transparent)}
 .hl::after{background:color-mix(in srgb,var(--green) 45%,transparent)}
-.dg::after{background:color-mix(in srgb,var(--red) 26%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--red) 60%,transparent)}
 .tg::after{box-shadow:inset 0 0 0 3px var(--gold);animation:pulse 1s infinite}
 .cur::after{box-shadow:inset 0 0 0 3px var(--fg)}
 .unit.magma img{animation:magma 2.4s ease-in-out infinite}@keyframes magma{0%,100%{filter:brightness(.85) saturate(.9) drop-shadow(0 0 1px #8a2a10)}50%{filter:brightness(1.3) saturate(1.4) drop-shadow(0 0 6px #ff7a2a)}}
