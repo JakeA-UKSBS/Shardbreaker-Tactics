@@ -26,7 +26,7 @@ const DRINKS={
   stout:{n:'Ironbark Stout',p:45,d:'One unit gains +1 Def.',st:()=>'def'},
   tea:{n:'Sage Tea',p:35,d:'One unit gains +1 Res and +1 Luck.',st:()=>['res','lck']}
 };
-const GREET=['“Mind the step, it’s been loose for years. What’ll it be?”','“Sit anywhere that isn’t sticky. What can I get ya?”','“You look like you’ve walked through worse than rain. Drink?”','“Another band of heroes. Coin first, stories after.”'];
+const GREET=['“What’ll it be?”'];
 const tavEl=document.createElement('div');tavEl.className='tav';tavEl.hidden=true;document.body.appendChild(tavEl);
 function tavShow(text,opts){
   /* opts: [key,label,sub?,disabled?] -> resolves with the chosen key */
