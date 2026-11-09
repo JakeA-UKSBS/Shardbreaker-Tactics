@@ -18,9 +18,11 @@ function learnBlock(u,k){if(has(u,k))return`${u.name} already knows ${SKILLS[k].
 const elv=u=>u.lv+(CLS[u.cls].tier===2?15:0);
 /* a few characters wield only certain kinds within their class's weapon types (Zwei: two-handed swords) */
 const ONLY_KIND={zwei:['greatsword']};
-/* some classes only take certain kinds of blade: rogues stick to daggers (Duelists add swords and rapiers) */
-const DAGGERS=['dagger','twindagger'],CLASS_KIND={Rogue:DAGGERS,Poisoner:DAGGERS,Assassin:DAGGERS,Duelist:[...DAGGERS,'sword','rapier']};
-const kindOk=(u,k)=>{const l=CLASS_KIND[CLS[u.cls].n];return!l||IT[k].t!=='blade'||l.includes(IT[k].kind)};
+/* blade kinds for the cast: daggers only for Rogues, Poisoners, Assassins and Duelists; two-handed swords only for
+   Mercenaries (Zwei) and Warriors; the pure rogue classes can't use swords (Duelists can). Monsters and other non-cast units are unaffected */
+const DAGGERS=['dagger','twindagger'],DAGGER_CLS=['Rogue','Poisoner','Assassin','Duelist'],GREAT_CLS=['Mercenary','Warrior'],ROGUE_CLS=['Rogue','Poisoner','Assassin'];
+const kindOk=(u,k)=>{const w=IT[k];if(!u.cast||w.t!=='blade')return true;const n=CLS[u.cls].n;
+  if(DAGGERS.includes(w.kind))return DAGGER_CLS.includes(n);if(w.kind==='greatsword')return GREAT_CLS.includes(n);if(['sword','rapier','scimitar'].includes(w.kind))return!ROGUE_CLS.includes(n);return false};
 /* signature elements: only Drecken wields lightning sigils, only Corvin ice ones */
 const EL_OWNER={lightning:'drecken',ice:'corvin'};
 const canUse=(u,k)=>CLS[u.cls].w.includes(IT[k].t)&&kindOk(u,k)&&(!EL_OWNER[IT[k].el]||u.cast===EL_OWNER[IT[k].el])&&(!u.cast||!ONLY_KIND[u.cast]||!WTYPES.includes(IT[k].t)||ONLY_KIND[u.cast].includes(IT[k].kind));
