@@ -416,7 +416,7 @@ const EVENTS = {
     d: 'A traveller sits in a monster’s cage, half starved. “Get me out of here and I’ll fight for you.”',
     o: null,
     make: () => {
-      const nu = castOffer(1, lvAvg(), 'recruit')[0];
+      const nu = castOffer(1, lvAvg(), 'event')[0];
       EVENTS.cage.card = `<div class="dcard on ev-card">${unitCard(nu)}</div>`;
       EVENTS.cage.ov = `<img class="ev-ov" src="${uSpr(nu)}" alt=""><img class="tv-bg" src="${cageBarsArt()}" alt="">`;
       return [

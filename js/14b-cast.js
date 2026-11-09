@@ -79,7 +79,7 @@ const CAST=[
   {id:'morrigan',name:'Morrigan',cls:'Cultist',wk:'umbralSigil',joins:'start',look:{fem:true,style:'long',hair:'#c0282a',skin:'#f6dcc4',cloth:'#5a1a2a',sash:'#c8322e',cape:true,capeC:'#2a1420',hand:true,el:'#ff4a5a',eye:'#3a6a3a'},
     asc:{'Witch':{look:{cloth:'#2a1420',capeC:'#6a1a2a',collar:'#6a1a2a',gear:'hairpin',el:'#c060ff'}},
          'Shaman':{wk:'crookStaff',look:{hand:false,cloth:'#5a3a2a',shawl:'#8a6a4a',capeC:'#3a2a1e',feather:['#7a5230','#efe6cf'],staff:'#4f331d',orb:'#7fd36a'}}}},
-  {id:'corvin',name:'Corvin',cls:'Ice Mage',wk:'frostSigil',joins:'start',look:{el:'#bfefff',fem:true,style:'bun',hair:'#2a2230',skin:'#f3cfa6',cloth:'#3a5a8a',sash:'#e2b553',cape:true,capeC:'#22284a',hand:true,eye:'#3a5a8a'},
+  {id:'corvin',name:'Corvin',cls:'Ice Mage',wk:'frostSigil',joins:'tavernEvent',look:{el:'#bfefff',fem:true,style:'bun',hair:'#2a2230',skin:'#f3cfa6',cloth:'#3a5a8a',sash:'#e2b553',cape:true,capeC:'#22284a',hand:true,eye:'#3a5a8a'},
     asc:{'Archmage':{look:{cloth:'#2a3a7a',capeC:'#3a2a6a',collar:'#2a3a7a',gear:'circlet'}},
          'Frostlord':{look:{cloth:'#cfe8f6',capeC:'#2a4a6a',sash:'#9fd8ff',collar:'#9fd8ff',el:'#bfefff',style:'long',hem:'#9fd8ff'}}}},
   {id:'drecken',name:'Drecken',cls:'Storm Mage',wk:'stormSigil',joins:'start',look:{style:'wild',hair:'#3a3a48',skin:'#e8b98f',cloth:'#3a4a5a',pants:'#2a2a34',sash:'#ffe14a',cape:true,capeC:'#1e2430',hand:true,el:'#ffe14a',eye:'#6a8ab0'},
@@ -98,7 +98,8 @@ const CAST=[
          'Aegis':{look:{metal:'#b8c0a8',shield:'aegis',capeC:'#3f4a2a'}}}},
   {id:'raptor',name:'Raptor',cls:'Adventurer',wk:'wornSword',joins:'tavern',look:{style:'short',hair:'#6b4226',skin:'#f3cfa6',cloth:'#c8682a',pants:'#5a4a3a',sash:'#7a5230',shield:'round',shieldC:'#c8682a',eye:'#3a6a3a'},
     asc:{'Hero':{wk:'knightlySword',look:{capeC:'#c8682a',shield:'kite',shieldC:'#a8501e',gear:'headband'}}}},
-  /* ---- found during the run (joins:'tavern' only at the tavern, 'event' only through their own event) ---- */
+  /* ---- found during the run (joins:'tavern' only at the tavern, 'event' only through their own event,
+     'tavernEvent' at the tavern or the caged traveller but never a recruit stop) ---- */
   {id:'aletta',name:'Aletta',cls:'Mender',wk:'mendingStaff',joins:'run',look:{fem:true,style:'bun',hair:'#a8743a',skin:'#f3cfa6',cloth:'#5a8a5a',sash:'#efe6cf',shawl:'#dfe8d0',gear:'nursecap',eye:'#3a6a3a'},
     asc:{'Saint':{wk:'dawnStaff',look:{gear:'circlet',capeC:'#dfe8d0',staff:'#e2b553',orb:'#9fe8c0'}},
          'Crusader':{wk:'holySword',gain:'holySword',look:{gear:null,metal:'#b8d0b0',shield:'kite',shieldC:'#5a8a5a',capeC:'#3f6a3f',shawl:null}}}},
@@ -177,10 +178,10 @@ function castUnit(id,lv){
   if(t!=='2'&&run&&(run.act||1)>=2&&CLS[c.cls].asc){const k=pick(CLS[c.cls].asc),l=castLook(u,k);if(l)u.look=l;promote(u,k);u.hp=u.maxhp}
   return u;
 }
-/* who can turn up: where = 'recruit' (recruit node, cage), 'tavern' or 'act1' (the offer as Act 2 begins) */
+/* who can turn up: where = 'recruit' (recruit node), 'event' (caged traveller), 'tavern' or 'act1' (the offer as Act 2 begins) */
 function castPool(where){
   const used=new Set([...(run.castUsed||[]),...run.roster.map(u=>u.cast)]),act=run.act||1;
-  return CAST.filter(c=>!used.has(c.id)&&(where==='act1'?c.joins==='act1':c.joins==='start'||c.joins==='run'||(where==='tavern'&&c.joins==='tavern')||(act>=2&&c.joins==='act1')));
+  return CAST.filter(c=>!used.has(c.id)&&(where==='act1'?c.joins==='act1':c.joins==='start'||c.joins==='run'||(where==='tavern'&&c.joins==='tavern')||((where==='tavern'||where==='event')&&c.joins==='tavernEvent')||(act>=2&&c.joins==='act1')));
 }
 /* n cast units for an offer, every eligible character equally likely. Anyone already offered this act (tavern, cage,
    recruit) is held back until there aren't enough unseen characters left to fill the offer */

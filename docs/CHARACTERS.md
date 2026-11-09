@@ -65,7 +65,7 @@ Each base class ascends into one or two advanced classes at Lv 5.
 | Kili | Archer | Sniper or Bow Cavalry | M |
 | Vaar | Brawler | Berserker | M |
 | Morrigan | Cultist | Witch or Shaman | F |
-| Corvin | Ice Mage | Archmage or Frostlord | F |
+| Corvin (tavern or caged traveller) | Ice Mage | Archmage or Frostlord | F |
 | Drecken | Storm Mage | Stormlord | M |
 | Aldric | Knight | Juggernaut or Paladin | M |
 | Maelis | Mender | Saint or Crusader | F |
@@ -106,7 +106,7 @@ A witch-hunter's daughter who took up the dark arts to hunt the blight instead. 
 - **Hex** (single, range 3 · 5 MP): Weak for 2 turns.
 - **Dark Pulse** (burst r1 · 10 MP): 1.0× Mag to every adjacent enemy.
 
-### Corvin: Ice Mage
+### Corvin: Ice Mage (tavern or caged traveller)
 ![Corvin](visuals/cast/corvin.png)
 
 A court magician's apprentice who walked out when her master started making weapons for the war. Curious and methodical. Works in frost.

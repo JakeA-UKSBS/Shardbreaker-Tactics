@@ -36,9 +36,9 @@ const IT={
   thornRapier:{n:'Thorn Rapier',t:'blade',kind:'rapier',mt:5,hit:100,crit:10,r:[1,1],uses:30},
   hookedBlade:{n:'Hooked Blade',t:'blade',kind:'scimitar',mt:7,hit:80,crit:5,r:[1,1],uses:35},
   moonglassEdge:{n:'Moonglass Edge',t:'blade',kind:'scimitar',mt:7,hit:80,crit:30,r:[1,1],uses:20,tint:'killer'},
-  ironSpear:{n:'Iron Spear',t:'pole',kind:'spear',mt:7,hit:80,crit:0,r:[1,1],uses:45},
-  steelSpear:{n:'Steel Spear',t:'pole',kind:'spear',mt:10,hit:70,crit:0,r:[1,1],uses:30,tint:'steel'},
-  javelin:{n:'Javelin',t:'pole',kind:'javelin',mt:6,hit:65,crit:0,r:[1,2],uses:20,thrown:true},
+  ironSpear:{n:'Iron Spear',t:'pole',kind:'spear',mt:7,hit:85,crit:0,r:[1,1],uses:45},
+  steelSpear:{n:'Steel Spear',t:'pole',kind:'spear',mt:10,hit:75,crit:0,r:[1,1],uses:30,tint:'steel'},
+  javelin:{n:'Javelin',t:'pole',kind:'javelin',mt:6,hit:70,crit:0,r:[1,2],uses:20,thrown:true},
   hatchet:{n:'Hatchet',t:'heavy',kind:'axe',mt:8,hit:75,crit:0,r:[1,1],uses:45},
   cleaver:{n:'Cleaver',t:'heavy',kind:'axe',mt:11,hit:65,crit:0,r:[1,1],uses:30,tint:'steel'},
   throwingAxe:{n:'Throwing Axe',t:'heavy',kind:'axe',mt:7,hit:60,crit:0,r:[1,2],uses:20,thrown:true},
@@ -67,7 +67,7 @@ for(const k in IT)IT[k].key=k;
 Object.assign(IT,{
   dirk:{n:'Dirk',t:'blade',kind:'dagger',mt:3,hit:95,crit:15,r:[1,1],uses:45,key:'dirk'},
   stiletto:{n:'Stiletto',t:'blade',kind:'dagger',thin:true,mt:4,hit:90,crit:25,r:[1,1],uses:30,key:'stiletto'},
-  barbedSpear:{n:'Barbed Spear',t:'pole',kind:'spear',mt:8,hit:75,crit:30,r:[1,1],uses:20,tint:'killer',key:'barbedSpear'},
+  barbedSpear:{n:'Barbed Spear',t:'pole',kind:'spear',mt:8,hit:80,crit:30,r:[1,1],uses:20,tint:'killer',key:'barbedSpear'},
   reaverAxe:{n:'Reaver Axe',t:'heavy',kind:'axe',mt:10,hit:65,crit:30,r:[1,1],uses:20,tint:'killer',key:'reaverAxe'},
   hawkeyeBow:{n:'Hawkeye Bow',t:'bow',kind:'bow',mt:7,hit:80,crit:30,r:[2,2],uses:20,tint:'killer',key:'hawkeyeBow'}
 });
@@ -80,12 +80,12 @@ for(const k in WT)IT[k].wt=WT[k];
 Object.assign(IT,{
   jadeJian:{n:'Jade Jian',t:'blade',kind:'sword',mt:7,hit:80,crit:30,r:[1,1],uses:25,tint:'jade',wt:5},
   jadeFang:{n:'Jade Fang',t:'blade',kind:'dagger',mt:5,hit:90,crit:35,r:[1,1],uses:25,tint:'jade',wt:2},
-  jadeSpear:{n:'Jade Spear',t:'pole',kind:'spear',mt:9,hit:75,crit:30,r:[1,1],uses:25,tint:'jade',wt:8},
+  jadeSpear:{n:'Jade Spear',t:'pole',kind:'spear',mt:9,hit:80,crit:30,r:[1,1],uses:25,tint:'jade',wt:8},
   jadeAxe:{n:'Jade Axe',t:'heavy',kind:'axe',mt:11,hit:65,crit:30,r:[1,1],uses:25,tint:'jade',wt:10},
   jadeBow:{n:'Jade Bow',t:'bow',kind:'bow',mt:8,hit:75,crit:30,r:[2,2],uses:25,tint:'jade',wt:5},
   longbow:{n:'Longbow',t:'bow',kind:'bow',mt:6,hit:75,crit:0,r:[2,3],uses:30,wt:6},
   /* steel-tier ranged variants (reach 1–2, the arbalest 2–3): trade-ups for the javelin, throwing axe, throwing knives and crossbow */
-  pilum:{n:'Pilum',t:'pole',kind:'javelin',mt:9,hit:70,crit:0,r:[1,2],uses:20,thrown:true,wt:9,tint:'steel'},
+  pilum:{n:'Pilum',t:'pole',kind:'javelin',mt:9,hit:75,crit:0,r:[1,2],uses:20,thrown:true,wt:9,tint:'steel'},
   tomahawk:{n:'Tomahawk',t:'heavy',kind:'axe',mt:10,hit:65,crit:0,r:[1,2],uses:20,thrown:true,wt:9,tint:'steel'},
   steelKnives:{n:'Steel Knives',t:'blade',kind:'dagger',mt:5,hit:90,crit:10,r:[1,2],uses:30,thrown:true,wt:2,tint:'steel'},
   galeSword:{n:'Gale Sword',t:'blade',kind:'sword',mt:6,hit:80,crit:0,r:[1,2],uses:25,wt:6,tint:'steel'},
@@ -98,7 +98,7 @@ Object.assign(IT,{
   meteorSigil:{n:'Meteor Sigil',t:'art',kind:'talisman',el:'earth',mt:13,hit:60,crit:0,r:[3,10],uses:5,mag:true,wt:9},
   /* slayer weapons: effective (×2 Mt) against one body tag */
   warHammer:{n:'War Hammer',t:'heavy',kind:'hammer',mt:8,hit:70,crit:0,r:[1,1],uses:30,wt:10,eff:['armoured']},
-  huntingSpear:{n:'Hunting Spear',t:'pole',kind:'spear',mt:7,hit:80,crit:0,r:[1,1],uses:30,wt:6,eff:['beast']},
+  huntingSpear:{n:'Hunting Spear',t:'pole',kind:'spear',mt:7,hit:85,crit:0,r:[1,1],uses:30,wt:6,eff:['beast']},
   holySword:{n:'Holy Sword',t:'blade',kind:'sword',mt:8,hit:80,crit:5,r:[1,1],uses:25,wt:6,eff:['spectral'],tint:'holy'},
   giantslayer:{n:'Giantslayer',t:'blade',kind:'greatsword',mt:9,hit:70,crit:0,r:[1,1],uses:25,wt:10,eff:['colossal'],tint:'steel'},
   farStaff:{n:'Far Staff',t:'spirit',kind:'staff',amt:10,r:[1,10],uses:15,tint:'mend'},
