@@ -61,7 +61,7 @@ Object.assign(SKILLS,{
    heal: × (Mag + 5); cure: removes bad statuses; push: tiles pushed back; once: once a fight; encore: the ally can act again. */
 const ABIL={
   /* Kili (Archer) */
-  aimedShot:{n:'Aimed Shot',cd:2,side:'foe',r:[2,5],dmg:1.5,hit:10,d:'A careful shot from range 2–5: 1.5× damage, as accurate as a normal attack.'},
+  aimedShot:{n:'Aimed Shot',cd:2,side:'foe',r:[2,5],dmg:1.5,sure:1,d:'A careful shot from range 2–5: 1.5× damage, and it never misses.'},
   pinningArrow:{n:'Pinning Arrow',cd:3,side:'foe',r:'wpn',dmg:.8,st:['root',1],d:'0.8× damage, and the target is Rooted (can’t move) next turn.'},
   volley:{n:'Volley',cd:4,side:'foe',r:[3,5],shape:'area',aim:'any',dmg:.7,d:'Arrows rain on a 3×3 area 3–5 tiles away: 0.7× damage to every enemy in it.'},
   /* Vaar (Brawler) */
@@ -241,7 +241,7 @@ function abBackstab(u,t){return hDiff(u,t)>0||state.units.some(o=>o!==u&&o.team=
 /* expected numbers against one target: {dmg (per strike), hit, n (strikes)} */
 function abVs(u,id,t,mult){
   const a=ABIL[id],w=abWeapon(u,a),c=calc(u,w,t,null,{init:u,phase});let m=(mult||a.dmg||0);if(a.backstab&&abBackstab(u,t))m*=2;
-  return{dmg:a.flat||dmgMods(u,t,{init:u},Math.max(0,Math.round(c.pow*m)-c.df)),hit:clamp(c.hit+(a.hit||0)+ABIL_HIT,0,100),n:a.hits||1,eff:c.eff};
+  return{dmg:a.flat||dmgMods(u,t,{init:u},Math.max(0,Math.round(c.pow*m)-c.df)),hit:a.sure?100:clamp(c.hit+(a.hit||0)+ABIL_HIT,0,100),n:a.hits||1,eff:c.eff};
 }
 function healAmt(u,id,t){const a=ABIL[id];let h=a.healPct?Math.round(t.maxhp*a.healPct):Math.round((u.mag+5)*a.heal);if(has(u,'lastLight')&&t.hp*2<t.maxhp)h=Math.round(h*1.5);return Math.min(h,t.maxhp-t.hp)}
 /* who Chain Lightning jumps to */
