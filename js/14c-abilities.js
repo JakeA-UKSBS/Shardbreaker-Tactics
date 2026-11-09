@@ -210,7 +210,9 @@ function stCalc(x,xw,y){
     acc:(hasSt(x,'blind')?-20:0)+(hasSt(x,'sandEyes')?-10:0)+(hasSt(x,'anthem')?10:0)+(state.units.some(o=>o!==x&&o.hp>0&&o.team===x.team&&has(o,'audience')&&man(o,x)<=2)?10:0),avo:(hasSt(y,'smoke')?30:0)+(has(y,'beginnersLuck')&&fy?10:0),crit:(has(x,'beginnersLuck')&&fx?10:0)};
 }
 const eagle=(u,w)=>w&&w.t==='bow'&&has(u,'eagleEye')?1:0;
-const stMov=u=>hasSt(u,'chill')?2:0;
+/* zone of control: starting next to a hostile unit costs 1 Move (Slippery ignores it). Doesn't stack with Slow: the bigger penalty applies */
+const zoc=u=>!has(u,'slippery')&&state.units.some(o=>o.hp>0&&hostile(o,u)&&man(o,u)===1);
+const stMov=u=>Math.max(hasSt(u,'chill')?2:0,zoc(u)?1:0);
 
 /* ---- shapes and targets ---- */
 const inB=(x,y)=>x>=0&&y>=0&&x<MW&&y<MH;
@@ -339,7 +341,7 @@ const SHAPE_N={one:'',cross:'Cross',area:'3×3 area',burst1:'Around the user',bu
 function abCostTxt(u,id){const a=ABIL[id];return a.mp?`${abCost(u,id)} MP${a.once?' · once':''}`:`CD ${a.cd}`}
 function abRangeTxt(u,id){const a=ABIL[id];if(a.side==='self')return SHAPE_N[a.shape]||'Self';const r=abRange(u,id);return`Rng ${r[0]===r[1]?r[0]:r[0]+'–'+r[1]}${a.shape&&a.shape!=='one'?' · '+SHAPE_N[a.shape]:''}`}
 function mpLine(u){const m=mpMax(u);return m?`<div class="mpl"><span class="bar"><i style="width:${(u.mp||0)/m*100}%"></i></span><span>${u.mp||0}/${m} MP</span></div>`:''}
-function stChips(u){const l=stList(u).map(k=>[STATUS[k].n,STATUS[k].d,STATUS[k].bad,u.st[k].n]);if(u.psn)l.push(['Poison','Takes 2 damage at the start of each of its turns (never below 1 HP). A Salve cures it.',1,u.psn]);if(u.stone)l.push(['Stone','Skips its next turn and can’t counter.',1,1]);
+function stChips(u){const l=stList(u).map(k=>[STATUS[k].n,STATUS[k].d,STATUS[k].bad,u.st[k].n]);if(u.psn)l.push(['Poison','Takes 2 damage at the start of each of its turns (never below 1 HP). A Salve cures it.',1,u.psn]);if(u.stone)l.push(['Stone','Skips its next turn and can’t counter.',1,1]);if(state&&state.units&&state.units.includes(u)&&u.hp>0&&!hasSt(u,'chill')&&zoc(u))l.push(['Engaged','Next to an enemy: −1 Move.',1,1]);
   return l.length?`<div class="stc">${l.map(([n,d,bad,t])=>`<span class="st ${bad?'bad':'good'}" title="${d}">${n}${t>1&&t<50?' '+t:''}</span>`).join('')}</div>`:''}
 /* the list of a unit's abilities (floating menu) */
 function abList(u){
