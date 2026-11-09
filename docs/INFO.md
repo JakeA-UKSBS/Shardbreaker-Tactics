@@ -127,6 +127,9 @@ Learned skills cost capacity (base 20, +5 when promoted). Personal skills are fr
 | Aventurine | Common | All units gain +10 Avoid and +5 Crit. |
 | Hunter’s Trophies | Uncommon | Effective hits deal 2 more damage. |
 | Horn of Plenty | Uncommon | +15 gold after every won fight, and tavern meals last 1 fight longer. |
+| Cook Book | Common | Tavern meals last 1 fight longer. |
+| Tinted Glasses | Common | Blind lasts 1 turn less on your units. |
+| Lucky Cat | Uncommon | All units gain +1 Lck. |
 | The Crystal Crown | Rare (Empty Throne only) | Units deal +3 damage, but enemies get +10 Hit against your units. |
 | Herbal Poultice | Starter | Salves heal 2 more HP. |
 | Sage’s Satchel | Heirloom | Everyone in your starting squad carries an extra Salve. |

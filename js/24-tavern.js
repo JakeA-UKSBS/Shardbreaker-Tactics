@@ -62,7 +62,7 @@ async function tavernNode(){
     if(m==='food'){
       const act=(run.meals||[]).map(x=>`${MEALS[x.id].n} (${x.n} fight${x.n>1?'s':''} left)`).join(', ');
       const f=await tavShow(`“Kitchen’s open. It all lasts a few fights, for the whole table.”${act?` Still in your bellies: ${act}.`:''}`,[...Object.entries(MEALS).map(([k,x])=>[k,`<img class="tv-ic" src="${mealArt(k)}" alt="">${x.n} · ${x.p}g`,`${x.d} for ${x.f} fights${M(k)?' (already eaten)':''}`,M(k)||gold()<x.p]),['back','Back','']]);
-      if(f!=='back'){spend(MEALS[f].p);done.food=1;run.ate=(run.ate||0)+1;(run.meals=run.meals||[]).push({id:f,n:MEALS[f].f+(R('plenty')?1:0)+(unl('gourmet')?1:0)});text=`The ${MEALS[f].n} arrives steaming. ${MEALS[f].d} for the next ${MEALS[f].f} fights.`}
+      if(f!=='back'){spend(MEALS[f].p);done.food=1;run.ate=(run.ate||0)+1;const n=MEALS[f].f+(R('plenty')?1:0)+(R('Cook_book')?1:0)+(unl('gourmet')?1:0);(run.meals=run.meals||[]).push({id:f,n});text=`The ${MEALS[f].n} arrives steaming. ${MEALS[f].d} for the next ${n} fights.`}
       continue}
     if(m==='hire'){
       if(!hires.length){text='“That’s everyone who wanted work tonight.”';continue}
