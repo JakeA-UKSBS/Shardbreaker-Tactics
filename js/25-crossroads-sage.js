@@ -36,7 +36,7 @@ async function musterScene(opts,need,late){
       <div class="ms-cards"></div>
       <div class="mbtns">${late?'':'<button type="button" data-g="back">Back</button>'}<button type="button" class="go" data-g="go" disabled>Set out</button></div></div>`;
   musEl.hidden=false;sgEl.hidden=true;
-  if(!late)tip('muster','Choose your squad','Click 3 travellers to bring them along. Their cards show stats, weapon and skill, and “What do stats do?” explains the numbers. Units who fall are gone for the rest of the run.');
+  if(!late)tip('muster','Choose your squad','Click 3 travellers to bring them along. Their cards show stats, weapon and skill, and “What do stats do?” explains the numbers. Units who fall get back up at 1 HP once the fight is won (from Ascension 5 they’re gone for good).');
   const draw=()=>{musEl.querySelectorAll('.mu').forEach(b=>b.classList.toggle('on',chosen.includes(+b.dataset.u)));
     const g=musEl.querySelector('[data-g="go"]');g.disabled=chosen.length!==need;g.textContent=`Set out (${chosen.length}/${need})`;
     musEl.querySelector('.ms-count').textContent=chosen.length===need?'Your squad is ready.':late?'Two veterans wait at the crossroads. Only one can join you.':`Click ${need-chosen.length===need?need:need-chosen.length} more traveller${need-chosen.length===1?'':'s'} to bring along.`;

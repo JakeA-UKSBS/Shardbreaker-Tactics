@@ -35,7 +35,7 @@ const ACH=[
 const relicOpen=k=>!RELICS[k].x||prof.runs>=RELICS[k].x;
 /* ascension: harder runs, one level opens each time you win at your highest level */
 const ASC_MAX=5;
-const ASC=['Normal','Enemies are 1 level higher.','Bosses and elite leaders are much tougher.','No early ease, you start with no gold, and units recover only 5 HP after a fight.','Enemies are another level higher, with one more in each battle.','Every enemy knows a combat skill.'];
+const ASC=['Normal','Enemies are 1 level higher.','Bosses and elite leaders are much tougher.','No early ease, you start with no gold, and units recover only 5 HP after a fight.','Enemies are another level higher, with one more in each battle.','Every enemy knows a combat skill, and fallen units are lost for good.'];
 const A=n=>!!(run&&(run.asc||0)>=n);
 /* called once when a run ends; returns lines describing anything new */
 function endRun(won){
