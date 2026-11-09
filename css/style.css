@@ -43,6 +43,7 @@ button.mini{padding:4px 8px;font-size:12px}
 .unit{position:absolute;width:48px;height:48px;pointer-events:none;transition:left .26s ease,top .26s ease,transform .15s ease,opacity .35s}
 .unit img{width:48px;height:48px;image-rendering:pixelated;display:block}
 .unit.e img{transform:scaleX(-1)}
+.unit img.artl{scale:-1 1}/* left-drawn art (ART_LEFT in 03-art.js): stacks with the transform flips, so it ends up facing like the rest */
 .unit.boss img{filter:var(--hf,) drop-shadow(0 0 2px var(--gold))}.unit.boss.threat img{filter:var(--hf,) drop-shadow(0 0 2px #ff3b2f) drop-shadow(0 0 3px #ff3b2f)}
 .unit.done img{filter:grayscale(.9) brightness(.65)}
 .unit.flash img{filter:brightness(3)}
@@ -642,3 +643,5 @@ img{-webkit-user-drag:none;user-select:none}
 .ufc-dev .dvs div{display:flex;justify-content:space-between;gap:8px}.ufc-dev .dvs i{font-style:normal;font-variant-numeric:tabular-nums;white-space:nowrap}
 .ufc-dev .dvt{border-top:1px solid rgba(255,255,255,.12);font-weight:700}
 .ufc-dev .dvn{color:var(--muted);font-size:10px;margin-top:4px}
+.ufc-dev .dvx{float:right;margin:-3px -5px 0 6px;padding:0 6px;font-size:11px;line-height:16px;min-height:0;background:none;border:1px solid #6a5a7a;border-radius:4px;color:var(--gold);cursor:pointer}
+.ufc-dev.min{width:auto;padding:3px}.ufc-dev.min>:not(.dvx){display:none}.ufc-dev.min .dvx{float:none;margin:0}

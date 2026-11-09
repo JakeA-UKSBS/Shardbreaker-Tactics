@@ -32,6 +32,10 @@ function art(key){return'art/'+key+'.png'}
 /* monsters: art/monsters/<Class>.png (and <Class>-strike.png for the attack pose); bosses drawn big (2×2, 3×3) use art/bosses/<name>.png,
    keyed by class or body. Drawn facing right; enemies are flipped to face left in game. */
 const BOSS_PNG={bear:'hollow-bear',gator:'krondis',Yeti:'yeti',crystal:'crystal-heart'};
+/* Rhi draws boss art facing LEFT (the way enemies face), so everything in art/bosses/ is shown as drawn;
+   monster art is still drawn facing right. Add a path to ART_LEFT if a non-boss piece is ever drawn facing left. */
+const ART_LEFT=new Set([]);
+function artLeft(src){src=String(src);return src.startsWith('art/bosses/')||ART_LEFT.has(String(src).replace(/^art\/|(-strike)?\.png$/g,''))}
 function monPng(cls,pose,sz){const b=sz>=2&&(BOSS_PNG[cls]||BOSS_PNG[CLS[cls].body]),k=b?'bosses/'+b:'monsters/'+cls;
   return'art/'+k+(pose==='strike'&&ART_PNG.has(k+'-strike')?'-strike':'')+'.png'}
 function mapWk(u){const i=u.items.findIndex(it=>WTYPES.includes(IT[it.k].t)||IT[it.k].t==='spirit');return i>=0?u.items[i].k:null}
