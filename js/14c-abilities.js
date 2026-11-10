@@ -293,11 +293,12 @@ async function useAbility(u,id,tx,ty){
   /* damage */
   for(const t of foes){
     const ranged=a.mag||man(u,t)>1;let landed=true;if(!a.dmg){/* status only: still has to hit */if(a.st){landed=(rn()+rn())/2<abVs(u,id,t).hit;if(!landed){sfx('miss');pop(t,'Miss','miss');mapPose(t,'dodge',u);await sleep(D(220));mapPose(t,'idle')}}}
-    else{const n=a.hits||1,V=abVs(u,id,t);let total=0;
+    else{const n=a.hits||1,V=abVs(u,id,t);let total=0,hits=0;
       for(let k=0;k<n&&t.hp>0;k++){if(a.mag||a.snd){sfx(elSnd);elSnd=null}else sfx(ranged?'arrow':hitSfx(w,false));if(a.fx){if(!k)await a.fx(u,t)}else if(ranged&&(a.shape||'one')==='one'||!ranged)await swingAt(u,t,w,false,ranged);else mapPose(u,'swing',t);
-        if((rn()+rn())/2<V.hit){const d=Math.min(V.dmg,t.hp);t.hp-=d;total+=d;sfx('hit');pop(t,'-'+d,'dmg');flash(t);if(a.mag)hitBurst(u,t,EL_COL[a.el]||'#c8b8ff')}else{sfx('miss');pop(t,'Miss','miss');mapPose(t,'dodge',u)}
+        if((rn()+rn())/2<V.hit){const d=Math.min(V.dmg,t.hp);t.hp-=d;total+=d;hits++;sfx('hit');pop(t,'-'+d,'dmg');flash(t);if(a.mag)hitBurst(u,t,EL_COL[a.el]||'#c8b8ff')}else{sfx('miss');pop(t,'Miss','miss');mapPose(t,'dodge',u)}
         await sleep(D(n>1?160:220));mapPose(u,'idle');mapPose(t,'idle');render();await sleep(D(n>1?60:110))}
-      landed=total>0;
+      /* a hit for 0 still lands, so on-hit effects (Stone Gaze, statuses, poison) still apply */
+      landed=hits>0;
       if(total&&has(u,'siphon')&&a.el==='dark'){const h=Math.min(Math.ceil(total/4),u.maxhp-u.hp);if(h){u.hp+=h;pop(u,'+'+h,'heal')}}
       exp+=expFor(u,t,total>0,t.hp<=0);
       if(t.hp>0&&total&&a.push){pushUnit(u,t,a.push);render();await sleep(D(250))}
