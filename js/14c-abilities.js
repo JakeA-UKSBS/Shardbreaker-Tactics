@@ -99,7 +99,7 @@ const ABIL={
   purify:{n:'Purify',mp:3,side:'ally',r:[0,3],cure:1,d:'Cures every bad status on an ally up to 3 away (or herself): Poison and Stone too.'},
   sanctuary:{n:'Sanctuary',mp:10,side:'ally',r:[0,2],shape:'area',aim:'any',give:['guard',1],d:'Guard (30% less damage) on every ally in a 3×3 area until your next turn.'},
   /* Rook (Rogue) */
-  backstab:{n:'Backstab',cd:2,side:'foe',r:[1,1],dmg:1,backstab:1,d:'1.0× damage, 1.5× from higher ground or when another ally is next to the target.'},
+  backstab:{n:'Backstab',cd:2,side:'foe',r:[1,1],dmg:1,backstab:1,d:'1.0× damage, 1.5× when another ally is next to the target.'},
   smokeBomb:{n:'Smoke Bomb',cd:4,side:'self',shape:'burst1',st:['blind',1],give:['smoke',1],d:'Enemies around him are Blinded (−20 Hit); he and allies around him get +30 Avoid until your next turn.'},
   tumble:{n:'Tumble',cd:2,side:'self',tumble:1,free:1,d:'Move up to 2 more tiles, ignoring height. Doesn’t use his action.'},
   /* Brynhildr (Shieldmaiden) */
@@ -258,7 +258,7 @@ function abWeapon(u,a){
   if(a.mag){const i=u.items.findIndex(it=>IT[it.k].t==='art'&&canUse(u,it.k));const w=i>=0?IT[u.items[i].k]:{mt:4,hit:90,t:'art',mag:true};return Object.assign({},w,{el:a.el||w.el,mag:true})}
   const i=eqIdx(u);return i>=0?IT[u.items[i].k]:{n:'Fists',mt:0,hit:85,t:'blade',r:[1,1]};
 }
-function abBackstab(u,t){return hDiff(u,t)>0||state.units.some(o=>o!==u&&o.team===u.team&&o.hp>0&&man(o,t)===1)}
+function abBackstab(u,t){return state.units.some(o=>o!==u&&o.team===u.team&&o.hp>0&&man(o,t)===1)}
 /* expected numbers against one target: {dmg (per strike), hit, n (strikes)} */
 function abVs(u,id,t,mult){
   const a=ABIL[id],w=abWeapon(u,a),c=calc(u,w,t,null,{init:u,phase});let m=(mult||a.dmg||0);if(a.backstab&&abBackstab(u,t))m*=1.5;
