@@ -32,6 +32,12 @@ Act 2  Volcanic Isle, Frostveil Reaches or Gemstone Caverns.
   | Elite | 10 | 10 | Not before floor 6, never twice in a row; shown as a horned skull |
   | Tavern | 10 | 13 | Never twice in a row |
 
+testing
+Room	Heavy side Light side 
+Battle	47 36
+Event	31	42
+Camp	12 12
+Elite	10 10
 *changing to be footsteps most likely, and testing whether tavern being out of this loop helps.
 
 
