@@ -40,10 +40,10 @@ const steelList=()=>[...Object.entries(STEEL).map(([t,k])=>`${IT[k].n} (${TN[t]}
 const squadHas=k=>!!run&&(run.roster||[]).some(u=>u.items.some(it=>it.k===k));
 const weaponOf=u=>u.items.find(it=>(isWpn(it.k)||IT[it.k].t==='spirit')&&canUse(u,it.k));
 
-/* ---- treasure: the vault holds one thing (an item, a skill or a relic), then who takes it ---- */
+/* ---- treasure: the vault always holds a relic (an item only if every common/uncommon relic is already owned) ---- */
 async function treasureNode(){
   const pool=['knightlySword','cleaver','steelSpear','ironwoodBow','moonglassEdge','greatsword','claymore','zweihander','flamberge','javelin','throwingAxe','crossbow','stormSigil','crookStaff','runeStaff','dawnStaff','salve','barbedSpear','reaverAxe','hawkeyeBow','warHammer','huntingSpear','giantslayer','holySword','stiletto','pilum','tomahawk','steelKnives','galeSword','arbalest','leatherArmour','chainmail','wardingCloak','travellersBoots','ironGauntlets'];
-  const mk=()=>{const r=rand(),rp=relicPool(['c','u']);if(rp.length&&r<.2)return'relic:'+pick(rp);if(r<.3)return'skill:'+pick(SKILL_POOL());return pick(pool.filter(k=>!isWpn(k)&&IT[k].t!=='spirit'||run.roster.some(u=>canUse(u,k))&&!squadHas(k)))};
+  const mk=()=>{const rp=relicPool(['c','u']);if(rp.length)return'relic:'+pick(rp);return pick(pool.filter(k=>!isWpn(k)&&IT[k].t!=='spirit'||run.roster.some(u=>canUse(u,k))&&!squadHas(k)))};
   let k=mk();
   for(;;){
     const row=k.startsWith('skill:')?`<img src="${icon('ascensionFragment')}" alt=""><span><b>${SKILLS[k.slice(6)].n}</b> · ${rwTag('skill')} · ${SKILLS[k.slice(6)].d}</span>`:k.startsWith('relic:')?`<img src="${relicArt(k.slice(6))}" alt=""><span><b>${RELICS[k.slice(6)].n}</b> · ${rwTag('artifact')} · ${RELICS[k.slice(6)].d}</span>`:`<img src="${icon(k)}" alt=""><span>${itemText(k)}</span>`;
