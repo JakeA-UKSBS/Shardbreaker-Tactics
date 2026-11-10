@@ -35,8 +35,8 @@ async function titleScreen(){
 /* run timer: run.time counts seconds of play (from the sage on), paused while the tab is hidden or on the title screen. Kept in the save and in Run History */
 const fmtTime=t=>{t=Math.max(0,Math.floor(t||0));const h=Math.floor(t/3600),m=Math.floor(t/60)%60,s=t%60,p=n=>String(n).padStart(2,'0');return h?`${h}:${p(m)}:${p(s)}`:`${m}:${p(s)}`};
 setInterval(()=>{const el=$('#runTime');if(!run||!titleEl.hidden){if(el)el.textContent='';return}if(!document.hidden)run.time=(run.time||0)+1;if(el)el.textContent=fmtTime(run.time)},1000);
-/* HP carries between fights: survivors recover 5 HP after a win (3 from Ascension 3); camps heal fully, taverns do not */
-const afterHeal=()=>(A(3)?3:5)+(R('waybread')?3:0);
+/* HP carries between fights: no healing after a win (only the Waybread relic's 3 HP); camps heal fully, taverns do not */
+const afterHeal=()=>R('waybread')?3:0;
 async function winScreen(){
   await sleep(600);
   const survivors=state.units.filter(u=>u.team==='p'&&!u.summon),fallen=chStart.units.filter(s=>s.team==='p'&&!survivors.some(u=>u.id===s.id));

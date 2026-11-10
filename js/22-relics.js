@@ -37,7 +37,7 @@ const RELICS={
   /* starter relics: Ithren offers 3 of the r:'s' ones before you pick a squad; r:'h' ones join the Heirloom pick (unlocked by Field Hospital). Neither drops anywhere else */
   poultice:{n:'Herbal Poultice',r:'s',d:'Salves heal 2 more HP.'},
   satchel:{n:'Sage’s Satchel',r:'h',d:'Everyone in your starting squad carries an extra Salve.'},
-  waybread:{n:'Waybread',r:'h',d:'Units recover 3 more HP after each fight.'},
+  waybread:{n:'Waybread',r:'h',d:'Units recover 3 HP after each fight.'},
   purse:{n:'Coin Purse',r:'s',d:'Start the run with 30 more gold.'},
   ward:{n:'Ithren’s Ward',r:'s',d:'All your units get +1 Res.'},
   sprig:{n:'Sprig of Renewal',r:'s',d:'Every unit heals 1 HP at the start of each player phase.'}
