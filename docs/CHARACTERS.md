@@ -163,7 +163,7 @@ A street thief working off a debt to Ithren. Quick-mouthed and not as selfish as
 - **Ascends into:** Duelist or Assassin.
 - **Look:** dark leathers, wrapped hands, jagged twin daggers.
 - **Passive: Slippery.** Can move through enemy tiles, and can't be Rooted.
-- **Backstab** (single, adjacent · CD 2): 1.0× Str, doubled from higher ground or when another ally is next to the target (flanking).
+- **Backstab** (single, adjacent · CD 2): 1.0× Str, 1.5× from higher ground or when another ally is next to the target (flanking).
 - **Smoke Bomb** (burst r1 · CD 4): Blinds enemies in the area; allies in it get +30 Avoid for 1 turn.
 - **Tumble** (self · CD 2): move up to 2 more tiles, ignoring height; doesn't use his action.
 

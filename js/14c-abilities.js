@@ -99,7 +99,7 @@ const ABIL={
   purify:{n:'Purify',mp:3,side:'ally',r:[0,3],cure:1,d:'Cures every bad status on an ally up to 3 away (or herself): Poison and Stone too.'},
   sanctuary:{n:'Sanctuary',mp:10,side:'ally',r:[0,2],shape:'area',aim:'any',give:['guard',1],d:'Guard (30% less damage) on every ally in a 3×3 area until your next turn.'},
   /* Rook (Rogue) */
-  backstab:{n:'Backstab',cd:2,side:'foe',r:[1,1],dmg:1,backstab:1,d:'1.0× damage, doubled from higher ground or when another ally is next to the target.'},
+  backstab:{n:'Backstab',cd:2,side:'foe',r:[1,1],dmg:1,backstab:1,d:'1.0× damage, 1.5× from higher ground or when another ally is next to the target.'},
   smokeBomb:{n:'Smoke Bomb',cd:4,side:'self',shape:'burst1',st:['blind',1],give:['smoke',1],d:'Enemies around him are Blinded (−20 Hit); he and allies around him get +30 Avoid until your next turn.'},
   tumble:{n:'Tumble',cd:2,side:'self',tumble:1,free:1,d:'Move up to 2 more tiles, ignoring height. Doesn’t use his action.'},
   /* Brynhildr (Shieldmaiden) */
@@ -190,7 +190,7 @@ function monMoves(u){const l=u.team==='e'?MKITS[u.cls]:null;if(!l)return'';retur
 const mpMax=u=>(kitOf(u)||{mp:0}).mp;
 const MP_REGEN=2;
 /* abilities are a little less accurate than a basic attack */
-const ABIL_HIT=-10;
+const ABIL_HIT=0;
 /* MP cost after Attunement */
 function abCost(u,id){const a=ABIL[id];if(!a.mp)return 0;return Math.max(0,a.mp-(has(u,'attunement')&&u.lastEl&&a.el&&u.lastEl!==a.el?2:0))}
 /* why an ability can't be used right now (null if it can) */
@@ -261,7 +261,7 @@ function abWeapon(u,a){
 function abBackstab(u,t){return hDiff(u,t)>0||state.units.some(o=>o!==u&&o.team===u.team&&o.hp>0&&man(o,t)===1)}
 /* expected numbers against one target: {dmg (per strike), hit, n (strikes)} */
 function abVs(u,id,t,mult){
-  const a=ABIL[id],w=abWeapon(u,a),c=calc(u,w,t,null,{init:u,phase});let m=(mult||a.dmg||0);if(a.backstab&&abBackstab(u,t))m*=2;
+  const a=ABIL[id],w=abWeapon(u,a),c=calc(u,w,t,null,{init:u,phase});let m=(mult||a.dmg||0);if(a.backstab&&abBackstab(u,t))m*=1.5;
   return{dmg:a.flat||dmgMods(u,t,{init:u},Math.max(0,Math.round(c.pow*m)-c.df)),hit:a.sure?100:clamp(c.hit+(a.hit||0)+ABIL_HIT,0,100),n:a.hits||1,eff:c.eff,c,m};
 }
 function healAmt(u,id,t){const a=ABIL[id];let h=a.healPct?Math.round(t.maxhp*a.healPct):Math.round((u.mag+5)*a.heal);if(has(u,'lastLight')&&t.hp*2<t.maxhp)h=Math.round(h*1.5);return Math.min(h,t.maxhp-t.hp)}
