@@ -5,11 +5,12 @@ An isometric, height based tactics game with inspiration from GBA Fire emblem an
 See [docs/INFO.md](docs/INFO.md) for the numbers: recruit odds, base stats and growths, weapons, effectiveness, skills, relics and regions.
 
 
-## Music and art*** [add info]
-Drop mp3 files into a `music/` folder next to `index.html`: `title.mp3`, `tavern.mp3`, `swamp.mp3`, `forest.mp3`, `mountain.mp3`, `desert.mp3`, `snow.mp3`, `cavern.mp3`, `heart.mp3` (Act 3). Each loops while you're in that region (map and battles). Missing files are skipped. "Sound and music" in Options turns it off.
-
 ## Regions
-Each run picks 2 of these 6 as its acts (`BIOMES`, `ACTS`). Each has 2-3 battle maps, a boss map, a monster pool and a rule.
+
+Regions per act:
+Act 1  Cursed Woodland, Sobek’s Mire or Sandstone Desert. 
+Act 2  Volcanic Isle, Frostveil Reaches or Gemstone Caverns.
+
 | Region | Monsters | Rule | Boss |
 | --- | --- | --- | --- |
 | Sobek’s Mire | Bog Lurkers, Lamias, Mud Monsters | Starting a turn in ankle-deep water or mangrove roots costs 1 Move; sand is solid | Krondis the alligator |
@@ -30,6 +31,10 @@ Each run picks 2 of these 6 as its acts (`BIOMES`, `ACTS`). Each has 2-3 battle 
   | Camp (rest) | 12 | 12 | Not before floor 6, not on floor 14, never twice in a row |
   | Elite | 10 | 10 | Not before floor 6, never twice in a row; shown as a horned skull |
   | Tavern | 10 | 13 | Never twice in a row |
+
+*changing to be footsteps most likely, and testing whether tavern being out of this loop helps.
+
+
 
   A roll that breaks a rule is rolled again, so on floors where a room isn't allowed (camps and elites before floor 6, say) the others come up a little more often.
 - On top of the odds, every route through floors 1-14 must have 6-9 fights (elites count) and at least one camp before the fixed one on 15 (`FIGHTS`, `routeOk()`). A lane that fails is rolled again. On top of that, the event lanes have 6-8 fights and at most two battles on floors 2-5.
