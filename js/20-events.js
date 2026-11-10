@@ -490,6 +490,7 @@ const EVENTS = {
     make: () => {
       const nu = castUnit('lysander', lvAvg());
       EVENTS.minstrel.card = `<div class="dcard on ev-card">${unitCard(nu)}</div>`;
+      EVENTS.minstrel.ov = `<img class="ev-ov2 ev-minstrel" src="${uSpr(nu)}" alt="">`;
       return [
         {
           l: 'Let him come',

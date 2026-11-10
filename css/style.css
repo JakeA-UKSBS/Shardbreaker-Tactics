@@ -555,6 +555,8 @@ button.it.sel{border-color:var(--gold)}
 .ev-stained-glass{left:40%;width:20%;top:4%;bottom:auto}
 .ev-banner{left:12%;width:16%;top:3%;bottom:auto}
 .tv-scene .ev-ov2{position:absolute;image-rendering:pixelated;pointer-events:none}.ev-healer{left:62%;width:15%;bottom:16%;transform:scaleX(-1)}
+/* Lysander sits by the campfire in the Wandering Minstrel event, facing the fire */
+.ev-minstrel{left:58%;width:15%;bottom:16%;transform:scaleX(-1)}
 .ev-floor{position:absolute;left:0;right:0;bottom:0;height:31%;background:url(../art/scenes/red-floor.png) 0 0/6% auto repeat;filter:brightness(.75);image-rendering:pixelated;pointer-events:none}
 .ev-cauldron{left:36%;width:22%;bottom:12%}
 .ev-meteor{left:30%;width:40%;bottom:11%}
