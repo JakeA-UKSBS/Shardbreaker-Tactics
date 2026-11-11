@@ -22,7 +22,7 @@ function buildBoard(){
     if(!PROPS[ov]){const v=tileVariant(tk,x,y);if(v)t.style.backgroundImage=`url(${v})`}
     const vh=vhOf(x,y),p=tileTop(x,y,vh),z=(x+y)*4;
     Object.assign(t.style,{left:p.x+'px',top:p.y+'px',zIndex:z+1,transform:`matrix(${TW/2/T},${TH/2/T},${-TW/2/T},${TH/2/T},0,0)`});
-    const D=(vh+1)*HS,sd=document.createElement('div'),sk=t.className.split(' ')[1];sd.className='blk';sd.dataset.t=sk;
+    const D=(vh+1)*HS,sd=document.createElement('div'),sk=t.className.split(' ')[1];sd.className='blk';sd.dataset.t=sk;sd.dataset.k=key(x,y);
     Object.assign(sd.style,{left:p.x-TW/2+'px',top:p.y+'px',width:TW+'px',height:TH+D+'px',zIndex:z});
     sd.innerHTML=`<svg width="${TW}" height="${TH+D}"><polygon points="0,${TH/2} ${TW/2},${TH} ${TW/2},${TH+D} 0,${TH/2+D}" fill="var(--c)"/><polygon points="0,${TH/2} ${TW/2},${TH} ${TW/2},${TH+D} 0,${TH/2+D}" fill="#000" opacity=".3"/><polygon points="${TW/2},${TH} ${TW},${TH/2} ${TW},${TH/2+D} ${TW/2},${TH+D}" fill="var(--c)"/><polygon points="${TW/2},${TH} ${TW},${TH/2} ${TW},${TH/2+D} ${TW/2},${TH+D}" fill="#000" opacity=".5"/><path d="M0 ${TH/2}L${TW/2} ${TH}L${TW} ${TH/2}" stroke="#fff" stroke-opacity=".32" fill="none"/></svg>`;
     boardEl.appendChild(sd);boardEl.appendChild(t);firstOf[sk]=firstOf[sk]||t;if(PROPS[ov])placeProp(x,y,ov);else if(tk==='shallow')placeDecor(x,y)}
@@ -75,7 +75,7 @@ function render(){
       const was=+el.dataset.bars||u.bars;el.dataset.bars=bb.n;if(bb.n<was&&u.hp>0){pop(u,'The shell shatters!','dmg');sfx('broke');toast(`${u.name} cracks: ${bb.n} bar${bb.n===1?'':'s'} left`)}}}
   }
   for(const id in uEls)if(!live.has(id)){uEls[id].remove();delete uEls[id]}
-  propsRender();
+  propsRender();aimFade();
   $('#turn').textContent=`Floor ${run?run.n:1} · Turn ${state.turn}`+(phase==='enemy'?' · Enemy':'');
   $('#obj').innerHTML=`<div><b>Goal</b>${goalShort()}</div><div><b>Lose</b>${loseText()}</div>`;
   const idle=phase==='player'&&!busy&&!over;

@@ -44,6 +44,11 @@ function unitZ(u){const sz=u.sz||1,d=u.x+u.y+(sz-1)*2,h=hOfU(u.x,u.y,sz);let z=d
 /* board px -> the tile under it: units first, then top faces (the front-most one), and only then side faces.
    Top faces win over the cliff in front of them, so a ledge half-hidden behind a taller block can still be tapped. */
 function pickAt(cx,cy){const b=vb(),px=(cx-b.l-cam.x)/cam.s,py=(cy-b.t-cam.y)/cam.s;
+  /* targeting: a cell you can pick wins over anything in front of it: first a target's own sprite, then a highlighted tile's top */
+  const cs=typeof targetCells==='function'&&targetCells();
+  if(cs){for(const u of state.units.filter(u=>u.hp>0&&cellsOf(u.x,u.y,u.sz||1).some(c=>cs.has(key(...c)))).sort((a,b)=>unitZ(b)-unitZ(a))){const r=uBox(u);if(px>=r.l+r.w*.25&&px<=r.l+r.w*.75&&py>=r.t+r.h*.2&&py<=r.t+r.h-4)return[u.x,u.y]}
+    let best=null,bd=-1;for(const k of cs){const[x,y]=k.split(',').map(Number),p=tileTop(x,y,vhOf(x,y)),dx=Math.abs(px-p.x);if(dx>TW/2)continue;const e=dx/(TW/2)*TH/2;if(py>=p.y+e&&py<=p.y+TH-e&&x+y>bd){best=[x,y];bd=x+y}}
+    if(best)return best}
   const us=state.units.filter(u=>u.hp>0).sort((a,b)=>unitZ(b)-unitZ(a));
   for(const u of us){const r=uBox(u);if(px>=r.l+r.w*.25&&px<=r.l+r.w*.75&&py>=r.t+r.h*.2&&py<=r.t+r.h-4)return[u.x,u.y]}
   let top=null,td=-1,side=null,sd=-1;
