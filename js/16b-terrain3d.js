@@ -50,6 +50,21 @@ function placeProp(x,y,k){const im=document.createElement('img'),c=scrC(x,y);let
   if(big){const c2=scrC(...big);cx=(c.x+c2.x)/2;cy=Math.max(c.y,c2.y);z=(big[0]+big[1])*4+3;src='art/props/'+REGION_BIG[actBiome().id]+'.png';w=Math.round(T*PROPS[k]*1.9);base=8}
   im.className='prop';im.alt='';im.dataset.k=key(x,y);im.dataset.p=k;im.src=src;if(k==='sandstone'&&(x+y)%2)im.style.transform='scaleX(-1)';
   Object.assign(im.style,{left:cx-w/2+'px',top:cy+base-w+'px',width:w+'px',height:w+'px',zIndex:z});boardEl.appendChild(im)}
+/* while choosing a target (attack/heal/ability), the cells you can pick. aim: every tile of the ability's reach (empty ones too) */
+function targetCells(){
+  if((ui==='target'||ui==='confirm')&&targets.length)return new Set(targets.flatMap(u=>cellsOf(u.x,u.y,u.sz||1).map(c=>key(...c))));
+  if(ui==='aim'&&aimSet)return aimSet;return null}
+/* each render while targeting: anything drawn in front of a unit you can pick (props, other units, taller blocks) fades to
+   see-through, so a target behind a tree, a cliff or an ally is still visible. Cleared as soon as targeting ends. */
+function aimFade(){
+  const cs=targetCells(),fade=new Set();
+  if(cs){const tg=state.units.filter(u=>u.hp>0&&cellsOf(u.x,u.y,u.sz||1).some(c=>cs.has(key(...c))));
+    const over=(a,b)=>a.l<b.l+b.w&&b.l<a.l+a.w&&a.t<b.t+b.h&&b.t<a.t+a.h,vis=u=>{const r=uBox(u),hi=uEls[u.id].firstChild.classList.contains('hi');return hi?{l:r.l-8,t:r.t-15,w:64,h:64}:r}/* big sprites (.hi) draw 64px */,css=e=>({l:parseFloat(e.style.left),t:parseFloat(e.style.top),w:parseFloat(e.style.width)||e.offsetWidth,h:parseFloat(e.style.height)||e.offsetHeight});
+    for(const t of tg){const b=uBox(t),body={l:b.l+b.w*.2,t:b.t+b.h*.15,w:b.w*.6,h:b.h*.8},z=unitZ(t),d=t.x+t.y+((t.sz||1)-1)*2,h=hOfU(t.x,t.y,t.sz||1);
+      for(const u of state.units)if(u!==t&&u.hp>0&&uEls[u.id]&&unitZ(u)>z&&over(body,vis(u)))fade.add(uEls[u.id]);
+      boardEl.querySelectorAll('img.prop').forEach(im=>{if(+im.style.zIndex>z&&over(body,css(im)))fade.add(im)});
+      boardEl.querySelectorAll('.blk').forEach(bk=>{const[x,y]=bk.dataset.k.split(',').map(Number);if(x+y>d&&vhOf(x,y)>h&&over(body,css(bk))){fade.add(bk);const tl=boardEl.querySelector(`.tile[data-k="${bk.dataset.k}"]`);if(tl)fade.add(tl)}})}}
+  boardEl.querySelectorAll('.vfade').forEach(e=>{if(!fade.has(e))e.classList.remove('vfade')});fade.forEach(e=>e.classList.add('vfade'))}
 /* each render: tall props fade when a unit stands just behind them */
 function propsRender(){
   const occ=new Set(state.units.filter(u=>u.hp>0).flatMap(u=>cellsOf(u.x,u.y,u.sz||1).map(c=>key(...c))));
