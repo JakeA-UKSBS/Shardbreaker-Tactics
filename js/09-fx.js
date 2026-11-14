@@ -22,6 +22,12 @@ function mapPose(u,name,t,wk){const el=uEls[u.id];if(!el)return;
   /* bosses (2+ tiles): just swap between the idle and strike frames, refitted to their box */
   if(u.sz>1){if(name!=='idle'&&name!=='swing'&&name!=='follow')return;const img=el.firstChild,src=sprite(u,name==='idle'?'idle':'strike',mapWk(u));if(img.dataset.s===src)return;
     img.src=src;img.dataset.s=src;img.classList.toggle('artl',artLeft(src));if(u.sz===2||src.startsWith('data:'))fillBox(img,src,u.team==='e');return}/* keeps the current fit until the new frame's is measured, so it doesn't jump the first time */const img=el.firstChild;wk=wk||mapWk(u);let src;
+  /* animated monsters (MON_SHEET): windup and follow step through their frames */
+  const sh=!u.cast&&MON_FR[u.cls]&&MON_SHEET[u.cls];
+  if(sh){const fr=name==='idle'?[0]:name==='windup'||name==='critup'?sh.windup:name==='swing'?[sh.swing]:name==='follow'?sh.follow:null;if(!fr)return;el._pose=name;
+    const show=i=>{if(el._pose!==name)return;img.src=MON_FR[u.cls][i];img.dataset.s=img.src;sheetFit(img,u.cls)};fr.forEach((f,j)=>j?setTimeout(()=>show(f),D(70*j)):show(f));
+    if(name==='idle'){img.style.transform='';return}
+    if(t){const p=scrC(u.x,u.y,u.sz),q=scrC(t.x,t.y,t.sz);if(Math.abs(q.x-p.x)>1)img.style.transform=q.x<p.x?'scaleX(-1)':'scaleX(1)'}return}
   if(name==='idle')src=sprite(u,'idle',mapWk(u));
   else if(u.cast)src=castPng(u,name);
   else if(name==='swing'||name==='follow')src=sprite(u,'strike');

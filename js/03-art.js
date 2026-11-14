@@ -36,7 +36,20 @@ const BOSS_PNG={bear:'hollow-bear',gator:'krondis',Yeti:'yeti',crystal:'crystal-
    monster art is still drawn facing right. Add a path to ART_LEFT if a non-boss piece is ever drawn facing left. */
 const ART_LEFT=new Set([]);
 function artLeft(src){src=String(src);return src.startsWith('art/bosses/')||ART_LEFT.has(String(src).replace(/^art\/|(-strike)?\.png$/g,''))}
+/* animated monsters: art/monsters/<Class>-sheet.png, n frames of fw x fh side by side, kept exactly as drawn. Sliced in the
+   browser into frames cropped to x0..x0+w (centred on the body), and flipped here if drawn facing left (left:true), so they
+   face right like the other monster art. Frame 0 is idle; an attack plays windup -> swing (the hit) -> follow.
+   Shown 48px tall (the width follows), centred on the tile. Until the sheet loads, the plain <Class>.png is used. */
+const MON_SHEET={HellHound:{n:6,fw:120,fh:64,x0:20,w:100,left:true,windup:[1,2],swing:3,follow:[4,5]}};
+const MON_FR={};
+Object.entries(MON_SHEET).forEach(([c,s])=>{const im=new Image();im.onload=()=>{MON_FR[c]=[...Array(s.n)].map((_,i)=>{const cv=document.createElement('canvas');cv.width=s.w;cv.height=s.fh;const g=cv.getContext('2d');
+  if(s.left){g.translate(s.w,0);g.scale(-1,1)}g.drawImage(im,i*s.fw+s.x0,0,s.w,s.fh,0,0,s.w,s.fh);return cv.toDataURL()});if(typeof render==='function'&&typeof state!=='undefined'&&state.units&&state.units.length)render()};im.src=`art/monsters/${c}-sheet.png`});
+/* size a map sprite img for an animated monster's frame (or clear that sizing for anything else) */
+function sheetFit(img,cls){const s=MON_SHEET[cls];
+  if(s&&MON_FR[cls]&&MON_FR[cls].includes(img.src)){const w=s.w*48/s.fh;img.style.setProperty('width',w+'px','important');img.style.marginLeft=(48-w)/2+'px';img.style.maxWidth='none';img.style.transformOrigin='50% 50%';return true}
+  if(img.style.marginLeft){img.style.removeProperty('width');img.style.marginLeft='';img.style.maxWidth=''}return false}
 function monPng(cls,pose,sz){const b=sz>=2&&(BOSS_PNG[cls]||BOSS_PNG[CLS[cls].body]),k=b?'bosses/'+b:'monsters/'+cls;
+  if(!b&&MON_FR[cls])return MON_FR[cls][pose==='strike'?MON_SHEET[cls].swing:0];
   return'art/'+k+(pose==='strike'&&ART_PNG.has(k+'-strike')?'-strike':'')+'.png'}
 function mapWk(u){const i=u.items.findIndex(it=>WTYPES.includes(IT[it.k].t)||IT[it.k].t==='spirit');return i>=0?u.items[i].k:null}
 function sprite(u,pose){return u.cast?castPng(u,pose==='strike'?'swing':'idle'):monPng(u.cls,pose,u.sz)}
