@@ -13,7 +13,9 @@ function unitCard(u,on,add,exp,nopie){
 const canReroll=()=>unl('reroll')&&!(run.rr=run.rr||{})[run.act||1];
 /* the second Crossroads, as Act 2 begins: 2 already-advanced veterans wait by the fire and one joins */
 async function actCrossroads(){
-  /* as Act 2 and Act 3 begin: 1 of 2 veterans. If the veterans have run out, anyone still unrecruited fills in */
+  /* as Act 3 begins: a relic instead (1 of 3, uncommon or rare) */
+  if((run.act||1)>=3){await relicPick(3,['u','r'],'The last crossroads','The road to the Heart. Take one thing with you.');return}
+  /* as Act 2 begins: 1 of 2 veterans. If the veterans have run out, anyone still unrecruited fills in */
   const where=castPool('act1').length>=2?'act1':'recruit';if(!castPool(where).length)return;const lv=Math.max(1,Math.round(run.roster.reduce((a,u)=>a+u.lv,0)/run.roster.length))+(R('lantern')?1:0);
   const pick=await musterScene(castOffer(2,lv,where),1,true),nu=pick&&pick[0];if(!nu)return;
   if(run.roster.length>=TEAM_CAP){const d=await modal(`<h2>Who leaves?</h2><p>Your squad is full (${TEAM_CAP}). ${nu.name} takes their place.</p><div class="draft">${run.roster.map((u,i)=>`<button type="button" class="dcard" data-m="d${i}">${unitCard(u)}</button>`).join('')}</div><div class="mbtns"><button type="button" data-m="skip">Keep my squad</button></div>`);

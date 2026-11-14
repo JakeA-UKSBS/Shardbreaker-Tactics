@@ -116,16 +116,22 @@ function mapScreen(preview){
     const any=e.target.closest('.nd');if(any){const[r,i]=any.dataset.n.split(',').map(Number),t=M[r][i].t;mapEl.querySelector('.nm-info').innerHTML=''}
   }});
 }
-/* the paths between rooms: curving trails of footprints. Drawn in pixels (so prints aren't squashed) and redrawn on resize.
-   Each trail's bend comes from its rooms' positions, so it's the same every time the map opens. Walked trails are red. */
+/* the paths between rooms: curving crystal veins. Drawn in pixels (so prints aren't squashed) and redrawn on resize.
+   Each trail's bend comes from its rooms' positions, so it's the same every time the map opens. Walked veins glow pale blue. */
 function drawTrails(M,Y,vis){
   const svg=mapEl.querySelector('.nm-trails');if(!svg)return;const W=svg.parentNode.clientWidth,H=+svg.getAttribute('height');svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
   const hsh=(a,b,c)=>{const v=Math.sin(a*12.9898+b*78.233+c*37.719)*43758.5453;return v-Math.floor(v)};let out='';
   const trail=(x1,y1,x2,y2,walked,seed)=>{const dx=x2-x1,dy=y2-y1,L0=Math.hypot(dx,dy),px=-dy/L0,py=dx/L0,h=hsh(...seed),a=(10+h*16)*(h<.5?-1:1),b=hsh(seed[2],seed[0],seed[1])<.5?1:-.6;
     const c1=[x1+dx*.33+px*a,y1+dy*.33+py*a],c2=[x1+dx*.66+px*a*b,y1+dy*.66+py*a*b],at=t=>{const u=1-t;return[u*u*u*x1+3*u*u*t*c1[0]+3*u*t*t*c2[0]+t*t*t*x2,u*u*u*y1+3*u*u*t*c1[1]+3*u*t*t*c2[1]+t*t*t*y2]};
     const pts=[];for(let i=0;i<=60;i++)pts.push(at(i/60));let len=0,next=26,k=0;const lens=[0];for(let i=1;i<pts.length;i++)lens.push(len+=Math.hypot(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]));
-    for(let i=1;i<pts.length&&next<len-26;i++){if(lens[i]<next)continue;const[ax,ay]=pts[i-1],[bx,by]=pts[i],ang=Math.atan2(by-ay,bx-ax),s=k++%2?3:-3,x=bx-Math.sin(ang)*s,y=by+Math.cos(ang)*s;
-      out+=`<g transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${(ang*180/Math.PI+90).toFixed(0)})" fill="${walked?'#8b2e16':'#5b3d20'}" opacity="${walked?1:.75}"><ellipse cy="-1.2" rx="1.8" ry="2.4"/><ellipse cy="2.6" rx="1.3" ry="1.3"/></g>`;next+=11}};
+    /* a jagged vein through the trimmed curve, with crystal shards budding off it every ~22px, alternating sides */
+    const cBase=walked?'#1f5f75':'#3b2f5a',cCore=walked?'#bff6ff':'#8a76bd',cShard=walked?'#7fe0f5':'#6c5a9e',op=walked?1:.7,vp=[];let sh=0,nextS=34;
+    for(let i=0;i<pts.length;i++){if(lens[i]<24||lens[i]>len-24)continue;const j=i===0?1:i,ang=Math.atan2(pts[j][1]-pts[j-1][1],pts[j][0]-pts[j-1][0]),w=(hsh(seed[0]+i,seed[1],seed[2])-.5)*3.2;
+      const x=pts[i][0]-Math.sin(ang)*w,y=pts[i][1]+Math.cos(ang)*w;if(i%3===0||!vp.length)vp.push(`${x.toFixed(1)},${y.toFixed(1)}`);
+      if(lens[i]>=nextS&&lens[i]<len-30){const side=sh++%2?1:-1,a2=ang+side*(.5+hsh(i,seed[2],seed[0])*.6),L=7+hsh(seed[1],i,seed[0])*5,wd=2.6;
+        const tx=x+Math.cos(a2)*L,ty=y+Math.sin(a2)*L,mx=x+Math.cos(a2)*L*.45,my=y+Math.sin(a2)*L*.45,nx=-Math.sin(a2)*wd,ny=Math.cos(a2)*wd;
+        out+=`<polygon points="${x.toFixed(1)},${y.toFixed(1)} ${(mx+nx).toFixed(1)},${(my+ny).toFixed(1)} ${tx.toFixed(1)},${ty.toFixed(1)} ${(mx-nx).toFixed(1)},${(my-ny).toFixed(1)}" fill="${cShard}" opacity="${op}"/>`;nextS+=22}}
+    if(vp.length>1){const d=vp.join(' ');out=`<polyline points="${d}" fill="none" stroke="${cBase}" stroke-width="3.4" stroke-linejoin="bevel" opacity="${op}"/><polyline points="${d}" fill="none" stroke="${cCore}" stroke-width="1.3" stroke-linejoin="bevel" opacity="${op}"/>`+out}};
   M.forEach((row,r)=>row.forEach((n,i)=>n.next.forEach(j=>{const m=M[r+1]&&M[r+1][j];if(m)trail(n.x*W/100,Y(r),m.x*W/100,Y(r+1),vis.has(r+','+i)&&vis.has((r+1)+','+j),[r,i,j])})));
   M[0].forEach((n,i)=>trail(W/2,Y(-1),n.x*W/100,Y(0),vis.has('0,'+i),[-1,0,i]));
   svg.innerHTML=out}
