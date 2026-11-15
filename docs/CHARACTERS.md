@@ -70,7 +70,7 @@ Each base class ascends into one or two advanced classes at Lv 5.
 | Aldric | Knight | Juggernaut or Paladin | M |
 | Maelis | Mender | Saint or Crusader | F |
 | Rook | Rogue | Duelist or Assassin | M |
-| Brynhildr | Shieldmaiden | Valkyrie or Aegis | F |
+| Rhyn | Shieldmaiden | Valkyrie or Aegis | F |
 | Trent | Cavalier | Paladin or Warlord | M |
 
 ### Kili: Archer
@@ -167,8 +167,8 @@ A street thief working off a debt to Ithren. Quick-mouthed and not as selfish as
 - **Smoke Bomb** (burst r1 · CD 4): Blinds enemies in the area; allies in it get +30 Avoid for 1 turn.
 - **Tumble** (self · CD 2): move up to 2 more tiles, ignoring height; doesn't use his action.
 
-### Brynhildr: Shieldmaiden
-![Brynhildr](visuals/cast/brynhildr.png)
+### Rhyn: Shieldmaiden
+![Rhyn](visuals/cast/rhyn.png)
 
 A city guardswoman who deserted rather than march on the neighbouring kingdom. Steady, dry and protective.
 - **Ascends into:** Valkyrie or Aegis.

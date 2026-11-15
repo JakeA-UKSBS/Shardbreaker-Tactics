@@ -102,7 +102,7 @@ const ABIL={
   backstab:{n:'Backstab',cd:2,side:'foe',r:[1,1],dmg:1,backstab:1,d:'1.0× damage, 1.5× when another ally is next to the target.'},
   smokeBomb:{n:'Smoke Bomb',cd:4,side:'self',shape:'burst1',st:['blind',1],give:['smoke',1],d:'Enemies around him are Blinded (−20 Hit); he and allies around him get +30 Avoid until your next turn.'},
   tumble:{n:'Tumble',cd:2,side:'self',tumble:1,free:1,d:'Move up to 2 more tiles, ignoring height. Doesn’t use his action.'},
-  /* Brynhildr (Shieldmaiden) */
+  /* Rhyn (Shieldmaiden) */
   shieldBash:{n:'Shield Bash',cd:2,side:'foe',r:[1,1],dmg:1,push:1,d:'1.0× damage and push 1.'},
   challenge:{n:'Challenge',cd:3,side:'self',shape:'burst2',st:['challenged',1],d:'Enemies within 2 tiles must attack her next turn, if they can reach her.'},
   holdTheLine:{n:'Hold the Line',cd:4,side:'self',self:[['guard',1],['steady',1]],d:'Guard (30% less damage), and she can’t be pushed, until your next turn.'},
@@ -132,7 +132,7 @@ const KITS={
   aletta:{mp:12,abil:['purify']},/* no kit passive yet: keeps her random skill */
   pepr:{passive:'venom',mp:0,abil:['poisonDart','noxiousCloud','tumble']},
   rook:{passive:'slippery',mp:0,abil:['backstab','smokeBomb','tumble']},
-  brynhildr:{passive:'bulwarkAura',mp:0,abil:['shieldBash','challenge','holdTheLine']},
+  rhyn:{passive:'bulwarkAura',mp:0,abil:['shieldBash','challenge','holdTheLine']},
   raptor:{passive:'beginnersLuck',mp:0,abil:['rally','cleanCut','shieldUp']},
   lysander:{passive:'audience',mp:24,abil:['songOfValour','lullaby','soothingBallad','encore'],
     asc:{'Bard':{songOfValour:'anthem',lullaby:'grandLullaby',soothingBallad:'soothingHymn'}}}/* as a Bard: stronger songs, shorter waits */
