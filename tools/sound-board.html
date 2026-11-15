@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Shardbreaker sound board</title>
+<style>
+  :root{--bg:#1c1a20;--panel:#26232c;--line:#3a3642;--text:#e8e2d6;--dim:#a49e94;--gold:#f0d278;--bad:#ff6a5a;--ok:#7fd36a;--amb:#e8b04a}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:14px/1.4 system-ui,sans-serif;display:flex;min-height:100vh}
+  aside{width:320px;flex:none;background:var(--panel);border-right:1px solid var(--line);padding:14px;display:flex;flex-direction:column;gap:12px;position:sticky;top:0;height:100vh;overflow:auto}
+  main{flex:1;padding:16px;max-width:1000px}
+  h1{font-size:16px;margin:0;color:var(--gold)}
+  h2{font-size:12px;margin:18px 0 6px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em}
+  button,input,select,textarea{font:inherit;color:var(--text);background:#1a181e;border:1px solid var(--line);border-radius:6px}
+  button{padding:4px 10px;cursor:pointer}button:hover{border-color:var(--gold)}button:disabled{opacity:.35;cursor:default}
+  textarea{width:100%;height:260px;padding:6px;font:11px/1.4 ui-monospace,monospace;resize:vertical}
+  .msg{font-size:12px;color:var(--dim)}
+  .filters{display:flex;flex-wrap:wrap;gap:6px}.filters button.on{background:#4a3e1e;border-color:var(--gold)}
+  .slot{display:grid;grid-template-columns:44px 1fr 170px 90px;gap:10px;align-items:center;padding:6px 8px;border:1px dashed transparent;border-radius:8px}
+  .slot:nth-child(even){background:rgba(255,255,255,.025)}
+  .slot.over{border-color:var(--gold);background:rgba(240,210,120,.12)}
+  .slot .k{font-weight:600}.slot .w{font-size:12px;color:var(--dim)}
+  .tag{display:inline-block;font-size:11px;padding:0 6px;border-radius:9px;margin-left:6px;vertical-align:1px}
+  .t-file{background:#24402a;color:var(--ok)}.t-synth{background:#46381a;color:var(--amb)}.t-none{background:#4a2420;color:var(--bad)}.t-new{background:#4a3e1e;color:var(--gold)}.t-hook{background:#33303a;color:var(--dim)}
+  .src{font-size:12px;color:var(--dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .play{width:40px;height:32px;padding:0;background:#4a3e1e;border-color:var(--gold)}
+  input[type=range]{width:90px}
+</style>
+</head>
+<body>
+<aside>
+  <h1>Shardbreaker sound board</h1>
+  <p class="msg">Every place in the game that has, or needs, a sound. ▶ plays what's there now (the file, or the synth placeholder). <b>Drag an audio file onto a row</b> to hear it there instead. It's kept until you reload.</p>
+  <p class="msg"><span class="tag t-file">file</span> recorded sound &nbsp;<span class="tag t-synth">synth</span> placeholder beep &nbsp;<span class="tag t-none">missing</span> nothing yet<br><span class="tag t-hook">not in game yet</span> the game doesn't play this one anywhere yet: it also needs hooking up in code.</p>
+  <div><h2>Show</h2><div class="filters" id="filters"></div></div>
+  <div><h2>To keep what you dropped</h2>
+    <p class="msg">Rename and save each file as shown, then paste the code lines in. Or hand this list to Claude.</p>
+    <textarea id="out" readonly placeholder="Drop a file on a row and the steps appear here."></textarea>
+    <button id="copy" disabled>Copy</button>
+  </div>
+</aside>
+<main id="list"></main>
+
+<script>/* the game's sound code (05-sound.js) needs these to load */var settings={sound:true};</script>
+<script src="../js/05-sound.js"></script>
+<script>
+/* ---- every sound slot: [group, key, what it's for, kind, in game?]
+   kind: sfx (SFX_FILE in 05-sound.js), music (music/<key>.mp3), amb (AMBIENCE in 16-maps-battles.js).
+   in game: false = nothing calls it yet, so a file alone won't be heard in the game */
+const REGIONS=[['forest','Cursed Woodland'],['swamp','Sobek’s Mire'],['desert','Sandstone Desert'],['mountain','Volcanic Isle'],['snow','Frostveil Reaches'],['cavern','Gemstone Caverns'],['heart','The Heart of the Blight']];
+const S=[];const add=(g,k,w,kind='sfx',hooked=true)=>S.push({g,k,w,kind,hooked});
+/* music */
+add('Music','title','Title screen','music');add('Music','tavern','Tavern','music');
+REGIONS.forEach(([k,n])=>add('Music',k,n,'music'));
+add('Music','boss','Boss fights','music',false);add('Music','map','Node map','music',false);add('Music','story','Sage / story scenes','music',false);
+/* ambience */
+REGIONS.forEach(([k,n])=>add('Ambience',k,n+' (loops under battles)','amb'));add('Ambience','tavern','Tavern (chatter, fire)','amb',false);
+/* combat */
+[['slash','blades'],['swing','heavy weapons, lances, staffs'],['claw','fangs and claws'],['arrow','bows'],['throw','javelins, throwing axes'],['hit','a blow lands'],['miss','a miss'],
+ ['critcharge','crit wind-up'],['crit','crit impact (non-swords)'],['swordcrit','sword crit impact'],['block','shield block, Guard'],['broke','weapon breaks, shields shatter'],['death','a unit falls']].forEach(([k,w])=>add('Combat',k,w));
+/* magic */
+[['fire','fire spells, Burn'],['water','water spells'],['ice','ice spells, Ice Shield'],['thunder','lightning'],['wind','wind spells'],['earth','earth/stone abilities, ground slams'],
+ ['dark','dark magic, life drain'],['heal','heals, salves, camps'],['sandswipe','sand attacks, Sand in Eyes']].forEach(([k,w])=>add('Magic',k,w));
+add('Magic','holy','Mender / Saint / Paladin light abilities','sfx',false);add('Magic','summon','Seren’s familiar appearing','sfx',false);
+/* statuses */
+[['poison','Poison lands'],['debuff','a debuff lands (Weak, Sundered, Blind, Root)'],['slow','Slow lands']].forEach(([k,w])=>add('Statuses',k,w));
+add('Statuses','stun','Stun lands','sfx',false);add('Statuses','buff','a buff lands (Rally, Valour, Anthem, Shield Up...)','sfx',false);add('Statuses','statusoff','a status wears off','sfx',false);
+/* movement */
+[['step','footsteps (grass)'],['hoof','cavalry moving'],['flap','fliers moving'],['jump','climbing to higher ground'],['move','unit picked up to move']].forEach(([k,w])=>add('Movement',k,w));
+[['step-sand','footsteps on sand'],['step-snow','footsteps on snow'],['step-stone','footsteps on stone'],['step-mud','footsteps in mud / shallow water']].forEach(([k,w])=>add('Movement',k,w,'sfx',false));
+/* monsters */
+['Wolf','Cursed Stag','Blighted Treant','Bog Lurker','Lamia','Mud Monster','Jackal','Sand Worm','Sandstone Golem','Hell Hound','Fire Sprite','Boulder Golem','Frost Wolf','Frost Sprite','Ice Worm','Ice Troll','Gem Golem','Shardling','Prism','Crystal Sentinel','Frog familiar']
+  .forEach(n=>add('Monsters','cry-'+n.toLowerCase().replace(/ /g,''),n+': attack / hurt / death cry','sfx',false));
+['Krondis','Hollow Bear','Pyrite Colossus','Magma Dragon','Yeti','Amethyst Turtle','Crystal Heart'].forEach(n=>add('Bosses','roar-'+n.toLowerCase().replace(/ /g,''),n+': roar (boss intro)','sfx',false));
+add('Bosses','rise','boss intro build-up');add('Bosses','burst','boss intro hit');add('Bosses','crystalshatter','Crystal Heart crystals breaking','sfx',false);
+/* turn flow */
+[['bell','battle starts'],['phase','player phase starts'],['ephase','enemy phase starts'],['ding','level up, reward'],['levelup','stat gains on level up'],['fanfare','victory, big reward'],['tick','small UI steps, counters']].forEach(([k,w])=>add('Turns & battle UI',k,w));
+add('Turns & battle UI','defeat','defeat','sfx',false);add('Turns & battle UI','promote','ascension / promotion','sfx',false);add('Turns & battle UI','reinforce','hold fight: reinforcements arrive','sfx',false);
+/* map and run */
+add('Map & run','item','item, relic or gold gained');add('Map & run','chestopen','chests and caches opening');add('Map & run','buy','buying');
+[['roompick','picking a room on the node map'],['campfire','arriving at a camp'],['crossroads','the Crossroads'],['actstart','entering a new act / region'],['relic','relic gained (own sound)'],['gold','gold gained (own sound)'],['forge','weapon forged / upgraded']].forEach(([k,w])=>add('Map & run',k,w,'sfx',false));
+/* tavern */
+add('Tavern','pour','drinks, Bog Witch tea, fountain');[['eat','buying food'],['hire','hiring a recruit'],['innkeeper','innkeeper greeting']].forEach(([k,w])=>add('Tavern',k,w,'sfx',false));
+/* events */
+[['anvil','smith events (reforge)'],['book','reading events'],['lever','Caged Traveller lock'],['paper','merchant and tailor wares']].forEach(([k,w])=>add('Events',k,w));
+[['bloodshrine','Blood Shrine'],['spar','Training Ground'],['dice','Gambler’s Table'],['idol','The Golden Idol'],['lute','The Wandering Minstrel'],['coin','Wishing Well'],['battlefield','Old Battlefield'],
+ ['choir','The Wayside Chapel'],['throne','The Empty Throne'],['storm','The Storm Altar / Storm Spire'],['veteran','The Old Veteran'],['statue','Statue of Valour'],['toll','The Toll Bridge'],['fog','The Strange Fog'],
+ ['beastgrowl','The Crystal-Touched Beast'],['star','The Fallen Star'],['oracle','The Oracle'],['sage','The Mountain Sage'],['onyx','The Black Onyx'],['sinking','The Sinking Sands'],['echo','Ithren’s Echo'],['ghosts','Those Who Came Before']]
+  .forEach(([k,w])=>add('Events','ev-'+k,w,'sfx',false));
+/* menus */
+[['select','left-click confirm (muted in game)'],['decline','right-click back (muted in game)'],['equip','equipping gear']].forEach(([k,w])=>add('Menus & UI',k,w));
+[['hover','hovering a button or tile'],['uiopen','opening a panel / menu'],['uiclose','closing a panel / menu'],['toggle','settings toggles'],['blip','dialogue text blips']].forEach(([k,w])=>add('Menus & UI',k,w,'sfx',false));
+
+/* ---- current state of each slot */
+const AMB_NOW={swamp:'sfx/swamp-ambience.mp3'};/* mirrors AMBIENCE in 16-maps-battles.js */
+const fileOf=s=>s.kind==='sfx'?(SFX_FILE[s.k]||[])[0]:s.kind==='amb'?AMB_NOW[s.k]:'music/'+s.k+'.mp3';
+const exists={};/* path -> true/false once checked (a hidden <audio> tries to load it) */
+const dropped={};/* slot id -> {name, url, vol} */
+const id=s=>s.kind+':'+s.k;
+function status(s){if(dropped[id(s)])return['file','dropped'];const f=fileOf(s);if(f&&exists[f])return['file',f];if(s.kind==='sfx'&&SFX[s.k])return['synth','synth placeholder'];return['none',f&&exists[f]===undefined?'checking…':'—']}
+function check(path){if(!path||path in exists)return;exists[path]=undefined;const a=new Audio();a.preload='metadata';a.oncanplay=a.onloadedmetadata=()=>{if(exists[path]!==true){exists[path]=true;draw()}};a.onerror=()=>{exists[path]=false;draw()};a.src='../'+path}
+
+/* ---- playing */
+let now=null;/* the Audio playing (music/ambience can be stopped) */
+function play(s){
+  if(now){now.pause();const was=now;now=null;if(was._id===id(s))return draw()}
+  const d=dropped[id(s)],f=fileOf(s),vol=d?d.vol:s.kind==='sfx'?(SFX_FILE[s.k]||[0,.6])[1]:s.kind==='amb'?.35:.45;
+  if(d||f&&exists[f]){const a=new Audio(d?d.url:'../'+f);a.volume=Math.min(1,vol*(s.kind==='sfx'?SFX_VOL:1));a._id=id(s);a.play().catch(()=>{});if(s.kind!=='sfx'){a.loop=true;now=a;draw()}return}
+  if(s.kind==='sfx'&&SFX[s.k])SFX[s.k]();
+}
+
+/* ---- drawing */
+const GROUPS=[...new Set(S.map(s=>s.g))];let show=new Set(GROUPS),onlyGaps=false;
+document.getElementById('filters').innerHTML=GROUPS.map(g=>`<button class="on" data-g="${g}">${g}</button>`).join('')+'<button data-gaps="1">Only missing</button>';
+document.getElementById('filters').onclick=e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.gaps){onlyGaps=!onlyGaps;b.classList.toggle('on',onlyGaps)}else{show.has(b.dataset.g)?show.delete(b.dataset.g):show.add(b.dataset.g);b.classList.toggle('on')}draw()};
+function draw(){
+  let html='';
+  for(const g of GROUPS){if(!show.has(g))continue;
+    const rows=S.filter(s=>s.g===g&&(!onlyGaps||status(s)[0]!=='file'));if(!rows.length)continue;
+    html+=`<h2>${g}</h2>`+rows.map(s=>{const[st,src]=status(s),d=dropped[id(s)],playing=now&&now._id===id(s),can=st!=='none';
+      return`<div class="slot" data-id="${id(s)}"><button class="play" data-p="${id(s)}" ${can?'':'disabled'}>${playing?'■':'▶'}</button>
+        <div><span class="k">${s.k}</span><span class="tag t-${st}">${d?'dropped':st==='none'?'missing':st}</span>${s.hooked?'':'<span class="tag t-hook">not in game yet</span>'}<div class="w">${s.w}</div></div>
+        <span class="src" title="${d?d.name:src}">${d?d.name:src}</span>
+        ${d?`<input type="range" min="0" max="1" step="0.05" value="${d.vol}" data-v="${id(s)}" title="Volume">`:'<span></span>'}</div>`}).join('');
+  }
+  document.getElementById('list').innerHTML=html;writeOut();
+}
+const slot=i=>S.find(s=>id(s)===i);
+document.getElementById('list').onclick=e=>{const b=e.target.closest('[data-p]');if(b)play(slot(b.dataset.p))};
+document.getElementById('list').oninput=e=>{const i=e.target.dataset.v;if(i&&dropped[i]){dropped[i].vol=+e.target.value;writeOut()}};
+document.getElementById('list').onchange=e=>{const i=e.target.dataset.v;if(i)play(slot(i))};
+
+/* ---- dropping files */
+const list=document.getElementById('list');
+addEventListener('dragover',e=>{e.preventDefault();const r=e.target.closest&&e.target.closest('.slot');document.querySelectorAll('.slot.over').forEach(x=>x!==r&&x.classList.remove('over'));if(r)r.classList.add('over')});
+addEventListener('drop',e=>{e.preventDefault();document.querySelectorAll('.over').forEach(x=>x.classList.remove('over'));
+  const r=e.target.closest&&e.target.closest('.slot'),f=e.dataTransfer.files[0];if(!r||!f)return;if(!/^audio\//.test(f.type)&&!/\.(mp3|wav|ogg|m4a)$/i.test(f.name))return alert(f.name+" doesn't look like an audio file");
+  const s=slot(r.dataset.id),old=dropped[id(s)];if(old)URL.revokeObjectURL(old.url);
+  dropped[id(s)]={name:f.name,url:URL.createObjectURL(f),vol:s.kind==='sfx'?(SFX_FILE[s.k]||[0,.6])[1]:s.kind==='amb'?.35:.45};if(now){now.pause();now=null}draw();play(s)});
+
+/* ---- what to do to keep them */
+function writeOut(){
+  const ds=S.filter(s=>dropped[id(s)]),ext=n=>(n.match(/\.\w+$/)||['.mp3'])[0].toLowerCase(),save=[],sfxL=[],ambL=[],hook=[];
+  for(const s of ds){const d=dropped[id(s)];
+    if(s.kind==='music'){const p='music/'+s.k+'.mp3';save.push(`${d.name}  ->  ${p}${ext(d.name)!=='.mp3'?'   (convert to mp3: the game looks for .mp3)':''}`);if(!s.hooked)hook.push(`music '${s.k}' (${s.w}): play it with music('${s.k}')`)}
+    else{const p=(s.kind==='amb'?'sfx/'+s.k+'-ambience':'sfx/'+s.k)+ext(d.name);save.push(`${d.name}  ->  ${p}`);
+      if(s.kind==='amb')ambL.push(`${s.k}:'${p}',`);else sfxL.push(`${s.k}:['${p}',${d.vol}],`);
+      if(!s.hooked)hook.push(`${s.k} (${s.w}): call ${s.kind==='amb'?`ambience('${s.k}')`:`sfx('${s.k}')`} where it happens`)}}
+  const out=!ds.length?'':[`Save these files:`,...save.map(x=>'  '+x),
+    sfxL.length?`\njs/05-sound.js, add to SFX_FILE:\n  ${sfxL.join('\n  ')}`:'',
+    ambL.length?`\njs/16-maps-battles.js, add to AMBIENCE:\n  ${ambL.join('\n  ')}`:'',
+    hook.length?`\nNot in the game yet, so they also need hooking up:\n  ${hook.join('\n  ')}`:''].filter(Boolean).join('\n');
+  document.getElementById('out').value=out;document.getElementById('copy').disabled=!out;
+}
+document.getElementById('copy').onclick=()=>navigator.clipboard.writeText(document.getElementById('out').value).then(()=>{const b=document.getElementById('copy');b.textContent='Copied';setTimeout(()=>b.textContent='Copy',1200)});
+
+S.forEach(s=>check(fileOf(s)));draw();
+</script>
+</body>
+</html>
