@@ -262,7 +262,7 @@ function mapScreen(preview) {
               vis.has(r + "," + i) ? "vis" : "",
               cur ? "cur" : "",
             ].join(" ");
-          return `<button type="button" class="${c}" style="left:${n.x}%;top:${Y(r)}px" data-n="${r},${i}" ${isOk(r, i) ? "" : 'tabindex="-1"'} aria-label="${NODE_N[n.t]}${cur ? " (you are here)" : ""}"><img src="${nodeIcon(n.t)}" alt="">${cur ? `<i class="nflag"><img src="${flagArt()}" alt=""></i>` : ""}</button>`;
+          return `<button type="button" class="${c}" style="left:${n.x}%;top:${Y(r)}px" data-n="${r},${i}" ${isOk(r, i) ? "" : 'tabindex="-1"'} aria-label="${NODE_N[n.t]}${cur ? " (you are here)" : ""}"><img ${picAttrs(nodeIcon(n.t), n.t === "boss" ? 116 : 24)} alt="">${cur ? `<i class="nflag"><img src="${flagArt()}" alt=""></i>` : ""}</button>`;
         })
         .join(""),
     ).join("") +
@@ -446,7 +446,7 @@ function mapScreen(preview) {
 }
 
 /* the paths between rooms: curving crystal veins. Drawn in pixels.
-   Each trail's bend comes from its rooms' positions, so it's the same every time the map opens. Walked veins glow pale blue. */
+   Each trail's bend comes from its rooms' positions, so it's the same every time the map opens. Dark red veins, lighter red shards, like the boss gem; walked ones are brighter. */
 function drawTrails(M, Y, vis) {
   const svg = mapEl.querySelector(".nm-trails");
   if (!svg) return;
@@ -496,10 +496,11 @@ function drawTrails(M, Y, vis) {
         )),
       );
     /* a jagged vein through the trimmed curve, with crystal shards budding off it every ~22px, alternating sides */
-    const cBase = walked ? "#1f5f75" : "#3b2f5a",
-      cCore = walked ? "#bff6ff" : "#8a76bd",
-      cShard = walked ? "#7fe0f5" : "#6c5a9e",
-      op = walked ? 1 : 0.7,
+    /* the boss gem's reds: dark red vein, lighter red shards. Walked veins are brighter and solid */
+    const cBase = walked ? "#6a0e0e" : "#4a0808",
+      cCore = walked ? "#c8302a" : "#8a1616",
+      cShard = walked ? "#ff7a68" : "#e8564a",
+      op = walked ? 1 : 0.65,
       vp = [];
     let sh = 0,
       nextS = 34;
