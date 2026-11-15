@@ -7,7 +7,7 @@ Drecken	Storm Mage	Stormlord	Starting roster	M	storm-grey robes + cape, yellow s
 Aldric	Knight	Juggernaut or Paladin	Starting roster	M	heavy armour, lance, red and yellow
 Maelis	Mender	Saint or Crusader	Starting roster	F	white gown + shawl, gold staff
 Rook	Rogue	Duelist or Assassin	Starting roster	M	leather armour, wrapped hands, dark outfit
-Brynhildr	Shieldmaiden	Valkyrie or Aegis	Starting roster	F	sword + decorative shield, olive outfit
+Rhyn	Shieldmaiden	Valkyrie or Aegis	Starting roster	F	sword + decorative shield, olive outfit
 Raptor	Adventurer	Hero	Tavern only	M	sword & shield, light armour, orange
 Aletta	Mender	Saint or Crusader	Found during run (tavern)	F	gown + shawl, green tints
 Trent	Cavalier	Paladin or Warlord	Found during run	M	armour with a green tint

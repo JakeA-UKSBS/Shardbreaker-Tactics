@@ -395,8 +395,8 @@ const CAST = [
     },
   },
   {
-    id: "brynhildr",
-    name: "Brynhildr",
+    id: "rhyn",
+    name: "Rhyn",
     cls: "Shieldmaiden",
     wk: "wornSword",
     joins: "start",
