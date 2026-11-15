@@ -121,7 +121,7 @@ const CLS={
   /* a plain townsfolk body for NPC figures (the innkeeper, recruit icons) */
   Villager:{n:'Villager',w:['blade'],body:'tunic',mov:5}
 };
-/* SKILLS: n = name, d = description shown in game. A unit has one personal skill (u.skill) and any number learned from scrolls (u.skills). */
+/* SKILLS: n = name, d = description shown in game. A unit has one personal skill (u.skill) and any number learned during the run (u.skills). */
 const SKILLS={
   command:{n:'Command',d:'Allies within 2 tiles gain +10 Hit and +10 Avoid.'},
   steadfast:{n:'Steadfast',d:'+4 Def and Res when attacked during the enemy phase.'},

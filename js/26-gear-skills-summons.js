@@ -28,13 +28,23 @@ async function tradeWith(u){
   }
 }
 
-/* ---- skill rewards: pick who learns it ---- */
-const SKILL_POOL=()=>Object.keys(SKILLS).filter(k=>!['command','venom','stoneGaze'].includes(k)&&!SKILLS[k].kit);
+/* ---- skill rewards: a unit learns a skill from its role's list (ROLES[role].skills in 14-classes.js) ---- */
+const roleOfU=u=>{const c=u.cast&&castDef(u.cast);return(c?c.cls:u.cls).split('.')[1]};
+const roleSkills=u=>((ROLES[roleOfU(u)]||{}).skills||[]).filter(k=>SKILLS[k]&&!has(u,k));
+async function learnSkill(title){
+  for(;;){
+    const u=await pickUnit(title||`Learn a ${rwTag('skill','skill')}`,'Choose who learns. Each unit picks from the skills that suit their role.',u=>roleSkills(u).length?null:'Knows them all','Skip',null,'skill');
+    if(!u)return null;
+    const opts=shuffle(roleSkills(u).slice()).slice(0,3);
+    const m=await modal(`<div class="eyebrow">${rwTag('skill')}</div><h2>${u.name} learns…</h2><div class="inv">${opts.map((k,i)=>`<button type="button" class="it" data-m="s${i}"><span><b>${SKILLS[k].n}</b> · ${SKILLS[k].d}</span></button>`).join('')}</div><div class="mbtns"><button type="button" data-m="back">Back</button></div>`);
+    if(m==='back')continue;const k=opts[+m.slice(1)];(u.skills=u.skills||[]).push({id:k,src:'learned'});sfx('fanfare');toast(`${u.name} learns ${SKILLS[k].n}`);return u}
+}
+/* a set skill (treasure 'skill:<id>'): pick who learns it */
 async function allocSkill(k,title){
   const sk=SKILLS[k];
   const u=await pickUnit(title||`New ${rwTag('skill','skill')}: ${sk.n}`,`<b>${sk.n}</b>: ${sk.d} Choose who learns it.`,u=>has(u,k)?'Already knows it':null,'Skip',null,'skill');
   if(!u)return null;
-  (u.skills=u.skills||[]).push({id:k,src:'scroll'});sfx('fanfare');toast(`${u.name} learns ${sk.n}`);return u;
+  (u.skills=u.skills||[]).push({id:k,src:'learned'});sfx('fanfare');toast(`${u.name} learns ${sk.n}`);return u;
 }
 
 /* ---- summons ---- */

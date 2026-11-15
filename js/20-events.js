@@ -247,19 +247,19 @@ const EVENTS = {
     o: [
       {
         l: 'Offer blood',
-        sub: 'One unit loses 3 max HP for good and learns a random skill',
+        sub: 'One unit loses 3 max HP for good and learns a random skill from their role',
         go: async () => {
           const u = await pickUnit('Who offers blood?', 'They lose 3 max HP for good.', u =>
             u.maxhp <= 12 ? 'Too weak' : null
           );
           if (!u) return null;
-          const ks = SKILL_POOL().filter(k => !has(u, k));
+          const ks = roleSkills(u);
           if (!ks.length) return `The altar stays cold. ${u.name} already knows everything it could teach.`;
           const k = pick(ks);
           u.maxhp -= 3;
           u.hp = Math.min(u.hp, u.maxhp);
           sfx('earth');
-          (u.skills = u.skills || []).push({ id: k, src: 'scroll' });
+          (u.skills = u.skills || []).push({ id: k, src: 'learned' });
           const how = `learns <b>${SKILLS[k].n}</b>`;
           return `${u.name} bleeds on the stone (max HP ${u.maxhp}) and ${how}. ${SKILLS[k].d}`;
         }

@@ -8,7 +8,7 @@ const endless=k=>(isWpn(k)&&IT[k].uses>5)||IT[k].t==='spirit';
 function mcost(u,x,y){const t=ter(x,y);if(u.team==='e'&&state.ice&&state.ice[key(x,y)])return 99;if(CLS[u.cls].phase)return 1;if(t.k==='lava'&&CLS[u.cls].lava)return 1;if(CLS[u.cls].fly)return['wall','cliff','cavewall'].includes(t.k)?99:1;if(CLS[u.cls].mnt&&(t.k==='forest'||t.k==='hill'))return t.c+1;return t.c}
 /* Teams: p = player, e = enemy, g = green 'other' units that fight the enemy and can be recruited. */
 const hostile=(a,b)=>(a.team==='e')!==(b.team==='e');
-/* Skills: u.skill is the personal skill. u.skills holds extras learned from scrolls: {id,src:"scroll"}. No limit on how many. */
+/* Skills: u.skill is the personal skill. u.skills holds the ones learned since: {id,src:"learned"} (older saves say "scroll"). No limit on how many. */
 const has=(u,id)=>u.skill===id||!!(u.skills&&u.skills.some(x=>x.id===id));
 function learnBlock(u,k){return has(u,k)?`${u.name} already knows ${SKILLS[k].n}.`:null}
 const elv=u=>u.lv+(CLS[u.cls].tier===2?15:0);
