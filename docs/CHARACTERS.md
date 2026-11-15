@@ -174,7 +174,7 @@ A city guardswoman who deserted rather than march on the neighbouring kingdom. S
 - **Ascends into:** Valkyrie or Aegis.
 - **Look:** olive outfit, sword and decorated shield; a great bronze shield as Aegis, a pegasus as Valkyrie.
 - **As Aegis:** immune to Stone (Stone Gaze).
-- **Passive: Bulwark.** Allies next to her take 30% less damage from ranged attacks.
+- **Passive: Heroic.** +2 damage while next to an ally.
 - **Shield Bash** (single, adjacent · CD 2): 1.0× Str, push 1.
 - **Challenge** (burst r2 · CD 3): enemies in range must target her next turn.
 - **Hold the Line** (self · CD 4): Guard, and she can't be pushed until her next turn.

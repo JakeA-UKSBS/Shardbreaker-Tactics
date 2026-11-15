@@ -567,7 +567,7 @@ const squadHp = (u) => {
 };
 const unitBox = (u) =>
   `<button type="button" class="nu-x" data-ux="1" aria-label="Close">✕</button>${unitDetail(u)}`;
-/* a unit's full details for the map screen: stats, skills (with capacity) and items */
+/* a unit's full details for the map screen: stats, skills and items */
 function unitDetail(u) {
   const C = CLS[u.cls],
     sk = [u.skill, ...(u.skills || []).map((x) => x.id)].filter(Boolean);
@@ -576,7 +576,7 @@ function unitDetail(u) {
     .filter((k) => k !== "hp")
     .map((k) => `<div><span>${SL[k]}</span><b>${u[k]}</b></div>`)
     .join("")}</div>
-  <div class="ns-h">Skills <small>${capPie(u)}</small></div>${sk.map((id, i) => `<div class="ns-row"><span><b>${SKILLS[id].n}${i === 0 ? " (personal)" : ""}</b>${SKILLS[id].d}</span></div>`).join("")}
+  <div class="ns-h">Skills</div>${sk.map((id, i) => `<div class="ns-row"><span><b>${SKILLS[id].n}${i === 0 ? " (personal)" : ""}</b>${SKILLS[id].d}</span></div>`).join("")}
   <div class="ns-h">Items</div>${u.items.map((it, ii, _a, ei = eqIdx(u)) => `<div class="ns-row${ii === ei ? " eqd" : ""}"><img src="${icon(it.k)}" alt=""><span>${itemText(it.k).replace("</b> · ", "</b>")}${IT[it.k].t === "item" ? ` <span class="uses">${it.u}/${IT[it.k].uses}</span>` : ""}</span>${IT[it.k].t === "item" && u.hp < u.maxhp ? `<button type="button" class="mini go" data-salve="${ii}" data-uu="${run.roster.indexOf(u)}">Use</button>` : ""}${ii === ei ? '<span class="ns-eq">Equipped</span>' : `${isWpn(it.k) && canUse(u, it.k) ? `<button type="button" class="mini go" data-equip="${ii}" data-uu="${run.roster.indexOf(u)}">Equip</button>` : ""}<button type="button" class="mini ns-drop" data-drop="${ii}" data-uu="${run.roster.indexOf(u)}" aria-label="Drop ${IT[it.k].n}">Drop</button>`}</div>`).join("") || '<p class="ns-none">No items.</p>'}
   <div class="ns-h">Wields</div><p class="ns-none">${C.w.map((t) => TN[t]).join(", ")}</p>`;
 }

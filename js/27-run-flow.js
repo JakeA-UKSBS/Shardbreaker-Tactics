@@ -50,7 +50,7 @@ async function winScreen(){
   /* beating the Crystal Heart ends the run: straight to Victory, no floor summary, loot or skills */
   if(!final){await modal(`<div class="eyebrow">Act ${run.act||1} · Floor ${run.n} of ${actLen()} won · Turn ${state.turn}</div><h2>${BATTLE.title}</h2><p>${final?'The run is complete.':bossWin?`${TheN(actBiome())} is cleared. The road leads on to ${theN(run.act>=2?BIOMES.heart:BIOMES[run.biomes[run.act]])}.`:`Survivors recover ${afterHeal()} HP. Camps heal fully.`}</p><div class="roster">${ro}</div><p>${rw.length?`Found: ${rw.map(k=>`<b>${IT[k].n}</b>`).join(', ')}. `:''}<span class="gold">+${gg} gold</span></p><div class="mbtns"><button class="go" type="button" data-m="next">${final?'Finish':'Press on'}</button></div>`);
   for(const k of rw)await giveTo(k,'From the battlefield.',true);
-  if(run.pendSkill){const k=run.pendSkill;run.pendSkill=null;await allocSkill(k,`Found: ${SKILLS[k].n}`)}}
+  if(run.pendSkill){run.pendSkill=null;await learnSkill()}}
   else run.pendSkill=null;
   if(run.kind==='elite'){await relicPick(2,['c','u'],'The elite’s spoils','');
     const u=await pickUnit(`Choose a unit for a ${rwTag('weapon')} upgrade +1`,'',u=>{const w=weaponOf(u);return!w?'No weapon':forgeLv(w)>=FORGE_MAX?'Already +3':null},'Leave it',undefined,'weapon');

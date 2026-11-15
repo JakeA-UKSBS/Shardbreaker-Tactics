@@ -4,11 +4,11 @@ function promote(u,to){
   const from=u.cls;to=to||CLS[from].promo;const b=CLS[to].bonus.slice();
   /* a new movement type on promotion also brings its stat tilt (gains only) */
   if(from.startsWith('G.')&&to.startsWith('G.')){const s1=MOVES[from.split('.')[2]].st||[],s2=MOVES[to.split('.')[2]].st||[];b.forEach((v,i)=>b[i]=v+Math.max(0,(s2[i]||0)-(s1[i]||0)))}
-  const old={lv:u.lv,cap:capOf(u)};ST.forEach(s=>old[s]=s==='hp'?u.maxhp:u[s]);
+  const old={lv:u.lv};ST.forEach(s=>old[s]=s==='hp'?u.maxhp:u[s]);
   const gift=CLS[to].gift&&u.items.length<5?CLS[to].gift:null;if(gift)u.items.push({k:gift,u:IT[gift].uses});
   if(u._nl){u.look=u._nl;delete u._nl}
   castSwap(u,to);
-  u.cls=to;u.lv=1;u.exp=0;u.cap=capOf(u)+PROMO_CAP;u.mov=CLS[to].mov;
+  u.cls=to;u.lv=1;u.exp=0;u.mov=CLS[to].mov;
   ST.forEach((s,i)=>{if(s==='hp'){u.maxhp+=b[i];u.hp+=b[i]}else u[s]+=b[i]});
   return{from,to,old,b,gift};
 }
@@ -19,7 +19,7 @@ async function ascend(u,to){
   el.innerHTML=`<div class="asc-stage"><div class="asc-pillar"></div><div class="asc-ring"></div><div class="asc-ring r2"></div>${parts}<div class="asc-wave"></div><img class="asc-spr" src="${before}" alt=""></div>
    <div class="asc-txt"><div class="eyebrow">Ascension</div><h2>${u.name}</h2><p class="asc-cls"><span>${CLS[r.from].n}</span> → <b>${CLS[r.to].n}</b></p></div>
    <div class="asc-box" hidden><div class="lvl">${shown(u).map((s,i)=>`<div data-s="${s}"><span>${SL[s]}</span><span><b class="v">${r.old[s]}</b><em></em></span></div>`).join('')}</div>
-   <p class="asc-cap">Skill capacity <b>${r.old.cap} → ${capOf(u)}</b> · Move <b>${u.mov}</b> · Wields <b>${CLS[u.cls].w.map(t=>CLS[r.from].w.includes(t)?TN[t]:`<span class="asc-new">${TN[t]}</span>`).join(', ')}</b>${r.gift?` · Gains a <b>${IT[r.gift].n}</b>`:''}</p>
+   <p class="asc-cap">Move <b>${u.mov}</b> · Wields <b>${CLS[u.cls].w.map(t=>CLS[r.from].w.includes(t)?TN[t]:`<span class="asc-new">${TN[t]}</span>`).join(', ')}</b>${r.gift?` · Gains a <b>${IT[r.gift].n}</b>`:''}</p>
    <p class="asc-cap dim">Level resets to 1. EXP is earned as an ascended unit from now on.</p>
    <div class="mbtns"><button class="go" type="button" data-m="ok" disabled>Continue</button></div></div><div class="asc-flash"></div>`;
   document.body.appendChild(el);

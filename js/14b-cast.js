@@ -97,7 +97,6 @@ const CAST_HIT = { kili: 5 };
 const BASE_ADJ = {
   Knight: [3, 0, 0, 0, 0, 0, -2, 0],
   Mender: [0, 0, 0, 0, 0, 0, 1, 0],
-  Shieldmaiden: [0, 0, 0, 0, 0, 0, -1, 0],
 };
 const castCls = (n) => `G.${CAST_CLASSES[n]}.${n.replace(/ /g, "")}`;
 for (const n in CAST_CLASSES) {
@@ -1001,13 +1000,8 @@ function castUnit(id, lv) {
     team: "p",
     lv: 1,
     exp: 0,
-    skill: (KITS[id] && KITS[id].passive) || pick(R.skills),
+    skill: (KITS[id] && KITS[id].passive) || PERSONAL[id] || pick(R.skills),
     skills: [],
-    cap:
-      BASE_CAP +
-      (t === "2"
-        ? PROMO_CAP
-        : 0) /* advanced joiners have the ascension's extra capacity too */,
     look: clone(c.look),
     g,
     mov: CLS[c.cls].mov,

@@ -6,7 +6,7 @@
    ================================================================== */
 function clearSel(){sel=null;moveSet=null;fringe=null;targets=[];pending=null;inspect=null;itemSel=null;abSel=null;abT=null;aimSet=null}
 function select(u){clearSel();sel=u.id;origin={x:u.x,y:u.y};moveSet=reach(u);fringe=fringeOf(u,moveSet);ui='move';render()}
-function cancelMove(){const u=sel&&byId(sel);if(u&&origin){u.x=origin.x;u.y=origin.y}clearSel();ui='idle';render()}
+function cancelMove(){const u=sel&&byId(sel);if(u&&u.canto){u.canto=0;finishAction();return}/* skipping the move after acting */if(u&&origin){u.x=origin.x;u.y=origin.y}clearSel();ui='idle';render()}
 function freeNear(x,y,taken,u){const seen=new Set([key(x,y)]),q=[[x,y]];
   while(q.length){const[cx,cy]=q.shift(),k=key(cx,cy),c=u?mcost(u,cx,cy):ter(cx,cy).c;if(c<99&&!taken.has(k))return{x:cx,y:cy};
     for(const[dx,dy]of DIRS){const nx=cx+dx,ny=cy+dy,nk=key(nx,ny);if(nx<0||ny<0||nx>=MW||ny>=MH||seen.has(nk))continue;seen.add(nk);q.push([nx,ny])}}
@@ -41,6 +41,8 @@ function tap(x,y){
   const o=unitAt(x,y),k=key(x,y);
   if(ui==='move'){
     const u=byId(sel);
+    /* moving after acting: a tile in reach moves there, anywhere else stays put. Either way the unit is done */
+    if(u.canto){if(moveSet.has(k)&&(x!==u.x||y!==u.y)){stepSfx(u,x,y);u.x=x;u.y=y}u.canto=0;finishAction();return}
     if(moveSet.has(k)){stepSfx(u,x,y);u.x=x;u.y=y;if(u.tumbled){u.tumbled=0;fringe=null}afterMove(u);return}
     if(o&&o.team==='e'&&fringe.has(k)){const t=bestApproach(u,o);if(t){if(t.x!==u.x||t.y!==u.y)stepSfx(u,t.x,t.y);u.x=t.x;u.y=t.y;targets=atkTargets(u);tmode='atk';openConfirm(o);return}}
     if(o&&o.team==='p'&&o!==u&&o.hp<o.maxhp&&staffIdx(u)>=0){const t=healApproach(u,o);if(t){if(t.x!==u.x||t.y!==u.y)stepSfx(u,t.x,t.y);u.x=t.x;u.y=t.y;targets=healTargets(u);tmode='heal';openConfirm(o);return}}
@@ -64,6 +66,15 @@ function tap(x,y){
    ENDING AN ACTION: commit the move, finish, prompt to end the turn
    ================================================================== */
 function commit(){const u=byId(sel);if(u)u.acted=true}
+/* act, then move: a unit that acts without moving first can still move afterwards, with its full movement (u.canto).
+   still = it hadn't moved when it acted. A unit that moved first, was moved by its action, acts again (Momentum, free
+   abilities) or fell is done */
+const stillAt=u=>!!(u&&origin&&u.x===origin.x&&u.y===origin.y);
+function afterAct(u,still){
+  if(over)return;
+  if(still&&stillAt(u)&&u.hp>0&&u.acted&&!u.stone&&phase==='player'){/* stillAt again: not if the action moved it (Leap, Charge, Hit and Run) */clearSel();sel=u.id;origin={x:u.x,y:u.y};moveSet=reach(u);fringe=new Set();u.canto=1;ui='move';render();
+    tip('canto','Move after acting','A unit that acts before moving can still move afterwards. Click a blue tile to move, or anywhere else to stay.');return}
+  finishAction()}
 function finishAction(){clearSel();ui='idle';render();checkEnd();if(over)return;saveGame();promptEnd()}
 function promptEnd(){setTimeout(async()=>{
   if(phase!=='player'||over||busy||!modalEl.hidden||!state.units.filter(u=>u.team==='p').every(u=>u.acted))return;
@@ -103,11 +114,11 @@ async function act(a){
   if(a==='equip'){sfx('equip');const it=u.items.splice(itemSel,1)[0];u.items.unshift(it);itemSel=0;render();return}
   if(a==='wprev'||a==='wnext'){const l=wpnsAt(u,man(u,pending),pending),i=l.indexOf(pendW);pendW=l[(i+(a==='wnext'?1:l.length-1))%l.length];render();return}
   if(a==='wait'){commit();finishAction();return}
-  if(a==='summon'){if(!canSummon(u))return;commit();doSummon(u);finishAction();return}
-  if(a==='use'){commit();const it=u.items[itemSel],amt=Math.min(salveAmt(it.k),u.maxhp-u.hp);u.hp+=amt;it.u--;if(it.u<=0)u.items.splice(itemSel,1);pop(u,'+'+amt,'heal');if(u.psn){u.psn=0;pop(u,'Cured','heal')}finishAction();return}
-  if(a==='doheal'){commit();const t=pending,si=spiritFor(u,t),w=IT[u.items[si].k],amt=Math.min(w.amt,t.maxhp-t.hp);t.hp+=amt;if(!endless(u.items[si].k)){u.items[si].u--;if(u.items[si].u<=0){toast(w.n+' shattered');u.items.splice(si,1)}}pop(t,'+'+amt,'heal');sfx('heal');clearSel();ui='idle';busy=true;render();
-    const g=gainExp(u,Math.round(15*EXP_RATE));await showExp(u,g);if(g&&g.gains)await levelUp(u,g);busy=false;finishAction();return}
-  if(a==='attack-go'){commit();const t=pending,it=u.items.splice(pendW,1)[0];u.items.unshift(it);clearSel();ui='idle';await fight(u,0,t);saveGame();promptEnd();return}
+  if(a==='summon'){if(!canSummon(u))return;const still=stillAt(u);commit();doSummon(u);afterAct(u,still);return}
+  if(a==='use'){const still=stillAt(u);commit();const it=u.items[itemSel],amt=Math.min(salveAmt(it.k),u.maxhp-u.hp);u.hp+=amt;it.u--;if(it.u<=0)u.items.splice(itemSel,1);pop(u,'+'+amt,'heal');if(u.psn){u.psn=0;pop(u,'Cured','heal')}afterAct(u,still);return}
+  if(a==='doheal'){const still=stillAt(u);commit();const t=pending,si=spiritFor(u,t),w=IT[u.items[si].k],amt=Math.min(w.amt,t.maxhp-t.hp);t.hp+=amt;if(!endless(u.items[si].k)){u.items[si].u--;if(u.items[si].u<=0){toast(w.n+' shattered');u.items.splice(si,1)}}pop(t,'+'+amt,'heal');if(has(u,'gentleTouch'))addSt(t,'tended',1,u);sfx('heal');clearSel();ui='idle';busy=true;render();
+    const g=gainExp(u,Math.round(15*EXP_RATE));await showExp(u,g);if(g&&g.gains)await levelUp(u,g);busy=false;afterAct(u,still);return}
+  if(a==='attack-go'){const still=stillAt(u);commit();const t=pending,it=u.items.splice(pendW,1)[0];u.items.unshift(it);clearSel();ui='idle';await fight(u,0,t);if(still&&u.acted){afterAct(u,still);return}saveGame();promptEnd();return}
 }
 
 /* ==================================================================
@@ -122,6 +133,7 @@ async function fight(a,ai,d){
   for(const[u,i,n]of[[a,ai,res.used.a],[d,res.f.di,res.used.d]]){if(i<0||!n)continue;const it=u.items[i];if(endless(it.k))continue;it.u-=n;if(it.u<=0){u.items.splice(i,1);sfx('broke');toast(`${u.name}'s ${IT[it.k].n} shattered`)}}
   const p=a.team==='p'?a:d.team==='p'?d:null,o=p===a?d:a;
   for(const e of res.ev)if(e.psn){const t=e.by==='a'?d:a;if(t.team==='p'&&M('soup'))continue;if(t.hp>0){t.psn=3;sfx('poison');pop(t,'Poisoned','crit')}}
+  for(const e of res.ev)if(e.sts){const t=e.by==='a'?d:a,by=e.by==='a'?a:d;if(t.hp>0)for(const[k,n]of e.sts){if(stImmune(t,k))continue;addSt(t,k,n,by);pop(t,STATUS[k].n,'crit')}}
   for(const e of res.ev)if(e.stone){const t=e.by==='a'?d:a;if(t.hp>0&&!stImmune(t,'stone')){t.stone=1;pop(t,'Stone!','crit');sfx('earth');toast(`${t.name} is turned to stone and loses ${t.team==='p'?'their':'its'} next turn`)}}
   /* a summon's EXP goes to the unit that summoned it */
   const ep=p&&p.summon?state.units.find(x=>x.id===p.owner&&x.hp>0):p;
@@ -131,6 +143,8 @@ async function fight(a,ai,d){
     for(const it of o.items.filter(i=>i.d)){(state.loot=state.loot||[]).push(it.k);sfx('item');notify(`${IT[it.k].n} dropped`,'Added to the spoils: choose who takes it after the fight.',icon(it.k))}
   if(p&&o.hp<=0&&p.hp>0&&o.team==='e'&&!o.summon)dropGold();
   if(a.hp>0&&d.hp<=0&&a.team==='p'&&phase==='player'&&has(a,'momentum')&&a.gf!==state.turn){a.gf=state.turn;a.acted=false;pop(a,'Momentum!','heal')}
+  /* Cleave: enemies next to his target take 3 damage (never lethal) */
+  if(a.hp>0&&has(a,'cleave'))for(const o of state.units)if(o!==d&&o.hp>1&&hostile(o,a)&&man(o,d)===1){const h=Math.min(3,o.hp-1);o.hp-=h;pop(o,'-'+h,'crit')}
   if(a.hp>0&&has(a,'hitAndRun')&&man(a,d)===1){let best=null,bd=-1;for(const[dx,dy]of DIRS){const x=a.x+dx,y=a.y+dy;if(x<0||y<0||x>=MW||y>=MH||unitAt(x,y)||mcost(a,x,y)>=99||!canStep(a,a.x,a.y,x,y))continue;
     const dd=Math.min(99,...state.units.filter(o=>hostile(o,a)&&o.hp>0).map(o=>man(o,{x,y})));if(dd>bd){bd=dd;best={x,y}}}if(best&&bd>1){a.x=best.x;a.y=best.y}}
   render();if(a.hp<=0||d.hp<=0)await sleep(380);
@@ -203,7 +217,7 @@ async function enemyPhase(){
   phaseHeal('e');tickSt('e','start');burnTick('e');render();await runAI('e');tickSt('e','end');
   busy=false;if(over)return;
   spawnWaves(state.turn+1);
-  state.turn++;state.units.forEach(u=>u.acted=false);phase='player';phaseHeal('p');abPlayerStart();
+  state.turn++;state.units.forEach(u=>{u.acted=false;u.canto=0});phase='player';phaseHeal('p');abPlayerStart();
   checkEnd();if(over)return;
   for(const u of state.units)if(u.team==='p'&&u.stone)u.acted=true;
   render();banner('Player Phase','p');

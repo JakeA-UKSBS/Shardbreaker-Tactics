@@ -28,20 +28,23 @@ async function tradeWith(u){
   }
 }
 
-/* ---- skill rewards: pick who learns it; a unit without room can forget a learned skill ---- */
-const SKILL_POOL=()=>Object.keys(SKILLS).filter(k=>!['command','venom','stoneGaze'].includes(k)&&!SKILLS[k].kit);
+/* ---- skill rewards: a unit learns a skill from its role's list (ROLES[role].skills in 14-classes.js) ---- */
+const roleOfU=u=>{const c=u.cast&&castDef(u.cast);return(c?c.cls:u.cls).split('.')[1]};
+const roleSkills=u=>((ROLES[roleOfU(u)]||{}).skills||[]).filter(k=>SKILLS[k]&&!has(u,k));
+async function learnSkill(title){
+  for(;;){
+    const u=await pickUnit(title||`Learn a ${rwTag('skill','skill')}`,'Choose who learns. Each unit picks from the skills that suit their role.',u=>roleSkills(u).length?null:'Knows them all','Skip',null,'skill');
+    if(!u)return null;
+    const opts=shuffle(roleSkills(u).slice()).slice(0,3);
+    const m=await modal(`<div class="eyebrow">${rwTag('skill')}</div><h2>${u.name} learns…</h2><div class="inv">${opts.map((k,i)=>`<button type="button" class="it" data-m="s${i}"><span><b>${SKILLS[k].n}</b> · ${SKILLS[k].d}</span></button>`).join('')}</div><div class="mbtns"><button type="button" data-m="back">Back</button></div>`);
+    if(m==='back')continue;const k=opts[+m.slice(1)];(u.skills=u.skills||[]).push({id:k,src:'learned'});sfx('fanfare');toast(`${u.name} learns ${SKILLS[k].n}`);return u}
+}
+/* a set skill (treasure 'skill:<id>'): pick who learns it */
 async function allocSkill(k,title){
   const sk=SKILLS[k];
-  for(;;){
-    const why=u=>has(u,k)?'Already knows it':null;
-    const u=await pickUnit(title||`New ${rwTag('skill','skill')}: ${sk.n}`,`<b>${sk.n}</b> (capacity ${sk.cost}): ${sk.d} Choose who learns it.`,why,'Skip',sk.cost,'skill');
-    if(!u)return null;
-    if(!learnBlock(u,k)){(u.skills=u.skills||[]).push({id:k,src:'scroll'});sfx('fanfare');toast(`${u.name} learns ${sk.n}`);return u}
-    const can=(u.skills||[]).filter(x=>x.src==='scroll'&&capUsed(u)-SKILLS[x.id].cost+sk.cost<=capOf(u));
-    const m=await modal(`<h2>${u.name} has no room</h2><p>${sk.n} needs ${sk.cost} capacity; ${u.name} has ${capOf(u)-capUsed(u)} free.${can.length?' Forget a learned skill to make room?':' Nothing they could forget would free enough room.'}</p>
-      <div class="inv">${can.map((x,i)=>`<button type="button" class="it" data-m="f${i}"><span><b>Forget ${SKILLS[x.id].n}</b> · ${SKILLS[x.id].d}</span></button>`).join('')}</div><div class="mbtns"><button type="button" data-m="back">Back</button></div>`);
-    if(m==='back')continue;const x=can[+m.slice(1)];u.skills.splice(u.skills.indexOf(x),1);u.skills.push({id:k,src:'scroll'});sfx('fanfare');toast(`${u.name} learns ${sk.n}`);return u;
-  }
+  const u=await pickUnit(title||`New ${rwTag('skill','skill')}: ${sk.n}`,`<b>${sk.n}</b>: ${sk.d} Choose who learns it.`,u=>has(u,k)?'Already knows it':null,'Skip',null,'skill');
+  if(!u)return null;
+  (u.skills=u.skills||[]).push({id:k,src:'learned'});sfx('fanfare');toast(`${u.name} learns ${sk.n}`);return u;
 }
 
 /* ---- summons ---- */
