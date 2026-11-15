@@ -40,10 +40,11 @@ function artLeft(src){src=String(src);const o=sheetOf(src);if(o)return!!o.s.left
    No slicing or waiting: the sheet is a CSS background on the sprite, positioned on one frame (cropped to x0..x0+w, centred
    on the body), and flipped by the artl class if drawn facing left (left:true). It loads like any other PNG, works opened
    straight from disk, and needs no plain <Class>.png: when a hand-drawn sheet arrives, delete the old PNGs and their manifest
-   lines. Frame 0 is idle; an attack plays windup -> swing (the hit) -> follow. Shown 48px tall (the width follows). */
+   lines. Frame 0 is idle; an attack plays windup -> swing (the hit) -> follow (any left out stay on the idle frame).
+   abil: {abilityId: [frames]} plays those frames when the monster uses that ability. Shown 48px tall (the width follows). */
 const MON_SHEET={HellHound:{n:6,fw:120,fh:64,x0:20,w:100,left:true,windup:[1,2],swing:3,follow:[4,5]},
   Wolf:{n:5,fw:100,fh:64,x0:0,w:100,left:true,windup:[1,2],swing:3,follow:[4]},
-  FrostWolf:{n:4,fw:100,fh:64,x0:0,w:92,left:true,windup:[1],swing:2,follow:[3]}};
+  FrostWolf:{n:4,fw:100,fh:64,x0:0,w:92,left:true,abil:{howl:[1,2,3]}}};
 const BLANK='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 /* sprite()/portrait() hand back 'sheet:<Class>:<frame>' for these; sheetOf reads it back */
 const sheetOf=src=>{const m=/^sheet:(\w+):(\d+)$/.exec(src||'');return m&&MON_SHEET[m[1]]?{cls:m[1],i:+m[2],s:MON_SHEET[m[1]]}:null};
