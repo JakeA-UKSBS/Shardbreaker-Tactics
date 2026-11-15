@@ -526,6 +526,8 @@ function drawTrails(M, Y, vis) {
         nextS += 22;
       }
     }
+    //Jagged line tech
+    // two side corners, 45% of the way out and pushed ±wd px sideways (mx+nx, my+ny)
     if (vp.length > 1) {
       const d = vp.join(" ");
       out =
@@ -550,6 +552,7 @@ function drawTrails(M, Y, vis) {
     ),
   );
   M[0].forEach((n, i) =>
+    //Bézier curve
     trail(W / 2, Y(-1), (n.x * W) / 100, Y(0), vis.has("0," + i), [-1, 0, i]),
   );
   svg.innerHTML = out;
