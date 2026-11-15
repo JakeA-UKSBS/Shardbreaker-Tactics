@@ -41,7 +41,8 @@ function artLeft(src){src=String(src);const o=sheetOf(src);if(o)return!!o.s.left
    on the body), and flipped by the artl class if drawn facing left (left:true). It loads like any other PNG, works opened
    straight from disk, and needs no plain <Class>.png: when a hand-drawn sheet arrives, delete the old PNGs and their manifest
    lines. Frame 0 is idle; an attack plays windup -> swing (the hit) -> follow. Shown 48px tall (the width follows). */
-const MON_SHEET={HellHound:{n:6,fw:120,fh:64,x0:20,w:100,left:true,windup:[1,2],swing:3,follow:[4,5]}};
+const MON_SHEET={HellHound:{n:6,fw:120,fh:64,x0:20,w:100,left:true,windup:[1,2],swing:3,follow:[4,5]},
+  Wolf:{n:5,fw:100,fh:64,x0:0,w:100,left:true,windup:[1,2],swing:3,follow:[4]}};
 const BLANK='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 /* sprite()/portrait() hand back 'sheet:<Class>:<frame>' for these; sheetOf reads it back */
 const sheetOf=src=>{const m=/^sheet:(\w+):(\d+)$/.exec(src||'');return m&&MON_SHEET[m[1]]?{cls:m[1],i:+m[2],s:MON_SHEET[m[1]]}:null};
