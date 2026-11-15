@@ -38,7 +38,7 @@ Object.assign(FOE,{
   CursedStag:{b:[17,6,0,5,8,2,2,2],g:[.6,.4,0,.35,.45,.15,.1,.15],items:['antlers'],look:{}},
   BoulderGolem:{b:[24,7,0,2,1,0,10,0],g:[.8,.4,0,.2,.05,0,.4,0],items:['slam'],look:{}},
   FireSprite:{b:[14,0,4,5,7,2,1,4],g:[.5,0,.4,.35,.45,.15,.05,.3],items:['emberSigil'],look:{}},
-  HellHound:{b:[16,6,0,4,7,1,2,1],g:[.55,.4,0,.3,.45,.1,.15,.1],items:['fangs'],look:{}},
+  HellHound:{b:[16,6,0,4,7,1,2,1],g:[.55,.4,0,.3,.45,.1,.15,.1],items:['fangs']},
   Shardling:{b:[16,6,0,5,8,0,3,1],g:[.55,.4,0,.35,.4,0,.2,.1],items:['claws'],look:{}},
   Prism:{b:[15,0,6,5,4,0,2,6],g:[.5,0,.4,.3,.25,0,.1,.35],items:['crystalShards'],look:{}},
   CrystalSentinel:{b:[24,7,0,3,2,0,9,2],g:[.8,.4,0,.25,.1,0,.4,.1],items:['slam'],look:{}},
@@ -54,7 +54,6 @@ const MONLOOK={
   CursedStag:()=>({fur:pick(['#4a3a4a','#5a4a3a','#3a3040']),eye:'#ff3a5a',antlers:'#d8d0bc',antler2:'#b07ae8',crys:false}),
   BoulderGolem:()=>({body:pick(['#7a746e','#6a625c','#8a8278']),eye:'#ff9a3c'}),
   FireSprite:()=>({crys:false,body:pick(['#ff8a3c','#ff6a2a','#ffaa3c'])}),
-  HellHound:()=>({fur:pick(['#4a2a26','#3a2422','#5a2e28']),eye:'#ff8a1a'}),
   /* crystal creatures: mostly blood red, sometimes another gem. crys:false = no extra crystals stuck on (they are crystal) */
   Shardling:()=>({crys:false,gem:pick(['#c8283a','#c8283a','#c8283a','#2a9a5a','#3a5ac8','#8a3ac0'])}),Prism:()=>({crys:false,gem:pick(['#c8283a','#c8283a','#3a5ac8','#8a3ac0'])}),CrystalSentinel:()=>({crys:false,gem:pick(['#a8202e','#a8202e','#2a8a4a','#7a3ab0'])}),
   BogLurker:()=>({crysSmall:true,body:pick(['#4a5a32','#3a4a3a','#5a5a3a'])}),

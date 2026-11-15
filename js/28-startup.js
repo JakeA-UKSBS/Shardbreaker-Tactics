@@ -63,7 +63,9 @@ function start(data){
   titleScreen();
 }
 window.claude?.hot?.snapshot?.(()=>({state,chStart,run,def:BATTLE,rng:rngS}));
-window.claude?.hot?.ready?window.claude.hot.ready(start):start(window.claude?.hot?.data??{});
+/* wait for the animated monster sheets to be cut into frames (MON_READY, 03-art.js) so they're never missing */
+const startWhenReady=d=>MON_READY.then(()=>start(d));
+window.claude?.hot?.ready?window.claude.hot.ready(startWhenReady):startWhenReady(window.claude?.hot?.data??{});
 
 /* PNG art (art/<key>.png, see art() in 03-art.js) */
 function titleCrystalArt(){return art('title/crystal')}
