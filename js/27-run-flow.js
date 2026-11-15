@@ -2,7 +2,7 @@
 /* ---- flow ---- */
 async function beginBattle(){
   run.fights=(run.fights||0)+1;const def=genBattle(run.fights,run.kind);BATTLE=def;
-  setupBattle(run.roster);battleAllies();saveGame();music(def.biome);ambience(def.biome);await battleIntro();
+  setupBattle(run.roster);battleAllies();saveGame();regionSound(def.biome);await battleIntro();
 }
 async function newRun(){
   const seed=(Date.now()^Math.floor(Math.random()*1e9))>>>0;seedRng(seed);

@@ -51,10 +51,10 @@ const REGIONS=[['forest','Cursed Woodland'],['swamp','Sobek’s Mire'],['desert'
 const S=[];const add=(g,k,w,kind='sfx',hooked=true)=>S.push({g,k,w,kind,hooked});
 /* music */
 add('Music','title','Title screen','music');add('Music','tavern','Tavern','music');
-REGIONS.forEach(([k,n])=>add('Music',k,n,'music'));
+/* regions have no music: their ambience plays instead */
 add('Music','boss','Boss fights','music',false);add('Music','map','Node map','music',false);add('Music','story','Sage / story scenes','music',false);
 /* ambience */
-REGIONS.forEach(([k,n])=>add('Ambience',k,n+' (loops under battles)','amb'));add('Ambience','tavern','Tavern (chatter, fire)','amb',false);
+REGIONS.forEach(([k,n])=>add('Ambience',k,n+' (loops on its map, events and battles)','amb'));add('Ambience','tavern','Tavern (chatter, fire)','amb',false);
 /* combat */
 [['slash','blades'],['swing','heavy weapons, lances, staffs'],['claw','fangs and claws'],['arrow','bows'],['throw','javelins, throwing axes'],['hit','a blow lands'],['miss','a miss'],
  ['critcharge','crit wind-up'],['crit','crit impact (non-swords)'],['swordcrit','sword crit impact'],['block','shield block, Guard'],['broke','weapon breaks, shields shatter'],['death','a unit falls']].forEach(([k,w])=>add('Combat',k,w));

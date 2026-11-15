@@ -5,7 +5,7 @@ const AU={ctx:null,nb:null};
 const SFX_VOL=.7;
 function audio(){
   if(!settings.sound)return null;
-  if(!AU.ctx){try{AU.ctx=new(window.AudioContext||window.webkitAudioContext)();AU.out=AU.ctx.createGain();AU.out.gain.value=SFX_VOL;AU.out.connect(AU.ctx.destination);const n=AU.ctx.sampleRate,b=AU.ctx.createBuffer(1,n,n),d=b.getChannelData(0);for(let i=0;i<n;i++)d[i]=Math.random()*2-1;AU.nb=b}catch(_){return null}}
+  if(!AU.ctx){try{AU.ctx=new(window.AudioContext||window.webkitAudioContext)();AU.out=AU.ctx.createGain();AU.out.gain.value=SFX_VOL*(settings.volSfx??1);AU.out.connect(AU.ctx.destination);const n=AU.ctx.sampleRate,b=AU.ctx.createBuffer(1,n,n),d=b.getChannelData(0);for(let i=0;i<n;i++)d[i]=Math.random()*2-1;AU.nb=b}catch(_){return null}}
   if(!AU.buf){AU.buf={};for(const n in SFX_FILE)fetch(SFX_FILE[n][0]).then(r=>r.arrayBuffer()).then(b=>AU.ctx.decodeAudioData(b)).then(d=>{AU.buf[n]=d}).catch(()=>{})}/* recorded sounds load once; until then (or offline) the synth versions play */
   if(AU.ctx.state==='suspended')AU.ctx.resume();return AU.ctx;
 }
