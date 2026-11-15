@@ -20,12 +20,12 @@ function flash(u){const el=uEls[u.id];if(!el)return;el.classList.add('flash');se
    Cast members have a PNG per frame; monsters only have idle and strike. */
 function mapPose(u,name,t,wk){const el=uEls[u.id];if(!el)return;
   /* bosses (2+ tiles): just swap between the idle and strike frames, refitted to their box */
-  if(u.sz>1){if(name!=='idle'&&name!=='swing'&&name!=='follow')return;const img=el.firstChild,src=sprite(u,name==='idle'?'idle':'strike',mapWk(u));if(img.dataset.s===src)return;
+  if(u.sz>1&&!(!u.cast&&MON_SHEET[u.cls])){if(name!=='idle'&&name!=='swing'&&name!=='follow')return;const img=el.firstChild,src=sprite(u,name==='idle'?'idle':'strike',mapWk(u));if(img.dataset.s===src)return;
     img.src=src;img.dataset.s=src;img.classList.toggle('artl',artLeft(src));if(u.sz===2||src.startsWith('data:'))fillBox(img,src,u.team==='e');return}/* keeps the current fit until the new frame's is measured, so it doesn't jump the first time */const img=el.firstChild;wk=wk||mapWk(u);let src;
   /* animated monsters (MON_SHEET): windup and follow step through their frames */
-  const sh=!u.cast&&!(u.sz>1)&&MON_SHEET[u.cls];
+  const sh=!u.cast&&MON_SHEET[u.cls];
   if(sh){const fr=name==='idle'?[0]:name==='windup'||name==='critup'?sh.windup||[0]:name==='swing'?[sh.swing??0]:name==='follow'?sh.follow||[0]:null;if(!fr)return;el._pose=name;
-    const show=i=>{if(el._pose!==name)return;sheetFit(img,`sheet:${u.cls}:${i}`)};fr.forEach((f,j)=>j?setTimeout(()=>show(f),D(70*j)):show(f));
+    const show=i=>{if(el._pose!==name)return;sheetFit(img,`sheet:${u.cls}:${sheetFrame(u,i)}`,u.sz)};fr.forEach((f,j)=>j?setTimeout(()=>show(f),D(70*j)):show(f));
     if(name==='idle'){img.style.transform='';return}
     if(t){const p=scrC(u.x,u.y,u.sz),q=scrC(t.x,t.y,t.sz);if(Math.abs(q.x-p.x)>1)img.style.transform=q.x<p.x?'scaleX(-1)':'scaleX(1)'}return}
   if(name==='idle')src=sprite(u,'idle',mapWk(u));
@@ -106,7 +106,7 @@ const D=ms=>ms*(fast?.3:1);
 const EL_COL={fire:'#ff8a3c',water:'#5ab4ff',ice:'#bfefff',wind:'#8ae8b0',earth:'#c8a060',lightning:'#ffe14a',illusion:'#b46aff',light:'#fff2b0',crystal:'#ff5a6a',nature:'#7ad85a',dark:'#b46aff'};
 /* element attacks have their own sound; other magic (light, dark, nature) is silent for now */
 /* an animated monster's ability frames (MON_SHEET abil), about 140ms each, then back to idle */
-async function sheetPlay(u,frames){const el=uEls[u.id];if(!el)return;el._pose='abil';for(const f of frames){sheetFit(el.firstChild,`sheet:${u.cls}:${f}`);await sleep(D(140))}await sleep(D(160));el._pose='idle';sheetFit(el.firstChild,`sheet:${u.cls}:0`)}
+async function sheetPlay(u,frames){const el=uEls[u.id];if(!el)return;el._pose='abil';for(const f of frames){sheetFit(el.firstChild,`sheet:${u.cls}:${f}`,u.sz);await sleep(D(140))}await sleep(D(160));el._pose='idle';sheetFit(el.firstChild,`sheet:${u.cls}:${sheetFrame(u,0)}`,u.sz)}
 const EL_SFX={fire:'fire',water:'water',lightning:'thunder',wind:'wind',ice:'ice'};
 const CLAW_SFX=['Claws','Fangs','Talons','Bite'];
 function hitSfx(w,ranged){return w.kind==='staff'&&!ranged?'swing':w.t==='art'?EL_SFX[w.el]||null:w.t==='bow'?'arrow':ranged?'throw':CLAW_SFX.includes(w.n)?'claw':w.t==='blade'?'slash':'swing'}
