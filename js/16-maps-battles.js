@@ -74,13 +74,17 @@ const theN=B=>B.noThe||/^The /.test(B.n)?B.n:'the '+B.n,TheN=B=>{const t=theN(B)
 const ACTS=3;
 /* REGION_ACTS: the regions each act draws from, so monsters can be balanced for their act */
 const REGION_ACTS=[['forest','swamp','desert'],['mountain','snow','cavern']];
-const MUSIC={title:'music/title.mp3',tavern:'music/tavern.mp3'};for(const k in BIOMES)MUSIC[k]=`music/${k}.mp3`;
+const MUSIC={title:'music/title.mp3',tavern:'music/tavern.mp3'};/* regions have ambience instead of music (AMBIENCE) */
 let bgm=null,bgmKey='';
-/* Background music: drop mp3s into music/ (title.mp3, swamp.mp3, forest.mp3, mountain.mp3, desert.mp3, snow.mp3, cavern.mp3, heart.mp3). Missing files are skipped. */
-/* ambience loops quietly under a region's battles (on top of its music) */
+/* Background music: music/title.mp3 and music/tavern.mp3. Missing files are skipped. */
+/* ambience: a region's sound, looping on its map, events and battles (regions have no music) */
 const AMBIENCE={swamp:'sfx/swamp-ambience.mp3'};let amb=null,ambKey='';
-function ambience(k){k=k||'';if(k===ambKey&&amb)return;ambKey=k;try{if(amb)amb.pause();amb=null;if(!settings.sound||!AMBIENCE[k])return;amb=new Audio(AMBIENCE[k]);amb.loop=true;amb.volume=.35;amb.play().catch(()=>{})}catch(_){}}
-function music(k){if(k===bgmKey&&bgm)return;bgmKey=k;try{if(bgm)bgm.pause();bgm=null;if(!settings.sound||!MUSIC[k])return;bgm=new Audio(MUSIC[k]);bgm.loop=true;bgm.volume=.45;bgm.play().catch(()=>{})}catch(_){}}
+function ambience(k){k=k||'';if(k===ambKey&&amb)return;ambKey=k;try{if(amb)amb.pause();amb=null;if(!settings.sound||!AMBIENCE[k])return;amb=new Audio(AMBIENCE[k]);amb.loop=true;amb.volume=.35*(settings.volAmb??1);amb.play().catch(()=>{})}catch(_){}}
+/* in a region: its ambience, no music */
+function regionSound(k){music(null);ambience(k)}
+/* Options volume sliders: apply to what's playing now */
+function applyVol(){if(AU.out)AU.out.gain.value=SFX_VOL*(settings.volSfx??1);if(bgm)bgm.volume=.45*(settings.volMusic??1);if(amb)amb.volume=.35*(settings.volAmb??1)}
+function music(k){if(k===bgmKey&&bgm)return;bgmKey=k;try{if(bgm)bgm.pause();bgm=null;if(!settings.sound||!MUSIC[k])return;bgm=new Audio(MUSIC[k]);bgm.loop=true;bgm.volume=.45*(settings.volMusic??1);bgm.play().catch(()=>{})}catch(_){}}
 
 /* BATTLE MAPS: n = name, map = rows of terrain letters (top row first, see TER for each letter), start = [x, y] tiles your units deploy on. */
 const MAPS={

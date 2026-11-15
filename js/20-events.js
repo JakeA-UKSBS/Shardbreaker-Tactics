@@ -1471,7 +1471,7 @@ async function eventNode() {
     E = EVENTS[ek],
     opts = ((E.card = null), E.o || E.make());
   seen.push(ek);
-  music(actBiome().id);
+  regionSound(actBiome().id);
   if (typeof EV_SFX[ek] === 'string') sfx(EV_SFX[ek]);
   for (;;) {
     const m = await evShow(

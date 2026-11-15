@@ -44,12 +44,12 @@ async function tavernNode(){
   const price=u=>40+15*u.lv+(CLS[u.cls].tier===2?45:0);
   tavEl.innerHTML=`<div class="tv-scene"><img class="tv-bg" src="${tavernArt()}" alt=""><img class="tv-keeper" src="${keeper}" alt="${KEEPER.name}"><img class="tv-counter" src="${counterArt()}" alt=""><span class="tv-gold"></span></div>
     <div class="tv-box"><div class="tv-name">${KEEPER.name}, the innkeeper</div><p class="tv-text"></p><div class="tv-opts"></div></div>`;
-  tavEl.hidden=false;music('tavern');
+  tavEl.hidden=false;ambience(null);music('tavern');
   tip('tavern','The tavern','Spend the gold you earn from fights: one drink, one meal and one hire per visit. Food lasts a few fights; drink boosts are permanent.');
   let text=pick(GREET);
   for(;;){
     const m=await tavShow(text,[['drink','Drinks at the bar',done.drink?'You’ve had your drink':'Ale, spirits and tea',done.drink],['food','Something to eat',done.food?'You’ve eaten':`Buffs for a few fights${(run.meals||[]).length?` · ${run.meals.length} active`:''}`,done.food],['hire','Anyone looking for work?',done.hire?'You’ve hired someone':`${hires.length} sellsword${hires.length===1?'':'s'} at the tables`,done.hire],/*['rumour','Heard any rumours?',''],*/['leave','Head back out','']]);
-    if(m==='leave'){tavEl.hidden=true;tavEl.onclick=null;music(B.id);return}
+    if(m==='leave'){tavEl.hidden=true;tavEl.onclick=null;regionSound(B.id);return}
     if(m==='rumour'){text=pick([`“They say ${B.boss.name||'a minotaur lord'} is waiting at the end of ${theN(B)}. ${B.tip[2]}”`,`“A traveller came through last week, white as milk. Said ${theN(B)} is no place for the unprepared. ${B.tip[2]}”`]);continue}
     if(m==='drink'){
       for(;;){const d=await tavShow('“Here’s what I’m pouring tonight.”',[...Object.entries(DRINKS).map(([k,x])=>[k,`<img class="tv-ic" src="${mugArt()}" alt="">${x.n} · ${x.p}g`,x.d+(bought.has(k)?' (sold out)':''),bought.has(k)||gold()<x.p]),['back','Back','']]);

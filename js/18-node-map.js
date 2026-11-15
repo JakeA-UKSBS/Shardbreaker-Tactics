@@ -595,8 +595,7 @@ async function restNode() {
 async function mapStep() {
   run.phase = "map";
   saveGame();
-  music(actBiome().id);
-  ambience(null);
+  regionSound(actBiome().id);
   const pos = await mapScreen(),
     N = run.map.rows[pos.r][pos.i];
   run.pos = pos;
