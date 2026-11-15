@@ -278,7 +278,6 @@ Recruited from recruit stops, the caged-traveller event and the tavern, alongsid
 | Aletta | Mender | Saint or Crusader | F |
 | Trent | Cavalier | Paladin or Warlord | M |
 | Holt | Crossbowman | Sniper or Artillery | M |
-| Sigrun | Drake Rider | – | F |
 | Kaya | Horse Archer | – | F |
 | Jun | Swordsman | Swordmaster | M |
 | Ash | Pyromancer | Pyrolord or Archmage | M |
@@ -319,16 +318,6 @@ A white-haired militia veteran who has held more walls than he can count. Patien
 - **Bolt Through** (pierce 2 at range 2 · CD 2): 1.2× Str to both tiles.
 - **Crippling Shot** (single, range 2–3 · CD 3): 0.8× Str and Slow.
 - **Overwatch** (self · CD 4): until his next turn, he shoots the first enemy that moves into his range.
-
-### Sigrun: Drake Rider
-![Sigrun](visuals/cast/sigrun.png)
-
-A drake-rider cadet who stole her own mount rather than let it be put down. Fierce, and closer to the drake than to anyone.
-- **Look:** dark leathers, crimson scarf and sash, braid, on a green drake.
-- **Passive: Wings.** Flies: ignores terrain and height when moving.
-- **Dive** (single, within 3 tiles · CD 3): flies to the target and strikes for 1.2× Str.
-- **Tail Sweep** (arc · CD 2): 0.8× Str and push 1.
-- **Drake Fire** (cone 3 · CD 4): 0.8× Str as fire damage, 30% chance to Burn.
 
 ### Kaya: Horse Archer
 ![Kaya](visuals/cast/kaya.png)

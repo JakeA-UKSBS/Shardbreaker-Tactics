@@ -12,7 +12,6 @@ Raptor	Adventurer	Hero	Tavern only	M	sword & shield, light armour, orange
 Aletta	Mender	Saint or Crusader	Found during run (tavern)	F	gown + shawl, green tints
 Trent	Cavalier	Paladin or Warlord	Found during run	M	armour with a green tint
 Holt	Crossbowman	Sniper or Artillery	Found during run	M	white hair, blue outfit
-Sigrun	Drake Rider	–	Found during run	F	dark leathers, braid, drake mount
 Kaya	Horse Archer	–	Found during run	F	white/purple hair, shortbow, leathers
 Jun	Swordsman	Swordmaster	Found during run (tavern)	M	blue Taoist robes
 Pepr	Poisoner	Assassin	Found during run	F	dark green outfit, green cloak, dirk
