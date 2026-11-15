@@ -97,6 +97,8 @@ const fileOf=s=>s.kind==='sfx'?(SFX_FILE[s.k]||[])[0]:s.kind==='amb'?AMB_NOW[s.k
 const exists={};/* path -> true/false once checked (a hidden <audio> tries to load it) */
 const dropped={};/* slot id -> {name, url, vol} */
 const id=s=>s.kind+':'+s.k;
+/* volume: what the game plays it at now (SFX_FILE volume, 0.35 for every ambience, 0.45 for music), or what you've set here */
+const vols={};const gameVol=s=>s.kind==='sfx'?(SFX_FILE[s.k]||[0,.6])[1]:s.kind==='amb'?.35:.45;const volOf=s=>vols[id(s)]??(dropped[id(s)]?dropped[id(s)].vol:gameVol(s));
 function status(s){if(dropped[id(s)])return['file','dropped'];const f=fileOf(s);if(f&&exists[f])return['file',f];if(s.kind==='sfx'&&SFX[s.k])return['synth','synth placeholder'];return['none',f&&exists[f]===undefined?'checking…':'—']}
 function check(path){if(!path||path in exists)return;exists[path]=undefined;const a=new Audio();a.preload='metadata';a.oncanplay=a.onloadedmetadata=()=>{if(exists[path]!==true){exists[path]=true;draw()}};a.onerror=()=>{exists[path]=false;draw()};a.src='../'+path}
 
@@ -104,7 +106,7 @@ function check(path){if(!path||path in exists)return;exists[path]=undefined;cons
 let now=null;/* the Audio playing (music/ambience can be stopped) */
 function play(s){
   if(now){now.pause();const was=now;now=null;if(was._id===id(s))return draw()}
-  const d=dropped[id(s)],f=fileOf(s),vol=d?d.vol:s.kind==='sfx'?(SFX_FILE[s.k]||[0,.6])[1]:s.kind==='amb'?.35:.45;
+  const d=dropped[id(s)],f=fileOf(s),vol=volOf(s);
   if(d||f&&exists[f]){const a=new Audio(d?d.url:'../'+f);a.volume=Math.min(1,vol*(s.kind==='sfx'?SFX_VOL:1));a._id=id(s);a.play().catch(()=>{});if(s.kind!=='sfx'){a.loop=true;now=a;draw()}return}
   if(s.kind==='sfx'&&SFX[s.k])SFX[s.k]();
 }
@@ -121,14 +123,14 @@ function draw(){
       return`<div class="slot" data-id="${id(s)}"><button class="play" data-p="${id(s)}" ${can?'':'disabled'}>${playing?'■':'▶'}</button>
         <div><span class="k">${s.k}</span><span class="tag t-${st}">${d?'dropped':st==='none'?'missing':st}</span>${s.hooked?'':'<span class="tag t-hook">not in game yet</span>'}<div class="w">${s.w}</div></div>
         <span class="src" title="${d?d.name:src}">${d?d.name:src}</span>
-        ${d?`<input type="range" min="0" max="1" step="0.05" value="${d.vol}" data-v="${id(s)}" title="Volume">`:'<span></span>'}</div>`}).join('');
+        ${st==='file'?`<input type="range" min="0" max="1" step="0.05" value="${volOf(s)}" data-v="${id(s)}" title="Volume ${volOf(s)}">`:'<span></span>'}</div>`}).join('');
   }
   document.getElementById('list').innerHTML=html;writeOut();
 }
 const slot=i=>S.find(s=>id(s)===i);
 document.getElementById('list').onclick=e=>{const b=e.target.closest('[data-p]');if(b)play(slot(b.dataset.p))};
-document.getElementById('list').oninput=e=>{const i=e.target.dataset.v;if(i&&dropped[i]){dropped[i].vol=+e.target.value;writeOut()}};
-document.getElementById('list').onchange=e=>{const i=e.target.dataset.v;if(i)play(slot(i))};
+document.getElementById('list').oninput=e=>{const i=e.target.dataset.v;if(!i)return;const v=+e.target.value;if(dropped[i])dropped[i].vol=v;else vols[i]=v;e.target.title='Volume '+v;if(now&&now._id===i)now.volume=Math.min(1,v*(i.startsWith('sfx:')?SFX_VOL:1));writeOut()};
+document.getElementById('list').onchange=e=>{const i=e.target.dataset.v;if(i&&i.startsWith('sfx:'))play(slot(i))};/* music/ambience: changes live while looping */
 
 /* ---- dropping files */
 const list=document.getElementById('list');
@@ -146,10 +148,11 @@ function writeOut(){
     else{const p=(s.kind==='amb'?'sfx/'+s.k+'-ambience':'sfx/'+s.k)+ext(d.name);save.push(`${d.name}  ->  ${p}`);
       if(s.kind==='amb')ambL.push(`${s.k}:'${p}',`);else sfxL.push(`${s.k}:['${p}',${d.vol}],`);
       if(!s.hooked)hook.push(`${s.k} (${s.w}): call ${s.kind==='amb'?`ambience('${s.k}')`:`sfx('${s.k}')`} where it happens`)}}
-  const out=!ds.length?'':[`Save these files:`,...save.map(x=>'  '+x),
+  const vc=S.filter(s=>!dropped[id(s)]&&vols[id(s)]!=null&&vols[id(s)]!==gameVol(s)),vL=vc.map(s=>s.kind==='sfx'?`js/05-sound.js SFX_FILE: ${s.k}:['${fileOf(s)}',${vols[id(s)]}],`:s.kind==='amb'?`${s.k} ambience at ${vols[id(s)]}: every ambience plays at 0.35 (amb.volume in ambience(), 16-maps-battles.js)`:`${s.k} music at ${vols[id(s)]}: all music plays at 0.45 (bgm.volume in music(), 16-maps-battles.js)`);
+  const out=!ds.length&&!vL.length?'':[ds.length?`Save these files:`:'',...save.map(x=>'  '+x),vL.length?`\nVolume changes:\n  ${vL.join('\n  ')}`:'',
     sfxL.length?`\njs/05-sound.js, add to SFX_FILE:\n  ${sfxL.join('\n  ')}`:'',
     ambL.length?`\njs/16-maps-battles.js, add to AMBIENCE:\n  ${ambL.join('\n  ')}`:'',
-    hook.length?`\nNot in the game yet, so they also need hooking up:\n  ${hook.join('\n  ')}`:''].filter(Boolean).join('\n');
+    hook.length?`\nNot in the game yet, so they also need hooking up:\n  ${hook.join('\n  ')}`:''].filter(Boolean).join('\n').trim();
   document.getElementById('out').value=out;document.getElementById('copy').disabled=!out;
 }
 document.getElementById('copy').onclick=()=>navigator.clipboard.writeText(document.getElementById('out').value).then(()=>{const b=document.getElementById('copy');b.textContent='Copied';setTimeout(()=>b.textContent='Copy',1200)});
