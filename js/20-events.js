@@ -1434,23 +1434,28 @@ Object.assign(EVENTS, {
 /* ==================================================================
    RUNNING AN EVENT
    ================================================================== */
-/* a sound as an event opens, for the events that have one */
+/* event sounds. 'snd' plays as the event opens; ['snd', i, ...] plays when option i is chosen (before its
+   result, so the chest creaks open before the gold or the trap), and ['snd', 'act'] on any option but the last (the walk-away one) */
 const EV_SFX = {
-  smith: 'anvil',
-  dwarf: 'anvil',
-  weaponmaster: 'anvil',
-  enchanter: 'book',
-  library: 'book',
-  gnome: 'book',
-  chest: 'chestopen',
-  cache: 'chestopen',
-  icecache: 'chestopen',
-  armoury: 'chestopen',
-  spring: 'pour',
-  witch: 'pour',
-  cage: 'lever',
+  smith: ['anvil', 0],
+  dwarf: ['anvil', 0],
+  weaponmaster: ['anvil', 0],
+  enchanter: ['book', 1, 2],
+  library: ['book', 0, 1],
+  gnome: ['book', 0],
+  chest: ['chestopen', 0],
+  cache: ['chestopen', 'act'],
+  icecache: ['chestopen', 0],
+  armoury: ['chestopen', 0, 1],
+  spring: ['pour', 0, 1],
+  witch: ['pour', 1],
+  cage: ['lever', 0],
   merchant: 'paper',
   tailor: 'paper'
+};
+const evSfxOn = (ek, i, n) => {
+  const e = EV_SFX[ek];
+  return Array.isArray(e) && (e.includes(i) || (e[1] === 'act' && i < n - 1)) ? e[0] : null;
 };
 async function eventNode() {
   /* act 3 only draws act-3 events; acts 1 and 2 never do */
@@ -1467,7 +1472,7 @@ async function eventNode() {
     opts = ((E.card = null), E.o || E.make());
   seen.push(ek);
   music(actBiome().id);
-  sfx(EV_SFX[ek]);
+  if (typeof EV_SFX[ek] === 'string') sfx(EV_SFX[ek]);
   for (;;) {
     const m = await evShow(
       E,
@@ -1483,6 +1488,7 @@ async function eventNode() {
         ];
       })
     );
+    sfx(evSfxOn(ek, +m, opts.length));
     const r = await opts[+m].go();
     evEl.hidden = false;
     if (r == null) continue;
