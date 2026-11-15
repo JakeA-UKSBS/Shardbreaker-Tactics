@@ -1,104 +1,277 @@
 /* Relics and their combat hooks */
 /* ---- relics: team passives for the rest of the run. r = rarity (c common, u uncommon, r rare); x = needs Old Relics ---- */
-const RELICS={
-  banner:{n:'Unbroken Banner',r:'c',d:'Units at full HP deal +2 damage.'},
-  whetstone:{n:'Whetstone',r:'c',d:'All units gain +10 Hit.'},
-  boots:{n:'Swift Boots',r:'c',d:'All units gain +1 Move.'},
-  salvebag:{n:'Herbalist’s Bag',r:'c',d:'Units heal 3 HP at the start of each of your turns.'},
-  shield:{n:'Tower Shield',r:'c',d:'Units next to an ally gain +2 Def and Res.'},
-  tome:{n:'Old Tome',r:'u',d:'Units gain 50% more EXP.'},
-  coin:{n:'Lucky Coin',r:'u',d:'All units gain +10 Crit.'},
-  fang:{n:'Vampire Fang',r:'u',d:'Units heal 5 HP when they defeat an enemy.'},
-  horn:{n:'War Horn',r:'u',d:'On turn 1 of each battle, units deal +3 damage.'},
-  phoenix:{n:'Phoenix Feather',r:'r',d:'Once per run, the first unit to fall survives with 10 HP.'},
-  crown:{n:'Slayer’s Crown',r:'r',d:'Units deal +4 damage to bosses and elite leaders.'},
-  lantern:{n:'Pathfinder’s Lantern',r:'r',d:'Tavern hires and the crossroads offer units 1 level higher.'},
-  quiver:{n:'Endless Quiver',r:'u',x:2,d:'Bows deal +3 damage.'},
-  focusgem:{n:'Focus Gem',r:'u',x:2,d:'Arts deal +2 damage and gain +10 Hit.'},
-  spurs:{n:'Golden Spurs',r:'u',x:4,d:'Mounted and flying units gain +1 Move and +10 Avoid.'},
-  bulwark:{n:'Iron Bulwark',r:'u',x:4,d:'Armoured units take 2 less damage.'},
-  anvil:{n:'Pocket Anvil',r:'r',x:6,d:'The Wandering Smith reforges twice.'},
-  mirror:{n:'Mirror Charm',r:'r',x:6,d:'Enemies get −10 Hit against your units.'},
-  ironrose:{n:'Iron Rose',r:'u',d:'Units below half HP take 3 less damage.'},
-  aventurine:{n:'Aventurine',r:'c',d:'All units gain +10 Avoid and +5 Crit.'},
-  trophies:{n:'Hunter’s Trophies',r:'u',d:'Effective hits deal 2 more damage.'},
-  bedroll:{n:'Traveller’s Bedroll',r:'c',d:'Training at a camp gives 60 EXP instead of 30.'},
-  kettle:{n:'Camp Kettle',r:'u',d:'At every camp, all units gain 10 EXP.'},
-  plenty:{n:'Horn of Plenty',r:'u',d:'+15 gold after every won fight, and tavern meals last 1 fight longer.'},
-  Cook_book:{n:'Cook Book',r:'c',d:'Tavern meals last 1 fight longer.'},
-  Tinted_glasses:{n:'Tinted Glasses',r:'c',d:'Blind lasts 1 turn less on your units.'},
-  Lucky_cat:{n:'Lucky Cat',r:'u',d:'All units gain +1 Lck.'},
-  /* ev: only from its event (the Empty Throne), never in the relic pools */
-  gemcrown:{n:'The Crystal Crown',r:'r',ev:1,d:'Units deal +3 damage, but the crystals call to monsters: enemies get +10 Hit against your units.'},
-  onyx:{n:'Black Onyx Shard',r:'u',ev:1,d:'Crystal creatures deal 1 less damage to your units.'},
-  ankh:{n:'Golden Ankh',r:'u',ev:1,d:'All units gain +1 Def.'},
-  gloves:{n:'Imbued Gloves',r:'r',ev:1,d:'All units gain +2 Res.'},
-  notes:{n:'Gnome’s Research Notes',r:'u',ev:1,d:'Units deal +2 damage to crystal creatures.'},
+const RELICS = {
+  banner: {
+    n: "Unbroken Banner",
+    r: "c",
+    d: "Units at full HP deal +2 damage.",
+  },
+  whetstone: { n: "Whetstone", r: "c", d: "All units gain +10 Hit." },
+  boots: { n: "Swift Boots", r: "c", d: "All units gain +1 Move." },
+  salvebag: {
+    n: "Herbalist’s Bag",
+    r: "c",
+    d: "Units heal 3 HP at the start of each of your turns.",
+  },
+  shield: {
+    n: "Tower Shield",
+    r: "c",
+    d: "Units next to an ally gain +2 Def and Res.",
+  },
+  tome: { n: "Old Tome", r: "u", d: "Units gain 50% more EXP." },
+  coin: { n: "Lucky Coin", r: "u", d: "All units gain +10 Crit." },
+  fang: {
+    n: "Vampire Fang",
+    r: "u",
+    d: "Units heal 5 HP when they defeat an enemy.",
+  },
+  horn: {
+    n: "War Horn",
+    r: "u",
+    d: "On turn 1 of each battle, units deal +3 damage.",
+  },
+  phoenix: {
+    n: "Phoenix Feather",
+    r: "r",
+    d: "Once per run, the first unit to fall survives with 10 HP.",
+  },
+  crown: {
+    n: "Slayer’s Crown",
+    r: "r",
+    d: "Units deal +4 damage to bosses and elite leaders.",
+  },
+  lantern: {
+    n: "Pathfinder’s Lantern",
+    r: "r",
+    d: "Tavern hires and the crossroads offer units 1 level higher.",
+  },
+  quiver: { n: "Endless Quiver", r: "u", x: 2, d: "Bows deal +3 damage." },
+  focusgem: {
+    n: "Focus Gem",
+    r: "u",
+    x: 2,
+    d: "Arts deal +2 damage and gain +10 Hit.",
+  },
+  spurs: {
+    n: "Golden Spurs",
+    r: "u",
+    x: 4,
+    d: "Mounted and flying units gain +1 Move and +10 Avoid.",
+  },
+  bulwark: {
+    n: "Iron Bulwark",
+    r: "u",
+    x: 4,
+    d: "Armoured units take 2 less damage.",
+  },
+  anvil: {
+    n: "Pocket Anvil",
+    r: "r",
+    x: 6,
+    d: "The Wandering Smith reforges twice.",
+  },
+  mirror: {
+    n: "Mirror Charm",
+    r: "r",
+    x: 6,
+    d: "Enemies get −10 Hit against your units.",
+  },
+  ironrose: {
+    n: "Iron Rose",
+    r: "u",
+    d: "Units below half HP take 3 less damage.",
+  },
+  aventurine: {
+    n: "Aventurine",
+    r: "c",
+    d: "All units gain +10 Avoid and +5 Crit.",
+  },
+  trophies: {
+    n: "Hunter’s Trophies",
+    r: "u",
+    d: "Effective hits deal 2 more damage.",
+  },
+  bedroll: {
+    n: "Traveller’s Bedroll",
+    r: "c",
+    d: "Training at a camp gives 60 EXP instead of 30.",
+  },
+  kettle: {
+    n: "Camp Kettle",
+    r: "u",
+    d: "At every camp, all units gain 10 EXP.",
+  },
+  plenty: {
+    n: "Horn of Plenty",
+    r: "u",
+    d: "+15 gold after every won fight, and tavern meals last 1 fight longer.",
+  },
+  Cook_book: { n: "Cook Book", r: "c", d: "Tavern meals last 1 fight longer." },
+  Tinted_glasses: {
+    n: "Tinted Glasses",
+    r: "c",
+    d: "Blind lasts 1 turn less on your units.",
+  },
+  Lucky_cat: { n: "Lucky Cat", r: "u", d: "All units gain +1 Lck." },
+  onyx: {
+    n: "Black Onyx Shard",
+    r: "u",
+    ev: 1,
+    d: "Crystal creatures deal 1 less damage to your units.",
+  },
+  ankh: { n: "Golden Ankh", r: "u", ev: 1, d: "All units gain +1 Def." },
+  gloves: { n: "Imbued Gloves", r: "r", ev: 1, d: "All units gain +2 Res." },
+  notes: {
+    n: "Gnome’s Research Notes",
+    r: "u",
+    ev: 1,
+    d: "Units deal +2 damage to crystal creatures.",
+  },
   /* starter relics: Ithren offers 3 of the r:'s' ones before you pick a squad; r:'h' ones join the Heirloom pick (unlocked by Field Hospital). Neither drops anywhere else */
-  poultice:{n:'Herbal Poultice',r:'s',d:'Salves heal 2 more HP.'},
-  satchel:{n:'Sage’s Satchel',r:'h',d:'Everyone in your starting squad carries an extra Salve.'},
-  waybread:{n:'Waybread',r:'h',d:'Units recover 3 HP after each fight.'},
-  purse:{n:'Coin Purse',r:'s',d:'Start the run with 30 more gold.'},
-  ward:{n:'Ithren’s Ward',r:'s',d:'All your units get +1 Res.'},
-  sprig:{n:'Sprig of Renewal',r:'s',d:'Every unit heals 1 HP at the start of each player phase.'}
+  poultice: { n: "Herbal Poultice", r: "s", d: "Salves heal 2 more HP." },
+  satchel: {
+    n: "Sage’s Satchel",
+    r: "h",
+    d: "Everyone in your starting squad carries an extra Salve.",
+  },
+  waybread: {
+    n: "Waybread",
+    r: "h",
+    d: "Units recover 3 HP after each fight.",
+  },
+  purse: { n: "Coin Purse", r: "s", d: "Start the run with 30 more gold." },
+  ward: { n: "Ithren’s Ward", r: "s", d: "All your units get +1 Res." },
+  sprig: {
+    n: "Sprig of Renewal",
+    r: "s",
+    d: "Every unit heals 1 HP at the start of each player phase.",
+  },
 };
 /* RC: relic gem colour per rarity (c common blue, u uncommon purple, r rare gold, s starter green, h heirloom bronze). RN: rarity names. */
-const RC={c:'#9fd8ff',u:'#c58aff',r:'#ffd23f',s:'#9fe8a0',h:'#e8b87a'},RN={c:'Common',u:'Uncommon',r:'Rare',s:'Starter',h:'Heirloom'};
-const salveAmt=k=>IT[k].amt+(R('poultice')?2:0);
-const R=id=>!!(run&&run.relics&&run.relics.includes(id));
+const RC = {
+    c: "#9fd8ff",
+    u: "#c58aff",
+    r: "#ffd23f",
+    s: "#9fe8a0",
+    h: "#e8b87a",
+  },
+  RN = { c: "Common", u: "Uncommon", r: "Rare", s: "Starter", h: "Heirloom" };
+const salveAmt = (k) => IT[k].amt + (R("poultice") ? 2 : 0);
+const R = (id) => !!(run && run.relics && run.relics.includes(id));
 /* a unit's Lck in a fight: the Lucky Cat gives your units +1 */
-const LK=u=>u.lck+(u.team==='p'&&R('Lucky_cat')?1:0);
+const LK = (u) => u.lck + (u.team === "p" && R("Lucky_cat") ? 1 : 0);
 /* gold dropped by defeated enemies: about 15g a battle (10g from Ascension 3), handed out over the kills, with
    whatever is left dropping from the last enemy. It goes to state.gold and is paid out with the win. */
-const GOLD_DROPS=()=>A(3)?10:15;
-function dropGold(){
-  if(state.goldLeft==null)state.goldLeft=GOLD_DROPS();if(state.goldLeft<=0)return;
-  const last=!state.units.some(u=>u.team==='e'&&u.hp>0&&!u.summon),g=last?state.goldLeft:rand()<.5?Math.min(state.goldLeft,ri(3,6)):0;if(!g)return;
-  state.goldLeft-=g;state.gold=(state.gold||0)+g;sfx('item');notify(`${g} gold dropped`,'Collected when the fight is won.',coinArt());
+const GOLD_DROPS = () => (A(3) ? 10 : 15);
+function dropGold() {
+  if (state.goldLeft == null) state.goldLeft = GOLD_DROPS();
+  if (state.goldLeft <= 0) return;
+  const last = !state.units.some(
+      (u) => u.team === "e" && u.hp > 0 && !u.summon,
+    ),
+    g = last
+      ? state.goldLeft
+      : rand() < 0.5
+        ? Math.min(state.goldLeft, ri(3, 6))
+        : 0;
+  if (!g) return;
+  state.goldLeft -= g;
+  state.gold = (state.gold || 0) + g;
+  sfx("item");
+  notify(`${g} gold dropped`, "Collected when the fight is won.", coinArt());
 }
-function relicPool(rs){return Object.keys(RELICS).filter(k=>!R(k)&&!RELICS[k].ev&&rs.includes(RELICS[k].r)&&relicOpen(k))}
-async function relicPick(n,rs,title,text,first){
+function relicPool(rs) {
+  return Object.keys(RELICS).filter(
+    (k) => !R(k) && !RELICS[k].ev && rs.includes(RELICS[k].r) && relicOpen(k),
+  );
+}
+async function relicPick(n, rs, title, text, first) {
   /* first: relics that are always offered (the Heirloom pick always has one heirloom relic) */
-  const opts=[...(first||[]).filter(Boolean),...shuffle(relicPool(rs))].slice(0,n);if(!opts.length)return null;
-  const m=await modal(`<div class="eyebrow">${rwTag('artifact')}</div><h2>${title}</h2>${text?`<p>${text}</p>`:''}<div class="inv big">${opts.map((k,i)=>`<button type="button" class="it" data-m="r${i}"><img src="${relicArt(k)}" alt=""><span><b>${RELICS[k].n}</b> · ${RELICS[k].d}</span><em>${RN[RELICS[k].r]}</em></button>`).join('')}</div>`);
-  const k=opts[+m.slice(1)];(run.relics=run.relics||[]).push(k);sfx('fanfare');toast(`${RELICS[k].n} obtained`);return k;
+  const opts = [
+    ...(first || []).filter(Boolean),
+    ...shuffle(relicPool(rs)),
+  ].slice(0, n);
+  if (!opts.length) return null;
+  const m = await modal(
+    `<div class="eyebrow">${rwTag("artifact")}</div><h2>${title}</h2>${text ? `<p>${text}</p>` : ""}<div class="inv big">${opts.map((k, i) => `<button type="button" class="it" data-m="r${i}"><img src="${relicArt(k)}" alt=""><span><b>${RELICS[k].n}</b> · ${RELICS[k].d}</span><em>${RN[RELICS[k].r]}</em></button>`).join("")}</div>`,
+  );
+  const k = opts[+m.slice(1)];
+  (run.relics = run.relics || []).push(k);
+  sfx("fanfare");
+  toast(`${RELICS[k].n} obtained`);
+  return k;
 }
 /* crystal creatures: enemies made of crystal or gem (for the Black Onyx Shard and the Gnome's notes) */
-const CRYS_CLS=['Shardling','Prism','CrystalSentinel','CrystalHeart','GemGolem','AmethystTurtle','PyriteColossus','AgateWyrm'],isCrys=u=>CRYS_CLS.includes(u.cls);
+const CRYS_CLS = [
+    "Shardling",
+    "Prism",
+    "CrystalSentinel",
+    "CrystalHeart",
+    "GemGolem",
+    "AmethystTurtle",
+    "PyriteColossus",
+    "AgateWyrm",
+  ],
+  isCrys = (u) => CRYS_CLS.includes(u.cls);
 /* combat hooks, called from calc(): only your units benefit */
-function relicCalc(x,xw,y){
-  const o={pow:0,df:0,acc:0,avo:0,crit:0};if(!run)return o;
+function relicCalc(x, xw, y) {
+  const o = { pow: 0, df: 0, acc: 0, avo: 0, crit: 0 };
+  if (!run) return o;
   /* early ease: in Act 1, enemies deal 2 less damage on floors 1-3 and 1 less on 4-6 */
-  if(x.team==='e'&&!A(3)&&(run.act||1)===1&&flScale(run.n)<7)o.pow-=2-Math.floor((flScale(run.n)-1)/3);
+  if (x.team === "e" && !A(3) && (run.act || 1) === 1 && flScale(run.n) < 7)
+    o.pow -= 2 - Math.floor((flScale(run.n) - 1) / 3);
   /* Ithren's Ward: +1 Res, which only matters against magic, so it's added to the defence there */
-  if(y.team==='p'&&xw.mag&&R('ward'))o.df+=1;
-  if(x.team==='p'){if(M('boar'))o.pow+=2;if(M('bread'))o.acc+=15}if(y.team==='p'&&M('pie'))o.df+=2;
-  if(!run.relics)return o;
-  if(x.team==='p'){
-    if(R('banner')&&x.hp===x.maxhp)o.pow+=2;
-    if(R('horn')&&state.turn===1)o.pow+=3;
-    if(R('crown')&&y.boss)o.pow+=4;
-    if(R('gemcrown'))o.pow+=3;
-    if(R('quiver')&&xw.t==='bow')o.pow+=3;
-    if(R('focusgem')&&xw.t==='art'){o.pow+=2;o.acc+=10}
-    if(R('whetstone'))o.acc+=10;
-    if(R('coin'))o.crit+=10;
-    if(R('aventurine'))o.crit+=5;
-    if(R('notes')&&isCrys(y))o.pow+=2;
-  }else{if(R('mirror'))o.acc-=10;if(R('gemcrown'))o.acc+=10}
-  if(y.team==='p'){
-    if(R('shield')&&state.units.some(a=>a!==y&&a.team==='p'&&a.hp>0&&man(a,y)===1))o.df+=2;
-    if(R('bulwark')&&CLS[y.cls].body==='armor')o.df+=2;
-    if(R('spurs')&&CLS[y.cls].mnt)o.avo+=10;
-    if(R('aventurine'))o.avo+=10;
-    if(R('ironrose')&&y.hp<y.maxhp/2)o.df+=3;
-    if(R('onyx')&&isCrys(x))o.df+=1;
-    if(R('ankh')&&!xw.mag)o.df+=1;
-    if(R('gloves')&&xw.mag)o.df+=2;
+  if (y.team === "p" && xw.mag && R("ward")) o.df += 1;
+  if (x.team === "p") {
+    if (M("boar")) o.pow += 2;
+    if (M("bread")) o.acc += 15;
+  }
+  if (y.team === "p" && M("pie")) o.df += 2;
+  if (!run.relics) return o;
+  if (x.team === "p") {
+    if (R("banner") && x.hp === x.maxhp) o.pow += 2;
+    if (R("horn") && state.turn === 1) o.pow += 3;
+    if (R("crown") && y.boss) o.pow += 4;
+    if (R("gemcrown")) o.pow += 3;
+    if (R("quiver") && xw.t === "bow") o.pow += 3;
+    if (R("focusgem") && xw.t === "art") {
+      o.pow += 2;
+      o.acc += 10;
+    }
+    if (R("whetstone")) o.acc += 10;
+    if (R("coin")) o.crit += 10;
+    if (R("aventurine")) o.crit += 5;
+    if (R("notes") && isCrys(y)) o.pow += 2;
+  } else {
+    if (R("mirror")) o.acc -= 10;
+    if (R("gemcrown")) o.acc += 10;
+  }
+  if (y.team === "p") {
+    if (
+      R("shield") &&
+      state.units.some(
+        (a) => a !== y && a.team === "p" && a.hp > 0 && man(a, y) === 1,
+      )
+    )
+      o.df += 2;
+    if (R("bulwark") && CLS[y.cls].body === "armor") o.df += 2;
+    if (R("spurs") && CLS[y.cls].mnt) o.avo += 10;
+    if (R("aventurine")) o.avo += 10;
+    if (R("ironrose") && y.hp < y.maxhp / 2) o.df += 3;
+    if (R("onyx") && isCrys(x)) o.df += 1;
+    if (R("ankh") && !xw.mag) o.df += 1;
+    if (R("gloves") && xw.mag) o.df += 2;
   }
   return o;
 }
-const relicMov=u=>u.team!=='p'?0:(R('boots')?1:0)+(R('spurs')&&CLS[u.cls].mnt?1:0)+(M('stew')?1:0);
+const relicMov = (u) =>
+  u.team !== "p"
+    ? 0
+    : (R("boots") ? 1 : 0) +
+      (R("spurs") && CLS[u.cls].mnt ? 1 : 0) +
+      (M("stew") ? 1 : 0);
 
 /* PNG art (art/<key>.png, see art() in 03-art.js) */
-function relicArt(k){return art('relics/'+k)}
+function relicArt(k) {
+  return art("relics/" + k);
+}
