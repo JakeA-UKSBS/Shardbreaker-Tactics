@@ -55,7 +55,6 @@ Object.assign(SKILLS,{
   gentleTouch:{n:'Gentle Touch',kit:1,d:'Allies she heals get +2 Def for a turn.'},
   charger:{n:'Charger',kit:1,d:'+2 damage when he attacks after moving 3 or more tiles.'},
   steadyAim:{n:'Steady Aim',kit:1,d:'+15 Hit and +5 Crit when he attacks without having moved this turn.'},
-  divingStrike:{n:'Diving Strike',kit:1,d:'+10 Crit against targets on lower ground.'},
   outrider:{n:'Outrider',kit:1,d:'+1 Move, and ignores zone of control.'},
   iaido:{n:'Iaido',kit:1,d:'+10 Crit on the first strike of a fight he starts.'},
   emberHeart:{n:'Ember Heart',kit:1,d:'His fire attacks have a 30% chance to Burn, and Burn he causes lasts 1 turn longer.'},
@@ -155,7 +154,7 @@ const KITS={
 };
 const kitOf=u=>u&&u.cast&&KITS[u.cast]||null;
 /* personal skills for characters without a kit (KITS passives cover the rest) */
-const PERSONAL={trent:'charger',holt:'steadyAim',sigrun:'divingStrike',kaya:'outrider',jun:'iaido',ash:'emberHeart',nyx:'execute',roark:'bloodRage',valen:'riposte',celest:'lightWard',seren:'kinship',zwei:'cleave',kyul:'malice'};
+const PERSONAL={trent:'charger',holt:'steadyAim',kaya:'outrider',jun:'iaido',ash:'emberHeart',nyx:'execute',roark:'bloodRage',valen:'riposte',celest:'lightWard',seren:'kinship',zwei:'cleave',kyul:'malice'};
 const abilOf=u=>{if(u&&u.team==='e'&&MKITS[u.cls])return MKITS[u.cls];const k=kitOf(u);if(!k)return[];const sw=k.asc&&k.asc[CLS[u.cls].n];return sw?k.abil.map(id=>sw[id]||id):k.abil};
 
 /* ---- monster moves: 2 per monster, cooldowns only (no MP). Extra fields: stone (Stone, bosses immune), psn (Poison),

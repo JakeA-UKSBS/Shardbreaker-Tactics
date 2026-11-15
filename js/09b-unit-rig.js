@@ -102,23 +102,16 @@ function hiArt(L,cls,team,wk,name,i,W){
   const limb=(a,b,col,t)=>p.line(Math.round(a[0]-(t>2?1:0)),Math.round(a[1]-(t>2?1:0)),Math.round(b[0]-(t>2?1:0)),Math.round(b[1]-(t>2?1:0)),col,t);
   const lift=fly?-3+(P.flap?1:0):0,hx=X0+P.bx,hy=Y0+P.by+lift+(seat?2:0),nx=hx+P.lean,ny=hy-17,head=[nx+1+P.tilt,ny-7],FT=Y0+22;
   /* ---- mount (behind the rider) ---- */
-  const mc=L.horse||'#7a5230',mc2=shade(mc,.72),mc3=shade(mc,1.18),wy=L.mount==='wyvern',peg=L.mount==='pegasus',mane=peg?'#e8e2d0':shade(mc,.45),bxH=X0+P.bx,byH=Y0+lift;
-  const wing=(far)=>{const up=P.flap?-4:0,base=[bxH-2,byH+3],col=far?shade(wy?shade(mc,.85):'#ffffff',.75):wy?shade(mc,.85):'#ffffff',edge=wy?shade(mc,.55):'#b9c4d6';
-    if(wy){const tip=[bxH-26,byH-24+up],m1=[bxH-16,byH-18+up],m2=[bxH-6,byH-22+up];p.poly([base,tip,[bxH-22,byH-8+up],m1,[bxH-11,byH-5],m2,[bxH+4,byH-3],[bxH+6,byH+4]],col);limb(base,tip,edge,1);limb(base,m1,edge,1);limb(base,m2,edge,1)}
-    else{for(let k=0;k<6;k++){const a=-158+k*13+(P.flap?-8:0),e=pt(...base,a,27-k*2);p.poly([base,e,pt(...base,a+11,22-k*2)],col);limb(pt(...base,a,5),e,edge,1)}}};
+  const mc=L.horse||'#7a5230',mc2=shade(mc,.72),mc3=shade(mc,1.18),peg=L.mount==='pegasus',mane=peg?'#e8e2d0':shade(mc,.45),bxH=X0+P.bx,byH=Y0+lift;
+  const wing=(far)=>{const up=P.flap?-4:0,base=[bxH-2,byH+3],col=far?shade('#ffffff',.75):'#ffffff',edge='#b9c4d6';
+    {for(let k=0;k<6;k++){const a=-158+k*13+(P.flap?-8:0),e=pt(...base,a,27-k*2);p.poly([base,e,pt(...base,a+11,22-k*2)],col);limb(pt(...base,a,5),e,edge,1)}}};
   if(fly)wing(true);
   if(seat){
     /* the mount moves with the pose: rears on the wind-up, gallops (legs stretched) on the strike, bobs its head at idle */
     const rearUp=/windup|critup/.test(name),gal=/swing|follow/.test(name),bob=name==='idle'&&P.flap?1:0;
     const leg=(x,dark,front)=>{const col=dark?mc2:mc,y0=byH+10,lift=(front&&rearUp?5:0)+(fly?3:0),dx=gal?(front?3:-3):front&&rearUp?3:0,f=[x+1+dx,FT-1-lift];
-      p.line(x+1,y0,Math.round(f[0]),Math.round(f[1])-2,col,3);p.rect(Math.round(f[0]),Math.round(f[1])-1,3,2,wy?shade(mc,.5):INK)};
-    if(wy){/* wyvern: long body, thick hind legs, tail, neck and horned head */
-      p.poly([[bxH-12,byH+4],[bxH-26,byH+10],[bxH-30,byH+16],[bxH-20,byH+12],[bxH-10,byH+10]],mc2);
-      p.ell(bxH+1,byH+6,15,6.5,mc);p.ell(bxH+1,byH+9,12,3,shade(mc,1.25));leg(bxH-6,true,false);leg(bxH+4,false,false);p.rect(bxH+3,byH+8,5,7,mc);
-      p.poly([[bxH+11,byH+3],[bxH+22,byH-12],[bxH+26,byH-10],[bxH+16,byH+6]],mc);p.ell(bxH+27,byH-13,6.5,4,mc);p.poly([[bxH+30,byH-15],[bxH+37,byH-12],[bxH+30,byH-9]],mc);
-      p.line(bxH+23,byH-16,bxH+19,byH-22,'#e8e2d0');p.line(bxH+26,byH-16,bxH+25,byH-23,'#e8e2d0');p.set(bxH+29,byH-14,'#ffd23f');
-      for(let k=0;k<4;k++)p.set(bxH+13+k*2,byH-2-k*3,mc3)}
-    else{/* horse or pegasus: long body under the rider, neck and head well forward */
+      p.line(x+1,y0,Math.round(f[0]),Math.round(f[1])-2,col,3);p.rect(Math.round(f[0]),Math.round(f[1])-1,3,2,INK)};
+    {/* horse or pegasus: long body under the rider, neck and head well forward */
       const B=bxH-1,Y=byH,hY=(rearUp?-3:gal?1:0)+bob;p.poly([[B-15,Y+2],[B-21,Y+8],[B-20,Y+16],[B-17,Y+16],[B-15,Y+8]],mane);
       leg(B-14,true,false);leg(B+9,true,true);p.ell(B,Y+6,17,7,mc);p.ell(B+12,Y+4,6,6,mc);p.line(B-12,Y,B+8,Y-1,mc3);p.line(B-10,Y+12,B+8,Y+12,mc2);leg(B-11,false,false);leg(B+13,false,true);
       p.poly([[B+12,Y+3],[B+18,Y-11+hY],[B+24,Y-12+hY],[B+21,Y+5]],mc);p.ell(B+25,Y-12+hY,6.5,4,mc);p.ell(B+30,Y-9+hY,3.4,3,mc);p.set(B+32,Y-9+hY,INK);

@@ -26,7 +26,6 @@ const CAST_CLASSES = {
   Adventurer: "shield.foot.blade.1",
   Cavalier: "tank.mounted.pole.1",
   Crossbowman: "skirm.foot.bow.1",
-  "Drake Rider": "bruiser.flying.pole.2",
   "Horse Archer": "skirm.mounted.bow.2",
   Swordsman: "sword.foot.blade.1",
   Pyromancer: "caster.foot.art.1",
@@ -85,10 +84,9 @@ const ASC_BONUS = {
   Swordmaster: [2, 3, 0, 3, 5, 1, 0, 1],
   Bard: [3, 0, 3, 2, 3, 1, 1, 2],
   "Grand Summoner": [4, 0, 5, 2, 2, 0, 2, 4],
-  /* classes that only ever join already advanced (Zwei, Kyul, Sigrun, Kaya) */
+  /* classes that only ever join already advanced (Zwei, Kyul, Kaya) */
   Mercenary: [4, 4, 0, 2, 2, 0, 2, 0],
   Warlock: [3, 0, 5, 1, 1, 0, 1, 3],
-  "Drake Rider": [5, 4, 0, 1, 2, 0, 3, 0],
   "Horse Archer": [3, 2, 0, 2, 4, 0, 1, 1],
 };
 /* BASE_ADJ: small per-class tweaks on top of the role's base stats, in stat order */
@@ -552,29 +550,6 @@ const CAST = [
         look: { bigBow: true, gear: "hood", capeC: "#2a3a5a" },
       },
       Artillery: { look: { metal: "#9aa8c0", capeC: "#2a3a5a", beard: true } },
-    },
-  },
-  {
-    id: "sigrun",
-    name: "Sigrun",
-    cls: "Drake Rider",
-    wk: "ironSpear",
-    joins: "run",
-    look: {
-      body: "tunic",
-      fem: true,
-      style: "tail",
-      hair: "#4a3a30",
-      skin: "#f6dcc4",
-      cloth: "#2a2630",
-      pants: "#3a2430",
-      sash: "#c8322e",
-      shawl: "#a8322e",
-      cape: true,
-      capeC: "#6a2a5a",
-      mount: "wyvern",
-      horse: "#4f8a4a",
-      eye: "#5a4a7a",
     },
   },
   {
