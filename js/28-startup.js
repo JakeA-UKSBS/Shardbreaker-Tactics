@@ -53,7 +53,22 @@ async function devMenu(){
     if(m==='win'){cancelMove();over='win';render();winScreen()}
     return}
 }
+/* map preview for tools/map-editor.html: it shows index.html?preview in an iframe and posts {map,h,start,biome}.
+   The map is drawn exactly as in a battle (no units), deploy tiles highlighted; the camera stays put between edits */
+function previewMode(){
+  document.body.classList.add('preview');let first=true;
+  /* fit the whole map (the game's initCam zooms in on small screens and centres on a unit) */
+  initCam=()=>{cam.s=fitS();centerOn((MW-1)/2,(MH-1)/2,false)};renderPanel=()=>{};/* no side panel */
+  addEventListener('message',e=>{const d=e.data;if(!d||!d.map)return;
+    run={seed:1,n:1,uid:1,roster:[],act:d.biome==='heart'?3:1,asc:0,relics:[],rr:{},biomes:[d.biome,d.biome],gold:0,meals:[]};
+    BATTLE={biome:d.biome,goal:'rout',map:d.map,h:d.h,start:d.start||[],foes:()=>[]};
+    const keep={...cam};setMap();state={turn:1,units:[]};phase='player';clearSel();
+    /* deploy tiles shown like a move range */moveSet=new Set(BATTLE.start.map(([x,y])=>key(x,y)));fringe=new Set();ui='move';buildBoard();render();
+    if(first){initCam();first=false}else{Object.assign(cam,keep);applyCam(false)}});
+  parent.postMessage({previewReady:1},'*');
+}
 function start(data){
+  if(/[?&]preview\b/.test(location.search)){applyTheme();previewMode();return}
   loadProf();
   try{const o=JSON.parse(localStorage.getItem(OPTS));if(o){settings=Object.assign(settings,o);if(!settings.tipsV2){settings.tips=false;settings.tipsV2=1;saveOpts()}}}catch(_){}
   applyTheme();
