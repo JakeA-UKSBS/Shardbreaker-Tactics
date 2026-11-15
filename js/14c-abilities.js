@@ -283,7 +283,8 @@ function pushUnit(u,t,n){
 async function useAbility(u,id,tx,ty){
   const a=ABIL[id];busy=true;
   if(a.mp){u.mp-=abCost(u,id);if(a.el)u.lastEl=a.el}if(a.cd)(u.cd=u.cd||{})[id]=a.cd;if(a.once)(u.cd=u.cd||{})[id]=99;
-  pop(u,a.n,'heal');await sleep(D(350));
+  const anim=!u.cast&&!(u.sz>1)&&MON_SHEET[u.cls]&&MON_SHEET[u.cls].abil&&MON_SHEET[u.cls].abil[id];/* e.g. the Frost Wolf's howl */
+  pop(u,a.n,'heal');if(anim)await sheetPlay(u,anim);else await sleep(D(350));
   if(a.wall){(state.ice=state.ice||{});for(const[x,y]of shapeTiles(u,id,tx,ty))if(!unitAt(x,y)&&ter(x,y).c<99)state.ice[key(x,y)]=a.wall;sfx('ice');render();await sleep(D(250))}
   else if(a.side==='tile'){stepSfx(u,tx,ty);u.x=tx;u.y=ty;render();await sleep(D(250));sfx('earth');shake()}
   /* Charge: run up next to the target first (the free tile beside it nearest the charger) */
