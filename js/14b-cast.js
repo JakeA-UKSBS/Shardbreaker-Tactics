@@ -97,7 +97,6 @@ const CAST_HIT = { kili: 5 };
 const BASE_ADJ = {
   Knight: [3, 0, 0, 0, 0, 0, -2, 0],
   Mender: [0, 0, 0, 0, 0, 0, 1, 0],
-  Shieldmaiden: [0, 0, 0, 0, 0, 0, -1, 0],
 };
 const castCls = (n) => `G.${CAST_CLASSES[n]}.${n.replace(/ /g, "")}`;
 for (const n in CAST_CLASSES) {

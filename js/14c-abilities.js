@@ -48,7 +48,7 @@ Object.assign(SKILLS,{
   plate:{n:'Plate',kit:1,d:'Physical hits deal 2 less damage to him; −1 Jump.'},
   lastLight:{n:'Last Light',kit:1,d:'Her heals restore 50% more on allies below half HP.'},
   slippery:{n:'Slippery',kit:1,d:'Can move through enemy tiles, and can’t be Rooted.'},
-  bulwarkAura:{n:'Bulwark',kit:1,d:'Allies next to her take 30% less damage from ranged attacks.'},
+  heroic:{n:'Heroic',kit:1,d:'+2 damage while next to an ally.'},
   beginnersLuck:{n:'Beginner’s Luck',kit:1,d:'+10 Crit and +10 Avoid while at full HP.'},
   audience:{n:'Audience',kit:1,d:'Allies within 2 tiles of him get +10 Hit.'},
   coldSnap:{n:'Cold Snap',kit:1,d:'His ice sigil attacks also Slow the target.'},
@@ -148,7 +148,7 @@ const KITS={
   aletta:{passive:'gentleTouch',mp:12,abil:['purify']},
   pepr:{passive:'venom',mp:0,abil:['poisonDart','noxiousCloud','tumble']},
   rook:{passive:'slippery',mp:0,abil:['backstab','smokeBomb','tumble']},
-  rhyn:{passive:'bulwarkAura',mp:0,abil:['shieldBash','challenge','holdTheLine']},
+  rhyn:{passive:'heroic',mp:0,abil:['shieldBash','challenge','holdTheLine']},
   raptor:{passive:'beginnersLuck',mp:0,abil:['rally','cleanCut','shieldUp']},
   lysander:{passive:'audience',mp:24,abil:['songOfValour','lullaby','soothingBallad','encore'],
     asc:{'Bard':{songOfValour:'anthem',lullaby:'grandLullaby',soothingBallad:'soothingHymn'}}}/* as a Bard: stronger songs, shorter waits */
@@ -220,7 +220,6 @@ function abBlock(u,id){const a=ABIL[id],cd=(u.cd||{})[id]||0;if(a.once&&cd>0)ret
 /* br (optional): collects [label, multiplier] for the dev-mode breakdown */
 function dmgMods(x,y,ctx,dmg,br){
   let m=1;const f=(l,v)=>{m*=v;if(br)br.push([l,v])};if(hasSt(x,'weak'))f('Weak',.7);if(hasSt(x,'anthem'))f('Anthem',1.3);else if(hasSt(x,'valour'))f('Valour',1.2);if(hasSt(y,'guard'))f('Target on Guard',.7);if(hasSt(x,'shieldUp')&&ctx&&ctx.init!==x)f('Shield Up counter',1.3);
-  if(man(x,y)>1&&state.units.some(o=>o!==y&&o.hp>0&&o.team===y.team&&man(o,y)===1&&has(o,'bulwarkAura')))f('Bulwark aura vs ranged',.7);
   return Math.max(0,Math.round(dmg*m));
 }
 /* Pow/Def/Hit/Avoid/Crit changes from statuses and passives, added inside calc() */

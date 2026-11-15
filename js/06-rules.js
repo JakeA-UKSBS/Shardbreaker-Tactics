@@ -66,6 +66,7 @@ function calc(x,xw,y,yw,ctx){
   if(has(x,'execute')&&y.hp*2<=y.maxhp)pow+=add(bp,'Execute',4);
   if(has(x,'bloodRage')&&!xw.mag&&x.hp*2<=x.maxhp)pow+=add(bp,'Blood Rage',3);
   if(has(x,'riposte')&&ctx.init&&ctx.init!==x)pow+=add(bp,'Riposte',3);
+  if(has(x,'heroic')&&state.units.some(o=>o!==x&&o.team===x.team&&o.hp>0&&man(o,x)===1))pow+=add(bp,'Heroic',2);
   const yf=!!CLS[y.cls].fly;let df=add(bd,xw.mag?'Res':'Def',xw.mag?y.res:y.def)+add(bd,xw.mag?'Gear Res':'Gear Def',xw.mag?gy.res:gy.def)+add(bd,t.n||'Terrain',yf?0:t.df)+add(bd,'Relics, meals',RB.df)+add(bd,'Statuses, passives',SB.df);if(has(y,'steadfast')&&ctx.phase==='enemy'&&ctx.init!==y)df+=add(bd,'Steadfast',4);
   if(state.units.some(o=>o!==y&&o.team===y.team&&o.hp>0&&man(o,y)===1&&has(o,'guardian')))df+=add(bd,'Guardian ally',2);if(xw.mag&&state.units.some(o=>o!==y&&o.team===y.team&&o.hp>0&&man(o,y)===1&&has(o,'lightWard')))df+=add(bd,'Light Ward ally',2);
   if(has(y,'kinship')&&state.units.some(o=>o.summon&&o.owner===y.id&&o.hp>0&&man(o,y)===1))df+=add(bd,'Kinship',2);

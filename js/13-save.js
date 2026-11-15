@@ -6,6 +6,7 @@ const SAVES_ON=false;
 function saveGame(){if(!SAVES_ON||!run)return;const map=run.phase==='map';try{localStorage.setItem(SAVE,JSON.stringify({state:map?null:state,chStart:map?null:chStart,run,def:map?null:BATTLE,rng:rngS}))}catch(_){}}
 /* dropGone: strips skills and items that no longer exist (e.g. Pierce and Lifetaker, and their scrolls) from a save, so older runs still load */
 function dropGone(o){if(!o||typeof o!=='object')return;
+  if(o.skill==='bulwarkAura')o.skill='heroic';/* Rhyn's old personal skill (Nov 2026) */
   if(Array.isArray(o.skills))o.skills=o.skills.filter(x=>!x||!x.id||SKILLS[x.id]);
   if(Array.isArray(o.items))o.items=o.items.filter(i=>!i||!i.k||IT[i.k]);
   if(Array.isArray(o.relics))o.relics=o.relics.filter(k=>RELICS[k]);
