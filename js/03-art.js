@@ -41,10 +41,13 @@ function artLeft(src){src=String(src);const o=sheetOf(src);if(o)return!!o.s.left
    on the body), and flipped by the artl class if drawn facing left (left:true). It loads like any other PNG, works opened
    straight from disk, and needs no plain <Class>.png: when a hand-drawn sheet arrives, delete the old PNGs and their manifest
    lines. Frame 0 is idle; an attack plays windup -> swing (the hit) -> follow (any left out stay on the idle frame).
-   abil: {abilityId: [frames]} plays those frames when the monster uses that ability. Shown 48px tall (the width follows). */
+   abil: {abilityId: [frames]} plays those frames when the monster uses that ability. st: {status: frame} shows that frame for
+   every pose while the unit has the status (the turtle stays in her spiked shell after Hunker Down).
+   Shown 48px tall per tile of size (bosses 96px), the width follows. */
 const MON_SHEET={HellHound:{n:6,fw:120,fh:64,x0:20,w:100,left:true,windup:[1,2],swing:3,follow:[4,5]},
   Wolf:{n:5,fw:100,fh:64,x0:0,w:100,left:true,windup:[1,2],swing:3,follow:[4]},
-  FrostWolf:{n:4,fw:100,fh:64,x0:0,w:92,left:true,abil:{howl:[1,2,3]}}};
+  FrostWolf:{n:4,fw:100,fh:64,x0:0,w:92,left:true,abil:{howl:[1,2,3]}},
+  AmethystTurtle:{n:4,fw:128,fh:128,x0:0,w:128,left:true,swing:1,abil:{hunkerDown:[2,3]},st:{shell:3}}};
 const BLANK='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 /* sprite()/portrait() hand back 'sheet:<Class>:<frame>' for these; sheetOf reads it back */
 const sheetOf=src=>{const m=/^sheet:(\w+):(\d+)$/.exec(src||'');return m&&MON_SHEET[m[1]]?{cls:m[1],i:+m[2],s:MON_SHEET[m[1]]}:null};
@@ -54,10 +57,10 @@ function sheetBg(src,h,bw){const o=sheetOf(src),s=o.s,k=h/s.fh,w=s.w*k,dx=bw==nu
 const SHEET_PROPS=['background-image','background-repeat','background-size','background-position'];
 /* put src on a map sprite img: a sheet frame (sized 48px tall, centred on the tile) or, for anything else, clear that styling.
    Returns true if it was a sheet frame (the caller then leaves img.src alone) */
-function sheetFit(img,src){const o=sheetOf(src);
-  if(o){if(img.getAttribute('src')!==BLANK)img.src=BLANK;img.dataset.s=src;const w=o.s.w*48/o.s.fh,bg=sheetBg(src,48);for(const k in bg)img.style.setProperty(k,bg[k]);
-    img.style.setProperty('width',w+'px','important');img.style.marginLeft=(48-w)/2+'px';img.style.maxWidth='none';img.style.transformOrigin='50% 50%';img.classList.toggle('artl',!!o.s.left);return true}
-  if(img.style.backgroundImage){SHEET_PROPS.forEach(k=>img.style.removeProperty(k));img.style.removeProperty('width');img.style.marginLeft='';img.style.maxWidth=''}return false}
+function sheetFit(img,src,sz){const o=sheetOf(src),H=48*(sz||1);
+  if(o){if(img.getAttribute('src')!==BLANK)img.src=BLANK;img.dataset.s=src;const w=o.s.w*H/o.s.fh,bg=sheetBg(src,H);for(const k in bg)img.style.setProperty(k,bg[k]);
+    img.style.setProperty('width',w+'px','important');img.style.setProperty('height',H+'px','important');img.style.marginLeft=(H-w)/2+'px';img.style.maxWidth='none';img.style.transformOrigin='50% 50%';img.classList.toggle('artl',!!o.s.left);return true}
+  if(img.style.backgroundImage){SHEET_PROPS.forEach(k=>img.style.removeProperty(k));img.style.removeProperty('width');img.style.removeProperty('height');img.style.marginLeft='';img.style.maxWidth=''}return false}
 /* an <img>'s attributes for a portrait box h px square: a plain src, or a blank src with the sheet frame as its background */
 function picAttrs(src,h){if(!sheetOf(src))return`src="${src}"`;const o=sheetOf(src),bg=sheetBg(src,h,h);
   return`src="${BLANK}" style="${Object.entries(bg).map(([k,v])=>k+':'+v).join(';')}${o.s.left?';transform:scaleX(-1)':''}"`}
@@ -65,7 +68,9 @@ function monPng(cls,pose,sz){const b=sz>=2&&(BOSS_PNG[cls]||BOSS_PNG[CLS[cls].bo
   if(!b&&MON_SHEET[cls])return`sheet:${cls}:${pose==='strike'?MON_SHEET[cls].swing:0}`;
   return'art/'+k+(pose==='strike'&&ART_PNG.has(k+'-strike')?'-strike':'')+'.png'}
 function mapWk(u){const i=u.items.findIndex(it=>WTYPES.includes(IT[it.k].t)||IT[it.k].t==='spirit');return i>=0?u.items[i].k:null}
-function sprite(u,pose){return u.cast?castPng(u,pose==='strike'?'swing':'idle'):monPng(u.cls,pose,u.sz)}
+/* a sheet frame for unit u: its status frame (MON_SHEET st) if it has one of those statuses, else frame f */
+function sheetFrame(u,f){const st=MON_SHEET[u.cls]&&MON_SHEET[u.cls].st;if(st)for(const k in st)if(hasSt(u,k))return st[k];return f}
+function sprite(u,pose){if(!u.cast&&MON_SHEET[u.cls])return`sheet:${u.cls}:${sheetFrame(u,pose==='strike'?MON_SHEET[u.cls].swing??0:0)}`;return u.cast?castPng(u,pose==='strike'?'swing':'idle'):monPng(u.cls,pose,u.sz)}
 /* cast members use their idle PNG (hand-drawn, like Vaar, or exported from the rig) so portraits match the map sprite */
 function portrait(u){if(u.pic&&PICS[u.pic])return PICS[u.pic];return u.cast?castPng(u,'idle'):monPng(u.cls,'idle',u.sz)}
 const icon=k=>iconArt(k);

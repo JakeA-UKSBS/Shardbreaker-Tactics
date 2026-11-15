@@ -64,7 +64,7 @@ Object.assign(BIOMES,{
   cavern:{n:'Gemstone Caverns',bg:'#2a2436',town:['c','e'],townN:'Miners’ Camp',d:'Caves glittering with emerald, ruby and sapphire, and golems made of the gems themselves.',
     tip:['cavern','Gem clusters','Gem clusters give +10 Avoid and +2 Def. The cave walls can’t be crossed.'],
     maps:['geode','mineshaft','glitter'],bossMap:'amethystHollow',pool:[['GemGolem',1]],elitePool:[['GemGolem',1]],
-    boss:{name:'Amethyra, the Amethyst Turtle',cls:'AmethystTurtle',s:[46,11,8,5,2,3,14,11],items:['slam','crystalShards'],skill:'steadfast',look:{body:'#6a7a5a',shell:'#4a3a5a',gem:'#b07ae8',crys:false}}}
+    boss:{name:'Amethyra, the Amethyst Turtle',cls:'AmethystTurtle',s:[46,11,8,5,2,3,14,11],items:['slam','crystalShards'],skill:'steadfast'}}
 });
 Object.assign(BIOMES.swamp,{town:['n','v'],townN:'Stilt Village'});Object.assign(BIOMES.forest,{town:['.','f'],townN:'Woodcutters’ Hamlet'});Object.assign(BIOMES.mountain,{town:['b','m'],townN:'Smelters’ Camp'});
 for(const k in BIOMES)BIOMES[k].id=k;
