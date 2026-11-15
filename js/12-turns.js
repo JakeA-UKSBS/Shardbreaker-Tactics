@@ -116,7 +116,7 @@ async function act(a){
   if(a==='wait'){commit();finishAction();return}
   if(a==='summon'){if(!canSummon(u))return;const still=stillAt(u);commit();doSummon(u);afterAct(u,still);return}
   if(a==='use'){const still=stillAt(u);commit();const it=u.items[itemSel],amt=Math.min(salveAmt(it.k),u.maxhp-u.hp);u.hp+=amt;it.u--;if(it.u<=0)u.items.splice(itemSel,1);pop(u,'+'+amt,'heal');if(u.psn){u.psn=0;pop(u,'Cured','heal')}afterAct(u,still);return}
-  if(a==='doheal'){const still=stillAt(u);commit();const t=pending,si=spiritFor(u,t),w=IT[u.items[si].k],amt=Math.min(w.amt,t.maxhp-t.hp);t.hp+=amt;if(!endless(u.items[si].k)){u.items[si].u--;if(u.items[si].u<=0){toast(w.n+' shattered');u.items.splice(si,1)}}pop(t,'+'+amt,'heal');sfx('heal');clearSel();ui='idle';busy=true;render();
+  if(a==='doheal'){const still=stillAt(u);commit();const t=pending,si=spiritFor(u,t),w=IT[u.items[si].k],amt=Math.min(w.amt,t.maxhp-t.hp);t.hp+=amt;if(!endless(u.items[si].k)){u.items[si].u--;if(u.items[si].u<=0){toast(w.n+' shattered');u.items.splice(si,1)}}pop(t,'+'+amt,'heal');if(has(u,'gentleTouch'))addSt(t,'tended',1,u);sfx('heal');clearSel();ui='idle';busy=true;render();
     const g=gainExp(u,Math.round(15*EXP_RATE));await showExp(u,g);if(g&&g.gains)await levelUp(u,g);busy=false;afterAct(u,still);return}
   if(a==='attack-go'){const still=stillAt(u);commit();const t=pending,it=u.items.splice(pendW,1)[0];u.items.unshift(it);clearSel();ui='idle';await fight(u,0,t);if(still&&u.acted){afterAct(u,still);return}saveGame();promptEnd();return}
 }
@@ -133,6 +133,7 @@ async function fight(a,ai,d){
   for(const[u,i,n]of[[a,ai,res.used.a],[d,res.f.di,res.used.d]]){if(i<0||!n)continue;const it=u.items[i];if(endless(it.k))continue;it.u-=n;if(it.u<=0){u.items.splice(i,1);sfx('broke');toast(`${u.name}'s ${IT[it.k].n} shattered`)}}
   const p=a.team==='p'?a:d.team==='p'?d:null,o=p===a?d:a;
   for(const e of res.ev)if(e.psn){const t=e.by==='a'?d:a;if(t.team==='p'&&M('soup'))continue;if(t.hp>0){t.psn=3;sfx('poison');pop(t,'Poisoned','crit')}}
+  for(const e of res.ev)if(e.sts){const t=e.by==='a'?d:a,by=e.by==='a'?a:d;if(t.hp>0)for(const[k,n]of e.sts){if(stImmune(t,k))continue;addSt(t,k,n,by);pop(t,STATUS[k].n,'crit')}}
   for(const e of res.ev)if(e.stone){const t=e.by==='a'?d:a;if(t.hp>0&&!stImmune(t,'stone')){t.stone=1;pop(t,'Stone!','crit');sfx('earth');toast(`${t.name} is turned to stone and loses ${t.team==='p'?'their':'its'} next turn`)}}
   /* a summon's EXP goes to the unit that summoned it */
   const ep=p&&p.summon?state.units.find(x=>x.id===p.owner&&x.hp>0):p;
@@ -142,6 +143,8 @@ async function fight(a,ai,d){
     for(const it of o.items.filter(i=>i.d)){(state.loot=state.loot||[]).push(it.k);sfx('item');notify(`${IT[it.k].n} dropped`,'Added to the spoils: choose who takes it after the fight.',icon(it.k))}
   if(p&&o.hp<=0&&p.hp>0&&o.team==='e'&&!o.summon)dropGold();
   if(a.hp>0&&d.hp<=0&&a.team==='p'&&phase==='player'&&has(a,'momentum')&&a.gf!==state.turn){a.gf=state.turn;a.acted=false;pop(a,'Momentum!','heal')}
+  /* Cleave: enemies next to his target take 3 damage (never lethal) */
+  if(a.hp>0&&has(a,'cleave'))for(const o of state.units)if(o!==d&&o.hp>1&&hostile(o,a)&&man(o,d)===1){const h=Math.min(3,o.hp-1);o.hp-=h;pop(o,'-'+h,'crit')}
   if(a.hp>0&&has(a,'hitAndRun')&&man(a,d)===1){let best=null,bd=-1;for(const[dx,dy]of DIRS){const x=a.x+dx,y=a.y+dy;if(x<0||y<0||x>=MW||y>=MH||unitAt(x,y)||mcost(a,x,y)>=99||!canStep(a,a.x,a.y,x,y))continue;
     const dd=Math.min(99,...state.units.filter(o=>hostile(o,a)&&o.hp>0).map(o=>man(o,{x,y})));if(dd>bd){bd=dd;best={x,y}}}if(best&&bd>1){a.x=best.x;a.y=best.y}}
   render();if(a.hp<=0||d.hp<=0)await sleep(380);

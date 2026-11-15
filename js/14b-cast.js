@@ -1001,7 +1001,7 @@ function castUnit(id, lv) {
     team: "p",
     lv: 1,
     exp: 0,
-    skill: (KITS[id] && KITS[id].passive) || pick(R.skills),
+    skill: (KITS[id] && KITS[id].passive) || PERSONAL[id] || pick(R.skills),
     skills: [],
     look: clone(c.look),
     g,

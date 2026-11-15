@@ -27,12 +27,13 @@ const STATUS={
   shieldUp:{n:'Shield Up',tick:'start',d:'Counterattacks deal 1.3×.'},
   valour:{n:'Valour',tick:'start',d:'Deals 20% more damage.'},
   anthem:{n:'Anthem',tick:'start',d:'Deals 30% more damage and +10 Hit.'},
-  iceShield:{n:'Ice Shield',tick:'start',d:'+3 Def.'}
+  iceShield:{n:'Ice Shield',tick:'start',d:'+3 Def.'},
+  tended:{n:'Tended',tick:'start',d:'+2 Def.'}
 };
 const hasSt=(u,k)=>!!(u&&u.st&&u.st[k]&&u.st[k].n>0);
 /* status immunities: Rook (Slippery) can't be Rooted; an Aegis can't be turned to Stone (nor can bosses) */
 function stImmune(u,k){if(!u)return false;if(k==='root'&&has(u,'slippery'))return true;if(k==='stone')return!!u.boss||CLS[u.cls]&&CLS[u.cls].n==='Aegis';return false}
-function addSt(u,k,n,by){if(stImmune(u,k))return;if(k==='blind'&&u.team==='p'&&R('Tinted_glasses')&&--n<=0)return;if(!u.st)u.st={};const o=u.st[k];u.st[k]={n:Math.max(n,o?o.n:0),by:by?by.id:(o&&o.by)};if(k==='stun'&&u.team==='p')u.acted=true}
+function addSt(u,k,n,by){if(stImmune(u,k))return;if(by&&STATUS[k]&&STATUS[k].bad&&(has(by,'malice')||k==='burn'&&has(by,'emberHeart')))n++;if(k==='blind'&&u.team==='p'&&R('Tinted_glasses')&&--n<=0)return;if(!u.st)u.st={};const o=u.st[k];u.st[k]={n:Math.max(n,o?o.n:0),by:by?by.id:(o&&o.by)};if(k==='stun'&&u.team==='p')u.acted=true}
 function tickSt(team,when){for(const u of state.units)if(u.team===team&&u.st){for(const k in u.st)if(STATUS[k]&&STATUS[k].tick===when){u.st[k].n--;if(u.st[k].n<=0)delete u.st[k]}}}
 /* at the start of a team's phase: burns hurt (but don't kill), water puts them out */
 function burnTick(team){for(const u of state.units)if(u.team===team&&hasSt(u,'burn')&&u.hp>0){if(['water','shallow'].includes(ter(u.x,u.y).k)){delete u.st.burn;pop(u,'Doused','heal');continue}const d=Math.min(2,u.hp-1);if(d>0){u.hp-=d;pop(u,'Burn -'+d,'crit')}}}
@@ -50,6 +51,21 @@ Object.assign(SKILLS,{
   bulwarkAura:{n:'Bulwark',kit:1,d:'Allies next to her take 30% less damage from ranged attacks.'},
   beginnersLuck:{n:'Beginner’s Luck',kit:1,d:'+10 Crit and +10 Avoid while at full HP.'},
   audience:{n:'Audience',kit:1,d:'Allies within 2 tiles of him get +10 Hit.'},
+  coldSnap:{n:'Cold Snap',kit:1,d:'His ice sigil attacks also Slow the target.'},
+  gentleTouch:{n:'Gentle Touch',kit:1,d:'Allies she heals get +2 Def for a turn.'},
+  charger:{n:'Charger',kit:1,d:'+2 damage when he attacks after moving 3 or more tiles.'},
+  steadyAim:{n:'Steady Aim',kit:1,d:'+15 Hit and +5 Crit when he attacks without having moved this turn.'},
+  divingStrike:{n:'Diving Strike',kit:1,d:'+10 Crit against targets on lower ground.'},
+  outrider:{n:'Outrider',kit:1,d:'+1 Move, and ignores zone of control.'},
+  iaido:{n:'Iaido',kit:1,d:'+10 Crit on the first strike of a fight he starts.'},
+  emberHeart:{n:'Ember Heart',kit:1,d:'His fire attacks have a 30% chance to Burn, and Burn he causes lasts 1 turn longer.'},
+  execute:{n:'Execute',kit:1,d:'+4 damage to enemies at half HP or less.'},
+  bloodRage:{n:'Blood Rage',kit:1,d:'+3 Str while at half HP or less.'},
+  riposte:{n:'Riposte',kit:1,d:'+3 damage on his counterattacks.'},
+  lightWard:{n:'Light Ward',kit:1,d:'Allies next to her take 2 less magic damage.'},
+  kinship:{n:'Kinship',kit:1,d:'+2 Def and Res while next to her familiar.'},
+  cleave:{n:'Cleave',kit:1,d:'When he attacks, enemies next to his target take 3 damage (it can’t finish them off).'},
+  malice:{n:'Malice',kit:1,d:'His dark magic hits make the target Weak for a turn, and debuffs he lands last 1 turn longer.'},
   twinBolt:{n:'Lightning Strikes Twice',kit:1,d:'With a lightning sigil: +3 Spd when checking for a double attack, but his second strike deals 0.8× damage.'}
 });
 
@@ -125,11 +141,11 @@ const KITS={
   kili:{passive:'eagleEye',mp:0,abil:['aimedShot','pinningArrow','volley']},
   vaar:{passive:'ironBody',mp:0,abil:['palmStrike','flurry','leap']},
   morrigan:{passive:'siphon',mp:24,abil:['drainTouch','hex','darkPulse']},
-  corvin:{mp:28,abil:['iceShard','frostWave','blizzard','iceShield','frostWall']},/* no kit passive yet: keeps her random skill */
+  corvin:{passive:'coldSnap',mp:28,abil:['iceShard','frostWave','blizzard','iceShield','frostWall']},
   drecken:{passive:'twinBolt',mp:28,abil:['spark','chainLightning','thunderclap']},
   aldric:{passive:'plate',mp:0,abil:['sunder','valiantThrust','cover']},
   maelis:{passive:'lastLight',mp:26,abil:['mend','purify','circleOfRest','sanctuary']},
-  aletta:{mp:12,abil:['purify']},/* no kit passive yet: keeps her random skill */
+  aletta:{passive:'gentleTouch',mp:12,abil:['purify']},
   pepr:{passive:'venom',mp:0,abil:['poisonDart','noxiousCloud','tumble']},
   rook:{passive:'slippery',mp:0,abil:['backstab','smokeBomb','tumble']},
   rhyn:{passive:'bulwarkAura',mp:0,abil:['shieldBash','challenge','holdTheLine']},
@@ -138,6 +154,8 @@ const KITS={
     asc:{'Bard':{songOfValour:'anthem',lullaby:'grandLullaby',soothingBallad:'soothingHymn'}}}/* as a Bard: stronger songs, shorter waits */
 };
 const kitOf=u=>u&&u.cast&&KITS[u.cast]||null;
+/* personal skills for characters without a kit (KITS passives cover the rest) */
+const PERSONAL={trent:'charger',holt:'steadyAim',sigrun:'divingStrike',kaya:'outrider',jun:'iaido',ash:'emberHeart',nyx:'execute',roark:'bloodRage',valen:'riposte',celest:'lightWard',seren:'kinship',zwei:'cleave',kyul:'malice'};
 const abilOf=u=>{if(u&&u.team==='e'&&MKITS[u.cls])return MKITS[u.cls];const k=kitOf(u);if(!k)return[];const sw=k.asc&&k.asc[CLS[u.cls].n];return sw?k.abil.map(id=>sw[id]||id):k.abil};
 
 /* ---- monster moves: 2 per monster, cooldowns only (no MP). Extra fields: stone (Stone, bosses immune), psn (Poison),
@@ -208,12 +226,12 @@ function dmgMods(x,y,ctx,dmg,br){
 /* Pow/Def/Hit/Avoid/Crit changes from statuses and passives, added inside calc() */
 function stCalc(x,xw,y){
   const phys=!xw.mag,fx=x.hp>=x.maxhp,fy=y.hp>=y.maxhp;
-  return{pow:(hasSt(x,'rally')&&phys?2:0),df:(phys&&hasSt(y,'rally')?2:0)-(phys&&hasSt(y,'sunder')?3:0)+(hasSt(y,'shell')?2:0)+(phys&&has(y,'plate')?2:0)+(phys&&hasSt(y,'iceShield')?3:0),
+  return{pow:(hasSt(x,'rally')&&phys?2:0),df:(phys&&hasSt(y,'rally')?2:0)-(phys&&hasSt(y,'sunder')?3:0)+(hasSt(y,'shell')?2:0)+(phys&&has(y,'plate')?2:0)+(phys&&hasSt(y,'iceShield')?3:0)+(phys&&hasSt(y,'tended')?2:0),
     acc:(hasSt(x,'blind')?-20:0)+(hasSt(x,'sandEyes')?-10:0)+(hasSt(x,'anthem')?10:0)+(state.units.some(o=>o!==x&&o.hp>0&&o.team===x.team&&has(o,'audience')&&man(o,x)<=2)?10:0),avo:(hasSt(y,'smoke')?30:0)+(has(y,'beginnersLuck')&&fy?10:0),crit:(has(x,'beginnersLuck')&&fx?10:0)};
 }
 const eagle=(u,w)=>w&&w.t==='bow'&&has(u,'eagleEye')?1:0;
 /* zone of control: starting next to a hostile unit costs 1 Move (Slippery ignores it). Doesn't stack with Slow: the bigger penalty applies */
-const zoc=u=>!has(u,'slippery')&&state.units.some(o=>o.hp>0&&hostile(o,u)&&man(o,u)===1);
+const zoc=u=>!has(u,'slippery')&&!has(u,'outrider')&&state.units.some(o=>o.hp>0&&hostile(o,u)&&man(o,u)===1);
 const stMov=u=>Math.max(hasSt(u,'chill')?2:0,zoc(u)?1:0);
 
 /* ---- shapes and targets ---- */
@@ -313,7 +331,7 @@ async function useAbility(u,id,tx,ty){
   }
   /* healing, buffs, cures */
   for(const t of allies){
-    if(a.heal||a.healPct){const h=healAmt(u,id,t);if(h){t.hp+=h;pop(t,'+'+h,'heal')}exp+=12}
+    if(a.heal||a.healPct){const h=healAmt(u,id,t);if(h){t.hp+=h;pop(t,'+'+h,'heal')}if(has(u,'gentleTouch'))addSt(t,'tended',1,u);exp+=12}
     if(a.cure){let c=0;if(t.st)for(const k of Object.keys(t.st))if(STATUS[k]&&STATUS[k].bad){delete t.st[k];c=1}if(t.psn){t.psn=0;c=1}if(t.stone){t.stone=0;c=1}if(c){pop(t,'Cured','heal');exp+=6}}
     if(a.give){addSt(t,a.give[0],a.give[1],u);pop(t,STATUS[a.give[0]].n,'heal');exp+=6}
     if(a.encore){t.acted=false;pop(t,'Encore!','heal');exp+=10}
