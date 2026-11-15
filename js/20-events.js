@@ -259,19 +259,8 @@ const EVENTS = {
           u.maxhp -= 3;
           u.hp = Math.min(u.hp, u.maxhp);
           sfx('earth');
-          let how;
-          if (!learnBlock(u, k)) {
-            u.skills.push({ id: k, src: 'scroll' });
-            how = `learns <b>${SKILLS[k].n}</b>`;
-          } else {
-            const can = (u.skills || []).filter(x => x.src === 'scroll');
-            if (can.length) {
-              const old = can[0];
-              u.skills.splice(u.skills.indexOf(old), 1);
-              u.skills.push({ id: k, src: 'scroll' });
-              how = `forgets ${SKILLS[old.id].n} and learns <b>${SKILLS[k].n}</b>`;
-            } else how = `glimpses ${SKILLS[k].n}, but has no room to keep it`;
-          }
+          (u.skills = u.skills || []).push({ id: k, src: 'scroll' });
+          const how = `learns <b>${SKILLS[k].n}</b>`;
           return `${u.name} bleeds on the stone (max HP ${u.maxhp}) and ${how}. ${SKILLS[k].d}`;
         }
       },

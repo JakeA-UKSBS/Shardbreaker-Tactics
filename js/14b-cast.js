@@ -1003,11 +1003,6 @@ function castUnit(id, lv) {
     exp: 0,
     skill: (KITS[id] && KITS[id].passive) || pick(R.skills),
     skills: [],
-    cap:
-      BASE_CAP +
-      (t === "2"
-        ? PROMO_CAP
-        : 0) /* advanced joiners have the ascension's extra capacity too */,
     look: clone(c.look),
     g,
     mov: CLS[c.cls].mov,

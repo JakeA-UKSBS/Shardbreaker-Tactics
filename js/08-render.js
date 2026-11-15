@@ -111,7 +111,7 @@ function card(u){
 
 /* ---- unit sheet (two pages, cycles through the same team) ---- */
 const TN={blade:'Blade',heavy:'Heavy',pole:'Polearm',bow:'Bow',art:'Sigil',spirit:'Staff',item:'Item'};
-let sheetU=null,sheetPg=0,sheetIt=null,sheetRm=null;
+let sheetU=null,sheetPg=0,sheetIt=null;
 
 /* ==================================================================
    UNIT SHEET: the full stats pop-up (Personal / Items or Stats tabs)
@@ -129,20 +129,19 @@ function sheetEl(){
     else if(a==='prev'||a==='next')cycleSheet(a==='next'?1:-1);
     else if(a==='p0'||a==='p1'){sheetPg=+a[1];sheetIt=null;sfx('tick');drawSheet()}
     else if(a[0]==='i'){const i=+a.slice(1);sheetIt=sheetIt===i?null:i;drawSheet()}
-    else if(a.startsWith('rm')){const i=+a.slice(2),u=byId(sheetU);if(sheetRm===i){u.skills.splice(i,1);sheetRm=null;sfx('broke');saveGame()}else sheetRm=i;drawSheet()}});
+});
   document.addEventListener('keydown',e=>{if(el.hidden)return;if(e.key==='Escape')closeSheet();else if(e.key==='ArrowRight')cycleSheet(1);else if(e.key==='ArrowLeft')cycleSheet(-1)});
   return el;
 }
 function sheetList(u){return state.units.filter(o=>o.team===u.team&&o.hp>0)}
-function openSheet(u){if(!u)return;sheetU=u.id;sheetPg=0;sheetIt=null;sheetRm=null;sfx('select');drawSheet();sheetEl().hidden=false}
+function openSheet(u){if(!u)return;sheetU=u.id;sheetPg=0;sheetIt=null;sfx('select');drawSheet();sheetEl().hidden=false}
 function closeSheet(){sheetEl().hidden=true;sheetU=null}
-function cycleSheet(d){const u=byId(sheetU);if(!u)return;const L=sheetList(u);if(L.length<2)return;sheetU=L[(L.indexOf(u)+d+L.length)%L.length].id;sheetIt=null;sheetRm=null;sfx('tick');drawSheet()}
+function cycleSheet(d){const u=byId(sheetU);if(!u)return;const L=sheetList(u);if(L.length<2)return;sheetU=L[(L.indexOf(u)+d+L.length)%L.length].id;sheetIt=null;sfx('tick');drawSheet()}
 function skillBlock(u){
   const row=(id,tag,dim)=>`<div class="skr${dim?' dim':''}"><b>${SKILLS[id].n}</b><span class="tag">${tag}</span><small>${SKILLS[id].d}</small></div>`;
   let rows=u.skill?row(u.skill,'Personal'):'';
-  (u.skills||[]).forEach((x,i)=>{rows+=row(x.id,`${SKILLS[x.id].cost}${u.team==='p'?` <button type="button" class="${sheetRm===i?'warn':''}" data-s="rm${i}">${sheetRm===i?'Remove? Scroll is lost':'Remove'}</button>`:''}`)});
-  const cap=u.team==='p'?`<span class="capn">Capacity ${capUsed(u)}/${capOf(u)}</span>`:'';
-  return`<div class="sskill"><div class="skh"><span class="sl">Skills</span>${cap}</div>${u.team==='p'?`<div class="capbar"><i style="width:${capUsed(u)/capOf(u)*100}%"></i></div>`:''}<div class="skl">${rows||'<small class="capn">None</small>'}</div></div>`;
+  (u.skills||[]).forEach(x=>{rows+=row(x.id,'Learned')});
+  return`<div class="sskill"><div class="skh"><span class="sl">Skills</span></div><div class="skl">${rows||'<small class="capn">None</small>'}</div></div>`;
 }
 function rngTxt(r){return r[0]===r[1]?r[0]:r[0]+'–'+r[1]}
 function itemInfo(u,k){

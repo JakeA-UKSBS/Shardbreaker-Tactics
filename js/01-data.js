@@ -121,41 +121,41 @@ const CLS={
   /* a plain townsfolk body for NPC figures (the innkeeper, recruit icons) */
   Villager:{n:'Villager',w:['blade'],body:'tunic',mov:5}
 };
-/* SKILLS: n = name, cost = skill capacity it takes up (units have BASE_CAP to spend), d = description shown in game. */
+/* SKILLS: n = name, d = description shown in game. A unit has one personal skill (u.skill) and any number learned from scrolls (u.skills). */
 const SKILLS={
-  command:{n:'Command',cost:10,d:'Allies within 2 tiles gain +10 Hit and +10 Avoid.'},
-  steadfast:{n:'Steadfast',cost:5,d:'+4 Def and Res when attacked during the enemy phase.'},
-  keenEye:{n:'Keen Eye',cost:5,d:'+20 Hit, and the target\'s terrain gives no Avoid.'},
-  kindle:{n:'Kindle',cost:5,d:'+2 Mag when this unit starts the fight.'},
-  swiftstrike:{n:'Swiftstrike',cost:5,d:'+3 Spd for doubling when this unit starts the fight.'},
-  wrath:{n:'Wrath',cost:10,d:'+15 Crit while at half HP or less.'},
-  focus:{n:'Focus',cost:10,d:'+10 Crit when no ally is adjacent.'},
-  renewal:{n:'Renewal',cost:10,d:'Adjacent allies recover 5 HP at the start of each of your turns.'},
-  bulwark:{n:'Bulwark',cost:15,d:'Luck×2% chance: halves damage from an incoming strike.'},
-  stoneGaze:{n:'Stone Gaze',cost:15,d:'Luck% chance on a hit: the target turns to stone, loses its next turn and can\'t counter. Bosses and an Aegis are immune.'}
+  command:{n:'Command',d:'Allies within 2 tiles gain +10 Hit and +10 Avoid.'},
+  steadfast:{n:'Steadfast',d:'+4 Def and Res when attacked during the enemy phase.'},
+  keenEye:{n:'Keen Eye',d:'+20 Hit, and the target\'s terrain gives no Avoid.'},
+  kindle:{n:'Kindle',d:'+2 Mag when this unit starts the fight.'},
+  swiftstrike:{n:'Swiftstrike',d:'+3 Spd for doubling when this unit starts the fight.'},
+  wrath:{n:'Wrath',d:'+15 Crit while at half HP or less.'},
+  focus:{n:'Focus',d:'+10 Crit when no ally is adjacent.'},
+  renewal:{n:'Renewal',d:'Adjacent allies recover 5 HP at the start of each of your turns.'},
+  bulwark:{n:'Bulwark',d:'Luck×2% chance: halves damage from an incoming strike.'},
+  stoneGaze:{n:'Stone Gaze',d:'Luck% chance on a hit: the target turns to stone, loses its next turn and can\'t counter. Bosses and an Aegis are immune.'}
 };
 /* more skills */
 Object.assign(SKILLS,{
-  hitAndRun:{n:'Hit and Run',cost:10,d:'After attacking in melee, steps back one tile if there is room.'},
-  quickDraw:{n:'Quick Draw',cost:15,d:'When attacked at half HP or less, strikes first.'},
-  flurry:{n:'Flurry',cost:15,d:'Spd% chance of an extra strike in each fight.'},
-  whirlwind:{n:'Whirlwind',cost:15,d:'Luck÷2% chance: one strike becomes five hits at half damage.'},
-  retaliate:{n:'Retaliate',cost:15,d:'Luck% chance, when hit in melee, to deal the same damage back.'},
-  ironSkin:{n:'Iron Skin',cost:10,d:'Luck×2% chance to halve physical damage taken.'},
-  spellWard:{n:'Spell Ward',cost:10,d:'Luck×2% chance to halve magic damage taken.'},
-  momentum:{n:'Momentum',cost:15,d:'Once per turn, defeating an enemy on your turn lets this unit act again.'},
-  fleetFoot:{n:'Fleet Foot',cost:10,d:'+2 Move.'},
-  taunt:{n:'Taunt',cost:5,d:'Enemies would rather attack this unit.'},
-  quickStudy:{n:'Quick Study',cost:10,d:'Gains double EXP.'},
-  earlyEdge:{n:'Early Edge',cost:10,d:'+20 Hit and Avoid on turns 1 to 5.'},
-  wolfsbane:{n:'Wolfsbane',cost:10,d:'Effective (×2) against Beasts.'},
-  spiritbane:{n:'Spiritbane',cost:10,d:'Effective (×2) against Spectral foes.'},
-  stonebane:{n:'Stonebane',cost:10,d:'Effective (×2) against Armoured foes.'},
-  guardian:{n:'Guardian',cost:10,d:'Adjacent allies take 2 less damage.'},
-  pikeWall:{n:'Pike Wall',cost:5,d:'+4 Def and +10 Hit against mounted units and fliers.'}
+  hitAndRun:{n:'Hit and Run',d:'After attacking in melee, steps back one tile if there is room.'},
+  quickDraw:{n:'Quick Draw',d:'When attacked at half HP or less, strikes first.'},
+  flurry:{n:'Flurry',d:'Spd% chance of an extra strike in each fight.'},
+  whirlwind:{n:'Whirlwind',d:'Luck÷2% chance: one strike becomes five hits at half damage.'},
+  retaliate:{n:'Retaliate',d:'Luck% chance, when hit in melee, to deal the same damage back.'},
+  ironSkin:{n:'Iron Skin',d:'Luck×2% chance to halve physical damage taken.'},
+  spellWard:{n:'Spell Ward',d:'Luck×2% chance to halve magic damage taken.'},
+  momentum:{n:'Momentum',d:'Once per turn, defeating an enemy on your turn lets this unit act again.'},
+  fleetFoot:{n:'Fleet Foot',d:'+2 Move.'},
+  taunt:{n:'Taunt',d:'Enemies would rather attack this unit.'},
+  quickStudy:{n:'Quick Study',d:'Gains double EXP.'},
+  earlyEdge:{n:'Early Edge',d:'+20 Hit and Avoid on turns 1 to 5.'},
+  wolfsbane:{n:'Wolfsbane',d:'Effective (×2) against Beasts.'},
+  spiritbane:{n:'Spiritbane',d:'Effective (×2) against Spectral foes.'},
+  stonebane:{n:'Stonebane',d:'Effective (×2) against Armoured foes.'},
+  guardian:{n:'Guardian',d:'Adjacent allies take 2 less damage.'},
+  pikeWall:{n:'Pike Wall',d:'+4 Def and +10 Hit against mounted units and fliers.'}
 });
-/* BASE_CAP: skill capacity a unit starts with. PROMO_CAP: extra capacity on promotion. PROMO_LV: level a unit can promote at. */
-const BASE_CAP=20,PROMO_CAP=5,PROMO_LV=5;
+/* PROMO_LV: level a unit can promote at */
+const PROMO_LV=5;
 /* ENEMY STATS, keyed by class id (must also exist in CLS):
    b = base stats at level 1, g = growth per level (a fixed amount, not a % chance), both in stat order [HP, Str, Mag, Skl, Spd, Lck, Def, Res].
    A foe's stat = b + floor(g × (level − 1)), see foe() in 02-state-rng.js.

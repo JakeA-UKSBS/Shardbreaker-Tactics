@@ -40,17 +40,17 @@ const stList=u=>Object.keys(u.st||{}).filter(k=>hasSt(u,k)&&STATUS[k]);
 
 /* ---- kit passives (they become the character's personal skill) ---- */
 Object.assign(SKILLS,{
-  eagleEye:{n:'Eagle Eye',cost:5,kit:1,d:'+1 range on every bow shot, on top of the height bonus.'},
-  ironBody:{n:'Iron Body',cost:5,kit:1,d:'Can’t be pushed or pulled.'},
-  siphon:{n:'Siphon',cost:5,kit:1,d:'Her dark spells heal her for 25% of the damage they deal.'},
-  attunement:{n:'Attunement',cost:5,kit:1,d:'A spell of a different element from her last one costs 2 less MP.'},
-  plate:{n:'Plate',cost:5,kit:1,d:'Physical hits deal 2 less damage to him; −1 Jump.'},
-  lastLight:{n:'Last Light',cost:5,kit:1,d:'Her heals restore 50% more on allies below half HP.'},
-  slippery:{n:'Slippery',cost:5,kit:1,d:'Can move through enemy tiles, and can’t be Rooted.'},
-  bulwarkAura:{n:'Bulwark',cost:5,kit:1,d:'Allies next to her take 30% less damage from ranged attacks.'},
-  beginnersLuck:{n:'Beginner’s Luck',cost:5,kit:1,d:'+10 Crit and +10 Avoid while at full HP.'},
-  audience:{n:'Audience',cost:5,kit:1,d:'Allies within 2 tiles of him get +10 Hit.'},
-  twinBolt:{n:'Lightning Strikes Twice',cost:5,kit:1,d:'With a lightning sigil: +3 Spd when checking for a double attack, but his second strike deals 0.8× damage.'}
+  eagleEye:{n:'Eagle Eye',kit:1,d:'+1 range on every bow shot, on top of the height bonus.'},
+  ironBody:{n:'Iron Body',kit:1,d:'Can’t be pushed or pulled.'},
+  siphon:{n:'Siphon',kit:1,d:'Her dark spells heal her for 25% of the damage they deal.'},
+  attunement:{n:'Attunement',kit:1,d:'A spell of a different element from her last one costs 2 less MP.'},
+  plate:{n:'Plate',kit:1,d:'Physical hits deal 2 less damage to him; −1 Jump.'},
+  lastLight:{n:'Last Light',kit:1,d:'Her heals restore 50% more on allies below half HP.'},
+  slippery:{n:'Slippery',kit:1,d:'Can move through enemy tiles, and can’t be Rooted.'},
+  bulwarkAura:{n:'Bulwark',kit:1,d:'Allies next to her take 30% less damage from ranged attacks.'},
+  beginnersLuck:{n:'Beginner’s Luck',kit:1,d:'+10 Crit and +10 Avoid while at full HP.'},
+  audience:{n:'Audience',kit:1,d:'Allies within 2 tiles of him get +10 Hit.'},
+  twinBolt:{n:'Lightning Strikes Twice',kit:1,d:'With a lightning sigil: +3 Spd when checking for a double attack, but his second strike deals 0.8× damage.'}
 });
 
 /* ---- abilities ----
@@ -384,8 +384,8 @@ async function abAct(u,a){
   if(a.startsWith('ab:')){const id=a.slice(3);if(abBlock(u,id))return;abSel=id;const A=ABIL[id];
     if(A.tumble){if(A.cd)(u.cd=u.cd||{})[id]=A.cd;abSel=null;moveSet=tumbleSet(u);fringe=new Set();u.tumbled=1;ui='move';sfx('select');render();return}
     aimSet=aimTiles(u,id);abT=A.side==='self'?{x:u.x,y:u.y}:null;ui='aim';sfx('select');render();return}
-  if(a==='abuse'&&abSel&&abT){const id=abSel,t=abT;commit();abSel=null;abT=null;aimSet=null;clearSel();ui='idle';await useAbility(u,id,t.x,t.y);if(over)return;
-    if(ABIL[id].free&&u.hp>0){u.acted=false}saveGame();promptEnd();render();return}
+  if(a==='abuse'&&abSel&&abT){const id=abSel,t=abT,still=stillAt(u);commit();abSel=null;abT=null;aimSet=null;clearSel();ui='idle';await useAbility(u,id,t.x,t.y);if(over)return;
+    if(ABIL[id].free&&u.hp>0){u.acted=false}if(still&&u.acted){afterAct(u,still);return}saveGame();promptEnd();render();return}
 }
 function abTap(x,y){const k=key(x,y),u=byId(sel);if(!aimSet||!aimSet.has(k)){if(ABIL[abSel].side==='self')return;abT=null;ui='abil';render();return}
   if(abT&&abT.x===x&&abT.y===y){act('abuse');return}abT={x,y};sfx('select');render()}

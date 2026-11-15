@@ -8,13 +8,9 @@ const endless=k=>(isWpn(k)&&IT[k].uses>5)||IT[k].t==='spirit';
 function mcost(u,x,y){const t=ter(x,y);if(u.team==='e'&&state.ice&&state.ice[key(x,y)])return 99;if(CLS[u.cls].phase)return 1;if(t.k==='lava'&&CLS[u.cls].lava)return 1;if(CLS[u.cls].fly)return['wall','cliff','cavewall'].includes(t.k)?99:1;if(CLS[u.cls].mnt&&(t.k==='forest'||t.k==='hill'))return t.c+1;return t.c}
 /* Teams: p = player, e = enemy, g = green 'other' units that fight the enemy and can be recruited. */
 const hostile=(a,b)=>(a.team==='e')!==(b.team==='e');
-/* Skills: u.skill is the personal skill (takes PERSONAL_CAP). u.skills holds extras: {id,src:"scroll"} (costs capacity). */
+/* Skills: u.skill is the personal skill. u.skills holds extras learned from scrolls: {id,src:"scroll"}. No limit on how many. */
 const has=(u,id)=>u.skill===id||!!(u.skills&&u.skills.some(x=>x.id===id));
-/* skill capacity used: the personal skill always takes PERSONAL_CAP, scroll-learned skills take their cost */
-const PERSONAL_CAP=5;
-const capUsed=u=>(u.skill&&u.team!=='e'?PERSONAL_CAP:0)+(u.skills||[]).reduce((a,x)=>a+(x.src==='scroll'?SKILLS[x.id].cost:0),0);
-const capOf=u=>u.cap||BASE_CAP;
-function learnBlock(u,k){if(has(u,k))return`${u.name} already knows ${SKILLS[k].n}.`;const c=SKILLS[k].cost;if(capUsed(u)+c>capOf(u))return`Needs ${c} capacity; ${u.name} has ${capOf(u)-capUsed(u)} free.`;return null}
+function learnBlock(u,k){return has(u,k)?`${u.name} already knows ${SKILLS[k].n}.`:null}
 const elv=u=>u.lv+(CLS[u.cls].tier===2?15:0);
 /* a few characters wield only certain kinds within their class's weapon types (Zwei: two-handed swords) */
 const ONLY_KIND={zwei:['greatsword']};
