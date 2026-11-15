@@ -655,3 +655,8 @@ img{-webkit-user-drag:none;user-select:none}
 /* reward colour coding (fixed colours so themes don't recolour them) */
 .rw{font-weight:700}.rw-artifact{color:#5a9cf0}.rw-weapon{color:#e0604a}.rw-skill{color:#7ccf84}.rw-item{color:#f0c850}
 
+
+/* map editor preview (index.html?preview): just the board */
+body.preview .top,body.preview .bar,body.preview .panel,body.preview #cog{display:none!important}
+body.preview .wrap{max-width:none!important;padding:0!important;margin:0!important}
+body.preview .vp{height:100vh!important;max-height:none!important;border:0!important;border-radius:0!important}

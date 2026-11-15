@@ -24,6 +24,7 @@
   .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px}
   .card h2{margin-bottom:8px}
   canvas{display:block;image-rendering:auto}
+  iframe{display:block;width:760px;height:560px;border:0;border-radius:8px;background:#0e0c12}
   #grid{cursor:crosshair}
   .msg{font-size:12px;color:var(--dim)}
   .msg b{color:var(--bad)}
@@ -66,12 +67,13 @@
 </aside>
 <main>
   <div class="card"><h2>Top down</h2><canvas id="grid"></canvas></div>
-  <div class="card"><h2>In game angle</h2><canvas id="iso"></canvas></div>
+  <div class="card"><h2>In game (live)</h2><iframe id="live" src="../index.html?preview" title="In game preview"></iframe><p class="msg">The real game drawing this map: tiles, trees, rocks and heights as they'll look in a battle. Deploy tiles are blue. Drag to pan, scroll to zoom.</p></div>
+  <canvas id="iso" style="display:none"></canvas>
 </main>
 <script>
 /* Reads the maps straight from the game's own files (works when served, e.g. GitHub Pages or a local server).
    Opened as a plain file it can't read them, so it says so. */
-const FILES=['../js/01-data.js','../js/15-regions-monsters.js','../js/16-maps-battles.js'];
+const FILES=['../js/01-data.js','../js/15-regions-monsters.js','../js/16-maps-battles.js','../art/manifest.js'];
 const SOLID_K=['wall','cliff','boulder','sandstone','lava','water','cavewall'];
 const KCOL={plain:'#7a8060',forest:'#3a5234',curse:'#6e3c82',boulder:'#6e6860',water:'#1e283c',bridge:'#8c643c',fort:'#aa966e',throne:'#c8aa3c',
   sand:'#c8a868',quicksand:'#8a6a3a',sandstone:'#9a6a40',snow:'#d8e0e8',deepsnow:'#b8c4d4',agate:'#5a8ac8',ice:'#8ac8e8',
@@ -80,21 +82,27 @@ const KCOL={plain:'#7a8060',forest:'#3a5234',curse:'#6e3c82',boulder:'#6e6860',w
   shallow:'#3a6a6a',mangrove:'#3a5a2a',mud:'#4a3a2a',basalt:'#4a3a3a',lava:'#e8582a',hill:'#7a6a5a',cliff:'#3a2a2a'};
 let TER={},MAPS={},HSET={},REG=[],cur=null,tool='height',brush=1,tbrush=null,undo=[],drag=false;
 const $=id=>document.getElementById(id);
-const S=46;/* tile size on the top-down grid */
+const S=40;/* tile size on the top-down grid */
+const TEX={};/* terrain key -> loaded tile image (art/tiles/<k>.png), drawn as each square's texture */
+let TOWN_START=[[6,14],[7,14],[5,14],[8,14],[6,13],[7,13]];
 
 async function load(){
   let txt;
   try{txt=await Promise.all(FILES.map(f=>fetch(f).then(r=>{if(!r.ok)throw 0;return r.text()})))}
   catch(e){$('src').innerHTML='<b>Couldn’t read the game files.</b> Open this page from the game’s site (…/tools/map-editor.html) or a local server, not as a file.';return}
   const all=txt.join('\n'),mf=txt[2];
+  /* tile textures: the game's art/tiles/<terrain key>.png, where one exists */
+  const have=new Set([...txt[3].matchAll(/"tiles\/([\w-]+)"/g)].map(m=>m[1]));
+  const ts=mf.match(/const TOWN_START=(\[\[.*?\]\]);/);if(ts)TOWN_START=JSON.parse(ts[1]);
   for(const m of all.matchAll(/'(.)':\{n:'([^']*)',k:'([^']*)',c:(\d+)/g))if(!TER[m[1]])TER[m[1]]={n:m[2],k:m[3],c:+m[4]};
   for(const m of mf.matchAll(/(\w+):\{n:(['"])(.*?)\2,map:(\[[^\]]*\]),start:(\[\[.*?\]\])(?:,boss:(\[\d+,\d+\]))?\}/g))MAPS[m[1]]={n:m[3],map:JSON.parse(m[4]),start:JSON.parse(m[5]),boss:m[6]&&JSON.parse(m[6])};
   /* settlements (Defend fights) live in TOWNS as town_<region> */
   const tb=(mf.match(/const TOWNS=\{([\s\S]*?)\n\};/)||[])[1]||'';
-  for(const m of tb.matchAll(/\n  (\w+):(\[[^\]]*\])/g))MAPS['town_'+m[1]]={n:'Settlement',map:JSON.parse(m[2]),start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]],town:m[1]};
+  for(const m of tb.matchAll(/\n  (\w+):(\[[^\]]*\])/g))MAPS['town_'+m[1]]={n:'Settlement',map:JSON.parse(m[2]),start:TOWN_START,town:m[1]};
   for(const m of mf.matchAll(/MAPS\.(\w+)\.h=(\[[^\]]*\]);/g))HSET[m[1]]=JSON.parse(m[2]);
   for(const m of all.matchAll(/\n  (\w+):\{n:'([^']+)'(?:(?!\n  \w+:\{n:)[\s\S])*?maps:(\[[^\]]*\]),bossMap:'(\w+)'/g)){
     const ids=[...JSON.parse(m[3].replace(/'/g,'"')),m[4],'town_'+m[1]].filter((v,i,a)=>MAPS[v]&&a.indexOf(v)===i);if(ids.length)REG.push({id:m[1],n:m[2],ids,boss:m[4]})}
+  for(const k of new Set(Object.values(TER).map(t=>t.k)))if(have.has(k)){const im=new Image();im.onload=()=>{TEX[k]=im;if(cur)draw()};im.src='../art/tiles/'+k+'.png'}
   $('src').textContent=`${Object.keys(MAPS).length} maps read from the game files.`;
   $('region').innerHTML=REG.map((r,i)=>`<option value="${i}">${r.n}</option>`).join('');
   $('region').onchange=fillMaps;fillMaps();
@@ -121,14 +129,16 @@ function draw(){
   const u2=new Set(unreachable(2).map(p=>p+'')),u1=new Set(unreachable(1).map(p=>p+''));
   c.textAlign='center';c.textBaseline='middle';
   for(let y=0;y<h;y++)for(let x=0;x<w;x++){const v=hh(x,y);
-    c.fillStyle=shade(colOf(ch(x,y)),1+.17*v);c.fillRect(x*S,y*S,S,S);c.strokeStyle='#14141a';c.lineWidth=1;c.strokeRect(x*S+.5,y*S+.5,S-1,S-1);
+    const tx=TEX[(TER[ch(x,y)]||{}).k];
+    if(tx){/* the middle of the diamond tile art, which is all texture */c.drawImage(tx,tx.width*.3,tx.height*.3,tx.width*.4,tx.height*.4,x*S,y*S,S,S);if(v){c.fillStyle=`rgba(255,255,255,${.07*v})`;c.fillRect(x*S,y*S,S,S)}}
+    else{c.fillStyle=shade(colOf(ch(x,y)),1+.17*v);c.fillRect(x*S,y*S,S,S)}c.strokeStyle='#14141a';c.lineWidth=1;c.strokeRect(x*S+.5,y*S+.5,S-1,S-1);
     if(solid(x,y)){c.strokeStyle='#0008';c.beginPath();c.moveTo(x*S+6,y*S+6);c.lineTo(x*S+S-6,y*S+S-6);c.moveTo(x*S+S-6,y*S+6);c.lineTo(x*S+6,y*S+S-6);c.stroke()}
     if(v){c.font='bold 15px system-ui';c.fillStyle='#000a';c.fillText(v,x*S+S/2+1,y*S+S/2+1);c.fillStyle='#fff';c.fillText(v,x*S+S/2,y*S+S/2)}
     if(u2.has(x+','+y)){c.strokeStyle='#ff4a4a';c.lineWidth=3;c.strokeRect(x*S+3,y*S+3,S-6,S-6)}
     else if(u1.has(x+','+y)){c.strokeStyle='#ffa03a';c.lineWidth=2;c.setLineDash([4,3]);c.strokeRect(x*S+4,y*S+4,S-8,S-8);c.setLineDash([])}}
   if(cur.boss){const[x,y]=cur.boss;c.strokeStyle='#ff5a5a';c.lineWidth=3;c.strokeRect(x*S+5,y*S+5,S-10,S-10);c.font='bold 10px system-ui';c.fillStyle='#ffb0b0';c.fillText('B',x*S+11,y*S+12)}
   cur.start.forEach(([x,y],i)=>{c.strokeStyle='#5aaaff';c.lineWidth=3;c.strokeRect(x*S+5,y*S+5,S-10,S-10);c.font='bold 10px system-ui';c.fillStyle='#9fd0ff';c.fillText(i+1,x*S+11,y*S+12)});
-  drawIso();
+  drawIso();sendLive();
   const steps=[];for(let y=0;y<h;y++)for(let x=0;x<w;x++)if(!solid(x,y))for(const[dx,dy]of[[1,0],[0,1]]){const nx=x+dx,ny=y+dy;if(nx<w&&ny<h&&!solid(nx,ny)&&Math.abs(hh(x,y)-hh(nx,ny))>2)steps.push(1)}
   const sh=cur.start.map(([x,y])=>hh(x,y));
   $('checks').innerHTML=[
@@ -141,7 +151,12 @@ function draw(){
   const town=MAPS[cur.id].town;/* a settlement's second line replaces its row in TOWNS (its deploy tiles are fixed) */
   $('out').value=`MAPS.${cur.id}.h=[${cur.h.map(r=>JSON.stringify(r)).join(', ')}];\n  `+(town?`${town}:${JSON.stringify(cur.map)},`:`${cur.id}:{n:${JSON.stringify(cur.n)},map:${JSON.stringify(cur.map)},start:${JSON.stringify(cur.start)}${cur.boss?`,boss:${JSON.stringify(cur.boss)}`:''}},`);
 }
-/* the same diamond view as the game: tiles 2:1, each level lifts a tile */
+/* live preview: post the map to the game in the iframe (index.html?preview), at most every 120ms while painting */
+let liveT=0,liveReady=false;
+const biomeOf=id=>{const r=REG.find(r=>r.ids.includes(id));return r?r.id:'forest'};
+function sendLive(){clearTimeout(liveT);liveT=setTimeout(()=>{const f=$('live');if(f&&f.contentWindow&&cur)f.contentWindow.postMessage({map:cur.map,h:cur.h,start:cur.start,biome:biomeOf(cur.id)},'*')},120)}
+addEventListener('message',e=>{if(e.data&&e.data.previewReady){liveReady=true;sendLive()}});
+/* the same diamond view as the game, drawn flat for Download PNG */
 function drawIso(){
   const cv=$('iso'),c=cv.getContext('2d'),w=W(),h=H(),TW=64,TH=32,LH=15,maxH=Math.max(...cur.h.join('').split('').map(Number));
   cv.width=(w+h)*TW/2+20;cv.height=(w+h)*TH/2+maxH*LH+40;const ox=h*TW/2+10,oy=maxH*LH+16;

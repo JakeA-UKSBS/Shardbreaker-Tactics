@@ -89,93 +89,95 @@ function music(k){if(k===bgmKey&&bgm)return;bgmKey=k;try{if(bgm)bgm.pause();bgm=
 /* BATTLE MAPS: n = name, map = rows of terrain letters (top row first, see TER for each letter), start = [x, y] tiles your units deploy on. */
 const MAPS={
   /* Swamp */
-  flats:{n:'Mangrove Flats',map:["sssnnssssv","vssnnsswws","ssssssswws","ssvsssssss","nssssvsssn","nssssssssn","ssswwsssss","vsswwssvss","sssssnnsss","ssssnnnsss"],start:[[4,9],[5,9],[6,9],[5,8],[6,8],[3,9]]},
-  road:{n:'Sunken Road',map:["wssnnnnnss","ssvnsssnvs","ssnnsvsnns","ssnsssssns","vsnssssssn","ssnnsssnns","ssvnnnnnvs","wsssnnnsss","wwsssnsssw","sssssnssss"],start:[[5,9],[4,9],[6,9],[5,8],[4,7],[6,7]]},
-  bog:{n:'Bog Pools',map:["vsswwwwssv","ssssnnssss","wsssnnssss","wssvssvssw","ssssssssss","nnsswwssnn","nnsswwssnn","svssssssvs","sssnnnnsss","ssssnnssss"],start:[[4,9],[5,9],[3,8],[4,8],[5,8],[6,8]]},
-  lair:{n:'Krondis’s Lair',map:["wssnnnnssw","sssnnnnnss","ssvssssvss","ssssssssss","vsswwwwssv","ssswwwwsss","snnssssnns","snnssssnns","sssnnnnsss","ssssnnssss"],start:[[4,9],[5,9],[3,8],[4,8],[5,8],[6,8]],boss:[5,1]},
+  flats:{n:'Mangrove Flats',map:["sssssnnnssssssv","sssssnnnssssssv","vvsssnnnssswwws","ssssssssssswwws","ssssssssssswwws","sssvvssssssssss","nnssssssvsssssn","nnssssssvsssssn","nnssssssssssssn","ssssswwwsssssss","ssssswwwsssssss","vvssswwwsssvsss","ssssssssnnnssss","ssssssssnnnssss","ssssssnnnnnssss"],start:[[6,14],[7,14],[8,14],[7,13],[8,13],[5,14]]},
+  road:{n:'Sunken Road',map:["wwsssnnnnnnnsss","wwsssnnnnnnnsss","sssvvnsssssnvvs","sssnnnssvssnnns","sssnnnssvssnnns","sssnnsssssssnns","vvsnnsssssssssn","vvsnnsssssssssn","sssnnnsssssnnns","sssvvnnnnnnnvvs","sssvvnnnnnnnvvs","wwssssnnnnnssss","wwwsssssnsssssw","wwwsssssnsssssw","ssssssssnssssss"],start:[[8,14],[7,14],[9,14],[8,13],[7,12],[9,12]]},
+  bog:{n:'Bog Pools',map:["vvssswwwwwwsssv","vvssswwwwwwsssv","ssssssnnnssssss","wwssssnnnssssss","wwssssnnnssssss","wwsssvsssvvsssw","sssssssssssssss","sssssssssssssss","nnnssswwwsssnnn","nnnssswwwsssnnn","nnnssswwwsssnnn","ssvsssssssssvvs","sssssnnnnnnssss","sssssnnnnnnssss","ssssssnnnssssss"],start:[[6,14],[7,14],[5,13],[6,13],[7,13],[8,13]]},
+  lair:{n:'Krondis’s Lair',map:["wwsssnnnnnnsssw","wwsssnnnnnnsssw","sssssnnnnnnnsss","sssvvssssssvsss","sssvvssssssvsss","sssssssssssssss","vvssswwwwwwsssv","vvssswwwwwwsssv","ssssswwwwwwssss","ssnnnssssssnnns","ssnnnssssssnnns","ssnnnssssssnnns","sssssnnnnnnssss","sssssnnnnnnssss","ssssssnnnssssss"],start:[[6,14],[7,14],[5,13],[6,13],[7,13],[8,13]],boss:[7,1]},
   /* Cursed Woodland */
-  woodland:{n:'Cursed Woodland',map:["...y..f...","^f....y..f","y..f..^^.y","..f..f....","^....y..f.",".y.f.....y","f^.....f..","..y..f..y.","f.........",".........."],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  brook:{n:'Black Brook',map:[".f....y...","y..ff....f","...f..y...","w=wwwwww=w","...y..f...","f.....f..y","..f......f","y....y....","...f....f.",".........."],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  clearing:{n:'Hunter’s Clearing',map:["f........f",".^f....f..",".^.^..^...","f.........","....y.....",".....^^..f","..f....f..","..........","..........",".........."],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  heart:{n:'The Hollow Heart',map:["f..f...f.f","^^y.....y.","....f.f...","..y.....y.","f^..y.y..f","..f....^f.","y.........","...f...f..","..........",".........."],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]],boss:[5,0]},
+  woodland:{n:'Cursed Woodland',map:[".....y...ff....",".....y...ff....","^^f......yy...f","yy...f...^^^..y","yy...f...^^^..y","...ff...f......","^^......y...ff.","^^......y...ff.","..y..f........y","ff^........f...","ff^........f...","...yy...f...yy.","ff.............","ff.............","..............."],start:[[6,14],[7,14],[5,14],[8,14],[6,13],[7,13]]},
+  brook:{n:'Black Brook',map:["..f......yy....","..f......yy....","yy...fff......f",".....f...yy....",".....f...yy....","ww=wwwwwwwww==w",".....y...ff....",".....y...ff....","ff.......ff...y","...ff.........f","...ff.........f","yy......y......",".....f......ff.",".....f......ff.","..............."],start:[[6,14],[7,14],[5,14],[8,14],[6,13],[7,13]]},
+  clearing:{n:'Hunter’s Clearing',map:["ff............f","ff............f","..^ff......f...","..^..^...^^....","..^..^...^^....","ff.............","......yy.......","......yy.......","........^^^...f","...ff......f...","...ff......f...","...............","...............","...............","..............."],start:[[6,14],[7,14],[5,14],[8,14],[6,13],[7,13]]},
+  heart:{n:'The Hollow Heart',map:["ff...f.....f..f","ff...f.....f..f","^^^yy.......yy.","......ff.ff....","......ff.ff....","...yy.......yy.","ff^...yy.yy...f","ff^...yy.yy...f","...ff......^ff.","yy.............","yy.............",".....f.....f...","...............","...............","..............."],start:[[6,14],[7,14],[5,14],[8,14],[6,13],[7,13]],boss:[7,0]},
   /* Volcanic Isle */
-  fields:{n:'Magma Fields',map:["bbbllbbbbR","mbbbllbbbb","bbbbbllbmb","bbbbbblbbb","bmbbbbbbbb","bbllbbbmbb","bbblllbbbb","mbbbbbbbbm","bbbbbbbbbb","bbbbbbbbbb"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  caldera:{n:'Caldera Pass',map:["bbmbllbmbb","bbbllllbbb","mbbllllbbm","bbbbllbbbb","bbbbbbbbbb","lbbmbbmbbl","bbbbbbbbbb","bmbbbbbbmb","bbbbbbbbbb","bbbbbbbbbb"],start:[[4,9],[5,9],[3,9],[6,9],[3,8],[5,8]]},
-  ridge:{n:'Rockslide Ridge',map:["bbbbRbbbbl","mRbbbbbbbl","bbRbbbblll","bbRRbbRlbb","bbbbbbbbll","llbbmbbbbl","blbbbbbmbb","llbRbbbbbb","lbbbbbbbbb","lbbbbbbbbb"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  crater:{n:'Dragon’s Crater',map:["llbbbbbbll","lbbbbbbbbl","bbmbbbbmbb","bbbbllbbbb","bbbllllbbb","bbbbllbbbb","bmbbbbbbmb","bbbbbbbbbb","bbbbbbbbbb","bbbbbbbbbb"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]],boss:[5,0]},
+  fields:{n:'Magma Fields',map:["bbbbblllbbbbbbR","bbbbblllbbbbbbR","mmbbbblllbbbbbb","bbbbbbbblllbmmb","bbbbbbbblllbmmb","bbbbbbbbbllbbbb","bbmbbbbbbbbbbbb","bbmbbbbbbbbbbbb","bbblllbbbbbmbbb","bbbbbllllbbbbbb","bbbbbllllbbbbbb","mmbbbbbbbbbbbbm","bbbbbbbbbbbbbbb","bbbbbbbbbbbbbbb","bbbbbbbbbbbbbbb"],start:[[6,14],[7,14],[5,14],[8,14],[6,13],[7,13]]},
+  caldera:{n:'Caldera Pass',map:["bbbmmblllbbmbbb","bbbmmblllbbmbbb","bbbbbllllllbbbb","mmbbbllllllbbbm","mmbbbllllllbbbm","bbbbbblllbbbbbb","bbbbbbbbbbbbbbb","bbbbbbbbbbbbbbb","llbbbmbbbmmbbbl","bbbbbbbbbbbbbbb","bbbbbbbbbbbbbbb","bbmbbbbbbbbbmmb","bbbbbbbbbbbbbbb","bbbbbbbbbbbbbbb","bbbbbbbbbbbbbbb"],start:[[6,14],[7,14],[5,14],[8,14],[5,13],[7,13]]},
+  ridge:{n:'Rockslide Ridge',map:["bbbbbbRRbbbbbbl","bbbbbbRRbbbbbbl","mmRbbbbbbbbbbbl","bbbRRbbbbbbllll","bbbRRbbbbbbllll","bbbRRRbbbRRlbbb","bbbbbbbbbbbblll","bbbbbbbbbbbblll","lllbbbmmbbbbbbl","bblbbbbbbbbmbbb","bblbbbbbbbbmbbb","lllbbRbbbbbbbbb","llbbbbbbbbbbbbb","llbbbbbbbbbbbbb","llbbbbbbbbbbbbb"],start:[[6,14],[7,14],[5,14],[8,14],[6,13],[7,13]]},
+  crater:{n:'Dragon’s Crater',map:["lllbbbbbbbbblll","lllbbbbbbbbblll","llbbbbbbbbbbbbl","bbbmmbbbbbbmbbb","bbbmmbbbbbbmbbb","bbbbbblllbbbbbb","bbbbbllllllbbbb","bbbbbllllllbbbb","bbbbbblllbbbbbb","bbmbbbbbbbbbmmb","bbmbbbbbbbbbmmb","bbbbbbbbbbbbbbb","bbbbbbbbbbbbbbb","bbbbbbbbbbbbbbb","bbbbbbbbbbbbbbb"],start:[[6,14],[7,14],[5,14],[8,14],[6,13],[7,13]],boss:[7,0]},
 };
 Object.assign(MAPS,{
   /* Act 3: the Heart of the Blight */
-  heartHall:{n:'Hall of Veins',map:["SSKSSSSKSS","SYSSUSSGSS","SSSSSSSSPS","KSSGSSUSSK","SSSSKKSSSS","SPSSSSSSYS","SSSUSSGSSS","SSSSSSSSSS","SYSSSSSSUS","SSSSSSSSSS"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  heartCore:{n:'Heart Chamber',map:["KSSSSSSSSK","SSYSSSSUSS","SSSSSSSSSS","SGSSSSSSPS","SSSSSSSSSS","KSUSSSSYSK","SSSSGSSSSS","SSPSSSSUSS","SSSSSSSSSS","SSSSSSSSSS","SSSSSSSSSS"],start:[[4,10],[5,10],[3,10],[6,10],[4,9],[5,9]],boss:[4,1]}
+  heartHall:{n:'Hall of Veins',map:["SSSKKSSSSSSKSSS","SSSKKSSSSSSKSSS","SSYSSSUUSSSGSSS","SSSSSSSSSSSSPPS","SSSSSSSSSSSSPPS","KKSSSGSSSUUSSSK","SSSSSSKKKSSSSSS","SSSSSSKKKSSSSSS","SSPSSSSSSSSSYYS","SSSSSUSSSGGSSSS","SSSSSUSSSGGSSSS","SSSSSSSSSSSSSSS","SSYSSSSSSSSSUUS","SSYSSSSSSSSSUUS","SSSSSSSSSSSSSSS"],start:[[6,14],[7,14],[5,14],[8,14],[6,13],[7,13]]},
+  heartCore:{n:'Heart Chamber',map:["KKSSSSSSSSSSSSK","KKSSSSSSSSSSSSK","SSSYYSSSSSSUSSS","SSSSSSSSSSSSSSS","SSSSSSSSSSSSSSS","SSGSSSSSSSSSPPS","SSSSSSSSSSSSSSS","KKSUUSSSSSSYSSK","KKSUUSSSSSSYSSK","SSSSSSGGSSSSSSS","SSSPPSSSSSSUSSS","SSSSSSSSSSSSSSS","SSSSSSSSSSSSSSS","SSSSSSSSSSSSSSS","SSSSSSSSSSSSSSS"],start:[[6,14],[7,14],[5,14],[8,14],[6,13],[7,13]],boss:[6,1]}
 });
 Object.assign(MAPS,{
-  dunes:{n:"Shifting Dunes",map:["knffzznnnw","knnnzznwwk","wwzznnnnnn","nwwwnnnnnn","nzzwwnffzz","nnnnnnnfzz","nnnnnnnnzn","nnnnnnknzn","knnnnnnnnn","knnnnnnnnn"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  oasis:{n:"Oasis",map:["nnnnwwnnnn","nnnwwwwnnn","knnnwwnnnk","nnnnnnnnnn","zznnknnzzn","zznnnnnzzn","nnnnnnnnnn","nknnnnnnkn","nnnnnnnnnn","nnnnnnnnnn"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  canyon:{n:"Sandstone Canyon",map:["nnnnzznnnn","nnknnnnknn","nnknnnnknn","nnnnnnnnnn","zznnkknnzz","nnnnkknnnn","nknnnnnnkn","nnnnnnnnnn","nnnnnnnnnn","nnnnnnnnnn"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  sunTemple:{n:"Temple of the Sun",map:["knnnnnnnnk","nnnnnnnnnn","nknnnnnnkn","nnnnzznnnn","nnnnzznnnn","knnnnnnnnk","nnnknnknnn","nnnnnnnnnn","nnnnnnnnnn","nnnnnnnnnn"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]],boss:[5,0]},
-  tundra:{n:"Open Tundra",map:["ojjooooojj","ojjooaoooo","ooo^^ooooo","aoooojjooo","oo^ojjjooo","oooooooooo","ojjooa^oo^","ooooooojjo","oooooooooo","oooooooooo"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  frozenLake:{n:"Frozen Lake",map:["oooiiiiioo","ooiiiiiii^","aoiiiaiii^","ooiiiiiiio","oooiiiiioo","ojjoo^ojjo","^jjoaoojjo","oooooooooo","oooooooooo","oooooooooo"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  agateField:{n:"Agate Field",map:["ooooojjooo","oaaoo^^oaa","o^ooaaoooo","j^oo^ooooj","ooao^oooao","oooojjoooo","ao^oooooao","oooooooooo","oooooooooo","oooooooooo"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  agateSpire:{n:"Agate Spire",map:["aooooooooa","oooo^ooooo","^jjoooojjo","ooooaaoo^o","jooooooooo","oaoooooaoo","oooooooooo","ojjoooojjo","oooooooooo","oooooooooo"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]],boss:[4,0]},
-  geode:{n:"Geode Chamber",map:["ccceccuccc","cccccccccc","cpcxxxxcec","cccccccccc","xcccccccxx","cuccccccpc","ccccxxcccc","cecccccccu","cccccccccc","cccccccccc"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  mineshaft:{n:"Old Mineshaft",map:["ccxcccxccc","ccxcecxcce","cccccccccc","xxcxxxxcxx","ccccuccccc","cecccccpcc","xccxxxxccx","cccccccccu","cccccccccc","cccccccccc"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  glitter:{n:"Glittering Hall",map:["ccecccucee","cccccccccc","cuccpccecp","ccccccccc^","eccccccccc","^ccp^ccucc","^ccccc^cce","cucccccccc","cccccccccc","cccccccccc"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]},
-  amethystHollow:{n:"Amethyst Hollow",map:["xxcccccccx","xccccccuuc","pcccccccue","ppccxxccee","cccccccccc","xucccccccx","xuucccccpp","cccccccccc","cccccccccx","xxccccccxx"],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]],boss:[4,0]}
+  dunes:{n:"Shifting Dunes",map:["kknfffzzznnnnnw","kknfffzzznnnnnw","kknnnnzzznnwwwk","wwwzzznnnnnnnnn","wwwzzznnnnnnnnn","nnwwwwnnnnnnnnn","nnzzzwwwnfffzzz","nnzzzwwwnfffzzz","nnnnnnnnnnnfzzz","nnnnnnnnnnnnzzn","nnnnnnnnnnnnzzn","nnnnnnnnnkknzzn","kknnnnnnnnnnnnn","kknnnnnnnnnnnnn","kknnnnnnnnnnnnn"],start:[[6,14],[7,14],[5,14],[8,14],[6,13],[7,13]]},
+  oasis:{n:"Oasis",map:["nnnnnnwwwnnnnnn","nnnnnnwwwnnnnnn","nnnnnwwwwwwnnnn","kknnnnwwwnnnnnk","kknnnnwwwnnnnnk","nnnnnnnnnnnnnnn","zzznnnkknnnzzzn","zzznnnkknnnzzzn","zzznnnnnnnnzzzn","nnnnnnnnnnnnnnn","nnnnnnnnnnnnnnn","nnknnnnnnnnnkkn","nnnnnnnnnnnnnnn","nnnnnnnnnnnnnnn","nnnnnnnnnnnnnnn"],start:[[6,14],[7,14],[5,14],[8,14],[6,13],[7,13]]},
+  canyon:{n:"Sandstone Canyon",map:["nnnnnnzzznnnnnn","nnnnnnzzznnnnnn","nnnkknnnnnnknnn","nnnkknnnnnnknnn","nnnkknnnnnnknnn","nnnnnnnnnnnnnnn","zzznnnkkknnnzzz","zzznnnkkknnnzzz","nnnnnnkkknnnnnn","nnknnnnnnnnnkkn","nnknnnnnnnnnkkn","nnnnnnnnnnnnnnn","nnnnnnnnnnnnnnn","nnnnnnnnnnnnnnn","nnnnnnnnnnnnnnn"],start:[[6,14],[7,14],[5,14],[8,14],[6,13],[7,13]]},
+  sunTemple:{n:"Temple of the Sun",map:["kknnnnnnnnnnnnk","kknnnnnnnnnnnnk","nnnnnnnnnnnnnnn","nnknnnnnnnnnkkn","nnknnnnnnnnnkkn","nnnnnnzzznnnnnn","nnnnnnzzznnnnnn","nnnnnnzzznnnnnn","kknnnnnnnnnnnnk","nnnnnknnnkknnnn","nnnnnknnnkknnnn","nnnnnnnnnnnnnnn","nnnnnnnnnnnnnnn","nnnnnnnnnnnnnnn","nnnnnnnnnnnnnnn"],start:[[6,14],[7,14],[5,14],[8,14],[6,13],[7,13]],boss:[7,0]},
+  tundra:{n:"Open Tundra",map:["oojjjooooooojjj","oojjjooooooojjj","oojjjoooaoooooo","ooooo^^^ooooooo","ooooo^^^ooooooo","aaoooooojjjoooo","ooo^^ojjjjjoooo","ooo^^ojjjjjoooo","ooooooooooooooo","oojjjoooa^^ooo^","oojjjoooa^^ooo^","ooooooooooojjjo","ooooooooooooooo","ooooooooooooooo","ooooooooooooooo"],start:[[6,14],[7,14],[5,14],[8,14],[6,13],[7,13]]},
+  frozenLake:{n:"Frozen Lake",map:["oooooiiiiiiiooo","oooooiiiiiiiooo","oooiiiiiiiiiii^","aaoiiiiiaiiiii^","aaoiiiiiaiiiii^","oooiiiiiiiiiiio","oooooiiiiiiiooo","oooooiiiiiiiooo","oojjjooo^oojjjo","^^jjjoaaooojjjo","^^jjjoaaooojjjo","ooooooooooooooo","ooooooooooooooo","ooooooooooooooo","ooooooooooooooo"],start:[[6,14],[7,14],[5,14],[8,14],[6,13],[7,13]]},
+  agateField:{n:"Agate Field",map:["oooooooojjjoooo","oooooooojjjoooo","ooaaaooo^^^oaaa","oo^oooaaaoooooo","oo^oooaaaoooooo","jj^ooo^^ooooooj","oooaao^^ooooaao","oooaao^^ooooaao","oooooojjjoooooo","aao^^oooooooaao","aao^^oooooooaao","ooooooooooooooo","ooooooooooooooo","ooooooooooooooo","ooooooooooooooo"],start:[[6,14],[7,14],[5,14],[8,14],[6,13],[7,13]]},
+  agateSpire:{n:"Agate Spire",map:["aaooooooooooooa","aaooooooooooooa","oooooo^^ooooooo","^^jjjoooooojjjo","^^jjjoooooojjjo","ooooooaaaooo^^o","jjooooooooooooo","jjooooooooooooo","ooaooooooooaooo","ooooooooooooooo","ooooooooooooooo","oojjjoooooojjjo","ooooooooooooooo","ooooooooooooooo","ooooooooooooooo"],start:[[6,14],[7,14],[5,14],[8,14],[6,13],[7,13]],boss:[6,0]},
+  geode:{n:"Geode Chamber",map:["cccccecccuucccc","cccccecccuucccc","ccccccccccccccc","ccpccxxxxxxceec","ccpccxxxxxxceec","ccccccccccccccc","xxccccccccccxxx","xxccccccccccxxx","ccucccccccccppc","ccccccxxxcccccc","ccccccxxxcccccc","ccecccccccccccu","ccccccccccccccc","ccccccccccccccc","ccccccccccccccc"],start:[[6,14],[7,14],[5,14],[8,14],[6,13],[7,13]]},
+  mineshaft:{n:"Old Mineshaft",map:["cccxxccccxxcccc","cccxxccccxxcccc","cccxxceecxxccce","ccccccccccccccc","ccccccccccccccc","xxxccxxxxxxcxxx","ccccccuuccccccc","ccccccuuccccccc","cceccccccccpccc","xxcccxxxxxxcccx","xxcccxxxxxxcccx","ccccccccccccccu","ccccccccccccccc","ccccccccccccccc","ccccccccccccccc"],start:[[6,14],[7,14],[5,14],[8,14],[6,13],[7,13]]},
+  glitter:{n:"Glittering Hall",map:["ccceeccccuuceee","ccceeccccuuceee","ccccccccccccccc","ccucccppccceccp","ccucccppccceccp","cccccccccccccc^","eeccccccccccccc","eeccccccccccccc","^^cccp^^cccuccc","^^ccccccc^^ccce","^^ccccccc^^ccce","ccucccccccccccc","ccccccccccccccc","ccccccccccccccc","ccccccccccccccc"],start:[[6,14],[7,14],[5,14],[8,14],[6,13],[7,13]]},
+  amethystHollow:{n:"Amethyst Hollow",map:["xxxcccccccccccx","xxxcccccccccccx","xxcccccccccuuuc","ppccccccccccuue","ppccccccccccuue","pppcccxxxccceee","ccccccccccccccc","ccccccccccccccc","xxucccccccccccx","xxuuucccccccppp","xxuuucccccccppp","ccccccccccccccc","ccccccccccccccx","ccccccccccccccx","xxxcccccccccxxx"],start:[[6,14],[7,14],[5,14],[8,14],[6,13],[7,13]],boss:[6,0]}
 });
 
 /* hand-made height maps (greybox): one digit per tile, 0 = ground. Maps without h get hills and rubble at 1. */
-MAPS.woodland.h=["5443210011", "4443210012", "4440000012", "0000000001", "0000000000", "0011000000", "0000000210", "0002000110", "0022000000", "0010000000"];
-MAPS.brook.h=["4433333344", "3333333333", "3333333333", "0100000010", "1111111111", "1111111111", "1122111111", "1122110000", "0000000000", "0000000000"];
-MAPS.clearing.h=["1111111111", "1111222111", "1112222211", "0112332110", "0112332100", "0011221000", "0001110000", "0000000000", "0000000000", "0000000000"];
-MAPS.heart.h=["2213333122", "2213333122", "1112222111", "0001111000", "0000000000", "0000000000", "0000000000", "0000000000", "0000000000", "0000000000"];
+MAPS.woodland.h=["554443221000111", "554443221000111", "444443221000112", "444440000000112", "444440000000112", "000000000000001", "000000000000000", "000000000000000", "000111000000000", "000000000002110", "000000000002110", "000002000001110", "000222000000000", "000222000000000", "000110000000000"];
+MAPS.brook.h=["444333333333444", "444333333333444", "333333333333333", "333333333333333", "333333333333333", "001000000000110", "111111111111111", "111111111111111", "111111111111111", "111222111111111", "111222111111111", "111222111000000", "000000000000000", "000000000000000", "000000000000000"];
+MAPS.clearing.h=["111111111111111", "111111111111111", "111111222221111", "111112222222111", "111112222222111", "001112333221110", "001112333221000", "001112333221000", "000111222110000", "000001111000000", "000001111000000", "000000000000000", "000000000000000", "000000000000000", "000000000000000"];
+MAPS.heart.h=["222113333331222", "222113333331222", "222113333331222", "111112222221111", "111112222221111", "000001111110000", "000000000000000", "000000000000000", "000000000000000", "000000000000000", "000000000000000", "000000000000000", "000000000000000", "000000000000000", "000000000000000"];
 /* Sandstone Desert */
-MAPS.dunes.h=["1110001111", "1111001111", "1122000111", "1111000114", "2000000023", "1100000023", "0001100111", "1112222111", "2223333222", "2223333222"];
-MAPS.oasis.h=["2210000122", "2100000012", "2100000012", "1100000011", "0000000001", "0000000001", "1000000001", "1100000011", "0000000000", "0000000000"];
-MAPS.canyon.h=["3321001233", "3331001333", "3331001333", "3321001233", "0010000100", "1000000001", "1100000011", "0000000000", "0000000000", "0000000000"];
-MAPS.sunTemple.h=["1234444321", "1233443321", "1223333221", "0112002110", "0011001100", "0000000000", "0000000000", "0000000000", "0000000000", "0000000000"];
+MAPS.dunes.h=["111110000111111", "111110000111111", "111111000111111", "111222000001111", "111222000001111", "111111000001114", "220000000000223", "220000000000223", "111000000000223", "000001110001111", "000001110001111", "111112222221111", "222223333332222", "222223333332222", "222223333332222"];
+MAPS.oasis.h=["222110000001222", "222110000001222", "221000000000112", "221000000000112", "221000000000112", "111000000000111", "000000000000001", "000000000000001", "000000000000001", "110000000000001", "110000000000001", "111000000000111", "000000000000000", "000000000000000", "000000000000000"];
+MAPS.canyon.h=["333221000112333", "333221000112333", "333331000113333", "333331000113333", "333331000113333", "333221000112333", "000110000001000", "000110000001000", "110000000000001", "111000000000111", "111000000000111", "000000000000000", "000000000000000", "000000000000000", "000000000000000"];
+MAPS.sunTemple.h=["112334444443221", "112334444443221", "112333444333221", "112223333332221", "112223333332221", "001112000221110", "000111000111000", "000111000111000", "000000000000000", "000000000000000", "000000000000000", "000000000000000", "000000000000000", "000000000000000", "000000000000000"];
 /* Frostveil Reaches */
-MAPS.tundra.h=["2221112222", "2210001122", "1100000111", "1000000011", "0000000000", "0000000000", "0001110000", "0011221100", "1122332211", "1123333211"];
-MAPS.frozenLake.h=["2210000012", "2100000001", "2100010001", "1100000001", "1110000011", "1111111111", "1111111111", "0000000000", "0000000000", "0000000000"];
-MAPS.agateField.h=["3333333333", "3443333344", "2322332222", "1211211111", "1121111121", "0000110000", "1000000010", "0000000000", "0000000000", "0000000000"];
-MAPS.agateSpire.h=["3344444433", "2333433332", "2222332222", "1112222111", "0011111100", "0000000000", "0000000000", "0000000000", "0000000000", "0000000000"];
+MAPS.tundra.h=["222221111222222", "222221111222222", "222110000111222", "111000000001111", "111000000001111", "110000000000111", "000000000000000", "000000000000000", "000000000000000", "000001111000000", "000001111000000", "000111222111000", "111222333222111", "111222333222111", "111223333332111"];
+MAPS.frozenLake.h=["222110000000112", "222110000000112", "221000000000001", "221000001000001", "221000001000001", "111000000000001", "111110000000111", "111110000000111", "111111111111111", "111111111111111", "111111111111111", "000000000000000", "000000000000000", "000000000000000", "000000000000000"];
+MAPS.agateField.h=["333333333333333", "333333333333333", "334443333333444", "223222333222222", "223222333222222", "112111221111111", "111221111111221", "111221111111221", "000000111000000", "110000000000110", "110000000000110", "000000000000000", "000000000000000", "000000000000000", "000000000000000"];
+MAPS.agateSpire.h=["333444444444333", "333444444444333", "223333443333332", "222222333222222", "222222333222222", "111112222221111", "000111111111000", "000111111111000", "000000000000000", "000000000000000", "000000000000000", "000000000000000", "000000000000000", "000000000000000", "000000000000000"];
 /* Gemstone Caverns */
-MAPS.geode.h=["3333333333", "3222222223", "3211111123", "2100000012", "2100000012", "2100000012", "2110000112", "2221111222", "2222222222", "2222222222"];
-MAPS.mineshaft.h=["2222222222", "2222222222", "2222222222", "2222222222", "1111111111", "1111111111", "1111111111", "0000000000", "0000000000", "0000000000"];
-MAPS.glitter.h=["1111111111", "1111111111", "1112222111", "1122332211", "1123333211", "1122332211", "0011221100", "0000110000", "0000000000", "0000000000"];
-MAPS.amethystHollow.h=["3334444335", "2333222234", "2333222222", "2212222211", "0012211100", "0002220000", "0011000000", "0010000000", "0011000001", "0000000001"];
+MAPS.geode.h=["333333333333333", "333333333333333", "332222222222223", "332111111111223", "332111111111223", "221000000000112", "221000000000112", "221000000000112", "221000000000112", "221110000001112", "221110000001112", "222221111112222", "222222222222222", "222222222222222", "222222222222222"];
+MAPS.mineshaft.h=["222222222222222", "222222222222222", "222222222222222", "222222222222222", "222222222222222", "222222222222222", "111111111111111", "111111111111111", "111111111111111", "111111111111111", "111111111111111", "000000000000000", "000000000000000", "000000000000000", "000000000000000"];
+MAPS.glitter.h=["111111111111111", "111111111111111", "111111111111111", "111112222221111", "111112222221111", "111222333222111", "111223333332111", "111223333332111", "111222333222111", "000111222111000", "000111222111000", "000000111000000", "000000000000000", "000000000000000", "000000000000000"];
+MAPS.amethystHollow.h=["333334444443335", "333334444443335", "223333222222334", "223333222222222", "223333222222222", "222112222222111", "000112221111000", "000112221111000", "000002222000000", "000111000000000", "000111000000000", "000110000000000", "000111000000001", "000111000000001", "000000000000001"];
 /* Sobek’s Mire */
-MAPS.flats.h=["0001100001", "1001100000", "0000000000", "0010000000", "1000010001", "1000000001", "0000000000", "1000000100", "0000122100", "0001222100"];
-MAPS.road.h=["0002222200", "0012000210", "0011010110", "0010000010", "1010000001", "0011000110", "0011111110", "0000111000", "0000010000", "0000010000"];
-MAPS.bog.h=["1000000001", "0000110000", "0000110000", "0001001000", "0000000000", "1100000011", "1100000011", "0100000010", "0001111000", "0000110000"];
-MAPS.lair.h=["0001222100", "0002333200", "0011111100", "0000000000", "0000000000", "0000000000", "0110000110", "0110000110", "0001111000", "0000110000"];
+MAPS.flats.h=["000001110000001", "000001110000001", "110001110000000", "000000000000000", "000000000000000", "000110000000000", "110000001000001", "110000001000001", "110000000000001", "000000000000000", "000000000000000", "110000000001000", "000000112221000", "000000112221000", "000001222221000"];
+MAPS.road.h=["000002222222000", "000002222222000", "000112000002110", "000111001001110", "000111001001110", "000110000000110", "110110000000001", "110110000000001", "000111000001110", "000111111111110", "000111111111110", "000000111110000", "000000001000000", "000000001000000", "000000001000000"];
+MAPS.bog.h=["110000000000001", "110000000000001", "000000111000000", "000000111000000", "000000111000000", "000001000110000", "000000000000000", "000000000000000", "111000000000111", "111000000000111", "111000000000111", "001000000000110", "000001111110000", "000001111110000", "000000111000000"];
+MAPS.lair.h=["000001222221000", "000001222221000", "000002333332000", "000111111111000", "000111111111000", "000000000000000", "000000000000000", "000000000000000", "000000000000000", "001110000001110", "001110000001110", "001110000001110", "000001111110000", "000001111110000", "000000111000000"];
 /* Volcanic Isle */
-MAPS.fields.h=["2220022333", "2221002223", "1111100222", "1111110111", "0000000000", "0000000000", "0000000000", "0000000000", "0000000000", "0000000000"];
-MAPS.caldera.h=["3333003333", "3330000333", "2220000222", "2222002222", "1111111111", "0111111110", "0000000000", "0000000000", "0000000000", "0000000000"];
-MAPS.ridge.h=["1111111111", "1111111111", "0020000000", "0022000011", "0000000001", "0111111121", "1122222211", "2233333322", "3334444333", "3344444433"];
-MAPS.crater.h=["0034444300", "0233333320", "1222222221", "1111001111", "1110000111", "1111001111", "0111111110", "0000000000", "0000000000", "0000000000"];
+MAPS.fields.h=["222220002223333", "222220002223333", "222221000222223", "111111110002222", "111111110002222", "111111111001111", "000000000000000", "000000000000000", "000000000000000", "000000000000000", "000000000000000", "000000000000000", "000000000000000", "000000000000000", "000000000000000"];
+MAPS.caldera.h=["333333000333333", "333333000333333", "333330000003333", "222220000002222", "222220000002222", "222222000222222", "111111111111111", "111111111111111", "001111111111110", "000000000000000", "000000000000000", "000000000000000", "000000000000000", "000000000000000", "000000000000000"];
+MAPS.ridge.h=["111111111111111", "111111111111111", "111111111111111", "000220000000000", "000220000000000", "000222000000111", "000000000000001", "000000000000001", "001111111111221", "111222222222111", "111222222222111", "222333333333222", "333334444443333", "333334444443333", "333444444444333"];
+MAPS.crater.h=["000334444443000", "000334444443000", "002333333333220", "112222222222221", "112222222222221", "111111000111111", "111110000001111", "111110000001111", "111111000111111", "001111111111110", "001111111111110", "000000000000000", "000000000000000", "000000000000000", "000000000000000"];
 /* settlements for Defend fights: one hand-made map per region, in its own terrain. Enemies arrive along the top two
-   rows; tents (A) and the shrine (F) heal and give cover in the middle; you start along the bottom. */
+   rows; you start along the bottom (TOWN_START). All maps are 15x15 (scaled up from the old 10x10 ones, Nov 2026). */
+/* where you deploy in every settlement */
+const TOWN_START=[[6,14],[7,14],[5,14],[8,14],[6,13],[7,13]];
 const TOWNS={
-  swamp:["ssssnnssss","svssnnssvs","ssnnnnnnss","wsnvnnvnsw","wsnnnnnnsw","ssnnnnnnss","snvnnnnvns","ssnnnnnnss","ssnnnnnnss","sssnnnnsss"],
-  desert:["nnnnnnnnnn","nknnnnnnkn","nnnnzznnnn","knnnnnnnnk","nnnnwwnnnn","nnnnwwnnnn","knnnnnnnnk","nnnnnnnnnn","nnnnnnnnnn","nnnnnnnnnn"],
-  forest:["..........",".f......f.","...^..^...","f..y..y..f","..........",".f......f.","^........^","..y....y..","..........",".........."],
-  mountain:["bbbbbbbbbb","bmbbbbbbmb","bbbRbbRbbb","lbbbbbbbbl","bbbbmmbbbb","bbbbbbbbbb","RbbbbbbbbR","bbmbbbbmbb","bbbbbbbbbb","bbbbbbbbbb"],
-  snow:["oooooooooo","oaoojjooao","ooo^oo^ooo","jooooooooj","ooooiioooo","oooooooooo","^oooooooo^","ooaooooaoo","oooooooooo","oooooooooo"],
-  cavern:["cccccccccc","cecccccccu","cccxccxccc","pccccccccp","cccceccccc","cccccccccc","xccccccccx","ccuccccecc","cccccccccc","cccccccccc"]
+  swamp:["ssssssnnnssssss","ssssssnnnssssss","ssvsssnnnsssvvs","sssnnnnnnnnnsss","sssnnnnnnnnnsss","wwsnnvnnnvvnssw","wwsnnnnnnnnnssw","wwsnnnnnnnnnssw","sssnnnnnnnnnsss","ssnvvnnnnnnvnns","ssnvvnnnnnnvnns","sssnnnnnnnnnsss","sssnnnnnnnnnsss","sssnnnnnnnnnsss","sssssnnnnnnssss"],
+  desert:["nnnnnnnnnnnnnnn","nnnnnnnnnnnnnnn","nnknnnnnnnnnkkn","nnnnnnzzznnnnnn","nnnnnnzzznnnnnn","kknnnnnnnnnnnnk","nnnnnnwwwnnnnnn","nnnnnnwwwnnnnnn","nnnnnnwwwnnnnnn","kknnnnnnnnnnnnk","kknnnnnnnnnnnnk","nnnnnnnnnnnnnnn","nnnnnnnnnnnnnnn","nnnnnnnnnnnnnnn","nnnnnnnnnnnnnnn"],
+  forest:["...............","...............","..f.........ff.",".....^...^^....",".....^...^^....","ff...y...yy...f","...............","...............","..f.........ff.","^^............^","^^............^","...yy......y...","...............","...............","..............."],
+  mountain:["bbbbbbbbbbbbbbb","bbbbbbbbbbbbbbb","bbmbbbbbbbbbmmb","bbbbbRbbbRRbbbb","bbbbbRbbbRRbbbb","llbbbbbbbbbbbbl","bbbbbbmmmbbbbbb","bbbbbbmmmbbbbbb","bbbbbbbbbbbbbbb","RRbbbbbbbbbbbbR","RRbbbbbbbbbbbbR","bbbmmbbbbbbmbbb","bbbbbbbbbbbbbbb","bbbbbbbbbbbbbbb","bbbbbbbbbbbbbbb"],
+  snow:["ooooooooooooooo","ooooooooooooooo","ooaooojjjoooaao","ooooo^ooo^^oooo","ooooo^ooo^^oooo","jjooooooooooooj","ooooooiiioooooo","ooooooiiioooooo","ooooooooooooooo","^^oooooooooooo^","^^oooooooooooo^","oooaaooooooaooo","ooooooooooooooo","ooooooooooooooo","ooooooooooooooo"],
+  cavern:["ccccccccccccccc","ccccccccccccccc","ccecccccccccccu","cccccxcccxxcccc","cccccxcccxxcccc","ppccccccccccccp","cccccceeccccccc","cccccceeccccccc","ccccccccccccccc","xxccccccccccccx","xxccccccccccccx","cccuucccccceccc","ccccccccccccccc","ccccccccccccccc","ccccccccccccccc"]
 };
-for(const k in TOWNS)if(BIOMES[k])MAPS['town_'+k]={n:BIOMES[k].townN,map:TOWNS[k],start:[[4,9],[5,9],[3,9],[6,9],[4,8],[5,8]]};
+for(const k in TOWNS)if(BIOMES[k])MAPS['town_'+k]={n:BIOMES[k].townN,map:TOWNS[k],start:TOWN_START};
 /* settlement height maps (made from the old generated ones, so they look the same; edit them with tools/map-editor.html) */
-MAPS.town_swamp.h=["0000110000", "0100110010", "0011111100", "0011111100", "0011011100", "0011111100", "0111011110", "0011111100", "0000000000", "0000000000"];
-MAPS.town_desert.h=["1233222122", "1332111133", "2221001123", "2222111123", "2221001222", "2221001222", "2210011222", "1100011111", "0000000000", "0000000000"];
-MAPS.town_forest.h=["2222222222", "2222222222", "2222222112", "2222222112", "2222221111", "2211111111", "2111111111", "1111111101", "0000000000", "0000000000"];
-MAPS.town_mountain.h=["3443234443", "2333333432", "1233323321", "0122222210", "1211112221", "2221112222", "2221112222", "1111111111", "0000000000", "0000000000"];
-MAPS.town_snow.h=["4444444433", "3334334333", "3334224333", "2232112333", "2221001232", "1122112232", "1111112222", "0011111111", "0000000000", "0000000000"];
-MAPS.town_cavern.h=["2222222222", "2222222222", "1112222112", "1112222111", "1111222111", "1111111111", "1111111111", "1111110000", "0000000000", "0000000000"];
+MAPS.town_swamp.h=["000000111000000", "000000111000000", "001000111000110", "000111111111000", "000111111111000", "000111111111000", "000111001111000", "000111001111000", "000111111111000", "001111001111110", "001111001111110", "000111111111000", "000000000000000", "000000000000000", "000000000000000"];
+MAPS.town_desert.h=["112333222221222", "112333222221222", "113332111111333", "222221000111223", "222221000111223", "222222111111223", "222221000112222", "222221000112222", "222221000112222", "222110001112222", "222110001112222", "111000001111111", "000000000000000", "000000000000000", "000000000000000"];
+MAPS.town_forest.h=["222222222222222", "222222222222222", "222222222222222", "222222222221112", "222222222221112", "222222222221112", "222222222111111", "222222222111111", "222111111111111", "221111111111111", "221111111111111", "111111111111001", "000000000000000", "000000000000000", "000000000000000"];
+MAPS.town_mountain.h=["334443223444443", "334443223444443", "223333333334332", "112333332333221", "112333332333221", "001222222222110", "112111111222221", "112111111222221", "222221111222222", "222221111222222", "222221111222222", "111111111111111", "000000000000000", "000000000000000", "000000000000000"];
+MAPS.town_snow.h=["444444444444333", "444444444444333", "333334333443333", "333334222443333", "333334222443333", "222332111223333", "222221000112332", "222221000112332", "111222111222332", "111111111222222", "111111111222222", "000111111111111", "000000000000000", "000000000000000", "000000000000000"];
+MAPS.town_cavern.h=["222222222222222", "222222222222222", "222222222222222", "111112222221112", "111112222221112", "111112222221111", "111111222221111", "111111222221111", "111111111111111", "111111111111111", "111111111111111", "111111111000000", "000000000000000", "000000000000000", "000000000000000"];
 /* ADJ: adjectives for generated names */
 const ADJ=['Howling','Silent','Broken','Ashen','Bitter','Hollow','Moonlit','Drowned'];
 function spawnTiles(m){
-  const out=[];for(let y=0;y<m.map.length;y++)for(let x=0;x<m.map[0].length;x++){const t=TER[m.map[y][x]];if(t.c>=99)continue;const d=Math.min(...m.start.map(([sx,sy])=>Math.abs(sx-x)+Math.abs(sy-y)));if(d>=4)out.push({x,y,d})}
+  const out=[];for(let y=0;y<m.map.length;y++)for(let x=0;x<m.map[0].length;x++){const t=TER[m.map[y][x]];if(t.c>=99)continue;const d=Math.min(...m.start.map(([sx,sy])=>Math.abs(sx-x)+Math.abs(sy-y)));if(d>=6)out.push({x,y,d})}
   return shuffle(out);
 }
 function actBiome(){const a=run&&run.act||1;if(a>=3)return BIOMES.heart;
@@ -184,7 +186,7 @@ function actBiome(){const a=run&&run.act||1;if(a>=3)return BIOMES.heart;
 /* BOSS_MOV: max tiles a boss moves per turn */
 const BOSS_MOV=2;
 /* ROCK_MAX: most rocks left on a battle map (the rest are cleared, see genBattle); two boulders side by side count as one */
-const ROCK_MAX=3;
+const ROCK_MAX=7;/* on a 15x15 map */
 /* ACT2_UP: Act 2 monsters (not bosses, who scale on their own) are a little stronger: extra levels, HP, and Str/Mag for whichever they use */
 const ACT2_UP={lv:1,hp:2,atk:1};
 function genBattle(n,kind){
@@ -233,7 +235,7 @@ function genBattle(n,kind){
   const W={};
   if(town){const top=[];m.map.forEach((r,y)=>{if(y<=1)[...r].forEach((ch,x)=>{if(TER[ch].c<99)top.push({x,y})})});shuffle(top);let e=0;for(let t=2;t<=turns;t++)W[t]=Array.from({length:1+(t%2)+(act>=2?1:0)},()=>({c:roll(),lv:Math.max(1,lvBase-1),...top[(e++)%top.length]}))}
   /* summoning bosses: two more every other turn. summon:'*' picks from the region's pool */
-  if(bossFight&&B.boss.summon){const sc=()=>B.boss.summon==='*'?roll():B.boss.summon;for(const t of(B.id==='heart'?[3,5,7]:[3,5,7,9]))W[t]=[{c:sc(),lv:lvBase,x:6,y:3,ifBoss:1},{c:sc(),lv:lvBase,x:6,y:3,ifBoss:1}];def.summonTxt=B.boss.summonTxt}
+  if(bossFight&&B.boss.summon){const sc=()=>B.boss.summon==='*'?roll():B.boss.summon;for(const t of(B.id==='heart'?[3,5,7]:[3,5,7,9])){const sx=Math.round(m.map[0].length*.6),sy=Math.round(m.map.length*.3);W[t]=[{c:sc(),lv:lvBase,x:sx,y:sy,ifBoss:1},{c:sc(),lv:lvBase,x:sx,y:sy,ifBoss:1}]};def.summonTxt=B.boss.summonTxt}
   if(Object.keys(W).length)def.waves=W;
   return def;
 }
