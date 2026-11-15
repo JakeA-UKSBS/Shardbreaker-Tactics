@@ -35,22 +35,31 @@ const BOSS_PNG={bear:'hollow-bear',gator:'krondis',Yeti:'yeti',crystal:'crystal-
 /* Rhi draws boss art facing LEFT (the way enemies face), so everything in art/bosses/ is shown as drawn;
    monster art is still drawn facing right. Add a path to ART_LEFT if a non-boss piece is ever drawn facing left. */
 const ART_LEFT=new Set([]);
-function artLeft(src){src=String(src);return src.startsWith('art/bosses/')||ART_LEFT.has(String(src).replace(/^art\/|(-strike)?\.png$/g,''))}
-/* animated monsters: art/monsters/<Class>-sheet.png, n frames of fw x fh side by side, kept exactly as drawn. Sliced in the
-   browser into frames cropped to x0..x0+w (centred on the body), and flipped here if drawn facing left (left:true), so they
-   face right like the other monster art. Frame 0 is idle; an attack plays windup -> swing (the hit) -> follow.
-   Shown 48px tall (the width follows), centred on the tile. The game waits for every sheet (MON_READY) before it starts,
-   so there's no plain <Class>.png for these: when a hand-drawn sheet arrives, delete the old PNGs and their manifest lines. */
+function artLeft(src){src=String(src);const o=sheetOf(src);if(o)return!!o.s.left;return src.startsWith('art/bosses/')||ART_LEFT.has(String(src).replace(/^art\/|(-strike)?\.png$/g,''))}
+/* animated monsters: art/monsters/<Class>-sheet.png, n frames of fw x fh side by side, kept exactly as drawn.
+   No slicing or waiting: the sheet is a CSS background on the sprite, positioned on one frame (cropped to x0..x0+w, centred
+   on the body), and flipped by the artl class if drawn facing left (left:true). It loads like any other PNG, works opened
+   straight from disk, and needs no plain <Class>.png: when a hand-drawn sheet arrives, delete the old PNGs and their manifest
+   lines. Frame 0 is idle; an attack plays windup -> swing (the hit) -> follow. Shown 48px tall (the width follows). */
 const MON_SHEET={HellHound:{n:6,fw:120,fh:64,x0:20,w:100,left:true,windup:[1,2],swing:3,follow:[4,5]}};
-const MON_FR={};
-const MON_READY=Promise.all(Object.entries(MON_SHEET).map(([c,s])=>new Promise(done=>{const im=new Image();im.onerror=done;im.onload=()=>{MON_FR[c]=[...Array(s.n)].map((_,i)=>{const cv=document.createElement('canvas');cv.width=s.w;cv.height=s.fh;const g=cv.getContext('2d');
-  if(s.left){g.translate(s.w,0);g.scale(-1,1)}g.drawImage(im,i*s.fw+s.x0,0,s.w,s.fh,0,0,s.w,s.fh);return cv.toDataURL()});done()};im.src=`art/monsters/${c}-sheet.png`})));
-/* size a map sprite img for an animated monster's frame (or clear that sizing for anything else) */
-function sheetFit(img,cls){const s=MON_SHEET[cls];
-  if(s&&MON_FR[cls]&&MON_FR[cls].includes(img.src)){const w=s.w*48/s.fh;img.style.setProperty('width',w+'px','important');img.style.marginLeft=(48-w)/2+'px';img.style.maxWidth='none';img.style.transformOrigin='50% 50%';return true}
-  if(img.style.marginLeft){img.style.removeProperty('width');img.style.marginLeft='';img.style.maxWidth=''}return false}
+const BLANK='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+/* sprite()/portrait() hand back 'sheet:<Class>:<frame>' for these; sheetOf reads it back */
+const sheetOf=src=>{const m=/^sheet:(\w+):(\d+)$/.exec(src||'');return m&&MON_SHEET[m[1]]?{cls:m[1],i:+m[2],s:MON_SHEET[m[1]]}:null};
+/* background properties for frame src drawn h px tall, centred in a box bw px wide (bw omitted: the frame's own width) */
+function sheetBg(src,h,bw){const o=sheetOf(src),s=o.s,k=h/s.fh,w=s.w*k,dx=bw==null?0:(bw-w)/2;
+  return{'background-image':`url(art/monsters/${o.cls}-sheet.png)`,'background-repeat':'no-repeat','background-size':`${s.n*s.fw*k}px ${h}px`,'background-position':`${(-(o.i*s.fw+s.x0)*k+dx).toFixed(2)}px 0`}}
+const SHEET_PROPS=['background-image','background-repeat','background-size','background-position'];
+/* put src on a map sprite img: a sheet frame (sized 48px tall, centred on the tile) or, for anything else, clear that styling.
+   Returns true if it was a sheet frame (the caller then leaves img.src alone) */
+function sheetFit(img,src){const o=sheetOf(src);
+  if(o){if(img.getAttribute('src')!==BLANK)img.src=BLANK;img.dataset.s=src;const w=o.s.w*48/o.s.fh,bg=sheetBg(src,48);for(const k in bg)img.style.setProperty(k,bg[k]);
+    img.style.setProperty('width',w+'px','important');img.style.marginLeft=(48-w)/2+'px';img.style.maxWidth='none';img.style.transformOrigin='50% 50%';img.classList.toggle('artl',!!o.s.left);return true}
+  if(img.style.backgroundImage){SHEET_PROPS.forEach(k=>img.style.removeProperty(k));img.style.removeProperty('width');img.style.marginLeft='';img.style.maxWidth=''}return false}
+/* an <img>'s attributes for a portrait box h px square: a plain src, or a blank src with the sheet frame as its background */
+function picAttrs(src,h){if(!sheetOf(src))return`src="${src}"`;const o=sheetOf(src),bg=sheetBg(src,h,h);
+  return`src="${BLANK}" style="${Object.entries(bg).map(([k,v])=>k+':'+v).join(';')}${o.s.left?';transform:scaleX(-1)':''}"`}
 function monPng(cls,pose,sz){const b=sz>=2&&(BOSS_PNG[cls]||BOSS_PNG[CLS[cls].body]),k=b?'bosses/'+b:'monsters/'+cls;
-  if(!b&&MON_SHEET[cls])return MON_FR[cls]?MON_FR[cls][pose==='strike'?MON_SHEET[cls].swing:0]:'';
+  if(!b&&MON_SHEET[cls])return`sheet:${cls}:${pose==='strike'?MON_SHEET[cls].swing:0}`;
   return'art/'+k+(pose==='strike'&&ART_PNG.has(k+'-strike')?'-strike':'')+'.png'}
 function mapWk(u){const i=u.items.findIndex(it=>WTYPES.includes(IT[it.k].t)||IT[it.k].t==='spirit');return i>=0?u.items[i].k:null}
 function sprite(u,pose){return u.cast?castPng(u,pose==='strike'?'swing':'idle'):monPng(u.cls,pose,u.sz)}

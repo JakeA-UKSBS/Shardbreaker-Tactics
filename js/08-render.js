@@ -69,7 +69,7 @@ function render(){
     const ub=uBox(u);el.style.left=ub.l+'px';el.style.top=ub.t+'px';el.style.zIndex=unitZ(u);{const w=ub.w+'px';if(el.style.width!==w){el.style.width=el.style.height=w;el.firstChild.style.width=el.firstChild.style.height=w}}
     if(u.hp<=0&&!el.dataset.dead&&el.isConnected&&el.style.opacity!==''){el.dataset.dead=1;dieFx(el,boardEl,ub.l+ub.w/2,ub.t+ub.h/2,u,1)}else if(u.hp>0)delete el.dataset.dead;
     el.style.opacity=u.hp>0?1:0;
-    const src=sprite(u,'idle',mapWk(u)),img=el.firstChild;if(img.dataset.s!==src){img.src=src;img.dataset.s=src;img.style.transform='';img.style.transformOrigin='';if(!u.cast&&!(u.sz>1))sheetFit(img,u.cls);if(u.sz===2||u.sz>1&&src.startsWith('data:'))fillBox(img,src,u.team==='e');/* bosses: load and measure the strike frame now so the first attack shows it */if(u.sz>1){const s2=sprite(u,'strike',mapWk(u));if(!FILLS[s2])fillBox(new Image(),s2)}}img.classList.toggle('hi',isHi(u.cls,u.sz));img.classList.toggle('artl',artLeft(img.dataset.s));
+    const src=sprite(u,'idle',mapWk(u)),img=el.firstChild;if(img.dataset.s!==src){img.dataset.s=src;img.style.transform='';img.style.transformOrigin='';if(!sheetFit(img,src))img.src=src;if(u.sz===2||u.sz>1&&src.startsWith('data:'))fillBox(img,src,u.team==='e');/* bosses: load and measure the strike frame now so the first attack shows it */if(u.sz>1){const s2=sprite(u,'strike',mapWk(u));if(!FILLS[s2])fillBox(new Image(),s2)}}img.classList.toggle('hi',isHi(u.cls,u.sz));img.classList.toggle('artl',artLeft(img.dataset.s));
     {const bi=el.querySelector('.hpb i'),bb=barsOf(u);bi.style.width=(bb?bb.frac:u.hp/u.maxhp)*100+'%';
      if(bb){bi.style.background=BAR_COL[bb.n]||'';bi.parentNode.style.background=bb.n>1?BAR_COL[bb.n-1]:'';el.style.setProperty('--hf',BAR_HF[bb.n]||'');
       const was=+el.dataset.bars||u.bars;el.dataset.bars=bb.n;if(bb.n<was&&u.hp>0){pop(u,'The shell shatters!','dmg');sfx('broke');toast(`${u.name} cracks: ${bb.n} bar${bb.n===1?'':'s'} left`)}}}
@@ -99,7 +99,7 @@ function itemRows(u,btn){
 }
 function card(u){
   const ei=eqIdx(u),si=staffIdx(u),wi=ei>=0?ei:si,w=wi>=0?IT[u.items[wi].k]:null,sk=u.skill&&SKILLS[u.skill],t=ter(u.x,u.y);
-  let h=`<div class="uc ${u.team}"><img class="por" src="${portrait(u)}" alt=""><div class="uci">
+  let h=`<div class="uc ${u.team}"><img class="por" ${picAttrs(portrait(u),56)} alt=""><div class="uci">
    <div class="ch"><b>${u.name}</b><span>${CLS[u.cls].n} · Lv ${u.lv}</span></div>
    <div class="hp"><span class="bar"><i style="width:${u.bars?barsOf(u).frac*100:u.hp/u.maxhp*100}%${u.bars?`;background:${BAR_COL[barsOf(u).n]}`:''}"></i></span><span>${u.hp}/${u.maxhp} HP${u.bars?` · Bar ${barsOf(u).n}/${u.bars}`:''}</span></div>
    ${u.team==='p'?`<div class="xp"><span class="bar"><i style="width:${u.exp}%"></i></span><span>${u.exp} EXP</span></div>`:''}${mpLine(u)}${stChips(u)}${monMoves(u)}
@@ -173,7 +173,7 @@ function drawSheet(){
   const dis=L.length<2?' disabled':'';
   el.innerHTML=`<div class="sbx ${u.team}" role="dialog" aria-label="${u.name} details">
    <div class="snav"><button type="button" data-s="prev" aria-label="Previous unit"${dis}>◀</button><span>${{p:'Allies',e:'Enemies',g:'Others'}[u.team]} · ${idx}/${L.length}</span><button type="button" data-s="next" aria-label="Next unit"${dis}>▶</button><button type="button" class="sx" data-s="x" aria-label="Close">✕</button></div>
-   <div class="shd"><img src="${portrait(u)}" alt=""><div class="shi"><b class="sn">${u.name}</b><span class="sc">${CLS[u.cls].n}${u.boss?' <em>Boss</em>':''}</span>${tagsOf(u).length?`<button type="button" class="stags" data-s="chart" aria-label="Effective damage chart">${tagsOf(u).map(t=>`<img src="${tagArt(t)}" alt="">${TAGS[t].n}`).join(' · ')}</button>`:''}<span class="slv">Lv ${u.lv}${u.team==='p'?` · ${u.exp} EXP`:''}</span><div class="hp"><span class="bar"><i style="width:${u.bars?barsOf(u).frac*100:u.hp/u.maxhp*100}%${u.bars?`;background:${BAR_COL[barsOf(u).n]}`:''}"></i></span><span>${u.hp}/${u.maxhp} HP${u.bars?` · Bar ${barsOf(u).n}/${u.bars}`:''}</span></div></div></div>
+   <div class="shd"><img ${picAttrs(portrait(u),92)} alt=""><div class="shi"><b class="sn">${u.name}</b><span class="sc">${CLS[u.cls].n}${u.boss?' <em>Boss</em>':''}</span>${tagsOf(u).length?`<button type="button" class="stags" data-s="chart" aria-label="Effective damage chart">${tagsOf(u).map(t=>`<img src="${tagArt(t)}" alt="">${TAGS[t].n}`).join(' · ')}</button>`:''}<span class="slv">Lv ${u.lv}${u.team==='p'?` · ${u.exp} EXP`:''}</span><div class="hp"><span class="bar"><i style="width:${u.bars?barsOf(u).frac*100:u.hp/u.maxhp*100}%${u.bars?`;background:${BAR_COL[barsOf(u).n]}`:''}"></i></span><span>${u.hp}/${u.maxhp} HP${u.bars?` · Bar ${barsOf(u).n}/${u.bars}`:''}</span></div></div></div>
    <div class="stabs"><button type="button" data-s="p0" class="${sheetPg===0?'cur':''}">Personal</button><button type="button" data-s="p1" class="${sheetPg===1?'cur':''}">${isHi(u.cls,u.sz)||u.team==='p'?'Items':'Stats'}</button></div>
    <div class="spg">${pg}</div></div>`;
 }
