@@ -61,11 +61,11 @@ An effective hit multiplies weapon Mt ×2. Only your side deals them for now.
 
 | Monster type | Who has it | Beaten by |
 |---|---|---|
-| Flier | Hawk, Prism, Wisp, Spirit Hawk | Bows |
+| Flier | Hawk, Prism | Bows |
 | Armoured | Magma Golem, Crystal Sentinel, Sandstone Golem, Pyrite Colossus, Gem Golem, Amethyst Turtle, Stone Warden, Yeti | War Hammer, Stonebane |
 | Beast | Wolf, Hawk, Alligator, Cursed Stag, Magma Dragon, Bog Lurker, Jackal, Sand Worm, Ice Worm, Hell Hound, Frost Wolf, Agate Wyrm, Hollow Bear, Spirit Wolf, Spirit Hawk | Hunting Spear, Wolfsbane |
 | Colossal | Every 2×2 boss | Giantslayer |
-| Spectral | Fire Sprite, Frost Sprite, Wisp | Light sigils, Holy Sword, Spiritbane, Paladins |
+| Spectral | Fire Sprite, Frost Sprite | Light sigils, Holy Sword, Spiritbane, Paladins |
 | Plant | Blighted Treant | Fire sigils |
 
 ## Skills
