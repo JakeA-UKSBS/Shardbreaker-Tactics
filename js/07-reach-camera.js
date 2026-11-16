@@ -47,12 +47,12 @@ function pickAt(cx,cy){const b=vb(),px=(cx-b.l-cam.x)/cam.s,py=(cy-b.t-cam.y)/ca
   /* targeting: a cell you can pick wins over anything in front of it: first a target's own sprite, then a highlighted tile's top */
   const cs=typeof targetCells==='function'&&targetCells();
   if(cs){for(const u of state.units.filter(u=>u.hp>0&&cellsOf(u.x,u.y,u.sz||1).some(c=>cs.has(key(...c)))).sort((a,b)=>unitZ(b)-unitZ(a))){const r=uBox(u);if(px>=r.l+r.w*.25&&px<=r.l+r.w*.75&&py>=r.t+r.h*.2&&py<=r.t+r.h-4)return[u.x,u.y]}
-    let best=null,bd=-1;for(const k of cs){const[x,y]=k.split(',').map(Number),p=tileTop(x,y,vhOf(x,y)),dx=Math.abs(px-p.x);if(dx>TW/2)continue;const e=dx/(TW/2)*TH/2;if(py>=p.y+e&&py<=p.y+TH-e&&x+y>bd){best=[x,y];bd=x+y}}
+    let best=null,bd=-1;for(const k of cs){const[x,y]=k.split(',').map(Number);if(ter(x,y).v)continue;const p=tileTop(x,y,vhOf(x,y)),dx=Math.abs(px-p.x);if(dx>TW/2)continue;const e=dx/(TW/2)*TH/2;if(py>=p.y+e&&py<=p.y+TH-e&&x+y>bd){best=[x,y];bd=x+y}}
     if(best)return best}
   const us=state.units.filter(u=>u.hp>0).sort((a,b)=>unitZ(b)-unitZ(a));
   for(const u of us){const r=uBox(u);if(px>=r.l+r.w*.25&&px<=r.l+r.w*.75&&py>=r.t+r.h*.2&&py<=r.t+r.h-4)return[u.x,u.y]}
   let top=null,td=-1,side=null,sd=-1;
-  for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const d=x+y;
+  for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){if(ter(x,y).v)continue;const d=x+y;
     const vh=vhOf(x,y),p=tileTop(x,y,vh),dx=Math.abs(px-p.x);if(dx>TW/2)continue;const e=dx/(TW/2)*TH/2;
     if(py>=p.y+e&&py<=p.y+TH-e){if(d>td){top=[x,y];td=d}}
     else if(py>p.y+TH-e&&py<=p.y+TH-e+(vh+1)*HS&&d>sd){side=[x,y];sd=d}}

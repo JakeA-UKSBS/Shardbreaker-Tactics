@@ -18,11 +18,13 @@ const T=48;
 /* TERRAIN, keyed by the letter used in MAPS:
    n = name shown in the tile info, k = art key (tiles/<k>.png and CSS class t-<k>),
    c = Move cost to enter (99 = impassable), av = Avoid bonus, df = Def bonus,
-   slow = −1 Move next turn for a unit that starts there. */
+   slow = −1 Move next turn for a unit that starts there.
+   '_' = Void: no tile at all (cut a corner or edge off a map). Nothing is drawn, nothing can stand, fly or be pushed there. */
 const TER={
   '.':{n:'Ashgrass',k:'plain',c:1,av:0,df:0},'f':{n:'Dead Wood',k:'forest',c:2,av:10,df:1},'m':{n:'Rubble',k:'hill',c:3,av:10,df:2},
   'w':{n:'Black Water',k:'water',c:99,av:0,df:0},'=':{n:'Bridge',k:'bridge',c:1,av:0,df:0},
-  'R':{n:'Crag',k:'cliff',c:99,av:0,df:0}
+  'R':{n:'Crag',k:'cliff',c:99,av:0,df:0},
+  '_':{n:'Void',k:'void',c:99,av:0,df:0,v:1}
 };
 /* ITEMS AND WEAPONS:
    n = name, t = weapon type (blade/heavy/pole/bow/art/spirit, or item/gear), kind = which icon/sprite shape to draw,

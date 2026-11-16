@@ -5,7 +5,7 @@ const isWpn=k=>WTYPES.includes(IT[k].t);
 /* endless: never loses uses. Every weapon with more than 5 uses, and all healing staves; only Heaven's Bolt and Meteor Sigil (5) run out */
 const endless=k=>(isWpn(k)&&IT[k].uses>5)||IT[k].t==='spirit';
 /* Fliers cross sky and rough ground at cost 1, but not walls, masts or crags. */
-function mcost(u,x,y){const t=ter(x,y);if(u.team==='e'&&state.ice&&state.ice[key(x,y)])return 99;if(CLS[u.cls].phase)return 1;if(t.k==='lava'&&CLS[u.cls].lava)return 1;if(CLS[u.cls].fly)return['wall','cliff','cavewall'].includes(t.k)?99:1;if(CLS[u.cls].mnt&&(t.k==='forest'||t.k==='hill'))return t.c+1;return t.c}
+function mcost(u,x,y){const t=ter(x,y);if(t.v)return 99;if(u.team==='e'&&state.ice&&state.ice[key(x,y)])return 99;if(CLS[u.cls].phase)return 1;if(t.k==='lava'&&CLS[u.cls].lava)return 1;if(CLS[u.cls].fly)return['wall','cliff','cavewall'].includes(t.k)?99:1;if(CLS[u.cls].mnt&&(t.k==='forest'||t.k==='hill'))return t.c+1;return t.c}
 /* Teams: p = player, e = enemy, g = green 'other' units that fight the enemy and can be recruited. */
 const hostile=(a,b)=>(a.team==='e')!==(b.team==='e');
 /* Skills: u.skill is the personal skill. u.skills holds the ones learned since: {id,src:"learned"} (older saves say "scroll"). No limit on how many. */

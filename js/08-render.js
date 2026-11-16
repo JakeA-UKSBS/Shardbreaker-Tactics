@@ -17,7 +17,7 @@ function buildBoard(){
   boardEl.classList.add('iso');boardEl.style.gridTemplateColumns='';boardEl.style.width=BW+'px';boardEl.style.height=BH+'px';
   /* features (trees, rocks, gems...) stand up as props (16b-terrain3d.js) on the map's usual ground */const gc={};for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const t=ter(x,y);if(t.c<99&&!OVER_T.includes(t.k)&&!PROPS[t.k])gc[t.k]=(gc[t.k]||0)+1}const gk=Object.keys(gc).sort((a,b)=>gc[b]-gc[a])[0]||'plain';
   const firstOf={};
-  for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const t=document.createElement('div'),tk=ter(x,y).k;const vol=BATTLE&&BATTLE.biome==='mountain',ov=tk==='hill'&&vol?'crag':tk;
+  for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){if(ter(x,y).v)continue;/* void: no tile */const t=document.createElement('div'),tk=ter(x,y).k;const vol=BATTLE&&BATTLE.biome==='mountain',ov=tk==='hill'&&vol?'crag':tk;
     t.className=PROPS[ov]?'tile '+propGround(ov,gk):'tile t-'+tk;t.dataset.k=key(x,y);
     if(!PROPS[ov]){const v=tileVariant(tk,x,y);if(v)t.style.backgroundImage=`url(${v})`}
     const vh=vhOf(x,y),p=tileTop(x,y,vh),z=(x+y)*4;
