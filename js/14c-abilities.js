@@ -126,6 +126,34 @@ const ABIL={
   lullaby:{n:'Lullaby',mp:8,side:'foe',r:[1,1],shape:'cone',aim:'dir',st:['stun',1,.5],d:'A cone of song (4 tiles): 50% chance to Stun each enemy hit.'},
   soothingBallad:{n:'Soothing Ballad',cd:3,side:'self',shape:'burst1',heal:.6,d:'A gentle tune: allies around him heal 0.6× (Mag + 5). Ready again 3 turns later.'},
   encore:{n:'Encore',mp:15,once:1,side:'ally',r:[1,3],encore:1,d:'An ally up to 3 away who has already acted can act again this turn. Once a fight.'},
+  /* Trent (Cavalier) */
+  lanceCharge:{n:'Lance Charge',cd:3,side:'foe',r:[2,4],dmg:1.3,charge:1,d:'Charges an enemy 2–4 tiles away, running up beside it: 1.3× damage.'},
+  overrun:{n:'Overrun',cd:3,side:'foe',r:[1,1],shape:'pierce',aim:'dir',dmg:1,d:'Rides through 2 tiles in a line: 1.0× damage to both.'},
+  warCry:{n:'War Cry',cd:4,side:'self',shape:'burst2',st:['weak',1],d:'Enemies within 2 tiles are Weak (deal 30% less damage) for a turn.'},
+  /* Holt (Crossbowman) */
+  piercingBolt:{n:'Piercing Bolt',cd:2,side:'foe',r:'wpn',dmg:1.1,st:['sunder',2],d:'1.1× damage, and the target has −3 Def for 2 turns.'},
+  cripplingShot:{n:'Crippling Shot',cd:3,side:'foe',r:'wpn',dmg:.8,st:['chill',1],d:'0.8× damage, and the target is Slowed (−2 Move).'},
+  suppressingFire:{n:'Suppressing Fire',cd:4,side:'foe',r:[2,4],shape:'area',aim:'any',dmg:.4,st:['blind',1],d:'Bolts sweep a 3×3 area 2–4 tiles away: 0.4× damage and Blind (−20 Hit) to every enemy in it.'},
+  /* Kaya (Horse Archer) */
+  quickShot:{n:'Quick Shot',cd:3,side:'foe',r:'wpn',dmg:.6,hits:2,d:'Two fast arrows of 0.6×.'},
+  markPrey:{n:'Mark Prey',cd:2,side:'foe',r:'wpn',dmg:.8,st:['sunder',2],d:'0.8× damage, and the target has −3 Def for 2 turns.'},
+  rideOn:{n:'Ride On',cd:2,side:'self',tumble:1,free:1,d:'Move up to 2 more tiles, ignoring height. Doesn’t use her action.'},
+  /* Jun (Swordsman) */
+  flashStep:{n:'Flash Step',cd:3,side:'foe',r:[2,3],dmg:1.1,charge:1,d:'Dashes to an enemy 2–3 tiles away and cuts: 1.1× damage.'},
+  twinSlash:{n:'Twin Slash',cd:2,side:'foe',r:[1,1],dmg:.7,hits:2,d:'Two cuts of 0.7×.'},
+  counterStance:{n:'Counter Stance',cd:3,side:'self',self:[['guard',1],['shieldUp',1]],d:'Guard (30% less damage), and his counterattacks deal 1.3×, until your next turn.'},
+  /* Celestine (Paladin) */
+  radiantThrust:{n:'Radiant Thrust',cd:2,side:'foe',r:[1,1],dmg:1.2,st:['blind',1],d:'1.2× damage, and the target is Blinded (−20 Hit).'},
+  layOnHands:{n:'Lay on Hands',cd:3,side:'ally',r:[0,1],heal:.8,cure:1,d:'Heals an adjacent ally (or herself) 0.8× (Mag + 5) and cures their bad statuses.'},
+  auraOfLight:{n:'Aura of Light',cd:4,side:'self',shape:'burst1',give:['shell',2],d:'She and allies around her get +2 Def and +2 Res for 2 turns.'},
+  /* Seren (Summoner) */
+  spiritBolt:{n:'Spirit Bolt',mp:4,mag:1,el:'nature',side:'foe',r:[1,3],dmg:1,d:'1.0× magic damage up to 3 away.'},
+  bondMend:{n:'Bond Mend',mp:4,side:'ally',r:[0,3],heal:1,d:'Heal an ally (or her familiar) up to 3 away: 1.0× (Mag + 5).'},
+  spiritWard:{n:'Spirit Ward',mp:5,side:'ally',r:[0,3],give:['shell',2],d:'An ally up to 3 away gets +2 Def and +2 Res for 2 turns.'},
+  /* Zwei (Mercenary) */
+  heavyBlow:{n:'Heavy Blow',cd:2,side:'foe',r:[1,1],dmg:1.5,hit:-10,d:'1.5× damage, but less accurate.'},
+  whirlwind:{n:'Whirlwind',cd:3,side:'self',shape:'burst1',dmg:.9,d:'Spins his greatsword: 0.9× damage to every enemy around him.'},
+  battleFocus:{n:'Battle Focus',cd:4,side:'self',self:[['rally',2]],d:'+2 Str and +2 Def for 2 turns.'},
   /* Bard versions of Lysander's songs (KITS.lysander.asc) */
   anthem:{n:'Anthem of Valour',mp:6,side:'self',shape:'burst2',give:['anthem',2],others:1,d:'Allies within 2 tiles deal 30% more damage and get +10 Hit for 2 turns.'},
   grandLullaby:{n:'Lullaby',mp:6,side:'foe',r:[1,1],shape:'cone',aim:'dir',st:['stun',1,.65],d:'A cone of song (4 tiles): 65% chance to Stun each enemy hit.'},
@@ -141,6 +169,14 @@ const KITS={
   aldric:{passive:'plate',mp:0,abil:['sunder','valiantThrust','cover']},
   maelis:{passive:'lastLight',mp:26,abil:['mend','purify','circleOfRest','sanctuary'],add:{Saint:['holyBombardment']}},/* add: abilities gained on ascending */
   klaus:{mp:24,abil:['circleOfFire']},/* his passive is his personal skill, Ember Heart */
+  /* these use their personal skill (PERSONAL) as the passive */
+  trent:{mp:0,abil:['lanceCharge','overrun','warCry']},
+  holt:{mp:0,abil:['piercingBolt','cripplingShot','suppressingFire']},
+  kaya:{mp:0,abil:['quickShot','markPrey','rideOn']},
+  jun:{mp:0,abil:['flashStep','twinSlash','counterStance']},
+  celestine:{mp:0,abil:['radiantThrust','layOnHands','auraOfLight']},
+  seren:{mp:22,abil:['spiritBolt','bondMend','spiritWard']},
+  zwei:{mp:0,abil:['heavyBlow','whirlwind','battleFocus']},
   rook:{passive:'slippery',mp:0,abil:['backstab','smokeBomb','tumble']},
   rhyn:{passive:'heroic',mp:0,abil:['shieldBash','challenge','holdTheLine']},
   raptor:{passive:'beginnersLuck',mp:0,abil:['rally','cleanCut','shieldUp']},
