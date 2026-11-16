@@ -43,11 +43,13 @@ function artLeft(src){src=String(src);const o=sheetOf(src);if(o)return!!o.s.left
    lines. Frame 0 is idle; an attack plays windup -> swing (the hit) -> follow (any left out stay on the idle frame).
    abil: {abilityId: [frames]} plays those frames when the monster uses that ability. st: {status: frame} shows that frame for
    every pose while the unit has the status (the turtle stays in her spiked shell after Hunker Down).
+   fireball: [x, y] of the mouth in the swing frame (frame pixels, as drawn): its spell attacks spit art/fx/fireball.png from there.
    Shown 48px tall per tile of size (bosses 96px), the width follows. */
 const MON_SHEET={HellHound:{n:6,fw:120,fh:64,x0:20,w:100,left:true,windup:[1,2],swing:3,follow:[4,5]},
   Wolf:{n:5,fw:100,fh:64,x0:0,w:100,left:true,windup:[1,2],swing:3,follow:[4]},
   FrostWolf:{n:4,fw:100,fh:64,x0:0,w:92,left:true,abil:{howl:[1,2,3]}},
-  AmethystTurtle:{n:4,fw:128,fh:128,x0:0,w:128,left:true,swing:1,abil:{hunkerDown:[2,3]},st:{shell:3}}};
+  AmethystTurtle:{n:4,fw:128,fh:128,x0:0,w:128,left:true,swing:1,abil:{hunkerDown:[2,3]},st:{shell:3}},
+  MagmaDragon:{n:2,fw:175,fh:168,x0:0,w:175,left:true,swing:1,fireball:[8,42],abil:{searingBreath:[1,1,1]}}};
 const BLANK='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 /* sprite()/portrait() hand back 'sheet:<Class>:<frame>' for these; sheetOf reads it back */
 const sheetOf=src=>{const m=/^sheet:(\w+):(\d+)$/.exec(src||'');return m&&MON_SHEET[m[1]]?{cls:m[1],i:+m[2],s:MON_SHEET[m[1]]}:null};
