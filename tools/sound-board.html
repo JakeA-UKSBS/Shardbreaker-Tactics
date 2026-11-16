@@ -71,9 +71,9 @@ add('Statuses','stun','Stun lands','sfx',false);add('Statuses','buff','a buff la
 ['Wolf','Cursed Stag','Blighted Treant','Bog Lurker','Lamia','Mud Monster','Jackal','Sand Worm','Sandstone Golem','Hell Hound','Fire Sprite','Boulder Golem','Frost Wolf','Frost Sprite','Ice Worm','Ice Troll','Gem Golem','Shardling','Prism','Crystal Sentinel','Frog familiar']
   .forEach(n=>add('Monsters','cry-'+n.toLowerCase().replace(/ /g,''),n+': attack / hurt / death cry','sfx',false));
 ['Krondis','Hollow Bear','Pyrite Colossus','Magma Dragon','Yeti','Amethyst Turtle','Crystal Heart'].forEach(n=>add('Bosses','roar-'+n.toLowerCase().replace(/ /g,''),n+': roar (boss intro)','sfx',false));
-add('Ascension','rise','ascension: the light rises');add('Ascension','burst','ascension: the flash as the new class appears');add('Bosses','crystalshatter','Crystal Heart crystals breaking','sfx',false);
+add('Bosses','crystalshatter','Crystal Heart crystals breaking','sfx',false);
 /* turn flow */
-[['bell','ascension begins (the toll before the light rises)'],['phase','player phase starts'],['ephase','enemy phase starts'],['ding','level up, reward'],['levelup','ascension: the new stats appear (not ordinary level-ups)'],['fanfare','victory, big reward'],['tick','small UI steps, counters']].forEach(([k,w])=>add('Turns & battle UI',k,w));
+[['phase','player phase starts'],['ephase','enemy phase starts'],['ding','level up, reward'],['levelup','ascension: the new stats appear (not ordinary level-ups)'],['fanfare','victory, big reward'],['tick','small UI steps, counters']].forEach(([k,w])=>add('Turns & battle UI',k,w));
 add('Turns & battle UI','defeat','defeat','sfx',false);add('Turns & battle UI','promote','ascension / promotion','sfx',false);add('Turns & battle UI','reinforce','hold fight: reinforcements arrive','sfx',false);
 /* map and run */
 add('Map & run','item','item, relic or gold gained');add('Map & run','chestopen','chests and caches opening');add('Map & run','buy','buying');
@@ -87,7 +87,7 @@ add('Tavern','pour','drinks, Bog Witch tea, fountain');[['eat','buying food'],['
  ['beastgrowl','The Crystal-Touched Beast'],['star','The Fallen Star'],['oracle','The Oracle'],['sage','The Mountain Sage'],['onyx','The Black Onyx'],['sinking','The Sinking Sands'],['echo','Ithren’s Echo'],['ghosts','Those Who Came Before']]
   .forEach(([k,w])=>add('Events','ev-'+k,w,'sfx',false));
 /* menus */
-[['uiopen','dialogue menus: Continue / an event choice (trial)'],['cancel','dialogue menus: Leave / Back / Skip (trial)'],['decline','right-click back: the cancel sound (muted in game)'],['equip','equipping gear']].forEach(([k,w])=>add('Menus & UI',k,w));
+[['uiopen','dialogue menus: Continue / an event choice (trial)'],['cancel','backing out: Leave / Back / Skip in menus, right-click back, closing the map'],['equip','equipping gear']].forEach(([k,w])=>add('Menus & UI',k,w));
 [['hover','hovering a button or tile'],['uiclose','closing a panel / menu'],['toggle','settings toggles'],['blip','dialogue text blips']].forEach(([k,w])=>add('Menus & UI',k,w,'sfx',false));
 
 /* ---- current state of each slot */

@@ -102,12 +102,12 @@ async function act(a){
   const u=sel&&byId(sel);
   if(a.startsWith('sheet:')){openSheet(byId(a.slice(6)));return}
   if(a==='chart'){effChart();return}
-  if(a==='cancel'){sfx('decline');cancelMove();return}
+  if(a==='cancel'){sfx('cancel');cancelMove();return}
   if(a==='abil'||a.startsWith('ab:')||a==='abuse'){await abAct(u,a);return}
   if(a==='menu'){pending=null;targets=[];itemSel=null;ui='menu';render();return}
   if(a==='attack'){targets=atkTargets(u);tmode='atk';pending=null;ui='target';render();return}
   if(a==='heal'){targets=healTargets(u);tmode='heal';pending=null;ui='target';render();return}
-  if(a==='back'){sfx('decline');pending=null;ui='target';render();return}
+  if(a==='back'){sfx('cancel');pending=null;ui='target';render();return}
   if(a==='items'){itemSel=null;ui='items';render();return}
   if(a==='trade'){busy=true;await tradeWith(u);busy=false;render();return}
   if(a.startsWith('item:')){itemSel=+a.slice(5);render();return}
@@ -129,7 +129,7 @@ async function fight(a,ai,d){
   const res=resolve(a,ai,d);
   await quickPlay(a,d,res);
   a.hp=res.hpA;d.hp=res.hpD;
-  for(const u of[a,d])if(u.team==='p'&&u.hp<=0&&R('phoenix')&&!run.phx){u.hp=Math.min(10,u.maxhp);run.phx=1;pop(u,'Phoenix!','heal');sfx('rise');toast(`The Phoenix Feather saves ${u.name}`)}
+  for(const u of[a,d])if(u.team==='p'&&u.hp<=0&&R('phoenix')&&!run.phx){u.hp=Math.min(10,u.maxhp);run.phx=1;pop(u,'Phoenix!','heal');sfx('heal');toast(`The Phoenix Feather saves ${u.name}`)}
   for(const[u,i,n]of[[a,ai,res.used.a],[d,res.f.di,res.used.d]]){if(i<0||!n)continue;const it=u.items[i];if(endless(it.k))continue;it.u-=n;if(it.u<=0){u.items.splice(i,1);sfx('broke');toast(`${u.name}'s ${IT[it.k].n} shattered`)}}
   const p=a.team==='p'?a:d.team==='p'?d:null,o=p===a?d:a;
   for(const e of res.ev)if(e.psn){const t=e.by==='a'?d:a;if(t.team==='p'&&M('soup'))continue;if(t.hp>0){t.psn=3;sfx('poison');pop(t,'Poisoned','crit')}}

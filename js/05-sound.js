@@ -15,7 +15,7 @@ const SFX_FILE={sandswipe:['sfx/sand-swipe.mp3',.8],earth:['sfx/sand-swipe.mp3',
   fire:['sfx/fire-explosion.mp3',.6],water:['sfx/water.mp3',.6],thunder:['sfx/thunder.mp3',.6],wind:['sfx/wind.mp3',.6],ice:['sfx/ice-explosion.mp3',.6],poison:['sfx/poison.mp3',.6],
   heal:['sfx/heal.mp3',.5],debuff:['sfx/debuff.mp3',.55],slow:['sfx/debuff.mp3',.25],/* Slow landing: the debuff sound, quieter */claw:['sfx/claw.mp3',.8],block:['sfx/block.mp3',.9],slash:['sfx/slash.mp3',.7],sword:['sfx/sword-swing.mp3',.7],
   /* UI */
-  uiopen:['sfx/ui-open.mp3',.6],cancel:['sfx/ui-cancel.mp3',.6],decline:['sfx/ui-cancel.mp3',.6],/* uiopen / cancel: dialogue menus only (uiSfx below), not battle actions; decline (right-click back) is the cancel sound, muted for now */equip:['sfx/equip.mp3',.7],buy:['sfx/buy.mp3',.6],
+  uiopen:['sfx/ui-open.mp3',.6],cancel:['sfx/ui-cancel.mp3',.6],/* uiopen: dialogue menus only (uiSfx below); cancel: backing out anywhere (menus, right-click back) */equip:['sfx/equip.mp3',.7],buy:['sfx/buy.mp3',.6],
   /* events */
   anvil:['sfx/anvil.mp3',.45],book:['sfx/book.mp3',.5],lever:['sfx/lever.mp3',.4],pour:['sfx/pour.mp3',.45],chestopen:['sfx/chest-open.mp3',.45],paper:['sfx/paper.mp3',.7]};
 function playBuf(n,delay=0,rate=1){const c=AU.ctx,s=c.createBufferSource(),g=c.createGain();s.buffer=AU.buf[n];s.playbackRate.value=rate;g.gain.value=SFX_FILE[n][1];s.connect(g).connect(AU.out);s.start(c.currentTime+delay)}
@@ -40,9 +40,6 @@ const SFX={
   thunder:()=>noise(.6,{vol:.6,f:2500,type:'lowpass',slide:180}),
   throw:()=>noise(.3,{vol:.15,f:1500,slide:800,q:4}),
   heal:()=>[660,880,1320].forEach((f,i)=>tone(f,.28,{vol:.08,delay:i*.07})),
-  bell:()=>[[196,.16],[392,.07],[588,.05],[784,.035],[1046,.02]].forEach(([f,v])=>tone(f,2.6,{vol:v})),
-  rise:()=>{tone(220,2.2,{type:'triangle',vol:.05,slide:880});noise(2.2,{vol:.12,f:900,slide:5000,q:1.2})},
-  burst:()=>{noise(.7,{vol:.55,f:220,type:'lowpass'});tone(98,.8,{type:'triangle',vol:.3,slide:49});[784,988,1175,1568,1976].forEach((f,i)=>tone(f,.5,{type:'triangle',vol:.06,delay:.12+i*.07}))},
   ding:()=>{tone(1568,.55,{vol:.1});tone(3136,.4,{vol:.03})},
   fanfare:()=>[523,587,659,784,880,1047].forEach((f,i)=>tone(f,i===5?.5:.11,{type:'triangle',vol:.08,delay:i*.08})),
   death:()=>tone(420,.65,{type:'square',vol:.05,slide:70}),
@@ -56,7 +53,7 @@ const SFX={
   earth:()=>{noise(.5,{vol:.55,f:180,type:'lowpass'});tone(70,.4,{type:'triangle',vol:.4,slide:40})},
 };
 /* synth stand-ins for recorded-only sounds */
-Object.assign(SFX,{jump:()=>tone(330,.12,{type:'square',vol:.04,slide:660}),swordcrit:()=>SFX.crit(),ice:()=>SFX.water(),poison:()=>SFX.dark(),debuff:()=>SFX.dark(),slow:()=>tone(200,.45,{type:'sawtooth',vol:.03,slide:80}),claw:()=>SFX.swing(),slash:()=>SFX.swing(),block:()=>SFX.broke(),decline:()=>SFX.ephase(),equip:()=>SFX.tick(),buy:()=>SFX.item(),anvil:()=>{},book:()=>{},lever:()=>{},pour:()=>{},chestopen:()=>{},paper:()=>{},sandswipe:()=>SFX.swing(),levelup:()=>{}});
+Object.assign(SFX,{jump:()=>tone(330,.12,{type:'square',vol:.04,slide:660}),swordcrit:()=>SFX.crit(),ice:()=>SFX.water(),poison:()=>SFX.dark(),debuff:()=>SFX.dark(),slow:()=>tone(200,.45,{type:'sawtooth',vol:.03,slide:80}),claw:()=>SFX.swing(),slash:()=>SFX.swing(),block:()=>SFX.broke(),equip:()=>SFX.tick(),buy:()=>SFX.item(),anvil:()=>{},book:()=>{},lever:()=>{},pour:()=>{},chestopen:()=>{},paper:()=>{},sandswipe:()=>SFX.swing(),levelup:()=>{}});
 /* dialogue-menu buttons (events, the tavern, pop-up windows): 'uiopen' for going on, 'cancel' for leaving / backing out.
    Trial run: easy to switch off here. key = the button's data key, label = its text */
 const UI_SFX_ON=true,CANCEL_KEYS=['back','close','no','skip','leave','cancel'],ADVANCE_KEYS=['ok','next','done','yes','continue'];
@@ -64,7 +61,7 @@ function uiSfx(key,label){if(!UI_SFX_ON)return false;
   if(CANCEL_KEYS.includes(key)||/^(leave|walk (on|away)|move on|decline|refuse|ignore|no\b|back|pass)/i.test(label||'')){sfx('cancel');return true}
   if(ADVANCE_KEYS.includes(key)||/^\d+$/.test(key)){sfx('uiopen');return true}return false}
 /* click sounds switched off for now (left-click confirm, right-click decline) */
-const SFX_MUTED=new Set(['select','decline']);
+const SFX_MUTED=new Set(['select']);
 function sfx(n){if(!n||!settings.sound||SFX_MUTED.has(n))return;try{if(audio()&&AU.buf[n]){if(n==='step')[0,.16].forEach((d,i)=>playBuf(n,d,i?.92:1.04));/* two footfalls */else playBuf(n)}else SFX[n]()}catch(_){}}
 /* tx,ty: where the unit is going; walkers (not fliers) also hop when it's higher ground */
 function stepSfx(u,tx,ty){if(settings.steps===false)return;const C=CLS[u.cls]||{};sfx(C.fly?'flap':C.mnt?'hoof':'step');if(!C.fly&&tx!=null&&hOf(tx,ty)>hOf(u.x,u.y))sfx('jump')}

@@ -65,7 +65,7 @@ function allyMon(c,lv,name,id){const m=mkMon(c,lv);Object.assign(m,{team:'p',sum
    late in the run. From Act 2 it is tougher on top: +4 HP and +1 Str, Mag, Def and Res for each act past the first */
 function sumLv(u){const act=run.act||1,foeLv=1+Math.floor(((act-1)*10+flScale(run.n))*.6);return Math.max(1,u.lv+(CLS[u.cls].tier===2?3:0)-1,foeLv)}
 function sumBoost(m){const k=(run.act||1)-1;if(k<=0)return m;m.maxhp+=4*k;m.hp=m.maxhp;for(const s of['str','mag','def','res'])m[s]+=k;return m}
-function doSummon(u){const F=famOf(u),t=summonTile(u);if(!t)return;u.sumLeft--;const m=sumBoost(allyMon(F.cls,sumLv(u),`${u.name}’s ${F.n}`,'sum'+(run.uid++)));m.x=t.x;m.y=t.y;m.acted=true;m.owner=u.id;state.units.push(m);sfx('rise');pop(m,'Summoned','heal')}
+function doSummon(u){const F=famOf(u),t=summonTile(u);if(!t)return;u.sumLeft--;const m=sumBoost(allyMon(F.cls,sumLv(u),`${u.name}’s ${F.n}`,'sum'+(run.uid++)));m.x=t.x;m.y=t.y;m.acted=true;m.owner=u.id;state.units.push(m);sfx('heal');pop(m,'Summoned','heal')}
 function battleAllies(){
   for(const u of state.units)if(u.team==='p'&&isSummoner(u))u.sumLeft=CLS[u.cls].tier===2?2:1;
 }
