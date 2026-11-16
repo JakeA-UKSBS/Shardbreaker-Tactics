@@ -1032,16 +1032,16 @@ Object.assign(EVENTS, {
   star: {
     t: 'The Fallen Star',
     act: 2,
-    ok: () => run.roster.some(u => u.cast === 'ash'),
+    ok: () => run.roster.some(u => u.cast === 'klaus'),
     art: 'crater',
     fig: 'meteor',
     d: 'A crater, still smoking. At its heart a sigil has burned itself into the star-iron.',
     o: [
       {
         l: 'Take the Meteor Sigil',
-        sub: 'Ash takes it: Rng 3–10, 5 uses, huge damage',
+        sub: 'Klaus takes it: Rng 3–10, 5 uses, huge damage',
         go: async () => {
-          const u = run.roster.find(u => u.cast === 'ash');
+          const u = run.roster.find(u => u.cast === 'klaus');
           if (!(await stow(u, 'meteorSigil'))) return null;
           sfx('item');
           return `${u.name} pries the <b>Meteor Sigil</b> free. It’s warm to the touch.`;

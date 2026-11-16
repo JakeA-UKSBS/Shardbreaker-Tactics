@@ -132,7 +132,7 @@ const SKILLS={
   focus:{n:'Focus',d:'+10 Crit when no ally is adjacent.'},
   renewal:{n:'Renewal',d:'Adjacent allies recover 5 HP at the start of each of your turns.'},
   bulwark:{n:'Bulwark',d:'Luck×2% chance: halves damage from an incoming strike.'},
-  stoneGaze:{n:'Stone Gaze',d:'Luck% chance on a hit: the target turns to stone, loses its next turn and can\'t counter. Bosses and an Aegis are immune.'}
+  stoneGaze:{n:'Stone Gaze',d:'Luck% chance on a hit: the target turns to stone, loses its next turn and can\'t counter. Bosses are immune.'}
 };
 /* more skills */
 Object.assign(SKILLS,{

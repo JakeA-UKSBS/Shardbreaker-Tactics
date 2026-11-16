@@ -14,9 +14,9 @@ function learnBlock(u,k){return has(u,k)?`${u.name} already knows ${SKILLS[k].n}
 const elv=u=>u.lv+(CLS[u.cls].tier===2?15:0);
 /* a few characters wield only certain kinds within their class's weapon types (Zwei: two-handed swords) */
 const ONLY_KIND={zwei:['greatsword']};
-/* blade kinds for the cast: daggers only for Rogues, Poisoners, Assassins and Duelists; two-handed swords only for
-   Mercenaries (Zwei) and Warriors; the pure rogue classes can't use swords (Duelists can). Monsters and other non-cast units are unaffected */
-const DAGGERS=['dagger','twindagger'],DAGGER_CLS=['Rogue','Poisoner','Assassin','Duelist'],GREAT_CLS=['Mercenary','Warrior'],ROGUE_CLS=['Rogue','Poisoner','Assassin'];
+/* blade kinds for the cast: daggers only for Rogues and Assassins; two-handed swords only for
+   Mercenaries (Zwei) and Warriors; the rogue classes can't use swords. Monsters and other non-cast units are unaffected */
+const DAGGERS=['dagger','twindagger'],DAGGER_CLS=['Rogue','Assassin'],GREAT_CLS=['Mercenary','Warrior'],ROGUE_CLS=['Rogue','Assassin'];
 const kindOk=(u,k)=>{const w=IT[k];if(!u.cast||w.t!=='blade')return true;const n=CLS[u.cls].n;
   if(DAGGERS.includes(w.kind))return DAGGER_CLS.includes(n);if(w.kind==='greatsword')return GREAT_CLS.includes(n);if(['sword','rapier','scimitar'].includes(w.kind))return!ROGUE_CLS.includes(n);return false};
 /* signature elements: only Drecken wields lightning sigils, only Corvin ice ones */
@@ -63,9 +63,6 @@ function calc(x,xw,y,yw,ctx){
   let pow=add(bp,'High ground',Math.max(0,hd))+add(bp,xw.mag?'Mag':'Str',xw.mag?x.mag:x.str)+add(bp,`${xw.n||'Weapon'} Mt${eff?` (${xw.mt}, ×${eff} effective)`:''}`,xw.mt*(eff||1))+add(bp,'Trophies',eff&&R('trophies')?2:0)+add(bp,'Relics, meals, early ease',RB.pow)+add(bp,'Statuses, passives',SB.pow)+add(bp,'Gear Str',xw.mag?0:gx.str);if(has(x,'kindle')&&ctx.init===x)pow+=add(bp,'Kindle',2);
   /* personal skills */const myTurn=ctx.init===x&&x.team==='p'&&phase==='player'&&typeof origin!=='undefined'&&origin;
   if(has(x,'charger')&&myTurn&&man(origin,x)>=3)pow+=add(bp,'Charger',2);
-  if(has(x,'execute')&&y.hp*2<=y.maxhp)pow+=add(bp,'Execute',4);
-  if(has(x,'bloodRage')&&!xw.mag&&x.hp*2<=x.maxhp)pow+=add(bp,'Blood Rage',3);
-  if(has(x,'riposte')&&ctx.init&&ctx.init!==x)pow+=add(bp,'Riposte',3);
   if(has(x,'heroic')&&state.units.some(o=>o!==x&&o.team===x.team&&o.hp>0&&man(o,x)===1))pow+=add(bp,'Heroic',2);
   const yf=!!CLS[y.cls].fly;let df=add(bd,xw.mag?'Res':'Def',xw.mag?y.res:y.def)+add(bd,xw.mag?'Gear Res':'Gear Def',xw.mag?gy.res:gy.def)+add(bd,t.n||'Terrain',yf?0:t.df)+add(bd,'Relics, meals',RB.df)+add(bd,'Statuses, passives',SB.df);if(has(y,'steadfast')&&ctx.phase==='enemy'&&ctx.init!==y)df+=add(bd,'Steadfast',4);
   if(state.units.some(o=>o!==y&&o.team===y.team&&o.hp>0&&man(o,y)===1&&has(o,'guardian')))df+=add(bd,'Guardian ally',2);if(xw.mag&&state.units.some(o=>o!==y&&o.team===y.team&&o.hp>0&&man(o,y)===1&&has(o,'lightWard')))df+=add(bd,'Light Ward ally',2);
@@ -120,8 +117,8 @@ function resolve(a,ai,d){
       /* on-hit effects. Stone Gaze (Luck%): target is turned to stone (Lamia). Venom: target is poisoned */
       if(has(X,'stoneGaze')&&hp[o]>0&&rn()<LK(X)){e.stone=true;e.proc=e.proc||SKILLS.stoneGaze.n}
       if(has(X,'venom')&&hp[o]>0&&dmg>0){e.psn=true;e.proc=e.proc||SKILLS.venom.n}
-      /* Cold Snap (ice sigils: Slow), Ember Heart (fire: 30% Burn), Malice (dark magic: Weak), applied by fight() */
-      {const W=s==='a'?f.aw:f.dw;if(hp[o]>0&&dmg>0&&W){if(has(X,'coldSnap')&&W.el==='ice')(e.sts=e.sts||[]).push(['chill',1]);if(has(X,'emberHeart')&&W.el==='fire'&&rn()<.3)(e.sts=e.sts||[]).push(['burn',2]);if(has(X,'malice')&&W.mag&&(W.el==='dark'||W.drain))(e.sts=e.sts||[]).push(['weak',1])}}
+      /* Cold Snap (ice sigils: Slow), Ember Heart (fire: 30% Burn), applied by fight() */
+      {const W=s==='a'?f.aw:f.dw;if(hp[o]>0&&dmg>0&&W){if(has(X,'coldSnap')&&W.el==='ice')(e.sts=e.sts||[]).push(['chill',1]);if(has(X,'emberHeart')&&W.el==='fire'&&rn()<.3)(e.sts=e.sts||[]).push(['burn',2]);}}
       /* Retaliate (Luck%): a melee hit is dealt straight back to the striker */
       if(has(Y,'retaliate')&&f.dist===1&&dmg>0&&hp[o]>0&&rn()<LK(Y)){const back=Math.min(dmg,hp[s]);hp[s]-=back;e.guard=SKILLS.retaliate.n}
       /* drain weapons (dark magic): heal a third of the damage dealt */

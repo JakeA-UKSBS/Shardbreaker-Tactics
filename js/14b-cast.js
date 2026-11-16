@@ -17,8 +17,7 @@ const CAST_CLASSES = {
   Brawler: "bruiser.foot.heavy.1",
   Cultist: "caster.foot.art.1",
   "Ice Mage": "caster.foot.art.1",
-  "Storm Mage": "caster.foot.art.1",
-  Poisoner: "rogue.foot.blade.1",
+  "Elemental Mage": "caster.foot.art.1",
   Knight: "knight.armour.pole.1",
   Mender: "support.foot.spirit.1",
   Rogue: "rogue.foot.blade.1",
@@ -33,21 +32,15 @@ const CAST_CLASSES = {
   Summoner: "summoner.foot.art.1",
   /* advanced classes */
   Sniper: "skirm.foot.bow.2",
-  "Bow Cavalry": "skirm.mounted.bow.2",
   Berserker: "bruiser.foot.heavy.2",
   Witch: "caster.foot.art.2",
-  Shaman: "caster.foot.art.2",
   Archmage: "caster.foot.art.2",
-  Frostlord: "caster.foot.art.2",
   Stormlord: "caster.foot.art.2",
   Juggernaut: "knight.armour.heavy.2",
   Paladin: "knight.mounted.pole.2",
   Saint: "support.foot.spirit.2",
-  Crusader: "shield.armour.blade.2",
-  Duelist: "sword.foot.blade.2",
   Assassin: "rogue.foot.blade.2",
   Valkyrie: "shield.flying.pole.2",
-  Aegis: "shield.armour.blade.2",
   Hero: "shield.foot.blade.2",
   Warlord: "tank.mounted.heavy.2",
   Artillery: "tank.armour.bow.2",
@@ -56,37 +49,29 @@ const CAST_CLASSES = {
   "Grand Summoner": "summoner.foot.art.2",
   Bard: "support.foot.spirit.2",
   Mercenary: "sword.foot.blade.2",
-  Warlock: "caster.foot.art.2",
 };
 /* ASC_BONUS: stats each advanced cast class adds on ascending 
    (HP, Str, Mag, Skl, Spd, Lck, Def, Res) */
 const ASC_BONUS = {
   Sniper: [2, 3, 0, 3, 2, 2, 1, 1],
-  "Bow Cavalry": [3, 2, 0, 2, 4, 0, 1, 1],
   Artillery: [5, 4, 0, 2, 0, 0, 4, 1],
   Berserker: [6, 5, 0, 2, 2, 0, 1, 0],
   Witch: [2, 0, 4, 2, 2, 0, 0, 4],
-  Shaman: [4, 0, 3, 1, 1, 0, 2, 4],
   Archmage: [2, 0, 5, 2, 1, 0, 1, 4],
-  Frostlord: [4, 0, 4, 1, 0, 0, 2, 4],
   Stormlord: [3, 0, 4, 1, 4, 0, 0, 2],
   Pyrolord: [4, 0, 5, 1, 1, 0, 2, 1],
   Juggernaut: [7, 4, 0, 1, 0, 0, 5, 1],
   Paladin: [5, 3, 0, 1, 2, 0, 3, 2],
   Warlord: [6, 4, 0, 1, 1, 0, 3, 1],
   Saint: [3, 0, 4, 2, 1, 0, 0, 5],
-  Crusader: [5, 3, 1, 1, 0, 0, 4, 2],
-  Duelist: [3, 3, 0, 2, 3, 1, 2, 1],
   Assassin: [2, 3, 0, 3, 4, 2, 0, 1],
   Valkyrie: [3, 3, 0, 1, 3, 0, 1, 4],
-  Aegis: [6, 2, 0, 1, 0, 0, 5, 3],
   Hero: [4, 3, 0, 2, 3, 0, 2, 1],
   Swordmaster: [2, 3, 0, 3, 5, 1, 0, 1],
   Bard: [3, 0, 3, 2, 3, 1, 1, 2],
   "Grand Summoner": [4, 0, 5, 2, 2, 0, 2, 4],
-  /* classes that only ever join already advanced (Zwei, Kyul, Kaya) */
+  /* classes that only ever join already advanced (Zwei, Kaya, Celestine) */
   Mercenary: [4, 4, 0, 2, 2, 0, 2, 0],
-  Warlock: [3, 0, 5, 1, 1, 0, 1, 3],
   "Horse Archer": [3, 2, 0, 2, 4, 0, 1, 1],
 };
 /* BASE_ADJ: small per-class tweaks on top of the role's base stats, in stat order */
@@ -108,8 +93,8 @@ for (const n in CAST_CLASSES) {
 /* ---- the characters ----
    cls: their class, wk: the weapon they hold, look: their look.
    asc: one entry per ascension; its look is laid over the base look (wk is the weapon drawn in the previews).
-   swap: on ascending, these weapons in their bag change (only Holt as a Sniper: crossbow → longbow, arbalest → greatbow; keeps reforging).
-   gain: on ascending, they're given this weapon too (Crusaders get a holy sword alongside their staff). */
+   swap: on ascending, these weapons in their bag change (keeps reforging).
+   gain: on ascending, they're given this weapon too. Each character has one ascension. */
 const CAST = [
   /* ---- starting roster ---- */
   {
@@ -137,10 +122,6 @@ const CAST = [
           cloth: "#3f5a32",
           feather: ["#efe6cf", "#c8322e", "#efe6cf", "#c8322e"],
         },
-      },
-      "Bow Cavalry": {
-        wk: "longbow",
-        look: { capeC: "#5a4a32", horse: "#7a5230" },
       },
     },
   },
@@ -203,18 +184,6 @@ const CAST = [
           el: "#c060ff",
         },
       },
-      Shaman: {
-        wk: "crookStaff",
-        look: {
-          hand: false,
-          cloth: "#5a3a2a",
-          shawl: "#8a6a4a",
-          capeC: "#3a2a1e",
-          feather: ["#7a5230", "#efe6cf"],
-          staff: "#4f331d",
-          orb: "#7fd36a",
-        },
-      },
     },
   },
   {
@@ -245,23 +214,12 @@ const CAST = [
           gear: "circlet",
         },
       },
-      Frostlord: {
-        look: {
-          cloth: "#cfe8f6",
-          capeC: "#2a4a6a",
-          sash: "#9fd8ff",
-          collar: "#9fd8ff",
-          el: "#bfefff",
-          style: "long",
-          hem: "#9fd8ff",
-        },
-      },
     },
   },
   {
     id: "drecken",
     name: "Drecken",
-    cls: "Storm Mage",
+    cls: "Elemental Mage",
     wk: "stormSigil",
     joins: "start",
     look: {
@@ -315,7 +273,6 @@ const CAST = [
           beard: true,
         },
       },
-      Paladin: { look: { capeC: "#b8322e", horse: "#e8e2d0" } },
     },
   },
   {
@@ -338,17 +295,6 @@ const CAST = [
     },
     asc: {
       Saint: { look: { gear: "circlet", capeC: "#fff8e8", collar: "#efe6cf" } },
-      Crusader: {
-        wk: "holySword",
-        gain: "holySword",
-        look: {
-          metal: "#e8e2d0",
-          shield: "kite",
-          shieldC: "#efe6cf",
-          capeC: "#e2b553",
-          shawl: null,
-        },
-      },
     },
   },
   {
@@ -371,15 +317,6 @@ const CAST = [
       eye: "#2a2230",
     },
     asc: {
-      Duelist: {
-        wk: "thornRapier",
-        look: {
-          cloth: "#4a3a4a",
-          sash: "#c8322e",
-          capeC: "#2a2230",
-          jag: null,
-        },
-      },
       Assassin: {
         wk: "stiletto",
         look: {
@@ -417,12 +354,11 @@ const CAST = [
           feather: ["#ffffff", "#e8e2d0"],
         },
       },
-      Aegis: { look: { metal: "#b8c0a8", shield: "aegis", capeC: "#3f4a2a" } },
     },
   },
   {
-    id: "raptor",
-    name: "Raptor",
+    id: "brin",
+    name: "Brin",
     cls: "Adventurer",
     wk: "wornSword",
     joins: "tavern",
@@ -452,47 +388,6 @@ const CAST = [
   /* ---- found during the run (joins:'tavern' only at the tavern, 'event' only through their own event,
      'tavernEvent' at the tavern or the caged traveller but never a recruit stop) ---- */
   {
-    id: "aletta",
-    name: "Aletta",
-    cls: "Mender",
-    wk: "mendingStaff",
-    joins: "run",
-    look: {
-      fem: true,
-      style: "bun",
-      hair: "#a8743a",
-      skin: "#f3cfa6",
-      cloth: "#5a8a5a",
-      sash: "#efe6cf",
-      shawl: "#dfe8d0",
-      gear: "nursecap",
-      eye: "#3a6a3a",
-    },
-    asc: {
-      Saint: {
-        wk: "dawnStaff",
-        look: {
-          gear: "circlet",
-          capeC: "#dfe8d0",
-          staff: "#e2b553",
-          orb: "#9fe8c0",
-        },
-      },
-      Crusader: {
-        wk: "holySword",
-        gain: "holySword",
-        look: {
-          gear: null,
-          metal: "#b8d0b0",
-          shield: "kite",
-          shieldC: "#5a8a5a",
-          capeC: "#3f6a3f",
-          shawl: null,
-        },
-      },
-    },
-  },
-  {
     id: "trent",
     name: "Trent",
     cls: "Cavalier",
@@ -508,14 +403,6 @@ const CAST = [
       eye: "#3a6a3a",
     },
     asc: {
-      Paladin: {
-        look: {
-          capeC: "#3f7a4a",
-          metal: "#c4dcbc",
-          shield: "kite",
-          shieldC: "#3f7a4a",
-        },
-      },
       Warlord: {
         look: {
           capeC: "#25603a",
@@ -544,11 +431,6 @@ const CAST = [
       eye: "#3a5a8a",
     },
     asc: {
-      Sniper: {
-        wk: "longbow",
-        swap: { crossbow: "longbow", arbalest: "yewGreatbow" },
-        look: { bigBow: true, gear: "hood", capeC: "#2a3a5a" },
-      },
       Artillery: { look: { metal: "#9aa8c0", capeC: "#2a3a5a", beard: true } },
     },
   },
@@ -557,7 +439,7 @@ const CAST = [
     name: "Kaya",
     cls: "Horse Archer",
     wk: "shortBow",
-    joins: "run",
+    joins: "act1",
     look: {
       fem: true,
       style: "long",
@@ -601,8 +483,8 @@ const CAST = [
     },
   },
   {
-    id: "ash",
-    name: "Ash",
+    id: "klaus",
+    name: "Klaus",
     cls: "Pyromancer",
     wk: "emberSigil",
     joins: "run",
@@ -626,43 +508,6 @@ const CAST = [
           hair: "#8a2a22",
           body: "robe",
           hem: "#ff8a3c",
-        },
-      },
-      Archmage: {
-        wk: "meteorSigil",
-        look: { capeC: "#3a1a3a", cloth: "#7a2a4a", collar: "#7a2a4a" },
-      },
-    },
-  },
-  {
-    id: "pepr",
-    name: "Pepr",
-    cls: "Poisoner",
-    wk: "dirk",
-    joins: "run",
-    look: {
-      fem: true,
-      style: "bun",
-      hair: "#5a2a6a",
-      skin: "#e8b98f",
-      cloth: "#1f3a22",
-      pants: "#162a18",
-      sash: "#8acd3a",
-      cape: true,
-      capeC: "#3f7a3a",
-      wraps: "#a8c48a",
-      wpnArt: "dagger",
-      stance: "lowguard",
-      eye: "#8acd3a",
-    },
-    asc: {
-      Assassin: {
-        wk: "stiletto",
-        look: {
-          gear: "hood",
-          mask: "#1f3a22",
-          capeC: "#2f6a2f",
-          cloth: "#162a18",
         },
       },
     },
@@ -693,81 +538,8 @@ const CAST = [
   } /* placeholder Bard look until his art is drawn */,
   /* ---- join after Act 1, already advanced ---- */
   {
-    id: "nyx",
-    name: "Nyx",
-    cls: "Assassin",
-    wk: "dirk",
-    joins: "act1",
-    look: {
-      fem: true,
-      style: "long",
-      hair: "#1d1a24",
-      skin: "#e8b98f",
-      cloth: "#1e1a22",
-      pants: "#141018",
-      sash: "#5a4a7a",
-      gear: "hood",
-      mask: "#4a4656",
-      capeC: "#1e1a22",
-      jag: true,
-      eye: "#9a6ad8",
-    },
-  },
-  {
-    id: "roark",
-    name: "Roark",
-    cls: "Berserker",
-    wk: "reaverAxe",
-    joins: "act1",
-    look: {
-      style: "wild",
-      beard: true,
-      hair: "#9a9aa2",
-      skin: "#e8b98f",
-      cloth: "#6a6a72",
-      pants: "#3a3a40",
-      sash: "#a8322a",
-      capeC: "#8a2a22",
-      scar: true,
-      dblAxe: true,
-      stance: "shoulder",
-      eye: "#6a3a2a",
-    },
-  },
-  {
-    id: "valen",
-    name: "Valen",
-    cls: "Swordsman",
-    wk: "knightlySword",
-    joins: "act1",
-    look: {
-      style: "mane",
-      hair: "#d9b25a",
-      skin: "#f3cfa6",
-      cloth: "#6a1e2a",
-      pants: "#3a2228",
-      sash: "#c9c3b8",
-      stance: "guard",
-      boots: "#4a3426",
-      eye: "#3a5a8a",
-    },
-    asc: {
-      Swordmaster: {
-        wk: "hookedBlade",
-        look: {
-          capeC: "#4a1420",
-          stance: "high",
-          tails: "#c9c3b8",
-          bracers: "#a8b4c8",
-          lapels: "#c9c3b8",
-          noCrown: true,
-        },
-      },
-    },
-  },
-  {
-    id: "celest",
-    name: "Celest",
+    id: "celestine",
+    name: "Celestine",
     cls: "Paladin",
     wk: "ironSpear",
     joins: "act1",
@@ -837,25 +609,6 @@ const CAST = [
       eye: "#2a2230",
     },
   },
-  {
-    id: "kyul",
-    name: "Kyul",
-    cls: "Warlock",
-    wk: "umbralSigil",
-    joins: "act1",
-    look: {
-      gear: "hood",
-      skin: "#c9b6a0",
-      cloth: "#1e2a22",
-      sash: "#3fae6a",
-      capeC: "#141a16",
-      mask: "#141a16",
-      mist: "#2a2230",
-      hand: true,
-      el: "#5fe08a",
-      eye: "#3fae6a",
-    },
-  },
 ];
 /* class names → class keys; each base class lists its ascensions for promotion */
 CAST.forEach((c) => {
@@ -914,7 +667,7 @@ function castArtAll() {
       for (const p of CAST_POSES) castArt(c.id, cls, p);
 }
 /* weapon types: a cast class (and its ascensions) wields only the type its characters start with; Menders wield staves
-   only (no sigils), and an ascension that gains a weapon (gain) adds that weapon's type (a Crusader: staves and blades) */
+   only (no sigils), and an ascension that gains a weapon (gain) adds that weapon's type */
 {
   const W = {},
     add = (k, ts) => (
