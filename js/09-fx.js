@@ -126,9 +126,9 @@ function hitSfx(w,ranged){return w.acid?'poison':w.kind==='staff'&&!ranged?'swin
 async function shoot(X,Y,w){
   const a=uBox(X),b=uBox(Y),sx=a.l+a.w/2,sy=a.t+a.h*.45,ex=b.l+b.w/2,ey=b.t+b.h*.5,arc=w.t==='art'?0:30+Math.max(0,sy-ey)*.3;
   if(w.t==='bow'){const f=FX.arrow,N=12,pts=[];for(let i=0;i<=N;i++){const t=i/N;pts.push([sx+(ex-sx)*t,sy+(ey-sy)*t-arc*4*t*(1-t)])}
-    const d=fxEl(f,sx,sy);fxFrame(d,f,2);const ang=i=>{const[nx,ny]=pts[Math.min(N,i+1)],[px,py]=pts[Math.max(0,i-1)];return Math.atan2(ny-py,nx-px)*180/Math.PI};
-    await d.animate(pts.map(([x,y],i)=>({transform:`translate(${x-f.ax}px,${y-f.ay}px) rotate(${ang(i)}deg)`})),{duration:D(300),easing:'linear'}).finished;d.remove();
-    fxPlay({...f,ax:53},ex,ey,{frames:[3,4,5],rot:ang(N)});return}
+    const AK=.45/* arrow scale: the art is drawn big for a 48px unit */,d=fxEl(f,sx,sy,AK);fxFrame(d,f,2);const ang=i=>{const[nx,ny]=pts[Math.min(N,i+1)],[px,py]=pts[Math.max(0,i-1)];return Math.atan2(ny-py,nx-px)*180/Math.PI};
+    await d.animate(pts.map(([x,y],i)=>({transform:`translate(${x-f.ax}px,${y-f.ay}px) rotate(${ang(i)}deg) scale(${AK})`})),{duration:D(300),easing:'linear'}).finished;d.remove();
+    fxPlay({...f,ax:53},ex,ey,{frames:[3,4,5],rot:ang(N),k:AK});return}
   const pj=document.createElement('div');pj.className='proj-m '+(w.t==='bow'?'arrow':w.t==='art'?'':'spin');pj.style.left='0';pj.style.top='0';
   if(w.t==='art')pj.style.color=pj.style.background=EL_COL[w.el]||'#c8b8ff';boardEl.appendChild(pj);
   const N=12,pts=[];for(let i=0;i<=N;i++){const t=i/N;pts.push([sx+(ex-sx)*t,sy+(ey-sy)*t-arc*4*t*(1-t)])}
