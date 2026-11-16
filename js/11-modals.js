@@ -1,6 +1,6 @@
 /* Modal dialogs, level-ups, tutorial tips and the options menu */
 /* ================= MODALS ================= */
-function modal(html){modalEl.innerHTML=`<div class="mbox">${html}</div>`;modalEl.hidden=false;return new Promise(res=>{modalEl.onclick=e=>{const b=e.target.closest('[data-m]');if(!b)return;modalEl.hidden=true;modalEl.onclick=null;res(b.dataset.m)}})}
+function modal(html){modalEl.innerHTML=`<div class="mbox">${html}</div>`;modalEl.hidden=false;return new Promise(res=>{modalEl.onclick=e=>{const b=e.target.closest('[data-m]');if(!b)return;uiSfx(b.dataset.m,b.textContent.trim());modalEl.hidden=true;modalEl.onclick=null;res(b.dataset.m)}})}
 async function levelUp(u,g){
   /* on the map: stars rise round the unit first */
   if(state&&state.units.includes(u)&&uEls[u.id]&&!uEls[u.id].hidden){const b=uBox(u);sfx('levelup');await fxPlay(FX.levelUp,b.l+b.w/2,b.t+b.h-4,{k:1.2})}

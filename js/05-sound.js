@@ -15,7 +15,7 @@ const SFX_FILE={sandswipe:['sfx/sand-swipe.mp3',.8],levelup:['sfx/aura-up.mp3',.
   fire:['sfx/fire-explosion.mp3',.6],water:['sfx/water.mp3',.6],thunder:['sfx/thunder.mp3',.6],wind:['sfx/wind.mp3',.6],ice:['sfx/ice-explosion.mp3',.6],poison:['sfx/poison.mp3',.6],
   heal:['sfx/heal.mp3',.5],debuff:['sfx/debuff.mp3',.55],slow:['sfx/debuff.mp3',.25],/* Slow landing: the debuff sound, quieter */claw:['sfx/claw.mp3',.8],block:['sfx/block.mp3',.9],slash:['sfx/slash.mp3',.7],sword:['sfx/sword-swing.mp3',.7],
   /* UI */
-  select:['sfx/confirm.mp3',.25],decline:['sfx/decline.mp3',.6],equip:['sfx/equip.mp3',.7],buy:['sfx/buy.mp3',.6],
+  select:['sfx/confirm.mp3',.25],decline:['sfx/decline.mp3',.6],advance:['sfx/ui-advance.mp3',.6],cancel:['sfx/ui-cancel.mp3',.6],/* dialogue menus only (uiSfx below), not battle actions */equip:['sfx/equip.mp3',.7],buy:['sfx/buy.mp3',.6],
   /* events */
   anvil:['sfx/anvil.mp3',.45],book:['sfx/book.mp3',.5],lever:['sfx/lever.mp3',.4],pour:['sfx/pour.mp3',.45],chestopen:['sfx/chest-open.mp3',.45],paper:['sfx/paper.mp3',.7]};
 function playBuf(n,delay=0,rate=1){const c=AU.ctx,s=c.createBufferSource(),g=c.createGain();s.buffer=AU.buf[n];s.playbackRate.value=rate;g.gain.value=SFX_FILE[n][1];s.connect(g).connect(AU.out);s.start(c.currentTime+delay)}
@@ -57,6 +57,12 @@ const SFX={
 };
 /* synth stand-ins for recorded-only sounds */
 Object.assign(SFX,{jump:()=>tone(330,.12,{type:'square',vol:.04,slide:660}),swordcrit:()=>SFX.crit(),ice:()=>SFX.water(),poison:()=>SFX.dark(),debuff:()=>SFX.dark(),slow:()=>tone(200,.45,{type:'sawtooth',vol:.03,slide:80}),claw:()=>SFX.swing(),slash:()=>SFX.swing(),block:()=>SFX.broke(),decline:()=>SFX.ephase(),equip:()=>SFX.tick(),buy:()=>SFX.item(),anvil:()=>{},book:()=>{},lever:()=>{},pour:()=>{},chestopen:()=>{},paper:()=>{},sandswipe:()=>SFX.swing(),levelup:()=>{}});
+/* dialogue-menu buttons (events, the tavern, pop-up windows): 'advance' for going on, 'cancel' for leaving / backing out.
+   Trial run: easy to switch off here. key = the button's data key, label = its text */
+const UI_SFX_ON=true,CANCEL_KEYS=['back','close','no','skip','leave','cancel'],ADVANCE_KEYS=['ok','next','done','go','yes','continue'];
+function uiSfx(key,label){if(!UI_SFX_ON)return false;
+  if(CANCEL_KEYS.includes(key)||/^(leave|walk (on|away)|move on|decline|refuse|ignore|no\b|back|pass)/i.test(label||'')){sfx('cancel');return true}
+  if(ADVANCE_KEYS.includes(key)||/^\d+$/.test(key)){sfx('advance');return true}return false}
 /* click sounds switched off for now (left-click confirm, right-click decline) */
 const SFX_MUTED=new Set(['select','decline']);
 function sfx(n){if(!n||!settings.sound||SFX_MUTED.has(n))return;try{if(audio()&&AU.buf[n]){if(n==='step')[0,.16].forEach((d,i)=>playBuf(n,d,i?.92:1.04));/* two footfalls */else playBuf(n)}else SFX[n]()}catch(_){}}
