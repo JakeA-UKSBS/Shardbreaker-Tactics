@@ -32,8 +32,9 @@ function setMap(){MAP=BATTLE.map;MW=MAP[0].length;MH=MAP.length;HM=heightsOf(BAT
 function enterMap(){setMap();over=null;phase='player';busy=false;ui='idle';clearSel();buildBoard();render();requestAnimationFrame(()=>initCam())}
 async function battleIntro(){
   const c=BATTLE;
-  {const b=state.units.find(u=>u.boss&&u.id==='boss');if(b&&BOSS_ROAR[b.cls])sfx(BOSS_ROAR[b.cls])}/* the boss roars as its fight opens */
   await modal(`<div class="eyebrow">Act ${run.act||1} · Floor ${run.n} of ${actLen()}</div><h2>${c.title}</h2><p>${c.intro}</p><div class="lvl" style="grid-template-columns:1fr"><div><span style="color:var(--gold)">Goal</span><span>${goalText().replace(/<[^>]+>/g,' ').trim()}</span></div><div><span style="color:var(--red)">Lose</span><span>${loseText()}</span></div></div><div class="mbtns"><button class="go" type="button" data-m="go">Begin</button></div>`);
+  /* after Begin: the boss roars (or the Crystal Heart beats), then the Player Phase banner */
+  {const b=state.units.find(u=>u.boss&&u.id==='boss');if(b&&BOSS_ROAR[b.cls]){sfx(BOSS_ROAR[b.cls]);await sleep(D(900))}}
   banner('Player Phase','p');saveGame();
   {const B=BIOMES[c.biome];if(B&&B.tip)tip(...B.tip)}
   tip('basics','Moving your units','Click a blue unit to see where it can go: blue tiles are moves, red tiles are what it can hit. Click a tile to move there, or click a red enemy to attack it straight away. Dead woods give +20 Avoid and +1 Def, so fight from the trees when you can.');
