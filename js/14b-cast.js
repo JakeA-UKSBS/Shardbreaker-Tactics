@@ -651,8 +651,11 @@ const castPngKey = (id, cls, pose) =>
   "-" +
   pose;
 /* an ascended class with no PNGs of its own yet uses the base class's (hand-drawn art arrives class by class) */
-function castPng(u, pose) {
+/* characters whose drawn idle is a relaxed pose: everywhere but the campfire they stand in this ready pose instead */
+const READY_POSE = { rook: "windup", rhyn: "windup" };
+function castPng(u, pose, rest) {
   if (!u || !u.cast) return null;
+  if (pose === "idle" && !rest && READY_POSE[u.cast]) pose = READY_POSE[u.cast];
   const k = castPngKey(u.cast, u.cls, pose);
   if (ART_PNG.has(k)) return "art/" + k + ".png";
   const c = castDef(u.cast),
