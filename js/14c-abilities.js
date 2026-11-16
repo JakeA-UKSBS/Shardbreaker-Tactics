@@ -353,8 +353,8 @@ const SHAPE_N={one:'',cross:'Cross',area:'3×3 area',burst1:'Around the user',bu
 function abCostTxt(u,id){const a=ABIL[id];return a.mp?`${abCost(u,id)} MP${a.once?' · once':''}`:`CD ${a.cd}`}
 function abRangeTxt(u,id){const a=ABIL[id];if(a.side==='self')return SHAPE_N[a.shape]||'Self';const r=abRange(u,id);return`Rng ${r[0]===r[1]?r[0]:r[0]+'–'+r[1]}${a.shape&&a.shape!=='one'?' · '+SHAPE_N[a.shape]:''}`}
 function mpLine(u){const m=mpMax(u);return m?`<div class="mpl"><span class="bar"><i style="width:${(u.mp||0)/m*100}%"></i></span><span>${u.mp||0}/${m} MP</span></div>`:''}
-function stChips(u){const l=stList(u).map(k=>[STATUS[k].n,STATUS[k].d,STATUS[k].bad,u.st[k].n]);if(u.psn)l.push(['Poison','Takes 2 damage at the start of each of its turns (never below 1 HP). A Salve cures it.',1,u.psn]);if(u.stone)l.push(['Stone','Skips its next turn and can’t counter.',1,1]);if(state&&state.units&&state.units.includes(u)&&u.hp>0&&!hasSt(u,'chill')&&zoc(u))l.push(['Pinned','Next to an enemy: −1 Move.',1,1]);
-  return l.length?`<div class="stc">${l.map(([n,d,bad,t])=>`<span class="st ${bad?'bad':'good'}" title="${d}">${n}${t>1&&t<50?' '+t:''}</span>`).join('')}</div>`:''}
+function stChips(u){const l=stList(u).map(k=>[STATUS[k].n,STATUS[k].d,STATUS[k].bad,u.st[k].n]);if(u.psn)l.push(['Poison','Takes 2 damage at the start of each of its turns (never below 1 HP). A Salve cures it.',1,u.psn]);if(u.stone)l.push(['Stone','Skips its next turn and can’t counter.',1,1]);if(state&&state.units&&state.units.includes(u)&&u.hp>0&&!hasSt(u,'chill')&&zoc(u))l.push(['Pinned','Started next to an enemy: −1 Move this turn. Doesn’t stack with Slow (the bigger penalty applies). Slippery and Outrider ignore it.',1,1]);
+  return l.length?`<div class="stc">${l.map(([n,d,bad,t])=>`<span class="st ${bad?'bad':'good'}" data-tip="${d}" tabindex="0">${n}${t>1&&t<50?' '+t:''}</span>`).join('')}</div>`:''}
 /* the list of a unit's abilities (floating menu) */
 function abList(u){
   return`<div class="abl"><div class="abl-h"><b>Abilities</b>${mpMax(u)?`<span>${u.mp||0}/${mpMax(u)} MP</span>`:''}</div>${abilOf(u).map(id=>{const a=ABIL[id],why=abBlock(u,id);
