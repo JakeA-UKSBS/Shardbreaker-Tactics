@@ -46,6 +46,9 @@ async function swingAt(X,Y,w,crit,ranged){const wk=w&&w.key;
   /* casters with their own bolt strip (Morrigan): it charges at the hand, then flies to the target */
   if(w&&w.t==='art'&&castPng(X,'bolt')){mapPose(X,crit?'critup':'windup',Y,wk);const ch=boltCharge(X,Y);await sleep(D((crit?120:150)*k));
     mapPose(X,'swing',Y,wk);lunge(X,Y,-6);ch.remove();await boltShot(X,Y);setTimeout(()=>mapPose(X,'follow',Y,wk),D(90));return}
+  /* monsters with a fireball (MON_SHEET fireball): rear up, then spit it at the target, adjacent or not */
+  const fb=!X.cast&&w&&w.t==='art'&&MON_SHEET[X.cls]&&MON_SHEET[X.cls].fireball;
+  if(fb){mapPose(X,'windup',Y,wk);await sleep(D(crit?260:200));mapPose(X,'swing',Y,wk);await sleep(D(90));await fireball(X,Y,crit);await sleep(D(120));mapPose(X,'idle');return}
   mapPose(X,crit?'critup':'windup',Y,wk);await sleep(D((crit?120:150)*k));
   mapPose(X,'swing',Y,wk);if(ranged){lunge(X,Y,-6);await shoot(X,Y,w)}else{lunge(X,Y);slashFx(X,Y,w,crit);await sleep(D(110*k))}
   setTimeout(()=>mapPose(X,'follow',Y,wk),D(90))}
@@ -118,6 +121,15 @@ async function shoot(X,Y,w){
   const N=12,pts=[];for(let i=0;i<=N;i++){const t=i/N;pts.push([sx+(ex-sx)*t,sy+(ey-sy)*t-arc*4*t*(1-t)])}
   const kf=pts.map(([x,y],i)=>{const[nx,ny]=pts[Math.min(N,i+1)],[px,py]=pts[Math.max(0,i-1)];return{transform:`translate(${x}px,${y}px) rotate(${w.t==='bow'?Math.atan2(ny-py,nx-px)*180/Math.PI:i*60}deg)`}});
   await pj.animate(kf,{duration:D(w.t==='bow'?300:380),easing:'linear'}).finished;pj.remove()}
+/* a fireball (art/fx/fireball.png, 3 flickering frames of 32x20 facing right) flies from X's mouth to Y and bursts */
+async function fireball(X,Y,crit){const img=uEls[X.id]&&uEls[X.id].firstChild,s=MON_SHEET[X.cls],bb=boardEl.getBoundingClientRect(),b=uBox(Y),ex=b.l+b.w/2,ey=b.t+b.h*.5;
+  let sx=uBox(X).l+uBox(X).w/2,sy=uBox(X).t+uBox(X).h*.4;
+  if(img){const r=img.getBoundingClientRect(),fx=s.fireball[0]/s.w,fy=s.fireball[1]/s.fh,toL=ex<((r.left+r.right)/2-bb.left)/cam.s;/* the mouth is on the side it's facing (towards the target) */
+    sx=((toL?r.left+fx*r.width:r.right-fx*r.width)-bb.left)/cam.s;sy=(r.top+fy*r.height-bb.top)/cam.s}
+  const k=crit?1.4:1,ang=Math.atan2(ey-sy,ex-sx)*180/Math.PI,pj=document.createElement('div');pj.className='proj-fb';boardEl.appendChild(pj);
+  let f=0;const fl=setInterval(()=>{f=(f+1)%3;pj.style.backgroundPosition=`${-f*64}px 0`},D(60));
+  const kf=[0,1].map(t=>({transform:`translate(${sx+(ex-sx)*t}px,${sy+(ey-sy)*t}px) rotate(${ang}deg) scale(${(t?1:.6)*k})`}));
+  await pj.animate(kf,{duration:D(Math.max(260,Math.hypot(ex-sx,ey-sy)*2.2)),easing:'ease-in'}).finished;clearInterval(fl);pj.remove();burst(Y,'#ff8a1e');if(crit)shake()}
 /* a ring bursts on the target: element colour for sigils, white for crits */
 function burst(Y,col){const b=uBox(Y),r=document.createElement('div');r.className='fx-m';r.style.left=b.l+b.w/2+'px';r.style.top=b.t+b.h*.55+'px';r.style.color=col;boardEl.appendChild(r);
   r.animate([{transform:'scale(.3)',opacity:1},{transform:'scale(1.4)',opacity:0}],{duration:D(380),easing:'ease-out'}).finished.then(()=>r.remove())}

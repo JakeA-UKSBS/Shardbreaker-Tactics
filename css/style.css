@@ -658,3 +658,6 @@ body.preview .vp{height:100vh!important;max-height:none!important;border:0!impor
 /* status chips: hover (or focus) shows what the status does */
 .st[data-tip]{position:relative;cursor:help}
 .st[data-tip]:hover::after,.st[data-tip]:focus::after{content:attr(data-tip);position:absolute;left:0;top:calc(100% + 6px);z-index:50;width:max-content;max-width:220px;padding:6px 8px;border-radius:6px;background:#1a161c;color:#f0e6d6;border:1px solid #5a4a3a;font-size:12px;font-weight:400;line-height:1.35;white-space:normal;box-shadow:0 4px 12px rgba(0,0,0,.5);pointer-events:none}
+
+/* the Magma Dragon's fireball (fireball() in 09-fx.js): art/fx/fireball.png at 2x, its head on the flight point */
+.proj-fb{position:absolute;left:0;top:0;width:64px;height:40px;margin:-20px 0 0 -50px;transform-origin:50px 20px;pointer-events:none;z-index:9000;background:url(../art/fx/fireball.png) 0 0/192px 40px no-repeat;image-rendering:pixelated;filter:drop-shadow(0 0 6px #ff7a1a)}
