@@ -185,10 +185,10 @@ function renderPanel(){
   let h='',fm='';const u=sel&&byId(sel);
   if(over)h=`<p class="hint">${over==='win'?'Battle won.':'The run has ended.'}</p>`;
   else if(phase==='enemy')h=(acting&&acting.hp>0?card(acting):'')+'<p class="hint">The enemy is moving…</p>';
-  else if(ui==='move')h=card(u)+`<p class="hint">Click a blue tile to move, or a red enemy to move into range and attack it. Click ${u.name} to act in place.</p><div class="acts"><button type="button" data-act="cancel">Cancel</button></div>`;
+  else if(ui==='move')h=card(u)+(u.canto?`<p class="hint">Click a blue tile to move, or anywhere else to stay put.</p><div class="acts"><button type="button" data-act="cancel">Stay</button></div>`:`<p class="hint">Click a blue tile to move, or a red enemy to move into range and attack it.</p><div class="acts"><button type="button" data-act="menu">Back</button></div>`);
   else if(ui==='menu'){
     const at=atkTargets(u).length,ht=healTargets(u).length;
-    h=card(u)+threatLine(key(u.x,u.y));fm=`<div class="acts">${abilOf(u).length?'<button class="go" type="button" data-act="abil">Abilities</button>':''}${at?'<button class="go" type="button" data-act="attack">Attack</button>':''}${ht?'<button class="go" type="button" data-act="heal">Heal</button>':''}${canSummon(u)?`<button class="go" type="button" data-act="summon">Summon ${famOf(u).n}</button>`:''}<button type="button" data-act="items">Items</button>${tradeMates(u).length?'<button type="button" data-act="trade">Trade</button>':''}<button type="button" data-act="wait">Wait</button><button type="button" data-act="cancel">Back</button></div>`;
+    h=card(u)+threatLine(key(u.x,u.y));fm=`<div class="acts">${movedSel(u)?'':'<button class="go" type="button" data-act="move">Move</button>'}${abilOf(u).length?'<button class="go" type="button" data-act="abil">Abilities</button>':''}${at?'<button class="go" type="button" data-act="attack">Attack</button>':''}${ht?'<button class="go" type="button" data-act="heal">Heal</button>':''}${canSummon(u)?`<button class="go" type="button" data-act="summon">Summon ${famOf(u).n}</button>`:''}<button type="button" data-act="items">Items</button>${tradeMates(u).length?'<button type="button" data-act="trade">Trade</button>':''}<button type="button" data-act="wait">Wait</button><button type="button" data-act="cancel">Back</button></div>`;
   }
   else if(ui==='abil'||ui==='aim'){const r=abPanel(u);h=r.h;fm=r.fm}
   else if(ui==='items'){

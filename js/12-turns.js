@@ -5,7 +5,9 @@
    SELECTING AND MOVING: select a unit, show its reach, click to move
    ================================================================== */
 function clearSel(){sel=null;moveSet=null;fringe=null;targets=[];pending=null;inspect=null;itemSel=null;abSel=null;abT=null;aimSet=null}
-function select(u){clearSel();sel=u.id;origin={x:u.x,y:u.y};moveSet=reach(u);fringe=fringeOf(u,moveSet);ui='move';render()}
+/* selecting a unit opens its command menu; Move is one of the options (not the default) */
+function select(u){clearSel();sel=u.id;origin={x:u.x,y:u.y};moveSet=reach(u);fringe=fringeOf(u,moveSet);ui='menu';render()}
+const movedSel=u=>!!origin&&(u.x!==origin.x||u.y!==origin.y);
 function cancelMove(){const u=sel&&byId(sel);if(u&&u.canto){u.canto=0;finishAction();return}/* skipping the move after acting */if(u&&origin){u.x=origin.x;u.y=origin.y}clearSel();ui='idle';render()}
 function freeNear(x,y,taken,u){const seen=new Set([key(x,y)]),q=[[x,y]];
   while(q.length){const[cx,cy]=q.shift(),k=key(cx,cy),c=u?mcost(u,cx,cy):ter(cx,cy).c;if(c<99&&!taken.has(k))return{x:cx,y:cy};
@@ -50,7 +52,7 @@ function tap(x,y){
     cancelMove();return;
   }
   if(ui==='aim'){abTap(x,y);return}
-  if(ui==='menu'||ui==='items'||ui==='abil'){cancelMove();return}
+  if(ui==='menu'||ui==='items'||ui==='abil'){const u=byId(sel);if(ui==='menu'&&o&&o.team==='p'&&!o.acted&&o!==u&&!movedSel(u)){select(o);return}cancelMove();return}
   if(ui==='target'||ui==='confirm'){const t=targets.find(t=>x>=t.x&&y>=t.y&&x<t.x+(t.sz||1)&&y<t.y+(t.sz||1));/* any tile of a 2×2 boss counts */
     if(t&&ui==='confirm'&&t===pending){act(tmode==='heal'?'doheal':'attack-go');return}
     if(t){sfx('select');openConfirm(t)}else{pending=null;ui='menu';render()}return}
@@ -105,6 +107,7 @@ async function act(a){
   if(a==='cancel'){sfx('cancel');cancelMove();return}
   if(a==='abil'||a.startsWith('ab:')||a==='abuse'){await abAct(u,a);return}
   if(a==='menu'){pending=null;targets=[];itemSel=null;ui='menu';render();return}
+  if(a==='move'){pending=null;targets=[];ui='move';render();return}
   if(a==='attack'){targets=atkTargets(u);tmode='atk';pending=null;ui='target';render();return}
   if(a==='heal'){targets=healTargets(u);tmode='heal';pending=null;ui='target';render();return}
   if(a==='back'){sfx('cancel');pending=null;ui='target';render();return}

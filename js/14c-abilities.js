@@ -124,7 +124,7 @@ const ABIL={
   /* Lysander (Minstrel) */
   songOfValour:{n:'Song of Valour',mp:6,side:'self',shape:'burst2',give:['valour',2],others:1,d:'Allies within 2 tiles deal 20% more damage for 2 turns.'},
   lullaby:{n:'Lullaby',mp:8,side:'foe',r:[1,1],shape:'cone',aim:'dir',st:['stun',1,.5],d:'A cone of song (4 tiles): 50% chance to Stun each enemy hit.'},
-  soothingBallad:{n:'Soothing Ballad',cd:3,side:'self',shape:'burst1',heal:.6,d:'A gentle tune: allies around him heal 0.6× (Mag + 5). Ready again 3 turns later.'},
+  soothingBallad:{n:'Soothing Ballad',cd:3,side:'self',shape:'burst1',give:['shell',2],others:1,d:'A steadying tune: allies around him get +2 Def and +2 Res for 2 turns. Ready again 3 turns later.'},
   encore:{n:'Encore',mp:15,once:1,side:'ally',r:[1,3],encore:1,d:'An ally up to 3 away who has already acted can act again this turn. Once a fight.'},
   /* Trent (Cavalier) */
   lanceCharge:{n:'Lance Charge',cd:3,side:'foe',r:[2,4],dmg:1.3,charge:1,d:'Charges an enemy 2–4 tiles away, running up beside it: 1.3× damage.'},
@@ -157,7 +157,7 @@ const ABIL={
   /* Bard versions of Lysander's songs (KITS.lysander.asc) */
   anthem:{n:'Anthem of Valour',mp:6,side:'self',shape:'burst2',give:['anthem',2],others:1,d:'Allies within 2 tiles deal 30% more damage and get +10 Hit for 2 turns.'},
   grandLullaby:{n:'Lullaby',mp:6,side:'foe',r:[1,1],shape:'cone',aim:'dir',st:['stun',1,.65],d:'A cone of song (4 tiles): 65% chance to Stun each enemy hit.'},
-  soothingHymn:{n:'Soothing Hymn',cd:2,side:'self',shape:'burst1',heal:.8,cure:1,d:'Allies around him heal 0.8× (Mag + 5) and are cured of bad statuses. Ready again 2 turns later.'},
+  soothingHymn:{n:'Soothing Hymn',cd:2,side:'self',shape:'burst1',give:['shell',2],cure:1,others:1,d:'Allies around him get +2 Def and +2 Res for 2 turns and are cured of bad statuses. Ready again 2 turns later.'},
 };
 /* the kits: passive, MP pool (spellcasters) and abilities */
 const KITS={
@@ -376,7 +376,8 @@ async function useAbility(u,id,tx,ty){
   for(const o of new Set(killed)){if(R('fang')&&u.hp>0){const h=Math.min(5,u.maxhp-u.hp);if(h){u.hp+=h;pop(u,'+'+h,'heal')}}
     for(const it of o.items.filter(i=>i.d)){(state.loot=state.loot||[]).push(it.k);sfx('item');notify(`${IT[it.k].n} dropped`,'Added to the spoils: choose who takes it after the fight.',icon(it.k))}
     if(o.team==='e'&&!o.summon)dropGold()}
-  if(u.team==='p'&&u.hp>0&&exp){const g=gainExp(u,Math.min(100,Math.round(Math.max(10,exp)*EXP_RATE*(R('tome')?1.5:1)*(has(u,'quickStudy')?2:1))));await showExp(u,g);if(g&&g.gains)await levelUp(u,g)}
+  /* any ability earns at least the base EXP (walls and leaps used to give none) */
+  if(u.team==='p'&&u.hp>0){const g=gainExp(u,Math.min(100,Math.round(Math.max(10,exp)*EXP_RATE*(R('tome')?1.5:1)*(has(u,'quickStudy')?2:1))));await showExp(u,g);if(g&&g.gains)await levelUp(u,g)}
   for(const o of foes)if(o.team==='p'&&o.hp<=0&&R('phoenix')&&!run.phx){o.hp=Math.min(10,o.maxhp);run.phx=1;pop(o,'Phoenix!','heal');sfx('heal');toast(`The Phoenix Feather saves ${o.name}`)}
   state.units=state.units.filter(o=>o.hp>0);busy=false;render();checkEnd();
 }
@@ -410,7 +411,7 @@ function abForecast(u,id,tx,ty){
   for(const t of foes){let txt='';if(a.dmg){const V=abVs(u,id,t),tot=V.dmg*V.n;txt=`<b>${V.dmg}${V.n>1?' ×'+V.n:''}</b> dmg · <b>${V.hit}%</b> · ${t.hp}→${Math.max(0,t.hp-tot)} HP${V.eff?' · <span class="effv">Effective</span>':''}`;
       if(a.chain)txt+=` · jumps to ${chainTo(u,id,t).map(c=>`${c.name} (${abVs(u,id,c,a.chain[1]).dmg})`).join(', ')||'nobody'}`;if(a.push)txt+=canPush(t)?` · push ${a.push}`:' · can’t be pushed'}
     if(a.st)txt+=`${txt?' · ':''}${STATUS[a.st[0]].n}${a.st[2]?` (${a.st[2]*100}%)`:''}${a.dmg?'':` · <b>${abVs(u,id,t).hit}%</b>`}`;if(!txt)continue;rows.push(`<div class="abf-r"><span class="ec">${t.name}</span>${txt}</div>`)}
-  for(const t of allies){let txt='';if(a.heal)txt=`+<b>${healAmt(u,id,t)}</b> HP → ${t.hp+healAmt(u,id,t)}/${t.maxhp}`;if(a.cure){const c=[...stList(t).filter(k=>STATUS[k].bad).map(k=>STATUS[k].n),...(t.psn?['Poison']:[]),...(t.stone?['Stone']:[])];if(c.length)txt+=`${txt?' · ':''}cures ${c.join(', ')}`;else if(!a.heal)txt='nothing to cure'}if(a.give)txt+=`${txt?' · ':''}${STATUS[a.give[0]].n}`;if(!txt&&!a.heal)continue;rows.push(`<div class="abf-r"><span class="pc">${t.name}</span>${txt||'–'}</div>`)}
+  for(const t of allies){let txt='';if(a.heal)txt=`+<b>${healAmt(u,id,t)}</b> HP → ${t.hp+healAmt(u,id,t)}/${t.maxhp}`;if(a.cure){const c=[...stList(t).filter(k=>STATUS[k].bad).map(k=>STATUS[k].n),...(t.psn?['Poison']:[]),...(t.stone?['Stone']:[])];if(c.length)txt+=`${txt?' · ':''}cures ${c.join(', ')}`;else if(!a.heal)txt='nothing to cure'}if(a.give)txt+=`${txt?' · ':''}${STATUS[a.give[0]].n}`;if(a.encore)txt+=t.acted?'acts again this turn':'hasn’t acted yet';if(!txt&&!a.heal)continue;rows.push(`<div class="abf-r"><span class="pc">${t.name}</span>${txt||'–'}</div>`)}
   for(const[k]of a.self||[])rows.push(`<div class="abf-r"><span class="pc">${u.name}</span>${STATUS[k].n}: ${STATUS[k].d}</div>`);
   if(a.side==='tile')rows.unshift(`<div class="abf-r"><span class="pc">${u.name}</span>leaps here</div>`);
   if(a.tumble)rows.push(`<div class="abf-r"><span class="pc">${u.name}</span>moves up to 2 tiles, then can still act</div>`);
