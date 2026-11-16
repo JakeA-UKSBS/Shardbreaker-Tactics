@@ -43,18 +43,20 @@ function artLeft(src){src=String(src);const o=sheetOf(src);if(o)return!!o.s.left
    lines. Frame 0 is idle; an attack plays windup -> swing (the hit) -> follow (any left out stay on the idle frame).
    abil: {abilityId: [frames]} plays those frames when the monster uses that ability. st: {status: frame} shows that frame for
    every pose while the unit has the status (the turtle stays in her spiked shell after Hunker Down).
+   cx: the body's centre x in the idle frame, so portraits and the boss node centre on the body rather than the whole frame.
+   Portraits and the node icon show the sheet as drawn (not flipped).
    fireball: [x, y] of the mouth in the swing frame (frame pixels, as drawn): its spell attacks spit art/fx/fireball.png from there.
    Shown 48px tall per tile of size (bosses 96px), the width follows. */
 const MON_SHEET={HellHound:{n:6,fw:120,fh:64,x0:20,w:100,left:true,windup:[1,2],swing:3,follow:[4,5]},
   Wolf:{n:5,fw:100,fh:64,x0:0,w:100,left:true,windup:[1,2],swing:3,follow:[4]},
   FrostWolf:{n:4,fw:100,fh:64,x0:0,w:92,left:true,abil:{howl:[1,2,3]}},
   AmethystTurtle:{n:4,fw:128,fh:128,x0:0,w:128,left:true,swing:1,abil:{hunkerDown:[2,3]},st:{shell:3}},
-  MagmaDragon:{n:2,fw:175,fh:168,x0:0,w:175,left:true,swing:1,fireball:[8,42],abil:{searingBreath:[1,1,1]}}};
+  MagmaDragon:{n:2,fw:175,fh:168,x0:0,w:175,cx:68,left:true,swing:1,fireball:[8,42],abil:{searingBreath:[1,1,1]}}};
 const BLANK='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 /* sprite()/portrait() hand back 'sheet:<Class>:<frame>' for these; sheetOf reads it back */
 const sheetOf=src=>{const m=/^sheet:(\w+):(\d+)$/.exec(src||'');return m&&MON_SHEET[m[1]]?{cls:m[1],i:+m[2],s:MON_SHEET[m[1]]}:null};
 /* background properties for frame src drawn h px tall, centred in a box bw px wide (bw omitted: the frame's own width) */
-function sheetBg(src,h,bw){const o=sheetOf(src),s=o.s,k=h/s.fh,w=s.w*k,dx=bw==null?0:(bw-w)/2;
+function sheetBg(src,h,bw){const o=sheetOf(src),s=o.s,k=h/s.fh,w=s.w*k,dx=bw==null?0:s.cx!=null?bw/2-(s.cx-s.x0)*k:(bw-w)/2;
   return{'background-image':`url(art/monsters/${o.cls}-sheet.png)`,'background-repeat':'no-repeat','background-size':`${s.n*s.fw*k}px ${h}px`,'background-position':`${(-(o.i*s.fw+s.x0)*k+dx).toFixed(2)}px 0`}}
 const SHEET_PROPS=['background-image','background-repeat','background-size','background-position'];
 /* put src on a map sprite img: a sheet frame (sized 48px tall, centred on the tile) or, for anything else, clear that styling.
@@ -65,7 +67,7 @@ function sheetFit(img,src,sz){const o=sheetOf(src),H=48*(sz||1);
   if(img.style.backgroundImage){SHEET_PROPS.forEach(k=>img.style.removeProperty(k));img.style.removeProperty('width');img.style.removeProperty('height');img.style.marginLeft='';img.style.maxWidth=''}return false}
 /* an <img>'s attributes for a portrait box h px square: a plain src, or a blank src with the sheet frame as its background */
 function picAttrs(src,h){if(!sheetOf(src))return`src="${src}"`;const o=sheetOf(src),bg=sheetBg(src,h,h);
-  return`src="${BLANK}" style="${Object.entries(bg).map(([k,v])=>k+':'+v).join(';')}${o.s.left?';transform:scaleX(-1)':''}"`}
+  return`src="${BLANK}" style="${Object.entries(bg).map(([k,v])=>k+':'+v).join(';')}"`}
 function monPng(cls,pose,sz){const b=sz>=2&&(BOSS_PNG[cls]||BOSS_PNG[CLS[cls].body]),k=b?'bosses/'+b:'monsters/'+cls;
   if(!b&&MON_SHEET[cls])return`sheet:${cls}:${pose==='strike'?MON_SHEET[cls].swing:0}`;
   return'art/'+k+(pose==='strike'&&ART_PNG.has(k+'-strike')?'-strike':'')+'.png'}

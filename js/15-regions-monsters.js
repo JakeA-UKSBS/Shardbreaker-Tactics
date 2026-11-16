@@ -78,7 +78,7 @@ const BIOMES={
   mountain:{n:'Volcanic Isle',bg:'#3a2420',d:'Basalt slopes cut by rivers of magma. Hell hounds run the slopes, golems block the passes, and fire sprites float over the lava.',
     tip:['lava','Magma','Magma can’t be crossed on foot. Fliers and fire creatures move over it freely.'],
     maps:['fields','caldera','ridge'],bossMap:'crater',pool:[['HellHound',4],['FireSprite',2,2],['BoulderGolem',3,3]],elitePool:[['BoulderGolem',3],['HellHound',2],['FireSprite',2]],
-    boss:{name:'Pyraxis, the Magma Dragon',cls:'MagmaDragon',sz:3,s:[42,12,10,6,4,2,10,9],items:['magmaBreath'],skill:'steadfast',look:{body:'#4a2420',magma:true,big:true,crysSmall:true,crysCol:'#3a2a4a'}}},
+    boss:{name:'Pyraxis, the Magma Dragon',cls:'MagmaDragon',sz:3,s:[42,12,10,6,4,2,10,9],items:['magmaBreath'],skill:'steadfast',look:{body:'#4a2420',big:true,crysSmall:true,crysCol:'#3a2a4a'}}},
   /* Act 3, the end of every run: not in the region draw (biomeIds). Its monsters are the Heart's own crystal creatures */
   heart:{n:'The Heart of the Blight',noThe:1,bg:'#3a1018',d:'Scorched ground split by veins of glowing gem. Every crystal in these lands grew from what waits here.',
     tip:['heart','The Crystal Heart','The Heart never moves, but it strikes from 2 to 6 tiles away. Get next to it: it can’t hit what’s beside it. On even turns it hurls a Crystal Storm at your toughest unit and everyone next to them, so spread out. It calls more blighted monsters on turns 3, 5 and 7.'],
