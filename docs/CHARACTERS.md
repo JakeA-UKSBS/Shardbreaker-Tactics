@@ -15,6 +15,7 @@ The cast, by when they can join. First names only for now. Kits are first drafts
 - **Act 2:** as it begins, a second Crossroads: two of the advanced characters wait by the fire and you take one. From then on they're in the recruit and tavern pools too.
 - **Once a run:** each character joins at most once a run.
 - **Weapons:** each character only ever wields the weapon type they start with (Menders: charms and arts), including after they ascend. They keep their weapon when they ascend, with two exceptions: Holt's crossbow becomes a longbow when he ascends to Sniper, and Crusaders are given a holy sword alongside their staff or charm.
+- **Ascensions:** each character has one (cut back from two, Nov 2026, to keep the art manageable). Characters without one (Kaya, Celestine, Zwei) join already advanced, after Act 1.
 - **Sprites:** every character and ascension is drawn by the unit rig; see the Named cast section of `VISUALS.md`. Their looks are set in `js/14b-cast.js`.
 
 
@@ -22,7 +23,7 @@ The cast, by when they can join. First names only for now. Kits are first drafts
 ## How kits work
 
 - **Signature kit:** each character has 1 passive and 3 abilities that belong to them alone.
-- **Free slots:** 1–2 slots per character for customising, filled from scrolls or skills found during the run (the Shardbreaker scroll skills are the starting pool).
+- **Learned skills:** skill rewards let a unit learn skills from its role list during the run; no limit.
 - **Costs:** spells cost **MP**, physical skills have a **cooldown (CD)** in turns. MP starts full and refills slowly (starting numbers: casters 20–30 MP, everyone else 0–10, +2 MP a turn).
 - **Damage:** a multiple of the unit's normal attack power (Str or Mag + weapon Mt, with height, effectiveness and relics), e.g. "1.5×". Defence or Resistance is subtracted afterwards. Abilities aren't countered. Heals are a multiple of (Mag + 5).
 - **In the game so far:** the 9 starting-roster characters and Lysander have their kits (the Abilities button in the command menu). Their passive replaces the random personal skill. The others still have a random personal skill for now.
@@ -62,22 +63,22 @@ Each base class ascends into one or two advanced classes at Lv 5.
 
 | Name | Class | Ascends into | Gender |
 |---|---|---|---|
-| Kili | Archer | Sniper or Bow Cavalry | M |
+| Kili | Archer | Sniper | M |
 | Vaar | Brawler | Berserker | M |
-| Morrigan | Cultist | Witch or Shaman | F |
-| Corvin (tavern or caged traveller) | Ice Mage | Archmage or Frostlord | F |
-| Drecken | Storm Mage | Stormlord | M |
-| Aldric | Knight | Juggernaut or Paladin | M |
-| Maelis | Mender | Saint or Crusader | F |
-| Rook | Rogue | Duelist or Assassin | M |
-| Rhyn | Shieldmaiden | Valkyrie or Aegis | F |
-| Trent | Cavalier | Paladin or Warlord | M |
+| Morrigan | Cultist | Witch | F |
+| Corvin (tavern or caged traveller) | Ice Mage | Frostlord | F |
+| Drecken | Elemental Mage | Stormlord | M |
+| Aldric | Knight | Juggernaut | M |
+| Maelis | Mender | Saint | F |
+| Rook | Rogue | Assassin | M |
+| Rhyn | Shieldmaiden | Valkyrie | F |
+| Trent | Cavalier | Warlord | M |
 
 ### Kili: Archer
 ![Kili](visuals/cast/kili.png)
 
 A poacher's son who has never missed a meal or a deer. Cheeky, and the one who climbs everything.
-- **Ascends into:** Sniper or Bow Cavalry.
+- **Ascends into:** Sniper.
 - **Look:** green leathers, feather headdress, longbow.
 - **Passive: Eagle Eye.** +1 range on every shot, on top of the height bonus.
 - **Aimed Shot** (single, range 2–5 · CD 2): 1.5× Str, as accurate as a normal attack.
@@ -99,7 +100,7 @@ A village blacksmith from the northern fjords who fights barehanded because he w
 ![Morrigan](visuals/cast/morrigan.png)
 
 A witch-hunter's daughter who took up the dark arts to hunt the blight instead. Cold, and fiercely loyal once won over.
-- **Ascends into:** Witch or Shaman.
+- **Ascends into:** Witch.
 - **Look:** scarlet hair, crimson cultist robes, casts from her hand.
 - **Passive: Siphon.** Her dark spells heal her for 25% of the damage they deal.
 - **Drain Touch** (single, adjacent · 4 MP): 1.2× Mag.
@@ -110,8 +111,8 @@ A witch-hunter's daughter who took up the dark arts to hunt the blight instead. 
 ![Corvin](visuals/cast/corvin.png)
 
 A court magician's apprentice who walked out when her master started making weapons for the war. Curious and methodical. Works in frost.
-- **Ascends into:** Archmage or Frostlord.
-- **Look:** dress and formal cloak, casts from her hand; pale ice-white robes as a Frostlord.
+- **Ascends into:** Frostlord.
+- **Look:** dress and formal cloak, casts from her hand.
 - **Weapon:** Frost Sigil. Only Corvin can wield ice sigils.
 - **Passive:** none yet (keeps a random skill).
 - Every attack spell Slows (−2 Move).
@@ -121,7 +122,7 @@ A court magician's apprentice who walked out when her master started making weap
 - **Ice Shield** (ally or self, range 3 · 5 MP): +3 Def for 3 turns.
 - **Frost Wall** (3 tiles in a row, range 3 · 8 MP): the tiles freeze into ice walls for 2 enemy turns. Enemies can't move through them; allies can.
 
-### Drecken: Storm Mage
+### Drecken: Elemental Mage
 ![Drecken](visuals/cast/drecken.png)
 
 Bio to come.
@@ -137,7 +138,7 @@ Bio to come.
 ![Aldric](visuals/cast/aldric.png)
 
 A landless knight whose lord sold his oath to the war. Earnest, and still believes in chivalry.
-- **Ascends into:** Juggernaut or Paladin.
+- **Ascends into:** Juggernaut.
 - **Look:** heavy armour in red and gold, lance and kite shield; a tower shield as a Juggernaut.
 - **Passive: Plate.** Physical hits deal 2 less damage to him; −1 Jump.
 - **Sunder** (single, adjacent · CD 2): 1.2× Str, and the target has −3 Def for 2 turns.
@@ -148,7 +149,7 @@ A landless knight whose lord sold his oath to the war. Earnest, and still believ
 ![Maelis](visuals/cast/maelis.png)
 
 A hospice nun who has sat with too many dying soldiers. Calm, with gallows humour.
-- **Ascends into:** Saint or Crusader.
+- **Ascends into:** Saint.
 - **Look:** white gown and shawl, gold staff.
 - **Passive: Last Light.** Her heals restore 50% more on allies below half HP.
 - **Mend** (single ally, range 3 · 4 MP): heals 1.2× Mag.
@@ -160,7 +161,7 @@ A hospice nun who has sat with too many dying soldiers. Calm, with gallows humou
 ![Rook](visuals/cast/rook.png)
 
 A street thief working off a debt to Ithren. Quick-mouthed and not as selfish as he pretends.
-- **Ascends into:** Duelist or Assassin.
+- **Ascends into:** Assassin.
 - **Look:** dark leathers, wrapped hands, jagged twin daggers.
 - **Passive: Slippery.** Can move through enemy tiles, and can't be Rooted.
 - **Backstab** (single, adjacent · CD 2): 1.0× Str, 1.5× when another ally is next to the target (flanking).
@@ -171,9 +172,8 @@ A street thief working off a debt to Ithren. Quick-mouthed and not as selfish as
 ![Rhyn](visuals/cast/rhyn.png)
 
 A city guardswoman who deserted rather than march on the neighbouring kingdom. Steady, dry and protective.
-- **Ascends into:** Valkyrie or Aegis.
-- **Look:** olive outfit, sword and decorated shield; a great bronze shield as Aegis, a pegasus as Valkyrie.
-- **As Aegis:** immune to Stone (Stone Gaze).
+- **Ascends into:** Valkyrie.
+- **Look:** olive outfit, sword and decorated shield; a pegasus as Valkyrie.
 - **Passive: Heroic.** +2 damage while next to an ally.
 - **Shield Bash** (single, adjacent · CD 2): 1.0× Str, push 1.
 - **Challenge** (burst r2 · CD 3): enemies in range must target her next turn.
@@ -185,46 +185,12 @@ As Act 2 begins, two of these offer to join; the rest turn up in the recruit and
 
 | Name | Class | Gender |
 |---|---|---|
-| Nyx | Assassin | F |
-| Roark | Berserker | M |
-| Valen | Swordsman (ascends into Swordmaster) | M |
-| Celest | Paladin | F |
+| Kaya | Horse Archer | F |
+| Celestine | Paladin | F |
 | Zwei | Mercenary | F |
-| Kyul | Warlock | M |
 
-### Nyx: Assassin
-![Nyx](visuals/cast/nyx.png)
-
-Nyx isn't her real name. No past, and a contract on Ithren that she has chosen not to fulfil. Yet.
-- **Look:** all in black, hood and face covering, jagged dagger.
-- **Passive: Unseen.** Enemies won't target her if another unit is in reach.
-- **Mark for Death** (single, range 4 · CD 4): the target takes 30% more damage from everyone for 2 turns.
-- **Shadowstep** (tile behind an enemy within 4 · CD 3): teleports there.
-- **Execute** (single, adjacent · CD 4): 1.0× Str, or 3.0× if the target is below 30% HP.
-
-### Roark: Berserker
-![Roark](visuals/cast/roark.png)
-
-A grey-haired mercenary who drinks too much and fights better for it. Loud, and the tavern regulars love him.
-- **Look:** grey hair and beard, scarred shoulder, red and grey, a big two-headed axe over his shoulder.
-- **Passive: Fury.** +15 Crit while below half HP.
-- **Cleave** (arc · CD 2): 1.0× Str.
-- **Whirlwind** (burst r1 · CD 4): 1.1× Str to everyone adjacent.
-- **Reckless Blow** (single, adjacent · CD 3): 1.8× Str, but he takes 25% more damage until his next turn.
-
-### Valen: Swordsman
-![Valen](visuals/cast/valen.png)
-
-A noble fencing master whose student died to a crystallised beast. Proud and precise.
-- **Ascends into:** Swordmaster.
-- **Look:** long blonde hair, burgundy, tall boots, a fencer’s guard; wristguards and lapels as a Swordmaster.
-- **Passive: Riposte.** His counters deal 1.2×.
-- **Lunge** (2 tiles straight, strikes at the end · CD 2): 1.1× Str.
-- **Disarm** (single, adjacent · CD 3): 0.7× Str and Weak.
-- **Feint** (single, adjacent · CD 2): 0.6× Str, and the target has −30 Avoid for 1 turn.
-
-### Celest: Paladin
-![Celest](visuals/cast/celest.png)
+### Celestine: Paladin
+![Celestine](visuals/cast/celestine.png)
 
 A templar whose order is preaching holy war. She came to prove them wrong.
 - **Look:** mounted, white armour with blues, lance and kite shield.
@@ -244,15 +210,15 @@ A sellsword from the southern deserts who fights for whoever pays, and right now
 - **Overhead Cleave** (single, adjacent · CD 3): 1.6× Str, −15 Hit.
 - **Second Wind** (self · CD 5): heals 30% of her max HP.
 
-### Kyul: Warlock
-![Kyul](visuals/cast/kyul.png)
+### Kaya: Horse Archer
+![Kaya](visuals/cast/kaya.png)
 
-A gravedigger who learned to listen to what the dead still want. Soft-spoken, and the mist follows him.
-- **Look:** black and green soul robes, hood and face covering, dark mist round his casting hand.
-- **Passive: Soul Harvest.** When an enemy dies within 3 tiles, he restores 4 MP.
-- **Soul Bolt** (single, range 4 · 5 MP): 1.2× Mag.
-- **Wither** (area r1 at range 3 · 8 MP): 0.8× Mag and Weak.
-- **Grasp of the Grave** (single, range 3 · 7 MP): 0.6× Mag and Root.
+A steppe rider with white-and-violet hair who trades arrows for passage. Laughs a lot, misses rarely.
+- **Look:** leathers, shortbow, on a grey horse.
+- **Passive: Parthian Shot.** Can move again after attacking, up to her remaining Move.
+- **Running Shot** (single, range 2 · CD 2): 1.0× Str, then +2 Move this turn.
+- **Twin Arrows** (single, range 2 · CD 3): 2 hits of 0.6× Str.
+- **Harry** (single, range 2–3 · CD 3): 0.7× Str and −2 Move on the target.
 
 ## Event only
 
@@ -275,33 +241,18 @@ Recruited from recruit stops, the caged-traveller event and the tavern, alongsid
 
 | Name | Class | Ascends into | Gender |
 |---|---|---|---|
-| Aletta | Mender | Saint or Crusader | F |
 | Trent | Cavalier | Paladin or Warlord | M |
-| Holt | Crossbowman | Sniper or Artillery | M |
-| Kaya | Horse Archer | – | F |
+| Holt | Crossbowman | Artillery | M |
 | Jun | Swordsman | Swordmaster | M |
-| Ash | Pyromancer | Pyrolord or Archmage | M |
-| Pepr | Poisoner | Assassin | F |
+| Klaus | Pyromancer | Pyrolord | M |
 | Raptor (tavern only) | Adventurer | Hero | M |
 | Seren | Summoner | Grand Summoner | F |
-
-### Aletta: Mender
-![Aletta](visuals/cast/aletta.png)
-
-The tavern-keeper's niece, who patches up every brawler in the bar and is tired of doing it for free. Brisk and practical.
-- **Ascends into:** Saint or Crusader.
-- **Look:** green gown and pale shawl, a small nurse’s cap.
-- **Passive: Field Dressing.** Allies she heals also lose one status effect.
-- **Mend** (single ally, range 2 · 4 MP): heals 1.0× Mag.
-- **Triage** (single ally, adjacent · 6 MP): heals 1.6× Mag, but only on allies below half HP.
-- **Smelling Salts** (single ally, adjacent · 5 MP): removes Stun and gives +2 Move this turn.
-- **In the game so far:** just **Purify** (single ally, range 3 · 3 MP, 12 MP pool), alongside her mending staff and random skill.
 
 ### Trent: Cavalier
 ![Trent](visuals/cast/trent.png)
 
 A hot-headed rider from a border garrison that fell to crystallised beasts. Rides first and asks later.
-- **Ascends into:** Paladin or Warlord.
+- **Ascends into:** Warlord.
 - **Look:** green-tinted armour on a dark horse; horse armour and a jousting lance as a Warlord.
 - **Passive: Mounted.** +2 Move, but can only climb 1 level at a time.
 - **Charge** (line, up to 4 tiles, stops at the first enemy · CD 3): 0.8× Str plus 0.2× for every tile travelled, then push 1.
@@ -312,22 +263,12 @@ A hot-headed rider from a border garrison that fell to crystallised beasts. Ride
 ![Holt](visuals/cast/holt.png)
 
 A white-haired militia veteran who has held more walls than he can count. Patient and dry.
-- **Ascends into:** Sniper or Artillery.
+- **Ascends into:** Artillery.
 - **Look:** white hair, blue outfit, crossbow; his crossbow becomes a longbow when he ascends to Sniper.
 - **Passive: Braced.** +20 Hit and +2 damage if he didn’t move this turn.
 - **Bolt Through** (pierce 2 at range 2 · CD 2): 1.2× Str to both tiles.
 - **Crippling Shot** (single, range 2–3 · CD 3): 0.8× Str and Slow.
 - **Overwatch** (self · CD 4): until his next turn, he shoots the first enemy that moves into his range.
-
-### Kaya: Horse Archer
-![Kaya](visuals/cast/kaya.png)
-
-A steppe rider with white-and-violet hair who trades arrows for passage. Laughs a lot, misses rarely.
-- **Look:** leathers, shortbow, on a grey horse.
-- **Passive: Parthian Shot.** Can move again after attacking, up to her remaining Move.
-- **Running Shot** (single, range 2 · CD 2): 1.0× Str, then +2 Move this turn.
-- **Twin Arrows** (single, range 2 · CD 3): 2 hits of 0.6× Str.
-- **Harry** (single, range 2–3 · CD 3): 0.7× Str and −2 Move on the target.
 
 ### Jun: Swordsman
 ![Jun](visuals/cast/jun.png)
@@ -340,11 +281,11 @@ A wandering swordsman from a mountain temple, working off his bar tab. Quiet, an
 - **Crescent** (arc · CD 3): 0.9× Str.
 - **Step Through** (2 tiles straight through an enemy · CD 3): passes through and strikes it for 1.0× Str.
 
-### Ash: Pyromancer
-![Ash](visuals/cast/ash.png)
+### Klaus: Pyromancer
+![Klaus](visuals/cast/klaus.png)
 
 A lamplighter's son who set his first fire by accident and every one since on purpose. Cheerful, a little alarming.
-- **Ascends into:** Pyrolord or Archmage.
+- **Ascends into:** Pyrolord.
 - **Look:** red robes with gold trim, fire in his hand; orange hem stripes as a Pyrolord.
 - **Passive: Kindling.** His fire spells deal +2 damage to Burning enemies.
 - **Fire Bolt** (single, range 3 · 4 MP): 1.1× Mag, 30% chance to Burn.
@@ -362,9 +303,66 @@ A spirit-speaker who bargained with something old to save her village. Gentle, b
 - **Soul Swap** (familiar · 4 MP): she and the familiar swap places.
 - **Ascends into Grand Summoner** (from Lv 5): +4 HP, +5 Mag, +2 Spd, +2 Luck, +2 Def, +4 Res; summons twice a fight instead of once and her familiar is 3 levels higher. Darker teal robes with a pale collar and a circlet.
 
-### Pepr: Poisoner
-![Pepr](visuals/cast/pepr.png)
+### Raptor: Adventurer (tavern only)
+![Raptor](visuals/cast/raptor.png)
 
+A farm boy who left home with a borrowed sword the day the beasts came. Eager, lucky, and better at this than anyone expected.
+- **Ascends into:** Hero.
+- **Weapons:** twin khopesh (swords); as a Hero he also gets an atlatl (throwing spears, range 1–2) and can use spears and lances as well as swords.
+- **Look:** light armour in orange, sword and round shield.
+- **Passive: Beginner’s Luck.** +10 Crit and +10 Avoid while at full HP.
+- **Rally** (burst r1 · CD 3): adjacent allies get +2 Str and +2 Def for 2 turns.
+- **Clean Cut** (single, adjacent · CD 2): 1.2× Str, as accurate as a normal attack.
+- **Shield Up** (self · CD 3): Guard, and his counters deal 1.3× until your next turn.
+
+## Old / unused characters
+
+Cut in November 2026 to cut back scope; their art is deleted. Kept here so their kits can come back later.
+
+### Nyx: Assassin
+Nyx isn't her real name. No past, and a contract on Ithren that she has chosen not to fulfil. Yet.
+- **Look:** all in black, hood and face covering, jagged dagger.
+- **Passive: Unseen.** Enemies won't target her if another unit is in reach.
+- **Mark for Death** (single, range 4 · CD 4): the target takes 30% more damage from everyone for 2 turns.
+- **Shadowstep** (tile behind an enemy within 4 · CD 3): teleports there.
+- **Execute** (single, adjacent · CD 4): 1.0× Str, or 3.0× if the target is below 30% HP.
+
+### Roark: Berserker
+A grey-haired mercenary who drinks too much and fights better for it. Loud, and the tavern regulars love him.
+- **Look:** grey hair and beard, scarred shoulder, red and grey, a big two-headed axe over his shoulder.
+- **Passive: Fury.** +15 Crit while below half HP.
+- **Cleave** (arc · CD 2): 1.0× Str.
+- **Whirlwind** (burst r1 · CD 4): 1.1× Str to everyone adjacent.
+- **Reckless Blow** (single, adjacent · CD 3): 1.8× Str, but he takes 25% more damage until his next turn.
+
+### Valen: Swordsman
+A noble fencing master whose student died to a crystallised beast. Proud and precise.
+- **Ascends into:** Swordmaster.
+- **Look:** long blonde hair, burgundy, tall boots, a fencer’s guard; wristguards and lapels as a Swordmaster.
+- **Passive: Riposte.** His counters deal 1.2×.
+- **Lunge** (2 tiles straight, strikes at the end · CD 2): 1.1× Str.
+- **Disarm** (single, adjacent · CD 3): 0.7× Str and Weak.
+- **Feint** (single, adjacent · CD 2): 0.6× Str, and the target has −30 Avoid for 1 turn.
+
+### Kyul: Warlock
+A gravedigger who learned to listen to what the dead still want. Soft-spoken, and the mist follows him.
+- **Look:** black and green soul robes, hood and face covering, dark mist round his casting hand.
+- **Passive: Soul Harvest.** When an enemy dies within 3 tiles, he restores 4 MP.
+- **Soul Bolt** (single, range 4 · 5 MP): 1.2× Mag.
+- **Wither** (area r1 at range 3 · 8 MP): 0.8× Mag and Weak.
+- **Grasp of the Grave** (single, range 3 · 7 MP): 0.6× Mag and Root.
+
+### Aletta: Mender
+The tavern-keeper's niece, who patches up every brawler in the bar and is tired of doing it for free. Brisk and practical.
+- **Ascends into:** Saint or Crusader.
+- **Look:** green gown and pale shawl, a small nurse’s cap.
+- **Passive: Field Dressing.** Allies she heals also lose one status effect.
+- **Mend** (single ally, range 2 · 4 MP): heals 1.0× Mag.
+- **Triage** (single ally, adjacent · 6 MP): heals 1.6× Mag, but only on allies below half HP.
+- **Smelling Salts** (single ally, adjacent · 5 MP): removes Stun and gives +2 Move this turn.
+- **In the game so far:** just **Purify** (single ally, range 3 · 3 MP, 12 MP pool), alongside her mending staff and random skill.
+
+### Pepr: Poisoner
 Bio to come.
 - **Ascends into:** Assassin.
 - **Look:** dark green outfit and green cloak, purple hair, dirk; hooded and masked as an Assassin.
@@ -372,14 +370,3 @@ Bio to come.
 - **Poison Dart** (single, range 2–3 · cooldown 2): 0.6× damage and Poison.
 - **Noxious Cloud** (3×3 at range 3 · cooldown 4): 0.3× damage, Poison and Weak for a turn.
 - **Tumble** (cooldown 2): move up to 2 more tiles, ignoring height. Doesn't use her action.
-
-### Raptor: Adventurer (tavern only)
-![Raptor](visuals/cast/raptor.png)
-
-A farm boy who left home with a borrowed sword the day the beasts came. Eager, lucky, and better at this than anyone expected.
-- **Ascends into:** Hero.
-- **Look:** light armour in orange, sword and round shield.
-- **Passive: Beginner’s Luck.** +10 Crit and +10 Avoid while at full HP.
-- **Rally** (burst r1 · CD 3): adjacent allies get +2 Str and +2 Def for 2 turns.
-- **Clean Cut** (single, adjacent · CD 2): 1.2× Str, as accurate as a normal attack.
-- **Shield Up** (self · CD 3): Guard, and his counters deal 1.3× until your next turn.

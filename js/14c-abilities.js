@@ -27,13 +27,12 @@ const STATUS={
   shieldUp:{n:'Shield Up',tick:'start',d:'Counterattacks deal 1.3×.'},
   valour:{n:'Valour',tick:'start',d:'Deals 20% more damage.'},
   anthem:{n:'Anthem',tick:'start',d:'Deals 30% more damage and +10 Hit.'},
-  iceShield:{n:'Ice Shield',tick:'start',d:'+3 Def.'},
-  tended:{n:'Tended',tick:'start',d:'+2 Def.'}
+  iceShield:{n:'Ice Shield',tick:'start',d:'+3 Def.'}
 };
 const hasSt=(u,k)=>!!(u&&u.st&&u.st[k]&&u.st[k].n>0);
-/* status immunities: Rook (Slippery) can't be Rooted; an Aegis can't be turned to Stone (nor can bosses) */
-function stImmune(u,k){if(!u)return false;if(k==='root'&&has(u,'slippery'))return true;if(k==='stone')return!!u.boss||CLS[u.cls]&&CLS[u.cls].n==='Aegis';return false}
-function addSt(u,k,n,by){if(stImmune(u,k))return;if(by&&STATUS[k]&&STATUS[k].bad&&(has(by,'malice')||k==='burn'&&has(by,'emberHeart')))n++;if(k==='blind'&&u.team==='p'&&R('Tinted_glasses')&&--n<=0)return;if(!u.st)u.st={};const o=u.st[k];u.st[k]={n:Math.max(n,o?o.n:0),by:by?by.id:(o&&o.by)};if(k==='stun'&&u.team==='p')u.acted=true}
+/* status immunities: Rook (Slippery) can't be Rooted; bosses can't be turned to Stone */
+function stImmune(u,k){if(!u)return false;if(k==='root'&&has(u,'slippery'))return true;if(k==='stone')return!!u.boss;return false}
+function addSt(u,k,n,by){if(stImmune(u,k))return;if(by&&k==='burn'&&has(by,'emberHeart'))n++;if(k==='blind'&&u.team==='p'&&R('Tinted_glasses')&&--n<=0)return;if(!u.st)u.st={};const o=u.st[k];u.st[k]={n:Math.max(n,o?o.n:0),by:by?by.id:(o&&o.by)};if(k==='stun'&&u.team==='p')u.acted=true}
 function tickSt(team,when){for(const u of state.units)if(u.team===team&&u.st){for(const k in u.st)if(STATUS[k]&&STATUS[k].tick===when){u.st[k].n--;if(u.st[k].n<=0)delete u.st[k]}}}
 /* at the start of a team's phase: burns hurt (but don't kill), water puts them out */
 function burnTick(team){for(const u of state.units)if(u.team===team&&hasSt(u,'burn')&&u.hp>0){if(['water','shallow'].includes(ter(u.x,u.y).k)){delete u.st.burn;pop(u,'Doused','heal');continue}const d=Math.min(2,u.hp-1);if(d>0){u.hp-=d;pop(u,'Burn -'+d,'crit')}}}
@@ -52,19 +51,14 @@ Object.assign(SKILLS,{
   beginnersLuck:{n:'Beginner’s Luck',kit:1,d:'+10 Crit and +10 Avoid while at full HP.'},
   audience:{n:'Audience',kit:1,d:'Allies within 2 tiles of him get +10 Hit.'},
   coldSnap:{n:'Cold Snap',kit:1,d:'His ice sigil attacks also Slow the target.'},
-  gentleTouch:{n:'Gentle Touch',kit:1,d:'Allies she heals get +2 Def for a turn.'},
   charger:{n:'Charger',kit:1,d:'+2 damage when he attacks after moving 3 or more tiles.'},
   steadyAim:{n:'Steady Aim',kit:1,d:'+15 Hit and +5 Crit when he attacks without having moved this turn.'},
   outrider:{n:'Outrider',kit:1,d:'+1 Move, and ignores zone of control.'},
   iaido:{n:'Iaido',kit:1,d:'+10 Crit on the first strike of a fight he starts.'},
   emberHeart:{n:'Ember Heart',kit:1,d:'His fire attacks have a 30% chance to Burn, and Burn he causes lasts 1 turn longer.'},
-  execute:{n:'Execute',kit:1,d:'+4 damage to enemies at half HP or less.'},
-  bloodRage:{n:'Blood Rage',kit:1,d:'+3 Str while at half HP or less.'},
-  riposte:{n:'Riposte',kit:1,d:'+3 damage on his counterattacks.'},
   lightWard:{n:'Light Ward',kit:1,d:'Allies next to her take 2 less magic damage.'},
   kinship:{n:'Kinship',kit:1,d:'+2 Def and Res while next to her familiar.'},
   cleave:{n:'Cleave',kit:1,d:'When he attacks, enemies next to his target take 3 damage (it can’t finish them off).'},
-  malice:{n:'Malice',kit:1,d:'His dark magic hits make the target Weak for a turn, and debuffs he lands last 1 turn longer.'},
   twinBolt:{n:'Lightning Strikes Twice',kit:1,d:'With a lightning sigil: +3 Spd when checking for a double attack, but his second strike deals 0.8× damage.'}
 });
 
@@ -94,10 +88,10 @@ const ABIL={
   iceShield:{n:'Ice Shield',mp:5,el:'ice',side:'ally',r:[0,3],give:['iceShield',3],d:'An ally up to 3 away (or herself) gets +3 Def for 3 turns.'},
   frostWall:{n:'Frost Wall',mp:8,el:'ice',side:'tile',wall:2,r:[1,3],shape:'wall',d:'Three tiles in a row, up to 3 away, freeze into ice walls for 2 enemy turns. Enemies can’t move through them; allies can.'},
   blizzard:{n:'Blizzard',mp:10,mag:1,el:'ice',side:'foe',r:[1,3],shape:'area',aim:'any',dmg:.7,st:['chill',1],d:'A 3×3 storm of ice up to 3 away: 0.7× magic damage and Slow to every enemy in it.'},
-  /* Drecken (Storm Mage) */
+  /* Drecken (Elemental Mage) */
   spark:{n:'Spark',mp:4,mag:1,el:'lightning',side:'foe',r:[1,3],dmg:1,st:['stun',1,.15],d:'1.0× magic damage up to 3 away, 15% chance to Stun.'},
   thunderclap:{n:'Thunderclap',mp:10,mag:1,el:'lightning',side:'self',shape:'burst1',dmg:1.1,st:['stun',1,.3],d:'1.1× magic damage to every enemy around him, 30% chance to Stun each.'},
-  /* Pepr (Poisoner) */
+  /* Pepr (Poisoner; cut, see docs/CHARACTERS.md): Poison Dart and Noxious Cloud are unused */
   poisonDart:{n:'Poison Dart',cd:2,side:'foe',r:[2,3],dmg:.6,psn:1,d:'0.6× damage from 2–3 tiles away, and the target is Poisoned.'},
   noxiousCloud:{n:'Noxious Cloud',cd:4,side:'foe',r:[1,3],shape:'area',aim:'any',dmg:.3,psn:1,st:['weak',1],d:'A 3×3 cloud up to 3 away: 0.3× damage, Poison and Weak (30% less damage) for a turn on every enemy in it.'},
   /* unused for now (was Corvin's) */
@@ -108,7 +102,7 @@ const ABIL={
   sunder:{n:'Sunder',cd:2,side:'foe',r:[1,1],dmg:1.2,st:['sunder',2],d:'1.2× damage, and the target has −3 Def for 2 turns.'},
   valiantThrust:{n:'Valiant Thrust',cd:3,side:'foe',r:[1,1],shape:'pierce',aim:'dir',dmg:1,d:'A lunge through 2 tiles in a line: 1.0× damage to both.'},
   cover:{n:'Cover',cd:3,side:'ally',r:[1,1],give:['cover',1],d:'Until his next turn, attacks on an adjacent ally hit him instead.'},
-  /* Maelis (Mender); Purify is also Aletta’s */
+  /* Maelis (Mender) */
   mend:{n:'Mend',mp:4,side:'ally',r:[0,3],heal:1.2,d:'Heal an ally up to 3 away (or herself): 1.2× (Mag + 5).'},
   circleOfRest:{n:'Circle of Rest',mp:8,side:'ally',r:[0,3],shape:'cross',aim:'any',heal:.8,cure:1,d:'Heals every ally in a cross for 0.8× (Mag + 5) and cures their bad statuses.'},
   purify:{n:'Purify',mp:3,side:'ally',r:[0,3],cure:1,d:'Cures every bad status on an ally up to 3 away (or herself): Poison and Stone too.'},
@@ -144,8 +138,6 @@ const KITS={
   drecken:{passive:'twinBolt',mp:28,abil:['spark','chainLightning','thunderclap']},
   aldric:{passive:'plate',mp:0,abil:['sunder','valiantThrust','cover']},
   maelis:{passive:'lastLight',mp:26,abil:['mend','purify','circleOfRest','sanctuary']},
-  aletta:{passive:'gentleTouch',mp:12,abil:['purify']},
-  pepr:{passive:'venom',mp:0,abil:['poisonDart','noxiousCloud','tumble']},
   rook:{passive:'slippery',mp:0,abil:['backstab','smokeBomb','tumble']},
   rhyn:{passive:'heroic',mp:0,abil:['shieldBash','challenge','holdTheLine']},
   raptor:{passive:'beginnersLuck',mp:0,abil:['rally','cleanCut','shieldUp']},
@@ -154,14 +146,14 @@ const KITS={
 };
 const kitOf=u=>u&&u.cast&&KITS[u.cast]||null;
 /* personal skills for characters without a kit (KITS passives cover the rest) */
-const PERSONAL={trent:'charger',holt:'steadyAim',kaya:'outrider',jun:'iaido',ash:'emberHeart',nyx:'execute',roark:'bloodRage',valen:'riposte',celest:'lightWard',seren:'kinship',zwei:'cleave',kyul:'malice'};
+const PERSONAL={trent:'charger',holt:'steadyAim',kaya:'outrider',jun:'iaido',klaus:'emberHeart',celestine:'lightWard',seren:'kinship',zwei:'cleave'};
 const abilOf=u=>{if(u&&u.team==='e'&&MKITS[u.cls])return MKITS[u.cls];const k=kitOf(u);if(!k)return[];const sw=k.asc&&k.asc[CLS[u.cls].n];return sw?k.abil.map(id=>sw[id]||id):k.abil};
 
 /* ---- monster moves: 2 per monster, cooldowns only (no MP). Extra fields: stone (Stone, bosses immune), psn (Poison),
    solo (a self move that only affects the user), healPct (heals this share of max HP). The enemy AI picks between
    these and a normal attack by score (aiAbil in 12-turns.js). Monsters not listed here still only attack. */
 Object.assign(ABIL,{
-  stoneGaze:{n:'Stone Gaze',cd:4,mag:1,side:'foe',r:[1,1],dmg:.5,stone:1,d:'0.5× magic damage, and the target is turned to Stone: it skips its next turn and can’t counter. Bosses and an Aegis are immune.'},
+  stoneGaze:{n:'Stone Gaze',cd:4,mag:1,side:'foe',r:[1,1],dmg:.5,stone:1,d:'0.5× magic damage, and the target is turned to Stone: it skips its next turn and can’t counter. Bosses are immune.'},
   constrict:{n:'Constrict',cd:3,side:'foe',r:[1,1],dmg:.8,st:['root',1],psn:1,d:'0.8× damage; the target is Rooted and Poisoned.'},
   mudSpit:{n:'Mud Spit',cd:3,side:'foe',r:[2,3],dmg:.8,st:['chill',1],d:'0.8× damage from 2–3 tiles away, and the target is Slowed.'},
   engulf:{n:'Engulf',cd:3,side:'foe',r:[1,1],dmg:1,st:['blind',2],d:'1.0× damage, and the target is Blinded for 2 turns.'},
@@ -224,7 +216,7 @@ function dmgMods(x,y,ctx,dmg,br){
 /* Pow/Def/Hit/Avoid/Crit changes from statuses and passives, added inside calc() */
 function stCalc(x,xw,y){
   const phys=!xw.mag,fx=x.hp>=x.maxhp,fy=y.hp>=y.maxhp;
-  return{pow:(hasSt(x,'rally')&&phys?2:0),df:(phys&&hasSt(y,'rally')?2:0)-(phys&&hasSt(y,'sunder')?3:0)+(hasSt(y,'shell')?2:0)+(phys&&has(y,'plate')?2:0)+(phys&&hasSt(y,'iceShield')?3:0)+(phys&&hasSt(y,'tended')?2:0),
+  return{pow:(hasSt(x,'rally')&&phys?2:0),df:(phys&&hasSt(y,'rally')?2:0)-(phys&&hasSt(y,'sunder')?3:0)+(hasSt(y,'shell')?2:0)+(phys&&has(y,'plate')?2:0)+(phys&&hasSt(y,'iceShield')?3:0),
     acc:(hasSt(x,'blind')?-20:0)+(hasSt(x,'sandEyes')?-10:0)+(hasSt(x,'anthem')?10:0)+(state.units.some(o=>o!==x&&o.hp>0&&o.team===x.team&&has(o,'audience')&&man(o,x)<=2)?10:0),avo:(hasSt(y,'smoke')?30:0)+(has(y,'beginnersLuck')&&fy?10:0),crit:(has(x,'beginnersLuck')&&fx?10:0)};
 }
 const eagle=(u,w)=>w&&w.t==='bow'&&has(u,'eagleEye')?1:0;
@@ -329,7 +321,7 @@ async function useAbility(u,id,tx,ty){
   }
   /* healing, buffs, cures */
   for(const t of allies){
-    if(a.heal||a.healPct){const h=healAmt(u,id,t);if(h){t.hp+=h;pop(t,'+'+h,'heal')}if(has(u,'gentleTouch'))addSt(t,'tended',1,u);exp+=12}
+    if(a.heal||a.healPct){const h=healAmt(u,id,t);if(h){t.hp+=h;pop(t,'+'+h,'heal')}exp+=12}
     if(a.cure){let c=0;if(t.st)for(const k of Object.keys(t.st))if(STATUS[k]&&STATUS[k].bad){delete t.st[k];c=1}if(t.psn){t.psn=0;c=1}if(t.stone){t.stone=0;c=1}if(c){pop(t,'Cured','heal');exp+=6}}
     if(a.give){addSt(t,a.give[0],a.give[1],u);pop(t,STATUS[a.give[0]].n,'heal');exp+=6}
     if(a.encore){t.acted=false;pop(t,'Encore!','heal');exp+=10}
@@ -361,8 +353,8 @@ const SHAPE_N={one:'',cross:'Cross',area:'3×3 area',burst1:'Around the user',bu
 function abCostTxt(u,id){const a=ABIL[id];return a.mp?`${abCost(u,id)} MP${a.once?' · once':''}`:`CD ${a.cd}`}
 function abRangeTxt(u,id){const a=ABIL[id];if(a.side==='self')return SHAPE_N[a.shape]||'Self';const r=abRange(u,id);return`Rng ${r[0]===r[1]?r[0]:r[0]+'–'+r[1]}${a.shape&&a.shape!=='one'?' · '+SHAPE_N[a.shape]:''}`}
 function mpLine(u){const m=mpMax(u);return m?`<div class="mpl"><span class="bar"><i style="width:${(u.mp||0)/m*100}%"></i></span><span>${u.mp||0}/${m} MP</span></div>`:''}
-function stChips(u){const l=stList(u).map(k=>[STATUS[k].n,STATUS[k].d,STATUS[k].bad,u.st[k].n]);if(u.psn)l.push(['Poison','Takes 2 damage at the start of each of its turns (never below 1 HP). A Salve cures it.',1,u.psn]);if(u.stone)l.push(['Stone','Skips its next turn and can’t counter.',1,1]);if(state&&state.units&&state.units.includes(u)&&u.hp>0&&!hasSt(u,'chill')&&zoc(u))l.push(['Engaged','Next to an enemy: −1 Move.',1,1]);
-  return l.length?`<div class="stc">${l.map(([n,d,bad,t])=>`<span class="st ${bad?'bad':'good'}" title="${d}">${n}${t>1&&t<50?' '+t:''}</span>`).join('')}</div>`:''}
+function stChips(u){const l=stList(u).map(k=>[STATUS[k].n,STATUS[k].d,STATUS[k].bad,u.st[k].n]);if(u.psn)l.push(['Poison','Takes 2 damage at the start of each of its turns (never below 1 HP). A Salve cures it.',1,u.psn]);if(u.stone)l.push(['Stone','Skips its next turn and can’t counter.',1,1]);if(state&&state.units&&state.units.includes(u)&&u.hp>0&&!hasSt(u,'chill')&&zoc(u))l.push(['Pinned','Started next to an enemy: −1 Move this turn. Doesn’t stack with Slow (the bigger penalty applies). Slippery and Outrider ignore it.',1,1]);
+  return l.length?`<div class="stc">${l.map(([n,d,bad,t])=>`<span class="st ${bad?'bad':'good'}" data-tip="${d}" tabindex="0">${n}${t>1&&t<50?' '+t:''}</span>`).join('')}</div>`:''}
 /* the list of a unit's abilities (floating menu) */
 function abList(u){
   return`<div class="abl"><div class="abl-h"><b>Abilities</b>${mpMax(u)?`<span>${u.mp||0}/${mpMax(u)} MP</span>`:''}</div>${abilOf(u).map(id=>{const a=ABIL[id],why=abBlock(u,id);
