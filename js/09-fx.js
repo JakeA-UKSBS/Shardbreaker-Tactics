@@ -38,7 +38,7 @@ function mapPose(u,name,t,wk){const el=uEls[u.id];if(!el)return;
   if(name==='idle'){img.style.transform='';return}
   if(t){const p=scrC(u.x,u.y,u.sz),q=scrC(t.x,t.y,t.sz);if(Math.abs(q.x-p.x)>1)img.style.transform=q.x<p.x?'scaleX(-1)':'scaleX(1)'}}
 /* one weapon strike on the map: wind up, swing (the lunge lands on it), then follow through. Resolves when the blow lands */
-const SLOW_SWING=new Set(['vaar','morrigan']);
+const SLOW_SWING=new Set(['vaar','morrigan','rook']);
 async function swingAt(X,Y,w,crit,ranged){const wk=w&&w.key;
   /* cast members with hand-drawn attack frames hold each frame a little longer than the code-drawn rig, so the swing reads.
      (Every cast member has PNGs, most exported from the rig, so this is a list rather than a check for a PNG.) */
