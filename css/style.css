@@ -661,3 +661,6 @@ body.preview .vp{height:100vh!important;max-height:none!important;border:0!impor
 
 /* the Magma Dragon's fireball (fireball() in 09-fx.js): art/fx/fireball.png at 2x, its head on the flight point */
 .proj-fb{position:absolute;left:0;top:0;width:64px;height:40px;margin:-20px 0 0 -50px;transform-origin:50px 20px;pointer-events:none;z-index:9000;background:url(../art/fx/fireball.png) 0 0/192px 40px no-repeat;image-rendering:pixelated;filter:drop-shadow(0 0 6px #ff7a1a)}
+
+/* spell VFX strips (FX in 09-fx.js) */
+.fx-strip{position:absolute;left:0;top:0;pointer-events:none;z-index:9000;background-repeat:no-repeat;image-rendering:pixelated}

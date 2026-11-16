@@ -107,7 +107,7 @@ function evShow(E,text,opts){
   evEl.innerHTML=`<div class="tv-scene"><img class="tv-bg" src="${eventScene(E.art)}" alt="">${[].concat(E.fig||[],propFig(E.art)||[]).filter(f=>ART_PNG.has('scenes/'+f)).map(f=>`<img class="ev-fig ev-${f}" src="art/scenes/${f}.png" alt="">`).join('')}${E.ov||''}<span class="tv-gold">${gold()} gold</span></div>
     <div class="tv-box"><div class="tv-name">${E.t}</div><p class="tv-text">${text}</p>${E.card&&opts.length>1?E.card:''}<div class="tv-opts">${opts.map(([k,l,sub,dis])=>`<button type="button" class="tv-o" data-t="${k}"${dis?' disabled':''}>${l}${sub?`<span>${sub}</span>`:''}</button>`).join('')}</div></div>`;
   evEl.hidden=false;
-  return new Promise(res=>{evEl.onclick=e=>{const b=e.target.closest('[data-t]');if(!b||b.disabled)return;sfx('tick');res(b.dataset.t)}});
+  return new Promise(res=>{evEl.onclick=e=>{const b=e.target.closest('[data-t]');if(!b||b.disabled)return;uiSfx(b.dataset.t,b.textContent.trim())||sfx('tick');res(b.dataset.t)}});
 }
 const lvAvg=()=>Math.max(1,Math.round(run.roster.reduce((a,u)=>a+u.lv,0)/run.roster.length));
 

@@ -1,7 +1,9 @@
 /* Modal dialogs, level-ups, tutorial tips and the options menu */
 /* ================= MODALS ================= */
-function modal(html){modalEl.innerHTML=`<div class="mbox">${html}</div>`;modalEl.hidden=false;return new Promise(res=>{modalEl.onclick=e=>{const b=e.target.closest('[data-m]');if(!b)return;modalEl.hidden=true;modalEl.onclick=null;res(b.dataset.m)}})}
+function modal(html){modalEl.innerHTML=`<div class="mbox">${html}</div>`;modalEl.hidden=false;return new Promise(res=>{modalEl.onclick=e=>{const b=e.target.closest('[data-m]');if(!b)return;uiSfx(b.dataset.m,b.textContent.trim());modalEl.hidden=true;modalEl.onclick=null;res(b.dataset.m)}})}
 async function levelUp(u,g){
+  /* on the map: stars rise round the unit first */
+  if(state&&state.units.includes(u)&&uEls[u.id]&&!uEls[u.id].hidden){const b=uBox(u);sfx('levelup');await fxPlay(FX.levelUp,b.l+b.w/2,b.t+b.h-4,{k:1.2})}
   const rows=shown(u).map(s=>`<div data-s="${s}"><span>${SL[s]}</span><span><b class="v">${g.old[s]}</b><em></em></span></div>`).join('');
   const done=modal(`<div class="lvhead"><img src="${portrait(u)}" alt=""><div><div class="eyebrow">Growth</div><h2>${u.name}</h2><p class="lvn">Lv ${g.old.lv}</p></div></div><div class="lvl">${rows}</div><div class="mbtns"><button class="go" type="button" data-m="ok" disabled>Continue</button></div>`);
   /* quick: the level ticks over, then every stat that grew goes up together with one ding */
