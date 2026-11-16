@@ -43,6 +43,9 @@ async function swingAt(X,Y,w,crit,ranged){const wk=w&&w.key;
   /* cast members with hand-drawn attack frames hold each frame a little longer than the code-drawn rig, so the swing reads.
      (Every cast member has PNGs, most exported from the rig, so this is a list rather than a check for a PNG.) */
   const k=SLOW_SWING.has(X.cast)?1.4:1;
+  /* sigils / spells with an element projectile (EL_PROJ: dark orbs, ice shards), and the frog's acid */
+  if(w&&w.t==='art'&&EL_PROJ[w.el]){mapPose(X,crit?'critup':'windup',Y,wk);await sleep(D((crit?120:150)*k));mapPose(X,'swing',Y,wk);lunge(X,Y,-6);await elShot(X,Y,w.el,crit);setTimeout(()=>mapPose(X,'follow',Y,wk),D(90));return}
+  if(w&&w.acid){mapPose(X,'windup',Y,wk);await sleep(D(150));mapPose(X,'swing',Y,wk);await acidSpew(X,Y);setTimeout(()=>mapPose(X,'follow',Y,wk),D(90));return}
   /* casters with their own bolt strip (Morrigan): it charges at the hand, then flies to the target */
   if(w&&w.t==='art'&&castPng(X,'bolt')){mapPose(X,crit?'critup':'windup',Y,wk);const ch=boltCharge(X,Y);await sleep(D((crit?120:150)*k));
     mapPose(X,'swing',Y,wk);lunge(X,Y,-6);ch.remove();await boltShot(X,Y);setTimeout(()=>mapPose(X,'follow',Y,wk),D(90));return}
@@ -50,7 +53,7 @@ async function swingAt(X,Y,w,crit,ranged){const wk=w&&w.key;
   const fb=!X.cast&&w&&w.t==='art'&&MON_SHEET[X.cls]&&MON_SHEET[X.cls].fireball;
   if(fb){mapPose(X,'windup',Y,wk);await sleep(D(crit?260:200));mapPose(X,'swing',Y,wk);await sleep(D(90));await fireball(X,Y,crit);await sleep(D(120));mapPose(X,'idle');return}
   mapPose(X,crit?'critup':'windup',Y,wk);await sleep(D((crit?120:150)*k));
-  mapPose(X,'swing',Y,wk);if(ranged){lunge(X,Y,-6);await shoot(X,Y,w)}else{lunge(X,Y);slashFx(X,Y,w,crit);await sleep(D(110*k))}
+  mapPose(X,'swing',Y,wk);if(ranged){lunge(X,Y,-6);await shoot(X,Y,w)}else{lunge(X,Y);if(!X.cast&&CLS[X.cls]&&CLS[X.cls].body==='golem')await slamFx(Y);else{slashFx(X,Y,w,crit);await sleep(D(110*k))}}
   setTimeout(()=>mapPose(X,'follow',Y,wk),D(90))}
 
 /* a cast member's own spell projectile: art/cast/<id>/<class>-bolt.png, 3 frames of 64x64 side by side, facing right:
@@ -70,7 +73,7 @@ async function boltShot(X,Y){const[sx,sy]=boltHand(X,Y),b=uBox(Y),ex=b.l+b.w/2,e
   const at=(x,y)=>({transform:`translate(${x-ax}px,${y-ay}px) rotate(${rot}deg)${fl?' scaleX(-1)':''}`});
   await d.animate([at(sx,sy),at(ex,ey)],{duration:D(260+Math.hypot(ex-sx,ey-sy)*.6),easing:'ease-in'}).finished;d.remove()}
 /* the hit on the target: the caster's own bolt burst if it has one, otherwise a ring in the element's colour */
-function hitBurst(X,Y,col){const src=castPng(X,'bolt');if(!src)return burst(Y,col);const b=uBox(Y),d=boltEl(src,2,b.l+b.w/2,b.t+b.h*.5,boltFlip(X,Y));
+function hitBurst(X,Y,col,el){if(el==='dark'||el==='lightning'){const[x,y]=fxMid(Y);fxPlay(el==='dark'?FX.darkBurst:FX.ballBurst,x,y,{k:1.3});return}const src=castPng(X,'bolt');if(!src)return burst(Y,col);const b=uBox(Y),d=boltEl(src,2,b.l+b.w/2,b.t+b.h*.5,boltFlip(X,Y));
   d.animate([{opacity:1,offset:.6},{opacity:0}],{duration:D(380)}).finished.then(()=>d.remove())}
 
 /* Krondis's Death Roll: Rhi's 8-frame strip (art/bosses/krondis-roll.png, 300x128 a frame) played over his map sprite.
@@ -97,7 +100,13 @@ function slashFrames(shape){const c='SLASH|'+shape;if(sprCache[c])return sprCach
         const t=(a-a0)/(a1-a0),th=TH*(f===3?1-t*.6:t)+.6;if(r>R||r<R-th)continue;p.set(x,y,r>R-1?SLASH_C[0]:r<R-th+1?SLASH_C[2]:SLASH_C[1])}}
     out.push(p.url())}
   return sprCache[c]=out}
-function slashFx(X,Y,w,crit){if(!w||!['blade','heavy'].includes(w.t))return;/* lances ('pole', the 'thrust' frames) are off until the thrust looks right */
+/* melee smears (FX): swords, axes and spears; drawn swinging to the right, flipped when the target is to the left */
+const SMEAR=w=>w.kind==='sword'?['swordSmear',[1,2,3,4,5],.85,[8,9,10,11,12]]:w.kind==='axe'?['axeSmear',null,.75]:w.t==='pole'&&w.kind==='spear'?['spearThrust',null,1]:null;
+function slashFx(X,Y,w,crit){const sm=w&&SMEAR(w);
+  if(sm){const[x,y]=fxMid(Y),toL=scrC(Y.x,Y.y,Y.sz).x<scrC(X.x,X.y,X.sz).x,f=FX[sm[0]],fr=sm[1]||[...Array(f.n).keys()],k=sm[2]*(crit?1.25:1);
+    const ang=sm[0]==='spearThrust'?Math.atan2(y-fxMid(X)[1],Math.abs(x-fxMid(X)[0])||1)*180/Math.PI:0;
+    fxPlay(f,x,y,{frames:crit&&sm[3]?[...fr,...sm[3]]:fr,k,sx:toL?-1:1,rot:toL?-ang:ang});return}
+  if(!w||!['blade','heavy'].includes(w.t))return;/* lances ('pole', the 'thrust' frames) are off until the thrust looks right */
   const fr=slashFrames(w.t==='pole'?'thrust':w.t==='heavy'?'heavy':'blade'),b=uBox(Y),a=scrC(X.x,X.y,X.sz),q=scrC(Y.x,Y.y,Y.sz),S=crit?80:64;
   const im=document.createElement('img');im.className='fx-slash';im.alt='';
   Object.assign(im.style,{left:b.l+b.w/2-S/2+'px',top:b.t+b.h*.5-S/2+'px',width:S+'px',height:S+'px',zIndex:9999,transform:q.x<a.x?'scaleX(-1)':''});
@@ -112,10 +121,14 @@ const EL_COL={fire:'#ff8a3c',water:'#5ab4ff',ice:'#bfefff',wind:'#8ae8b0',earth:
 async function sheetPlay(u,frames){const el=uEls[u.id];if(!el)return;el._pose='abil';for(const f of frames){sheetFit(el.firstChild,`sheet:${u.cls}:${f}`,u.sz);await sleep(D(140))}await sleep(D(160));el._pose='idle';sheetFit(el.firstChild,`sheet:${u.cls}:${sheetFrame(u,0)}`,u.sz)}
 const EL_SFX={fire:'fire',water:'water',lightning:'thunder',wind:'wind',ice:'ice'};
 const CLAW_SFX=['Claws','Fangs','Talons','Bite'];
-function hitSfx(w,ranged){return w.kind==='staff'&&!ranged?'swing':w.t==='art'?EL_SFX[w.el]||null:w.t==='bow'?'arrow':ranged?'throw':CLAW_SFX.includes(w.n)?'claw':w.t==='blade'?'slash':'swing'}
+function hitSfx(w,ranged){return w.acid?'poison':w.kind==='staff'&&!ranged?'swing':w.t==='art'?EL_SFX[w.el]||null:w.t==='bow'?'arrow':ranged?'throw':CLAW_SFX.includes(w.n)?'claw':w.t==='blade'?(w.kind==='sword'?'sword':'slash'):'swing'}
 /* a projectile flies from X to Y: arrows and thrown weapons arc (higher when shooting downhill), sigils fly straight and glow */
 async function shoot(X,Y,w){
   const a=uBox(X),b=uBox(Y),sx=a.l+a.w/2,sy=a.t+a.h*.45,ex=b.l+b.w/2,ey=b.t+b.h*.5,arc=w.t==='art'?0:30+Math.max(0,sy-ey)*.3;
+  if(w.t==='bow'){const f=FX.arrow,N=12,pts=[];for(let i=0;i<=N;i++){const t=i/N;pts.push([sx+(ex-sx)*t,sy+(ey-sy)*t-arc*4*t*(1-t)])}
+    const d=fxEl(f,sx,sy);fxFrame(d,f,2);const ang=i=>{const[nx,ny]=pts[Math.min(N,i+1)],[px,py]=pts[Math.max(0,i-1)];return Math.atan2(ny-py,nx-px)*180/Math.PI};
+    await d.animate(pts.map(([x,y],i)=>({transform:`translate(${x-f.ax}px,${y-f.ay}px) rotate(${ang(i)}deg)`})),{duration:D(300),easing:'linear'}).finished;d.remove();
+    fxPlay({...f,ax:53},ex,ey,{frames:[3,4,5],rot:ang(N)});return}
   const pj=document.createElement('div');pj.className='proj-m '+(w.t==='bow'?'arrow':w.t==='art'?'':'spin');pj.style.left='0';pj.style.top='0';
   if(w.t==='art')pj.style.color=pj.style.background=EL_COL[w.el]||'#c8b8ff';boardEl.appendChild(pj);
   const N=12,pts=[];for(let i=0;i<=N;i++){const t=i/N;pts.push([sx+(ex-sx)*t,sy+(ey-sy)*t-arc*4*t*(1-t)])}
@@ -130,6 +143,66 @@ async function fireball(X,Y,crit){const img=uEls[X.id]&&uEls[X.id].firstChild,s=
   let f=0;const fl=setInterval(()=>{f=(f+1)%3;pj.style.backgroundPosition=`${-f*64}px 0`},D(60));
   const kf=[0,1].map(t=>({transform:`translate(${sx+(ex-sx)*t}px,${sy+(ey-sy)*t}px) rotate(${ang}deg) scale(${(t?1:.6)*k})`}));
   await pj.animate(kf,{duration:D(Math.max(260,Math.hypot(ex-sx,ey-sy)*2.2)),easing:'ease-in'}).finished;clearInterval(fl);pj.remove();burst(Y,'#ff8a1e');if(crit)shake()}
+/* ---- spell VFX strips (art/fx/*.png, frames side by side, drawn facing right). See FX below for each. ---- */
+const FX={
+  darkOrb:{src:'art/fx/dark-orb.png',fw:40,fh:32,n:10,ax:20,ay:16,ms:50},/* Umbral sigils and dark spells: the orb flies, its tail behind */
+  darkBurst:{src:'art/fx/dark-burst.png',fw:40,fh:32,n:6,ax:20,ay:16,ms:70},/* the orb pops on the target; played backwards, it gathers at the hand on a crit */
+  iceShard:{src:'art/fx/ice-shard.png',fw:48,fh:32,n:3,ax:30,ay:16,ms:70},/* frost sigils and ice spells */
+  iceNova:{src:'art/fx/ice-nova.png',fw:32,fh:32,n:25,ax:16,ay:28,ms:55,hit:7},/* a crystal bursts from a tile (frames 0-7), then breaks up */
+  holyBeam:{src:'art/fx/holy-beam.png',fw:48,fh:48,n:15,ax:24,ay:45,ms:50,hit:6},/* a pillar of light lands on a tile, then sparks */
+  holyCross:{src:'art/fx/holy-cross.png',fw:32,fh:32,n:3,ax:16,ay:16,ms:110},/* healing */
+  fireRing:{src:'art/fx/fire-ring.png',fw:96,fh:64,n:17,ax:48,ay:40,ms:65,hit:5},/* Klaus's Circle of Fire: a spark, the ring roars up, then burns down */
+  frostBreath:{src:'art/fx/frost-breath.png',fw:96,fh:40,n:14,ax:4,ay:22,ms:60,hit:3},/* Corvin's Frost Wave: a gust of ice from the hand, widening as it goes */
+  ballLightning:{src:'art/fx/ball-lightning.png',fw:44,fh:48,n:3,ax:30,ay:24,ms:60},/* lightning sigils (Drecken): the ball flies, crackling */
+  ballBurst:{src:'art/fx/ball-lightning-burst.png',fw:58,fh:48,n:8,ax:32,ay:24,ms:65},/* ...and bursts on the target */
+  chainArc:{src:'art/fx/chain-lightning.png',fw:180,fh:72,n:13,ax:8,ay:40,ms:55,hit:4},/* Chain Lightning: an arc jumping from one target to the next, stretched to fit */
+  earthSlam:{src:'art/fx/earth-slam.png',fw:84,fh:56,n:14,ax:45,ay:47,ms:55,hit:3},/* golems: a rock arm crashes down, then the debris settles */
+  swordSmear:{src:'art/fx/sword-smear.png',fw:104,fh:64,n:13,ax:56,ay:30,ms:45},/* swords: a sweep (frames 1-5); a crit adds the downward cut with sparks (8-12) */
+  axeSmear:{src:'art/fx/axe-smear.png',fw:128,fh:104,n:8,ax:65,ay:55,ms:50},/* axes (Vaar's hatchet): a big overhead arc */
+  spearThrust:{src:'art/fx/spear-thrust.png',fw:72,fh:32,n:9,ax:58,ay:18,ms:45},/* spears: a stab, its tip on the target */
+  arrow:{src:'art/fx/arrow.png',fw:64,fh:32,n:6,ax:44,ay:18,ms:60},/* bows: frames 1-2 in flight (tip at 44,18), 3-5 it thunks in (tip at 53) */
+  tendrils:{src:'art/fx/dark-tendrils.png',fw:64,fh:56,n:20,ax:31,ay:51,ms:60,hit:7},/* Morrigan's Hex: dark tendrils rise round the target, then sink away */
+  levelUp:{src:'art/fx/level-up.png',fw:64,fh:96,n:9,ax:32,ay:80,ms:80},/* levelling up on the map: stars and chevrons rise round the unit */
+  smoke:{src:'art/fx/smoke.png',fw:64,fh:64,n:11,ax:32,ay:34,ms:75,hit:3},/* Rook's Smoke Bomb: a pop, the cloud, then it thins out */
+  acidGlob:{src:'art/fx/acid-glob.png',fw:44,fh:40,n:3,ax:40,ay:16,ms:60},/* the Spirit Frog's acid: a glob with a dripping trail... */
+  acidSplash:{src:'art/fx/acid-splash.png',fw:56,fh:40,n:13,ax:37,ay:20,ms:60}/* ...that splashes and drips off the target */
+};
+/* one FX element at board point (x,y): k = scale, rot = degrees, sx = extra horizontal stretch */
+function fxEl(f,x,y,k=1,rot=0,sx=1){const d=document.createElement('div');d.className='fx-strip';
+  Object.assign(d.style,{width:f.fw+'px',height:f.fh+'px',backgroundImage:`url(${f.src})`,backgroundSize:`${f.n*f.fw}px ${f.fh}px`,transformOrigin:`${f.ax}px ${f.ay}px`,
+    transform:`translate(${x-f.ax}px,${y-f.ay}px) rotate(${rot}deg) scale(${k*sx},${k})`});boardEl.appendChild(d);return d}
+const fxFrame=(d,f,i)=>d.style.backgroundPosition=`${-i*f.fw}px 0`;
+/* play frames (default all) at (x,y); resolves when frame f.hit shows (or at the end), and removes itself at the end */
+function fxPlay(f,x,y,o={}){const fr=o.frames||[...Array(f.n).keys()],d=fxEl(f,x,y,o.k,o.rot,o.sx),ms=D(o.ms||f.ms);let i=0,hitAt=fr.indexOf(f.hit??-1);if(hitAt<0)hitAt=fr.length-1;
+  return new Promise(res=>{fxFrame(d,f,fr[0]);if(!hitAt)res();const t=setInterval(()=>{i++;if(i>=fr.length){clearInterval(t);d.remove();res();return}fxFrame(d,f,fr[i]);if(i===hitAt)res()},ms)})}
+/* a looping strip flies from (sx,sy) to (ex,ey), turned to face where it's going */
+async function fxFly(f,sx,sy,ex,ey,k=1){const rot=Math.atan2(ey-sy,ex-sx)*180/Math.PI,d=fxEl(f,sx,sy,k,rot);let i=0;const t=setInterval(()=>fxFrame(d,f,i=(i+1)%f.n),D(f.ms));
+  const at=(x,y)=>({transform:`translate(${x-f.ax}px,${y-f.ay}px) rotate(${rot}deg) scale(${k})`});
+  await d.animate([at(sx,sy),at(ex,ey)],{duration:D(240+Math.hypot(ex-sx,ey-sy)*.9),easing:'ease-in'}).finished;clearInterval(t);d.remove()}
+const fxMid=u=>{const b=uBox(u);return[b.l+b.w/2,b.t+b.h*.5]};
+/* where a spell leaves the caster: Morrigan's hand (BOLT_HAND), otherwise chest height on the side facing the target */
+function fxFrom(X,Y){if(BOLT_HAND[X.cast])return boltHand(X,Y);const b=uBox(X),toL=boltFlip(X,Y);return[b.l+b.w/2+(toL?-10:10),b.t+b.h*.42]}
+/* element projectiles for sigil attacks and single-target spells; crit: an extra flourish at the hand first */
+const EL_PROJ={lightning:{f:'ballLightning',k:1.2},dark:{f:'darkOrb',k:1.3,crit:async(X,Y)=>{const[x,y]=fxFrom(X,Y);await fxPlay(FX.darkBurst,x,y,{frames:[5,4,3,2,1,0],k:1.1})}},ice:{f:'iceShard',k:1.1}};
+async function elShot(X,Y,el,crit){const p=EL_PROJ[el];if(crit&&p.crit)await p.crit(X,Y);const[sx,sy]=fxFrom(X,Y),[ex,ey]=fxMid(Y);await fxFly(FX[p.f],sx,sy,ex,ey,p.k*(crit?1.25:1))}
+/* the Spirit Frog's acid: a glob from its mouth, then a splash on the target */
+async function acidSpew(X,Y){const b=uBox(X),toL=boltFlip(X,Y),sx=b.l+b.w/2+(toL?-8:8),sy=b.t+b.h*.6,[ex,ey]=fxMid(Y);
+  await fxFly(FX.acidGlob,sx,sy,ex,ey,1.2);fxPlay(FX.acidSplash,ex,ey,{k:1.3})}
+/* tile VFX for area spells (ABIL tfx): a crystal / pillar on every tile of the shape, a little staggered; resolves as they land */
+const TILE_FX={
+  ice:tiles=>Promise.all(tiles.map(([x,y],i)=>sleep(D(i*35)).then(()=>{const p=tileTop(x,y,vhOf(x,y));return fxPlay(FX.iceNova,p.x,p.y+TH/2,{k:1.3})}))),
+  fire:tiles=>{const p=tiles.map(([x,y])=>tileTop(x,y,vhOf(x,y))),n=p.length,cx=p.reduce((a,q)=>a+q.x,0)/n,cy=p.reduce((a,q)=>a+q.y,0)/n+TH/2;return fxPlay(FX.fireRing,cx,cy,{k:2.2})},
+  breath:(tiles,u)=>{const ps=tiles.map(([x,y])=>{const p=tileTop(x,y,vhOf(x,y));return[p.x,p.y+TH/2]}),[ex,ey]=ps.reduce((a,p)=>[a[0]+p[0]/ps.length,a[1]+p[1]/ps.length],[0,0]),
+      b=uBox(u),toL=ex<b.l+b.w/2,sx=b.l+b.w/2+(toL?-10:10),sy=b.t+b.h*.45,L=Math.max(...ps.map(([x,y])=>Math.hypot(x-sx,y-sy)))+20;
+    return fxPlay(FX.frostBreath,sx,sy,{rot:Math.atan2(ey-sy,ex-sx)*180/Math.PI,k:1.5,sx:L/(92*1.5)})},
+  tendrils:tiles=>Promise.all(tiles.map(([x,y])=>{const p=tileTop(x,y,vhOf(x,y));return fxPlay(FX.tendrils,p.x,p.y+TH/2+4,{k:1.4})})),
+  smoke:(tiles,u)=>{const[x,y]=fxMid(u);return fxPlay(FX.smoke,x,y+8,{k:2.6})},
+  holy:tiles=>Promise.all(tiles.map(([x,y])=>sleep(D(Math.random()*260)).then(()=>{const p=tileTop(x,y,vhOf(x,y));return fxPlay(FX.holyBeam,p.x,p.y+TH/2,{k:1.4})})))};
+/* an arc of lightning from unit A to unit B (Chain Lightning's jumps); resolves when it strikes */
+function arcFx(A,B){const[sx,sy]=fxMid(A),[ex,ey]=fxMid(B),L=Math.hypot(ex-sx,ey-sy);return fxPlay(FX.chainArc,sx,sy,{rot:Math.atan2(ey-sy,ex-sx)*180/Math.PI,sx:Math.max(.4,L/165)})}
+/* a golem's slam lands on the target's tile */
+function slamFx(Y){const b=uBox(Y);return fxPlay(FX.earthSlam,b.l+b.w/2,b.t+b.h-8,{k:1.2})}
+function healFx(t){const[x,y]=fxMid(t);fxPlay(FX.holyCross,x,y-4,{k:1.8,frames:[0,0,1,2]})}
 /* a ring bursts on the target: element colour for sigils, white for crits */
 function burst(Y,col){const b=uBox(Y),r=document.createElement('div');r.className='fx-m';r.style.left=b.l+b.w/2+'px';r.style.top=b.t+b.h*.55+'px';r.style.color=col;boardEl.appendChild(r);
   r.animate([{transform:'scale(.3)',opacity:1},{transform:'scale(1.4)',opacity:0}],{duration:D(380),easing:'ease-out'}).finished.then(()=>r.remove())}
@@ -157,7 +230,7 @@ async function quickPlay(a,d,res){
     sfx(X.cls==='Krondis'?'sandswipe':hitSfx(w,ranged));
     await swingAt(X,Y,w,e.crit,ranged);
     if(e.hit){sfx(e.crit?(w.t==='art'?'crit':'swordcrit'):'hit');/* weapon crits use the recorded sword crit */Y.hp=Y===a?e.hpA:e.hpD;pop(Y,(e.crit?'Crit ':'')+'-'+e.dmg,e.crit?'crit':'dmg');flash(Y);lunge(Y,X,-6);
-      if(w.t==='art')hitBurst(X,Y,EL_COL[w.el]||'#c8b8ff');if(w.el==='crystal')shatterFx(Y);if(e.crit){shake();burst(Y,'#fff')}if(e.guard){pop(Y,e.guard,'heal');if(e.guard!==SKILLS.retaliate.n)sfx('block')}
+      if(w.t==='art')hitBurst(X,Y,EL_COL[w.el]||'#c8b8ff',w.el);if(w.el==='crystal')shatterFx(Y);if(e.crit){shake();burst(Y,'#fff')}if(e.guard){pop(Y,e.guard,'heal');if(e.guard!==SKILLS.retaliate.n)sfx('block')}
       if(e.heal){X.hp=X===a?e.hpA:e.hpD;pop(X,'+'+e.heal,'heal')}}
     else{sfx('miss');pop(Y,'Miss','miss');lunge(Y,X,-10)}
     await sleep(D(240));mapPose(X,'idle');mapPose(Y,'idle');render();await sleep(D(200))}

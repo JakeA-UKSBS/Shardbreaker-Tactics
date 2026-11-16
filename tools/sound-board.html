@@ -56,7 +56,7 @@ add('Music','boss','Boss fights','music',false);add('Music','map','Node map','mu
 /* ambience */
 REGIONS.forEach(([k,n])=>add('Ambience',k,n+' (loops on its map, events and battles)','amb'));add('Ambience','tavern','Tavern (chatter, fire)','amb',false);
 /* combat */
-[['slash','blades'],['swing','heavy weapons, lances, staffs'],['claw','fangs and claws'],['arrow','bows'],['throw','javelins, throwing axes'],['hit','a blow lands'],['miss','a miss'],
+[['sword','swords'],['slash','other blades (daggers, claws drawn as blades)'],['swing','heavy weapons, lances, staffs'],['claw','fangs and claws'],['arrow','bows'],['throw','javelins, throwing axes'],['hit','a blow lands'],['miss','a miss'],
  ['critcharge','crit wind-up'],['crit','crit impact (non-swords)'],['swordcrit','sword crit impact'],['block','shield block, Guard'],['broke','weapon breaks, shields shatter'],['death','a unit falls']].forEach(([k,w])=>add('Combat',k,w));
 /* magic */
 [['fire','fire spells, Burn'],['water','water spells'],['ice','ice spells, Ice Shield'],['thunder','lightning'],['wind','wind spells'],['earth','earth/stone abilities, ground slams'],
@@ -88,7 +88,7 @@ add('Tavern','pour','drinks, Bog Witch tea, fountain');[['eat','buying food'],['
  ['beastgrowl','The Crystal-Touched Beast'],['star','The Fallen Star'],['oracle','The Oracle'],['sage','The Mountain Sage'],['onyx','The Black Onyx'],['sinking','The Sinking Sands'],['echo','Ithren’s Echo'],['ghosts','Those Who Came Before']]
   .forEach(([k,w])=>add('Events','ev-'+k,w,'sfx',false));
 /* menus */
-[['select','left-click confirm (muted in game)'],['decline','right-click back (muted in game)'],['equip','equipping gear']].forEach(([k,w])=>add('Menus & UI',k,w));
+[['advance','dialogue menus: Continue / an event choice (trial)'],['cancel','dialogue menus: Leave / Back / Skip (trial)'],['select','left-click confirm (muted in game)'],['decline','right-click back (muted in game)'],['equip','equipping gear']].forEach(([k,w])=>add('Menus & UI',k,w));
 [['hover','hovering a button or tile'],['uiopen','opening a panel / menu'],['uiclose','closing a panel / menu'],['toggle','settings toggles'],['blip','dialogue text blips']].forEach(([k,w])=>add('Menus & UI',k,w,'sfx',false));
 
 /* ---- current state of each slot */
