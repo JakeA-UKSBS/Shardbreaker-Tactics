@@ -56,6 +56,7 @@ function eventScene(prop){
   if(prop==='stormaltar'){p.ell(80,14,40,9,'#2a2a3a');p.ell(60,18,20,6,'#3a3a4a');p.ell(104,16,22,6,'#3a3a4a');zig(82,22,50);S(64,52,32,14,'#2a2630');S(60,48,40,5,'#3a3640');p.ell(80,46,5,3,YL);p.ell(80,46,2,1.5,'#ffffff')}
   if(prop==='cache'){S(46,50,22,18,WD);S(46,50,22,2,WD2);S(72,54,20,14,WD2);S(96,44,24,24,WD);S(96,44,24,2,WD2);
     for(const[x,y]of[[50,56],[100,52]])S(x,y,12,3,'#efe6cf');for(let y=30;y<=44;y++)p.set(104+Math.round(3*Math.sin(Math.PI*(y-30)/14)),y,BROWN);p.line(58,48,64,40,M);p.line(62,48,68,40,M);p.ell(82,52,4,3,'#7ad6ff')}
+  if(prop==='roadside'){p.ell(64,68,9,3,'#5a4a4a');p.poly([[58,66],[64,52],[70,66]],'#ff8a3c');p.poly([[61,66],[64,58],[67,66]],YL)}/* just a campfire by the road (the Wandering Minstrel stands beside it) */
   if(prop==='veteran'){p.ell(64,68,9,3,'#5a4a4a');p.poly([[58,66],[64,52],[70,66]],'#ff8a3c');p.poly([[61,66],[64,58],[67,66]],YL);
     S(92,52,12,14,'#5a5a6a');p.ell(98,48,4,4,'#e0b090');p.poly([[95,50],[101,50],[98,57]],'#e8e2d0');S(96,44,5,2,'#e8e2d0');S(86,62,8,6,'#5a4a3a');p.line(112,68,116,44,M,2);S(110,54,8,2,G)}
   if(prop==='statue'){S(64,58,32,10,ST1);S(60,54,40,4,ST2);S(74,34,12,20,ST2);p.ell(80,30,5,5,ST2);p.line(86,36,94,14,'#c9c9d0',2);S(84,34,6,2,ST1);
@@ -472,7 +473,7 @@ const EVENTS = {
   /* Lysander joins only through this event */
   minstrel: {
     t: 'The Wandering Minstrel',
-    art: 'veteran',
+    art: 'roadside',
     ok: () => !(run.castUsed || []).includes('lysander') && !run.roster.some(u => u.cast === 'lysander'),
     d: 'A man in a feathered cap sits by the road, tuning a lyre. “Monster hunters! Every ballad needs heroes. Mind if I come along and write yours?”',
     o: null,
@@ -495,7 +496,7 @@ const EVENTS = {
             run.roster.push(nu);
             castJoined(nu);
             sfx('item');
-            return `<b>${nu.name}</b> slings his lyre over his shoulder. “I’ll make you all sound taller.”`;
+            return `<b>${nu.name}</b> slings his lyre over his shoulder. “I shall sing encouraging tunes and write ballads of your victories!”`;
           }
         },
         {

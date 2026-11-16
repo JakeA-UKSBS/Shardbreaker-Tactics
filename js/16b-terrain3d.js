@@ -5,14 +5,14 @@
    instead of being painted flat onto the diamond. Solid ones (boulders, rocks, spires) no longer raise a block. */
 const PROPS={forest:1.3,hill:1,cliff:1.1,crag:1.1,boulder:1.15,
   mangrove:1.25,curse:1.15,sandstone:1,agate:1,emerald:1,ruby:1,sapphire:1,malachite:.9,
-  'bgem-g':1,'bgem-r':1,'bgem-b':1,'bgem-v':1,spire:1.45};
+  'bgem-g':1,'bgem-r':1,'bgem-b':1,'bgem-v':1,spire:1.45,cactus:1.35};
 /* the feature alone (transparent round it), and the ground under it */
 function propArt(k,used){if(OVER_T.includes(k))return tileArt(k,used,true);if(k==='boulder')return boulderArt();
   return art('tiles/'+k+'-bare')}
 function propGroundArt(k){return art('tiles/'+k+'-ground')}
 /* the ground class: the shared features (trees, boulders...) sit on the map's usual ground, region features on their own */
-const propGround=(k,gk)=>OVER_T.includes(k)||k==='boulder'||k==='curse'?'t-'+gk:'t-g-'+k;
-texStyle.textContent+=Object.keys(PROPS).filter(k=>!OVER_T.includes(k)&&k!=='boulder').map(k=>`.t-g-${k}{background:url(${propGroundArt(k)}) 0 0/100% 100%}`).join('');
+const propGround=(k,gk)=>OVER_T.includes(k)||k==='boulder'||k==='curse'||k==='cactus'?'t-'+gk:'t-g-'+k;
+texStyle.textContent+=Object.keys(PROPS).filter(k=>!OVER_T.includes(k)&&k!=='boulder'&&k!=='cactus').map(k=>`.t-g-${k}{background:url(${propGroundArt(k)}) 0 0/100% 100%}`).join('');
 /* stand a prop on tile x,y (called by buildBoard). Its base sits a little below the tile's centre */
 /* other regions' boulders: CraftPix rocks (art/props/<name>.png, padded square, scale × the boulder's size). Regions not listed keep the plain boulder */
 const REGION_ROCKS={desert:[['sand-rock',1.1]],snow:[['ice-block',.9],['snow-peaks',1.1]],forest:[['moss-rock',1.1]],swamp:[['moss-rock',1.1]],mountain:[['red-spire',1.1]],heart:[['red-spire',1.1]]};
@@ -24,6 +24,8 @@ const KIND_ROCKS={sandstone:[['sand-rock',1.1]],
   /* the Cursed Woodland: Dead Wood (f) is bare dead trees; the Cursed Thicket (y) is a bramble bush or a dark mushroom tree */
   forest:[['wood-deadtree-1',1],['wood-deadtree-2',1],['wood-deadtree-3',.95]],
   curse:[['wood-bush',.8],['wood-shroom-1',.9],['wood-shroom-2',.9],['wood-shroom-3',.9]],
+  /* the desert's Cactus (C): tall, branching and small (the art's own sizes), picked by tile */
+  cactus:[['cactus-1',1],['cactus-2',1],['cactus-3',1]],
   /* the swamp's Mangrove Roots: rooted swamp trees */
   mangrove:[['swamp-tree-1',1.25],['swamp-tree-2',1.25],['swamp-tree-3',1.3],['swamp-tree-4',1.3]]};
 /* decoration on shallow water: reeds and lily pads on some tiles (no effect on play). [art, share of tiles, size × a tile] */

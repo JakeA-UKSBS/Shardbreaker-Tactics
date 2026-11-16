@@ -42,7 +42,7 @@ Object.assign(MONLOOK,{
 /* fields: see the TERRAIN key in 01-data.js */
 Object.assign(TER,{
   'D':{n:'Deep Mud',k:'mud',c:99,av:0,df:0},/* the swamp's impassable ground: its maps' water (w) becomes this */
-  'k':{n:'Sandstone Rocks',k:'sandstone',c:99,av:0,df:0},'^':{n:'Boulders',k:'boulder',c:99,av:0,df:0},'z':{n:'Quicksand',k:'quicksand',c:1,av:0,df:0,slow:true},
+  'k':{n:'Sandstone Rocks',k:'sandstone',c:99,av:0,df:0},'^':{n:'Boulders',k:'boulder',c:99,av:0,df:0},'z':{n:'Quicksand',k:'quicksand',c:1,av:0,df:0,slow:true},'C':{n:'Cactus',k:'cactus',c:2,av:10,df:0},
   'o':{n:'Snow',k:'snow',c:1,av:0,df:0},'j':{n:'Deep Snow',k:'deepsnow',c:1,av:0,df:0,slow:true},'a':{n:'Blue Agate',k:'agate',c:2,av:10,df:2},'i':{n:'Frozen Lake',k:'ice',c:1,av:-10,df:0},
   'c':{n:'Cave Floor',k:'cave',c:1,av:0,df:0},'x':{n:'Iridescent Rock',k:'cavewall',c:99,av:0,df:0},'g':{n:'Malachite',k:'malachite',c:2,av:10,df:2},
   'e':{n:'Emerald Cluster',k:'emerald',c:2,av:10,df:2},'u':{n:'Ruby Cluster',k:'ruby',c:2,av:10,df:2},'p':{n:'Sapphire Cluster',k:'sapphire',c:2,av:10,df:2},
