@@ -115,7 +115,7 @@ const ABIL={
   shieldBash:{n:'Shield Bash',cd:2,side:'foe',r:[1,1],dmg:1,push:1,d:'1.0× damage and push 1.'},
   challenge:{n:'Challenge',cd:3,side:'self',shape:'burst2',st:['challenged',1],d:'Enemies within 2 tiles must attack her next turn, if they can reach her.'},
   holdTheLine:{n:'Hold the Line',cd:4,side:'self',self:[['guard',1],['steady',1]],d:'Guard (30% less damage), and she can’t be pushed, until your next turn.'},
-  /* Brin (Adventurer) */
+  /* Raptor (Adventurer) */
   rally:{n:'Rally',cd:3,side:'self',shape:'burst1',give:['rally',2],others:1,d:'Allies around him get +2 Str and +2 Def for 2 turns.'},
   cleanCut:{n:'Clean Cut',cd:2,side:'foe',r:[1,1],dmg:1.2,hit:10,d:'1.2× damage, as accurate as a normal attack.'},
   shieldUp:{n:'Shield Up',cd:3,side:'self',self:[['guard',1],['shieldUp',1]],d:'Guard, and his counterattacks deal 1.3×, until your next turn.'},
@@ -140,7 +140,7 @@ const KITS={
   maelis:{passive:'lastLight',mp:26,abil:['mend','purify','circleOfRest','sanctuary']},
   rook:{passive:'slippery',mp:0,abil:['backstab','smokeBomb','tumble']},
   rhyn:{passive:'heroic',mp:0,abil:['shieldBash','challenge','holdTheLine']},
-  brin:{passive:'beginnersLuck',mp:0,abil:['rally','cleanCut','shieldUp']},
+  raptor:{passive:'beginnersLuck',mp:0,abil:['rally','cleanCut','shieldUp']},
   lysander:{passive:'audience',mp:24,abil:['songOfValour','lullaby','soothingBallad','encore'],
     asc:{'Bard':{songOfValour:'anthem',lullaby:'grandLullaby',soothingBallad:'soothingHymn'}}}/* as a Bard: stronger songs, shorter waits */
 };

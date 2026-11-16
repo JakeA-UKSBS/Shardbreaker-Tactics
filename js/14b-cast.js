@@ -34,7 +34,7 @@ const CAST_CLASSES = {
   Sniper: "skirm.foot.bow.2",
   Berserker: "bruiser.foot.heavy.2",
   Witch: "caster.foot.art.2",
-  Archmage: "caster.foot.art.2",
+  Frostlord: "caster.foot.art.2",
   Stormlord: "caster.foot.art.2",
   Juggernaut: "knight.armour.heavy.2",
   Paladin: "knight.mounted.pole.2",
@@ -57,7 +57,7 @@ const ASC_BONUS = {
   Artillery: [5, 4, 0, 2, 0, 0, 4, 1],
   Berserker: [6, 5, 0, 2, 2, 0, 1, 0],
   Witch: [2, 0, 4, 2, 2, 0, 0, 4],
-  Archmage: [2, 0, 5, 2, 1, 0, 1, 4],
+  Frostlord: [4, 0, 4, 1, 0, 0, 2, 4],
   Stormlord: [3, 0, 4, 1, 4, 0, 0, 2],
   Pyrolord: [4, 0, 5, 1, 1, 0, 2, 1],
   Juggernaut: [7, 4, 0, 1, 0, 0, 5, 1],
@@ -206,12 +206,15 @@ const CAST = [
       eye: "#3a5a8a",
     },
     asc: {
-      Archmage: {
+      Frostlord: {
         look: {
-          cloth: "#2a3a7a",
-          capeC: "#3a2a6a",
-          collar: "#2a3a7a",
-          gear: "circlet",
+          cloth: "#cfe8f6",
+          capeC: "#2a4a6a",
+          sash: "#9fd8ff",
+          collar: "#9fd8ff",
+          el: "#bfefff",
+          style: "long",
+          hem: "#9fd8ff",
         },
       },
     },
@@ -357,10 +360,10 @@ const CAST = [
     },
   },
   {
-    id: "brin",
-    name: "Brin",
+    id: "raptor",
+    name: "Raptor",
     cls: "Adventurer",
-    wk: "wornSword",
+    wk: "twinKhopesh",
     joins: "tavern",
     look: {
       style: "short",
@@ -369,17 +372,14 @@ const CAST = [
       cloth: "#c8682a",
       pants: "#5a4a3a",
       sash: "#7a5230",
-      shield: "round",
-      shieldC: "#c8682a",
       eye: "#3a6a3a",
     },
     asc: {
       Hero: {
-        wk: "knightlySword",
+        wk: "twinKhopesh",
+        gain: "atlatl",
         look: {
           capeC: "#c8682a",
-          shield: "kite",
-          shieldC: "#a8501e",
           gear: "headband",
         },
       },

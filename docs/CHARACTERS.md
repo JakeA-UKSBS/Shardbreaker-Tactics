@@ -66,7 +66,7 @@ Each base class ascends into one or two advanced classes at Lv 5.
 | Kili | Archer | Sniper | M |
 | Vaar | Brawler | Berserker | M |
 | Morrigan | Cultist | Witch | F |
-| Corvin (tavern or caged traveller) | Ice Mage | Archmage | F |
+| Corvin (tavern or caged traveller) | Ice Mage | Frostlord | F |
 | Drecken | Elemental Mage | Stormlord | M |
 | Aldric | Knight | Juggernaut | M |
 | Maelis | Mender | Saint | F |
@@ -111,7 +111,7 @@ A witch-hunter's daughter who took up the dark arts to hunt the blight instead. 
 ![Corvin](visuals/cast/corvin.png)
 
 A court magician's apprentice who walked out when her master started making weapons for the war. Curious and methodical. Works in frost.
-- **Ascends into:** Archmage.
+- **Ascends into:** Frostlord.
 - **Look:** dress and formal cloak, casts from her hand.
 - **Weapon:** Frost Sigil. Only Corvin can wield ice sigils.
 - **Passive:** none yet (keeps a random skill).
@@ -245,7 +245,7 @@ Recruited from recruit stops, the caged-traveller event and the tavern, alongsid
 | Holt | Crossbowman | Artillery | M |
 | Jun | Swordsman | Swordmaster | M |
 | Klaus | Pyromancer | Pyrolord | M |
-| Brin (tavern only) | Adventurer | Hero | M |
+| Raptor (tavern only) | Adventurer | Hero | M |
 | Seren | Summoner | Grand Summoner | F |
 
 ### Trent: Cavalier
@@ -303,11 +303,12 @@ A spirit-speaker who bargained with something old to save her village. Gentle, b
 - **Soul Swap** (familiar · 4 MP): she and the familiar swap places.
 - **Ascends into Grand Summoner** (from Lv 5): +4 HP, +5 Mag, +2 Spd, +2 Luck, +2 Def, +4 Res; summons twice a fight instead of once and her familiar is 3 levels higher. Darker teal robes with a pale collar and a circlet.
 
-### Brin: Adventurer (tavern only)
-![Brin](visuals/cast/brin.png)
+### Raptor: Adventurer (tavern only)
+![Raptor](visuals/cast/raptor.png)
 
 A farm boy who left home with a borrowed sword the day the beasts came. Eager, lucky, and better at this than anyone expected.
 - **Ascends into:** Hero.
+- **Weapons:** twin khopesh (swords); as a Hero he also gets an atlatl (throwing spears, range 1–2) and can use spears and lances as well as swords.
 - **Look:** light armour in orange, sword and round shield.
 - **Passive: Beginner’s Luck.** +10 Crit and +10 Avoid while at full HP.
 - **Rally** (burst r1 · CD 3): adjacent allies get +2 Str and +2 Def for 2 turns.
