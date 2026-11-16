@@ -664,3 +664,11 @@ body.preview .vp{height:100vh!important;max-height:none!important;border:0!impor
 
 /* spell VFX strips (FX in 09-fx.js) */
 .fx-strip{position:absolute;left:0;top:0;pointer-events:none;z-index:9000;background-repeat:no-repeat;image-rendering:pixelated}
+
+/* the Sphinx event: its statue beside the path */
+.ev-sphinx{left:54%;width:24%;bottom:12%}
+
+/* Options: General / Sound & Music tabs */
+.opt-tabs{display:flex;gap:6px;margin:0 0 10px;border-bottom:1px solid var(--line,#5a4a3a)}
+.opt-tabs button{border-radius:6px 6px 0 0;margin-bottom:-1px;opacity:.7}
+.opt-tabs button.on{opacity:1;border-bottom-color:transparent;font-weight:700}

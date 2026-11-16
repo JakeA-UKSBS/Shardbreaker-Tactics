@@ -54,7 +54,7 @@ async function winScreen(){
   else run.pendSkill=null;
   if(run.kind==='elite'){await relicPick(2,['c','u'],'The elite’s spoils','');
     const u=await pickUnit(`Choose a unit for a ${rwTag('weapon')} upgrade +1`,'',u=>{const w=weaponOf(u);return!w?'No weapon':forgeLv(w)>=FORGE_MAX?'Already +3':null},'Leave it',undefined,'weapon');
-    if(u){const w=weaponOf(u);forge(w);if(R('anvil'))forge(w);sfx('item');toast(`${u.name}’s weapon is now the ${IT[w.k].n}`)}}
+    if(u){const w=weaponOf(u);forge(w);sfx('item');toast(`${u.name}’s weapon is now the ${IT[w.k].n}`)}}
   if(bossWin&&!final)await relicPick(3,['u','r'],'The boss’s hoard','');
   if(final){const news=endRun(true);sfx('fanfare');await modal(`<div class="endban win">Victory</div><div class="eyebrow">${seedTag(run.seed)}${run.asc?` · Ascension ${run.asc}`:''} · ${fmtTime(run.time)}</div><h2>The blight is broken</h2>${newsHTML(news)}<div class="roster">${run.roster.map(u=>`<div><img src="${portrait(u)}" alt="">${u.name}<span class="hint">${CLS[u.cls].n}</span></div>`).join('')}</div><div class="mbtns"><button class="go" type="button" data-m="ok">Back to title</button></div>`);
     try{localStorage.removeItem(SAVE)}catch(_){}run=null;titleScreen();return}

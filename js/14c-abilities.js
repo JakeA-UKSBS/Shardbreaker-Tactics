@@ -240,7 +240,9 @@ const MP_REGEN=2;
 /* abilities are a little less accurate than a basic attack */
 const ABIL_HIT=0;
 /* MP cost after Attunement */
-function abCost(u,id){const a=ABIL[id];if(!a.mp)return 0;return Math.max(0,a.mp-(has(u,'attunement')&&u.lastEl&&a.el&&u.lastEl!==a.el?2:0))}
+function abCost(u,id){const a=ABIL[id];if(!a.mp)return 0;return Math.max(0,a.mp-(has(u,'attunement')&&u.lastEl&&a.el&&u.lastEl!==a.el?2:0)-(u.team==='p'&&R('riddle')?1:0))}
+/* cooldown after use (the Sphinx's Riddle takes a turn off, never under 1) */
+const abCd=(u,id)=>{const c=ABIL[id].cd||0;return c&&u.team==='p'&&R('riddle')?Math.max(1,c-1):c};
 /* why an ability can't be used right now (null if it can) */
 function abBlock(u,id){const a=ABIL[id],cd=(u.cd||{})[id]||0;if(a.once&&cd>0)return'Used this fight';if(cd>0)return`Ready in ${cd} turn${cd>1?'s':''}`;if(a.mp&&(u.mp||0)<abCost(u,id))return'Not enough MP';
   if(a.side!=='self'&&!aimTiles(u,id).size)return'No target in range';return null}
@@ -329,7 +331,7 @@ function pushUnit(u,t,n){
 /* ---- using an ability ---- */
 async function useAbility(u,id,tx,ty){
   const a=ABIL[id];busy=true;
-  if(a.mp){u.mp-=abCost(u,id);if(a.el)u.lastEl=a.el}if(a.cd)(u.cd=u.cd||{})[id]=a.cd;if(a.once)(u.cd=u.cd||{})[id]=99;
+  if(a.mp){u.mp-=abCost(u,id);if(a.el)u.lastEl=a.el}if(a.cd)(u.cd=u.cd||{})[id]=abCd(u,id);if(a.once)(u.cd=u.cd||{})[id]=99;
   const anim=!u.cast&&MON_SHEET[u.cls]&&MON_SHEET[u.cls].abil&&MON_SHEET[u.cls].abil[id];/* e.g. the Frost Wolf's howl */
   pop(u,a.n,'heal');if(anim)await sheetPlay(u,anim);else await sleep(D(350));
   if(a.wall){(state.ice=state.ice||{});for(const[x,y]of shapeTiles(u,id,tx,ty))if(!unitAt(x,y)&&ter(x,y).c<99)state.ice[key(x,y)]=a.wall;sfx('ice');render();await sleep(D(250))}
@@ -359,7 +361,8 @@ async function useAbility(u,id,tx,ty){
     if(a.stone&&landed&&t.hp>0&&!stImmune(t,'stone')){t.stone=1;pop(t,'Stone!','crit');sfx('earth');toast(`${t.name} is turned to stone and loses ${t.team==='p'?'their':'its'} next turn`);await sleep(D(200))}
     if(!a.dmg)exp+=10;
   }
-  /* healing, buffs, cures */
+  /* healing, buffs, cures (casters raise their staff: the swing pose) */
+  if(allies.length&&u.cast&&!a.dmg){mapPose(u,'swing',allies.find(t=>t!==u)||u);await sleep(D(260))}
   for(const t of allies){
     if(a.heal||a.healPct){const h=healAmt(u,id,t);if(h){t.hp+=h;pop(t,'+'+h,'heal');healFx(t)}exp+=12}
     if(a.cure){let c=0;if(t.st)for(const k of Object.keys(t.st))if(STATUS[k]&&STATUS[k].bad){delete t.st[k];c=1}if(t.psn){t.psn=0;c=1}if(t.stone){t.stone=0;c=1}if(c){pop(t,'Cured','heal');exp+=6}}
@@ -390,7 +393,7 @@ function abPlayerStart(){if(state.ice)for(const k in state.ice)if(--state.ice[k]
 /* ---- the Abilities menu, aiming and the forecast ---- */
 let abSel=null,abT=null,aimSet=null;
 const SHAPE_N={one:'',cross:'Cross',area:'3×3 area',burst1:'Around the user',burst2:'Within 2 of the user',pierce:'2 tiles in a line',cone:'Cone, 4 tiles'};
-function abCostTxt(u,id){const a=ABIL[id];return a.mp?`${abCost(u,id)} MP${a.once?' · once':''}`:`CD ${a.cd}`}
+function abCostTxt(u,id){const a=ABIL[id];return a.mp?`${abCost(u,id)} MP${a.once?' · once':''}`:`CD ${abCd(u,id)}`}
 function abRangeTxt(u,id){const a=ABIL[id];if(a.side==='self')return SHAPE_N[a.shape]||'Self';const r=abRange(u,id);return`Rng ${r[0]===r[1]?r[0]:r[0]+'–'+r[1]}${a.shape&&a.shape!=='one'?' · '+SHAPE_N[a.shape]:''}`}
 function mpLine(u){const m=mpMax(u);return m?`<div class="mpl"><span class="bar"><i style="width:${(u.mp||0)/m*100}%"></i></span><span>${u.mp||0}/${m} MP</span></div>`:''}
 function stChips(u){const l=stList(u).map(k=>[STATUS[k].n,STATUS[k].d,STATUS[k].bad,u.st[k].n]);if(u.psn)l.push(['Poison','Takes 2 damage at the start of each of its turns (never below 1 HP). A Salve cures it.',1,u.psn]);if(u.stone)l.push(['Stone','Skips its next turn and can’t counter.',1,1]);if(state&&state.units&&state.units.includes(u)&&u.hp>0&&!hasSt(u,'chill')&&zoc(u))l.push(['Pinned','Started next to an enemy: −1 Move this turn. Doesn’t stack with Slow (the bigger penalty applies). Slippery and Outrider ignore it.',1,1]);
