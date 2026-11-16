@@ -92,7 +92,7 @@ vp.addEventListener('wheel',e=>{e.preventDefault();const b=vb(),mx=e.clientX-b.l
 addEventListener('resize',()=>applyCam());
 /* keyboard and mouse: Esc backs out; right-click backs out mid-action (after moving: undo the move), and inspects a unit when nothing is selected; E ends the turn */
 function backOut(){if(busy||!modalEl.hidden||phase!=='player'||over)return;const sh=document.querySelector('.sheet');if(sh&&!sh.hidden)return;
-  if(ui==='move'||ui==='menu')act('cancel');else if(ui==='aim')act('abil');else if(ui==='abil')act('menu');else if(ui==='confirm')act('back');else if(ui==='target')act('menu');else if(ui==='items')act('menu');else{clearSel();ui='idle';render()}}
+  if(ui==='move'&&!byId(sel).canto)act('menu');else if(ui==='move'||ui==='menu')act('cancel');else if(ui==='aim')act('abil');else if(ui==='abil')act('menu');else if(ui==='confirm')act('back');else if(ui==='target')act('menu');else if(ui==='items')act('menu');else{clearSel();ui='idle';render()}}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')backOut();else if((e.key==='e'||e.key==='E')&&modalEl.hidden&&!busy)$('#btnEnd').click()});
 vp.addEventListener('contextmenu',e=>{e.preventDefault();const p=pickAt(e.clientX,e.clientY),o=p&&unitAt(...p);
   if(ui==='idle'&&o&&o.hp>0&&modalEl.hidden&&!busy)openSheet(o);else backOut()});
