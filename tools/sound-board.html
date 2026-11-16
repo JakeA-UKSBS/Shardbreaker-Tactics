@@ -73,7 +73,7 @@ add('Statuses','stun','Stun lands','sfx',false);add('Statuses','buff','a buff la
   .forEach(n=>add('Monsters','cry-'+n.toLowerCase().replace(/ /g,''),n+': attack / hurt / death cry','sfx',false));
 ['Krondis','Hollow Bear','Magma Dragon','Yeti','Amethyst Turtle'].forEach(n=>{const k='roar-'+n.toLowerCase().replace(/ /g,'');add('Bosses',k,n+': roar (as the boss fight opens)','sfx',!!SFX_FILE[k])});
 /* no roar for these two: the Crystal Heart beats, the Colossus may stay silent */
-add('Bosses','heartbeat-crystalheart','Crystal Heart: a beating heart (as the fight opens)','sfx',false);add('Bosses','rumble-pyritecolossus','Pyrite Colossus: a sandstorm or pounding on the floor, or nothing','sfx',false);
+add('Bosses','heartbeat-crystalheart','Crystal Heart: its heartbeat as the fight opens'),add('Bosses','heartbeat-crystalheart-fast','Crystal Heart: a faster heartbeat each time its shell shatters');add('Bosses','rumble-pyritecolossus','Pyrite Colossus: a sandstorm or pounding on the floor, or nothing','sfx',false);
 add('Bosses','rise','boss intro build-up');add('Bosses','burst','boss intro hit');add('Bosses','crystalshatter','Crystal Heart crystals breaking','sfx',false);
 /* turn flow */
 [['bell','battle starts'],['phase','player phase starts'],['ephase','enemy phase starts'],['ding','level up, reward'],['levelup','stat gains on level up'],['fanfare','victory, big reward'],['tick','small UI steps, counters']].forEach(([k,w])=>add('Turns & battle UI',k,w));
