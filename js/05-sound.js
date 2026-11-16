@@ -59,7 +59,7 @@ const SFX={
 Object.assign(SFX,{jump:()=>tone(330,.12,{type:'square',vol:.04,slide:660}),swordcrit:()=>SFX.crit(),ice:()=>SFX.water(),poison:()=>SFX.dark(),debuff:()=>SFX.dark(),slow:()=>tone(200,.45,{type:'sawtooth',vol:.03,slide:80}),claw:()=>SFX.swing(),slash:()=>SFX.swing(),block:()=>SFX.broke(),decline:()=>SFX.ephase(),equip:()=>SFX.tick(),buy:()=>SFX.item(),anvil:()=>{},book:()=>{},lever:()=>{},pour:()=>{},chestopen:()=>{},paper:()=>{},sandswipe:()=>SFX.swing(),levelup:()=>{}});
 /* dialogue-menu buttons (events, the tavern, pop-up windows): 'advance' for going on, 'cancel' for leaving / backing out.
    Trial run: easy to switch off here. key = the button's data key, label = its text */
-const UI_SFX_ON=true,CANCEL_KEYS=['back','close','no','skip','leave','cancel'],ADVANCE_KEYS=['ok','next','done','go','yes','continue'];
+const UI_SFX_ON=true,CANCEL_KEYS=['back','close','no','skip','leave','cancel'],ADVANCE_KEYS=['ok','next','done','yes','continue'];
 function uiSfx(key,label){if(!UI_SFX_ON)return false;
   if(CANCEL_KEYS.includes(key)||/^(leave|walk (on|away)|move on|decline|refuse|ignore|no\b|back|pass)/i.test(label||'')){sfx('cancel');return true}
   if(ADVANCE_KEYS.includes(key)||/^\d+$/.test(key)){sfx('advance');return true}return false}
