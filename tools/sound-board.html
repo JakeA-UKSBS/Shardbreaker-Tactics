@@ -57,7 +57,7 @@ add('Music','boss','Boss fights','music',false);add('Music','map','Node map','mu
 REGIONS.forEach(([k,n])=>add('Ambience',k,n+' (loops on its map, events and battles)','amb'));add('Ambience','tavern','Tavern (chatter, fire)','amb',false);
 /* combat */
 [['sword','swords'],['slash','other blades (daggers, claws drawn as blades)'],['swing','heavy weapons, lances, staffs'],['claw','fangs and claws'],['arrow','bows'],['throw','javelins, throwing axes'],['hit','a blow lands'],['miss','a miss'],
- ['critcharge','crit wind-up'],['crit','crit impact (non-swords)'],['swordcrit','sword crit impact'],['block','shield block, Guard'],['broke','weapon breaks, shields shatter'],['death','a unit falls']].forEach(([k,w])=>add('Combat',k,w));
+ ['critcharge','crit wind-up'],['crit','crit impact (non-swords)'],['swordcrit','sword crit impact'],['block','shield block, Guard'],['broke','weapon breaks, shields shatter'],['death','a unit falls: one sound for every unit (a crystal-breaking sound is planned)']].forEach(([k,w])=>add('Combat',k,w));
 /* magic */
 [['fire','fire spells, Burn'],['water','water spells'],['ice','ice spells, Ice Shield'],['thunder','lightning'],['wind','wind spells'],['earth','earth/stone abilities, ground slams'],
  ['dark','dark magic, life drain'],['heal','heals, salves, camps'],['sandswipe','sand attacks, Sand in Eyes']].forEach(([k,w])=>add('Magic',k,w));
@@ -68,9 +68,6 @@ add('Statuses','stun','Stun lands','sfx',false);add('Statuses','buff','a buff la
 /* movement */
 [['step','footsteps (grass)'],['hoof','cavalry moving'],['flap','fliers moving'],['jump','climbing to higher ground'],['move','unit picked up to move']].forEach(([k,w])=>add('Movement',k,w));
 [['step-sand','footsteps on sand'],['step-snow','footsteps on snow'],['step-stone','footsteps on stone'],['step-mud','footsteps in mud / shallow water']].forEach(([k,w])=>add('Movement',k,w,'sfx',false));
-/* monsters */
-['Wolf','Cursed Stag','Blighted Treant','Bog Lurker','Lamia','Mud Monster','Jackal','Sand Worm','Sandstone Golem','Hell Hound','Fire Sprite','Boulder Golem','Frost Wolf','Frost Sprite','Ice Worm','Ice Troll','Gem Golem','Shardling','Prism','Crystal Sentinel','Frog familiar']
-  .forEach(n=>add('Monsters','cry-'+n.toLowerCase().replace(/ /g,''),n+': attack / hurt / death cry','sfx',false));
 ['Krondis','Hollow Bear','Pyrite Colossus','Magma Dragon','Yeti','Amethyst Turtle','Crystal Heart'].forEach(n=>add('Bosses','roar-'+n.toLowerCase().replace(/ /g,''),n+': roar (boss intro)','sfx',false));
 add('Bosses','rise','boss intro build-up');add('Bosses','burst','boss intro hit');add('Bosses','crystalshatter','Crystal Heart crystals breaking','sfx',false);
 /* turn flow */
