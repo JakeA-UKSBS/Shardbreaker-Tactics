@@ -45,13 +45,14 @@ function artLeft(src){src=String(src);const o=sheetOf(src);if(o)return!!o.s.left
    every pose while the unit has the status (the turtle stays in her spiked shell after Hunker Down).
    cx: the body's centre x in the idle frame, so portraits and the boss node centre on the body rather than the whole frame.
    Portraits and the node icon show the sheet as drawn (not flipped).
+   roar: the frame shown while the boss roars after Begin (battleIntro).
    fireball: [x, y] of the mouth in the swing frame (frame pixels, as drawn): its spell attacks spit art/fx/fireball.png from there.
    Shown 48px tall per tile of size (bosses 96px), the width follows. */
-const MON_SHEET={HellHound:{n:6,fw:120,fh:64,x0:20,w:100,left:true,windup:[1,2],swing:3,follow:[4,5]},
-  Wolf:{n:5,fw:100,fh:64,x0:0,w:100,left:true,windup:[1,2],swing:3,follow:[4]},
-  FrostWolf:{n:4,fw:100,fh:64,x0:0,w:92,left:true,abil:{howl:[1,2,3]}},
+const MON_SHEET={HellHound:{n:6,fw:120,fh:64,x0:20,w:100,disp:64,left:true,windup:[1,2],swing:3,follow:[4,5]},
+  Wolf:{n:5,fw:100,fh:64,x0:0,w:100,disp:64,left:true,windup:[1,2],swing:3,follow:[4]},
+  FrostWolf:{n:4,fw:100,fh:64,x0:0,w:92,disp:64,left:true,abil:{howl:[1,2,3]}},
   AmethystTurtle:{n:4,fw:128,fh:128,x0:0,w:128,left:true,swing:1,abil:{hunkerDown:[2,3]},st:{shell:3}},
-  MagmaDragon:{n:2,fw:175,fh:168,x0:0,w:175,cx:68,left:true,swing:1,fireball:[8,42],abil:{searingBreath:[1,1,1]}}};
+  MagmaDragon:{n:3,fw:175,fh:168,x0:0,w:175,cx:68,left:true,windup:[1],swing:2,roar:1,fireball:[8,42],abil:{searingBreath:[1,2,2]}}};/* frames: idle, roar (mouth open), rearing */
 const BLANK='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 /* sprite()/portrait() hand back 'sheet:<Class>:<frame>' for these; sheetOf reads it back */
 const sheetOf=src=>{const m=/^sheet:(\w+):(\d+)$/.exec(src||'');return m&&MON_SHEET[m[1]]?{cls:m[1],i:+m[2],s:MON_SHEET[m[1]]}:null};
@@ -61,12 +62,15 @@ function sheetBg(src,h,bw){const o=sheetOf(src),s=o.s,k=h/s.fh,w=s.w*k,dx=bw==nu
 const SHEET_PROPS=['background-image','background-repeat','background-size','background-position'];
 /* put src on a map sprite img: a sheet frame (sized 48px tall, centred on the tile) or, for anything else, clear that styling.
    Returns true if it was a sheet frame (the caller then leaves img.src alone) */
-function sheetFit(img,src,sz){const o=sheetOf(src),H=48*(sz||1);
+/* disp (MON_SHEET): show this many px tall on the map instead of 48 (the wolves and hounds at 64, like the cast) */
+function sheetFit(img,src,sz){const o=sheetOf(src),H=o&&o.s.disp&&(sz||1)===1?o.s.disp:48*(sz||1);
   if(o){if(img.getAttribute('src')!==BLANK)img.src=BLANK;img.dataset.s=src;const w=o.s.w*H/o.s.fh,bg=sheetBg(src,H);for(const k in bg)img.style.setProperty(k,bg[k]);
     img.style.setProperty('width',w+'px','important');img.style.setProperty('height',H+'px','important');img.style.marginLeft=(H-w)/2+'px';img.style.maxWidth='none';img.style.transformOrigin='50% 50%';img.classList.toggle('artl',!!o.s.left);return true}
   if(img.style.backgroundImage){SHEET_PROPS.forEach(k=>img.style.removeProperty(k));img.style.removeProperty('width');img.style.removeProperty('height');img.style.marginLeft='';img.style.maxWidth=''}return false}
 /* an <img>'s attributes for a portrait box h px square: a plain src, or a blank src with the sheet frame as its background */
-function picAttrs(src,h){if(!sheetOf(src))return`src="${src}"`;const o=sheetOf(src),bg=sheetBg(src,h,h);
+function picAttrs(src,h){if(!sheetOf(src))return`src="${src}"`;const o=sheetOf(src),s=o.s,
+    /* a frame wider than tall (the wolves, the hound) shrinks to fit the box's width, sitting low in it; sheets with cx centre on the body instead */
+    fh=s.cx==null&&s.w>s.fh?h*s.fh/s.w:h,bg=sheetBg(src,fh,h);if(fh<h)bg['background-position']=bg['background-position'].replace(/ 0$/,` ${((h-fh)*.7).toFixed(1)}px`);
   return`src="${BLANK}" style="${Object.entries(bg).map(([k,v])=>k+':'+v).join(';')}"`}
 function monPng(cls,pose,sz){const b=sz>=2&&(BOSS_PNG[cls]||BOSS_PNG[CLS[cls].body]),k=b?'bosses/'+b:'monsters/'+cls;
   if(!b&&MON_SHEET[cls])return`sheet:${cls}:${pose==='strike'?MON_SHEET[cls].swing:0}`;
