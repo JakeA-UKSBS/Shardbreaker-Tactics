@@ -30,7 +30,7 @@ async function ascend(u,to){
     el.classList.add('charge');await w(900);
   }
   spr.src=after;el.classList.remove('charge');el.classList.add('burst');sfx('burst');
-  await w(still?0:900);el.querySelector('.asc-box').hidden=false;
+  await w(still?0:900);el.querySelector('.asc-box').hidden=false;sfx('levelup');/* the aura sound: ascension only, not ordinary level-ups */
   for(const s of shown(u)){const inc=r.b[ST.indexOf(s)];if(!inc)continue;const row=el.querySelector(`[data-s="${s}"]`);row.classList.add('up');row.querySelector('.v').textContent=r.old[s]+inc;row.querySelector('em').textContent='+'+inc;sfx('ding');await w(220)}
   const btn=el.querySelector('[data-m]');btn.disabled=false;btn.focus();
   await new Promise(res=>btn.addEventListener('click',res,{once:true}));

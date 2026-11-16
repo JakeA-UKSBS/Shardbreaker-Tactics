@@ -73,7 +73,7 @@ add('Statuses','stun','Stun lands','sfx',false);add('Statuses','buff','a buff la
 ['Krondis','Hollow Bear','Pyrite Colossus','Magma Dragon','Yeti','Amethyst Turtle','Crystal Heart'].forEach(n=>add('Bosses','roar-'+n.toLowerCase().replace(/ /g,''),n+': roar (boss intro)','sfx',false));
 add('Ascension','rise','ascension: the light rises');add('Ascension','burst','ascension: the flash as the new class appears');add('Bosses','crystalshatter','Crystal Heart crystals breaking','sfx',false);
 /* turn flow */
-[['bell','ascension begins (the toll before the light rises)'],['phase','player phase starts'],['ephase','enemy phase starts'],['ding','level up, reward'],['levelup','stat gains on level up'],['fanfare','victory, big reward'],['tick','small UI steps, counters']].forEach(([k,w])=>add('Turns & battle UI',k,w));
+[['bell','ascension begins (the toll before the light rises)'],['phase','player phase starts'],['ephase','enemy phase starts'],['ding','level up, reward'],['levelup','ascension: the new stats appear (not ordinary level-ups)'],['fanfare','victory, big reward'],['tick','small UI steps, counters']].forEach(([k,w])=>add('Turns & battle UI',k,w));
 add('Turns & battle UI','defeat','defeat','sfx',false);add('Turns & battle UI','promote','ascension / promotion','sfx',false);add('Turns & battle UI','reinforce','hold fight: reinforcements arrive','sfx',false);
 /* map and run */
 add('Map & run','item','item, relic or gold gained');add('Map & run','chestopen','chests and caches opening');add('Map & run','buy','buying');
