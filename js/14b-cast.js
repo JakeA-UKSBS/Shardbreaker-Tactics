@@ -650,10 +650,14 @@ const castPngKey = (id, cls, pose) =>
   CLS[cls].n.toLowerCase().replace(/[^a-z0-9]+/g, "-") +
   "-" +
   pose;
+/* an ascended class with no PNGs of its own yet uses the base class's (hand-drawn art arrives class by class) */
 function castPng(u, pose) {
   if (!u || !u.cast) return null;
   const k = castPngKey(u.cast, u.cls, pose);
-  return ART_PNG.has(k) ? "art/" + k + ".png" : null;
+  if (ART_PNG.has(k)) return "art/" + k + ".png";
+  const c = castDef(u.cast),
+    b = c && CLS[c.cls] && castPngKey(u.cast, c.cls, pose);
+  return b && ART_PNG.has(b) ? "art/" + b + ".png" : null;
 }
 function castArt(id, cls, pose) {
   const c = castDef(id),
