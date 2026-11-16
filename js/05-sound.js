@@ -13,7 +13,7 @@ function audio(){
 const SFX_FILE={sandswipe:['sfx/sand-swipe.mp3',.8],levelup:['sfx/aura-up.mp3',.5],step:['sfx/boots-grass.mp3',.45],swordcrit:['sfx/sword-crit.mp3',.8],jump:['sfx/retro-jump.mp3',.5],
   /* RPG Essentials Free pack: element attacks and poisoning */
   fire:['sfx/fire-explosion.mp3',.6],water:['sfx/water.mp3',.6],thunder:['sfx/thunder.mp3',.6],wind:['sfx/wind.mp3',.6],ice:['sfx/ice-explosion.mp3',.6],poison:['sfx/poison.mp3',.6],
-  heal:['sfx/heal.mp3',.5],debuff:['sfx/debuff.mp3',.55],slow:['sfx/debuff.mp3',.25],/* Slow landing: the debuff sound, quieter */claw:['sfx/claw.mp3',.8],block:['sfx/block.mp3',.9],slash:['sfx/slash.mp3',.7],
+  heal:['sfx/heal.mp3',.5],debuff:['sfx/debuff.mp3',.55],slow:['sfx/debuff.mp3',.25],/* Slow landing: the debuff sound, quieter */claw:['sfx/claw.mp3',.8],block:['sfx/block.mp3',.9],slash:['sfx/slash.mp3',.7],sword:['sfx/sword-swing.mp3',.7],
   /* UI */
   select:['sfx/confirm.mp3',.25],decline:['sfx/decline.mp3',.6],equip:['sfx/equip.mp3',.7],buy:['sfx/buy.mp3',.6],
   /* events */

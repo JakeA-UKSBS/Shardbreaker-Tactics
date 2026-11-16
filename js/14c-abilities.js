@@ -81,13 +81,13 @@ const ABIL={
   leap:{n:'Leap',cd:4,side:'tile',r:[1,3],shape:'area',dmg:1.2,d:'Leap to an empty tile up to 3 away, ignoring height, and slam down: 1.2× damage to every enemy around the landing.'},
   /* Morrigan (Cultist) */
   drainTouch:{n:'Drain Touch',mp:4,mag:1,el:'dark',side:'foe',r:[1,1],dmg:1.2,d:'1.2× magic damage to an adjacent enemy.'},
-  hex:{n:'Hex',mp:5,mag:1,el:'dark',side:'foe',r:[1,3],st:['weak',2],d:'The target is Weak (deals 30% less damage) for 2 turns.'},
+  hex:{n:'Hex',tfx:'tendrils',mp:5,mag:1,el:'dark',side:'foe',r:[1,3],st:['weak',2],d:'The target is Weak (deals 30% less damage) for 2 turns.'},
   darkPulse:{n:'Dark Pulse',mp:10,mag:1,el:'dark',side:'self',shape:'burst1',dmg:1,d:'1.0× magic damage to every enemy around her.'},
   /* Corvin (Ice Mage) */
   iceShard:{n:'Ice Shard',mp:4,mag:1,el:'ice',side:'foe',r:[1,3],dmg:1,st:['chill',1],d:'1.0× magic damage up to 3 away, and Slow (−2 Move).'},
   iceShield:{n:'Ice Shield',mp:5,el:'ice',side:'ally',r:[0,3],give:['iceShield',3],d:'An ally up to 3 away (or herself) gets +3 Def for 3 turns.'},
   frostWall:{n:'Frost Wall',mp:8,el:'ice',side:'tile',wall:2,r:[1,3],shape:'wall',d:'Three tiles in a row, up to 3 away, freeze into ice walls for 2 enemy turns. Enemies can’t move through them; allies can.'},
-  blizzard:{n:'Blizzard',mp:10,mag:1,el:'ice',side:'foe',r:[1,3],shape:'area',aim:'any',dmg:.7,st:['chill',1],d:'A 3×3 storm of ice up to 3 away: 0.7× magic damage and Slow to every enemy in it.'},
+  blizzard:{n:'Blizzard',tfx:'ice',mp:10,mag:1,el:'ice',side:'foe',r:[1,3],shape:'area',aim:'any',dmg:.7,st:['chill',1],d:'A 3×3 storm of ice up to 3 away: 0.7× magic damage and Slow to every enemy in it.'},
   /* Drecken (Elemental Mage) */
   spark:{n:'Spark',mp:4,mag:1,el:'lightning',side:'foe',r:[1,3],dmg:1,st:['stun',1,.15],d:'1.0× magic damage up to 3 away, 15% chance to Stun.'},
   thunderclap:{n:'Thunderclap',mp:10,mag:1,el:'lightning',side:'self',shape:'burst1',dmg:1.1,st:['stun',1,.3],d:'1.1× magic damage to every enemy around him, 30% chance to Stun each.'},
@@ -96,7 +96,7 @@ const ABIL={
   noxiousCloud:{n:'Noxious Cloud',cd:4,side:'foe',r:[1,3],shape:'area',aim:'any',dmg:.3,psn:1,st:['weak',1],d:'A 3×3 cloud up to 3 away: 0.3× damage, Poison and Weak (30% less damage) for a turn on every enemy in it.'},
   /* unused for now (was Corvin's) */
   flameBurst:{n:'Flame Burst',mp:5,mag:1,el:'fire',side:'foe',r:[1,3],shape:'cross',aim:'any',dmg:.9,st:['burn',2,.3],d:'A cross of fire up to 3 away: 0.9× magic damage, 30% chance to Burn.'},
-  frostWave:{n:'Frost Wave',mp:7,mag:1,el:'ice',side:'foe',r:[1,1],shape:'cone',aim:'dir',dmg:.9,st:['chill',1],d:'A cone of frost (4 tiles): 0.9× magic damage and Slow (−2 Move).'},
+  frostWave:{n:'Frost Wave',tfx:'breath',mp:7,mag:1,el:'ice',side:'foe',r:[1,1],shape:'cone',aim:'dir',dmg:.9,st:['chill',1],d:'A cone of frost (4 tiles): 0.9× magic damage and Slow (−2 Move).'},
   chainLightning:{n:'Chain Lightning',mp:9,mag:1,el:'lightning',side:'foe',r:[1,4],dmg:1,chain:[2,.6],d:'1.0× magic damage, then it bounces up to 2 times, each to an enemy within 2 tiles of the last one hit, at 0.6×.'},
   /* Aldric (Knight) */
   sunder:{n:'Sunder',cd:2,side:'foe',r:[1,1],dmg:1.2,st:['sunder',2],d:'1.2× damage, and the target has −3 Def for 2 turns.'},
@@ -106,10 +106,12 @@ const ABIL={
   mend:{n:'Mend',mp:4,side:'ally',r:[0,3],heal:1.2,d:'Heal an ally up to 3 away (or herself): 1.2× (Mag + 5).'},
   circleOfRest:{n:'Circle of Rest',mp:8,side:'ally',r:[0,3],shape:'cross',aim:'any',heal:.8,cure:1,d:'Heals every ally in a cross for 0.8× (Mag + 5) and cures their bad statuses.'},
   purify:{n:'Purify',mp:3,side:'ally',r:[0,3],cure:1,d:'Cures every bad status on an ally up to 3 away (or herself): Poison and Stone too.'},
+  circleOfFire:{n:'Circle of Fire',tfx:'fire',mp:8,mag:1,el:'fire',side:'foe',r:[1,3],shape:'area',aim:'any',dmg:.9,st:['burn',2],d:'A ring of flame on a 3×3 area up to 3 away: 0.9× magic damage and Burn to every enemy in it.'},
+  holyBombardment:{n:'Holy Bombardment',tfx:'holy',mp:10,mag:1,el:'light',side:'foe',r:[1,3],shape:'area',aim:'any',dmg:.8,d:'Pillars of light strike a 3×3 area up to 3 away: 0.8× magic damage to every enemy in it.'},
   sanctuary:{n:'Sanctuary',mp:10,side:'ally',r:[0,2],shape:'area',aim:'any',give:['guard',1],d:'Guard (30% less damage) on every ally in a 3×3 area until your next turn.'},
   /* Rook (Rogue) */
   backstab:{n:'Backstab',cd:2,side:'foe',r:[1,1],dmg:1,backstab:1,d:'1.0× damage, 1.5× when another ally is next to the target.'},
-  smokeBomb:{n:'Smoke Bomb',cd:4,side:'self',shape:'burst1',st:['blind',1],give:['smoke',1],d:'Enemies around him are Blinded (−20 Hit); he and allies around him get +30 Avoid until your next turn.'},
+  smokeBomb:{n:'Smoke Bomb',tfx:'smoke',cd:4,side:'self',shape:'burst1',st:['blind',1],give:['smoke',1],d:'Enemies around him are Blinded (−20 Hit); he and allies around him get +30 Avoid until your next turn.'},
   tumble:{n:'Tumble',cd:2,side:'self',tumble:1,free:1,d:'Move up to 2 more tiles, ignoring height. Doesn’t use his action.'},
   /* Rhyn (Shieldmaiden) */
   shieldBash:{n:'Shield Bash',cd:2,side:'foe',r:[1,1],dmg:1,push:1,d:'1.0× damage and push 1.'},
@@ -137,7 +139,8 @@ const KITS={
   corvin:{passive:'coldSnap',mp:28,abil:['iceShard','frostWave','blizzard','iceShield','frostWall']},
   drecken:{passive:'twinBolt',mp:28,abil:['spark','chainLightning','thunderclap']},
   aldric:{passive:'plate',mp:0,abil:['sunder','valiantThrust','cover']},
-  maelis:{passive:'lastLight',mp:26,abil:['mend','purify','circleOfRest','sanctuary']},
+  maelis:{passive:'lastLight',mp:26,abil:['mend','purify','circleOfRest','sanctuary'],add:{Saint:['holyBombardment']}},/* add: abilities gained on ascending */
+  klaus:{mp:24,abil:['circleOfFire']},/* his passive is his personal skill, Ember Heart */
   rook:{passive:'slippery',mp:0,abil:['backstab','smokeBomb','tumble']},
   rhyn:{passive:'heroic',mp:0,abil:['shieldBash','challenge','holdTheLine']},
   raptor:{passive:'beginnersLuck',mp:0,abil:['rally','cleanCut','shieldUp']},
@@ -147,7 +150,7 @@ const KITS={
 const kitOf=u=>u&&u.cast&&KITS[u.cast]||null;
 /* personal skills for characters without a kit (KITS passives cover the rest) */
 const PERSONAL={trent:'charger',holt:'steadyAim',kaya:'outrider',jun:'iaido',klaus:'emberHeart',celestine:'lightWard',seren:'kinship',zwei:'cleave'};
-const abilOf=u=>{if(u&&u.team==='e'&&MKITS[u.cls])return MKITS[u.cls];const k=kitOf(u);if(!k)return[];const sw=k.asc&&k.asc[CLS[u.cls].n];return sw?k.abil.map(id=>sw[id]||id):k.abil};
+const abilOf=u=>{if(u&&u.team==='e'&&MKITS[u.cls])return MKITS[u.cls];const k=kitOf(u);if(!k)return[];const cn=CLS[u.cls].n,sw=k.asc&&k.asc[cn],l=sw?k.abil.map(id=>sw[id]||id):k.abil;return k.add&&k.add[cn]?[...l,...k.add[cn]]:l};
 
 /* ---- monster moves: 2 per monster, cooldowns only (no MP). Extra fields: stone (Stone, bosses immune), psn (Poison),
    solo (a self move that only affects the user), healPct (heals this share of max HP). The enemy AI picks between
@@ -298,21 +301,22 @@ async function useAbility(u,id,tx,ty){
   /* Charge: run up next to the target first (the free tile beside it nearest the charger) */
   if(a.charge){const t=unitAt(tx,ty);if(t&&man(u,t)>1){const opts=DIRS.map(([dx,dy])=>({x:t.x+dx,y:t.y+dy})).filter(p=>p.x>=0&&p.y>=0&&p.x<MW&&p.y<MH&&!unitAt(p.x,p.y)&&mcost(u,p.x,p.y)<99).sort((p,q)=>man(u,p)-man(u,q));
     if(opts[0]){stepSfx(u,opts[0].x,opts[0].y);u.x=opts[0].x;u.y=opts[0].y;render();await sleep(D(200))}}}
+  if(a.tfx){mapPose(u,'swing',unitAt(tx,ty)||{x:tx,y:ty});await TILE_FX[a.tfx](shapeTiles(u,id,tx,ty),u)}
   const{foes,allies}=abHits(u,id,tx,ty),w=abWeapon(u,a),killed=[];let exp=0,elSnd=a.snd||(a.mag?(/^frost/.test(id)?'ice':hitSfx(w,true)):null);
   /* damage */
   for(const t of foes){
     const ranged=a.mag||man(u,t)>1;let landed=true;if(!a.dmg){/* status only: still has to hit */if(a.st){landed=(rn()+rn())/2<abVs(u,id,t).hit;if(!landed){sfx('miss');pop(t,'Miss','miss');mapPose(t,'dodge',u);await sleep(D(220));mapPose(t,'idle')}}}
     else{const n=a.hits||1,V=abVs(u,id,t);let total=0,hits=0;
       for(let k=0;k<n&&t.hp>0;k++){if(a.mag||a.snd){sfx(elSnd);elSnd=null}else sfx(ranged?'arrow':hitSfx(w,false));if(a.fx){if(!k)await a.fx(u,t)}else if(ranged&&(a.shape||'one')==='one'||!ranged)await swingAt(u,t,w,false,ranged);else mapPose(u,'swing',t);
-        if((rn()+rn())/2<V.hit){const d=Math.min(V.dmg,t.hp);t.hp-=d;total+=d;hits++;sfx('hit');pop(t,'-'+d,'dmg');flash(t);if(a.mag)hitBurst(u,t,EL_COL[a.el]||'#c8b8ff')}else{sfx('miss');pop(t,'Miss','miss');mapPose(t,'dodge',u)}
+        if((rn()+rn())/2<V.hit){const d=Math.min(V.dmg,t.hp);t.hp-=d;total+=d;hits++;sfx('hit');pop(t,'-'+d,'dmg');flash(t);if(a.mag)hitBurst(u,t,EL_COL[a.el]||'#c8b8ff',a.el)}else{sfx('miss');pop(t,'Miss','miss');mapPose(t,'dodge',u)}
         await sleep(D(n>1?160:220));mapPose(u,'idle');mapPose(t,'idle');render();await sleep(D(n>1?60:110))}
       /* a hit for 0 still lands, so on-hit effects (Stone Gaze, statuses, poison) still apply */
       landed=hits>0;
       if(total&&has(u,'siphon')&&a.el==='dark'){const h=Math.min(Math.ceil(total/4),u.maxhp-u.hp);if(h){u.hp+=h;pop(u,'+'+h,'heal')}}
       exp+=expFor(u,t,total>0,t.hp<=0);
       if(t.hp>0&&total&&a.push){pushUnit(u,t,a.push);render();await sleep(D(250))}
-      if(a.chain&&t.hp>0||a.chain)for(const c of chainTo(u,id,t)){const V2=abVs(u,id,c,a.chain[1]);sfx('thunder');burst(c,EL_COL.lightning);
-        if((rn()+rn())/2<V2.hit){const d=Math.min(V2.dmg,c.hp);c.hp-=d;pop(c,'-'+d,'dmg');flash(c);exp+=expFor(u,c,true,c.hp<=0);if(c.hp<=0)killed.push(c)}else pop(c,'Miss','miss');render();await sleep(D(260))}
+      if(a.chain&&t.hp>0||a.chain){let prev=t;for(const c of chainTo(u,id,t)){const V2=abVs(u,id,c,a.chain[1]);sfx('thunder');await arcFx(prev,c);prev=c;
+        if((rn()+rn())/2<V2.hit){const d=Math.min(V2.dmg,c.hp);c.hp-=d;pop(c,'-'+d,'dmg');flash(c);exp+=expFor(u,c,true,c.hp<=0);if(c.hp<=0)killed.push(c)}else pop(c,'Miss','miss');render();await sleep(D(260))}}
       if(t.hp<=0){killed.push(t);continue}}
     if(a.st&&landed&&t.hp>0&&!stImmune(t,a.st[0])&&(!a.st[2]||rn()<a.st[2]*100)){addSt(t,a.st[0],a.st[1],u);if(STATUS[a.st[0]].bad)sfx(a.st[0]==='chill'?'slow':'debuff');pop(t,STATUS[a.st[0]].n,'crit');await sleep(D(200))}
     if(a.psn&&landed&&t.hp>0&&!(t.team==='p'&&M('soup'))){t.psn=3;sfx('poison');pop(t,'Poisoned','crit');await sleep(D(200))}
@@ -321,7 +325,7 @@ async function useAbility(u,id,tx,ty){
   }
   /* healing, buffs, cures */
   for(const t of allies){
-    if(a.heal||a.healPct){const h=healAmt(u,id,t);if(h){t.hp+=h;pop(t,'+'+h,'heal')}exp+=12}
+    if(a.heal||a.healPct){const h=healAmt(u,id,t);if(h){t.hp+=h;pop(t,'+'+h,'heal');healFx(t)}exp+=12}
     if(a.cure){let c=0;if(t.st)for(const k of Object.keys(t.st))if(STATUS[k]&&STATUS[k].bad){delete t.st[k];c=1}if(t.psn){t.psn=0;c=1}if(t.stone){t.stone=0;c=1}if(c){pop(t,'Cured','heal');exp+=6}}
     if(a.give){addSt(t,a.give[0],a.give[1],u);pop(t,STATUS[a.give[0]].n,'heal');exp+=6}
     if(a.encore){t.acted=false;pop(t,'Encore!','heal');exp+=10}

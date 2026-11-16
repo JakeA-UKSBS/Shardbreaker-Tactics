@@ -56,7 +56,7 @@ add('Music','boss','Boss fights','music',false);add('Music','map','Node map','mu
 /* ambience */
 REGIONS.forEach(([k,n])=>add('Ambience',k,n+' (loops on its map, events and battles)','amb'));add('Ambience','tavern','Tavern (chatter, fire)','amb',false);
 /* combat */
-[['slash','blades'],['swing','heavy weapons, lances, staffs'],['claw','fangs and claws'],['arrow','bows'],['throw','javelins, throwing axes'],['hit','a blow lands'],['miss','a miss'],
+[['sword','swords'],['slash','other blades (daggers, claws drawn as blades)'],['swing','heavy weapons, lances, staffs'],['claw','fangs and claws'],['arrow','bows'],['throw','javelins, throwing axes'],['hit','a blow lands'],['miss','a miss'],
  ['critcharge','crit wind-up'],['crit','crit impact (non-swords)'],['swordcrit','sword crit impact'],['block','shield block, Guard'],['broke','weapon breaks, shields shatter'],['death','a unit falls']].forEach(([k,w])=>add('Combat',k,w));
 /* magic */
 [['fire','fire spells, Burn'],['water','water spells'],['ice','ice spells, Ice Shield'],['thunder','lightning'],['wind','wind spells'],['earth','earth/stone abilities, ground slams'],

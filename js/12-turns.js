@@ -116,7 +116,7 @@ async function act(a){
   if(a==='wait'){commit();finishAction();return}
   if(a==='summon'){if(!canSummon(u))return;const still=stillAt(u);commit();doSummon(u);afterAct(u,still);return}
   if(a==='use'){const still=stillAt(u);commit();const it=u.items[itemSel],amt=Math.min(salveAmt(it.k),u.maxhp-u.hp);u.hp+=amt;it.u--;if(it.u<=0)u.items.splice(itemSel,1);pop(u,'+'+amt,'heal');if(u.psn){u.psn=0;pop(u,'Cured','heal')}afterAct(u,still);return}
-  if(a==='doheal'){const still=stillAt(u);commit();const t=pending,si=spiritFor(u,t),w=IT[u.items[si].k],amt=Math.min(w.amt,t.maxhp-t.hp);t.hp+=amt;if(!endless(u.items[si].k)){u.items[si].u--;if(u.items[si].u<=0){toast(w.n+' shattered');u.items.splice(si,1)}}pop(t,'+'+amt,'heal');sfx('heal');clearSel();ui='idle';busy=true;render();
+  if(a==='doheal'){const still=stillAt(u);commit();const t=pending,si=spiritFor(u,t),w=IT[u.items[si].k],amt=Math.min(w.amt,t.maxhp-t.hp);t.hp+=amt;if(!endless(u.items[si].k)){u.items[si].u--;if(u.items[si].u<=0){toast(w.n+' shattered');u.items.splice(si,1)}}pop(t,'+'+amt,'heal');healFx(t);sfx('heal');clearSel();ui='idle';busy=true;render();
     const g=gainExp(u,Math.round(15*EXP_RATE));await showExp(u,g);if(g&&g.gains)await levelUp(u,g);busy=false;afterAct(u,still);return}
   if(a==='attack-go'){const still=stillAt(u);commit();const t=pending,it=u.items.splice(pendW,1)[0];u.items.unshift(it);clearSel();ui='idle';await fight(u,0,t);if(still&&u.acted){afterAct(u,still);return}saveGame();promptEnd();return}
 }
