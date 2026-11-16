@@ -56,6 +56,7 @@ function eventScene(prop){
   if(prop==='stormaltar'){p.ell(80,14,40,9,'#2a2a3a');p.ell(60,18,20,6,'#3a3a4a');p.ell(104,16,22,6,'#3a3a4a');zig(82,22,50);S(64,52,32,14,'#2a2630');S(60,48,40,5,'#3a3640');p.ell(80,46,5,3,YL);p.ell(80,46,2,1.5,'#ffffff')}
   if(prop==='cache'){S(46,50,22,18,WD);S(46,50,22,2,WD2);S(72,54,20,14,WD2);S(96,44,24,24,WD);S(96,44,24,2,WD2);
     for(const[x,y]of[[50,56],[100,52]])S(x,y,12,3,'#efe6cf');for(let y=30;y<=44;y++)p.set(104+Math.round(3*Math.sin(Math.PI*(y-30)/14)),y,BROWN);p.line(58,48,64,40,M);p.line(62,48,68,40,M);p.ell(82,52,4,3,'#7ad6ff')}
+  if(prop==='pond'){p.ell(78,66,34,9,'#2a5a6a');p.ell(78,65,28,6,'#3f8aa0');p.ell(70,64,10,2,'#8fd0e0');for(const[x,h]of[[46,10],[49,13],[52,9],[104,11],[107,14]])p.rect(x,66-h,1,h,'#6a8a3a');p.rect(30,60,8,7,'#7a5a3a');p.rect(30,60,8,1,'#9a7a5a');for(let i=0;i<22;i++)p.rect(40+i,50-Math.round(i*.35),1,1,'#8a6a4a');p.rect(61,42,1,22,'#d8d0c0')}/* a pond with reeds, a bucket and a rod (the Old Fisherman) */
   if(prop==='roadside'){p.ell(64,68,9,3,'#5a4a4a');p.poly([[58,66],[64,52],[70,66]],'#ff8a3c');p.poly([[61,66],[64,58],[67,66]],YL)}/* just a campfire by the road (the Wandering Minstrel stands beside it) */
   if(prop==='veteran'){p.ell(64,68,9,3,'#5a4a4a');p.poly([[58,66],[64,52],[70,66]],'#ff8a3c');p.poly([[61,66],[64,58],[67,66]],YL);
     S(92,52,12,14,'#5a5a6a');p.ell(98,48,4,4,'#e0b090');p.poly([[95,50],[101,50],[98,57]],'#e8e2d0');S(96,44,5,2,'#e8e2d0');S(86,62,8,6,'#5a4a3a');p.line(112,68,116,44,M,2);S(110,54,8,2,G)}
@@ -136,7 +137,6 @@ const EVENTS = {
           const w = weaponOf(u),
             old = IT[w.k].n;
           forge(w);
-          if (R('anvil')) forge(w);
           sfx('item');
           return `Sparks fly. ${u.name}’s ${old} comes back as the <b>${IT[w.k].n}</b>: Mt ${IT[w.k].mt}, Hit ${IT[w.k].hit}.`;
         }
@@ -387,6 +387,7 @@ const EVENTS = {
           const k = pick(relicPool(['r']));
           if (!k) return 'The plinth is empty.';
           run.relics.push(k);
+          await onRelic(k);
           run.roster.forEach(u => {
             u.maxhp = Math.max(10, u.maxhp - 2);
             u.hp = Math.min(u.hp, u.maxhp);
@@ -509,6 +510,68 @@ const EVENTS = {
         }
       ];
     }
+  },
+
+  /* Desert or swamp: answer the Sphinx's riddle (a unit learns a skill) or take its riddle-stone (a relic). */
+  sphinx: {
+    t: 'The Sphinx',
+    art: 'sphinx',
+    ok: () => ['desert', 'swamp'].includes(actBiome().id),
+    d: 'A great stone sphinx crouches across the path. Its eyes open. “None pass without an answer. Answer well, and I will teach you. Or take my riddle with you, and be wiser for it.”',
+    o: null,
+    make: () => {
+      EVENTS.sphinx.ov = `<img class="ev-ov2 ev-sphinx" src="art/props/sphinx.png" alt="">`;
+      return [
+        {
+          l: 'Answer the riddle',
+          sub: 'One unit learns a skill',
+          go: async () => {
+            const u = await learnSkill('The Sphinx teaches: learn a skill');
+            return u ? `“Correct.” The sphinx’s voice fills ${u.name}’s head with something new.` : '“Silence is also an answer.” The sphinx closes its eyes.';
+          }
+        },
+        {
+          l: 'Take its riddle with you',
+          sub: `Artifact: ${RELICS.riddle.n} (${RELICS.riddle.d})`,
+          go: async () => {
+            run.relics.push('riddle');
+            sfx('item');
+            return 'The sphinx breathes out a riddle carved in stone. Turning it over, your squad finds its abilities come easier.';
+          }
+        },
+        { l: 'Walk around it', go: async () => 'The sphinx watches you go. It has all the time in the world.' }
+      ];
+    }
+  },
+
+  /* A fisherman: fish (every unit recovers 5 HP) or a common artifact. */
+  fisherman: {
+    t: 'The Old Fisherman',
+    art: 'pond',
+    d: 'An old man sits on an upturned bucket by the water, a line in the reeds. “Bites are good today. Hungry? Or I’ve got this odd thing I hooked last week. No use to me.”',
+    o: [
+      {
+        l: 'Share his catch',
+        sub: 'Every unit recovers 5 HP',
+        go: async () => {
+          run.roster.forEach(u => (u.hp = Math.min(u.maxhp, u.hp + 5)));
+          sfx('heal');
+          return 'He grills a few fish over a little fire. Every unit recovers 5 HP.';
+        }
+      },
+      {
+        l: 'Take the odd thing',
+        sub: 'A common artifact',
+        go: async () => {
+          const k = pick(relicPool(['c']));
+          if (!k) return 'He rummages in his bucket, but it’s gone.';
+          run.relics.push(k);
+          await onRelic(k);
+          sfx('item');
+          return `He hands over a weed-tangled <b>${RELICS[k].n}</b>: ${RELICS[k].d}`;
+        }
+      }
+    ]
   },
 
   /* One unit +3 max HP, or every unit +1 Res. */

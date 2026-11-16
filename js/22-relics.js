@@ -50,7 +50,7 @@ const RELICS = {
     n: "Focus Gem",
     r: "u",
     x: 2,
-    d: "Arts deal +2 damage and gain +10 Hit.",
+    d: "Magic attacks (sigils and spells) deal +2 damage and gain +10 Hit.",
   },
   spurs: {
     n: "Golden Spurs",
@@ -68,7 +68,7 @@ const RELICS = {
     n: "Pocket Anvil",
     r: "r",
     x: 6,
-    d: "The Wandering Smith reforges twice.",
+    d: "On pickup: one unit’s weapon is upgraded twice (+2).",
   },
   mirror: {
     n: "Mirror Charm",
@@ -120,6 +120,7 @@ const RELICS = {
     d: "Crystal creatures deal 1 less damage to your units.",
   },
   ankh: { n: "Golden Ankh", r: "u", ev: 1, d: "All units gain +1 Def." },
+  riddle: { n: "Sphinx’s Riddle", r: "r", ev: 1, d: "Abilities cost 1 less MP, and their cooldowns are 1 turn shorter (never under 1)." },
   gloves: { n: "Imbued Gloves", r: "r", ev: 1, d: "All units gain +2 Res." },
   notes: {
     n: "Gnome’s Research Notes",
@@ -199,7 +200,19 @@ async function relicPick(n, rs, title, text, first) {
   (run.relics = run.relics || []).push(k);
   sfx("fanfare");
   toast(`${RELICS[k].n} obtained`);
+  await onRelic(k);
   return k;
+}
+/* relics that do something the moment you get them */
+async function onRelic(k) {
+  if (k !== "anvil") return;
+  const u = await pickUnit(`Pocket Anvil: upgrade a ${rwTag("weapon")} +2`, "", (u) => { const w = weaponOf(u); return !w ? "No weapon" : forgeLv(w) >= FORGE_MAX ? "Already +3" : null; }, "Leave it", undefined, "weapon");
+  if (!u) return;
+  const w = weaponOf(u);
+  forge(w);
+  forge(w);
+  sfx("anvil");
+  toast(`${u.name}’s weapon is now the ${IT[w.k].n}`);
 }
 /* crystal creatures: enemies made of crystal or gem (for the Black Onyx Shard and the Gnome's notes) */
 const CRYS_CLS = [
