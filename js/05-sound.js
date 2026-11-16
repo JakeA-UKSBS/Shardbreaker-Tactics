@@ -20,6 +20,7 @@ const SFX_FILE={sandswipe:['sfx/sand-swipe.mp3',.8],levelup:['sfx/aura-up.mp3',.
   'roar-hollowbear':['sfx/roar-hollow-bear.mp3',.5],'roar-krondis':['sfx/roar-krondis.mp3',.5],'roar-magmadragon':['sfx/roar-magma-dragon.mp3',.5],'roar-yeti':['sfx/roar-yeti.mp3',.5],'roar-amethystturtle':['sfx/roar-amethyst-turtle.mp3',.5],
   /* events */
   anvil:['sfx/anvil.mp3',.45],book:['sfx/book.mp3',.5],lever:['sfx/lever.mp3',.4],pour:['sfx/pour.mp3',.45],chestopen:['sfx/chest-open.mp3',.45],paper:['sfx/paper.mp3',.7]};
+/* boss -> its intro sound (a roar, or the Crystal Heart's heartbeat / the Colossus's rumble once those exist) */
 const BOSS_ROAR={HollowBear:'roar-hollowbear',Krondis:'roar-krondis',MagmaDragon:'roar-magmadragon',Yeti:'roar-yeti',AmethystTurtle:'roar-amethystturtle'};
 function playBuf(n,delay=0,rate=1){const c=AU.ctx,s=c.createBufferSource(),g=c.createGain();s.buffer=AU.buf[n];s.playbackRate.value=rate;g.gain.value=SFX_FILE[n][1];s.connect(g).connect(AU.out);s.start(c.currentTime+delay)}
 function tone(f,dur,o={}){const c=audio();if(!c)return;const t=c.currentTime+(o.delay||0),os=c.createOscillator(),g=c.createGain();os.type=o.type||'sine';os.frequency.setValueAtTime(f,t);if(o.slide)os.frequency.exponentialRampToValueAtTime(o.slide,t+dur);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(o.vol||.2,t+.006);g.gain.exponentialRampToValueAtTime(.0001,t+dur);os.connect(g).connect(AU.out);os.start(t);os.stop(t+dur+.03)}
