@@ -68,8 +68,13 @@ add('Statuses','stun','Stun lands','sfx',false);add('Statuses','buff','a buff la
 /* movement */
 [['step','footsteps (grass)'],['hoof','cavalry moving'],['flap','fliers moving'],['jump','climbing to higher ground'],['move','unit picked up to move']].forEach(([k,w])=>add('Movement',k,w));
 [['step-sand','footsteps on sand'],['step-snow','footsteps on snow'],['step-stone','footsteps on stone'],['step-mud','footsteps in mud / shallow water']].forEach(([k,w])=>add('Movement',k,w,'sfx',false));
-['Krondis','Hollow Bear','Pyrite Colossus','Magma Dragon','Yeti','Amethyst Turtle','Crystal Heart'].forEach(n=>add('Bosses','roar-'+n.toLowerCase().replace(/ /g,''),n+': roar (boss intro)','sfx',false));
-add('Bosses','crystalshatter','Crystal Heart crystals breaking','sfx',false);
+/* monsters */
+['Wolf','Cursed Stag','Blighted Treant','Bog Lurker','Lamia','Mud Monster','Jackal','Sand Worm','Sandstone Golem','Hell Hound','Fire Sprite','Boulder Golem','Frost Wolf','Frost Sprite','Ice Worm','Ice Troll','Gem Golem','Shardling','Prism','Crystal Sentinel','Frog familiar']
+  .forEach(n=>add('Monsters','cry-'+n.toLowerCase().replace(/ /g,''),n+': attack / hurt / death cry','sfx',false));
+['Krondis','Hollow Bear','Magma Dragon','Yeti','Amethyst Turtle'].forEach(n=>{const k='roar-'+n.toLowerCase().replace(/ /g,'');add('Bosses',k,n+': roar (as the boss fight opens)','sfx',!!SFX_FILE[k])});
+/* no roar for these two: the Crystal Heart beats, the Colossus may stay silent */
+add('Bosses','heartbeat-crystalheart','Crystal Heart: its heartbeat as the fight opens'),add('Bosses','heartbeat-crystalheart-fast','Crystal Heart: a faster heartbeat each time its shell shatters');add('Bosses','rumble-pyritecolossus','Pyrite Colossus: a sandstorm or pounding on the floor, or nothing','sfx',false);
+add('Bosses','rise','boss intro build-up');add('Bosses','burst','boss intro hit');add('Bosses','crystalshatter','Crystal Heart crystals breaking','sfx',false);
 /* turn flow */
 [['phase','player phase starts'],['ephase','enemy phase starts'],['ding','level up, reward'],['levelup','ascension: the new stats appear (not ordinary level-ups)'],['fanfare','victory, big reward'],['tick','small UI steps, counters']].forEach(([k,w])=>add('Turns & battle UI',k,w));
 add('Turns & battle UI','defeat','defeat','sfx',false);add('Turns & battle UI','promote','ascension / promotion','sfx',false);add('Turns & battle UI','reinforce','hold fight: reinforcements arrive','sfx',false);

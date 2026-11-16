@@ -72,7 +72,7 @@ function render(){
     const src=sprite(u,'idle',mapWk(u)),img=el.firstChild;if(img.dataset.s!==src){img.dataset.s=src;img.style.transform='';img.style.transformOrigin='';if(!sheetFit(img,src,u.sz)){img.src=src;if(u.sz===2||u.sz>1&&src.startsWith('data:'))fillBox(img,src,u.team==='e')}/* bosses: load and measure the strike frame now so the first attack shows it */if(u.sz>1&&!sheetOf(src)){const s2=sprite(u,'strike',mapWk(u));if(!FILLS[s2])fillBox(new Image(),s2)}}img.classList.toggle('hi',isHi(u.cls,u.sz));img.classList.toggle('artl',artLeft(img.dataset.s));
     {const bi=el.querySelector('.hpb i'),bb=barsOf(u);bi.style.width=(bb?bb.frac:u.hp/u.maxhp)*100+'%';
      if(bb){bi.style.background=BAR_COL[bb.n]||'';bi.parentNode.style.background=bb.n>1?BAR_COL[bb.n-1]:'';el.style.setProperty('--hf',BAR_HF[bb.n]||'');
-      const was=+el.dataset.bars||u.bars;el.dataset.bars=bb.n;if(bb.n<was&&u.hp>0){pop(u,'The shell shatters!','dmg');sfx('broke');toast(`${u.name} cracks: ${bb.n} bar${bb.n===1?'':'s'} left`)}}}
+      const was=+el.dataset.bars||u.bars;el.dataset.bars=bb.n;if(bb.n<was&&u.hp>0){pop(u,'The shell shatters!','dmg');sfx('broke');if(u.cls==='CrystalHeart')sfx('heartbeat-crystalheart-fast');toast(`${u.name} cracks: ${bb.n} bar${bb.n===1?'':'s'} left`)}}}
   }
   for(const id in uEls)if(!live.has(id)){uEls[id].remove();delete uEls[id]}
   propsRender();aimFade();
