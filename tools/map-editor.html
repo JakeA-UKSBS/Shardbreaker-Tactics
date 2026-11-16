@@ -75,7 +75,7 @@
    Opened as a plain file it can't read them, so it says so. */
 const FILES=['../js/01-data.js','../js/15-regions-monsters.js','../js/16-maps-battles.js','../art/manifest.js'];
 const SOLID_K=['wall','cliff','boulder','sandstone','lava','water','cavewall'];
-const KCOL={void:'#0b0b10',plain:'#7a8060',forest:'#3a5234',curse:'#6e3c82',boulder:'#6e6860',water:'#1e283c',bridge:'#8c643c',fort:'#aa966e',throne:'#c8aa3c',
+const KCOL={void:'#0b0b10',cactus:'#5a9a3a',plain:'#7a8060',forest:'#3a5234',curse:'#6e3c82',boulder:'#6e6860',water:'#1e283c',bridge:'#8c643c',fort:'#aa966e',throne:'#c8aa3c',
   sand:'#c8a868',quicksand:'#8a6a3a',sandstone:'#9a6a40',snow:'#d8e0e8',deepsnow:'#b8c4d4',agate:'#5a8ac8',ice:'#8ac8e8',
   cave:'#5a5068',emerald:'#3aa868',ruby:'#c83a4a',sapphire:'#3a5ac8',cavewall:'#2a2236',chest:'#c89a3a',
   grave:'#4a4656',tent:'#b89a6a',tomb:'#8a8494',floor:'#8a8478',light:'#fff2b0',carpet:'#8a2a3a',wall:'#2a2830',
@@ -172,7 +172,7 @@ function drawIso(){
     c.strokeStyle=starts.has(x+','+y)?'#5aaaff':'#0004';c.lineWidth=starts.has(x+','+y)?2:1;c.stroke();
     if(solid(x,y)){c.fillStyle=shade(base,.8);c.beginPath();c.moveTo(px-TW/4,py+TH/2+2);c.lineTo(px,py-TH*.6);c.lineTo(px+TW/4,py+TH/2+2);c.fill()}}
 }
-function buildPalette(){const used=[...new Set(cur.map.join(''))],common=['^','w','=','_'];
+function buildPalette(){const used=[...new Set(cur.map.join(''))],common=['^','w','=','_',...(used.includes('n')?['C']:[])];/* desert maps (sand) also offer Cactus */
   const keys=[...used,...Object.keys(TER).filter(k=>!used.includes(k)&&common.includes(k))];if(!tbrush||!keys.includes(tbrush))tbrush=keys[0];
   $('tpal').innerHTML=keys.map(k=>`<button class="sw${k===tbrush?' on':''}" data-t="${k}"><i style="background:${colOf(k)}"></i>${TER[k].n} <span class="msg">${k==='_'?'(no tile)':TER[k].c>=99?'(solid)':''}</span></button>`).join('');
   $('tpal').querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{tbrush=b.dataset.t;buildPalette()})}
