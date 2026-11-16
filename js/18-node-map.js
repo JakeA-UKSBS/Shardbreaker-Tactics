@@ -321,7 +321,7 @@ function mapScreen(preview) {
       if (e.target.closest("[data-close]")) {
         mapEl.onclick = null;
         mapEl.hidden = true;
-        sfx("decline");
+        sfx("cancel");
         return res(null);
       }
       const eq = e.target.closest("[data-equip]");
