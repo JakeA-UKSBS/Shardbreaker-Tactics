@@ -181,6 +181,12 @@ function drawSheet(){
    SIDE PANEL AND FLOATING MENUS: what the panel shows in each ui state, plus the
    command menu and the forecast pop-out that float beside units on the board
    ================================================================== */
+/* damage in the forecast: the number as normal, any bonus from relics, skills, statuses and abilities as a small green +N, its sources on hover */
+const BASE_POW=/^(High ground|Str|Mag|Gear Str|.* Mt( \(.*\))?)$/;
+function dmgBonus(r){const src=(r.br&&r.br.pow||[]).filter(([l,v])=>v>0&&!BASE_POW.test(l));return{n:src.reduce((a,[,v])=>a+v,0),src}}
+/* the small green +N after a damage number; src = [[label, amount]] */
+const bonusChip=src=>{const n=src.reduce((a,[,v])=>a+v,0);return n?`<small class="dmg-up" data-tip="${src.map(([l,v])=>`${l} +${v}`).join(' · ')}" tabindex="0">+${n}</small>`:''};
+function dmgTxt(r){return `${r.dmg}${bonusChip(dmgBonus(r).src)}${r.n>1?' ×2':''}`}
 function renderPanel(){
   let h='',fm='';const u=sel&&byId(sel);
   if(over)h=`<p class="hint">${over==='win'?'Battle won.':'The run has ended.'}</p>`;
@@ -208,7 +214,7 @@ function renderPanel(){
       fm=`<div class="ufc-h"><span class="pc">${u.name}</span>${list.length>1?'<button class="mini" type="button" data-act="wprev" aria-label="Previous weapon">◀</button>':''}<img src="${icon(f.aw.key)}" alt="" title="${f.aw.n}">${list.length>1?'<button class="mini" type="button" data-act="wnext" aria-label="Next weapon">▶</button>':''}<span class="ec">${pending.name}</span></div>
       <div class="ufc-w">${f.aw.n}<button class="mini" type="button" data-act="chart" aria-label="Effective damage chart">?</button></div>
       ${A.hd?`<div class="ufc-w hgt">${A.hd>0?`High ground: +${A.hd*10} Hit, +${A.hd} Dmg`:`Low ground: ${A.hd*10} Hit`}</div>`:''}
-      <div class="ufc-g"><b>${u.hp}→${aft(u.hp,D)}</b><i>HP</i><b>${pending.hp}→${aft(pending.hp,A)}</b><b>${A.dmg}${A.n>1?' ×2':''}</b><i>DMG</i><b>${D?D.dmg+(D.n>1?' ×2':''):'–'}</b><b>${A.hit}%</b><i>HIT</i><b>${D?D.hit+'%':'–'}</b><b>${A.crit}%</b><i>CRT</i><b>${D?D.crit+'%':'–'}</b></div>
+      <div class="ufc-g"><b>${u.hp}→${aft(u.hp,D)}</b><i>HP</i><b>${pending.hp}→${aft(pending.hp,A)}</b><b>${dmgTxt(A)}</b><i>DMG</i><b>${D?dmgTxt(D):'–'}</b><b>${A.hit}%</b><i>HIT</i><b>${D?D.hit+'%':'–'}</b><b>${A.crit}%</b><i>CRT</i><b>${D?D.crit+'%':'–'}</b></div>
       ${A.eff?`<button type="button" class="effl" data-act="chart">${effT.map(t=>`<img src="${tagArt(t)}" alt="">`).join('')}Effective ×${A.eff}</button>`:''}
       <div class="ufc-b"><button class="go" type="button" data-act="attack-go">Attack</button><button type="button" data-act="back">Back</button></div>`+devPanel([devBreak(u,pending,A),D&&devBreak(pending,u,D)]);
     }
