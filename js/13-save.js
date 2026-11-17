@@ -7,6 +7,7 @@ function saveGame(){if(!SAVES_ON||!run)return;const map=run.phase==='map';try{lo
 /* dropGone: strips skills and items that no longer exist (e.g. Pierce and Lifetaker, and their scrolls) from a save, so older runs still load */
 function dropGone(o){if(!o||typeof o!=='object')return;
   if(o.skill==='bulwarkAura')o.skill='heroic';/* Rhyn's old personal skill (Nov 2026) */
+  if(o.cast==='vaar'&&o.skill==='ironBody')o.skill='outlander';/* Vaar's old personal skill (Nov 2026) */
   if(Array.isArray(o.skills))o.skills=o.skills.filter(x=>!x||!x.id||SKILLS[x.id]);
   if(Array.isArray(o.items))o.items=o.items.filter(i=>!i||!i.k||IT[i.k]);
   if(Array.isArray(o.relics))o.relics=o.relics.filter(k=>RELICS[k]);
@@ -32,7 +33,7 @@ function setMap(){MAP=BATTLE.map;MW=MAP[0].length;MH=MAP.length;HM=heightsOf(BAT
 function enterMap(){setMap();over=null;phase='player';busy=false;ui='idle';clearSel();buildBoard();render();requestAnimationFrame(()=>initCam())}
 async function battleIntro(){
   const c=BATTLE;
-  await modal(`<div class="eyebrow">Act ${run.act||1} · Floor ${run.n} of ${actLen()}</div><h2>${c.title}</h2><p>${c.intro}</p><div class="lvl" style="grid-template-columns:1fr"><div><span style="color:var(--gold)">Goal</span><span>${goalText().replace(/<[^>]+>/g,' ').trim()}</span></div><div><span style="color:var(--red)">Lose</span><span>${loseText()}</span></div></div><div class="mbtns"><button class="go" type="button" data-m="go">Begin</button></div>`);
+  await modal(`<div class="eyebrow">Act ${run.act||1} · Floor ${run.n} of ${actLen()}</div><h2>${c.title}</h2>${c.intro?`<p>${c.intro}</p>`:''}<div class="lvl" style="grid-template-columns:1fr"><div><span style="color:var(--gold)">Goal</span><span>${goalText().replace(/<[^>]+>/g,' ').trim()}</span></div><div><span style="color:var(--red)">Lose</span><span>${loseText()}</span></div></div><div class="mbtns"><button class="go" type="button" data-m="go">Begin</button></div>`);
   /* after Begin: the boss roars (or the Crystal Heart beats), then the Player Phase banner */
   {const b=state.units.find(u=>u.boss&&u.id==='boss');if(b&&BOSS_ROAR[b.cls]){const s=MON_SHEET[b.cls];if(s&&s.roar!=null&&uEls[b.id]){sheetFit(uEls[b.id].firstChild,`sheet:${b.cls}:${s.roar}`,b.sz);setTimeout(()=>mapPose(b,'idle'),D(1500))}/* mouth open while it roars */sfx(BOSS_ROAR[b.cls]);await sleep(D(900))}}
   banner('Player Phase','p');saveGame();

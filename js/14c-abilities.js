@@ -42,6 +42,7 @@ const stList=u=>Object.keys(u.st||{}).filter(k=>hasSt(u,k)&&STATUS[k]);
 Object.assign(SKILLS,{
   eagleEye:{n:'Eagle Eye',kit:1,d:'+1 range on every bow shot, on top of the height bonus.'},
   ironBody:{n:'Iron Body',kit:1,d:'Can’t be pushed or pulled.'},
+  outlander:{n:'Outlander',kit:1,d:'+1 Skl and +1 Spd while no ally is next to him.'},
   siphon:{n:'Siphon',kit:1,d:'Her dark spells heal her for 25% of the damage they deal.'},
   attunement:{n:'Attunement',kit:1,d:'A spell of a different element from her last one costs 2 less MP.'},
   plate:{n:'Plate',kit:1,d:'Physical hits deal 2 less damage to him; −1 Jump.'},
@@ -162,7 +163,7 @@ const ABIL={
 /* the kits: passive, MP pool (spellcasters) and abilities */
 const KITS={
   kili:{passive:'eagleEye',mp:0,abil:['aimedShot','pinningArrow','volley']},
-  vaar:{passive:'ironBody',mp:0,abil:['palmStrike','flurry','leap']},
+  vaar:{passive:'outlander',mp:0,abil:['palmStrike','flurry','leap']},
   morrigan:{passive:'siphon',mp:24,abil:['drainTouch','hex','darkPulse']},
   corvin:{passive:'coldSnap',mp:28,abil:['iceShard','frostWave','blizzard','iceShield','frostWall']},
   drecken:{passive:'twinBolt',mp:28,abil:['spark','chainLightning','thunderclap']},

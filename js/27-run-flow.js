@@ -11,7 +11,7 @@ async function newRun(){
   run.castUsed=[];const lv0=2,starters=shuffle(CAST.filter(c=>c.joins==='start'));
   const opts=starters.slice(0,unl('draft6')?6:5).map(c=>castUnit(c.id,lv0));
   run.map=genMap();titleEl.hidden=true;const asc=await sageScene();if(asc===null){titleEl.hidden=false;return false}run.asc=asc;if(A(3))run.gold=0;if(unl('funds'))run.gold+=20;
-  {const k=await relicPick(3,['s'],'Ithren’s gift','“Take this to assist you.”');if(k==='purse')run.gold+=30}
+  {const k=await relicPick(3,['s'],'Ithren’s gift','');if(k==='purse')run.gold+=30}
 const squad=await musterScene(opts,3);if(!squad)return false;
   run.roster=squad;squad.forEach(castJoined);
   if(unl('startRelic'))await relicPick(2,['c','u'],'An heirloom','Choose a relic to carry from the start.',[pick(relicPool(['h']))]);
