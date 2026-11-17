@@ -313,6 +313,8 @@ function abVs(u,id,t,mult){
   const a=ABIL[id],w=abWeapon(u,a),c=calc(u,w,t,null,{init:u,phase});let m=(mult||a.dmg||0);if(a.backstab&&abBackstab(u,t))m*=1.5;
   return{dmg:a.flat||dmgMods(u,t,{init:u},Math.max(0,Math.round(c.pow*m)-c.df)),hit:a.sure?100:clamp(c.hit+(a.hit||0)+ABIL_HIT,0,100),n:a.hits||1,eff:c.eff,c,m};
 }
+/* an ability's damage bonus for the forecast: relics / skills / statuses, plus what its multiplier adds when it's over 1× */
+function abBonus(u,id,V){const src=dmgBonus(V.c).src.slice(),x=Math.round(V.c.pow*V.m)-V.c.pow;if(V.m>1&&x>0)src.push([ABIL[id].n,x]);return bonusChip(src)}
 function healAmt(u,id,t){const a=ABIL[id];let h=a.healPct?Math.round(t.maxhp*a.healPct):Math.round((u.mag+5)*a.heal);if(has(u,'lastLight')&&t.hp*2<t.maxhp)h=Math.round(h*1.5);return Math.min(h,t.maxhp-t.hp)}
 /* who Chain Lightning jumps to */
 function chainTo(u,id,t){const a=ABIL[id],out=[];let at=t;for(let i=0;i<a.chain[0];i++){const n=state.units.filter(o=>o!==t&&!out.includes(o)&&o.hp>0&&hostile(o,u)&&man(o,at)<=2).sort((p,q)=>man(p,at)-man(q,at))[0];if(!n)break;out.push(n);at=n}return out}
@@ -408,7 +410,7 @@ function abList(u){
 /* the forecast for an aimed ability */
 function abForecast(u,id,tx,ty){
   const a=ABIL[id],{foes,allies}=abHits(u,id,tx,ty),rows=[];
-  for(const t of foes){let txt='';if(a.dmg){const V=abVs(u,id,t),tot=V.dmg*V.n;txt=`<b>${V.dmg}${V.n>1?' ×'+V.n:''}</b> dmg · <b>${V.hit}%</b> · ${t.hp}→${Math.max(0,t.hp-tot)} HP${V.eff?' · <span class="effv">Effective</span>':''}`;
+  for(const t of foes){let txt='';if(a.dmg){const V=abVs(u,id,t),tot=V.dmg*V.n;txt=`<b>${V.dmg}${abBonus(u,id,V)}${V.n>1?' ×'+V.n:''}</b> dmg · <b>${V.hit}%</b> · ${t.hp}→${Math.max(0,t.hp-tot)} HP${V.eff?' · <span class="effv">Effective</span>':''}`;
       if(a.chain)txt+=` · jumps to ${chainTo(u,id,t).map(c=>`${c.name} (${abVs(u,id,c,a.chain[1]).dmg})`).join(', ')||'nobody'}`;if(a.push)txt+=canPush(t)?` · push ${a.push}`:' · can’t be pushed'}
     if(a.st)txt+=`${txt?' · ':''}${STATUS[a.st[0]].n}${a.st[2]?` (${a.st[2]*100}%)`:''}${a.dmg?'':` · <b>${abVs(u,id,t).hit}%</b>`}`;if(!txt)continue;rows.push(`<div class="abf-r"><span class="ec">${t.name}</span>${txt}</div>`)}
   for(const t of allies){let txt='';if(a.heal)txt=`+<b>${healAmt(u,id,t)}</b> HP → ${t.hp+healAmt(u,id,t)}/${t.maxhp}`;if(a.cure){const c=[...stList(t).filter(k=>STATUS[k].bad).map(k=>STATUS[k].n),...(t.psn?['Poison']:[]),...(t.stone?['Stone']:[])];if(c.length)txt+=`${txt?' · ':''}cures ${c.join(', ')}`;else if(!a.heal)txt='nothing to cure'}if(a.give)txt+=`${txt?' · ':''}${STATUS[a.give[0]].n}`;if(a.encore)txt+=t.acted?'acts again this turn':'hasn’t acted yet';if(!txt&&!a.heal)continue;rows.push(`<div class="abf-r"><span class="pc">${t.name}</span>${txt||'–'}</div>`)}

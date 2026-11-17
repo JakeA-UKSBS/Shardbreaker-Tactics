@@ -181,10 +181,12 @@ function drawSheet(){
    SIDE PANEL AND FLOATING MENUS: what the panel shows in each ui state, plus the
    command menu and the forecast pop-out that float beside units on the board
    ================================================================== */
-/* damage in the forecast, with any bonus from relics, skills, statuses and abilities in green ("+2"), its sources on hover */
+/* damage in the forecast: the number as normal, any bonus from relics, skills, statuses and abilities as a small green +N, its sources on hover */
 const BASE_POW=/^(High ground|Str|Mag|Gear Str|.* Mt( \(.*\))?)$/;
 function dmgBonus(r){const src=(r.br&&r.br.pow||[]).filter(([l,v])=>v>0&&!BASE_POW.test(l));return{n:src.reduce((a,[,v])=>a+v,0),src}}
-function dmgTxt(r){const b=dmgBonus(r);return `${b.n?`<span class="dmg-up" data-tip="${b.src.map(([l,v])=>`${l} +${v}`).join(' · ')}" tabindex="0">${r.dmg}<small>+${b.n}</small></span>`:r.dmg}${r.n>1?' ×2':''}`}
+/* the small green +N after a damage number; src = [[label, amount]] */
+const bonusChip=src=>{const n=src.reduce((a,[,v])=>a+v,0);return n?`<small class="dmg-up" data-tip="${src.map(([l,v])=>`${l} +${v}`).join(' · ')}" tabindex="0">+${n}</small>`:''};
+function dmgTxt(r){return `${r.dmg}${bonusChip(dmgBonus(r).src)}${r.n>1?' ×2':''}`}
 function renderPanel(){
   let h='',fm='';const u=sel&&byId(sel);
   if(over)h=`<p class="hint">${over==='win'?'Battle won.':'The run has ended.'}</p>`;

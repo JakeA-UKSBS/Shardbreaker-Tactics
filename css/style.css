@@ -680,7 +680,6 @@ body.preview .vp{height:100vh!important;max-height:none!important;border:0!impor
 .obj div:last-child{font-size:12px;opacity:.85}
 .obj div:last-child b{min-width:52px}
 
-/* damage boosted by relics / skills / statuses / abilities: green, with the bonus as a small +N */
-.dmg-up{color:#7ddc6a;cursor:help;position:relative}
-.dmg-up small{font-size:.65em;margin-left:2px;vertical-align:super;color:#7ddc6a}
-.dmg-up[data-tip]:hover::after,.dmg-up[data-tip]:focus::after{content:attr(data-tip);position:absolute;left:50%;transform:translateX(-50%);top:calc(100% + 6px);z-index:50;width:max-content;max-width:220px;padding:6px 8px;border-radius:6px;background:#1a161c;color:#f0e6d6;border:1px solid #5a4a3a;font-size:12px;font-weight:400;line-height:1.35;white-space:normal;pointer-events:none}
+/* damage boosted by relics / skills / statuses / abilities: a small green +N after the number, its sources above it on hover */
+.dmg-up{color:#7ddc6a;font-size:.65em;margin-left:2px;vertical-align:super;cursor:help;position:relative;font-weight:700}
+.dmg-up[data-tip]:hover::after,.dmg-up[data-tip]:focus::after{content:attr(data-tip);position:absolute;left:50%;transform:translateX(-50%);bottom:calc(100% + 6px);z-index:50;width:max-content;max-width:220px;padding:6px 8px;border-radius:6px;background:#1a161c;color:#f0e6d6;border:1px solid #5a4a3a;font-size:12px;font-weight:400;line-height:1.35;white-space:normal;pointer-events:none;vertical-align:baseline}
