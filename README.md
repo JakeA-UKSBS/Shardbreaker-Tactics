@@ -75,4 +75,3 @@ Elite	10 10
 - EXP is 1.5× the Fire Emblem formula (`EXP_RATE`), so units evolve during Act 1.
 - Relics (`RELICS`): team passives for the run. Elites offer 1 of 2, the Act 1 boss 1 of 3, treasure rooms sometimes hold one. Combat effects go through `relicCalc()`, move through `relicMov()`.
 
-p
