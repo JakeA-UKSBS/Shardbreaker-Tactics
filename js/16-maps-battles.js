@@ -212,7 +212,7 @@ function genBattle(n,kind){
   const bossName=B.boss.name,turns=town?ri(5,6):0;
   const goal=bossFight?'boss':town?'defend':'rout';
   const def={biome:B.id,title:bossFight?(B.boss&&B.boss.name||'Boss Battle'):town?'Defend the Settlement':elite?'Elite Battle':'Battle',/* no map names in titles; bosses go by their own name */goal,turns,map:m.map,h:m.h,start:m.start,gifts:{},
-    intro:bossFight&&B.boss.intro?B.boss.intro:bossFight?`${bossName} waits for you in the ${m.n}. Defeat it to clear ${theN(B)}.`:town?`Crystallised beasts are closing on the ${m.n.toLowerCase()}. Hold them off for ${turns} turns.`:elite?`A pack led by something old and strong holds the ${m.n.toLowerCase()}. Rout them all.`:`${count} monsters wait in the ${m.n.toLowerCase()}. Rout them.`};
+    intro:bossFight&&B.boss.intro?B.boss.intro:bossFight?`${bossName} waits for you in the ${m.n}. Defeat it to clear ${theN(B)}.`:town?`Crystallised beasts are closing on the ${m.n.toLowerCase()}. Hold them off for ${turns} turns.`:elite?`A pack led by something old and strong holds the ${m.n.toLowerCase()}. Rout them all.`:''};/* ordinary fights: no intro line, the goal says it */
   /* drops: 12% of enemies carry something, at most one weapon a battle, and never a weapon the squad already has */
   def.foes=()=>{const tiles=spawnTiles(m),out=[];let wDrop=0;
     list.forEach((c,i)=>{const lv=Math.max(1,lvBase+(rand()<.3?1:0)-(c==='Wolf'?1:0)+(elite?2:0)+(act===2?ACT2_UP.lv:0)),u=mkMon(c,lv),t=tiles[i%tiles.length];u.x=t.x;u.y=t.y;
