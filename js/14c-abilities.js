@@ -196,7 +196,6 @@ Object.assign(ABIL,{
   stoneGaze:{n:'Stone Gaze',cd:5,mag:1,side:'foe',r:[1,1],dmg:.5,stone:.5,d:'0.5× magic damage, and a 50% chance the target is turned to Stone: it skips its next turn and can’t counter. Bosses are immune.'},
   constrict:{n:'Constrict',cd:2,mag:1,side:'foe',r:[1,1],dmg:.8,st:['root',1],psn:1,d:'0.8× magic damage; the target is Rooted and Poisoned.'},
   mudSpit:{n:'Mud Spit',cd:3,side:'foe',r:[2,3],dmg:.8,st:['chill',1],d:'0.8× damage from 2–3 tiles away, and the target is Slowed.'},
-  engulf:{n:'Engulf',cd:3,side:'foe',r:[1,1],dmg:1,st:['blind',2],d:'1.0× damage, and the target is Blinded for 2 turns.'},
   howl:{n:'Howl',cd:4,side:'self',shape:'burst2',give:['rally',2],others:1,d:'Allies within 2 tiles are Rallied (+2 Str, +2 Def) for 2 turns.'},
   hamstring:{n:'Hamstring',cd:3,side:'foe',r:[1,1],dmg:.8,st:['chill',1],d:'0.8× damage, and the target is Slowed.'},
   frostBite:{n:'Frost Bite',cd:3,side:'foe',r:[1,1],dmg:1,st:['chill',1],d:'1.0× damage, and the target is Slowed.'},
@@ -227,7 +226,7 @@ Object.assign(ABIL,{
   regenerate:{n:'Regenerate',cd:4,side:'self',solo:1,healPct:.3,d:'Heals 30% of its max HP.'}
 });
 const MKITS={
-  Lamia:['stoneGaze','constrict'],MudMonster:['mudSpit','engulf'],
+  Lamia:['stoneGaze','constrict'],MudMonster:['mudSpit'],
   Wolf:['howl','hamstring'],BlightedTreant:['graspingRoots','barkSkin'],HollowBear:['maul','roar'],
   FireSprite:['fireball','flicker'],BoulderGolem:['moltenFist','eruption','boulderToss'],MagmaDragon:['searingBreath','wingGust'],
   SandWorm:['burrow','sandBlast'],Krondis:['deathRoll'],PyriteColossus:['stalagmite','boulderToss'],GemGolem:['boulderToss'],SandstoneGolem:['sandStream','sandBurn','boulderToss'],Yeti:['groundSlam'],CursedStag:['charge'],FrostSprite:['iceBlitz'],AmethystTurtle:['hunkerDown'],FrostWolf:['frostBite','howl'],IceWorm:['burrow','iceSpray'],HellHound:['flameBite','howl'],IceTroll:['clubSmash','regenerate']
@@ -432,6 +431,8 @@ function abPanel(u){
 /* the tiles to light up while aiming: range (aimSet) and the area of the chosen tile */
 function abTileCls(k){if(ui!=='aim'||!abSel)return null;const a=ABIL[abSel],out=[];
   if(aimSet&&aimSet.has(k))out.push(a.side==='ally'?'hl':'atk');
+  /* aimed by direction (Valiant Thrust, Overrun): light every tile each direction would hit, not just the first */
+  else if(a.aim==='dir'&&aimSet&&!abT){const u=byId(sel);if(u&&[...aimSet].some(t=>{const[x,y]=t.split(',').map(Number);return shapeTiles(u,abSel,x,y).some(([sx,sy])=>key(sx,sy)===k)}))out.push('atk')}
   if(abT){const u=byId(sel);if(u&&shapeTiles(u,abSel,abT.x,abT.y).some(([x,y])=>key(x,y)===k))out.push('tg','cur');if(a.side!=='self'&&k===key(abT.x,abT.y))out.push('cur')}
   return out}
 /* actions: open the list, pick an ability, use it */

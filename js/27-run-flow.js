@@ -66,7 +66,7 @@ async function winScreen(){
 async function loseScreen(){
   await sleep(500);
   const sq=chStart.units.filter(u=>u.team==='p'&&!u.summon);
-  const m=await modal(`<div class="endban lose">Defeat</div><div class="eyebrow">${seedTag(run.seed)}${run.asc?` · Ascension ${run.asc}`:''} · ${fmtTime(run.time)}</div><h2>The run ends</h2><p>Your squad fell in Act ${run.act||1}, floor ${run.n} of ${RUN_LEN}, in ${TheN(actBiome()).replace(/^The /,'the ')}.</p><div class="roster">${sq.map(u=>`<div class="dead"><img src="${portrait(u)}" alt="">${u.name}<span class="hint">${CLS[u.cls].n} · Lv ${u.lv}</span></div>`).join('')}</div><div class="mbtns"><button class="go" type="button" data-m="title">Back to title</button></div>`);
+  const m=await modal(`<div class="endban lose">Defeat</div><div class="eyebrow">${seedTag(run.seed)}${run.asc?` · Ascension ${run.asc}`:''} · ${fmtTime(run.time)}</div><p>Your squad fell in Act ${run.act||1}, floor ${run.n} of ${RUN_LEN}, in ${TheN(actBiome()).replace(/^The /,'the ')}.</p><div class="roster">${sq.map(u=>`<div class="dead"><img src="${portrait(u)}" alt="">${u.name}<span class="hint">${CLS[u.cls].n} · Lv ${u.lv}</span></div>`).join('')}</div><div class="mbtns"><button class="go" type="button" data-m="title">Back to title</button></div>`);
   const news=endRun(false);if(news.length)await modal(`<h2>Progress</h2>${newsHTML(news)}<div class="mbtns"><button class="go" type="button" data-m="ok">Back to title</button></div>`);
   try{localStorage.removeItem(SAVE)}catch(_){}run=null;titleScreen();
 }
