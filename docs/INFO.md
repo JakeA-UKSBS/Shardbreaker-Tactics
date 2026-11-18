@@ -153,12 +153,12 @@ Learned skills cost capacity (base 20, +5 when promoted). Personal skills are fr
 
 | Region | Monsters (weight; from floor) | Elite pack | Boss |
 |---|---|---|---|
-| Sobek’s Mire | Bog Lurker 3, Lamia 3 (fl 2+), Mud Monster 2 (fl 4+) | Mud Monster, Lamia, Bog Lurker | Krondis |
+| Sobek’s Mire | Swamp Ooze, Blighted croc 3, Lamia 3 (fl 2+), Mud Monster 2 (fl 4+) | Swamp Ooze, Lamia, Blighted Croc | Krondis |
 | Cursed Woodland | Wolf 4, Blighted Stag 3 (fl 2+), Blighted Treant 2 (fl 5+) | Blighted Treant, Blighted Stag, Wolf | The Hollow Bear |
 | Volcanic Isle | Hell Hound 4, Fire Sprite 2 (fl 2+), Magma Golem 3 (fl 3+) | Magma Golem, Hell Hound, Fire Sprite | Pyraxis, the Magma Dragon |
-| The Heart of the Blight | Shardling 4, Prism 3, Crystal Sentinel 2 | Crystal Sentinel, Shardling, Prism | The Crystal Heart |
-| Sandstone Desert | Jackal 4, Sand Worm 3 (fl 2+), Sandstone Golem 2 (fl 4+) | Sandstone Golem, Jackal, Sand Worm | The Pyrite Colossus |
-| Frostveil Reaches | Frost Wolf 4, Frost Sprite 3 (fl 2+), Ice Worm 2 (fl 4+), Ice Troll 2 (fl 5+) | Ice Worm, Ice Troll, Frost Wolf, Frost Sprite | The Yeti |
+| The Heart of the Blight | Floating Crystals(4), Crystal Sentinel 2 | Crystal Sentinel, Shardling, Prism | The Crystal Heart |
+| Sandstone Desert | ***, Sand Worm 3 (fl 2+), Sandstone Golem 2 (fl 4+) | Sandstone Golem, Jackal, Sand Worm | The Pyrite Colossus |
+| Frostveil Reaches | Frost Wolf 4, Ice Worm 2 (fl 4+), Ice Troll 2 (fl 5+) | Ice Worm, Ice Troll, Frost Wolf, Frost Sprite | The Yeti |
 | Gemstone Caverns | Gem Golem | Gem Golem | Amethyra, the Amethyst Turtle |
 
 ## Monster moves
