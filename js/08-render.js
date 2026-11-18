@@ -248,3 +248,6 @@ function devBreak(X,Y,C,ab){
 /* dev breakdown can be shrunk to a small tab; settings.devMin remembers it between forecasts */
 function devPanel(parts){const h=parts.filter(Boolean).join('<hr>');return h?`<div class="ufc-dev${settings.devMin?' min':''}"><button type="button" class="dvx" data-dev="1" title="Show/hide breakdown">${settings.devMin?'Dev ▸':'▾'}</button>${h}<div class="dvn">Rolled later: crit ×3, Bulwark/Iron Skin/Spell Ward halve, Whirlwind. Hit uses the average of two rolls.</div></div>`:''}
 panel.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||busy)return;act(b.dataset.act)});
+/* cast PNGs taller than 64px (a rider on a horse) show at full height, feet still on the tile */
+document.addEventListener('load',e=>{const i=e.target;if(i.tagName!=='IMG'||!i.classList.contains('hi')||!i.src.includes('/art/cast/'))return;const h=i.naturalHeight;
+  if(h>64){i.style.setProperty('height',h+'px','important');i.style.marginTop=(-15-(h-64))+'px'}else{i.style.removeProperty('height');i.style.marginTop=''}},true);

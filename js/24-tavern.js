@@ -10,9 +10,15 @@ const MEALS={
   bread:{n:'Honey Bread',p:25,f:3,d:'+15 Hit'},
   pie:{n:'Fish Pie',p:30,f:3,d:'+2 Def and Res'},
   stew:{n:'Pepper Stew',p:40,f:2,d:'+1 Move'},
-  soup:{n:'Mushroom Soup',p:20,f:3,d:'Immune to poison'}
+  soup:{n:'Mushroom Soup',p:20,f:3,d:'Immune to poison'},
+  /* orchard fruit (free, from the Orchard event): as = the meal whose effect it has */
+  fireApple:{n:'Fire Apple',f:2,d:'+2 damage',as:'boar',fruit:1},
+  goldPear:{n:'Gold Pear',f:2,d:'+15 Hit',as:'bread',fruit:1},
+  ironPlum:{n:'Iron Plum',f:2,d:'+2 Def and Res',as:'pie',fruit:1},
+  swiftberry:{n:'Swiftberries',f:2,d:'+1 Move',as:'stew',fruit:1},
+  bitterberry:{n:'Bitterberries',f:2,d:'Immune to poison',as:'soup',fruit:1}
 };
-const M=id=>!!(run&&run.meals&&run.meals.some(m=>m.id===id&&m.n>0));
+const M=id=>!!(run&&run.meals&&run.meals.some(m=>m.n>0&&(m.id===id||(MEALS[m.id]&&MEALS[m.id].as===id))));
 function afterFightMeals(){if(!run)return;if(run.meals){run.meals.forEach(m=>m.n--);run.meals=run.meals.filter(m=>m.n>0)}}
 
 /* ---- the tavern ---- */
@@ -61,7 +67,7 @@ async function tavernNode(){
       continue}
     if(m==='food'){
       const act=(run.meals||[]).map(x=>`${MEALS[x.id].n} (${x.n} fight${x.n>1?'s':''} left)`).join(', ');
-      const f=await tavShow(`“Kitchen’s open. It all lasts a few fights, for the whole table.”${act?` Still in your bellies: ${act}.`:''}`,[...Object.entries(MEALS).map(([k,x])=>[k,`<img class="tv-ic" src="${mealArt(k)}" alt="">${x.n} · ${x.p}g`,`${x.d} for ${x.f} fights${M(k)?' (already eaten)':''}`,M(k)||gold()<x.p]),['back','Back','']]);
+      const f=await tavShow(`“Kitchen’s open. It all lasts a few fights, for the whole table.”${act?` Still in your bellies: ${act}.`:''}`,[...Object.entries(MEALS).filter(([,x])=>!x.fruit).map(([k,x])=>[k,`<img class="tv-ic" src="${mealArt(k)}" alt="">${x.n} · ${x.p}g`,`${x.d} for ${x.f} fights${M(k)?' (already eaten)':''}`,M(k)||gold()<x.p]),['back','Back','']]);
       if(f!=='back'){spend(MEALS[f].p);done.food=1;run.ate=(run.ate||0)+1;const n=MEALS[f].f+(R('plenty')?1:0)+(R('Cook_book')?1:0)+(unl('gourmet')?1:0);(run.meals=run.meals||[]).push({id:f,n});text=`The ${MEALS[f].n} arrives steaming. ${MEALS[f].d} for the next ${n} fights.`}
       continue}
     if(m==='hire'){
