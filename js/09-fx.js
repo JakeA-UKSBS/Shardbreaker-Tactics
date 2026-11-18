@@ -239,7 +239,7 @@ async function quickPlay(a,d,res){
     if(e.crit){sfx('critcharge');const el=uEls[X.id];if(el)el.animate([{filter:'none'},{filter:'brightness(2.2) drop-shadow(0 0 6px #fff)'},{filter:'none'}],{duration:D(320)});await sleep(D(260))}
     /* Krondis opens his jaws (strike frame) and holds it before the sound and the swing */
     if(X.cls==='Krondis'){mapPose(X,'swing',Y);await sleep(D(500))}
-    sfx(X.cls==='Krondis'?'sandswipe':hitSfx(w,ranged));
+    sfx(MON_ATK[X.cls]||(X.cls==='Krondis'?'sandswipe':hitSfx(w,ranged)));
     await swingAt(X,Y,w,e.crit,ranged);
     if(e.hit){sfx(e.crit?(w.t==='art'?'crit':'swordcrit'):'hit');/* weapon crits use the recorded sword crit */Y.hp=Y===a?e.hpA:e.hpD;pop(Y,(e.crit?'Crit ':'')+'-'+e.dmg,e.crit?'crit':'dmg');flash(Y);lunge(Y,X,-6);
       if(w.t==='art')hitBurst(X,Y,EL_COL[w.el]||'#c8b8ff',w.el);if(w.el==='crystal')shatterFx(Y);if(e.crit){shake();burst(Y,'#fff')}if(e.guard){pop(Y,e.guard,'heal');if(e.guard!==SKILLS.retaliate.n)sfx('block')}
