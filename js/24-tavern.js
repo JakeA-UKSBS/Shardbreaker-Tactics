@@ -42,7 +42,7 @@ async function tavernNode(){
   const hires=castOffer(3,Math.max(1,Math.round(run.roster.reduce((a,u)=>a+u.lv,0)/run.roster.length))+(R('lantern')?1:0),'tavern');
   /* hires who join already advanced (Lv 1 but strong: and the after-Act-1 cast) cost 45 more */
   const price=u=>40+15*u.lv+(CLS[u.cls].tier===2?45:0);
-  tavEl.innerHTML=`<div class="tv-scene"><img class="tv-bg" src="${tavernArt()}" alt=""><img class="tv-keeper" src="${keeper}" alt="${KEEPER.name}"><img class="tv-counter" src="${counterArt()}" alt=""><span class="tv-gold"></span></div>
+  tavEl.innerHTML=`<div class="tv-scene"><img class="tv-bg" src="${tavernArt()}" alt="${KEEPER.name} behind the bar"><span class="tv-gold"></span></div>
     <div class="tv-box"><div class="tv-name">${KEEPER.name}, the innkeeper</div><p class="tv-text"></p><div class="tv-opts"></div></div>`;
   tavEl.hidden=false;ambience(null);music('tavern');
   tip('tavern','The tavern','Spend the gold you earn from fights: one drink, one meal and one hire per visit. Food lasts a few fights; drink boosts are permanent.');
@@ -79,4 +79,3 @@ async function tavernNode(){
 function mealArt(id){return art('meals/'+id)}
 function mugArt(){return art('ui/mug')}
 function tavernArt(){return art('scenes/tavern')}
-function counterArt(){return art('scenes/tavern-counter')}
