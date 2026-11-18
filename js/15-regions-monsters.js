@@ -23,7 +23,7 @@ SKILLS.venom={n:'Venom',cost:15,d:'On a hit, poisons the target: it loses 2 HP a
 /* fields: see the CLASSES key in 01-data.js */
 Object.assign(CLS,{
   MudMonster:{n:'Mud Monster',w:['heavy'],body:'mud',mov:4,wade:true},Krondis:{n:'Alligator',w:['heavy'],body:'gator',mov:4,wade:true},
-  CursedStag:{n:'Blighted Stag',w:['pole'],body:'beast',mov:6},
+  BlightedStag:{n:'Blighted Stag',w:['pole'],body:'beast',mov:6},
   BoulderGolem:{n:'Magma Golem',w:['heavy'],body:'golem',mov:4},FireSprite:{n:'Fire Sprite',w:['art'],body:'flame',mov:5,lava:true},MagmaDragon:{n:'Magma Dragon',w:['art','heavy'],body:'dragon',mov:0,lava:true},
   HellHound:{n:'Hell Hound',w:['blade'],body:'beast',mov:6,lava:true},
   CrystalHeart:{n:'Crystal Heart',w:['art'],body:'crystal',mov:0},
@@ -35,7 +35,7 @@ CLS.Lamia.wade=true;
 /* fields: see the ENEMY STATS key in 01-data.js (b/g order: HP, Str, Mag, Skl, Spd, Lck, Def, Res) */
 Object.assign(FOE,{
   MudMonster:{b:[23,6,0,2,1,0,5,0],g:[.9,.4,0,.2,.1,0,.3,0],items:['slam'],look:{}},
-  CursedStag:{b:[17,6,0,5,8,2,2,2],g:[.6,.4,0,.35,.45,.15,.1,.15],items:['antlers'],look:{}},
+  BlightedStag:{b:[17,6,0,5,8,2,2,2],g:[.6,.4,0,.35,.45,.15,.1,.15],items:['antlers'],look:{}},
   BoulderGolem:{b:[24,7,0,2,1,0,10,0],g:[.8,.4,0,.2,.05,0,.4,0],items:['slam'],look:{}},
   FireSprite:{b:[14,0,4,5,7,2,1,4],g:[.5,0,.4,.35,.45,.15,.05,.3],items:['emberSigil'],look:{}},
   HellHound:{b:[16,6,0,4,7,1,2,1],g:[.55,.4,0,.3,.45,.1,.15,.1],items:['fangs']},
@@ -51,7 +51,7 @@ Object.assign(FOE,{
    mount/horse = mount type and its colour, leaves/antlers = extra part colours. */
 const MONLOOK={
   MudMonster:()=>({body:pick(['#5a4a32','#4a4a2a','#5a3a2a'])}),
-  CursedStag:()=>({fur:pick(['#4a3a4a','#5a4a3a','#3a3040']),eye:'#ff3a5a',antlers:'#d8d0bc',antler2:'#b07ae8',crys:false}),
+  BlightedStag:()=>({fur:pick(['#4a3a4a','#5a4a3a','#3a3040']),eye:'#ff3a5a',antlers:'#d8d0bc',antler2:'#b07ae8',crys:false}),
   BoulderGolem:()=>({body:pick(['#7a746e','#6a625c','#8a8278']),eye:'#ff9a3c'}),
   FireSprite:()=>({crys:false,body:pick(['#ff8a3c','#ff6a2a','#ffaa3c'])}),
   /* crystal creatures: mostly blood red, sometimes another gem. crys:false = no extra crystals stuck on (they are crystal) */
@@ -73,7 +73,7 @@ const BIOMES={
     boss:{name:'Krondis',cls:'Krondis',mov:4,s:[40,13,0,5,5,2,10,5],items:['bite'],skill:'wrath',look:{body:'#5a6a86',belly:'#5a7a4a',crown:true}}},
   forest:{n:'Cursed Woodland',bg:'#26302a',d:'A dead forest under a curse. The deer here have gone wrong, wolves hunt in packs, and the trees themselves are waking up.',
     tip:['woods','Cursed thickets','Cursed thickets give +10 Avoid and +1 Def, but cost 2 Move to enter. Stags are fast: keep your back line covered.'],
-    maps:['woodland','brook','clearing'],bossMap:'heart',pool:[['Wolf',4],['CursedStag',3,2],['BlightedTreant',2,5]],elitePool:[['BlightedTreant',3],['CursedStag',3],['Wolf',2]],
+    maps:['woodland','brook','clearing'],bossMap:'heart',pool:[['Wolf',4],['BlightedStag',3,2],['BlightedTreant',2,5]],elitePool:[['BlightedTreant',3],['BlightedStag',3],['Wolf',2]],
     boss:{name:'The Hollow Bear',cls:'HollowBear',mov:4,s:[38,13,0,6,5,3,8,7],items:['slam'],skill:'wrath',look:{fur:'#3a2a24',eye:'#ff3a3a',core:'#ff6aa8'}}},
   mountain:{n:'Volcanic Isle',bg:'#3a2420',d:'Basalt slopes cut by rivers of magma. Hell hounds run the slopes, golems block the passes, and fire sprites float over the lava.',
     tip:['lava','Magma','Magma can’t be crossed on foot. Fliers and fire creatures move over it freely.'],

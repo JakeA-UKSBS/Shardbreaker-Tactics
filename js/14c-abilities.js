@@ -230,7 +230,7 @@ const MKITS={
   Lamia:['stoneGaze','constrict'],MudMonster:['mudSpit','engulf'],
   Wolf:['howl','hamstring'],BlightedTreant:['graspingRoots','barkSkin'],HollowBear:['maul','roar'],
   FireSprite:['fireball','flicker'],BoulderGolem:['moltenFist','eruption','boulderToss'],MagmaDragon:['searingBreath','wingGust'],
-  SandWorm:['burrow','sandBlast'],Krondis:['deathRoll'],PyriteColossus:['stalagmite','boulderToss'],GemGolem:['boulderToss'],SandstoneGolem:['sandStream','sandBurn','boulderToss'],Yeti:['groundSlam'],CursedStag:['charge'],FrostSprite:['iceBlitz'],AmethystTurtle:['hunkerDown'],FrostWolf:['frostBite','howl'],IceWorm:['burrow','iceSpray'],HellHound:['flameBite','howl'],IceTroll:['clubSmash','regenerate']
+  SandWorm:['burrow','sandBlast'],Krondis:['deathRoll'],PyriteColossus:['stalagmite','boulderToss'],GemGolem:['boulderToss'],SandstoneGolem:['sandStream','sandBurn','boulderToss'],Yeti:['groundSlam'],BlightedStag:['charge'],FrostSprite:['iceBlitz'],AmethystTurtle:['hunkerDown'],FrostWolf:['frostBite','howl'],IceWorm:['burrow','iceSpray'],HellHound:['flameBite','howl'],IceTroll:['clubSmash','regenerate']
 };
 /* the Moves block on an enemy's Details sheet */
 function monSheet(u){const l=u.team==='e'?MKITS[u.cls]:null;if(!l)return'';

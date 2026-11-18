@@ -1066,7 +1066,7 @@ Object.assign(EVENTS, {
   beast: {
     t: 'The Crystal-Touched Beast',
     art: 'beast',
-    ov: '<img class="ev-fig ev-beast" src="art/monsters/CursedStag.png" alt="">',
+    ov: '<img class="ev-fig ev-beast" src="art/monsters/BlightedStag.png" alt="">',
     d: 'A stag stands swaying in the undergrowth, breathing hard. Crystal has grown through one of its antlers, and its eyes are starting to glaze. This is how it starts, Ithren said.',
     o: [
       {
