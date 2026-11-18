@@ -47,7 +47,7 @@ async function treasureNode(){
   let k=mk();
   for(;;){
     const row=k.startsWith('skill:')?`<img src="${icon('ascensionFragment')}" alt=""><span><b>${SKILLS[k.slice(6)].n}</b> · ${rwTag('skill')} · ${SKILLS[k.slice(6)].d}</span>`:k.startsWith('relic:')?`<img src="${relicArt(k.slice(6))}" alt=""><span><b>${RELICS[k.slice(6)].n}</b> · ${rwTag('artifact')} · ${RELICS[k.slice(6)].d}</span>`:`<img src="${icon(k)}" alt=""><span>${itemText(k)}</span>`;
-    const m=await modal(`<div class="eyebrow">Treasure</div><h2>A sealed vault</h2><div class="inv big"><button type="button" class="it" data-m="take">${row}</button></div>${canReroll()?'<div class="mbtns"><button type="button" data-m="reroll">Reroll (once this act)</button></div>':''}`);
+    const m=await modal(`<h2>Treasure chest</h2><div class="inv big"><button type="button" class="it" data-m="take">${row}</button></div>${canReroll()?'<div class="mbtns"><button type="button" data-m="reroll">Reroll (once this act)</button></div>':''}`);
     if(m==='reroll'){run.rr[run.act||1]=1;k=mk();sfx('tick');continue}
     if(k.startsWith('skill:')){if(await allocSkill(k.slice(6)))return;continue}
     if(k.startsWith('relic:')){const r=k.slice(6);(run.relics=run.relics||[]).push(r);sfx('fanfare');toast(`${RELICS[r].n} obtained`);return}

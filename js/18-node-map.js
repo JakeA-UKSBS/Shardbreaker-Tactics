@@ -589,7 +589,7 @@ async function restNode() {
     toast("Camp Kettle: everyone gains 10 EXP");
   }
   const m = await modal(
-    `<div class="eyebrow">Rest</div><h2>A quiet camp</h2><p>Everyone rests and heals fully. Choose one unit to train: they gain ${train} EXP.</p><div class="draft">${run.roster.map((u, i) => `<button type="button" class="dcard" data-m="t${i}">${unitCard(u, false, 0, true)}</button>`).join("")}</div>`,
+    `<h2>Campsite</h2><p>Everyone rests and heals fully. Choose one unit to train: they gain ${train} EXP.</p><div class="draft">${run.roster.map((u, i) => `<button type="button" class="dcard" data-m="t${i}">${unitCard(u, false, 0, true)}</button>`).join("")}</div>`,
   );
   await expAll([run.roster[+m.slice(1)]], train);
 }
