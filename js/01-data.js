@@ -57,6 +57,7 @@ const IT={
   tideSigil:{n:'Tide Sigil',t:'art',kind:'talisman',el:'water',mt:5,hit:90,crit:0,r:[1,2],uses:40,mag:true},
   frostSigil:{n:'Frost Sigil',t:'art',kind:'talisman',el:'ice',mt:7,hit:85,crit:5,r:[1,2],uses:35,mag:true},
   stormSigil:{n:'Storm Sigil',t:'art',kind:'talisman',el:'lightning',mt:8,hit:80,crit:5,r:[1,2],uses:35,mag:true},
+  poisonSpit:{n:'Poison Spit',acid:true,t:'art',kind:'talisman',mt:5,hit:90,crit:0,r:[1,2],uses:99,mag:true,psn:.3,d:'30% chance to poison on a hit.'},/* the Lamia's attack: the frog's acid glob (acid:true), magic, sometimes poisons */
   thornSigil:{n:'Thorn Sigil',t:'art',kind:'talisman',el:'nature',mt:5,hit:90,crit:0,r:[1,2],uses:40,mag:true},
   dawnSigil:{n:'Dawn Sigil',t:'art',kind:'talisman',el:'light',mt:5,hit:90,crit:0,r:[1,2],uses:40,mag:true},
   umbralSigil:{n:'Umbral Sigil',t:'art',kind:'talisman',el:'dark',mt:5,hit:85,crit:0,r:[1,2],uses:40,mag:true,drain:true},

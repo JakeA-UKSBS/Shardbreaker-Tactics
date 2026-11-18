@@ -117,6 +117,7 @@ function resolve(a,ai,d){
       /* on-hit effects. Stone Gaze (Luck%): target is turned to stone (Lamia). Venom: target is poisoned */
       if(has(X,'stoneGaze')&&hp[o]>0&&rn()<LK(X)){e.stone=true;e.proc=e.proc||SKILLS.stoneGaze.n}
       if(has(X,'venom')&&hp[o]>0&&dmg>0){e.psn=true;e.proc=e.proc||SKILLS.venom.n}
+      else if(XW0&&XW0.psn&&hp[o]>0&&dmg>0&&rn()<XW0.psn*100){e.psn=true;e.proc=e.proc||'Poison'}/* weapons that sometimes poison (the Lamia's Poison Spit) */
       /* Cold Snap (ice sigils: Slow), Ember Heart (fire: 30% Burn), applied by fight() */
       {const W=s==='a'?f.aw:f.dw;if(hp[o]>0&&dmg>0&&W){if(has(X,'coldSnap')&&W.el==='ice')(e.sts=e.sts||[]).push(['chill',1]);if(has(X,'emberHeart')&&W.el==='fire'&&rn()<.3)(e.sts=e.sts||[]).push(['burn',2]);}}
       /* Retaliate (Luck%): a melee hit is dealt straight back to the striker */
