@@ -109,7 +109,7 @@ const ABIL={
   purify:{n:'Purify',mp:3,side:'ally',r:[0,3],cure:1,d:'Cures every bad status on an ally up to 3 away (or herself): Poison and Stone too.'},
   circleOfFire:{n:'Circle of Fire',tfx:'fire',mp:8,mag:1,el:'fire',side:'foe',r:[1,3],shape:'area',aim:'any',dmg:.9,st:['burn',2],d:'A ring of flame on a 3×3 area up to 3 away: 0.9× magic damage and Burn to every enemy in it.'},
   holyBombardment:{n:'Holy Bombardment',tfx:'holy',mp:10,mag:1,el:'light',side:'foe',r:[1,3],shape:'area',aim:'any',dmg:.8,d:'Pillars of light strike a 3×3 area up to 3 away: 0.8× magic damage to every enemy in it.'},
-  sanctuary:{n:'Sanctuary',mp:10,side:'ally',r:[0,2],shape:'area',aim:'any',give:['guard',1],d:'Guard (30% less damage) on every ally in a 3×3 area until your next turn.'},
+  sanctuary:{n:'Sanctuary',afx:'sanctuary',mp:10,side:'ally',r:[0,2],shape:'area',aim:'any',give:['guard',1],d:'Guard (30% less damage) on every ally in a 3×3 area until your next turn.'},
   /* Rook (Rogue) */
   backstab:{n:'Backstab',cd:2,side:'foe',r:[1,1],dmg:1,backstab:1,d:'1.0× damage, 1.5× when another ally is next to the target.'},
   smokeBomb:{n:'Smoke Bomb',tfx:'smoke',cd:4,side:'self',shape:'burst1',st:['blind',1],give:['smoke',1],d:'Enemies around him are Blinded (−20 Hit); he and allies around him get +30 Avoid until your next turn.'},
@@ -213,7 +213,7 @@ Object.assign(ABIL,{
   burrow:{n:'Burrow',cd:3,side:'tile',r:[1,4],shape:'area',dmg:1,d:'Tunnels to an empty tile up to 4 away and bursts out: 1.0× damage to every enemy around it.'},
   sandBlast:{n:'Sand Blast',cd:3,side:'foe',r:[1,1],shape:'cone',aim:'dir',dmg:.8,st:['blind',2],d:'A cone of sand (4 tiles): 0.8× damage and Blind.'},
   clubSmash:{n:'Club Smash',cd:3,side:'foe',r:[1,1],dmg:1.5,d:'1.5× damage.'},
-  deathRoll:{n:'Death Roll',snd:'water',fx:krondisRollFx,cd:3,side:'foe',r:[1,1],dmg:.5,hits:3,d:'Grabs and rolls: three hits of 0.5× damage.'},
+  deathRoll:{n:'Death Roll',snd:'water',fx:krondisRollFx,cd:3,side:'foe',r:[1,1],dmg:.7,hits:3,d:'Grabs and rolls: three hits of 0.7× damage.'},
   stalagmite:{n:'Stalagmite',cd:3,side:'foe',r:[1,3],dmg:1,flat:5,st:['chill',1],d:'Pyrite bursts up under a target up to 3 away: 5 damage (ignores Def), and the target is Slowed.'},
   sandStream:{n:'Sand Stream',cd:3,side:'foe',r:[1,3],st:['sandEyes',2],d:'Sand in the eyes of a target up to 3 away: −10 Hit for 2 turns.'},
   sandBurn:{n:'Sand Burn',cd:3,side:'foe',r:[1,2],dmg:.6,st:['burn',2],d:'Scalding sand from up to 2 away: 0.6× damage and Burn.'},
@@ -366,6 +366,7 @@ async function useAbility(u,id,tx,ty){
   }
   /* healing, buffs, cures (casters raise their staff: the swing pose) */
   if(allies.length&&u.cast&&!a.dmg){mapPose(u,'swing',allies.find(t=>t!==u)||u);await sleep(D(260))}
+  if(a.afx)for(const t of allies){const b=uBox(t);fxPlay(FX[a.afx],b.l+b.w/2,b.t+b.h-2)}/* a per-ally effect (Sanctuary's bubble) */
   for(const t of allies){
     if(a.heal||a.healPct){const h=healAmt(u,id,t);if(h){t.hp+=h;pop(t,'+'+h,'heal');healFx(t)}exp+=12}
     if(a.cure){let c=0;if(t.st)for(const k of Object.keys(t.st))if(STATUS[k]&&STATUS[k].bad){delete t.st[k];c=1}if(t.psn){t.psn=0;c=1}if(t.stone){t.stone=0;c=1}if(c){pop(t,'Cured','heal');exp+=6}}
