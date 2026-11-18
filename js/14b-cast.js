@@ -388,8 +388,8 @@ const CAST = [
   /* ---- found during the run (joins:'tavern' only at the tavern, 'event' only through their own event,
      'tavernEvent' at the tavern or the caged traveller but never a recruit stop) ---- */
   {
-    id: "trent",
-    name: "Trent",
+    id: "arthur",
+    name: "Arthur",
     cls: "Cavalier",
     wk: "ironSpear",
     joins: "start",
@@ -457,7 +457,7 @@ const CAST = [
     name: "Jun",
     cls: "Swordsman",
     wk: "wornSword",
-    joins: "run",
+    joins: "start",
     look: {
       body: "robe",
       style: "topknot",

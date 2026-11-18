@@ -298,7 +298,8 @@ const EVENTS = {
     d: 'A covered wagon, a tired mule and a merchant who is very pleased to see paying customers.',
     o: null,
     make: () => {
-      const stock = shuffle([
+      /* javelin and throwing axe listed twice: a bit more common (the Set drops repeats) */
+      const stock = [...new Set(shuffle([
           'warHammer',
           'huntingSpear',
           'giantslayer',
@@ -310,6 +311,8 @@ const EVENTS = {
           'cleaver',
           'ironwoodBow',
           'javelin',
+          'javelin',
+          'throwingAxe',
           'throwingAxe',
           'throwingKnives',
           'galeSword',
@@ -320,7 +323,7 @@ const EVENTS = {
           'ironGauntlets',
           'dawnStaff',
           'stiletto'
-        ]).slice(0, 3),
+        ]))].slice(0, 3),
         price = k => (IT[k].t === 'gear' ? 40 : IT[k].crit >= 20 ? 55 : 45);
       return [
         ...stock.map(k => ({

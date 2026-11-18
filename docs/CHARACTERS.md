@@ -72,7 +72,8 @@ Each base class ascends into one or two advanced classes at Lv 5.
 | Maelis | Mender | Saint | F |
 | Rook | Rogue | Assassin | M |
 | Rhyn | Shieldmaiden | Valkyrie | F |
-| Trent | Cavalier | Warlord | M |
+| Arthur | Cavalier | Warlord | M |
+| Jun | Swordsman | Swordmaster | M |
 
 ### Kili: Archer
 ![Kili](visuals/cast/kili.png)
@@ -92,7 +93,6 @@ A village blacksmith from the northern fjords who fights barehanded because he w
 - **Ascends into:** Berserker.
 - **Look:** Nordic axeman, blue tattoos, earthy browns; a big two-headed axe over his shoulder as a Berserker.
 - **Passive: Iron Body.** Can't be pushed or pulled.
-- **Palm Strike** (single, adjacent · CD 1): 1.0× Str, push 2. Hitting a wall or unit deals extra damage, and falling off a ledge deals damage per level fallen.
 - **Flurry** (single, adjacent · CD 3): 3 hits of 0.5× Str.
 - **Leap** (tile, range 3, ignores height · CD 4): lands with 1.2× Str in area r1.
 
@@ -164,7 +164,7 @@ A street thief working off a debt to Ithren. Quick-mouthed and not as selfish as
 - **Ascends into:** Assassin.
 - **Look:** dark leathers, wrapped hands, jagged twin daggers.
 - **Passive: Slippery.** Can move through enemy tiles, and can't be Rooted.
-- **Backstab** (single, adjacent · CD 2): 1.0× Str, 1.5× when another ally is next to the target (flanking).
+- **Flanking Strike** (single, adjacent · CD 2): 1.0× Str, 1.5× when another ally is next to the target (flanking).
 - **Smoke Bomb** (burst r1 · CD 4): Blinds enemies in the area; allies in it get +30 Avoid for 1 turn.
 - **Tumble** (self · CD 2): move up to 2 more tiles, ignoring height; doesn't use his action.
 
@@ -241,15 +241,14 @@ Recruited from recruit stops, the caged-traveller event and the tavern, alongsid
 
 | Name | Class | Ascends into | Gender |
 |---|---|---|---|
-| Trent | Cavalier | Paladin or Warlord | M |
+| Arthur | Cavalier | Paladin or Warlord | M |
 | Holt | Crossbowman | Artillery | M |
-| Jun | Swordsman | Swordmaster | M |
 | Klaus | Pyromancer | Pyrolord | M |
 | Raptor (tavern only) | Adventurer | Hero | M |
 | Seren | Summoner | Grand Summoner | F |
 
-### Trent: Cavalier
-![Trent](visuals/cast/trent.png)
+### Arthur: Cavalier
+![Arthur](visuals/cast/arthur.png)
 
 A hot-headed rider from a border garrison that fell to crystallised beasts. Rides first and asks later.
 - **Ascends into:** Warlord.
