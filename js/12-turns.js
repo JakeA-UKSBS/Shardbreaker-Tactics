@@ -255,7 +255,7 @@ function aiAbil(e,tiles,ps,canAtk){
           if(e.hp*2>=e.maxhp||!near(e.x,e.y,1))continue;s+=15+Math.min(...ps.map(p=>man({x:tx,y:ty},p)))}
         else{const lx=a.side==='tile'?tx:x,ly=a.side==='tile'?ty:y,w={...e,x:lx,y:ly},h=abHits(a.side==='tile'?w:v,id,tx,ty);
           for(const t of h.foes){const V=a.dmg?abVs(w,id,t):abVs(w,id,t,0),hc=V.hit/100,dm=V.dmg*V.n;
-            s+=a.dmg?dm*hc+(dm>=t.hp?40*hc:0):0;if(a.st&&!stImmune(t,a.st[0]))s+=(ST_VAL[a.st[0]]||8)*hc;if(a.psn&&!t.psn)s+=8*hc;if(a.stone&&!stImmune(t,'stone'))s+=25*hc}
+            s+=a.dmg?dm*hc+(dm>=t.hp?40*hc:0):0;if(a.st&&!stImmune(t,a.st[0]))s+=(ST_VAL[a.st[0]]||8)*hc;if(a.psn&&!t.psn)s+=8*hc;if(a.stone&&!stImmune(t,'stone'))s+=25*a.stone*hc}
           for(const t of h.allies){if(a.give&&near(t.x,t.y,4))s+=ST_VAL[a.give[0]]||6;if(a.self&&near(lx,ly,3))s+=ST_VAL[a.self[0][0]]||6;
             if(a.healPct&&t.hp<t.maxhp*.6)s+=healAmt(e,id,t)*1.2}
           if(buff)s-=.5*Math.min(...ps.map(p=>man({x,y,sz:e.sz},p)))

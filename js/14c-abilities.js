@@ -193,8 +193,8 @@ const abilOf=u=>{if(u&&u.team==='e'&&MKITS[u.cls])return MKITS[u.cls];const k=ki
    solo (a self move that only affects the user), healPct (heals this share of max HP). The enemy AI picks between
    these and a normal attack by score (aiAbil in 12-turns.js). Monsters not listed here still only attack. */
 Object.assign(ABIL,{
-  stoneGaze:{n:'Stone Gaze',cd:4,mag:1,side:'foe',r:[1,1],dmg:.5,stone:1,d:'0.5× magic damage, and the target is turned to Stone: it skips its next turn and can’t counter. Bosses are immune.'},
-  constrict:{n:'Constrict',cd:3,side:'foe',r:[1,1],dmg:.8,st:['root',1],psn:1,d:'0.8× damage; the target is Rooted and Poisoned.'},
+  stoneGaze:{n:'Stone Gaze',cd:5,mag:1,side:'foe',r:[1,1],dmg:.5,stone:.5,d:'0.5× magic damage, and a 50% chance the target is turned to Stone: it skips its next turn and can’t counter. Bosses are immune.'},
+  constrict:{n:'Constrict',cd:2,mag:1,side:'foe',r:[1,1],dmg:.8,st:['root',1],psn:1,d:'0.8× magic damage; the target is Rooted and Poisoned.'},
   mudSpit:{n:'Mud Spit',cd:3,side:'foe',r:[2,3],dmg:.8,st:['chill',1],d:'0.8× damage from 2–3 tiles away, and the target is Slowed.'},
   engulf:{n:'Engulf',cd:3,side:'foe',r:[1,1],dmg:1,st:['blind',2],d:'1.0× damage, and the target is Blinded for 2 turns.'},
   howl:{n:'Howl',cd:4,side:'self',shape:'burst2',give:['rally',2],others:1,d:'Allies within 2 tiles are Rallied (+2 Str, +2 Def) for 2 turns.'},
@@ -214,7 +214,8 @@ Object.assign(ABIL,{
   sandBlast:{n:'Sand Blast',cd:3,side:'foe',r:[1,1],shape:'cone',aim:'dir',dmg:.8,st:['blind',2],d:'A cone of sand (4 tiles): 0.8× damage and Blind.'},
   clubSmash:{n:'Club Smash',cd:3,side:'foe',r:[1,1],dmg:1.5,d:'1.5× damage.'},
   deathRoll:{n:'Death Roll',snd:'water',fx:krondisRollFx,cd:3,side:'foe',r:[1,1],dmg:.7,hits:3,d:'Grabs and rolls: three hits of 0.7× damage.'},
-  stalagmite:{n:'Stalagmite',cd:3,side:'foe',r:[1,3],dmg:1,flat:5,st:['chill',1],d:'Pyrite bursts up under a target up to 3 away: 5 damage (ignores Def), and the target is Slowed.'},
+  boulderToss:{n:'Boulder Toss',fx:boulderFx,snd:'earth',cd:3,side:'foe',r:[2,4],dmg:1,d:'Hurls a boulder at a target 2–4 tiles away: 1.0× damage.'},
+  stalagmite:{n:'Stalagmite',tfx:'spike',cd:3,side:'foe',r:[1,3],dmg:1,flat:5,st:['chill',1],d:'Pyrite bursts up under a target up to 3 away: 5 damage (ignores Def), and the target is Slowed.'},
   sandStream:{n:'Sand Stream',cd:3,side:'foe',r:[1,3],st:['sandEyes',2],d:'Sand in the eyes of a target up to 3 away: −10 Hit for 2 turns.'},
   sandBurn:{n:'Sand Burn',cd:3,side:'foe',r:[1,2],dmg:.6,st:['burn',2],d:'Scalding sand from up to 2 away: 0.6× damage and Burn.'},
   groundSlam:{n:'Ground Slam',cd:3,side:'self',shape:'burst1',dmg:.7,d:'0.7× damage to every enemy around it.'},
@@ -228,8 +229,8 @@ Object.assign(ABIL,{
 const MKITS={
   Lamia:['stoneGaze','constrict'],MudMonster:['mudSpit','engulf'],
   Wolf:['howl','hamstring'],BlightedTreant:['graspingRoots','barkSkin'],HollowBear:['maul','roar'],
-  FireSprite:['fireball','flicker'],BoulderGolem:['moltenFist','eruption'],MagmaDragon:['searingBreath','wingGust'],
-  SandWorm:['burrow','sandBlast'],Krondis:['deathRoll'],PyriteColossus:['stalagmite'],SandstoneGolem:['sandStream','sandBurn'],Yeti:['groundSlam'],CursedStag:['charge'],FrostSprite:['iceBlitz'],AmethystTurtle:['hunkerDown'],FrostWolf:['frostBite','howl'],IceWorm:['burrow','iceSpray'],HellHound:['flameBite','howl'],IceTroll:['clubSmash','regenerate']
+  FireSprite:['fireball','flicker'],BoulderGolem:['moltenFist','eruption','boulderToss'],MagmaDragon:['searingBreath','wingGust'],
+  SandWorm:['burrow','sandBlast'],Krondis:['deathRoll'],PyriteColossus:['stalagmite','boulderToss'],GemGolem:['boulderToss'],SandstoneGolem:['sandStream','sandBurn','boulderToss'],Yeti:['groundSlam'],CursedStag:['charge'],FrostSprite:['iceBlitz'],AmethystTurtle:['hunkerDown'],FrostWolf:['frostBite','howl'],IceWorm:['burrow','iceSpray'],HellHound:['flameBite','howl'],IceTroll:['clubSmash','regenerate']
 };
 /* the Moves block on an enemy's Details sheet */
 function monSheet(u){const l=u.team==='e'?MKITS[u.cls]:null;if(!l)return'';
@@ -338,7 +339,7 @@ async function useAbility(u,id,tx,ty){
   const anim=!u.cast&&MON_SHEET[u.cls]&&MON_SHEET[u.cls].abil&&MON_SHEET[u.cls].abil[id];/* e.g. the Frost Wolf's howl */
   pop(u,a.n,'heal');if(anim)await sheetPlay(u,anim);else await sleep(D(350));
   if(a.wall){(state.ice=state.ice||{});for(const[x,y]of shapeTiles(u,id,tx,ty))if(!unitAt(x,y)&&ter(x,y).c<99)state.ice[key(x,y)]=a.wall;sfx('ice');render();await sleep(D(250))}
-  else if(a.side==='tile'){stepSfx(u,tx,ty);u.x=tx;u.y=ty;render();await sleep(D(250));sfx('earth');shake()}
+  else if(a.side==='tile'){stepSfx(u,tx,ty);u.x=tx;u.y=ty;render();await sleep(D(250));sfx('earth');shake();if(a.dmg){const p=tileTop(tx,ty,vhOf(tx,ty));fxPlay(FX.shockwave,p.x,p.y+TH/2,{k:1.7})}/* the landing's shockwave ring */}
   /* Charge: run up next to the target first (the free tile beside it nearest the charger) */
   if(a.charge){const t=unitAt(tx,ty);if(t&&man(u,t)>1){const opts=DIRS.map(([dx,dy])=>({x:t.x+dx,y:t.y+dy})).filter(p=>p.x>=0&&p.y>=0&&p.x<MW&&p.y<MH&&!unitAt(p.x,p.y)&&mcost(u,p.x,p.y)<99).sort((p,q)=>man(u,p)-man(u,q));
     if(opts[0]){stepSfx(u,opts[0].x,opts[0].y);u.x=opts[0].x;u.y=opts[0].y;render();await sleep(D(200))}}}
@@ -361,7 +362,7 @@ async function useAbility(u,id,tx,ty){
       if(t.hp<=0){killed.push(t);continue}}
     if(a.st&&landed&&t.hp>0&&!stImmune(t,a.st[0])&&(!a.st[2]||rn()<a.st[2]*100)){addSt(t,a.st[0],a.st[1],u);if(STATUS[a.st[0]].bad)sfx(a.st[0]==='chill'?'slow':'debuff');pop(t,STATUS[a.st[0]].n,'crit');await sleep(D(200))}
     if(a.psn&&landed&&t.hp>0&&!(t.team==='p'&&M('soup'))){t.psn=3;sfx('poison');pop(t,'Poisoned','crit');await sleep(D(200))}
-    if(a.stone&&landed&&t.hp>0&&!stImmune(t,'stone')){t.stone=1;pop(t,'Stone!','crit');sfx('earth');toast(`${t.name} is turned to stone and loses ${t.team==='p'?'their':'its'} next turn`);await sleep(D(200))}
+    if(a.stone&&landed&&t.hp>0&&!stImmune(t,'stone')&&rand()<a.stone){t.stone=1;pop(t,'Stone!','crit');sfx('earth');toast(`${t.name} is turned to stone and loses ${t.team==='p'?'their':'its'} next turn`);await sleep(D(200))}
     if(!a.dmg)exp+=10;
   }
   /* healing, buffs, cures (casters raise their staff: the swing pose) */

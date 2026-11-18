@@ -164,6 +164,10 @@ const FX={
   tendrils:{src:'art/fx/dark-tendrils.png',fw:64,fh:56,n:20,ax:31,ay:51,ms:60,hit:7},/* Morrigan's Hex: dark tendrils rise round the target, then sink away */
   levelUp:{src:'art/fx/level-up.png',fw:64,fh:96,n:9,ax:32,ay:80,ms:80},/* levelling up on the map: stars and chevrons rise round the unit */
   sanctuary:{src:'art/fx/sanctuary.png',fw:72,fh:88,n:16,ax:36,ay:82,ms:60},/* Sanctuary: a shimmering shield bubble round each guarded ally */
+  earthSpike:{src:'art/fx/earth-spike.png',fw:128,fh:64,n:21,ax:64,ay:56,ms:50,hit:4},/* the Pyrite Colossus's Stalagmite: spikes burst up, then crumble */
+  boulder:{src:'art/fx/boulder.png',fw:16,fh:18,n:1,ax:8,ay:9,ms:60},/* Boulder Toss: the rock in flight (spun in code)... */
+  boulderImpact:{src:'art/fx/boulder-impact.png',fw:80,fh:56,n:15,ax:50,ay:48,ms:55,hit:2},/* ...and the crash and dust on the target */
+  shockwave:{src:'art/fx/shockwave.png',fw:120,fh:52,n:14,ax:60,ay:30,ms:50},/* Leap (Vaar): a ring of shockwave where he lands */
   smoke:{src:'art/fx/smoke.png',fw:64,fh:64,n:11,ax:32,ay:34,ms:75,hit:3},/* Rook's Smoke Bomb: a pop, the cloud, then it thins out */
   acidGlob:{src:'art/fx/acid-glob.png',fw:44,fh:40,n:3,ax:40,ay:16,ms:60},/* the Spirit Frog's acid: a glob with a dripping trail... */
   acidSplash:{src:'art/fx/acid-splash.png',fw:56,fh:40,n:13,ax:37,ay:20,ms:60}/* ...that splashes and drips off the target */
@@ -197,12 +201,18 @@ const TILE_FX={
       b=uBox(u),toL=ex<b.l+b.w/2,sx=b.l+b.w/2+(toL?-10:10),sy=b.t+b.h*.45,L=Math.max(...ps.map(([x,y])=>Math.hypot(x-sx,y-sy)))+20;
     return fxPlay(FX.frostBreath,sx,sy,{rot:Math.atan2(ey-sy,ex-sx)*180/Math.PI,k:1.5,sx:L/(92*1.5)})},
   tendrils:tiles=>Promise.all(tiles.map(([x,y])=>{const p=tileTop(x,y,vhOf(x,y));return fxPlay(FX.tendrils,p.x,p.y+TH/2+4,{k:1.4})})),
+  spike:tiles=>Promise.all(tiles.map(([x,y])=>{const p=tileTop(x,y,vhOf(x,y));return fxPlay(FX.earthSpike,p.x,p.y+TH/2+2,{k:.75})})),
   smoke:(tiles,u)=>{const[x,y]=fxMid(u);return fxPlay(FX.smoke,x,y+8,{k:2.6})},
   holy:tiles=>Promise.all(tiles.map(([x,y])=>sleep(D(Math.random()*260)).then(()=>{const p=tileTop(x,y,vhOf(x,y));return fxPlay(FX.holyBeam,p.x,p.y+TH/2,{k:1.4})})))};
 /* an arc of lightning from unit A to unit B (Chain Lightning's jumps); resolves when it strikes */
 function arcFx(A,B){const[sx,sy]=fxMid(A),[ex,ey]=fxMid(B),L=Math.hypot(ex-sx,ey-sy);return fxPlay(FX.chainArc,sx,sy,{rot:Math.atan2(ey-sy,ex-sx)*180/Math.PI,sx:Math.max(.4,L/165)})}
 /* a golem's slam lands on the target's tile */
 function slamFx(Y){const b=uBox(Y);return fxPlay(FX.earthSlam,b.l+b.w/2,b.t+b.h-8,{k:1.2})}
+/* Boulder Toss (golems, the Pyrite Colossus): wind up, lob a spinning rock on a high arc, crash on the target */
+async function boulderFx(X,Y){mapPose(X,'windup',Y);await sleep(D(220));mapPose(X,'swing',Y);
+  const b=uBox(X),[ex,ey]=fxMid(Y),sx=b.l+b.w/2,sy=b.t+b.h*.25,f=FX.boulder,d=fxEl(f,sx,sy,1.6),N=14,arc=40+Math.hypot(ex-sx,ey-sy)*.35,pts=[];
+  for(let i=0;i<=N;i++){const t=i/N;pts.push({transform:`translate(${sx+(ex-sx)*t-f.ax}px,${sy+(ey-sy)*t-arc*4*t*(1-t)-f.ay}px) rotate(${t*540}deg) scale(1.6)`})}
+  await d.animate(pts,{duration:D(520),easing:'linear'}).finished;d.remove();shake();await fxPlay(FX.boulderImpact,ex,ey+8,{k:1.3});setTimeout(()=>mapPose(X,'idle'),D(200))}
 function healFx(t){const[x,y]=fxMid(t);fxPlay(FX.holyCross,x,y-4,{k:1.8,frames:[0,0,1,2]})}
 /* a ring bursts on the target: element colour for sigils, white for crits */
 function burst(Y,col){const b=uBox(Y),r=document.createElement('div');r.className='fx-m';r.style.left=b.l+b.w/2+'px';r.style.top=b.t+b.h*.55+'px';r.style.color=col;boardEl.appendChild(r);
