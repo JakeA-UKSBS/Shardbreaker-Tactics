@@ -8,6 +8,7 @@ function saveGame(){if(!SAVES_ON||!run)return;const map=run.phase==='map';try{lo
 function dropGone(o){if(!o||typeof o!=='object')return;
   if(o.skill==='bulwarkAura')o.skill='heroic';/* Rhyn's old personal skill (Nov 2026) */
   if(o.cast==='vaar'&&o.skill==='ironBody')o.skill='outlander';/* Vaar's old personal skill (Nov 2026) */
+  if(o.cls==='CursedStag')o.cls='BlightedStag';/* renamed (Nov 2026) */
   if(Array.isArray(o.skills))o.skills=o.skills.filter(x=>!x||!x.id||SKILLS[x.id]);
   if(Array.isArray(o.items))o.items=o.items.filter(i=>!i||!i.k||IT[i.k]);
   if(Array.isArray(o.relics))o.relics=o.relics.filter(k=>RELICS[k]);
