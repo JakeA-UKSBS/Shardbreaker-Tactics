@@ -16,7 +16,7 @@ function eventScene(prop){
   if(prop==='witch'&&ART_PNG.has('scenes/witch-hut'))return'art/scenes/witch-hut.png';/* Rhi's hut, drawn at 640x360 */
   const B=actBiome(),c='EV|'+prop+'|'+B.id;if(sprCache[c])return sprCache[c];
   const W=160,H=90,p=Px(W,H),sky=REG_SKY[B.id]||REG_SKY.forest,gr=REG_GROUND[B.id]||'#3e4436';
-  if(['smith','spar','witch','library','armoury','study','chapel','throne'].includes(prop)){const wl=prop==='witch'?'#3a3028':'#4a4038',wl2=shade(wl,.8);p.rect(0,0,W,64,wl);for(let y=0;y<64;y+=8)for(let x=(y/8%2)*8;x<W;x+=16)p.rect(x,y,15,7,wl2);
+  if(['smith','spar','witch','library','armoury','study','chapel','throne','antiques'].includes(prop)){const wl=prop==='witch'?'#3a3028':'#4a4038',wl2=shade(wl,.8);p.rect(0,0,W,64,wl);for(let y=0;y<64;y+=8)for(let x=(y/8%2)*8;x<W;x+=16)p.rect(x,y,15,7,wl2);
     p.rect(142,14,14,18,sky[2]);p.rect(142,14,14,6,sky[1]);p.rect(148,14,2,18,'#2a1e14');p.rect(142,22,14,2,'#2a1e14');
     for(const x of[0,52,104])p.rect(x,0,6,64,'#3a2a1a');p.rect(0,0,W,5,'#3a2a1a');p.rect(0,62,W,28,'#6a4a2a');for(let y=64;y<90;y+=5)p.rect(0,y,W,1,'#4a3218');for(let i=0;i<14;i++)p.rect((i*37)%W,64+((i*13)%5)*5,1,5,'#4a3218')}
   else{sky.forEach((col,i)=>p.rect(0,i*20,W,20,col));p.rect(0,60,W,30,gr);for(let i=0;i<40;i++)p.set((i*41)%W,62+(i*17)%26,shade(gr,i%2?1.15:.85));
@@ -52,6 +52,11 @@ function eventScene(prop){
     p.ell(60,70,3,2,'#e8e2d0');p.ell(118,68,4,2,'#e8e2d0');p.line(120,70,128,60,'#e8e2d0')}
   const JD='#5fd3a0',JD2='#2f8a66',ST1='#6a6672',ST2='#8a8794',ST3='#4a4652',YL='#ffe14a';
   const zig=(x,y0,y1)=>{let x0=x,y=y0;while(y<y1){const nx=x0+(((y/6)|0)%2?4:-4);p.line(x0,y,nx,y+6,YL,2);x0=nx;y+=6}};
+  if(prop==='antiques'){for(const x of[20,112]){S(x,24,30,40,WD2);for(let r=0;r<3;r++)S(x+1,34+r*10,28,1,WD)}
+    for(const[x,y,c]of[[24,28,G],[32,29,'#7ad6ff'],[40,27,'#c8322e'],[116,28,'#9a6ad8'],[126,29,G],[114,38,'#7fd36a'],[124,38,ST2],[28,38,ST2],[40,38,'#e8a23a']])S(x,y,5,5,c);
+    S(58,52,44,4,WD);S(62,56,4,14,WD2);S(94,56,4,14,WD2);p.ell(70,49,4,3,G);S(78,44,6,8,'#5fb2d8');S(79,42,4,2,WD2);p.ell(92,49,3,3,'#c8322e')}
+  if(prop==='stables'){S(10,26,100,4,WD2);for(const x of[10,42,74,106])S(x,30,4,38,WD);for(const x of[14,46,78])S(x,50,28,2,WD2);
+    for(const[x,y]of[[20,60],[54,62],[86,58]])p.ell(x+6,y+4,8,4,'#d8b85a');p.ell(130,66,12,5,'#d8b85a');p.ell(128,62,8,4,'#e8c86a');S(140,40,3,28,WD);S(136,40,12,2,M2)}
   if(prop==='tomb'){S(52,34,56,34,ST1);S(48,30,64,6,ST2);S(44,26,72,4,ST3);S(66,40,28,28,JD2);S(68,42,24,26,JD);p.line(80,42,80,68,JD2);p.ell(80,52,3,3,'#e9fff5');for(const x of[50,106])S(x,36,4,32,ST2)}
   if(prop==='stormaltar'){p.ell(80,14,40,9,'#2a2a3a');p.ell(60,18,20,6,'#3a3a4a');p.ell(104,16,22,6,'#3a3a4a');zig(82,22,50);S(64,52,32,14,'#2a2630');S(60,48,40,5,'#3a3640');p.ell(80,46,5,3,YL);p.ell(80,46,2,1.5,'#ffffff')}
   if(prop==='cache'){S(46,50,22,18,WD);S(46,50,22,2,WD2);S(72,54,20,14,WD2);S(96,44,24,24,WD);S(96,44,24,2,WD2);
@@ -111,6 +116,8 @@ function evShow(E,text,opts){
   evEl.hidden=false;
   return new Promise(res=>{evEl.onclick=e=>{const b=e.target.closest('[data-t]');if(!b||b.disabled)return;uiSfx(b.dataset.t,b.textContent.trim())||sfx('tick');res(b.dataset.t)}});
 }
+/* the Stables: Arthur can still join (never joined this run) */
+const stableArthur=()=>!(run.castUsed||[]).includes('arthur')&&!run.roster.some(u=>u.cast==='arthur');
 const lvAvg=()=>Math.max(1,Math.round(run.roster.reduce((a,u)=>a+u.lv,0)/run.roster.length));
 
 /* ==================================================================
@@ -575,6 +582,85 @@ const EVENTS = {
         }
       }
     ]
+  },
+
+  /* Buy one of 3 artifacts. Price by rarity. */
+  antiquities: {
+    t: 'Antiquities Dealer',
+    art: 'antiques',
+    d: 'A narrow shop crammed with dusty cases. The dealer polishes her spectacles. “Everything here is genuine. Mostly.”',
+    o: null,
+    ok: () => relicPool(['c', 'u', 'r']).length > 0,
+    make: () => {
+      const price = k => ({ c: 50, u: 80, r: 120 })[RELICS[k].r];
+      return [
+        ...shuffle(relicPool(['c', 'u', 'r'])).slice(0, 3).map(k => ({
+          l: `<img class="ev-ri" src="${relicArt(k)}" alt="">${RELICS[k].n} · ${price(k)}g`,
+          sub: `${RN[RELICS[k].r]} · ${RELICS[k].d}`,
+          cost: price(k),
+          go: async () => {
+            spend(price(k));
+            (run.relics = run.relics || []).push(k);
+            toast(`${RELICS[k].n} obtained`);
+            await onRelic(k);
+            return `She wraps the <b>${RELICS[k].n}</b> in old cloth. “A fine choice.”`;
+          }
+        })),
+        { l: 'Just browsing', go: async () => 'The dealer goes back to her polishing.' }
+      ];
+    }
+  },
+
+  /* Arthur joins, or (if he's already been with you) his old groom Gu An gives you the Golden Spurs. */
+  stables: {
+    t: 'The Stables',
+    art: 'stables',
+    d: '',
+    o: null,
+    ok: () => stableArthur() || !R('spurs'),
+    make: () => {
+      const E = EVENTS.stables;
+      if (stableArthur()) {
+        const nu = castUnit('arthur', lvAvg());
+        E.d = 'A row of stalls and the smell of hay. A knight is saddling a warhorse. “Riding out? I could use the company, and you look like you could use a lance.”';
+        E.card = `<div class="dcard on ev-card">${unitCard(nu)}</div>`;
+        E.ov = `<img class="ev-ov" src="${uSpr(nu)}" alt="">`;
+        return [
+          {
+            l: 'Ride with us',
+            sub: `${nu.name} joins your squad`,
+            go: async () => {
+              if (run.roster.length >= TEAM_CAP) {
+                const d = await modal(
+                  `<h2>Who stays behind?</h2><p>${nu.name} (${CLS[nu.cls].n}) takes their place.</p><div class="draft">${run.roster.map((u, i) => `<button type="button" class="dcard" data-m="d${i}">${unitCard(u)}</button>`).join('')}</div><div class="mbtns"><button type="button" data-m="skip">Keep my squad</button></div>`
+                );
+                if (d === 'skip') return null;
+                run.roster.splice(+d.slice(1), 1);
+              }
+              run.roster.push(nu);
+              castJoined(nu);
+              sfx('item');
+              return `<b>${nu.name}</b>, a ${CLS[nu.cls].n}, swings into the saddle and joins the squad.`;
+            }
+          },
+          { l: 'Ride on', go: async () => 'You leave him to his horse.' }
+        ];
+      }
+      E.ov = '';
+      E.d = 'A row of stalls and the smell of hay. The groom, Gu An, looks up from a hoof. “You ride with Sir Arthur? Then take these. He left them here last winter, and he’ll want them.”';
+      return [
+        {
+          l: 'Take the spurs',
+          sub: `Golden Spurs · ${RELICS.spurs.d}`,
+          go: async () => {
+            (run.relics = run.relics || []).push('spurs');
+            sfx('fanfare');
+            toast(`${RELICS.spurs.n} obtained`);
+            return 'Gu An hands over a pair of <b>Golden Spurs</b>. “Tell him to stop leaving things behind.”';
+          }
+        }
+      ];
+    }
   },
 
   /* One unit +3 max HP, or every unit +1 Res. */
@@ -1507,6 +1593,7 @@ const EV_SFX = {
   witch: ['pour', 1],
   cage: ['lever', 0],
   merchant: 'paper',
+  antiquities: 'paper',
   tailor: 'paper'
 };
 const evSfxOn = (ek, i, n) => {

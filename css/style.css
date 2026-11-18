@@ -691,3 +691,4 @@ body.preview .vp{height:100vh!important;max-height:none!important;border:0!impor
 
 /* node map: the seed tucked in the top-right corner (act and gold are shown elsewhere) */
 .nm-head{position:relative}.nm-seed{position:fixed;top:12px;right:16px;z-index:5;font-family:var(--display);font-size:12px;letter-spacing:.06em;color:var(--muted)}
+.ev-ri{width:22px;height:22px;image-rendering:pixelated;vertical-align:middle;margin-right:6px}
