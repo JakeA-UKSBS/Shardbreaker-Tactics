@@ -31,7 +31,7 @@ async function musterScene(opts,need,late){
   musEl.innerHTML=`<div class="tv-scene"><img class="tv-bg" src="${musterArt()}" alt=""><img class="ms-fire" src="${campArt()}" alt="">
       <div class="ms-post" aria-label="Signpost">${signs.map(([a,b])=>`<span class="ms-sign"><small>${a}</small>${b}</span>`).join('')}</div>
       ${opts.map((u,i)=>`<button type="button" class="mu" data-u="${i}" style="left:${pos(i)}%;bottom:${up(i)}%;--s:${sc(i)};z-index:${10-Math.round(Math.sin(ang(i))*5)}" aria-label="${u.name}"><img src="${u.cast&&castPng(u,'idle',true)||uSpr(u)}" alt=""${pos(i)>50?' class="fl"':''}><span>${u.name}</span></button>`).join('')}
-      <button type="button" class="ms-map" data-g="map" aria-label="Look at the map" title="Look at the map"><img src="${mapIconArt()}" alt="">Map</button><span class="tv-gold">Seed ${run.seed}</span></div>
+      <button type="button" class="ms-map" data-g="map" aria-label="Look at the map" title="Look at the map"><img src="${mapIconArt()}" alt="">Map</button></div>
     <div class="tv-box"><div class="ms-head"><b class="ms-count"></b><button type="button" class="mini ms-info" data-g="info" aria-expanded="false">ⓘ What do stats do?</button></div>${statHelpHTML()}
       <div class="ms-cards"></div>
       <div class="mbtns">${late?'':'<button type="button" data-g="back">Back</button>'}<button type="button" class="go" data-g="go" disabled>Set out</button></div></div>`;
