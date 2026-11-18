@@ -688,3 +688,6 @@ body.preview .vp{height:100vh!important;max-height:none!important;border:0!impor
 .turnbox{display:flex;flex-direction:column;align-items:flex-end;gap:2px;margin-left:8px;white-space:nowrap}
 /* narrow screens: the goal panel gets its own row under the buttons */
 @media (max-width:959px){.bar{flex-wrap:wrap}.obj{order:9;flex-basis:100%;box-sizing:border-box}.turnbox{margin-left:auto}}
+
+/* node map: the seed tucked in the top-right corner (act and gold are shown elsewhere) */
+.nm-head{position:relative}.nm-seed{position:fixed;top:12px;right:16px;z-index:5;font-family:var(--display);font-size:12px;letter-spacing:.06em;color:var(--muted)}
