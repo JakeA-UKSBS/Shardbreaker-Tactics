@@ -140,8 +140,7 @@ Learned skills cost capacity (base 20, +5 when promoted). Personal skills are fr
 
 ## Rules of thumb
 
-- **EXP:** ×1.2. Units promote at Lv 5 (+5 skill capacity). Every level-up is +1 to each shown stat.
-- **HP between fights:** survivors recover 5 HP after a win (3 from Ascension 3; Waybread +3). Taverns and the camp before the boss heal fully. Salves can be used on the road map.
+- **EXP:** ×1.2. Units promote at Lv 5. Every level-up is +1 to each shown stat.
 - **Early ease:** in Act 1, enemies deal 2 less damage on floors 1–3 and 1 less on 4–6 (off from Ascension 3).
 - **Bosses:** 2×2, move 2, Colossal.
 - **Zone of control:** a unit (yours or theirs) that starts its move next to an enemy has −1 Move. Fliers and cavalry too; Slippery ignores it. Doesn't stack with Slow (−2): the bigger penalty applies.
@@ -153,13 +152,13 @@ Learned skills cost capacity (base 20, +5 when promoted). Personal skills are fr
 
 | Region | Monsters (weight; from floor) | Elite pack | Boss |
 |---|---|---|---|
-| Sobek’s Mire | Swamp Ooze, Blighted croc 3, Lamia 3 (fl 2+), Mud Monster 2 (fl 4+) | Swamp Ooze, Lamia, Blighted Croc | Krondis |
+| Sobek’s Mire | Swamp Ooze, Blighted croc 3, Lamia 3 (fl 2+),  | Swamp Ooze, Lamia, Blighted Croc | Krondis |
 | Cursed Woodland | Wolf 4, Blighted Stag 3 (fl 2+), Blighted Treant 2 (fl 5+) | Blighted Treant, Blighted Stag, Wolf | The Hollow Bear |
 | Volcanic Isle | Hell Hound 4, Fire Sprite 2 (fl 2+), Magma Golem 3 (fl 3+) | Magma Golem, Hell Hound, Fire Sprite | Pyraxis, the Magma Dragon |
-| The Heart of the Blight | Floating Crystals(4), Crystal Sentinel 2 | Crystal Sentinel, Shardling, Prism | The Crystal Heart |
+| The Heart of the Blight | Floating Crystals(4), Gem Golem | Crystal Sentinel, Shardling, Prism | The Crystal Heart |
 | Sandstone Desert | ***, Sand Worm 3 (fl 2+), Sandstone Golem 2 (fl 4+) | Sandstone Golem, Jackal, Sand Worm | The Pyrite Colossus |
 | Frostveil Reaches | Frost Wolf 4, Ice Worm 2 (fl 4+), Ice Troll 2 (fl 5+) | Ice Worm, Ice Troll, Frost Wolf, Frost Sprite | The Yeti |
-| Gemstone Caverns | Gem Golem | Gem Golem | Amethyra, the Amethyst Turtle |
+| Gemstone Caverns | Gem Golem, Crystal-Borer Beetles?| Gem Golem | Amethyra, the Amethyst Turtle |
 
 ## Monster moves
 
@@ -185,19 +184,18 @@ Each monster has 2 moves on cooldowns (no MP). On its turn it scores every ready
 | Sandstone Golem | Sand Stream (CD 3): range 1–3, −10 Hit for 2 turns | Sand Burn (CD 3): range 1–2, 0.6×, Burn |
 | The Yeti | Ground Slam (CD 3): 0.7× to every enemy around it | |
 | Blighted Stag | Charge (CD 3): runs up to a target 2 away, 1.2× | |
-| Frost Sprite | Ice Blitz (CD 3): range 1–2, 3 hits of 0.4× magic | |
 | Amethyra | Hunker Down (once, below half HP): +2 Def and Res for the rest of the fight | |
 
-**To do (moves not added yet):** Bog Lurker, Jackal, Gem Golem, Shardling, Prism, Crystal Sentinel; second moves for Krondis, the Pyrite Colossus, the Yeti, the Blighted Stag, the Frost Sprite and Amethyra. Draft ideas: Bog Lurker Drag Under / Ambush; Krondis Death Roll / Tail Sweep; Blighted Stag Charge / Blight Antlers; Jackal Pounce / Scavenge; Sandstone Golem Boulder Toss / Sand Wall; Pyrite Colossus Gold Glare / Ground Slam; Frost Sprite Ice Shard / Hail; Yeti Avalanche / Hurl; Gemsnail Retract / Glitter Spray; Gem Golem Prism Beam / Gem Shell; Amethyra Shell Spin / Amethyst Rain; Shardling Shard Lunge / Splinter; Prism Refract / Dazzle; Crystal Sentinel Bulwark / Crystal Slam.
+
 
 ## Event maybes
 
 Ideas, not built yet.
 
-- **Bandits:** not sure about adding yet.
+
 - **Fields of Plenty:** a Salve and every unit heals 2 HP, or the Fruit of Plenty, every unit +1 max HP.
 - **Jungle Maze:** left/right choices with odds, e.g. 40% a relic, 20% damage.
 - **Smoke Signal:** a choice between two characters who'd like to join (X or Y).
-- **Tablet of X:** boons that aren't weapons or EXP (still to think of).
+- **Tablet of X:** grants a skill choice for a character .
 - **Relaxing Outcrop:** soak in the view, every unit +15 EXP; or find something (X).
 - **Uncorrupted gems:** inert gems untouched by the crystal (opal, sunstone, diamond, maybe tiger's eye).
