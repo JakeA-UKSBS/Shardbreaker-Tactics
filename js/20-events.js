@@ -57,6 +57,16 @@ function eventScene(prop){
     S(58,52,44,4,WD);S(62,56,4,14,WD2);S(94,56,4,14,WD2);p.ell(70,49,4,3,G);S(78,44,6,8,'#5fb2d8');S(79,42,4,2,WD2);p.ell(92,49,3,3,'#c8322e')}
   if(prop==='stables'){S(10,26,100,4,WD2);for(const x of[10,42,74,106])S(x,30,4,38,WD);for(const x of[14,46,78])S(x,50,28,2,WD2);
     for(const[x,y]of[[20,60],[54,62],[86,58]])p.ell(x+6,y+4,8,4,'#d8b85a');p.ell(130,66,12,5,'#d8b85a');p.ell(128,62,8,4,'#e8c86a');S(140,40,3,28,WD);S(136,40,12,2,M2)}
+  if(prop==='orchard'){for(const[x,y]of[[24,40],[64,36],[104,40],[140,38]]){S(x-2,y,5,26,WD2);p.ell(x,y-4,16,13,'#2f6a2a');p.ell(x-3,y-7,11,8,'#3f8a3a');
+    for(let i=0;i<7;i++)p.ell(x-10+(i*7)%20,y-12+(i*5)%14,1.6,1.6,['#d8322e','#e8c23a','#8a5ab0'][i%3])}
+    S(84,62,14,9,WD);S(84,62,14,2,WD2);for(let i=0;i<4;i++)p.ell(87+i*3,61,1.6,1.6,'#d8322e')}
+  if(prop==='maze'){const V='#2a5a2a',V2='#3f7a36';S(0,30,160,40,V);for(let i=0;i<30;i++)p.ell((i*29)%160,30+(i*11)%36,5,4,i%2?V2:'#244a24');
+    p.poly([[38,70],[50,42],[62,42],[68,70]],'#141a10');p.poly([[94,70],[100,42],[112,42],[124,70]],'#141a10');p.set(55,52,'#ffe14a');p.set(56,52,'#fff6a0');
+    for(let i=0;i<5;i++)p.line(108+i*2,48-i*2,110+i*2,40-i*3,'#8a8a8a')}
+  if(prop==='tablet'){S(64,60,32,8,ST1);S(68,22,24,40,ST2);S(70,20,20,4,ST2);S(70,24,20,36,ST1);
+    for(let y=28;y<56;y+=6)for(let x=72;x<88;x+=4)if((x*7+y)%5)S(x,y,2,3,ST3);p.ell(80,30,3,2,JD)}
+  if(prop==='outcrop'){p.poly([[0,90],[0,58],[40,52],[70,56],[96,60],[96,90]],ST1);p.poly([[0,58],[40,52],[70,56],[96,60],[94,62],[60,60],[20,62],[0,64]],ST2);
+    for(const[x,y]of[[120,70],[136,64],[148,72]])p.ell(x,y,8,4,shade(gr,.8));p.ell(36,50,3,2,'#c9a46a');S(28,58,4,2,ST3)}
   if(prop==='tomb'){S(52,34,56,34,ST1);S(48,30,64,6,ST2);S(44,26,72,4,ST3);S(66,40,28,28,JD2);S(68,42,24,26,JD);p.line(80,42,80,68,JD2);p.ell(80,52,3,3,'#e9fff5');for(const x of[50,106])S(x,36,4,32,ST2)}
   if(prop==='stormaltar'){p.ell(80,14,40,9,'#2a2a3a');p.ell(60,18,20,6,'#3a3a4a');p.ell(104,16,22,6,'#3a3a4a');zig(82,22,50);S(64,52,32,14,'#2a2630');S(60,48,40,5,'#3a3640');p.ell(80,46,5,3,YL);p.ell(80,46,2,1.5,'#ffffff')}
   if(prop==='cache'){S(46,50,22,18,WD);S(46,50,22,2,WD2);S(72,54,20,14,WD2);S(96,44,24,24,WD);S(96,44,24,2,WD2);
@@ -661,6 +671,142 @@ const EVENTS = {
         }
       ];
     }
+  },
+
+  /* Free fruit: works like a tavern meal (same effects), for 2 fights. */
+  orchard: {
+    t: 'The Orchard',
+    art: 'orchard',
+    d: 'Rows of old trees, heavy with fruit nobody has picked. The squad fills its pockets.',
+    o: null,
+    make: () => [
+      ...shuffle(Object.keys(MEALS).filter(k => MEALS[k].fruit)).slice(0, 3).map(k => ({
+        l: `<img class="ev-ri" src="${mealArt(k)}" alt="">${MEALS[k].n}`,
+        sub: `${MEALS[k].d} for the next ${MEALS[k].f} fights${M(MEALS[k].as) ? ' (you already have this effect)' : ''}`,
+        go: async () => {
+          const n = MEALS[k].f + (R('plenty') ? 1 : 0);
+          (run.meals = run.meals || []).push({ id: k, n });
+          sfx('item');
+          return `Everyone eats their fill of ${MEALS[k].n}. ${MEALS[k].d} for the next ${n} fights.`;
+        }
+      }))
+    ]
+  },
+
+  /* Two paths, each a gamble. */
+  maze: {
+    t: 'Jungle Maze',
+    art: 'maze',
+    d: 'The trail splits into two tunnels through the vines. Something glints down the left one. The right one smells of smoke and old campfires.',
+    o: [
+      {
+        l: 'Take the left path',
+        sub: '40% an artifact · 20% a snake nest (every unit −5 HP) · 40% nothing',
+        go: async () => {
+          const r = rn();
+          if (r < 40) {
+            const k = pick(relicPool(['c', 'u']));
+            if (k) {
+              (run.relics = run.relics || []).push(k);
+              toast(`${RELICS[k].n} obtained`);
+              await onRelic(k);
+              return `At a dead end, half buried in leaves: a <b>${RELICS[k].n}</b>. ${RELICS[k].d}`;
+            }
+          }
+          if (r >= 40 && r < 60) {
+            run.roster.forEach(u => (u.hp = Math.max(1, u.hp - 5)));
+            sfx('poison');
+            return 'The floor is alive with snakes. Everyone is bitten getting out: every unit loses 5 HP.';
+          }
+          return 'The path winds round and round, and spits you out where you started.';
+        }
+      },
+      {
+        l: 'Take the right path',
+        sub: '50% an abandoned camp (40 gold) · 20% a pit (every unit −3 HP) · 30% nothing',
+        go: async () => {
+          const r = rn();
+          if (r < 50) {
+            run.gold = gold() + 40;
+            sfx('buy');
+            return 'An abandoned camp, a pouch still hanging from a branch. <b>40 gold</b>.';
+          }
+          if (r < 70) {
+            run.roster.forEach(u => (u.hp = Math.max(1, u.hp - 3)));
+            sfx('landing');
+            return 'The ground gives way into a pit of thorns. Every unit loses 3 HP climbing out.';
+          }
+          return 'Nothing but vines and mosquitoes. You come out the far side, scratched but fine.';
+        }
+      },
+      { l: 'Go around', go: async () => 'You take the long way round the maze.' }
+    ]
+  },
+
+  /* One unit learns a skill (choice of 3 from their role). */
+  tablet: {
+    t: 'Tablet of the Ancients',
+    art: 'tablet',
+    d: 'A stone tablet stands in the grass, covered in carvings. Some show warriors in battle, and some look almost like instructions.',
+    o: [
+      {
+        l: 'Study the carvings',
+        sub: 'One unit learns a skill (choose from 3 that suit their role)',
+        go: async () => {
+          evEl.hidden = true;
+          const u = await learnSkill('Who studies the tablet?');
+          evEl.hidden = false;
+          if (!u) return null;
+          const k = u.skills[u.skills.length - 1].id;
+          return `${u.name} traces the carvings until they make sense, and learns <b>${SKILLS[k].n}</b>. ${SKILLS[k].d}`;
+        }
+      },
+      { l: 'Leave it', go: async () => 'Whatever it says, it can wait.' }
+    ]
+  },
+
+  /* Every unit +15 EXP, or search the rocks for something. */
+  outcrop: {
+    t: 'Relaxing Outcrop',
+    art: 'outcrop',
+    d: 'A flat rock high above the trail, warm in the sun, with the whole region spread out below.',
+    o: [
+      {
+        l: 'Soak in the view',
+        sub: 'Every unit gains 15 EXP',
+        go: async () => {
+          evEl.hidden = true;
+          for (const u of run.roster) {
+            const g = gainExp(u, 15);
+            if (g && g.gains) await levelUp(u, g);
+          }
+          return 'Everyone sits a while and talks about the road so far. Every unit gains 15 EXP.';
+        }
+      },
+      {
+        l: 'Search the rocks',
+        sub: '40% gold · 30% a Salve · 30% a common artifact',
+        go: async () => {
+          const r = rn(),
+            k = r >= 70 && pick(relicPool(['c']));
+          if (k) {
+            (run.relics = run.relics || []).push(k);
+            toast(`${RELICS[k].n} obtained`);
+            await onRelic(k);
+            return `Wedged in a crack: a <b>${RELICS[k].n}</b>. ${RELICS[k].d}`;
+          }
+          if (r >= 40) {
+            evEl.hidden = true;
+            const u = await giveTo('salve', 'Tucked under a ledge: a Salve.', true);
+            evEl.hidden = false;
+            return u ? `Tucked under a ledge, a <b>Salve</b>. ${u.name} takes it.` : 'You find a Salve, but leave it behind.';
+          }
+          run.gold = gold() + 30;
+          sfx('buy');
+          return 'Someone left a coin purse up here. <b>30 gold</b>.';
+        }
+      }
+    ]
   },
 
   /* One unit +3 max HP, or every unit +1 Res. */
