@@ -63,7 +63,7 @@ An effective hit multiplies weapon Mt ×2. Only your side deals them for now.
 |---|---|---|
 | Flier | Hawk, Prism | Bows |
 | Armoured | Magma Golem, Crystal Sentinel, Sandstone Golem, Pyrite Colossus, Gem Golem, Amethyst Turtle, Stone Warden, Yeti | War Hammer, Stonebane |
-| Beast | Wolf, Hawk, Alligator, Cursed Stag, Magma Dragon, Bog Lurker, Jackal, Sand Worm, Ice Worm, Hell Hound, Frost Wolf, Agate Wyrm, Hollow Bear, Spirit Wolf, Spirit Hawk | Hunting Spear, Wolfsbane |
+| Beast | Wolf, Hawk, Alligator, Blighted Stag, Magma Dragon, Bog Lurker, Jackal, Sand Worm, Ice Worm, Hell Hound, Frost Wolf, Agate Wyrm, Hollow Bear, Spirit Wolf, Spirit Hawk | Hunting Spear, Wolfsbane |
 | Colossal | Every 2×2 boss | Giantslayer |
 | Spectral | Fire Sprite, Frost Sprite | Light sigils, Holy Sword, Spiritbane, Paladins |
 | Plant | Blighted Treant | Fire sigils |
@@ -154,7 +154,7 @@ Learned skills cost capacity (base 20, +5 when promoted). Personal skills are fr
 | Region | Monsters (weight; from floor) | Elite pack | Boss |
 |---|---|---|---|
 | Sobek’s Mire | Bog Lurker 3, Lamia 3 (fl 2+), Mud Monster 2 (fl 4+) | Mud Monster, Lamia, Bog Lurker | Krondis |
-| Cursed Woodland | Wolf 4, Cursed Stag 3 (fl 2+), Blighted Treant 2 (fl 5+) | Blighted Treant, Cursed Stag, Wolf | The Hollow Bear |
+| Cursed Woodland | Wolf 4, Blighted Stag 3 (fl 2+), Blighted Treant 2 (fl 5+) | Blighted Treant, Blighted Stag, Wolf | The Hollow Bear |
 | Volcanic Isle | Hell Hound 4, Fire Sprite 2 (fl 2+), Magma Golem 3 (fl 3+) | Magma Golem, Hell Hound, Fire Sprite | Pyraxis, the Magma Dragon |
 | The Heart of the Blight | Shardling 4, Prism 3, Crystal Sentinel 2 | Crystal Sentinel, Shardling, Prism | The Crystal Heart |
 | Sandstone Desert | Jackal 4, Sand Worm 3 (fl 2+), Sandstone Golem 2 (fl 4+) | Sandstone Golem, Jackal, Sand Worm | The Pyrite Colossus |
@@ -184,11 +184,11 @@ Each monster has 2 moves on cooldowns (no MP). On its turn it scores every ready
 | The Pyrite Colossus | Stalagmite (CD 3): range 1–3, 5 flat damage, Slow | |
 | Sandstone Golem | Sand Stream (CD 3): range 1–3, −10 Hit for 2 turns | Sand Burn (CD 3): range 1–2, 0.6×, Burn |
 | The Yeti | Ground Slam (CD 3): 0.7× to every enemy around it | |
-| Cursed Stag | Charge (CD 3): runs up to a target 2 away, 1.2× | |
+| Blighted Stag | Charge (CD 3): runs up to a target 2 away, 1.2× | |
 | Frost Sprite | Ice Blitz (CD 3): range 1–2, 3 hits of 0.4× magic | |
 | Amethyra | Hunker Down (once, below half HP): +2 Def and Res for the rest of the fight | |
 
-**To do (moves not added yet):** Bog Lurker, Jackal, Gem Golem, Shardling, Prism, Crystal Sentinel; second moves for Krondis, the Pyrite Colossus, the Yeti, the Cursed Stag, the Frost Sprite and Amethyra. Draft ideas: Bog Lurker Drag Under / Ambush; Krondis Death Roll / Tail Sweep; Cursed Stag Charge / Blight Antlers; Jackal Pounce / Scavenge; Sandstone Golem Boulder Toss / Sand Wall; Pyrite Colossus Gold Glare / Ground Slam; Frost Sprite Ice Shard / Hail; Yeti Avalanche / Hurl; Gemsnail Retract / Glitter Spray; Gem Golem Prism Beam / Gem Shell; Amethyra Shell Spin / Amethyst Rain; Shardling Shard Lunge / Splinter; Prism Refract / Dazzle; Crystal Sentinel Bulwark / Crystal Slam.
+**To do (moves not added yet):** Bog Lurker, Jackal, Gem Golem, Shardling, Prism, Crystal Sentinel; second moves for Krondis, the Pyrite Colossus, the Yeti, the Blighted Stag, the Frost Sprite and Amethyra. Draft ideas: Bog Lurker Drag Under / Ambush; Krondis Death Roll / Tail Sweep; Blighted Stag Charge / Blight Antlers; Jackal Pounce / Scavenge; Sandstone Golem Boulder Toss / Sand Wall; Pyrite Colossus Gold Glare / Ground Slam; Frost Sprite Ice Shard / Hail; Yeti Avalanche / Hurl; Gemsnail Retract / Glitter Spray; Gem Golem Prism Beam / Gem Shell; Amethyra Shell Spin / Amethyst Rain; Shardling Shard Lunge / Splinter; Prism Refract / Dazzle; Crystal Sentinel Bulwark / Crystal Slam.
 
 ## Event maybes
 

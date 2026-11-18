@@ -53,6 +53,7 @@ function artLeft(src){src=String(src);const o=sheetOf(src);if(o)return!!o.s.left
 const MON_SHEET={HellHound:{n:6,fw:120,fh:64,x0:20,w:100,disp:64,left:true,windup:[1,2],swing:3,follow:[4,5]},
   Wolf:{n:5,fw:100,fh:64,x0:0,w:100,disp:64,left:true,windup:[1,2],swing:3,follow:[4]},
   FrostWolf:{n:4,fw:100,fh:64,x0:0,w:92,disp:64,left:true,abil:{howl:[1,2,3]}},
+  CursedStag:{n:2,fw:64,fh:64,x0:0,w:64,disp:64,left:true,swing:1,abil:{charge:[1,1,1]}},/* the Blighted Stag: standing, head down for the charge */
   Lamia:{n:4,fw:64,fh:64,x0:0,w:64,disp:64,left:true,swing:2,mouth:[16,15],abil:{stoneGaze:[1,1,1],constrict:[3,3,3]}},/* idle, red-eyed gaze, spit, coiled */
   PyriteColossus:{n:6,fw:150,fh:150,x0:0,w:150,left:true,windup:[1],swing:2,follow:[5],abil:{stalagmite:[3,4,5]},introSlam:[3,4]},/* idle, wind-up, punch, arms raised, slam, recover */
   AmethystTurtle:{n:4,fw:128,fh:128,x0:0,w:128,left:true,swing:1,abil:{hunkerDown:[2,3]},st:{shell:3}},
