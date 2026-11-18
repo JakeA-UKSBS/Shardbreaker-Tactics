@@ -279,8 +279,8 @@ button.it.sel{border-color:var(--gold)}
 .unit.done.psn img{filter:grayscale(.9) brightness(.65) drop-shadow(0 0 3px #b46ae0)}.unit.done.sum img{filter:grayscale(.9) brightness(.65) drop-shadow(0 0 3px #7fc8ff)}
 /* PC: map left, command panel right */
 @media (min-width:960px){
-  .wrap{max-width:1500px;height:100%;box-sizing:border-box;display:grid;grid-template-columns:minmax(0,1fr) 360px;grid-template-rows:auto auto minmax(0,1fr);column-gap:14px;padding-inline:20px;padding-block:12px}
-  .top,.bar{grid-column:1/-1}.vp{grid-column:1;grid-row:3;height:auto;min-height:0}.panel{grid-column:2;grid-row:3;overflow:auto;align-self:stretch}
+  .wrap{max-width:1500px;height:100%;box-sizing:border-box;display:grid;grid-template-columns:minmax(0,1fr) 360px;grid-template-rows:auto minmax(0,1fr);row-gap:10px;column-gap:14px;padding-inline:20px;padding-block:12px}
+  .bar{grid-column:1/-1}.vp{grid-column:1;grid-row:2;height:auto;min-height:0}.panel{grid-column:2;grid-row:2;overflow:auto;align-self:stretch}
   h1{font-size:26px}.mbox{max-width:640px}.draft{display:grid;grid-template-columns:1fr 1fr}.nm-board{max-width:620px}.nm-scroll{max-width:760px;width:100%;margin:0 auto}
   .nm-head,.nm-info,.nm-squad,.nm-relics{max-width:760px;width:100%;margin-inline:auto}.nd{width:54px;height:54px;margin:-27px 0 0 -27px}.nd img{width:30px;height:30px}
 }
@@ -683,3 +683,8 @@ body.preview .vp{height:100vh!important;max-height:none!important;border:0!impor
 /* damage boosted by relics / skills / statuses / abilities: a small green +N after the number, its sources above it on hover */
 .dmg-up{color:#7ddc6a;font-size:.65em;margin-left:2px;vertical-align:super;cursor:help;position:relative;font-weight:700}
 .dmg-up[data-tip]:hover::after,.dmg-up[data-tip]:focus::after{content:attr(data-tip);position:absolute;left:50%;transform:translateX(-50%);bottom:calc(100% + 6px);z-index:50;width:max-content;max-width:220px;padding:6px 8px;border-radius:6px;background:#1a161c;color:#f0e6d6;border:1px solid #5a4a3a;font-size:12px;font-weight:400;line-height:1.35;white-space:normal;pointer-events:none;vertical-align:baseline}
+
+/* floor / turn / run time, in the battle bar beside End Turn */
+.turnbox{display:flex;flex-direction:column;align-items:flex-end;gap:2px;margin-left:8px;white-space:nowrap}
+/* narrow screens: the goal panel gets its own row under the buttons */
+@media (max-width:959px){.bar{flex-wrap:wrap}.obj{order:9;flex-basis:100%;box-sizing:border-box}.turnbox{margin-left:auto}}

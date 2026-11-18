@@ -14,12 +14,13 @@
 <body>
 
 <div class="wrap">
-  <div class="top"><h1>Shardbreaker</h1><span class="turn" id="turn"></span><span class="turn runtime" id="runTime" title="Run time"></span></div>
+  <!-- no title in battle: the floor / turn / time sit in the bar, so the map gets the room -->
   <div class="bar">
     <button id="btnDanger" type="button">Danger</button>
     <button id="btnMap" type="button" title="Map" aria-label="View the map" hidden><img alt=""></button>
     <button id="btnDev" type="button" hidden>Dev</button>
     <div class="obj" id="obj"></div>
+    <span class="turnbox"><span class="turn" id="turn"></span><span class="turn runtime" id="runTime" title="Run time"></span></span>
     <button id="btnEnd" type="button" class="go">End Turn</button>
   </div>
   <div class="vp" id="vp"><div class="board" id="board"></div></div>
