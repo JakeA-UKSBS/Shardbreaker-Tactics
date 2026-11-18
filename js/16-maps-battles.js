@@ -56,7 +56,7 @@ Object.assign(BIOMES,{
   desert:{n:'Sandstone Desert',bg:'#4a3a24',town:['n','k'],townN:'Oasis Town',d:'Dunes and sandstone ruins under a white sun. Jackals run in packs, and the quicksand swallows the careless.',
     tip:['desert','Quicksand','A unit that starts its turn in quicksand has 1 less Move. Sandstone rocks block the way.'],
     maps:['dunes','oasis','canyon'],bossMap:'sunTemple',pool:[['Jackal',4],['SandWorm',3,2],['SandstoneGolem',2,4]],elitePool:[['SandstoneGolem',3],['Jackal',2],['SandWorm',2]],
-    boss:{name:'The Pyrite Colossus',cls:'PyriteColossus',s:[42,13,0,5,3,2,12,7],items:['slam'],skill:'steadfast',look:{body:'#c9a83a',eye:'#fff2b0',crysAt:[{core:[14,19],col:'#3ad87a'}]}}},
+    boss:{name:'The Pyrite Colossus',cls:'PyriteColossus',mov:3,s:[42,13,0,5,3,2,12,7],items:['slam'],skill:'steadfast',look:{body:'#c9a83a',eye:'#fff2b0',crysAt:[{core:[14,19],col:'#3ad87a'}]}}},
   snow:{n:'Frostveil Reaches',bg:'#2a3a4e',town:['o','a'],townN:'Hill Village',d:'Snowfields studded with blue agate. Frost wolves hunt the drifts, and ice worms tunnel beneath them.',
     tip:['snow','Deep snow','A unit that starts its turn in deep snow has 1 less Move (snow creatures ignore it). Frozen lakes give −10 Avoid; blue agate gives +10 Avoid and +2 Def.'],
     maps:['tundra','frozenLake','agateField'],bossMap:'agateSpire',pool:[['FrostWolf',4],['FrostSprite',3,2],['IceWorm',2,4],['IceTroll',2,5]],elitePool:[['IceWorm',3],['IceTroll',2],['FrostWolf',2],['FrostSprite',2]],
