@@ -111,7 +111,7 @@ const ABIL={
   holyBombardment:{n:'Holy Bombardment',tfx:'holy',mp:10,mag:1,el:'light',side:'foe',r:[1,3],shape:'area',aim:'any',dmg:.8,d:'Pillars of light strike a 3×3 area up to 3 away: 0.8× magic damage to every enemy in it.'},
   sanctuary:{n:'Sanctuary',afx:'sanctuary',mp:10,side:'ally',r:[0,2],shape:'area',aim:'any',give:['guard',1],d:'Guard (30% less damage) on every ally in a 3×3 area until your next turn.'},
   /* Rook (Rogue) */
-  backstab:{n:'Backstab',cd:2,side:'foe',r:[1,1],dmg:1,backstab:1,d:'1.0× damage, 1.5× when another ally is next to the target.'},
+  backstab:{n:'Flanking Strike',cd:2,side:'foe',r:[1,1],dmg:1,backstab:1,d:'1.0× damage, 1.5× when another ally is next to the target.'},
   smokeBomb:{n:'Smoke Bomb',tfx:'smoke',cd:4,side:'self',shape:'burst1',st:['blind',1],give:['smoke',1],d:'Enemies around him are Blinded (−20 Hit); he and allies around him get +30 Avoid until your next turn.'},
   tumble:{n:'Tumble',cd:2,side:'self',tumble:1,free:1,d:'Move up to 2 more tiles, ignoring height. Doesn’t use his action.'},
   /* Rhyn (Shieldmaiden) */
@@ -127,7 +127,7 @@ const ABIL={
   lullaby:{n:'Lullaby',mp:8,side:'foe',r:[1,1],shape:'cone',aim:'dir',st:['stun',1,.5],d:'A cone of song (4 tiles): 50% chance to Stun each enemy hit.'},
   soothingBallad:{n:'Soothing Ballad',cd:3,side:'self',shape:'burst1',give:['shell',2],others:1,d:'A steadying tune: allies around him get +2 Def and +2 Res for 2 turns. Ready again 3 turns later.'},
   encore:{n:'Encore',mp:15,once:1,side:'ally',r:[1,3],encore:1,d:'An ally up to 3 away who has already acted can act again this turn. Once a fight.'},
-  /* Trent (Cavalier) */
+  /* Arthur (Cavalier) */
   lanceCharge:{n:'Lance Charge',cd:3,side:'foe',r:[2,4],dmg:1.3,charge:1,d:'Charges an enemy 2–4 tiles away, running up beside it: 1.3× damage.'},
   overrun:{n:'Overrun',cd:3,side:'foe',r:[1,1],shape:'pierce',aim:'dir',dmg:1,d:'Rides through 2 tiles in a line: 1.0× damage to both.'},
   warCry:{n:'War Cry',cd:4,side:'self',shape:'burst2',st:['weak',1],d:'Enemies within 2 tiles are Weak (deal 30% less damage) for a turn.'},
@@ -163,7 +163,7 @@ const ABIL={
 /* the kits: passive, MP pool (spellcasters) and abilities */
 const KITS={
   kili:{passive:'eagleEye',mp:0,abil:['aimedShot','pinningArrow','volley']},
-  vaar:{passive:'outlander',mp:0,abil:['palmStrike','flurry','leap']},
+  vaar:{passive:'outlander',mp:0,abil:['flurry','leap']},
   morrigan:{passive:'siphon',mp:24,abil:['drainTouch','hex','darkPulse']},
   corvin:{passive:'coldSnap',mp:28,abil:['iceShard','frostWave','blizzard','iceShield','frostWall']},
   drecken:{passive:'twinBolt',mp:28,abil:['spark','chainLightning','thunderclap']},
@@ -171,7 +171,7 @@ const KITS={
   maelis:{passive:'lastLight',mp:26,abil:['mend','purify','circleOfRest','sanctuary'],add:{Saint:['holyBombardment']}},/* add: abilities gained on ascending */
   klaus:{mp:24,abil:['circleOfFire']},/* his passive is his personal skill, Ember Heart */
   /* these use their personal skill (PERSONAL) as the passive */
-  trent:{mp:0,abil:['lanceCharge','overrun','warCry']},
+  arthur:{mp:0,abil:['lanceCharge','overrun','warCry']},
   holt:{mp:0,abil:['piercingBolt','cripplingShot','suppressingFire']},
   kaya:{mp:0,abil:['quickShot','markPrey','rideOn']},
   jun:{mp:0,abil:['flashStep','twinSlash','counterStance']},
@@ -186,7 +186,7 @@ const KITS={
 };
 const kitOf=u=>u&&u.cast&&KITS[u.cast]||null;
 /* personal skills for characters without a kit (KITS passives cover the rest) */
-const PERSONAL={trent:'charger',holt:'steadyAim',kaya:'outrider',jun:'iaido',klaus:'emberHeart',celestine:'lightWard',seren:'kinship',zwei:'cleave'};
+const PERSONAL={arthur:'charger',holt:'steadyAim',kaya:'outrider',jun:'iaido',klaus:'emberHeart',celestine:'lightWard',seren:'kinship',zwei:'cleave'};
 const abilOf=u=>{if(u&&u.team==='e'&&MKITS[u.cls])return MKITS[u.cls];const k=kitOf(u);if(!k)return[];const cn=CLS[u.cls].n,sw=k.asc&&k.asc[cn],l=sw?k.abil.map(id=>sw[id]||id):k.abil;return k.add&&k.add[cn]?[...l,...k.add[cn]]:l};
 
 /* ---- monster moves: 2 per monster, cooldowns only (no MP). Extra fields: stone (Stone, bosses immune), psn (Poison),
@@ -338,7 +338,7 @@ async function useAbility(u,id,tx,ty){
   const anim=!u.cast&&MON_SHEET[u.cls]&&MON_SHEET[u.cls].abil&&MON_SHEET[u.cls].abil[id];/* e.g. the Frost Wolf's howl */
   pop(u,a.n,'heal');if(anim)await sheetPlay(u,anim);else await sleep(D(350));
   if(a.wall){(state.ice=state.ice||{});for(const[x,y]of shapeTiles(u,id,tx,ty))if(!unitAt(x,y)&&ter(x,y).c<99)state.ice[key(x,y)]=a.wall;sfx('ice');render();await sleep(D(250))}
-  else if(a.side==='tile'){stepSfx(u,tx,ty);u.x=tx;u.y=ty;render();await sleep(D(250));sfx('earth');shake();if(a.dmg){const p=tileTop(tx,ty,vhOf(tx,ty));fxPlay(FX.shockwave,p.x,p.y+TH/2,{k:1.7})}/* the landing's shockwave ring */}
+  else if(a.side==='tile'){stepSfx(u,tx,ty);u.x=tx;u.y=ty;render();await sleep(D(250));sfx('earth');shake();if(id==='leap'){const p=tileTop(tx,ty,vhOf(tx,ty));fxPlay(FX.shockwave,p.x,p.y+TH/2,{k:1.7})}/* the landing's shockwave ring */}
   /* Charge: run up next to the target first (the free tile beside it nearest the charger) */
   if(a.charge){const t=unitAt(tx,ty);if(t&&man(u,t)>1){const opts=DIRS.map(([dx,dy])=>({x:t.x+dx,y:t.y+dy})).filter(p=>p.x>=0&&p.y>=0&&p.x<MW&&p.y<MH&&!unitAt(p.x,p.y)&&mcost(u,p.x,p.y)<99).sort((p,q)=>man(u,p)-man(u,q));
     if(opts[0]){stepSfx(u,opts[0].x,opts[0].y);u.x=opts[0].x;u.y=opts[0].y;render();await sleep(D(200))}}}
@@ -372,7 +372,7 @@ async function useAbility(u,id,tx,ty){
     if(a.give){addSt(t,a.give[0],a.give[1],u);pop(t,STATUS[a.give[0]].n,'heal');exp+=6}
     if(a.encore){t.acted=false;pop(t,'Encore!','heal');exp+=10}
   }
-  if(a.heal||a.healPct||a.give||a.cure||a.encore)sfx('heal');
+  if((a.heal||a.healPct||a.give||a.cure||a.encore)&&id!=='cover')sfx('heal');/* Cover: no heal chime */
   for(const[k,n]of a.self||[]){addSt(u,k,n,u);pop(u,STATUS[k].n,'heal')}
   render();if(posed){mapPose(u,'swing',allies.find(t=>t!==u)||u);setTimeout(()=>mapPose(u,'idle'),D(550))}/* staff still raised while the cross plays */await sleep(D(300));
   /* defeated enemies: relic heal, drops and gold, as in a normal fight */

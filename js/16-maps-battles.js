@@ -218,7 +218,7 @@ function genBattle(n,kind){
     list.forEach((c,i)=>{const lv=Math.max(1,lvBase+(rand()<.3?1:0)-(c==='Wolf'?1:0)+(elite?2:0)+(act===2?ACT2_UP.lv:0)),u=mkMon(c,lv),t=tiles[i%tiles.length];u.x=t.x;u.y=t.y;
       if(act===2){u.maxhp+=ACT2_UP.hp;u.hp+=ACT2_UP.hp;if(u.str)u.str+=ACT2_UP.atk;if(u.mag)u.mag+=ACT2_UP.atk}
       if(elite&&i===0){u.name='Elder '+u.name;u.boss=true;const eb=A(2)?2:1;ST.forEach(k=>{if(k==='hp'){u.maxhp+=6*eb;u.hp+=6*eb}else u[k]+=2*eb});u.skill=u.skill||pick(['wrath','steadfast','swiftstrike','bulwark'])}
-      if(rand()<.12){const k=pick(['salve','salve','salve','knightlySword','cleaver','steelSpear','ironwoodBow','javelin','throwingAxe','throwingKnives','leatherArmour','wardingCloak','travellersBoots'].filter(k=>!isWpn(k)||!wDrop&&!squadHas(k)));if(isWpn(k))wDrop=1;u.items.push({k,u:IT[k].uses,d:true})}out.push(u)});
+      if(rand()<.12){const k=pick(['salve','salve','salve','knightlySword','cleaver','steelSpear','ironwoodBow','javelin','javelin','throwingAxe','throwingAxe','throwingKnives','leatherArmour','wardingCloak','travellersBoots'].filter(k=>!isWpn(k)||!wDrop&&!squadHas(k)));if(isWpn(k))wDrop=1;u.items.push({k,u:IT[k].uses,d:true})}out.push(u)});
     if(bossFight){let[bx,by]=MAPS[mk].boss||[6,3];/* the map's boss:[x,y] is where the boss stands */
       const b=B.boss,up=[10,3,3,3,2,2,3,3].map((v,i)=>v*(act-1)+(A(2)?[8,2,2,1,1,0,2,2][i]:0));
       const bsz=b.sz||2,fits=(x,y)=>cellsOf(x,y,bsz).every(([cx,cy])=>cy>=0&&cx>=0&&cy<m.map.length&&cx<m.map[0].length&&TER[m.map[cy][cx]].c<99);
@@ -233,7 +233,12 @@ function genBattle(n,kind){
     return out};
   /* reinforcements are plain data so they survive a save: {turn:[{c,lv,x,y,ifBoss}]} */
   const W={};
-  if(town){const top=[];m.map.forEach((r,y)=>{if(y<=1)[...r].forEach((ch,x)=>{if(TER[ch].c<99)top.push({x,y})})});shuffle(top);let e=0;for(let t=2;t<=turns;t++)W[t]=Array.from({length:1+(t%2)+(act>=2?1:0)},()=>({c:roll(),lv:Math.max(1,lvBase-1),...top[(e++)%top.length]}))}
+  /* defend maps: waves come in from a few entry points (3 of: top-left, top, top-right, left side, right side), never the cast's side */
+  if(town){const H=m.map.length,Wd=m.map[0].length,mid=Math.floor(Wd/2),sy=Math.floor(H/3);
+    const anchors=[[0,0],[mid,0],[Wd-1,0],[0,sy],[Wd-1,sy]];
+    const zones=shuffle(anchors.map(([ax,ay])=>{const z=[];for(let y=0;y<H/2;y++)for(let x=0;x<Wd;x++)if((x<=1||x>=Wd-2||y<=1)&&Math.abs(x-ax)+Math.abs(y-ay)<=2&&TER[m.map[y][x]].c<99)z.push({x,y});return shuffle(z)}).filter(z=>z.length)).slice(0,3);
+    const used=zones.map(()=>0);let e=0;
+    for(let t=2;t<=turns;t++)W[t]=Array.from({length:1+(t%2)+(act>=2?1:0)},()=>{const i=(e++)%zones.length,z=zones[i];return{c:roll(),lv:Math.max(1,lvBase-1),...z[(used[i]++)%z.length]}})}
   /* summoning bosses: two more every other turn. summon:'*' picks from the region's pool */
   if(bossFight&&B.boss.summon){const sc=()=>B.boss.summon==='*'?roll():B.boss.summon;for(const t of(B.id==='heart'?[3,5,7]:[3,5,7,9])){const sx=Math.round(m.map[0].length*.6),sy=Math.round(m.map.length*.3);W[t]=[{c:sc(),lv:lvBase,x:sx,y:sy,ifBoss:1},{c:sc(),lv:lvBase,x:sx,y:sy,ifBoss:1}]};def.summonTxt=B.boss.summonTxt}
   if(Object.keys(W).length)def.waves=W;

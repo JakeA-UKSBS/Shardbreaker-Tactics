@@ -42,7 +42,7 @@ const weaponOf=u=>u.items.find(it=>(isWpn(it.k)||IT[it.k].t==='spirit')&&canUse(
 
 /* ---- treasure: the vault always holds a relic (an item only if every common/uncommon relic is already owned) ---- */
 async function treasureNode(){
-  const pool=['knightlySword','cleaver','steelSpear','ironwoodBow','moonglassEdge','greatsword','claymore','zweihander','flamberge','javelin','throwingAxe','crossbow','stormSigil','crookStaff','runeStaff','dawnStaff','salve','barbedSpear','reaverAxe','hawkeyeBow','warHammer','huntingSpear','giantslayer','holySword','stiletto','pilum','tomahawk','steelKnives','galeSword','arbalest','leatherArmour','chainmail','wardingCloak','travellersBoots','ironGauntlets'];
+  const pool=['knightlySword','cleaver','steelSpear','ironwoodBow','moonglassEdge','greatsword','claymore','zweihander','flamberge','javelin','javelin','throwingAxe','throwingAxe','crossbow','stormSigil','crookStaff','runeStaff','dawnStaff','salve','barbedSpear','reaverAxe','hawkeyeBow','warHammer','huntingSpear','giantslayer','holySword','stiletto','pilum','tomahawk','steelKnives','galeSword','arbalest','leatherArmour','chainmail','wardingCloak','travellersBoots','ironGauntlets'];
   const mk=()=>{const rp=relicPool(['c','u']);if(rp.length)return'relic:'+pick(rp);return pick(pool.filter(k=>!isWpn(k)&&IT[k].t!=='spirit'||run.roster.some(u=>canUse(u,k))&&!squadHas(k)))};
   let k=mk();
   for(;;){
