@@ -44,6 +44,7 @@ function artLeft(src){src=String(src);const o=sheetOf(src);if(o)return!!o.s.left
    abil: {abilityId: [frames]} plays those frames when the monster uses that ability. st: {status: frame} shows that frame for
    every pose while the unit has the status (the turtle stays in her spiked shell after Hunker Down).
    cx: the body's centre x in the idle frame, so portraits and the boss node centre on the body rather than the whole frame.
+   cxMap: also centre the body on its tiles on the map (the Colossus; he never turns, so one offset fits).
    Portraits and the node icon show the sheet as drawn (not flipped).
    roar: the frame shown while the boss roars after Begin (battleIntro).
    introSlam: [raised, slam] frames: after Begin the boss slams the floor instead (a shake and a thud).
@@ -54,7 +55,7 @@ const MON_SHEET={HellHound:{n:6,fw:120,fh:64,x0:20,w:100,disp:64,left:true,windu
   Wolf:{n:5,fw:100,fh:64,x0:0,w:100,disp:64,left:true,windup:[1,2],swing:3,follow:[4]},
   FrostWolf:{n:4,fw:100,fh:64,x0:0,w:92,disp:64,left:true,abil:{howl:[1,2,3]}},
   Lamia:{n:4,fw:64,fh:64,x0:0,w:64,disp:64,left:true,swing:2,mouth:[16,15],abil:{stoneGaze:[1,1,1],constrict:[3,3,3]}},/* idle, red-eyed gaze, spit, coiled */
-  PyriteColossus:{n:6,fw:150,fh:150,x0:0,w:150,left:true,windup:[1],swing:2,follow:[5],abil:{stalagmite:[3,4,5]},introSlam:[3,4]},/* idle, wind-up, punch, arms raised, slam, recover */
+  PyriteColossus:{n:6,fw:150,fh:150,x0:0,w:150,cx:92,cxMap:1,left:true,windup:[1],swing:2,follow:[5],abil:{stalagmite:[3,4,5]},introSlam:[3,4]},/* idle, wind-up, punch, arms raised, slam, recover */
   AmethystTurtle:{n:4,fw:128,fh:128,x0:0,w:128,left:true,swing:1,abil:{hunkerDown:[2,3]},st:{shell:3}},
   MagmaDragon:{n:3,fw:175,fh:168,x0:0,w:175,cx:68,left:true,windup:[1],swing:2,roar:1,fireball:[8,42],abil:{searingBreath:[1,2,2]}}};/* frames: idle, roar (mouth open), rearing */
 const BLANK='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
@@ -69,7 +70,7 @@ const SHEET_PROPS=['background-image','background-repeat','background-size','bac
 /* disp (MON_SHEET): show this many px tall on the map instead of 48 (the wolves and hounds at 64, like the cast) */
 function sheetFit(img,src,sz){const o=sheetOf(src),H=o&&o.s.disp&&(sz||1)===1?o.s.disp:48*(sz||1);
   if(o){if(img.getAttribute('src')!==BLANK)img.src=BLANK;img.dataset.s=src;const w=o.s.w*H/o.s.fh,bg=sheetBg(src,H);for(const k in bg)img.style.setProperty(k,bg[k]);
-    img.style.setProperty('width',w+'px','important');img.style.setProperty('height',H+'px','important');{const B=48*(sz||1);img.style.marginLeft=(B-w)/2+'px';img.style.marginTop=(B-H)+'px'}/* centred on the unit's box, feet on its bottom edge (a 64px sheet stands like the 64px cast) */img.style.maxWidth='none';img.style.transformOrigin='50% 50%';img.classList.toggle('artl',!!o.s.left);return true}
+    img.style.setProperty('width',w+'px','important');img.style.setProperty('height',H+'px','important');{const B=48*(sz||1),s=o.s;img.style.marginLeft=(s.cxMap&&s.cx!=null?B/2-(s.left?s.w-(s.cx-s.x0):s.cx-s.x0)*H/s.fh:(B-w)/2)+'px';img.style.marginTop=(B-H)+'px'}/* centred on the unit's box, feet on its bottom edge (a 64px sheet stands like the 64px cast) */img.style.maxWidth='none';img.style.transformOrigin='50% 50%';img.classList.toggle('artl',!!o.s.left);return true}
   if(img.style.backgroundImage){SHEET_PROPS.forEach(k=>img.style.removeProperty(k));img.style.removeProperty('width');img.style.removeProperty('height');img.style.marginLeft='';img.style.marginTop='';img.style.maxWidth=''}return false}
 /* an <img>'s attributes for a portrait box h px square: a plain src, or a blank src with the sheet frame as its background */
 function picAttrs(src,h){if(!sheetOf(src))return`src="${src}"`;const o=sheetOf(src),s=o.s,
