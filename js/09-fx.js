@@ -163,6 +163,7 @@ const FX={
   arrow:{src:'art/fx/arrow.png',fw:64,fh:32,n:6,ax:44,ay:18,ms:60},/* bows: frames 1-2 in flight (tip at 44,18), 3-5 it thunks in (tip at 53) */
   tendrils:{src:'art/fx/dark-tendrils.png',fw:64,fh:56,n:20,ax:31,ay:51,ms:60,hit:7},/* Morrigan's Hex: dark tendrils rise round the target, then sink away */
   levelUp:{src:'art/fx/level-up.png',fw:64,fh:96,n:9,ax:32,ay:80,ms:80},/* levelling up on the map: stars and chevrons rise round the unit */
+  sanctuary:{src:'art/fx/sanctuary.png',fw:72,fh:88,n:16,ax:36,ay:82,ms:60},/* Sanctuary: a shimmering shield bubble round each guarded ally */
   smoke:{src:'art/fx/smoke.png',fw:64,fh:64,n:11,ax:32,ay:34,ms:75,hit:3},/* Rook's Smoke Bomb: a pop, the cloud, then it thins out */
   acidGlob:{src:'art/fx/acid-glob.png',fw:44,fh:40,n:3,ax:40,ay:16,ms:60},/* the Spirit Frog's acid: a glob with a dripping trail... */
   acidSplash:{src:'art/fx/acid-splash.png',fw:56,fh:40,n:13,ax:37,ay:20,ms:60}/* ...that splashes and drips off the target */
