@@ -187,7 +187,8 @@ function fxFrom(X,Y){if(BOLT_HAND[X.cast])return boltHand(X,Y);const b=uBox(X),t
 const EL_PROJ={lightning:{f:'ballLightning',k:1.2},dark:{f:'darkOrb',k:1.3,crit:async(X,Y)=>{const[x,y]=fxFrom(X,Y);await fxPlay(FX.darkBurst,x,y,{frames:[5,4,3,2,1,0],k:1.1})}},ice:{f:'iceShard',k:1.1}};
 async function elShot(X,Y,el,crit){const p=EL_PROJ[el];if(crit&&p.crit)await p.crit(X,Y);const[sx,sy]=fxFrom(X,Y),[ex,ey]=fxMid(Y);await fxFly(FX[p.f],sx,sy,ex,ey,p.k*(crit?1.25:1))}
 /* the Spirit Frog's acid: a glob from its mouth, then a splash on the target */
-async function acidSpew(X,Y){const b=uBox(X),toL=boltFlip(X,Y),sx=b.l+b.w/2+(toL?-8:8),sy=b.t+b.h*.6,[ex,ey]=fxMid(Y);
+async function acidSpew(X,Y){const b=uBox(X),toL=boltFlip(X,Y),[ex,ey]=fxMid(Y);let sx=b.l+b.w/2+(toL?-8:8),sy=b.t+b.h*.6;
+  {const s=!X.cast&&MON_SHEET[X.cls],img=uEls[X.id]&&uEls[X.id].firstChild;if(s&&s.mouth&&img){const r=img.getBoundingClientRect(),bb=boardEl.getBoundingClientRect(),fx=s.mouth[0]/s.w,fy=s.mouth[1]/s.fh,l=ex<((r.left+r.right)/2-bb.left)/cam.s;sx=((l?r.left+fx*r.width:r.right-fx*r.width)-bb.left)/cam.s;sy=(r.top+fy*r.height-bb.top)/cam.s}}/* from the mouth (MON_SHEET mouth) */
   await fxFly(FX.acidGlob,sx,sy,ex,ey,1.2);fxPlay(FX.acidSplash,ex,ey,{k:1.3})}
 /* tile VFX for area spells (ABIL tfx): a crystal / pillar on every tile of the shape, a little staggered; resolves as they land */
 const TILE_FX={

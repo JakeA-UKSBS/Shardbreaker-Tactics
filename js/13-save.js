@@ -37,7 +37,8 @@ async function battleIntro(){
   /* after Begin: the boss roars (or the Crystal Heart beats), then the Player Phase banner */
   {const b=state.units.find(u=>u.boss&&u.id==='boss'),bs=b&&MON_SHEET[b.cls];
    if(bs&&bs.introSlam&&uEls[b.id]){const img=uEls[b.id].firstChild;sheetFit(img,`sheet:${b.cls}:${bs.introSlam[0]}`,b.sz);await sleep(D(320));sheetFit(img,`sheet:${b.cls}:${bs.introSlam[1]}`,b.sz);shake();sfx('earth');await sleep(D(450));mapPose(b,'idle')}/* the Colossus slams the floor */
-   else if(b&&BOSS_ROAR[b.cls]){const s=MON_SHEET[b.cls];if(s&&s.roar!=null&&uEls[b.id]){sheetFit(uEls[b.id].firstChild,`sheet:${b.cls}:${s.roar}`,b.sz);setTimeout(()=>mapPose(b,'idle'),D(1500))}/* mouth open while it roars */sfx(BOSS_ROAR[b.cls]);await sleep(D(900))}}
+   else if(b&&BOSS_ROAR[b.cls]){const s=MON_SHEET[b.cls];if(s&&s.roar!=null&&uEls[b.id]){sheetFit(uEls[b.id].firstChild,`sheet:${b.cls}:${s.roar}`,b.sz);setTimeout(()=>mapPose(b,'idle'),D(1500))}
+     else if(uEls[b.id]){const p=state.units.find(u=>u.team==='p');mapPose(b,'swing',p||b);setTimeout(()=>mapPose(b,'idle'),D(1500))}/* no roar frame (Krondis, the Bear, the Yeti): roar with the strike pose's open jaws *//* mouth open while it roars */sfx(BOSS_ROAR[b.cls]);await sleep(D(900))}}
   banner('Player Phase','p');saveGame();
   {const B=BIOMES[c.biome];if(B&&B.tip)tip(...B.tip)}
   tip('basics','Moving your units','Click a blue unit to see where it can go: blue tiles are moves, red tiles are what it can hit. Click a tile to move there, or click a red enemy to attack it straight away. Dead woods give +20 Avoid and +1 Def, so fight from the trees when you can.');
