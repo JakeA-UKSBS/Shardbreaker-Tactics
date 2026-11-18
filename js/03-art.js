@@ -69,8 +69,8 @@ const SHEET_PROPS=['background-image','background-repeat','background-size','bac
 /* disp (MON_SHEET): show this many px tall on the map instead of 48 (the wolves and hounds at 64, like the cast) */
 function sheetFit(img,src,sz){const o=sheetOf(src),H=o&&o.s.disp&&(sz||1)===1?o.s.disp:48*(sz||1);
   if(o){if(img.getAttribute('src')!==BLANK)img.src=BLANK;img.dataset.s=src;const w=o.s.w*H/o.s.fh,bg=sheetBg(src,H);for(const k in bg)img.style.setProperty(k,bg[k]);
-    img.style.setProperty('width',w+'px','important');img.style.setProperty('height',H+'px','important');img.style.marginLeft=(H-w)/2+'px';img.style.maxWidth='none';img.style.transformOrigin='50% 50%';img.classList.toggle('artl',!!o.s.left);return true}
-  if(img.style.backgroundImage){SHEET_PROPS.forEach(k=>img.style.removeProperty(k));img.style.removeProperty('width');img.style.removeProperty('height');img.style.marginLeft='';img.style.maxWidth=''}return false}
+    img.style.setProperty('width',w+'px','important');img.style.setProperty('height',H+'px','important');{const B=48*(sz||1);img.style.marginLeft=(B-w)/2+'px';img.style.marginTop=(B-H)+'px'}/* centred on the unit's box, feet on its bottom edge (a 64px sheet stands like the 64px cast) */img.style.maxWidth='none';img.style.transformOrigin='50% 50%';img.classList.toggle('artl',!!o.s.left);return true}
+  if(img.style.backgroundImage){SHEET_PROPS.forEach(k=>img.style.removeProperty(k));img.style.removeProperty('width');img.style.removeProperty('height');img.style.marginLeft='';img.style.marginTop='';img.style.maxWidth=''}return false}
 /* an <img>'s attributes for a portrait box h px square: a plain src, or a blank src with the sheet frame as its background */
 function picAttrs(src,h){if(!sheetOf(src))return`src="${src}"`;const o=sheetOf(src),s=o.s,
     /* a frame wider than tall (the wolves, the hound) shrinks to fit the box's width, sitting low in it; sheets with cx centre on the body instead */
