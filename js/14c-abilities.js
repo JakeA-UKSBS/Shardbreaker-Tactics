@@ -348,7 +348,7 @@ async function useAbility(u,id,tx,ty){
   for(const t of foes){
     const ranged=a.mag||man(u,t)>1;let landed=true;if(!a.dmg){/* status only: still has to hit */if(a.st){landed=(rn()+rn())/2<abVs(u,id,t).hit;if(!landed){sfx('miss');pop(t,'Miss','miss');mapPose(t,'dodge',u);await sleep(D(220));mapPose(t,'idle')}}}
     else{const n=a.hits||1,V=abVs(u,id,t);let total=0,hits=0;
-      for(let k=0;k<n&&t.hp>0;k++){if(a.mag||a.snd){sfx(elSnd);elSnd=null}else sfx(ranged?'arrow':hitSfx(w,false));if(a.fx){if(!k)await a.fx(u,t)}else if(ranged&&(a.shape||'one')==='one'||!ranged)await swingAt(u,t,w,false,ranged);else mapPose(u,'swing',t);
+      for(let k=0;k<n&&t.hp>0;k++){if(a.mag||a.snd){sfx(elSnd);elSnd=null}else sfx(ranged?'arrow':hitSfx(w,false));if(a.fx){if(!k)await a.fx(u,t)}else if(anim){if(!k&&uEls[u.id]){sheetFit(uEls[u.id].firstChild,`sheet:${u.cls}:${anim[anim.length-1]}`,u.sz);await sleep(D(160))}}/* its own frames (Stone Gaze's red eyes): no spit or swing */else if(ranged&&(a.shape||'one')==='one'||!ranged)await swingAt(u,t,w,false,ranged);else mapPose(u,'swing',t);
         if((rn()+rn())/2<V.hit){const d=Math.min(V.dmg,t.hp);t.hp-=d;total+=d;hits++;sfx('hit');pop(t,'-'+d,'dmg');flash(t);if(a.mag)hitBurst(u,t,EL_COL[a.el]||'#c8b8ff',a.el)}else{sfx('miss');pop(t,'Miss','miss');mapPose(t,'dodge',u)}
         await sleep(D(n>1?160:220));mapPose(u,'idle');mapPose(t,'idle');render();await sleep(D(n>1?60:110))}
       /* a hit for 0 still lands, so on-hit effects (Stone Gaze, statuses, poison) still apply */
@@ -365,7 +365,7 @@ async function useAbility(u,id,tx,ty){
     if(!a.dmg)exp+=10;
   }
   /* healing, buffs, cures (casters raise their staff: the swing pose) */
-  if(allies.length&&u.cast&&!a.dmg){mapPose(u,'swing',allies.find(t=>t!==u)||u);await sleep(D(260))}
+  const posed=allies.length&&u.cast&&!a.dmg;if(posed){mapPose(u,'swing',allies.find(t=>t!==u)||u);await sleep(D(260))}
   for(const t of allies){
     if(a.heal||a.healPct){const h=healAmt(u,id,t);if(h){t.hp+=h;pop(t,'+'+h,'heal');healFx(t)}exp+=12}
     if(a.cure){let c=0;if(t.st)for(const k of Object.keys(t.st))if(STATUS[k]&&STATUS[k].bad){delete t.st[k];c=1}if(t.psn){t.psn=0;c=1}if(t.stone){t.stone=0;c=1}if(c){pop(t,'Cured','heal');exp+=6}}
@@ -374,7 +374,7 @@ async function useAbility(u,id,tx,ty){
   }
   if(a.heal||a.healPct||a.give||a.cure||a.encore)sfx('heal');
   for(const[k,n]of a.self||[]){addSt(u,k,n,u);pop(u,STATUS[k].n,'heal')}
-  render();await sleep(D(300));
+  render();if(posed){mapPose(u,'swing',allies.find(t=>t!==u)||u);setTimeout(()=>mapPose(u,'idle'),D(550))}/* staff still raised while the cross plays */await sleep(D(300));
   /* defeated enemies: relic heal, drops and gold, as in a normal fight */
   for(const o of new Set(killed)){if(R('fang')&&u.hp>0){const h=Math.min(5,u.maxhp-u.hp);if(h){u.hp+=h;pop(u,'+'+h,'heal')}}
     for(const it of o.items.filter(i=>i.d)){(state.loot=state.loot||[]).push(it.k);sfx('item');notify(`${IT[it.k].n} dropped`,'Added to the spoils: choose who takes it after the fight.',icon(it.k))}
