@@ -60,7 +60,7 @@ function ensureCls(k){
 /* fields: see the CLASSES key in 01-data.js */
 Object.assign(CLS,{
   Wolf:{n:'Wolf',w:['blade'],body:'beast',mov:6,crit:5},
-  Lamia:{n:'Lamia',w:['art'],body:'serpent',mov:5}
+  Lamia:{n:'Lamia',w:['art'],body:'serpent',mov:5,weak:'ice'}
 });
 IT.fangs={n:'Fangs',t:'blade',kind:'claw',mt:5,hit:85,crit:5,r:[1,1],uses:99,key:'fangs'};
 IT.talons={n:'Talons',t:'blade',kind:'claw',mt:4,hit:90,crit:5,r:[1,1],uses:99,key:'talons'};

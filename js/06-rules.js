@@ -52,7 +52,9 @@ function tagsOf(u){if(!u||!u.cls||u.cls.startsWith('G.'))return[];const C=CLS[u.
 function effOf(w){const o=(w&&w.eff||[]).slice();if(w&&w.t==='bow')o.push('flier');if(w&&w.el==='light')o.push('spectral');if(w&&w.el==='fire')o.push('plant');return o}
 /* Paladins are holy warriors: everything they swing is effective against spectres */
 const SLAYER={wolfsbane:'beast',stonebane:'armoured',spiritbane:'spectral'};
-function effHit(x,xw,y){if(x.team==='e')return 0;if(xw&&xw.el&&CLS[y.cls]&&CLS[y.cls].weak===xw.el)return 2;/* elemental weakness (Ice Troll: fire) */const tg=tagsOf(y);if(!tg.length)return 0;const e=effOf(xw);for(const k in SLAYER)if(has(x,k))e.push(SLAYER[k]);
+/* elemental weaknesses: CLS weak is one element or a list (Ice Troll: fire) */
+const weakOf=u=>[].concat((CLS[u.cls]||{}).weak||[]);
+function effHit(x,xw,y){if(x.team==='e')return 0;if(xw&&xw.el&&weakOf(y).includes(xw.el))return 2;/* elemental weakness (Ice Troll: fire) */const tg=tagsOf(y);if(!tg.length)return 0;const e=effOf(xw);for(const k in SLAYER)if(has(x,k))e.push(SLAYER[k]);
   if(CLS[x.cls]&&/Paladin/.test(CLS[x.cls].n))e.push('spectral');
   const hit=tg.filter(t=>e.includes(t));if(!hit.length)return 0;return 2}
 /* br: every term that went into the numbers, as [label, value] lists, for the dev-mode breakdown panel */
