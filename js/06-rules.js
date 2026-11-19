@@ -57,7 +57,7 @@ function effHit(x,xw,y){if(x.team==='e')return 0;if(xw&&xw.el&&CLS[y.cls]&&CLS[y
   const hit=tg.filter(t=>e.includes(t));if(!hit.length)return 0;return 2}
 /* br: every term that went into the numbers, as [label, value] lists, for the dev-mode breakdown panel */
 function calc(x,xw,y,yw,ctx){
-  const t=ter(y.x,y.y),RB=relicCalc(x,xw,y),SB=stCalc(x,xw,y),gx=gearOf(x),gy=gearOf(y);
+  const t=ter(y.x,y.y),RB=relicCalc(x,xw,y,ctx),SB=stCalc(x,xw,y),gx=gearOf(x),gy=gearOf(y);
   const bp=[],bd=[],ba=[],bv=[],bc=[],mods=[],add=(b,l,v)=>{if(v)b.push([l,v]);return v||0};
   const eff=effHit(x,xw,y)||(xw.t==='bow'&&CLS[y.cls].fly?2:0);const hd=hDiff(x,y);
   let pow=add(bp,'High ground',Math.max(0,hd))+add(bp,xw.mag?'Mag':'Str',xw.mag?x.mag:x.str)+add(bp,`${xw.n||'Weapon'} Mt${eff?` (${xw.mt}, ×${eff} effective)`:''}`,xw.mt*(eff||1))+add(bp,'Trophies',eff&&R('trophies')?2:0)+add(bp,'Relics, meals, early ease',RB.pow)+add(bp,'Statuses, passives',SB.pow)+add(bp,'Gear Str',xw.mag?0:gx.str);if(has(x,'kindle')&&ctx.init===x)pow+=add(bp,'Kindle',2);
@@ -107,7 +107,7 @@ function resolve(a,ai,d){
       if(used[s]>1&&has(X,'twinBolt')&&(s==='a'?f.aw:f.dw).el==='lightning')dmg=Math.round(dmg*.8);
       /* attacker skills: Whirlwind (Luck÷2%) turns this strike into five half-damage hits; then the crit roll (×3) */
       if(!whirled&&has(X,'whirlwind')&&rn()<LK(X)/2){whirled=true;e.proc=SKILLS.whirlwind.n;dmg=Math.floor(S.dmg/2)*5}
-      if(rn()<S.crit+(s==='a'&&used.a===1&&has(X,'iaido')&&X.team==='p'?10:0)){e.crit=true;dmg*=3}/* Iaido: +10 on the opening strike */
+      if(rn()<S.crit+(s==='a'&&used.a===1&&has(X,'iaido')&&X.team==='p'?10:0)){e.crit=true;dmg*=3;if(X.team==='p'&&R('crimson')){const ch=Math.min(4,mx[s]-hp[s]);if(ch>0){hp[s]+=ch;e.heal+=ch}}}/* Crimson Edge: crits heal 4 *//* Iaido: +10 on the opening strike */
       const XW0=s==='a'?f.aw:f.dw;
       /* defender skills, Luck×2%, halve the damage: Bulwark against anything, else Spell Ward against magic or Iron Skin against physical */
       if(has(Y,'bulwark')&&dmg>0&&rn()<LK(Y)*2){e.guard=SKILLS.bulwark.n;dmg=Math.floor(dmg/2)}
