@@ -130,7 +130,7 @@ A court magician's apprentice who walked out when her master started making weap
 Bio to come.
 - **Ascends into:** Stormlord.
 - **Look:** dark storm-grey robes and cape, yellow sash, casts from his hand; lightning down the robe as a Stormlord.
-- **Weapon:** Storm Sigil. Only Drecken can wield lightning sigils (Spark, Thunderhead, Heaven's Bolt; the Storm Altar and Storm Spire events are his).
+- **Weapon:** Storm Sigil. Only Drecken can wield lightning sigils (Thunder Sigil from the armoury, Heaven's Bolt; the Storm Spire event is his).
 - **Passive: Lightning Strikes Twice.** With a lightning sigil: +3 Spd when checking for a double attack, but his second strike deals 0.8×.
 - **Spark** (single, range 3 · 4 MP): 1.0× Mag, 15% chance to Stun.
 - **Chain Lightning** (single, range 4 · 9 MP): 1.0× Mag, then bounces up to 2 times, each to an enemy within 2 tiles of the last one hit, at 0.6×.

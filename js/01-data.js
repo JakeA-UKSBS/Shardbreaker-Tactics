@@ -53,7 +53,7 @@ const IT={
   shortBow:{n:'Short Bow',t:'bow',kind:'bow',mt:6,hit:85,crit:0,r:[2,3],uses:45},
   ironwoodBow:{n:'Ironwood Bow',t:'bow',kind:'bow',mt:9,hit:70,crit:0,r:[2,3],uses:30,tint:'steel'},
   crossbow:{n:'Crossbow',t:'bow',kind:'crossbow',mt:8,hit:80,crit:0,r:[2,3],uses:35},
-  emberSigil:{n:'Ember Sigil',t:'art',kind:'talisman',el:'fire',mt:5,hit:90,crit:0,r:[1,2],uses:40,mag:true},
+  emberSigil:{n:'Fire Sigil',t:'art',kind:'talisman',el:'fire',mt:5,hit:90,crit:0,r:[1,2],uses:40,mag:true},
   tideSigil:{n:'Tide Sigil',t:'art',kind:'talisman',el:'water',mt:5,hit:90,crit:0,r:[1,2],uses:40,mag:true},
   frostSigil:{n:'Frost Sigil',t:'art',kind:'talisman',el:'ice',mt:7,hit:85,crit:5,r:[1,2],uses:35,mag:true},
   stormSigil:{n:'Storm Sigil',t:'art',kind:'talisman',el:'lightning',mt:8,hit:80,crit:5,r:[1,2],uses:35,mag:true},
@@ -100,8 +100,8 @@ Object.assign(IT,{
   arbalest:{n:'Arbalest',t:'bow',kind:'crossbow',mt:11,hit:75,crit:0,r:[2,3],uses:30,wt:10,tint:'steel'},
   yewGreatbow:{n:'Yew Greatbow',t:'bow',kind:'bow',mt:9,hit:75,crit:0,r:[2,3],uses:30,wt:8,tint:'steel'},
   throwingKnives:{n:'Throwing Knives',t:'blade',kind:'dagger',mt:3,hit:90,crit:10,r:[1,2],uses:30,thrown:true,wt:1},
-  sparkSigil:{n:'Spark Sigil',t:'art',kind:'talisman',el:'lightning',mt:4,hit:95,crit:15,r:[1,2],uses:40,mag:true,wt:2},
-  thunderheadSigil:{n:'Thunderhead Sigil',t:'art',kind:'talisman',el:'lightning',mt:8,hit:75,crit:30,r:[1,2],uses:25,mag:true,wt:6},
+  /* armoury stock (not dropped or given by events) */
+  thunderSigil:{n:'Thunder Sigil',armoury:true,t:'art',kind:'talisman',el:'lightning',mt:4,hit:95,crit:15,r:[1,2],uses:40,mag:true,wt:2},
   heavensBolt:{n:'Heaven’s Bolt',t:'art',kind:'talisman',el:'lightning',mt:10,hit:65,crit:5,r:[3,10],uses:5,mag:true,wt:8},
   meteorSigil:{n:'Meteor Sigil',t:'art',kind:'talisman',el:'earth',mt:13,hit:60,crit:0,r:[3,10],uses:5,mag:true,wt:9},
   /* slayer weapons: effective (×2 Mt) against one body tag */
