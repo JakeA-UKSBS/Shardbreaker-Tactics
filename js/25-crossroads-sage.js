@@ -27,7 +27,7 @@ async function musterScene(opts,need,late){
   const chosen=[],B1=BIOMES[run.biomes[0]],B2=BIOMES[run.biomes[1]],n=opts.length;
   const signs=late?(run.act||1)>=3?[['Act 3',BIOMES.heart.n]]:[['Act 2',B2.n],['Beyond',BIOMES.heart.n]]:[['Act 1',B1.n],['Act 2',B2.n]];
   /* stand the travellers in an arc around the campfire: the far ones behind it, smaller */
-  const ang=i=>Math.PI*(1-i/(n-1)),pos=i=>50+38*Math.cos(ang(i)),up=i=>8+24*Math.sin(ang(i)),sc=i=>1-.22*Math.sin(ang(i));
+  const ang=i=>Math.PI*(1-i/(n-1)),pos=i=>50+38*Math.cos(ang(i)),up=i=>17+22*Math.sin(ang(i)),sc=i=>1-.22*Math.sin(ang(i));
   musEl.innerHTML=`<div class="tv-scene"><img class="tv-bg" src="${musterArt()}" alt=""><img class="ms-fire" src="${campArt()}" alt="">
       <div class="ms-post" aria-label="Signpost">${signs.map(([a,b])=>`<span class="ms-sign"><small>${a}</small>${b}</span>`).join('')}</div>
       ${opts.map((u,i)=>`<button type="button" class="mu" data-u="${i}" style="left:${pos(i)}%;bottom:${up(i)}%;--s:${sc(i)};z-index:${10-Math.round(Math.sin(ang(i))*5)}" aria-label="${u.name}"><img src="${u.cast&&castPng(u,'idle',true)||uSpr(u)}" alt=""${pos(i)>50?' class="fl"':''}><span>${u.name}</span></button>`).join('')}

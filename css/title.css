@@ -93,7 +93,7 @@
 .a2n{font-variant-numeric:tabular-nums}
 .a2d{display:none;font-size:13px;color:var(--fg);margin-top:4px;line-height:1.35}.a2d em{display:block;font-style:normal;color:var(--muted);margin-top:2px}
 .ach2.open .a2d{display:block}.a2ok{color:var(--gold);font-weight:800}
-.tv-scene .ms-fire{left:50%;bottom:10%;width:11%;transform:translateX(-50%);z-index:6;filter:drop-shadow(0 0 10px rgba(255,140,40,.55))}
+.tv-scene .ms-fire{left:50%;bottom:18%;width:11%;transform:translateX(-50%);z-index:6;filter:drop-shadow(0 0 10px rgba(255,140,40,.55))}
 /* Ascension arrows over the crystal ball: gold arrowheads (art/ui/arrow-l, arrow-r), 3x */
 .sg-diff button{width:27px;height:16px;padding:0;border:0;border-radius:0;font-size:0;background:url(../art/ui/arrow-l.png) 0 0/100% 100%;image-rendering:pixelated}
 .sg-diff button[data-d="1"]{background-image:url(../art/ui/arrow-r.png)}
