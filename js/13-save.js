@@ -5,6 +5,7 @@ const SAVE='sbtactics.save.v2'/* v2: items, skills and monsters renamed to match
 const SAVES_ON=true;
 function saveGame(){if(!SAVES_ON||!run)return;const map=run.phase==='map';try{localStorage.setItem(SAVE,JSON.stringify({state:map?null:state,chStart:map?null:chStart,run,def:map?null:BATTLE,rng:rngS}))}catch(_){}}
 /* dropGone: strips skills and items that no longer exist (e.g. Pierce and Lifetaker, and their scrolls) from a save, so older runs still load */
+const ITEM_RENAMED={emberSigil:'fireSigil',barbedSpear:'qiang',cleaver:'steelHatchet',jadeFang:'jadeFangs',runeStaff:'runeCrook',sparkSigil:'thunderSigil'};
 function dropGone(o){if(!o||typeof o!=='object')return;
   if(o.skill==='bulwarkAura')o.skill='heroic';/* Rhyn's old personal skill (Nov 2026) */
   if(o.cast==='vaar'&&o.skill==='ironBody')o.skill='outlander';/* Vaar's old personal skill (Nov 2026) */
@@ -12,6 +13,7 @@ function dropGone(o){if(!o||typeof o!=='object')return;
   if(o.cast==='trent'){o.cast='arthur';if(o.name==='Trent')o.name='Arthur'}/* renamed (Nov 2026) */
   if(Array.isArray(o.roster))o.roster=o.roster.filter(u=>!u||u.cast!=='holt');/* Holt cut (Nov 2026) */
   if(Array.isArray(o.skills))o.skills=o.skills.filter(x=>!x||!x.id||SKILLS[x.id]);
+  if(Array.isArray(o.items))o.items.forEach(i=>{const b=i&&i.k&&String(i.k).split('~');const nk=b&&ITEM_RENAMED[b[0]];if(nk)i.k=nk+(b[1]?'~'+b[1]:'')});/* renamed weapons (Nov 2026) */
   if(Array.isArray(o.items))o.items=o.items.filter(i=>!i||!i.k||IT[i.k]);
   if(Array.isArray(o.relics))o.relics=o.relics.filter(k=>RELICS[k]);
   if(Array.isArray(o.units))o.units=o.units.filter(u=>!u||!u.cls||CLS[u.cls]);

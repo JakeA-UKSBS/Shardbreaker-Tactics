@@ -36,72 +36,56 @@ const TER={
 const IT={
   wornSword:{n:'Worn Sword',t:'blade',kind:'sword',mt:5,hit:90,crit:0,r:[1,1],uses:40},
   twinDaggers:{n:'Twin Daggers',t:'blade',kind:'twindagger',mt:4,hit:95,crit:5,r:[1,1],uses:40},
-  knightlySword:{n:'Knightly Sword',t:'blade',kind:'sword',mt:8,hit:75,crit:0,r:[1,1],uses:30,tint:'steel'},
-  thornRapier:{n:'Thorn Rapier',t:'blade',kind:'rapier',mt:5,hit:100,crit:10,r:[1,1],uses:30},
-  hookedBlade:{n:'Hooked Blade',t:'blade',kind:'scimitar',mt:7,hit:80,crit:5,r:[1,1],uses:35},
-  moonglassEdge:{n:'Moonglass Edge',t:'blade',kind:'scimitar',mt:7,hit:80,crit:30,r:[1,1],uses:20,tint:'killer'},
   ironSpear:{n:'Iron Spear',t:'pole',kind:'spear',mt:7,hit:85,crit:0,r:[1,1],uses:45},
   steelSpear:{n:'Steel Spear',t:'pole',kind:'spear',mt:10,hit:75,crit:0,r:[1,1],uses:30,tint:'steel'},
   /* Raptor's: twin khopesh (a sword with a bit more crit) and, once he's a Hero, the atlatl (javelin stats). Placeholder art */
   twinKhopesh:{n:'Twin Khopesh',t:'blade',kind:'sword',mt:5,hit:90,crit:10,r:[1,1],uses:40},
-  atlatl:{n:'Atlatl',t:'pole',kind:'javelin',mt:6,hit:70,crit:0,r:[1,2],uses:20,thrown:true},
-  javelin:{n:'Javelin',t:'pole',kind:'javelin',mt:6,hit:70,crit:0,r:[1,2],uses:20,thrown:true},
+  atlatl:{n:'Atlatl',t:'pole',kind:'javelin',mt:7,hit:80,crit:0,r:[1,2],uses:20,thrown:true},
+  javelin:{n:'Javelin',t:'pole',kind:'javelin',mt:6,hit:80,crit:0,r:[1,2],uses:20,thrown:true},
   hatchet:{n:'Hatchet',t:'heavy',kind:'axe',mt:8,hit:75,crit:0,r:[1,1],uses:45},
-  cleaver:{n:'Cleaver',t:'heavy',kind:'axe',mt:11,hit:65,crit:0,r:[1,1],uses:30,tint:'steel'},
+  steelHatchet:{n:'Steel Hatchet',t:'heavy',kind:'axe',mt:11,hit:65,crit:0,r:[1,1],uses:30,tint:'steel'},
   throwingAxe:{n:'Throwing Axe',t:'heavy',kind:'axe',mt:7,hit:60,crit:0,r:[1,2],uses:20,thrown:true},
-  halberd:{n:'Halberd',t:'heavy',kind:'halberd',mt:9,hit:70,crit:0,r:[1,1],uses:40},
   shortBow:{n:'Short Bow',t:'bow',kind:'bow',mt:6,hit:85,crit:0,r:[2,3],uses:45},
-  ironwoodBow:{n:'Ironwood Bow',t:'bow',kind:'bow',mt:9,hit:70,crit:0,r:[2,3],uses:30,tint:'steel'},
-  crossbow:{n:'Crossbow',t:'bow',kind:'crossbow',mt:8,hit:80,crit:0,r:[2,3],uses:35},
-  emberSigil:{n:'Fire Sigil',t:'art',kind:'talisman',el:'fire',mt:5,hit:90,crit:0,r:[1,2],uses:40,mag:true},
-  tideSigil:{n:'Tide Sigil',t:'art',kind:'talisman',el:'water',mt:5,hit:90,crit:0,r:[1,2],uses:40,mag:true},
+  fireSigil:{n:'Fire Sigil',t:'art',kind:'talisman',el:'fire',mt:5,hit:90,crit:0,r:[1,2],uses:40,mag:true},
   frostSigil:{n:'Frost Sigil',t:'art',kind:'talisman',el:'ice',mt:7,hit:85,crit:5,r:[1,2],uses:35,mag:true},
-  stormSigil:{n:'Storm Sigil',t:'art',kind:'talisman',el:'lightning',mt:8,hit:80,crit:5,r:[1,2],uses:35,mag:true},
+  stormSigil:{n:'Storm Sigil',t:'art',kind:'talisman',el:'lightning',mt:4,hit:95,crit:15,r:[1,2],uses:40,mag:true},
   poisonSpit:{n:'Poison Spit',acid:true,t:'art',kind:'talisman',mt:5,hit:90,crit:0,r:[1,2],uses:99,mag:true,psn:.3,d:'30% chance to poison on a hit.'},/* the Lamia's attack: the frog's acid glob (acid:true), magic, sometimes poisons */
-  thornSigil:{n:'Thorn Sigil',t:'art',kind:'talisman',el:'nature',mt:5,hit:90,crit:0,r:[1,2],uses:40,mag:true},
   dawnSigil:{n:'Dawn Sigil',t:'art',kind:'talisman',el:'light',mt:5,hit:90,crit:0,r:[1,2],uses:40,mag:true},
   umbralSigil:{n:'Umbral Sigil',t:'art',kind:'talisman',el:'dark',mt:5,hit:85,crit:0,r:[1,2],uses:40,mag:true,drain:true},
-  crookStaff:{n:'Crook Staff',t:'art',kind:'staff',mt:6,hit:85,crit:0,r:[1,1],uses:45,mag:true},
-  runeStaff:{n:'Rune Staff',t:'art',kind:'staff',mt:4,hit:85,crit:0,r:[1,2],uses:40,mag:true},
-  mendingStaff:{n:'Mending Staff',t:'spirit',kind:'staff',amt:10,r:[1,1],uses:30},
-  dawnStaff:{n:'Dawn Staff',t:'spirit',kind:'staff',amt:20,r:[1,1],uses:20,tint:'mend'},
+  runeCrook:{n:'Rune Crook',t:'art',kind:'staff',mt:4,hit:85,crit:0,r:[1,2],uses:40,mag:true},
+  mendingStaff:{n:'Mending Staff',t:'spirit',kind:'staff',amt:10,r:[1,2],uses:30},
   greatsword:{n:'Greatsword',t:'blade',kind:'greatsword',mt:11,hit:70,crit:5,r:[1,1],uses:30,tint:'steel'},
   claws:{n:'Claws',t:'blade',kind:'twin',mt:4,hit:85,crit:10,r:[1,1],uses:99},
-  labrys:{n:'Labrys',t:'heavy',kind:'axe',mt:12,hit:75,crit:10,r:[1,1],uses:30,tint:'steel'},
   salve:{n:'Salve',t:'item',kind:'pill',amt:10,uses:3}
 };
 for(const k in IT)IT[k].key=k;
 /* ---- weapon weight (Wt): weight above the wielder's Str (Mag for sigils) costs that much attack speed ---- */
 Object.assign(IT,{
-  dirk:{n:'Dirk',t:'blade',kind:'dagger',mt:3,hit:95,crit:15,r:[1,1],uses:45,key:'dirk'},
   stiletto:{n:'Stiletto',t:'blade',kind:'dagger',thin:true,mt:4,hit:90,crit:25,r:[1,1],uses:30,key:'stiletto'},
-  barbedSpear:{n:'Barbed Spear',t:'pole',kind:'spear',mt:8,hit:80,crit:30,r:[1,1],uses:20,tint:'killer',key:'barbedSpear'},
+  qiang:{n:'Qiang',t:'pole',kind:'spear',mt:8,hit:80,crit:30,r:[1,1],uses:20,tint:'killer',key:'qiang'},
   reaverAxe:{n:'Reaver Axe',t:'heavy',kind:'axe',mt:10,hit:65,crit:30,r:[1,1],uses:20,tint:'killer',key:'reaverAxe'},
   hawkeyeBow:{n:'Hawkeye Bow',t:'bow',kind:'bow',mt:7,hit:80,crit:30,r:[2,3],uses:20,tint:'killer',key:'hawkeyeBow'}
 });
 /* WT: weapon weight. Weight above the wielder's Str (Mag for sigils) is taken off their attack speed (see wtOver/AS). */
-const WT={wornSword:4,twinKhopesh:4,atlatl:8,twinDaggers:2,knightlySword:8,thornRapier:3,hookedBlade:6,moonglassEdge:6,greatsword:12,ironSpear:6,steelSpear:10,javelin:8,hatchet:7,cleaver:11,throwingAxe:9,halberd:9,labrys:13,
-  shortBow:3,ironwoodBow:7,crossbow:6,emberSigil:2,tideSigil:3,frostSigil:4,stormSigil:5,thornSigil:3,dawnSigil:2,umbralSigil:5,crookStaff:4,runeStaff:3,
-  dirk:1,stiletto:2,barbedSpear:7,reaverAxe:9,hawkeyeBow:5};
+const WT={wornSword:4,twinKhopesh:4,atlatl:8,twinDaggers:2,greatsword:12,ironSpear:6,steelSpear:10,javelin:8,hatchet:7,steelHatchet:11,throwingAxe:9,
+  shortBow:3,fireSigil:2,frostSigil:4,stormSigil:2,dawnSigil:2,umbralSigil:5,runeCrook:3,
+  stiletto:2,qiang:7,reaverAxe:9,hawkeyeBow:5};
 for(const k in WT)IT[k].wt=WT[k];
 /* ---- special weapons from events: jade (killer) weapons, lightning sigils, long-range sigils and charms ---- */
 Object.assign(IT,{
   jadeJian:{n:'Jade Jian',t:'blade',kind:'sword',mt:7,hit:80,crit:30,r:[1,1],uses:25,tint:'jade',wt:5},
-  jadeFang:{n:'Jade Fang',t:'blade',kind:'dagger',mt:5,hit:90,crit:35,r:[1,1],uses:25,tint:'jade',wt:2},
-  jadeSpear:{n:'Jade Spear',t:'pole',kind:'spear',mt:9,hit:80,crit:30,r:[1,1],uses:25,tint:'jade',wt:8},
-  jadeAxe:{n:'Jade Axe',t:'heavy',kind:'axe',mt:11,hit:65,crit:30,r:[1,1],uses:25,tint:'jade',wt:10},
-  jadeBow:{n:'Jade Bow',t:'bow',kind:'bow',mt:8,hit:75,crit:30,r:[2,3],uses:25,tint:'jade',wt:5},
+  jadeFangs:{n:'Jade Fangs',t:'blade',kind:'dagger',mt:5,hit:90,crit:35,r:[1,1],uses:25,tint:'jade',wt:2},
   longbow:{n:'Longbow',t:'bow',kind:'bow',mt:6,hit:75,crit:0,r:[2,3],uses:30,wt:6},
-  /* steel-tier ranged variants (reach 1–2, the arbalest 2–3): trade-ups for the javelin, throwing axe, throwing knives and crossbow */
-  pilum:{n:'Pilum',t:'pole',kind:'javelin',mt:9,hit:75,crit:0,r:[1,2],uses:20,thrown:true,wt:9,tint:'steel'},
+  /* steel-tier ranged variants (reach 1–2): trade-ups for the javelin, throwing axe and throwing knives */
   tomahawk:{n:'Tomahawk',t:'heavy',kind:'axe',mt:10,hit:65,crit:0,r:[1,2],uses:20,thrown:true,wt:9,tint:'steel'},
   steelKnives:{n:'Steel Knives',t:'blade',kind:'dagger',mt:5,hit:90,crit:10,r:[1,2],uses:30,thrown:true,wt:2,tint:'steel'},
   galeSword:{n:'Gale Sword',t:'blade',kind:'sword',mt:6,hit:80,crit:0,r:[1,2],uses:25,wt:6,tint:'steel'},
-  arbalest:{n:'Arbalest',t:'bow',kind:'crossbow',mt:11,hit:75,crit:0,r:[2,3],uses:30,wt:10,tint:'steel'},
-  yewGreatbow:{n:'Yew Greatbow',t:'bow',kind:'bow',mt:9,hit:75,crit:0,r:[2,3],uses:30,wt:8,tint:'steel'},
+  yewGreatbow:{n:'Yew Greatbow',t:'bow',kind:'bow',mt:9,hit:80,crit:5,r:[2,4],uses:30,wt:8,tint:'steel'},
   throwingKnives:{n:'Throwing Knives',t:'blade',kind:'dagger',mt:3,hit:90,crit:10,r:[1,2],uses:30,thrown:true,wt:1},
   /* armoury stock (not dropped or given by events) */
-  thunderSigil:{n:'Thunder Sigil',armoury:true,t:'art',kind:'talisman',el:'lightning',mt:4,hit:95,crit:15,r:[1,2],uses:40,mag:true,wt:2},
+  flameSigil:{n:'Flame Sigil',t:'art',kind:'talisman',el:'fire',mt:8,hit:80,crit:5,r:[1,2],uses:30,mag:true,wt:4,key:'fireSigil'},
+  blizzardSigil:{n:'Blizzard Sigil',t:'art',kind:'talisman',el:'ice',mt:9,hit:80,crit:5,r:[1,2],uses:30,mag:true,wt:5,key:'frostSigil'},
+  thunderSigil:{n:'Thunder Sigil',armoury:true,t:'art',kind:'talisman',el:'lightning',mt:8,hit:80,crit:5,r:[1,2],uses:35,mag:true,wt:5},
   heavensBolt:{n:'Heaven’s Bolt',t:'art',kind:'talisman',el:'lightning',mt:10,hit:65,crit:5,r:[3,10],uses:5,mag:true,wt:8},
   meteorSigil:{n:'Meteor Sigil',t:'art',kind:'talisman',el:'earth',mt:13,hit:60,crit:0,r:[3,10],uses:5,mag:true,wt:9},
   /* slayer weapons: effective (×2 Mt) against one body tag */
@@ -176,3 +160,6 @@ const HAIRS=['#1d1a24','#2a2230','#3a2a20','#241c1c','#4a3a30'];
 /* BATTLE: the current battle (made by genBattle) */
 let BATTLE=null;
 
+
+/* armoury stock: upgrades only (nothing a unit starts with) */
+for(const k of ['stiletto', 'jadeJian', 'jadeFangs', 'claymore', 'flamberge', 'galeSword', 'steelKnives', 'throwingKnives', 'holySword', 'giantslayer', 'steelSpear', 'qiang', 'huntingSpear', 'javelin', 'steelHatchet', 'reaverAxe', 'warHammer', 'throwingAxe', 'tomahawk', 'hawkeyeBow', 'yewGreatbow', 'thunderSigil', 'farStaff', 'zweihander', 'flameSigil', 'blizzardSigil'])if(IT[k])IT[k].armoury=true;

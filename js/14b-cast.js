@@ -141,7 +141,7 @@ const CAST = [
     },
     asc: {
       Berserker: {
-        wk: "labrys",
+        wk: "reaverAxe",
         look: {
           style: "wild",
           capeC: "#5a4a3a",
@@ -280,6 +280,7 @@ const CAST = [
     name: "Maelis",
     cls: "Mender",
     wk: "mendingStaff",
+    wk2: "dawnSigil",
     joins: "start",
     look: {
       fem: true,
@@ -449,7 +450,7 @@ const CAST = [
     },
     asc: {
       Swordmaster: {
-        wk: "moonglassEdge",
+        wk: "jadeJian",
         look: {
           capeC: "#1e2f5a",
           tails: "#efe6cf",
@@ -464,7 +465,7 @@ const CAST = [
     id: "klaus",
     name: "Klaus",
     cls: "Pyromancer",
-    wk: "emberSigil",
+    wk: "fireSigil",
     joins: "run",
     look: {
       style: "short",
@@ -540,7 +541,7 @@ const CAST = [
     name: "Seren",
     cls: "Summoner",
     familiar: "spiritFrog",
-    wk: "runeStaff",
+    wk: "runeCrook",
     joins: "run",
     look: {
       fem: true,
@@ -664,6 +665,7 @@ function castArtAll() {
       c.cls.split(".")[1] === "support"
         ? ["spirit"]
         : [c.wk ? IT[c.wk].t : "spirit"];
+    if (c.wk2) ts.push(IT[c.wk2].t); /* a second starting weapon adds its type (Maelis: sigils) */
     add(c.cls, ts);
     for (const k in c.asc) {
       add(k, ts);
@@ -695,6 +697,7 @@ function castUnit(id, lv) {
   if (t === "2")
     g.forEach((p, i) => (s[i] += Math.round((p * (PROMO_LV - 1)) / 100)));
   if (c.wk) items.push({ k: c.wk, u: IT[c.wk].uses });
+  if (c.wk2) items.push({ k: c.wk2, u: IT[c.wk2].uses }); /* a second starting weapon (Maelis's Dawn Sigil) */
   if (
     role === "support" &&
     c.wk !== "mendingStaff" &&

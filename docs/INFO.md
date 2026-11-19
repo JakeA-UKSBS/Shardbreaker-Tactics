@@ -6,53 +6,52 @@ Numbers pulled straight from the game data. Regenerate this file after balance c
 
 Weapons never break (except the 5-use Meteor and Heaven's Bolt).
 
-| Weapon | Type | Mt | Hit | Crit | Wt | Rng | Effective vs |
-|---|---|---|---|---|---|---|---|
-| Worn Sword | Blade | 5 | 90 | 0 | 4 | 1 |  |
-| Twin Daggers | Blade | 4 | 95 | 5 | 2 | 1 |  |
-| Knightly Sword | Blade | 8 | 75 | 0 | 8 | 1 |  |
-| Thorn Rapier | Blade | 5 | 100 | 10 | 3 | 1 |  |
-| Hooked Blade | Blade | 7 | 80 | 5 | 6 | 1 |  |
-| Moonglass Edge | Blade | 7 | 80 | 30 | 6 | 1 |  |
-| Iron Spear | Polearm | 7 | 80 | 0 | 6 | 1 |  |
-| Steel Spear | Polearm | 10 | 70 | 0 | 10 | 1 |  |
-| Javelin | Polearm | 6 | 65 | 0 | 8 | 1–2 |  |
-| Hatchet | Heavy | 8 | 75 | 0 | 7 | 1 |  |
-| Cleaver | Heavy | 11 | 65 | 0 | 11 | 1 |  |
-| Throwing Axe | Heavy | 7 | 60 | 0 | 9 | 1–2 |  |
-| Halberd | Heavy | 9 | 70 | 0 | 9 | 1 |  |
-| Short Bow | Bow | 6 | 85 | 0 | 3 | 2–3 | Quarry |
-| Ironwood Bow | Bow | 9 | 70 | 0 | 7 | 2–3 | Quarry |
-| Crossbow | Bow | 8 | 80 | 0 | 6 | 2–3 | Quarry |
-| Fire Sigil | Sigil (Fire) | 5 | 90 | 0 | 2 | 1–2 | Plant |
-| Tide Sigil | Sigil (Water) | 5 | 90 | 0 | 3 | 1–2 |  |
-| Storm Sigil | Sigil (Lightning) | 8 | 80 | 5 | 5 | 1–2 |  |
-| Thorn Sigil | Sigil (Nature) | 5 | 90 | 0 | 3 | 1–2 |  |
-| Dawn Sigil | Sigil (Light) | 5 | 90 | 0 | 2 | 1–2 | Infernal |
-| Umbral Sigil | Sigil (Dark) | 5 | 85 | 0 | 5 | 1–2 |  |
-| Crook Staff | Sigil | 6 | 85 | 0 | 4 | 1 |  |
-| Rune Staff | Sigil | 4 | 85 | 0 | 3 | 1–2 |  |
-| Greatsword | Blade | 11 | 70 | 5 | 12 | 1 |  |
-| Labrys | Heavy | 12 | 75 | 10 | 13 | 1 |  |
-| Dirk | Blade | 3 | 95 | 15 | 1 | 1 |  |
-| Stiletto | Blade | 4 | 90 | 25 | 2 | 1 |  |
-| Barbed Spear | Polearm | 8 | 75 | 30 | 7 | 1 |  |
-| Reaver Axe | Heavy | 10 | 65 | 30 | 9 | 1 |  |
-| Hawkeye Bow | Bow | 7 | 80 | 30 | 5 | 2–3 | Quarry |
-| Jade Jian | Blade | 7 | 80 | 30 | 5 | 1 |  |
-| Jade Fang | Blade | 5 | 90 | 35 | 2 | 1 |  |
-| Jade Spear | Polearm | 9 | 75 | 30 | 8 | 1 |  |
-| Jade Axe | Heavy | 11 | 65 | 30 | 10 | 1 |  |
-| Jade Bow | Bow | 8 | 75 | 30 | 5 | 2–3 | Quarry |
-| Longbow | Bow | 6 | 70 | 0 | 6 | 2–3 | Quarry |
-| Throwing Knives | Blade | 3 | 90 | 10 | 1 | 1–2 |  |
-| Thunder Sigil | Sigil (Lightning) | 4 | 95 | 15 | 2 | 1–2 | Ooze (armoury only) |
-| Heaven’s Bolt | Sigil (Lightning) | 10 | 65 | 5 | 8 | 3–10 |  |
-| Meteor Sigil | Sigil (Earth) | 13 | 60 | 0 | 9 | 3–10 |  |
-| War Hammer | Heavy | 8 | 70 | 0 | 10 | 1 | Armoured |
-| Hunting Spear | Polearm | 7 | 80 | 0 | 6 | 1 | Beast |
-| Holy Sword | Blade | 8 | 80 | 5 | 6 | 1 | Infernal |
-| Giantslayer | Blade | 9 | 70 | 0 | 10 | 1 | Colossal |
+| Weapon | Type | Mt | Hit | Crit | Wt | Rng | Effective vs | Armoury |
+|---|---|---|---|---|---|---|---|---|
+| Worn Sword | Blade | 5 | 90 | 0 | 4 | 1 |  |  |
+| Twin Daggers | Blade | 4 | 95 | 5 | 2 | 1 |  |  |
+| Iron Spear | Polearm | 7 | 85 | 0 | 6 | 1 |  |  |
+| Steel Spear | Polearm | 10 | 75 | 0 | 10 | 1 |  | Yes |
+| Twin Khopesh | Blade | 5 | 90 | 10 | 4 | 1 |  |  |
+| Atlatl | Polearm | 7 | 80 | 0 | 8 | 1–2 |  |  |
+| Javelin | Polearm | 6 | 80 | 0 | 8 | 1–2 |  | Yes |
+| Hatchet | Heavy | 8 | 75 | 0 | 7 | 1 |  |  |
+| Steel Hatchet | Heavy | 11 | 65 | 0 | 11 | 1 |  | Yes |
+| Throwing Axe | Heavy | 7 | 60 | 0 | 9 | 1–2 |  | Yes |
+| Short Bow | Bow | 6 | 85 | 0 | 3 | 2–3 | Beast |  |
+| Fire Sigil | Sigil (Fire) | 5 | 90 | 0 | 2 | 1–2 | Plant, Troll |  |
+| Frost Sigil | Sigil (Ice) | 7 | 85 | 5 | 4 | 1–2 |  |  |
+| Storm Sigil | Sigil (Lightning) | 4 | 95 | 15 | 2 | 1–2 | Ooze |  |
+| Dawn Sigil | Sigil (Light) | 5 | 90 | 0 | 2 | 1–2 | Infernal |  |
+| Umbral Sigil | Sigil (Dark) | 5 | 85 | 0 | 5 | 1–2 |  |  |
+| Rune Crook | Sigil | 4 | 85 | 0 | 3 | 1–2 |  |  |
+| Mending Staff | Staff | – | – | 0 | 0 | 1–2 |  |  |
+| Greatsword | Blade | 11 | 70 | 5 | 12 | 1 |  |  |
+| Stiletto | Blade | 4 | 90 | 25 | 2 | 1 |  | Yes |
+| Qiang | Polearm | 8 | 80 | 30 | 7 | 1 |  | Yes |
+| Reaver Axe | Heavy | 10 | 65 | 30 | 9 | 1 |  | Yes |
+| Hawkeye Bow | Bow | 7 | 80 | 30 | 5 | 2–3 | Beast | Yes |
+| Jade Jian | Blade | 7 | 80 | 30 | 5 | 1 |  | Yes |
+| Jade Fangs | Blade | 5 | 90 | 35 | 2 | 1 |  | Yes |
+| Longbow | Bow | 6 | 75 | 0 | 6 | 2–3 | Beast |  |
+| Tomahawk | Heavy | 10 | 65 | 0 | 9 | 1–2 |  | Yes |
+| Steel Knives | Blade | 5 | 90 | 10 | 2 | 1–2 |  | Yes |
+| Gale Sword | Blade | 6 | 80 | 0 | 6 | 1–2 |  | Yes |
+| Yew Greatbow | Bow | 9 | 80 | 5 | 8 | 2–4 | Beast | Yes |
+| Throwing Knives | Blade | 3 | 90 | 10 | 1 | 1–2 |  | Yes |
+| Flame Sigil | Sigil (Fire) | 8 | 80 | 5 | 4 | 1–2 | Plant, Troll | Yes |
+| Blizzard Sigil | Sigil (Ice) | 9 | 80 | 5 | 5 | 1–2 |  | Yes |
+| Thunder Sigil | Sigil (Lightning) | 8 | 80 | 5 | 5 | 1–2 | Ooze | Yes |
+| Heaven’s Bolt | Sigil (Lightning) | 10 | 65 | 5 | 8 | 3–10 | Ooze |  |
+| Meteor Sigil | Sigil (Earth) | 13 | 60 | 0 | 9 | 3–10 |  |  |
+| War Hammer | Heavy | 8 | 70 | 0 | 10 | 1 | Armoured | Yes |
+| Hunting Spear | Polearm | 7 | 85 | 0 | 6 | 1 | Beast | Yes |
+| Holy Sword | Blade | 8 | 80 | 5 | 6 | 1 | Infernal | Yes |
+| Giantslayer | Blade | 9 | 70 | 0 | 10 | 1 | Colossal | Yes |
+| Far Staff | Staff | – | – | 0 | 0 | 1–10 |  | Yes |
+| Claymore | Blade | 9 | 75 | 0 | 10 | 1 |  | Yes |
+| Zweihänder | Blade | 14 | 65 | 5 | 14 | 1 |  | Yes |
+| Flamberge | Blade | 12 | 70 | 20 | 12 | 1 |  | Yes |
 
 ## Effective damage
 
@@ -61,15 +60,15 @@ An effective hit multiplies weapon Mt ×2. Only your side deals them for now.
 | Monster type | Who has it | Beaten by |
 |---|---|---|
 | Armoured | Magma Golem, Crystal Sentinel, Sandstone Golem, Pyrite Colossus, Gem Golem, Amethyst Turtle, Yeti | War Hammer, Stonebane |
-| Beast | Wolf, Alligator, Blighted Stag, Magma Dragon, Blighted Croc, Sand Worm, Ice Worm, Hell Hound, Frost Wolf, Agate Wyrm, Hollow Bear, Spirit Frog | Hunting Spear, Wolfsbane |
-| Quarry | Blighted Stag (bats, when added) | Bows |
+| Beast | Wolf, Blighted Stag, Hell Hound, Frost Wolf, Agate Wyrm, Hollow Bear, Spirit Frog | Hunting Spear, bows, Wolfsbane |
 | Colossal | Every 2×2 or 3×3 boss | Giantslayer |
 | Infernal | Hell Hound, Magma Dragon (Pyraxis), Fire Sprite | Light (Dawn Sigil, light abilities), Holy Sword, Fiendbane |
 | Plant | Blighted Treant | Fire |
 | Ooze | Swamp Ooze | Lightning |
-| Troll | Ice Troll | Fire |
+| Ice | Ice Troll, Ice Worm | Fire |
+| Scaled | Alligator (Krondis), Blighted Croc | Ice |
 
-**Elemental weaknesses** (×2 Mt from a sigil or ability of that element): Ice Worm: fire · Lamia, Krondis (Alligator): ice. (The Holy Sword counts as light.)
+**Elemental weaknesses** (×2 Mt from a sigil or ability of that element): Lamia: ice. (The Holy Sword counts as light.)
 
 **Elemental resistances** (half damage from your attacks of that element): Hell Hound, Magma Dragon, Fire Sprite, Magma Golem: fire · Frost Wolf, Ice Worm, Yeti: ice. The in-game chart (What beats what) lists every monster each row covers on hover.
 

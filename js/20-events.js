@@ -322,22 +322,19 @@ const EVENTS = {
           'holySword',
           'claymore',
           'flamberge',
-          'knightlySword',
           'steelSpear',
-          'cleaver',
-          'ironwoodBow',
+          'steelHatchet',
+          'yewGreatbow',
           'javelin',
           'javelin',
           'throwingAxe',
           'throwingAxe',
           'throwingKnives',
           'galeSword',
-          'arbalest',
           'leatherArmour',
           'wardingCloak',
           'travellersBoots',
           'ironGauntlets',
-          'dawnStaff',
           'stiletto'
         ]))].slice(0, 3),
         price = k => (IT[k].t === 'gear' ? 40 : IT[k].crit >= 20 ? 55 : 45);
@@ -870,12 +867,12 @@ const EVENTS = {
         sub: 'Find a weapon or gear; it may cost you',
         go: async () => {
           const k = pick([
-            'knightlySword',
+            'claymore',
             'steelSpear',
-            'cleaver',
-            'ironwoodBow',
-            'moonglassEdge',
-            'barbedSpear',
+            'steelHatchet',
+            'yewGreatbow',
+            'jadeJian',
+            'qiang',
             'reaverAxe',
             'hawkeyeBow',
             'chainmail',
@@ -1046,8 +1043,8 @@ Object.assign(EVENTS, {
       if (has(u => CLS[u.cls].w.includes('bow'))) o.push('longbow');
       if (has(u => isRoleU(u, 'rogue'))) o.push('throwingKnives');
       if (has(u => isRoleU(u, 'support'))) o.push('farStaff');
-      if (has(u => isRoleU(u, 'summoner'))) o.push('runeStaff');
-      if (o.length < 2) o.push(pick(['knightlySword', 'steelSpear', 'cleaver']));
+      if (has(u => isRoleU(u, 'summoner'))) o.push('runeCrook');
+      if (o.length < 2) o.push(pick(['claymore', 'steelSpear', 'steelHatchet']));
       return [
         ...o.slice(0, 3).map(k => ({
           l: `Open the ${IT[k].n} crate`,

@@ -66,7 +66,11 @@ function render(){
     live.add(u.id);let el=uEls[u.id];
     if(!el){el=document.createElement('div');el.innerHTML='<img alt=""><div class="hpb"><i></i></div>';boardEl.appendChild(el);uEls[u.id]=el}
     el.className='unit '+u.team+(u.summon?' sum':'')+(u.stone?' stone':'')+(u.psn?' psn':'')+(u.boss?' boss':'')+(u.look&&u.look.magma?' magma':'')+(u.look&&u.look.spirit?' spirit':'')+(u.acted&&u.team==='p'?' done':'')+(thr.has(u.id)?' threat':'');
-    const ub=uBox(u);el.style.left=ub.l+'px';el.style.top=ub.t+'px';el.style.zIndex=unitZ(u);{const w=ub.w+'px';if(el.style.width!==w){el.style.width=el.style.height=w;el.firstChild.style.width=el.firstChild.style.height=w}}
+    const ub=uBox(u);
+    /* units with a move frame (horses: Kaya) show it while they slide to a new tile */
+    {const ps=ub.l+','+ub.t,mv=el.dataset.pos&&el.dataset.pos!==ps&&u.hp>0&&castPng(u,'move');el.dataset.pos=ps;
+     if(mv){const img=el.firstChild;img.src=mv;clearTimeout(el._mv);el._mv=setTimeout(()=>{if(img.dataset.s&&!img.dataset.s.startsWith('sheet:'))img.src=img.dataset.s},300)}}
+    el.style.left=ub.l+'px';el.style.top=ub.t+'px';el.style.zIndex=unitZ(u);{const w=ub.w+'px';if(el.style.width!==w){el.style.width=el.style.height=w;el.firstChild.style.width=el.firstChild.style.height=w}}
     if(u.hp<=0&&!el.dataset.dead&&el.isConnected&&el.style.opacity!==''){el.dataset.dead=1;dieFx(el,boardEl,ub.l+ub.w/2,ub.t+ub.h/2,u,1)}else if(u.hp>0)delete el.dataset.dead;
     el.style.opacity=u.hp>0?1:0;
     const src=sprite(u,'idle',mapWk(u)),img=el.firstChild;if(img.dataset.s!==src){img.dataset.s=src;img.style.transform='';img.style.transformOrigin='';if(!sheetFit(img,src,u.sz)){img.src=src;if(u.sz===2||u.sz>1&&src.startsWith('data:'))fillBox(img,src,u.team==='e')}/* bosses: load and measure the strike frame now so the first attack shows it */if(u.sz>1&&!sheetOf(src)){const s2=sprite(u,'strike',mapWk(u));if(!FILLS[s2])fillBox(new Image(),s2)}}img.classList.toggle('hi',isHi(u.cls,u.sz));img.classList.toggle('artl',artLeft(img.dataset.s));
@@ -98,7 +102,7 @@ function itemRows(u,btn){
     return`<${tag} class="it${i===ei?' eqd':''}${btn&&itemSel===i?' sel':''}"${btn?` data-act="item:${i}" type="button"`:''}><img src="${icon(it.k)}" alt="">${w.n}${it.d?' <em>drops</em>':''}<span class="u">${[w.r&&w.t!=='item'?`Rng ${rngTxt(w.r)}`:'',endless(it.k)?'':`${it.u}/${w.uses}`].filter(Boolean).join(' · ')}</span></${tag}>`}).join('')||'<p class="skd">No items.</p>'}</div>`;
 }
 /* enemy card: its types, and what it's weak to or resists */
-const TAG_BEATEN={armoured:'Hammers',beast:'Spears',quarry:'Bows',colossal:'Giantslayer',infernal:'Light',plant:'Fire',troll:'Fire',ooze:'Lightning'};
+const TAG_BEATEN={armoured:'Hammers',beast:'Spears, Bows',colossal:'Giantslayer',infernal:'Light',plant:'Fire',ice:'Fire',ooze:'Lightning',scaled:'Ice'};
 const EL_N={fire:'Fire',ice:'Ice',lightning:'Lightning',light:'Light',dark:'Dark',nature:'Nature',water:'Water'};
 function monTypes(u){if(u.team!=='e')return'';const tg=tagsOf(u),wk=[...new Set([...tg.map(t=>TAG_BEATEN[t]),...weakOf(u).map(e=>EL_N[e]||e)])].filter(Boolean),rs=resOf(u).map(e=>EL_N[e]||e);
   if(!tg.length&&!wk.length&&!rs.length)return'';

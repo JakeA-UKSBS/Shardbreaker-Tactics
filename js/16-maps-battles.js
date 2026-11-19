@@ -4,7 +4,7 @@
 Object.assign(CLS,{
   SandWorm:{n:'Sand Worm',w:['heavy'],body:'worm',mov:4,wade:true},SandstoneGolem:{n:'Sandstone Golem',w:['heavy'],body:'golem',mov:4},
   PyriteColossus:{n:'Pyrite Colossus',w:['heavy'],body:'cubes',mov:0},
-  FrostWolf:{n:'Frost Wolf',w:['blade'],body:'beast',mov:6,wade:true},IceWorm:{n:'Ice Worm',w:['heavy'],body:'worm',mov:4,wade:true,weak:'fire'},
+  FrostWolf:{n:'Frost Wolf',w:['blade'],body:'beast',mov:6,wade:true},IceWorm:{n:'Ice Worm',w:['heavy'],body:'worm',mov:4,wade:true},
   AgateWyrm:{n:'Agate Wyrm',w:['art','heavy'],body:'dragon',mov:0},
   GemGolem:{n:'Gem Golem',w:['heavy'],body:'golem',mov:4},
   AmethystTurtle:{n:'Amethyst Turtle',w:['heavy','art'],body:'turtle',mov:0},
@@ -217,7 +217,7 @@ function genBattle(n,kind){
     list.forEach((c,i)=>{const lv=Math.max(1,lvBase+(rand()<.3?1:0)-(c==='Wolf'?1:0)+(elite?2:0)+(act===2?ACT2_UP.lv:0)),u=mkMon(c,lv),t=tiles[i%tiles.length];u.x=t.x;u.y=t.y;
       if(act===2){u.maxhp+=ACT2_UP.hp;u.hp+=ACT2_UP.hp;if(u.str)u.str+=ACT2_UP.atk;if(u.mag)u.mag+=ACT2_UP.atk}
       if(elite&&i===0){u.name='Elder '+u.name;u.boss=true;const eb=A(2)?2:1;ST.forEach(k=>{if(k==='hp'){u.maxhp+=6*eb;u.hp+=6*eb}else u[k]+=2*eb});u.skill=u.skill||pick(['wrath','steadfast','swiftstrike','bulwark'])}
-      if(rand()<.12){const k=pick(['salve','salve','salve','knightlySword','cleaver','steelSpear','ironwoodBow','javelin','javelin','throwingAxe','throwingAxe','throwingKnives','leatherArmour','wardingCloak','travellersBoots'].filter(k=>!isWpn(k)||!wDrop&&!squadHas(k)));if(isWpn(k))wDrop=1;u.items.push({k,u:IT[k].uses,d:true})}out.push(u)});
+      if(rand()<.12){const k=pick(['salve','salve','salve','claymore','steelHatchet','steelSpear','yewGreatbow','javelin','javelin','throwingAxe','throwingAxe','throwingKnives','leatherArmour','wardingCloak','travellersBoots'].filter(k=>!isWpn(k)||!wDrop&&!squadHas(k)));if(isWpn(k))wDrop=1;u.items.push({k,u:IT[k].uses,d:true})}out.push(u)});
     if(bossFight){let[bx,by]=MAPS[mk].boss||[6,3];/* the map's boss:[x,y] is where the boss stands */
       const b=B.boss,up=[10,3,3,3,2,2,3,3].map((v,i)=>v*(act-1)+(A(2)?[8,2,2,1,1,0,2,2][i]:0));
       const bsz=b.sz||2,fits=(x,y)=>cellsOf(x,y,bsz).every(([cx,cy])=>cy>=0&&cx>=0&&cy<m.map.length&&cx<m.map[0].length&&TER[m.map[cy][cx]].c<99);
