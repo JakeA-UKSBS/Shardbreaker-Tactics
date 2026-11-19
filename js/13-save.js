@@ -1,8 +1,8 @@
 /* Save/load and battle setup */
 /* ================= BATTLE SETUP / SAVE ================= */
 const SAVE='sbtactics.save.v2'/* v2: items, skills and monsters renamed to match their in-game names; v1 runs are dropped */,OPTS='sbtactics.opts';
-/* SAVES_ON: run saves are switched off while the game is changing a lot (removed content kept breaking old saves). Set true to bring Continue back. */
-const SAVES_ON=false;
+/* SAVES_ON: autosaves the run (map screen, every action, each player phase) so it can be continued from the title. Set false to switch saves off. */
+const SAVES_ON=true;
 function saveGame(){if(!SAVES_ON||!run)return;const map=run.phase==='map';try{localStorage.setItem(SAVE,JSON.stringify({state:map?null:state,chStart:map?null:chStart,run,def:map?null:BATTLE,rng:rngS}))}catch(_){}}
 /* dropGone: strips skills and items that no longer exist (e.g. Pierce and Lifetaker, and their scrolls) from a save, so older runs still load */
 function dropGone(o){if(!o||typeof o!=='object')return;

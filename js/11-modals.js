@@ -31,14 +31,14 @@ async function optionsMenu(fromTitle){
     const tabs=`<div class="opt-tabs" role="tablist">${[['gen','General'],['snd','Sound & Music']].map(([k,l])=>`<button type="button" role="tab" aria-selected="${tab===k}" class="${tab===k?'on':''}" data-m="tab:${k}">${l}</button>`).join('')}</div>`;
     const body=tab==='snd'?`${row('sound','Sound and music',settings.sound)}${row('steps','Walking sounds',settings.steps!==false)}${vol('volMusic','Music volume')}${vol('volAmb','Ambience volume')}${vol('volSfx','Effects volume')}`
       :`${row('anim','Animations',settings.anim)}${row('tips','Tutorial tips',settings.tips)}<div class="opt"><span>Colour scheme</span><button type="button" data-m="theme">${THEMES[settings.theme]||'Tavern'}</button></div>${row('dev','Dev mode (testing)',settings.dev)}<button type="button" data-m="chart">Effective damage chart</button>`;
-    const mp=modal(`<h2>Options</h2>${tabs}${body}<div class="mbtns">${fromTitle?'':'<button type="button" data-m="title">Quit to title</button>'}<button class="go" type="button" data-m="close">Close</button></div>`);
+    const mp=modal(`<h2>Options</h2>${tabs}${body}<div class="mbtns">${fromTitle?'':'<button type="button" data-m="title">Save &amp; quit</button>'}<button class="go" type="button" data-m="close">Close</button></div>`);
     /* volume sliders change as you drag; effects play a blip on release so you can hear the level */
     modalEl.oninput=e=>{const k=e.target.dataset.vol;if(k){settings[k]=+e.target.value;applyVol()}};modalEl.onchange=e=>{const k=e.target.dataset.vol;if(k){saveOpts();if(k==='volSfx')sfx('ding')}};
     const m=await mp;modalEl.oninput=modalEl.onchange=null;
 
     if(m.startsWith('tab:')){tab=m.slice(4);continue}
     if(m==='chart'){await effChart();continue}if(m==='theme'){const ks=Object.keys(THEMES);settings.theme=ks[(ks.indexOf(settings.theme)+1)%ks.length];applyTheme();saveOpts();continue}if(m==='anim')settings.anim=!settings.anim;else if(m==='sound'){settings.sound=!settings.sound;sfx('select');const k=bgmKey;if(bgm)bgm.pause();bgm=null;bgmKey='';music(k);const ak=ambKey;if(amb)amb.pause();amb=null;ambKey='';ambience(ak)}else if(m==='steps'){settings.steps=settings.steps===false;if(settings.steps)stepSfx({cls:''})}else if(m==='tips'){settings.tips=!settings.tips;if(settings.tips)settings.seen=[]}else if(m==='dev'){settings.dev=!settings.dev;if(state)render()}
-    else if(m==='title'){saveGame();document.querySelectorAll('.nmap,.tav,.sheet').forEach(e=>e.hidden=true);titleScreen();return}else return;
+    else if(m==='title'){/* no save here: the last autosave is a safe point (quitting mid-event or mid-enemy-phase would save a half-done state) */document.querySelectorAll('.nmap,.tav,.sheet').forEach(e=>e.hidden=true);titleScreen();return}else return;
     saveOpts();
   }
 }

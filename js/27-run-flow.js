@@ -28,7 +28,9 @@ async function titleScreen(){
     if(m==='opts'){await optionsMenu(true);continue}
     if(m==='records'){await recordsScreen();continue}
     if(m==='hist'){await historyScreen();continue}
-    if(m==='cont'){titleEl.hidden=true;restore(sv);if(run.phase==='map')mapStep();else banner('Player Phase','p');return}
+    if(m==='cont'){titleEl.hidden=true;try{restore(sv)}catch(e){console.error(e);try{localStorage.removeItem(SAVE)}catch(_){}run=null;titleEl.hidden=false;toast('That save couldn’t be loaded');continue}
+      if(run.phase==='map')mapStep();else{regionSound(BATTLE.biome);banner('Player Phase','p')}return}
+    if(sv&&sv.run&&await modal(`<h2>Start a new run?</h2><p>Your run in progress will be lost.</p><div class="mbtns"><button type="button" data-m="no">Back</button><button type="button" class="go" data-m="yes">New Run</button></div>`)!=='yes')continue;
     if(await newRun())return;
   }
 }
