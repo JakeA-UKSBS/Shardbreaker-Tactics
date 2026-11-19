@@ -191,7 +191,7 @@ const ROCK_MAX=7;/* on a 15x15 map */
 /* ACT2_UP: Act 2 monsters (not bosses, who scale on their own) are a little stronger: extra levels, HP, and Str/Mag for whichever they use */
 const ACT2_UP={lv:1,hp:2,atk:1};
 function genBattle(n,kind){
-  const act=run&&run.act||1,B=actBiome(),bossFight=kind==='boss',elite=kind==='elite',town=!bossFight&&!elite&&MAPS['town_'+B.id]&&(run&&run.n||1)>=2&&rand()<.25;
+  const act=run&&run.act||1,B=actBiome(),bossFight=kind==='boss',elite=kind==='elite',town=!bossFight&&!elite&&MAPS['town_'+B.id]&&!!(run&&run.def);/* set from the node (nodeDef in 18-node-map.js) */
   const mk=bossFight?B.bossMap:town?'town_'+B.id:pick(B.maps);let m=MAPS[mk];
   /* tidy the hand-made map: at most ROCK_MAX rocks (boulders ^, sandstone k, crags R).
      What's removed becomes the map's most common ground. */

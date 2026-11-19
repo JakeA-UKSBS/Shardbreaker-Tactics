@@ -190,6 +190,13 @@ const actLen = () =>
 /* difficulty runs on a 10-floor scale whatever the map length */
 const flScale = (n) => Math.round(((n || 1) * 10) / RUN_LEN);
 const NODE_IC = {};
+/* battles from floor 2 on are sometimes defend maps (about 1 in 4, where the region has a town map). Decided by the seed, so the map can show it */
+function nodeDef(r, i) {
+  const N = run.map.rows[r][i];
+  if (N.t !== "battle" || r < 1 || !MAPS["town_" + actBiome().id]) return false;
+  const h = (Math.imul((run.seed | 0) ^ ((run.act || 1) * 7919), 2654435761) ^ Math.imul(r + 1, 40503) ^ Math.imul(i + 1, 97)) >>> 0;
+  return h % 4 === 0;
+}
 function nodeIcon(t) {
   if (t === "boss") return bossIcon();
   return (
@@ -262,7 +269,7 @@ function mapScreen(preview) {
               vis.has(r + "," + i) ? "vis" : "",
               cur ? "cur" : "",
             ].join(" ");
-          return `<button type="button" class="${c}" style="left:${n.x}%;top:${Y(r)}px" data-n="${r},${i}" ${isOk(r, i) ? "" : 'tabindex="-1"'} aria-label="${NODE_N[n.t]}${cur ? " (you are here)" : ""}"><img ${picAttrs(nodeIcon(n.t), n.t === "boss" ? 116 : 24)} alt="">${cur ? `<i class="nflag"><img src="${flagArt()}" alt=""></i>` : ""}</button>`;
+          return `<button type="button" class="${c}" style="left:${n.x}%;top:${Y(r)}px" data-n="${r},${i}" ${isOk(r, i) ? "" : 'tabindex="-1"'} aria-label="${NODE_N[n.t]}${cur ? " (you are here)" : ""}"><img ${picAttrs(nodeIcon(n.t), n.t === "boss" ? 116 : 24)} alt="">${nodeDef(r, i) ? '<span class="nd-def" title="Defend: hold out until the waves stop">DEF</span>' : ""}${cur ? `<i class="nflag"><img src="${flagArt()}" alt=""></i>` : ""}</button>`;
         })
         .join(""),
     ).join("") +
@@ -603,6 +610,7 @@ async function mapStep() {
   (run.path = run.path || []).push(pos);
   run.n = pos.r + 1;
   run.kind = N.t;
+  run.def = nodeDef(pos.r, pos.i);
   if (N.t === "recruit") {
     await recruitNode();
     return mapStep();
