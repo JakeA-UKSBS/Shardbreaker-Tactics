@@ -83,6 +83,7 @@ const ABIL={
   /* Morrigan (Cultist) */
   drainTouch:{n:'Drain Touch',mp:4,mag:1,el:'dark',side:'foe',r:[1,1],dmg:1.2,d:'1.2× magic damage to an adjacent enemy.'},
   hex:{n:'Hex',tfx:'tendrils',mp:5,mag:1,el:'dark',side:'foe',r:[1,3],st:['weak',2],d:'The target is Weak (deals 30% less damage) for 2 turns.'},
+  vortex:{n:'Vortex',tfx:'tendrils',mp:7,mag:1,el:'dark',side:'foe',r:[1,4],shape:'diamond2',aim:'any',dmg:.4,pull:1,d:'A dark whirl up to 4 away: 0.4× magic damage to every enemy within 2 tiles of it, and they are all pulled 1 tile towards the centre.'},
   darkPulse:{n:'Dark Pulse',mp:10,mag:1,el:'dark',side:'self',shape:'burst1',dmg:1,d:'1.0× magic damage to every enemy around her.'},
   /* Corvin (Ice Mage) */
   iceShard:{n:'Ice Shard',mp:4,mag:1,el:'ice',side:'foe',r:[1,3],dmg:1,st:['chill',1],d:'1.0× magic damage up to 3 away, and Slow (−2 Move).'},
@@ -166,7 +167,7 @@ const ABIL={
 const KITS={
   kili:{passive:'eagleEye',mp:0,abil:['aimedShot','pinningArrow','volley']},
   vaar:{passive:'outlander',mp:0,abil:['flurry','leap']},
-  morrigan:{passive:'siphon',mp:24,abil:['drainTouch','hex','darkPulse']},
+  morrigan:{passive:'siphon',mp:24,abil:['drainTouch','hex','vortex','darkPulse']},
   corvin:{passive:'coldSnap',mp:28,abil:['iceShard','frostWave','blizzard','iceShield','frostWall']},
   drecken:{passive:'twinBolt',mp:28,abil:['spark','chainLightning','thunderclap']},
   aldric:{passive:'plate',mp:0,abil:['sunder','valiantThrust','cover']},
@@ -279,6 +280,7 @@ function shapeTiles(u,id,tx,ty){
   else if(sh==='cross'){add(tx,ty);for(const[dx,dy]of DIRS)add(tx+dx,ty+dy)}
   else if(sh==='wall'){const ac=Math.abs(tx-u.x)>=Math.abs(ty-u.y);for(let s=-1;s<=1;s++)add(tx+(ac?0:s),ty+(ac?s:0))}
   else if(sh==='area'){for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++)add(tx+dx,ty+dy)}
+  else if(sh==='diamond2'){for(let dy=-2;dy<=2;dy++)for(let dx=-2;dx<=2;dx++)if(Math.abs(dx)+Math.abs(dy)<=2)add(tx+dx,ty+dy)}
   else{const dx=Math.sign(tx-u.x),dy=Math.sign(ty-u.y),px=-dy,py=dx;
     if(sh==='pierce'){add(u.x+dx,u.y+dy);add(u.x+2*dx,u.y+2*dy)}
     if(sh==='cone')for(let d=1;d<=2;d++)for(let s=-(d-1);s<=d-1;s++)add(u.x+dx*d+px*s,u.y+dy*d+py*s)}
@@ -324,10 +326,13 @@ function chainTo(u,id,t){const a=ABIL[id],out=[];let at=t;for(let i=0;i<a.chain[
 
 /* ---- pushing ---- */
 const canPush=t=>!(t.sz>1)&&!t.boss&&!has(t,'ironBody')&&!hasSt(t,'steady');
+const HAZARD={water:['Splash','water'],mud:['Sunk','water'],lava:['Scorch','fire'],void:['Fall','landing']};
 function pushUnit(u,t,n){
   if(!canPush(t)){pop(t,'Unmoved','miss');return 0}
   let dx=t.x-u.x,dy=t.y-u.y;if(Math.abs(dx)>=Math.abs(dy)){dx=Math.sign(dx);dy=0}else{dy=Math.sign(dy);dx=0}let hurt=0;
   for(let i=0;i<n;i++){const nx=t.x+dx,ny=t.y+dy,o=inB(nx,ny)&&unitAt(nx,ny);
+    /* pushed into water, deep mud, magma or the void: 10 damage (fliers and lava-walkers just move in) */
+    const hz=inB(nx,ny)&&!o&&mcost(t,nx,ny)>=99&&HAZARD[ter(nx,ny).k];if(hz){const d=Math.min(10,t.hp);t.hp-=d;hurt+=d;pop(t,hz[0]+' -'+d,'dmg');sfx(hz[1]);break}
     if(!inB(nx,ny)||mcost(t,nx,ny)>=99||o||hOf(nx,ny)-hOf(t.x,t.y)>jumpOf(t)){const d=Math.min(3,t.hp);t.hp-=d;hurt+=d;pop(t,'Slam -'+d,'dmg');sfx('earth');break}
     const fall=hOf(t.x,t.y)-hOf(nx,ny);t.x=nx;t.y=ny;if(fall>=2){const d=Math.min(2*fall,t.hp);t.hp-=d;hurt+=d;pop(t,'Fall -'+d,'dmg')}}
   return hurt;
@@ -366,6 +371,10 @@ async function useAbility(u,id,tx,ty){
     if(a.stone&&landed&&t.hp>0&&!stImmune(t,'stone')&&rand()<a.stone){t.stone=1;pop(t,'Stone!','crit');sfx('earth');toast(`${t.name} is turned to stone and loses ${t.team==='p'?'their':'its'} next turn`);await sleep(D(200))}
     if(!a.dmg)exp+=10;
   }
+  /* Vortex: the surviving enemies in the area are pulled towards the centre, nearest first */
+  if(a.pull){for(const t of foes.filter(t=>t.hp>0).sort((p,q)=>man(p,{x:tx,y:ty})-man(q,{x:tx,y:ty})))if(t.x!==tx||t.y!==ty)pushUnit({x:2*t.x-tx,y:2*t.y-ty},t,a.pull);render();await sleep(D(250))}
+  /* ice abilities freeze any water they cover for 3 turns: walkable Frozen Lake */
+  if(a.shape&&(a.el==='ice'||/ice|frost/i.test(id))&&freezeWater(shapeTiles(u,id,tx,ty))){sfx('ice');render();await sleep(D(200))}
   /* healing, buffs, cures (casters raise their staff: the swing pose) */
   const posed=allies.length&&u.cast&&!a.dmg;if(posed){mapPose(u,'swing',allies.find(t=>t!==u)||u);await sleep(D(260))}
   for(const t of allies){
@@ -393,7 +402,9 @@ function tumbleSet(u){const s=new Set([key(u.x,u.y)]);for(let dy=-2;dy<=2;dy++)f
 /* a battle starts: full MP, no cooldowns or statuses */
 function abReset(us){for(const u of us){u.mp=mpMax(u);u.cd={};u.st={};delete u.lastEl}}
 /* your phase starts: MP back, cooldowns tick, your buffs fade, burns hurt, stunned units sit out */
-function abPlayerStart(){if(state.ice)for(const k in state.ice)if(--state.ice[k]<=0)delete state.ice[k];for(const u of state.units)if(u.team==='p'){if(mpMax(u))u.mp=Math.min(mpMax(u),(u.mp||0)+MP_REGEN);for(const k in u.cd||{})if(u.cd[k]>0)u.cd[k]--}
+function freezeWater(ts){let n=0;for(const[x,y]of ts)if(TER[MAP[y][x]].k==='water'){(state.frz=state.frz||{})[key(x,y)]=3;n++}return n}
+function abPlayerStart(){if(state.frz)for(const k in state.frz){const[x,y]=k.split(',').map(Number);if(--state.frz[k]<=0){if(unitAt(x,y))state.frz[k]=1;/* stays frozen while someone stands on it */else delete state.frz[k]}}
+if(state.ice)for(const k in state.ice)if(--state.ice[k]<=0)delete state.ice[k];for(const u of state.units)if(u.team==='p'){if(mpMax(u))u.mp=Math.min(mpMax(u),(u.mp||0)+MP_REGEN);for(const k in u.cd||{})if(u.cd[k]>0)u.cd[k]--}
   tickSt('p','start');burnTick('p');for(const u of state.units)if(u.team==='p'&&hasSt(u,'stun')){u.acted=true;pop(u,'Stunned','miss')}}
 
 /* ---- the Abilities menu, aiming and the forecast ---- */
@@ -414,7 +425,7 @@ function abList(u){
 function abForecast(u,id,tx,ty){
   const a=ABIL[id],{foes,allies}=abHits(u,id,tx,ty),rows=[];
   for(const t of foes){let txt='';if(a.dmg){const V=abVs(u,id,t),tot=V.dmg*V.n;txt=`<b>${V.dmg}${abBonus(u,id,V)}${V.n>1?' ×'+V.n:''}</b> dmg · <b>${V.hit}%</b> · ${t.hp}→${Math.max(0,t.hp-tot)} HP${V.eff?' · <span class="effv">Effective</span>':''}`;
-      if(a.chain)txt+=` · jumps to ${chainTo(u,id,t).map(c=>`${c.name} (${abVs(u,id,c,a.chain[1]).dmg})`).join(', ')||'nobody'}`;if(a.push)txt+=canPush(t)?` · push ${a.push}`:' · can’t be pushed'}
+      if(a.chain)txt+=` · jumps to ${chainTo(u,id,t).map(c=>`${c.name} (${abVs(u,id,c,a.chain[1]).dmg})`).join(', ')||'nobody'}`;if(a.push)txt+=canPush(t)?` · push ${a.push}`:' · can’t be pushed';if(a.pull)txt+=canPush(t)?' · pulled in':' · can’t be moved'}
     if(a.st)txt+=`${txt?' · ':''}${STATUS[a.st[0]].n}${a.st[2]?` (${a.st[2]*100}%)`:''}${a.dmg?'':` · <b>${abVs(u,id,t).hit}%</b>`}`;if(!txt)continue;rows.push(`<div class="abf-r"><span class="ec">${t.name}</span>${txt}</div>`)}
   for(const t of allies){let txt='';if(a.heal)txt=`+<b>${healAmt(u,id,t)}</b> HP → ${t.hp+healAmt(u,id,t)}/${t.maxhp}`;if(a.cure){const c=[...stList(t).filter(k=>STATUS[k].bad).map(k=>STATUS[k].n),...(t.psn?['Poison']:[]),...(t.stone?['Stone']:[])];if(c.length)txt+=`${txt?' · ':''}cures ${c.join(', ')}`;else if(!a.heal)txt='nothing to cure'}if(a.give)txt+=`${txt?' · ':''}${STATUS[a.give[0]].n}`;if(a.encore)txt+=t.acted?'acts again this turn':'hasn’t acted yet';if(!txt&&!a.heal)continue;rows.push(`<div class="abf-r"><span class="pc">${t.name}</span>${txt||'–'}</div>`)}
   for(const[k]of a.self||[])rows.push(`<div class="abf-r"><span class="pc">${u.name}</span>${STATUS[k].n}: ${STATUS[k].d}</div>`);

@@ -53,6 +53,7 @@ Object.assign(TER,{
   'P':{n:'Blighted Sapphire',k:'bgem-b',c:2,av:10,df:2},'Y':{n:'Blighted Amethyst',k:'bgem-v',c:2,av:10,df:2},'K':{n:'Crystal Spire',k:'spire',c:99,av:0,df:0}
 });
 texStyle.textContent+=['sandstone','quicksand','snow','deepsnow','agate','ice','cave','cavewall','emerald','ruby','sapphire','scorch','bgem-g','bgem-r','bgem-b','bgem-v','spire'].map(k=>`.t-${k}{background:url(${bioTile2(k)}) 0 0/100% 100%}`).join('');
+texStyle.textContent+=`.tile.frz{background:url(${bioTile2('ice')}) 0 0/100% 100% !important}`;/* water frozen by an ice ability */
 /* fields: see the REGIONS key in 15-regions-monsters.js */
 Object.assign(BIOMES,{
   desert:{n:'Sandstone Desert',bg:'#4a3a24',town:['n','k'],townN:'Oasis Town',d:'Dunes and sandstone ruins under a white sun. Jackals run in packs, and the quicksand swallows the careless.',
@@ -192,7 +193,7 @@ const ROCK_MAX=7;/* on a 15x15 map */
 /* ACT2_UP: Act 2 monsters (not bosses, who scale on their own) are a little stronger: extra levels, HP, and Str/Mag for whichever they use */
 const ACT2_UP={lv:1,hp:2,atk:1};
 function genBattle(n,kind){
-  const act=run&&run.act||1,B=actBiome(),bossFight=kind==='boss',elite=kind==='elite',town=!bossFight&&!elite&&MAPS['town_'+B.id]&&(run&&run.n||1)>=2&&rand()<.25;
+  const act=run&&run.act||1,B=actBiome(),bossFight=kind==='boss',elite=kind==='elite',town=!bossFight&&!elite&&MAPS['town_'+B.id]&&!!(run&&run.def);/* set from the node (nodeDef in 18-node-map.js) */
   const mk=bossFight?B.bossMap:town?'town_'+B.id:pick(B.maps);let m=MAPS[mk];
   /* tidy the hand-made map: at most ROCK_MAX rocks (boulders ^, sandstone k, crags R).
      What's removed becomes the map's most common ground. */
