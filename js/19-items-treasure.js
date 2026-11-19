@@ -4,11 +4,11 @@ const FORGE_MAX=3;
 function ensureIt(k){if(IT[k]||!k.includes('~'))return k;const[b,n]=k.split('~'),B=IT[b],N=+n;IT[k]=Object.assign(clone(B),{n:`${B.n} +${N}`,key:k,base:b,forge:N},B.t==='spirit'?{amt:B.amt+5*N}:{mt:B.mt+2*N,hit:B.hit+5*N});return k}
 function forgeLv(it){return IT[it.k].forge||0}
 function forge(it){const B=IT[it.k],n=(B.forge||0)+1;if(n>FORGE_MAX)return false;it.k=ensureIt((B.base||it.k)+'~'+n);return true}
-const STEEL={blade:'knightlySword',heavy:'cleaver',pole:'steelSpear',bow:'ironwoodBow'};
+const STEEL={blade:'claymore',heavy:'steelHatchet',pole:'steelSpear',bow:'yewGreatbow'};
 /* the Weaponmaster's trade-ups: each weapon line goes to its next tier, keeping the kind of weapon */
-const UPGRADE={wornSword:'knightlySword',knightlySword:'jadeJian',ironSpear:'steelSpear',steelSpear:'jadeSpear',hatchet:'cleaver',cleaver:'jadeAxe',
-  shortBow:'ironwoodBow',ironwoodBow:'jadeBow',longbow:'yewGreatbow',hookedBlade:'moonglassEdge',javelin:'pilum',throwingAxe:'tomahawk',throwingKnives:'steelKnives',crossbow:'arbalest',dirk:'jadeFang',twinDaggers:'jadeFang',stiletto:'jadeFang',
-  claymore:'greatsword',greatsword:'zweihander'};
+const UPGRADE={wornSword:'claymore',ironSpear:'steelSpear',steelSpear:'qiang',hatchet:'steelHatchet',steelHatchet:'reaverAxe',
+  shortBow:'hawkeyeBow',longbow:'yewGreatbow',javelin:'atlatl',throwingAxe:'tomahawk',throwingKnives:'steelKnives',twinDaggers:'jadeFangs',stiletto:'jadeFangs',
+  fireSigil:'flameSigil',frostSigil:'blizzardSigil',claymore:'greatsword',greatsword:'zweihander'};
 /* the next tier of a unit's weapon (keeps any reforging); null if there's nothing better */
 function tierUp(u,it){const B=IT[it.k],up=UPGRADE[B.base||it.k],f=B.forge||0;return up&&canUse(u,up)?(f?ensureIt(up+'~'+f):up):null}
 
@@ -33,7 +33,7 @@ async function stow(u,k){if(u.items.length<5){u.items.push({k,u:IT[k].uses});ret
   if(m==='skip')return false;const n=+m.slice(1),out=u.items[n];u.items.splice(n,1,{k,u:IT[k].uses});toast(`${u.name} leaves the ${IT[out.k].n} behind`);
   if(n===eq){const e=eqIdx(u);if(e>=0)toast(`${u.name} equips the ${IT[u.items[e].k].n}`)}return true}
 /* the best steel weapon for a unit's weapon type (the elite's reward) */
-const steelFor=u=>{if(canUse(u,'zweihander')&&!canUse(u,'knightlySword'))return'zweihander';if(canUse(u,'steelKnives')&&!canUse(u,'knightlySword'))return'steelKnives';for(const t of CLS[u.cls].w)if(STEEL[t]&&canUse(u,STEEL[t]))return STEEL[t];return null};
+const steelFor=u=>{if(canUse(u,'zweihander')&&!canUse(u,'claymore'))return'zweihander';if(canUse(u,'steelKnives')&&!canUse(u,'claymore'))return'steelKnives';for(const t of CLS[u.cls].w)if(STEEL[t]&&canUse(u,STEEL[t]))return STEEL[t];return null};
 /* the steel weapons by name, for offers (only the spear has "Steel" in its name) */
 const steelList=()=>[...Object.entries(STEEL).map(([t,k])=>`${IT[k].n} (${TN[t]})`),`${IT.steelKnives.n} (rogues)`,`${IT.zweihander.n} (Zwei)`].join(', ');
 /* does anyone in the squad already carry this item? (weapon offers skip these, so loot isn't a duplicate) */
@@ -42,7 +42,7 @@ const weaponOf=u=>u.items.find(it=>(isWpn(it.k)||IT[it.k].t==='spirit')&&canUse(
 
 /* ---- treasure: the vault always holds a relic (an item only if every common/uncommon relic is already owned) ---- */
 async function treasureNode(){
-  const pool=['knightlySword','cleaver','steelSpear','ironwoodBow','moonglassEdge','greatsword','claymore','zweihander','flamberge','javelin','javelin','throwingAxe','throwingAxe','crossbow','stormSigil','crookStaff','runeStaff','dawnStaff','salve','barbedSpear','reaverAxe','hawkeyeBow','warHammer','huntingSpear','giantslayer','holySword','stiletto','pilum','tomahawk','steelKnives','galeSword','arbalest','leatherArmour','chainmail','wardingCloak','travellersBoots','ironGauntlets'];
+  const pool=['claymore','steelHatchet','steelSpear','yewGreatbow','jadeJian','greatsword','claymore','zweihander','flamberge','javelin','javelin','throwingAxe','throwingAxe','stormSigil','runeCrook','salve','qiang','reaverAxe','hawkeyeBow','warHammer','huntingSpear','giantslayer','holySword','stiletto','tomahawk','steelKnives','galeSword','leatherArmour','chainmail','wardingCloak','travellersBoots','ironGauntlets'];
   const mk=()=>{const rp=relicPool(['c','u']);if(rp.length)return'relic:'+pick(rp);return pick(pool.filter(k=>!isWpn(k)&&IT[k].t!=='spirit'||run.roster.some(u=>canUse(u,k))&&!squadHas(k)))};
   let k=mk();
   for(;;){
