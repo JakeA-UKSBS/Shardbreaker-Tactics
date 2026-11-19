@@ -87,7 +87,7 @@
 .tav{position:fixed;inset:0;z-index:57;display:flex;flex-direction:column;align-items:center;gap:10px;overflow:auto;background:#140d0a;padding-block:max(12px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-bottom,0px));padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px))}
 .tav{--tvw:min(100%,1280px,calc((100vh - 300px)*16/9))}/* leaves room for the dialogue box (name, a line of text, two rows of options) */
 .tav.sg{--tvw:min(100vw - 24px,calc((100vh - 190px)*16/9));gap:8px;padding-block:8px;justify-content:center}/* Ithren's tent: as big as the screen allows, with just room for his one-line box underneath (trial) */
-.tav.ev,.tav.mus{--tvw:min(100vw - 24px,calc((100vh - var(--fitbox,190px))*16/9));gap:8px;padding-block:8px;justify-content:center}/* events: the same size as the tent (scenes drawn at the tent's size) */
+.tav.ev{--tvw:min(100vw - 24px,calc((100vh - var(--fitbox,190px))*16/9));gap:8px;padding-block:8px;justify-content:center}/* events: the same size as the tent (scenes drawn at the tent's size) */
 .tv-scene{box-sizing:border-box;position:relative;width:max(min(100%,760px),var(--tvw));aspect-ratio:16/9;flex:none;border:2px solid #5a3a22;border-radius:8px;overflow:hidden}
 .tv-scene img{position:absolute;image-rendering:pixelated}
 .tv-bg{inset:0;width:100%;height:100%}
@@ -165,3 +165,6 @@
 .sk-opt{display:flex;flex-direction:column;align-items:flex-start;gap:6px;text-align:left;padding:12px;border-radius:8px;background:#2a1c14;border:1px solid #7a5230;cursor:pointer;min-height:96px}
 .sk-opt b{font-family:var(--display);font-size:16px;color:var(--gold)}.sk-opt span{font-size:13px;line-height:1.35;opacity:.9}
 .sk-opt:hover,.sk-opt:focus-visible{border-color:var(--gold);background:#3a281c}
+
+/* the Crossroads: the sage tent's size; its box can sit over the bottom of the scene */
+.tav.mus{--tvw:min(100vw - 24px,calc((100vh - 190px)*16/9));gap:8px;padding-block:8px;justify-content:flex-start}.tav.mus .tv-box{position:relative;z-index:2}
