@@ -4,9 +4,9 @@ const FORGE_MAX=3;
 function ensureIt(k){if(IT[k]||!k.includes('~'))return k;const[b,n]=k.split('~'),B=IT[b],N=+n;IT[k]=Object.assign(clone(B),{n:`${B.n} +${N}`,key:k,base:b,forge:N},B.t==='spirit'?{amt:B.amt+5*N}:{mt:B.mt+2*N,hit:B.hit+5*N});return k}
 function forgeLv(it){return IT[it.k].forge||0}
 function forge(it){const B=IT[it.k],n=(B.forge||0)+1;if(n>FORGE_MAX)return false;it.k=ensureIt((B.base||it.k)+'~'+n);return true}
-const STEEL={blade:'claymore',heavy:'steelHatchet',pole:'steelSpear',bow:'yewGreatbow'};
+const STEEL={blade:'jadeJian',dagger:'steelKnives',heavy:'steelHatchet',pole:'steelSpear',bow:'yewGreatbow'};
 /* the Weaponmaster's trade-ups: each weapon line goes to its next tier, keeping the kind of weapon */
-const UPGRADE={wornSword:'claymore',ironSpear:'steelSpear',steelSpear:'qiang',hatchet:'steelHatchet',steelHatchet:'reaverAxe',
+const UPGRADE={wornSword:'jadeJian',ironSpear:'steelSpear',steelSpear:'qiang',hatchet:'steelHatchet',steelHatchet:'reaverAxe',
   shortBow:'hawkeyeBow',longbow:'yewGreatbow',javelin:'atlatl',throwingAxe:'tomahawk',throwingKnives:'steelKnives',twinDaggers:'jadeFangs',stiletto:'jadeFangs',
   fireSigil:'flameSigil',frostSigil:'blizzardSigil',claymore:'greatsword',greatsword:'zweihander'};
 /* the next tier of a unit's weapon (keeps any reforging); null if there's nothing better */
@@ -33,9 +33,9 @@ async function stow(u,k){if(u.items.length<5){u.items.push({k,u:IT[k].uses});ret
   if(m==='skip')return false;const n=+m.slice(1),out=u.items[n];u.items.splice(n,1,{k,u:IT[k].uses});toast(`${u.name} leaves the ${IT[out.k].n} behind`);
   if(n===eq){const e=eqIdx(u);if(e>=0)toast(`${u.name} equips the ${IT[u.items[e].k].n}`)}return true}
 /* the best steel weapon for a unit's weapon type (the elite's reward) */
-const steelFor=u=>{if(canUse(u,'zweihander')&&!canUse(u,'claymore'))return'zweihander';if(canUse(u,'steelKnives')&&!canUse(u,'claymore'))return'steelKnives';for(const t of CLS[u.cls].w)if(STEEL[t]&&canUse(u,STEEL[t]))return STEEL[t];return null};
+const steelFor=u=>{if(canUse(u,'zweihander')&&!canUse(u,'jadeJian'))return'zweihander';/* Zwei: two-handed swords only */for(const t of CLS[u.cls].w)if(STEEL[t]&&canUse(u,STEEL[t]))return STEEL[t];return null};
 /* the steel weapons by name, for offers (only the spear has "Steel" in its name) */
-const steelList=()=>[...Object.entries(STEEL).map(([t,k])=>`${IT[k].n} (${TN[t]})`),`${IT.steelKnives.n} (rogues)`,`${IT.zweihander.n} (Zwei)`].join(', ');
+const steelList=()=>[...Object.entries(STEEL).map(([t,k])=>`${IT[k].n} (${TN[t]})`),`${IT.zweihander.n} (Zwei)`].join(', ');
 /* does anyone in the squad already carry this item? (weapon offers skip these, so loot isn't a duplicate) */
 const squadHas=k=>!!run&&(run.roster||[]).some(u=>u.items.some(it=>it.k===k));
 const weaponOf=u=>u.items.find(it=>(isWpn(it.k)||IT[it.k].t==='spirit')&&canUse(u,it.k));

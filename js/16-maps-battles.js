@@ -16,7 +16,6 @@ Object.assign(CLS,{
 /* elemental resistances (half damage): the monsters 5e would call immune */
 for(const[k,e]of Object.entries({HellHound:'fire',MagmaDragon:'fire',FireSprite:'fire',BoulderGolem:'fire',FrostWolf:'ice',IceWorm:'ice',Yeti:'ice'}))if(CLS[k])CLS[k].res=e;
 IT.crystalBall={n:'Crystal Ball',t:'item',kind:'orb',uses:1,key:'crystalBall'};
-IT.frostBreath={n:'Frost Breath',t:'art',kind:'talisman',el:'water',mt:9,hit:80,crit:0,r:[1,2],uses:99,mag:true,key:'frostBreath'};
 IT.crystalShards={n:'Crystal Shards',t:'art',kind:'talisman',el:'earth',mt:7,hit:80,crit:10,r:[1,2],uses:99,mag:true,key:'crystalShards'};
 /* fields: see the ENEMY STATS key in 01-data.js (b/g order: HP, Str, Mag, Skl, Spd, Lck, Def, Res) */
 Object.assign(FOE,{

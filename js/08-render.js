@@ -103,7 +103,7 @@ function itemRows(u,btn){
 }
 /* enemy card: its types, and what it's weak to or resists */
 const TAG_BEATEN={armoured:'Hammers',beast:'Spears, Bows',colossal:'Giantslayer',infernal:'Light',plant:'Fire',ice:'Fire',ooze:'Lightning',scaled:'Ice'};
-const EL_N={fire:'Fire',ice:'Ice',lightning:'Lightning',light:'Light',dark:'Dark',nature:'Nature',water:'Water'};
+const EL_N={fire:'Fire',ice:'Ice',lightning:'Lightning',light:'Light',dark:'Dark'};
 function monTypes(u){if(u.team!=='e')return'';const tg=tagsOf(u),wk=[...new Set([...tg.map(t=>TAG_BEATEN[t]),...weakOf(u).map(e=>EL_N[e]||e)])].filter(Boolean),rs=resOf(u).map(e=>EL_N[e]||e);
   if(!tg.length&&!wk.length&&!rs.length)return'';
   return`<div class="eq mtypes">${tg.map(t=>`<span class="mty"><img src="${tagArt(t)}" alt="">${TAGS[t].n}</span>`).join('')}${wk.length?`<span class="mwk">Weak: ${wk.join(', ')}</span>`:''}${rs.length?`<span class="mrs">Resists: ${rs.join(', ')} (½)</span>`:''}</div>`}
@@ -126,7 +126,7 @@ function card(u){
 }
 
 /* ---- unit sheet (two pages, cycles through the same team) ---- */
-const TN={blade:'Blade',heavy:'Heavy',pole:'Polearm',bow:'Bow',art:'Sigil',spirit:'Staff',item:'Item'};
+const TN={blade:'Blade',dagger:'Dagger',heavy:'Heavy',pole:'Polearm',bow:'Bow',art:'Sigil',spirit:'Staff',item:'Item'};
 let sheetU=null,sheetPg=0,sheetIt=null;
 
 /* ==================================================================
@@ -177,7 +177,7 @@ function drawSheet(){
     /* immunities: can't be pushed (bosses, big monsters, Iron Body, Steady), Stone, Root */
     const imm=[...(canPush(u)?[]:['Knockback']),...(stImmune(u,'stone')?['Stone']:[]),...(stImmune(u,'root')?['Root']:[])];
     pg=`<div class="sgrid">${shown(u).filter(s=>s!=='hp').map(s=>bar(SL[s],s==='lck'?LK(u):u[s],SB[s]||0)).join('')}</div>
-    <div class="sinfo"><div><span class="sl">Move</span><b>${u.mov+SB.mov}${upChip(SB.mov)}</b></div><div><span class="sl">Terrain</span><b>${terrText(t)}</b></div><div class="wide"><span class="sl">Weapons</span><span class="wts">${wt}</span></div>${imm.length?`<div class="wide"><span class="sl">Immune</span><b>${imm.join(', ')}</b></div>`:''}${CLS[u.cls].weak?`<div class="wide"><span class="sl">Weak to</span><b>${weakOf(u).map(e=>({fire:'Fire',ice:'Ice',water:'Water',lightning:'Lightning',light:'Light',dark:'Dark',nature:'Nature'})[e]||e).join(', ')} (×2 Mt)</b></div>`:''}${resOf(u).length?`<div class="wide"><span class="sl">Resists</span><b>${resOf(u).map(e=>({fire:'Fire',ice:'Ice',lightning:'Lightning',light:'Light',dark:'Dark',nature:'Nature'})[e]||e).join(', ')} (½ damage)</b></div>`:''}${stChips(u)?`<div class="wide"><span class="sl">Status</span>${stChips(u)}</div>`:''}</div>
+    <div class="sinfo"><div><span class="sl">Move</span><b>${u.mov+SB.mov}${upChip(SB.mov)}</b></div><div><span class="sl">Terrain</span><b>${terrText(t)}</b></div><div class="wide"><span class="sl">Weapons</span><span class="wts">${wt}</span></div>${imm.length?`<div class="wide"><span class="sl">Immune</span><b>${imm.join(', ')}</b></div>`:''}${CLS[u.cls].weak?`<div class="wide"><span class="sl">Weak to</span><b>${weakOf(u).map(e=>({fire:'Fire',ice:'Ice',lightning:'Lightning',light:'Light',dark:'Dark'})[e]||e).join(', ')} (×2 Mt)</b></div>`:''}${resOf(u).length?`<div class="wide"><span class="sl">Resists</span><b>${resOf(u).map(e=>({fire:'Fire',ice:'Ice',lightning:'Lightning',light:'Light',dark:'Dark',nature:'Nature'})[e]||e).join(', ')} (½ damage)</b></div>`:''}${stChips(u)?`<div class="wide"><span class="sl">Status</span>${stChips(u)}</div>`:''}</div>
     ${skillBlock(u)}${monSheet(u)}`;
   }else{
     const atk=w?(w.mag?u.mag:u.str)+w.mt:'–',hit=w?w.hit+u.skl*2+Math.floor(LK(u)/2):'–',crit=w?(w.crit||0)+(CLS[u.cls].crit||0)+Math.floor(u.skl/2):'–';

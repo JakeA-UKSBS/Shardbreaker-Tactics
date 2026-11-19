@@ -147,7 +147,7 @@ const ABIL={
   layOnHands:{n:'Lay on Hands',cd:3,side:'ally',r:[0,1],heal:.8,cure:1,d:'Heals an adjacent ally (or herself) 0.8× (Mag + 5) and cures their bad statuses.'},
   auraOfLight:{n:'Aura of Light',cd:4,side:'self',shape:'burst1',give:['shell',2],d:'She and allies around her get +2 Def and +2 Res for 2 turns.'},
   /* Seren (Summoner) */
-  spiritBolt:{n:'Spirit Bolt',mp:4,mag:1,el:'nature',side:'foe',r:[1,3],dmg:1,d:'1.0× magic damage up to 3 away.'},
+  spiritBolt:{n:'Spirit Bolt',mp:4,mag:1,side:'foe',r:[1,3],dmg:1,d:'1.0× magic damage up to 3 away.'},
   bondMend:{n:'Bond Mend',mp:4,side:'ally',r:[0,3],heal:1,d:'Heal an ally (or her familiar) up to 3 away: 1.0× (Mag + 5).'},
   spiritWard:{n:'Spirit Ward',mp:5,side:'ally',r:[0,3],give:['shell',2],d:'An ally up to 3 away gets +2 Def and +2 Res for 2 turns.'},
   /* Zwei (Mercenary) */
