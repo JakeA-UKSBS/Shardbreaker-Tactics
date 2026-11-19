@@ -67,9 +67,5 @@ IT.talons={n:'Talons',t:'blade',kind:'claw',mt:4,hit:90,crit:5,r:[1,1],uses:99,k
 Object.assign(FOE,{
   Wolf:{b:[15,5,0,3,7,1,2,0],g:[.55,.35,0,.3,.45,.1,.15,.05],items:['fangs']}
 });
-function monLook(c){
-  if(MONLOOK[c])return MONLOOK[c]();
-  return clone((FOE[c]&&FOE[c].look)||{});/* bosses with hand-drawn art have no look */
-}
-function mkMon(c,lv){const u=foe(c,lv,0,0);u.look=monLook(c);/* monsters move 1 less than their class (4+ only), so they rarely reach you on turn 1 */if(u.mov>=4)u.mov--;
+function mkMon(c,lv){const u=foe(c,lv,0,0);/* monsters move 1 less than their class (4+ only), so they rarely reach you on turn 1 */if(u.mov>=4)u.mov--;
   return u}

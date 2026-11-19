@@ -155,8 +155,8 @@ const PROMO_LV=5;
 /* ENEMY STATS, keyed by class id (must also exist in CLS):
    b = base stats at level 1, g = growth per level (a fixed amount, not a % chance), both in stat order [HP, Str, Mag, Skl, Spd, Lck, Def, Res].
    A foe's stat = b + floor(g × (level − 1)), see foe() in 02-state-rng.js.
-   items = weapons/attacks it carries (keys in IT), pic = portrait art key, look = sprite options (colours are hex: skin, eye, hair, cloth, wing, shell...).
-   Monsters with an entry in MONLOOK get a random look from there instead. */
+   items = weapons/attacks it carries (keys in IT), pic = portrait art key, look = optional flags (spirit: the summon glow).
+   Monster art is all PNG now (art/monsters, art/bosses). */
 const FOE={};
 
 /* BATTLE: the current battle (made by genBattle) */
