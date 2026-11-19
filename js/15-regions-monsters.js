@@ -29,10 +29,13 @@ Object.assign(CLS,{
   CrystalHeart:{n:'Crystal Heart',w:['art'],body:'crystal',mov:0},
   /* the Heart's own creatures (Act 3) */
   Shardling:{n:'Shardling',w:['blade'],body:'shardling',mov:5},Prism:{n:'Prism',w:['art'],body:'prism',mov:4,fly:true},CrystalSentinel:{n:'Crystal Sentinel',w:['heavy'],body:'sentinel',mov:3},
+  /* Sobek's Mire */
+  Lamia:{n:'Lamia',w:['art'],body:'serpent',mov:5,wade:true,weak:'ice'},
   BogLurker:{n:'Bog Lurker',w:['blade'],body:'gator',mov:4,wade:true},BlightedTreant:{n:'Blighted Treant',w:['heavy'],body:'golem',mov:3}
 });
 /* fields: see the ENEMY STATS key in 01-data.js (b/g order: HP, Str, Mag, Skl, Spd, Lck, Def, Res) */
 Object.assign(FOE,{
+  Lamia:{b:[18,0,5,4,4,1,3,4],g:[.6,0,.4,.3,.3,.1,.15,.3],items:['poisonSpit']},
   MudMonster:{b:[23,6,0,2,1,0,5,0],g:[.9,.4,0,.2,.1,0,.3,0],items:['slam'],look:{}},
   BlightedStag:{b:[17,6,0,5,8,2,2,2],g:[.6,.4,0,.35,.45,.15,.1,.15],items:['antlers'],look:{}},
   BoulderGolem:{b:[24,7,0,2,1,0,10,0],g:[.8,.4,0,.2,.05,0,.4,0],items:['slam'],look:{}},

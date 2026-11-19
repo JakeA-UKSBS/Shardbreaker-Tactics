@@ -2,8 +2,6 @@
 /* ---- new regions: Sandstone Desert, Frostveil Reaches, Gemstone Caverns ---- */
 /* fields: see the CLASSES key in 01-data.js */
 Object.assign(CLS,{
-  /* desert (the Lamia also turns up in Sobek's Mire) */
-  Lamia:{n:'Lamia',w:['art'],body:'serpent',mov:5,wade:true,weak:'ice'},
   SandWorm:{n:'Sand Worm',w:['heavy'],body:'worm',mov:4,wade:true},SandstoneGolem:{n:'Sandstone Golem',w:['heavy'],body:'golem',mov:4},
   PyriteColossus:{n:'Pyrite Colossus',w:['heavy'],body:'cubes',mov:0},
   FrostWolf:{n:'Frost Wolf',w:['blade'],body:'beast',mov:6,wade:true},IceWorm:{n:'Ice Worm',w:['heavy'],body:'worm',mov:4,wade:true,weak:'fire'},
@@ -23,7 +21,6 @@ IT.frostBreath={n:'Frost Breath',t:'art',kind:'talisman',el:'water',mt:9,hit:80,
 IT.crystalShards={n:'Crystal Shards',t:'art',kind:'talisman',el:'earth',mt:7,hit:80,crit:10,r:[1,2],uses:99,mag:true,key:'crystalShards'};
 /* fields: see the ENEMY STATS key in 01-data.js (b/g order: HP, Str, Mag, Skl, Spd, Lck, Def, Res) */
 Object.assign(FOE,{
-  Lamia:{b:[18,0,5,4,4,1,3,4],g:[.6,0,.4,.3,.3,.1,.15,.3],items:['poisonSpit']},
   SandWorm:{b:[20,6,0,4,4,1,4,1],g:[.7,.4,0,.3,.25,.1,.2,.05],items:['bite'],look:{}},
   SandstoneGolem:{b:[24,7,0,2,2,0,9,1],g:[.8,.4,0,.2,.1,0,.35,.05],items:['slam'],look:{}},
   FrostWolf:{b:[16,5,0,4,7,1,2,2],g:[.55,.35,0,.3,.45,.1,.15,.15],items:['fangs']},
@@ -55,9 +52,9 @@ texStyle.textContent+=['sandstone','quicksand','snow','deepsnow','agate','ice','
 texStyle.textContent+=`.tile.frz{background:url(${bioTile2('ice')}) 0 0/100% 100% !important}`;/* water frozen by an ice ability */
 /* fields: see the REGIONS key in 15-regions-monsters.js */
 Object.assign(BIOMES,{
-  desert:{n:'Sandstone Desert',bg:'#4a3a24',town:['n','k'],townN:'Oasis Town',d:'Dunes and sandstone ruins under a white sun. Lamias lurk in the ruins, and the quicksand swallows the careless.',
+  desert:{n:'Sandstone Desert',bg:'#4a3a24',town:['n','k'],townN:'Oasis Town',d:'Dunes and sandstone ruins under a white sun. Sand worms hunt beneath the dunes, and the quicksand swallows the careless.',
     tip:['desert','Quicksand','A unit that starts its turn in quicksand has 1 less Move. Sandstone rocks block the way.'],
-    maps:['dunes','oasis','canyon'],bossMap:'sunTemple',pool:[['Lamia',4],['SandWorm',3,2],['SandstoneGolem',2,4]],elitePool:[['SandstoneGolem',3],['Lamia',2],['SandWorm',2]],
+    maps:['dunes','oasis','canyon'],bossMap:'sunTemple',pool:[['SandWorm',4],['SandstoneGolem',2,4]],elitePool:[['SandstoneGolem',3],['SandWorm',2]],
     boss:{name:'The Pyrite Colossus',cls:'PyriteColossus',mov:3,s:[42,13,0,5,3,2,12,7],items:['slam'],skill:'steadfast',look:{body:'#c9a83a',eye:'#fff2b0',crysAt:[{core:[14,19],col:'#3ad87a'}]}}},
   snow:{n:'Frostveil Reaches',bg:'#2a3a4e',town:['o','a'],townN:'Hill Village',d:'Snowfields studded with blue agate. Frost wolves hunt the drifts, and ice worms tunnel beneath them.',
     tip:['snow','Deep snow','A unit that starts its turn in deep snow has 1 less Move (snow creatures ignore it). Frozen lakes give −10 Avoid; blue agate gives +10 Avoid and +2 Def.'],
