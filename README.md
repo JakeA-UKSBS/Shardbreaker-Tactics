@@ -38,7 +38,6 @@ Battle	47 36
 Event	31	42
 Camp	12 12
 Elite	10 10
-*changing to be footsteps most likely, and testing whether tavern being out of this loop helps.
 
 
 
@@ -63,12 +62,6 @@ Elite	10 10
 
 ## bosses
 - Region bosses are 2×2 (`u.sz=2`, x/y is the top-left). `man()` measures between footprints and `unitAt()` checks every cell, so movement, range, the danger map and the AI all handle them. Their sprites are 64×64: hand-drawn in `BIG` 
-
-## monsters
-- Monsters: `Wolf`, `Lamia` in `CLS`/`FOE`, looks from `monLook()`. Wolves use the `beast` body in `fig()`.
-- `MAPS`: battle maps, grouped by region. `genBattle()` picks a map and enemies from the act's region. Region terrain letters are listed at the top of the REGIONS section; tile art is `bioTile()`.
-- Region monster sprites are bodies in `fig()` (`mud`, `gator`, `golem`, `flame`, `dragon`, `storm`, `eye`), with looks from `MONLOOK`.
-- Reinforcements (`def.waves`) are plain data, `{turn:[{c,lv,x,y,ifBoss}]}`, so they survive a save.
 
 
 ## calcs
