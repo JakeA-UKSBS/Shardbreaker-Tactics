@@ -153,6 +153,7 @@ A hospice nun who has sat with too many dying soldiers. Calm, with gallows humou
 - **Ascends into:** Saint.
 - **Look:** white gown and shawl, gold staff.
 - **Passive: Last Light.** Her heals restore 50% more on allies below half HP.
+- **Smite** (single enemy, range 2 · 3 MP): 0.6× Mag light damage. Placeholder animation.
 - **Mend** (single ally, range 3 · 4 MP): heals 1.2× Mag.
 - **Purify** (single ally, range 3 · 3 MP): cures every bad status, Poison and Stone included.
 - **Circle of Rest** (cross · 8 MP): heals 0.8× Mag and cures statuses.
