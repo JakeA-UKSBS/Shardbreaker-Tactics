@@ -83,7 +83,7 @@ A poacher's son who has never missed a meal or a deer. Cheeky, and the one who c
 - **Look:** green leathers, feather headdress, longbow.
 - **Passive: Clear Shot.** Ignores cover: her target gets no Avoid or Def from the terrain it stands on.
 - **Aimed Shot** (single, range 2–5 · CD 2): 1.5× Str, as accurate as a normal attack.
-- **Pinning Arrow** (single · CD 3): 0.8× Str and Root.
+- **Pinning Arrow** (single · CD 3): 0.8× Str, and the target can’t move for 2 turns (Root).
 - **Volley** (area r1 at range 3–5 · CD 4): 0.7× Str to everything in the area.
 
 ### Vaar: Brawler
@@ -92,7 +92,8 @@ A poacher's son who has never missed a meal or a deer. Cheeky, and the one who c
 A village blacksmith from the northern fjords who fights barehanded because he won't take a weapon to war. Gentle giant.
 - **Ascends into:** Berserker.
 - **Look:** Nordic axeman, blue tattoos, earthy browns; a big two-headed axe over his shoulder as a Berserker.
-- **Passive: Iron Body.** Can't be pushed or pulled.
+- **Passive: Outlander.** +1 Skl and +1 Spd while no ally is next to him.
+- **Shove** (single, adjacent · CD 2): 0.8× Str and push 1. Into a wall or unit: 3 more damage; into water, mud, magma or the void: 10.
 - **Flurry** (single, adjacent · CD 3): 3 hits of 0.5× Str.
 - **Leap** (tile, range 3, ignores height · CD 4): lands with 1.2× Str in area r1.
 
@@ -264,10 +265,10 @@ A hot-headed rider from a border garrison that fell to crystallised beasts. Ride
 A wandering swordsman from a mountain temple, working off his bar tab. Quiet, and very fast.
 - **Ascends into:** Swordmaster.
 - **Look:** blue Taoist robes, hair in a bun, sword held low; wristguards and lapels as a Swordmaster.
-- **Passive: Flowing Blade.** +15 Avoid on the turn after he attacks.
-- **Draw Cut** (single, adjacent · CD 2): 1.3× Str; doubled crit chance if he hasn’t been hit this fight.
-- **Crescent** (arc · CD 3): 0.9× Str.
-- **Step Through** (2 tiles straight through an enemy · CD 3): passes through and strikes it for 1.0× Str.
+- **Passive: Iaido.** +10 Crit on the first strike of a fight he starts.
+- **Asura Slash** (single, range 1–2 · CD 3): dashes to the enemy and cuts for 1.1× Str.
+- **Flowing Blade** (single, adjacent · CD 2): 3 cuts of 0.6× Str.
+- **Counter Stance** (self · CD 3): Guard, and his counterattacks deal 1.3×, until your next turn.
 
 ### Klaus: Pyromancer
 ![Klaus](visuals/cast/klaus.png)

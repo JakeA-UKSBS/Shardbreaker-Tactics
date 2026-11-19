@@ -73,9 +73,10 @@ Object.assign(SKILLS,{
 const ABIL={
   /* Kili (Archer) */
   aimedShot:{n:'Aimed Shot',cd:2,side:'foe',r:[2,5],dmg:1.5,sure:1,d:'A careful shot from range 2–5: 1.5× damage, and it never misses.'},
-  pinningArrow:{n:'Pinning Arrow',cd:3,side:'foe',r:'wpn',dmg:.8,st:['root',1],d:'0.8× damage, and the target is Rooted (can’t move) next turn.'},
+  pinningArrow:{n:'Pinning Arrow',cd:3,side:'foe',r:'wpn',dmg:.8,st:['root',2],d:'0.8× damage, and the target is Rooted (can’t move) for 2 turns.'},
   volley:{n:'Volley',cd:4,side:'foe',r:[3,5],shape:'area',aim:'any',dmg:.7,d:'Arrows rain on a 3×3 area 3–5 tiles away: 0.7× damage to every enemy in it.'},
   /* Vaar (Brawler) */
+  shove:{n:'Shove',cd:2,side:'foe',r:[1,1],dmg:.8,push:1,d:'0.8× damage and push 1. Into a wall or unit: 3 more; into water, mud, magma or the void: 10.'},
   palmStrike:{n:'Palm Strike',cd:1,side:'foe',r:[1,1],dmg:1,push:2,d:'1.0× damage and push 2. Slamming into a wall or unit hurts more; falling off a ledge hurts too.'},
   flurry:{n:'Flurry',cd:3,side:'foe',r:[1,1],dmg:.5,hits:3,d:'3 quick strikes of 0.5×.'},
   leap:{n:'Leap',cd:4,side:'tile',r:[1,3],shape:'area',dmg:1.2,d:'Leap to an empty tile up to 3 away, ignoring height, and slam down: 1.2× damage to every enemy around the landing.'},
@@ -138,8 +139,8 @@ const ABIL={
   markPrey:{n:'Mark Prey',cd:2,side:'foe',r:'wpn',dmg:.8,st:['sunder',2],d:'0.8× damage, and the target has −3 Def for 2 turns.'},
   rideOn:{n:'Ride On',cd:2,side:'self',tumble:1,free:1,d:'Move up to 2 more tiles, ignoring height. Doesn’t use her action.'},
   /* Jun (Swordsman) */
-  flashStep:{n:'Flash Step',cd:3,side:'foe',r:[2,3],dmg:1.1,charge:1,d:'Dashes to an enemy 2–3 tiles away and cuts: 1.1× damage.'},
-  twinSlash:{n:'Twin Slash',cd:2,side:'foe',r:[1,1],dmg:.7,hits:2,d:'Two cuts of 0.7×.'},
+  flashStep:{n:'Asura Slash',cd:3,side:'foe',r:[1,2],dmg:1.1,charge:1,d:'Dashes to an enemy up to 2 tiles away and cuts: 1.1× damage.'},
+  twinSlash:{n:'Flowing Blade',cd:2,side:'foe',r:[1,1],dmg:.6,hits:3,d:'Three flowing cuts of 0.6×.'},
   counterStance:{n:'Counter Stance',cd:3,side:'self',self:[['guard',1],['shieldUp',1]],d:'Guard (30% less damage), and his counterattacks deal 1.3×, until your next turn.'},
   /* Celestine (Paladin) */
   radiantThrust:{n:'Radiant Thrust',cd:2,side:'foe',r:[1,1],dmg:1.2,st:['blind',1],d:'1.2× damage, and the target is Blinded (−20 Hit).'},
@@ -161,7 +162,7 @@ const ABIL={
 /* the kits: passive, MP pool (spellcasters) and abilities */
 const KITS={
   kili:{passive:'clearShot',mp:0,abil:['aimedShot','pinningArrow','volley']},
-  vaar:{passive:'outlander',mp:0,abil:['flurry','leap']},
+  vaar:{passive:'outlander',mp:0,abil:['shove','flurry','leap']},
   morrigan:{passive:'siphon',mp:24,abil:['drainTouch','hex','vortex','darkPulse']},
   corvin:{passive:'coldSnap',mp:28,abil:['iceShard','frostWave','blizzard','iceShield','frostWall']},
   drecken:{passive:'twinBolt',mp:28,abil:['spark','chainLightning','thunderclap']},
