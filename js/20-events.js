@@ -68,7 +68,6 @@ function eventScene(prop){
   if(prop==='outcrop'){p.poly([[0,90],[0,58],[40,52],[70,56],[96,60],[96,90]],ST1);p.poly([[0,58],[40,52],[70,56],[96,60],[94,62],[60,60],[20,62],[0,64]],ST2);
     for(const[x,y]of[[120,70],[136,64],[148,72]])p.ell(x,y,8,4,shade(gr,.8));p.ell(36,50,3,2,'#c9a46a');S(28,58,4,2,ST3)}
   if(prop==='tomb'){S(52,34,56,34,ST1);S(48,30,64,6,ST2);S(44,26,72,4,ST3);S(66,40,28,28,JD2);S(68,42,24,26,JD);p.line(80,42,80,68,JD2);p.ell(80,52,3,3,'#e9fff5');for(const x of[50,106])S(x,36,4,32,ST2)}
-  if(prop==='stormaltar'){p.ell(80,14,40,9,'#2a2a3a');p.ell(60,18,20,6,'#3a3a4a');p.ell(104,16,22,6,'#3a3a4a');zig(82,22,50);S(64,52,32,14,'#2a2630');S(60,48,40,5,'#3a3640');p.ell(80,46,5,3,YL);p.ell(80,46,2,1.5,'#ffffff')}
   if(prop==='cache'){S(46,50,22,18,WD);S(46,50,22,2,WD2);S(72,54,20,14,WD2);S(96,44,24,24,WD);S(96,44,24,2,WD2);
     for(const[x,y]of[[50,56],[100,52]])S(x,y,12,3,'#efe6cf');for(let y=30;y<=44;y++)p.set(104+Math.round(3*Math.sin(Math.PI*(y-30)/14)),y,BROWN);p.line(58,48,64,40,M);p.line(62,48,68,40,M);p.ell(82,52,4,3,'#7ad6ff')}
   if(prop==='pond'){p.ell(78,66,34,9,'#2a5a6a');p.ell(78,65,28,6,'#3f8aa0');p.ell(70,64,10,2,'#8fd0e0');for(const[x,h]of[[46,10],[49,13],[52,9],[104,11],[107,14]])p.rect(x,66-h,1,h,'#6a8a3a');p.rect(30,60,8,7,'#7a5a3a');p.rect(30,60,8,1,'#9a7a5a');for(let i=0;i<22;i++)p.rect(40+i,50-Math.round(i*.35),1,1,'#8a6a4a');p.rect(61,42,1,22,'#d8d0c0')}/* a pond with reeds, a bucket and a rod (the Old Fisherman) */
@@ -1035,36 +1034,6 @@ async function giveTo(k, why, found) {
    MORE EVENTS (acts 1 and 2; star, spire, oracle and sage are act 2 only)
    ================================================================== */
 Object.assign(EVENTS, {
-  /* only turns up when Drecken is in the squad, and the sigil is his */
-  stormaltar: {
-    t: 'The Storm Altar',
-    art: 'stormaltar',
-    ok: () => run.roster.some(u => u.cast === 'drecken'),
-    d: 'Lightning strikes the same black altar again and again. A sigil sits in the scorch mark, crackling.',
-    o: [
-      {
-        l: 'Take the Thunderhead Sigil',
-        sub: 'A high-crit lightning sigil for Drecken',
-        go: async () => {
-          const u = run.roster.find(u => u.cast === 'drecken');
-          if (!u || !(await stow(u, 'thunderheadSigil'))) return null;
-          sfx('item');
-          return `${u.name} snatches the <b>Thunderhead Sigil</b> between strikes.`;
-        }
-      },
-      {
-        l: 'Everyone touches the stone',
-        sub: 'Every unit +1 Spd and loses 5 HP',
-        go: async () => {
-          run.roster.forEach(u => u.spd++);
-          hurtAll(5);
-          sfx('thunder');
-          return 'The jolt knocks everyone flat. Faster for it (+1 Spd), but singed (−5 HP).';
-        }
-      }
-    ]
-  },
-
   /* Open one crate: a piece of gear for a particular class. */
   cache: {
     t: 'The Specialist’s Cache',
@@ -1077,7 +1046,6 @@ Object.assign(EVENTS, {
       if (has(u => CLS[u.cls].w.includes('bow'))) o.push('longbow');
       if (has(u => isRoleU(u, 'rogue'))) o.push('throwingKnives');
       if (has(u => isRoleU(u, 'support'))) o.push('farStaff');
-      if (has(u => canUse(u, 'sparkSigil'))) o.push('sparkSigil');
       if (has(u => isRoleU(u, 'summoner'))) o.push('runeStaff');
       if (o.length < 2) o.push(pick(['knightlySword', 'steelSpear', 'cleaver']));
       return [
@@ -1262,38 +1230,6 @@ Object.assign(EVENTS, {
         }
       },
       { l: 'Leave it', go: async () => 'You give it a wide berth.' }
-    ]
-  },
-
-  /* EXP (more for casters), or take the Spark Sigil. */
-  library: {
-    t: 'The Ruined Library',
-    art: 'library',
-    d: 'Half the roof is gone, but the shelves still stand. Rain has spared a few tomes.',
-    o: [
-      {
-        l: 'Study the tomes',
-        sub: 'Casters, Menders and Summoners gain 35 EXP; others 10',
-        go: async () => {
-          evEl.hidden = true;
-          const m = run.roster.filter(u => CLS[u.cls].w.includes('art') || CLS[u.cls].w.includes('spirit'));
-          await expAll(m, 35);
-          await expAll(
-            run.roster.filter(u => !m.includes(u)),
-            10
-          );
-          return 'A long afternoon of reading. The spellcasters gain 35 EXP, everyone else 10.';
-        }
-      },
-      {
-        l: 'Take the storm tome',
-        sub: 'The Spark Sigil',
-        need: () => canAny('sparkSigil'),
-        go: async () => {
-          const u = await giveTo('sparkSigil');
-          return u && `${u.name} pockets the <b>Spark Sigil</b>.`;
-        }
-      }
     ]
   },
 
@@ -1729,7 +1665,6 @@ const EV_SFX = {
   dwarf: ['anvil', 0],
   weaponmaster: ['anvil', 0],
   enchanter: ['book', 1, 2],
-  library: ['book', 0, 1],
   gnome: ['book', 0],
   chest: ['chestopen', 0],
   cache: ['chestopen', 'act'],

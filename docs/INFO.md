@@ -24,7 +24,7 @@ Weapons never break (except the 5-use Meteor and Heaven's Bolt).
 | Short Bow | Bow | 6 | 85 | 0 | 3 | 2–3 | Quarry |
 | Ironwood Bow | Bow | 9 | 70 | 0 | 7 | 2–3 | Quarry |
 | Crossbow | Bow | 8 | 80 | 0 | 6 | 2–3 | Quarry |
-| Ember Sigil | Sigil (Fire) | 5 | 90 | 0 | 2 | 1–2 | Plant |
+| Fire Sigil | Sigil (Fire) | 5 | 90 | 0 | 2 | 1–2 | Plant |
 | Tide Sigil | Sigil (Water) | 5 | 90 | 0 | 3 | 1–2 |  |
 | Storm Sigil | Sigil (Lightning) | 8 | 80 | 5 | 5 | 1–2 |  |
 | Thorn Sigil | Sigil (Nature) | 5 | 90 | 0 | 3 | 1–2 |  |
@@ -46,8 +46,7 @@ Weapons never break (except the 5-use Meteor and Heaven's Bolt).
 | Jade Bow | Bow | 8 | 75 | 30 | 5 | 2–3 | Quarry |
 | Longbow | Bow | 6 | 70 | 0 | 6 | 2–3 | Quarry |
 | Throwing Knives | Blade | 3 | 90 | 10 | 1 | 1–2 |  |
-| Spark Sigil | Sigil (Lightning) | 4 | 95 | 15 | 2 | 1–2 |  |
-| Thunderhead Sigil | Sigil (Lightning) | 8 | 75 | 30 | 6 | 1–2 |  |
+| Thunder Sigil | Sigil (Lightning) | 4 | 95 | 15 | 2 | 1–2 | Ooze (armoury only) |
 | Heaven’s Bolt | Sigil (Lightning) | 10 | 65 | 5 | 8 | 3–10 |  |
 | Meteor Sigil | Sigil (Earth) | 13 | 60 | 0 | 9 | 3–10 |  |
 | War Hammer | Heavy | 8 | 70 | 0 | 10 | 1 | Armoured |
