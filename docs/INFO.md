@@ -63,14 +63,14 @@ An effective hit multiplies weapon Mt ×2. Only your side deals them for now.
 |---|---|---|
 | Flier | Hawk, Prism | Bows |
 | Armoured | Magma Golem, Crystal Sentinel, Sandstone Golem, Pyrite Colossus, Gem Golem, Amethyst Turtle, Stone Warden, Yeti | War Hammer, Stonebane |
-| Beast | Wolf, Hawk, Alligator, Blighted Stag, Magma Dragon, Bog Lurker, Jackal, Sand Worm, Ice Worm, Hell Hound, Frost Wolf, Agate Wyrm, Hollow Bear, Spirit Wolf, Spirit Hawk | Hunting Spear, Wolfsbane |
+| Beast | Wolf, Hawk, Alligator, Blighted Stag, Magma Dragon, Bog Lurker, Sand Worm, Ice Worm, Hell Hound, Frost Wolf, Agate Wyrm, Hollow Bear, Spirit Wolf, Spirit Hawk | Hunting Spear, Wolfsbane |
 | Colossal | Every 2×2 boss | Giantslayer |
-| Spectral | Fire Sprite, Frost Sprite | Light sigils, Holy Sword, Spiritbane, Paladins |
+| Spectral | Fire Sprite | Light sigils, Holy Sword, Spiritbane, Paladins |
 | Plant | Blighted Treant | Fire sigils |
 
 **Elemental weaknesses** (×2 Mt from a sigil or ability of that element): Ice Worm, Ice Troll: fire · Lamia, Krondis (Alligator): ice · Mud Monster: lightning · Hell Hound: light (the Holy Sword counts as light too).
 
-**Elemental resistances** (half damage from your attacks of that element): Hell Hound, Magma Dragon, Fire Sprite, Magma Golem: fire · Frost Wolf, Ice Worm, Frost Sprite, Yeti: ice. The in-game chart (What beats what) lists every monster each row covers on hover.
+**Elemental resistances** (half damage from your attacks of that element): Hell Hound, Magma Dragon, Fire Sprite, Magma Golem: fire · Frost Wolf, Ice Worm, Yeti: ice. The in-game chart (What beats what) lists every monster each row covers on hover.
 
 ## Skills
 
@@ -162,8 +162,8 @@ Learned skills cost capacity (base 20, +5 when promoted). Personal skills are fr
 | Cursed Woodland | Wolf 4, Blighted Stag 3 (fl 2+), Blighted Treant 2 (fl 5+) | Blighted Treant, Blighted Stag, Wolf | The Hollow Bear |
 | Volcanic Isle | Hell Hound 4, Fire Sprite 2 (fl 2+), Magma Golem 3 (fl 3+) | Magma Golem, Hell Hound, Fire Sprite | Pyraxis, the Magma Dragon |
 | The Heart of the Blight | Floating Crystals(4), Gem Golem | Crystal Sentinel, Shardling, Prism | The Crystal Heart |
-| Sandstone Desert | ***, Sand Worm 3 (fl 2+), Sandstone Golem 2 (fl 4+) | Sandstone Golem, Jackal, Sand Worm | The Pyrite Colossus |
-| Frostveil Reaches | Frost Wolf 4, Ice Worm 2 (fl 4+), Ice Troll 2 (fl 5+) | Ice Worm, Ice Troll, Frost Wolf, Frost Sprite | The Yeti |
+| Sandstone Desert | Sand Worm 4, Sandstone Golem 2 (fl 4+) | Sandstone Golem, Sand Worm | The Pyrite Colossus |
+| Frostveil Reaches | Frost Wolf 4, Ice Worm 2 (fl 4+), Ice Troll 2 (fl 5+) | Ice Worm, Ice Troll, Frost Wolf | The Yeti |
 | Gemstone Caverns | Gem Golem, Crystal-Borer Beetles?| Gem Golem | Amethyra, the Amethyst Turtle |
 
 ## Monster moves

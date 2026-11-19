@@ -59,15 +59,13 @@ function ensureCls(k){
 /* ---- monsters ---- */
 /* fields: see the CLASSES key in 01-data.js */
 Object.assign(CLS,{
-  Wolf:{n:'Wolf',w:['blade'],body:'beast',mov:6,crit:5},
-  Lamia:{n:'Lamia',w:['art'],body:'serpent',mov:5,weak:'ice'}
+  Wolf:{n:'Wolf',w:['blade'],body:'beast',mov:6,crit:5}
 });
 IT.fangs={n:'Fangs',t:'blade',kind:'claw',mt:5,hit:85,crit:5,r:[1,1],uses:99,key:'fangs'};
 IT.talons={n:'Talons',t:'blade',kind:'claw',mt:4,hit:90,crit:5,r:[1,1],uses:99,key:'talons'};
 /* fields: see the ENEMY STATS key in 01-data.js (b/g order: HP, Str, Mag, Skl, Spd, Lck, Def, Res) */
 Object.assign(FOE,{
-  Wolf:{b:[15,5,0,3,7,1,2,0],g:[.55,.35,0,.3,.45,.1,.15,.05],items:['fangs']},
-  Lamia:{b:[18,0,5,4,4,1,3,4],g:[.6,0,.4,.3,.3,.1,.15,.3],items:['poisonSpit'],look:{}}
+  Wolf:{b:[15,5,0,3,7,1,2,0],g:[.55,.35,0,.3,.45,.1,.15,.05],items:['fangs']}
 });
 function monLook(c){
   if(MONLOOK[c])return MONLOOK[c]();

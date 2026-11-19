@@ -69,7 +69,7 @@ add('Statuses','stun','Stun lands','sfx',false);add('Statuses','buff','a buff la
 [['step','footsteps (grass)'],['hoof','cavalry moving'],['flap','fliers moving'],['jump','climbing to higher ground'],['move','unit picked up to move']].forEach(([k,w])=>add('Movement',k,w));
 [['step-sand','footsteps on sand'],['step-snow','footsteps on snow'],['step-stone','footsteps on stone'],['step-mud','footsteps in mud / shallow water']].forEach(([k,w])=>add('Movement',k,w,'sfx',false));
 /* monsters */
-['Wolf','Cursed Stag','Blighted Treant','Bog Lurker','Lamia','Mud Monster','Jackal','Sand Worm','Sandstone Golem','Hell Hound','Fire Sprite','Boulder Golem','Frost Wolf','Frost Sprite','Ice Worm','Ice Troll','Gem Golem','Shardling','Prism','Crystal Sentinel','Frog familiar']
+['Wolf','Cursed Stag','Blighted Treant','Bog Lurker','Lamia','Mud Monster','Sand Worm','Sandstone Golem','Hell Hound','Fire Sprite','Boulder Golem','Frost Wolf','Ice Worm','Ice Troll','Gem Golem','Shardling','Prism','Crystal Sentinel','Frog familiar']
   .forEach(n=>add('Monsters','cry-'+n.toLowerCase().replace(/ /g,''),n+': attack / hurt / death cry','sfx',false));
 ['Krondis','Hollow Bear','Magma Dragon','Yeti','Amethyst Turtle'].forEach(n=>{const k='roar-'+n.toLowerCase().replace(/ /g,'');add('Bosses',k,n+': roar (as the boss fight opens)','sfx',!!SFX_FILE[k])});
 /* no roar for these two: the Crystal Heart beats, the Colossus may stay silent */

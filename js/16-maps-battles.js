@@ -2,9 +2,9 @@
 /* ---- new regions: Sandstone Desert, Frostveil Reaches, Gemstone Caverns ---- */
 /* fields: see the CLASSES key in 01-data.js */
 Object.assign(CLS,{
-  Jackal:{n:'Jackal',w:['blade'],body:'beast',mov:6},SandWorm:{n:'Sand Worm',w:['heavy'],body:'worm',mov:4,wade:true},SandstoneGolem:{n:'Sandstone Golem',w:['heavy'],body:'golem',mov:4},
+  SandWorm:{n:'Sand Worm',w:['heavy'],body:'worm',mov:4,wade:true},SandstoneGolem:{n:'Sandstone Golem',w:['heavy'],body:'golem',mov:4},
   PyriteColossus:{n:'Pyrite Colossus',w:['heavy'],body:'cubes',mov:0},
-  FrostWolf:{n:'Frost Wolf',w:['blade'],body:'beast',mov:6,wade:true},IceWorm:{n:'Ice Worm',w:['heavy'],body:'worm',mov:4,wade:true,weak:'fire'},FrostSprite:{n:'Frost Sprite',w:['art'],body:'frost',mov:5,wade:true},
+  FrostWolf:{n:'Frost Wolf',w:['blade'],body:'beast',mov:6,wade:true},IceWorm:{n:'Ice Worm',w:['heavy'],body:'worm',mov:4,wade:true,weak:'fire'},
   AgateWyrm:{n:'Agate Wyrm',w:['art','heavy'],body:'dragon',mov:0},
   GemGolem:{n:'Gem Golem',w:['heavy'],body:'golem',mov:4},
   AmethystTurtle:{n:'Amethyst Turtle',w:['heavy','art'],body:'turtle',mov:0},
@@ -15,30 +15,26 @@ Object.assign(CLS,{
   Sage:{n:'Sage',w:['art'],body:'robe',mov:0}
 });
 /* elemental resistances (half damage): the monsters 5e would call immune */
-for(const[k,e]of Object.entries({HellHound:'fire',MagmaDragon:'fire',FireSprite:'fire',BoulderGolem:'fire',FrostWolf:'ice',IceWorm:'ice',FrostSprite:'ice',Yeti:'ice'}))if(CLS[k])CLS[k].res=e;
+for(const[k,e]of Object.entries({HellHound:'fire',MagmaDragon:'fire',FireSprite:'fire',BoulderGolem:'fire',FrostWolf:'ice',IceWorm:'ice',Yeti:'ice'}))if(CLS[k])CLS[k].res=e;
 IT.crystalBall={n:'Crystal Ball',t:'item',kind:'orb',uses:1,key:'crystalBall'};
 IT.frostBreath={n:'Frost Breath',t:'art',kind:'talisman',el:'water',mt:9,hit:80,crit:0,r:[1,2],uses:99,mag:true,key:'frostBreath'};
 IT.crystalShards={n:'Crystal Shards',t:'art',kind:'talisman',el:'earth',mt:7,hit:80,crit:10,r:[1,2],uses:99,mag:true,key:'crystalShards'};
 /* fields: see the ENEMY STATS key in 01-data.js (b/g order: HP, Str, Mag, Skl, Spd, Lck, Def, Res) */
 Object.assign(FOE,{
-  Jackal:{b:[14,5,0,4,8,2,1,0],g:[.5,.35,0,.3,.5,.15,.1,.05],items:['fangs'],look:{}},
   SandWorm:{b:[20,6,0,4,4,1,4,1],g:[.7,.4,0,.3,.25,.1,.2,.05],items:['bite'],look:{}},
   SandstoneGolem:{b:[24,7,0,2,2,0,9,1],g:[.8,.4,0,.2,.1,0,.35,.05],items:['slam'],look:{}},
   FrostWolf:{b:[16,5,0,4,7,1,2,2],g:[.55,.35,0,.3,.45,.1,.15,.15],items:['fangs']},
   IceWorm:{b:[21,6,0,4,4,1,5,2],g:[.7,.4,0,.3,.25,.1,.25,.1],items:['bite'],look:{}},
   IceTroll:{b:[24,8,0,3,3,0,5,1],g:[.8,.5,0,.25,.2,.05,.3,.05],items:['slam'],look:{}},
-  FrostSprite:{b:[14,0,4,5,7,2,1,4],g:[.5,0,.4,.35,.45,.15,.05,.3],items:['tideSigil'],look:{}},
   GemGolem:{b:[22,7,0,3,2,0,9,3],g:[.75,.4,0,.25,.1,0,.35,.15],items:['slam'],look:{}}
 });
 /* GEMS: crystal colours (green, red, blue, gold, violet) */
 const GEMS=['#3aa86a','#c8323a','#3a5ac8','#c8a83a','#9a5ac8'];
 Object.assign(MONLOOK,{
-  Jackal:()=>({fur:pick(['#c9a060','#b08850','#d8b878']),eye:'#ffd23f'}),
   SandWorm:()=>({body:pick(['#c98a6a','#b8785a','#d8a07a'])}),
   SandstoneGolem:()=>({body:pick(['#c9945a','#b8824a','#d8a46a']),eye:'#ffd23f'}),
   IceWorm:()=>({body:pick(['#c8dcec','#b0c8e0','#d8e8f4'])}),
   IceTroll:()=>({style:'bald',skin:pick(['#9ab8d0','#8aa8c4','#a8c8dc']),cloth:'#4a5a6a',eye:'#7fe3ff'}),
-  FrostSprite:()=>({crys:false,body:pick(['#9fd8ff','#7fc8ff','#b8e4ff'])}),
   GemGolem:()=>({body:pick(GEMS),eye:'#ffffff'})
 });
 /* fields: see the TERRAIN key in 01-data.js */
@@ -56,13 +52,13 @@ texStyle.textContent+=['sandstone','quicksand','snow','deepsnow','agate','ice','
 texStyle.textContent+=`.tile.frz{background:url(${bioTile2('ice')}) 0 0/100% 100% !important}`;/* water frozen by an ice ability */
 /* fields: see the REGIONS key in 15-regions-monsters.js */
 Object.assign(BIOMES,{
-  desert:{n:'Sandstone Desert',bg:'#4a3a24',town:['n','k'],townN:'Oasis Town',d:'Dunes and sandstone ruins under a white sun. Jackals run in packs, and the quicksand swallows the careless.',
+  desert:{n:'Sandstone Desert',bg:'#4a3a24',town:['n','k'],townN:'Oasis Town',d:'Dunes and sandstone ruins under a white sun. Sand worms hunt beneath the dunes, and the quicksand swallows the careless.',
     tip:['desert','Quicksand','A unit that starts its turn in quicksand has 1 less Move. Sandstone rocks block the way.'],
-    maps:['dunes','oasis','canyon'],bossMap:'sunTemple',pool:[['Jackal',4],['SandWorm',3,2],['SandstoneGolem',2,4]],elitePool:[['SandstoneGolem',3],['Jackal',2],['SandWorm',2]],
+    maps:['dunes','oasis','canyon'],bossMap:'sunTemple',pool:[['SandWorm',4],['SandstoneGolem',2,4]],elitePool:[['SandstoneGolem',3],['SandWorm',2]],
     boss:{name:'The Pyrite Colossus',cls:'PyriteColossus',mov:3,s:[42,13,0,5,3,2,12,7],items:['slam'],skill:'steadfast',look:{body:'#c9a83a',eye:'#fff2b0',crysAt:[{core:[14,19],col:'#3ad87a'}]}}},
   snow:{n:'Frostveil Reaches',bg:'#2a3a4e',town:['o','a'],townN:'Hill Village',d:'Snowfields studded with blue agate. Frost wolves hunt the drifts, and ice worms tunnel beneath them.',
     tip:['snow','Deep snow','A unit that starts its turn in deep snow has 1 less Move (snow creatures ignore it). Frozen lakes give −10 Avoid; blue agate gives +10 Avoid and +2 Def.'],
-    maps:['tundra','frozenLake','agateField'],bossMap:'agateSpire',pool:[['FrostWolf',4],['FrostSprite',3,2],['IceWorm',2,4],['IceTroll',2,5]],elitePool:[['IceWorm',3],['IceTroll',2],['FrostWolf',2],['FrostSprite',2]],
+    maps:['tundra','frozenLake','agateField'],bossMap:'agateSpire',pool:[['FrostWolf',4],['IceWorm',2,4],['IceTroll',2,5]],elitePool:[['IceWorm',3],['IceTroll',2],['FrostWolf',2]],
     boss:{name:'The Yeti',cls:'Yeti',mov:4,s:[42,13,0,6,5,2,9,8],items:['slam'],skill:'wrath',look:{body:'#e8eef8',eye:'#7fe3ff'}}},
   cavern:{n:'Gemstone Caverns',bg:'#2a2436',town:['c','e'],townN:'Miners’ Camp',d:'Caves glittering with emerald, ruby and sapphire, and golems made of the gems themselves.',
     tip:['cavern','Gem clusters','Gem clusters give +10 Avoid and +2 Def. The cave walls can’t be crossed.'],
