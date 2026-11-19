@@ -50,9 +50,9 @@ const IT={
   cleaver:{n:'Cleaver',t:'heavy',kind:'axe',mt:11,hit:65,crit:0,r:[1,1],uses:30,tint:'steel'},
   throwingAxe:{n:'Throwing Axe',t:'heavy',kind:'axe',mt:7,hit:60,crit:0,r:[1,2],uses:20,thrown:true},
   halberd:{n:'Halberd',t:'heavy',kind:'halberd',mt:9,hit:70,crit:0,r:[1,1],uses:40},
-  shortBow:{n:'Short Bow',t:'bow',kind:'bow',mt:6,hit:85,crit:0,r:[2,2],uses:45},
-  ironwoodBow:{n:'Ironwood Bow',t:'bow',kind:'bow',mt:9,hit:70,crit:0,r:[2,2],uses:30,tint:'steel'},
-  crossbow:{n:'Crossbow',t:'bow',kind:'crossbow',mt:8,hit:80,crit:0,r:[2,2],uses:35},
+  shortBow:{n:'Short Bow',t:'bow',kind:'bow',mt:6,hit:85,crit:0,r:[2,3],uses:45},
+  ironwoodBow:{n:'Ironwood Bow',t:'bow',kind:'bow',mt:9,hit:70,crit:0,r:[2,3],uses:30,tint:'steel'},
+  crossbow:{n:'Crossbow',t:'bow',kind:'crossbow',mt:8,hit:80,crit:0,r:[2,3],uses:35},
   emberSigil:{n:'Ember Sigil',t:'art',kind:'talisman',el:'fire',mt:5,hit:90,crit:0,r:[1,2],uses:40,mag:true},
   tideSigil:{n:'Tide Sigil',t:'art',kind:'talisman',el:'water',mt:5,hit:90,crit:0,r:[1,2],uses:40,mag:true},
   frostSigil:{n:'Frost Sigil',t:'art',kind:'talisman',el:'ice',mt:7,hit:85,crit:5,r:[1,2],uses:35,mag:true},
@@ -77,7 +77,7 @@ Object.assign(IT,{
   stiletto:{n:'Stiletto',t:'blade',kind:'dagger',thin:true,mt:4,hit:90,crit:25,r:[1,1],uses:30,key:'stiletto'},
   barbedSpear:{n:'Barbed Spear',t:'pole',kind:'spear',mt:8,hit:80,crit:30,r:[1,1],uses:20,tint:'killer',key:'barbedSpear'},
   reaverAxe:{n:'Reaver Axe',t:'heavy',kind:'axe',mt:10,hit:65,crit:30,r:[1,1],uses:20,tint:'killer',key:'reaverAxe'},
-  hawkeyeBow:{n:'Hawkeye Bow',t:'bow',kind:'bow',mt:7,hit:80,crit:30,r:[2,2],uses:20,tint:'killer',key:'hawkeyeBow'}
+  hawkeyeBow:{n:'Hawkeye Bow',t:'bow',kind:'bow',mt:7,hit:80,crit:30,r:[2,3],uses:20,tint:'killer',key:'hawkeyeBow'}
 });
 /* WT: weapon weight. Weight above the wielder's Str (Mag for sigils) is taken off their attack speed (see wtOver/AS). */
 const WT={wornSword:4,twinKhopesh:4,atlatl:8,twinDaggers:2,knightlySword:8,thornRapier:3,hookedBlade:6,moonglassEdge:6,greatsword:12,ironSpear:6,steelSpear:10,javelin:8,hatchet:7,cleaver:11,throwingAxe:9,halberd:9,labrys:13,
@@ -90,7 +90,7 @@ Object.assign(IT,{
   jadeFang:{n:'Jade Fang',t:'blade',kind:'dagger',mt:5,hit:90,crit:35,r:[1,1],uses:25,tint:'jade',wt:2},
   jadeSpear:{n:'Jade Spear',t:'pole',kind:'spear',mt:9,hit:80,crit:30,r:[1,1],uses:25,tint:'jade',wt:8},
   jadeAxe:{n:'Jade Axe',t:'heavy',kind:'axe',mt:11,hit:65,crit:30,r:[1,1],uses:25,tint:'jade',wt:10},
-  jadeBow:{n:'Jade Bow',t:'bow',kind:'bow',mt:8,hit:75,crit:30,r:[2,2],uses:25,tint:'jade',wt:5},
+  jadeBow:{n:'Jade Bow',t:'bow',kind:'bow',mt:8,hit:75,crit:30,r:[2,3],uses:25,tint:'jade',wt:5},
   longbow:{n:'Longbow',t:'bow',kind:'bow',mt:6,hit:75,crit:0,r:[2,3],uses:30,wt:6},
   /* steel-tier ranged variants (reach 1–2, the arbalest 2–3): trade-ups for the javelin, throwing axe, throwing knives and crossbow */
   pilum:{n:'Pilum',t:'pole',kind:'javelin',mt:9,hit:75,crit:0,r:[1,2],uses:20,thrown:true,wt:9,tint:'steel'},

@@ -673,16 +673,16 @@ const EVENTS = {
     }
   },
 
-  /* Free fruit: works like a tavern meal (same effects), for 2 fights. */
+  /* Free fruit: lasts 2 fights, like food. A choice of 2. */
   orchard: {
     t: 'The Orchard',
     art: 'orchard',
     d: 'Rows of old trees, heavy with fruit nobody has picked. The squad fills its pockets.',
     o: null,
     make: () => [
-      ...shuffle(Object.keys(MEALS).filter(k => MEALS[k].fruit)).slice(0, 3).map(k => ({
+      ...Object.keys(MEALS).filter(k => MEALS[k].fruit).map(k => ({
         l: `<img class="ev-ri" src="${mealArt(k)}" alt="">${MEALS[k].n}`,
-        sub: `${MEALS[k].d} for the next ${MEALS[k].f} fights${M(MEALS[k].as) ? ' (you already have this effect)' : ''}`,
+        sub: `${MEALS[k].d} for the next ${MEALS[k].f} fights${M(k) ? ' (already active: this adds more fights)' : ''}`,
         go: async () => {
           const n = MEALS[k].f + (R('plenty') ? 1 : 0);
           (run.meals = run.meals || []).push({ id: k, n });

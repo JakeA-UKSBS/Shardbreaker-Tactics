@@ -11,14 +11,11 @@ const MEALS={
   pie:{n:'Fish Pie',p:30,f:3,d:'+2 Def and Res'},
   stew:{n:'Pepper Stew',p:40,f:2,d:'+1 Move'},
   soup:{n:'Mushroom Soup',p:20,f:3,d:'Immune to poison'},
-  /* orchard fruit (free, from the Orchard event): as = the meal whose effect it has */
-  fireApple:{n:'Fire Apple',f:2,d:'+2 damage',as:'boar',fruit:1},
-  goldPear:{n:'Gold Pear',f:2,d:'+15 Hit',as:'bread',fruit:1},
-  ironPlum:{n:'Iron Plum',f:2,d:'+2 Def and Res',as:'pie',fruit:1},
-  swiftberry:{n:'Swiftberries',f:2,d:'+1 Move',as:'stew',fruit:1},
-  bitterberry:{n:'Bitterberries',f:2,d:'Immune to poison',as:'soup',fruit:1}
+  /* orchard fruit (free, from the Orchard event): temporary like food, with their own effects */
+  vigourApple:{n:'Vigour Apple',f:2,d:'+1 Str and Mag for every unit',fruit:1},
+  quickberry:{n:'Quickberries',f:2,d:'Ability cooldowns are 1 turn shorter',fruit:1}
 };
-const M=id=>!!(run&&run.meals&&run.meals.some(m=>m.n>0&&(m.id===id||(MEALS[m.id]&&MEALS[m.id].as===id))));
+const M=id=>!!(run&&run.meals&&run.meals.some(m=>m.id===id&&m.n>0));
 function afterFightMeals(){if(!run)return;if(run.meals){run.meals.forEach(m=>m.n--);run.meals=run.meals.filter(m=>m.n>0)}}
 
 /* ---- the tavern ---- */

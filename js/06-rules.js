@@ -29,7 +29,7 @@ const canUse=(u,k)=>CLS[u.cls].w.includes(IT[k].t)&&kindOk(u,k)&&(!EL_OWNER[IT[k
 const JUMP=2,jumpOf=u=>(CLS[u.cls].jump??JUMP)-(has(u,'plate')?1:0);
 function canStep(u,fx,fy,tx,ty){const C=CLS[u.cls];if(C.fly||C.phase||(u.sz||1)>1)return true;return Math.abs(hOf(tx,ty)-hOf(fx,fy))<=jumpOf(u)}
 const hDiff=(a,b)=>clamp(hOf(a.x,a.y)-hOf(b.x,b.y),-3,3);
-/* the range shown on cards and sheets: the weapon's, plus Eagle Eye (height bonus only applies per target) */
+/* the range shown on cards and sheets (the height bonus only applies per target) */
 const rngShow=(u,w)=>[w.r[0],w.r[1]+(typeof eagle==='function'?eagle(u,w):0)];
 function rngBonus(w,a,b){return a&&b&&w.t==='bow'?clamp(Math.floor((hOf(a.x,a.y)-hOf(b.x,b.y))/2),0,2):0}
 /* o (the target) is optional: without it, height can't add bow range */
@@ -68,13 +68,13 @@ function calc(x,xw,y,yw,ctx){
   /* personal skills */const myTurn=ctx.init===x&&x.team==='p'&&phase==='player'&&typeof origin!=='undefined'&&origin;
   if(has(x,'charger')&&myTurn&&man(origin,x)>=3)pow+=add(bp,'Charger',2);
   if(has(x,'heroic')&&state.units.some(o=>o!==x&&o.team===x.team&&o.hp>0&&man(o,x)===1))pow+=add(bp,'Heroic',2);
-  const yf=!!CLS[y.cls].fly;let df=add(bd,xw.mag?'Res':'Def',xw.mag?y.res:y.def)+add(bd,xw.mag?'Gear Res':'Gear Def',xw.mag?gy.res:gy.def)+add(bd,t.n||'Terrain',yf?0:t.df)+add(bd,'Relics, meals',RB.df)+add(bd,'Statuses, passives',SB.df);if(has(y,'steadfast')&&ctx.phase==='enemy'&&ctx.init!==y)df+=add(bd,'Steadfast',4);
+  const yf=!!CLS[y.cls].fly;let df=add(bd,xw.mag?'Res':'Def',xw.mag?y.res:y.def)+add(bd,xw.mag?'Gear Res':'Gear Def',xw.mag?gy.res:gy.def)+add(bd,(t.n||'Terrain')+(has(x,'clearShot')&&t.df>0?' (Clear Shot ignores)':''),yf||(has(x,'clearShot')&&t.df>0)?0:t.df)+add(bd,'Relics, meals',RB.df)+add(bd,'Statuses, passives',SB.df);if(has(y,'steadfast')&&ctx.phase==='enemy'&&ctx.init!==y)df+=add(bd,'Steadfast',4);
   if(state.units.some(o=>o!==y&&o.team===y.team&&o.hp>0&&man(o,y)===1&&has(o,'guardian')))df+=add(bd,'Guardian ally',2);if(xw.mag&&state.units.some(o=>o!==y&&o.team===y.team&&o.hp>0&&man(o,y)===1&&has(o,'lightWard')))df+=add(bd,'Light Ward ally',2);
   if(has(y,'kinship')&&state.units.some(o=>o.summon&&o.owner===y.id&&o.hp>0&&man(o,y)===1))df+=add(bd,'Kinship',2);
   const xm=CLS[x.cls].mnt||CLS[x.cls].fly,ym=CLS[y.cls].mnt||CLS[y.cls].fly;if(has(y,'pikeWall')&&xm)df+=add(bd,'Pike Wall',4);
   const dead=has(x,'keenEye');
   const acc=add(ba,'Height',Math.max(-10,hd*10))+add(ba,'Weapon Hit',xw.hit)+add(ba,'Skl ×2',(x.skl+OL(x))*2)+add(ba,'Lck /2',Math.floor(LK(x)/2))+add(ba,'Character bonus',CAST_HIT[x.cast]||0)+add(ba,'Early Edge',has(x,'earlyEdge')&&state.turn<=5?20:0)+add(ba,'Command aura',aura(x))+add(ba,'Keen Eye',dead?20:0)+add(ba,'Relics, meals',RB.acc)+add(ba,'Statuses, passives',SB.acc)+add(ba,'Pike Wall vs mounted',has(x,'pikeWall')&&ym?10:0);
-  const avo=add(bv,'AS ×2',AS(y,yw)*2)+add(bv,'Lck',LK(y))+add(bv,'Early Edge',has(y,'earlyEdge')&&state.turn<=5?20:0)+add(bv,(t.n||'Terrain')+(dead?' (Keen Eye ignores)':''),dead||yf?0:t.av)+add(bv,'Command aura',aura(y))+add(bv,'Relics, meals',RB.avo)+add(bv,'Statuses, passives',SB.avo);
+  const avo=add(bv,'AS ×2',AS(y,yw)*2)+add(bv,'Lck',LK(y))+add(bv,'Early Edge',has(y,'earlyEdge')&&state.turn<=5?20:0)+add(bv,(t.n||'Terrain')+(dead?' (Keen Eye ignores)':has(x,'clearShot')&&t.av>0?' (Clear Shot ignores)':''),dead||yf||(has(x,'clearShot')&&t.av>0)?0:t.av)+add(bv,'Command aura',aura(y))+add(bv,'Relics, meals',RB.avo)+add(bv,'Statuses, passives',SB.avo);
   let crit=add(bc,'Relics, meals',RB.crit)+add(bc,'Statuses, passives',SB.crit)+add(bc,'Weapon Crit',xw.crit||0)+add(bc,'Class Crit',CLS[x.cls].crit||0)+add(bc,'Skl /2',Math.floor((x.skl+OL(x))/2))+add(bc,'Target Lck /2',-Math.floor(LK(y)/2));if(has(x,'focus')&&!state.units.some(o=>o!==x&&o.team===x.team&&o.hp>0&&man(o,x)===1))crit+=add(bc,'Focus',10);if(has(x,'wrath')&&x.hp*2<=x.maxhp)crit+=add(bc,'Wrath',15);
   const asx=AS(x,xw),bonus=(has(x,'swiftstrike')&&ctx.init===x?3:0)+(has(x,'twinBolt')&&xw.el==='lightning'?3:0),asy=AS(y,yw);
   return{dmg:resHalf(x,xw,y,dmgMods(x,y,ctx,Math.max(0,pow-df),mods)),pow,df,hit:clamp(acc-avo,0,100),crit:x.team==='e'?0:clamp(crit,0,100),n:asx+bonus-asy>=4?2:1,eff,hd,

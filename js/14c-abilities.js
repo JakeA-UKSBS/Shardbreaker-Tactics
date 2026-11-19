@@ -40,7 +40,7 @@ const stList=u=>Object.keys(u.st||{}).filter(k=>hasSt(u,k)&&STATUS[k]);
 
 /* ---- kit passives (they become the character's personal skill) ---- */
 Object.assign(SKILLS,{
-  eagleEye:{n:'Eagle Eye',kit:1,d:'+1 range on every bow shot, on top of the height bonus.'},
+  clearShot:{n:'Clear Shot',kit:1,d:'Ignores cover: the target gets no Avoid or Def from the terrain it stands on.'},
   ironBody:{n:'Iron Body',kit:1,d:'Can’t be pushed or pulled.'},
   outlander:{n:'Outlander',kit:1,d:'+1 Skl and +1 Spd while no ally is next to him.'},
   siphon:{n:'Siphon',kit:1,d:'Her dark spells heal her for 25% of the damage they deal.'},
@@ -160,7 +160,7 @@ const ABIL={
 };
 /* the kits: passive, MP pool (spellcasters) and abilities */
 const KITS={
-  kili:{passive:'eagleEye',mp:0,abil:['aimedShot','pinningArrow','volley']},
+  kili:{passive:'clearShot',mp:0,abil:['aimedShot','pinningArrow','volley']},
   vaar:{passive:'outlander',mp:0,abil:['flurry','leap']},
   morrigan:{passive:'siphon',mp:24,abil:['drainTouch','hex','vortex','darkPulse']},
   corvin:{passive:'coldSnap',mp:28,abil:['iceShard','frostWave','blizzard','iceShield','frostWall']},
@@ -239,7 +239,8 @@ const ABIL_HIT=0;
 /* MP cost after Attunement */
 function abCost(u,id){const a=ABIL[id];if(!a.mp)return 0;return Math.max(0,a.mp-(has(u,'attunement')&&u.lastEl&&a.el&&u.lastEl!==a.el?2:0)-(u.team==='p'&&R('riddle')?1:0))}
 /* cooldown after use (the Sphinx's Riddle takes a turn off, never under 1) */
-const abCd=(u,id)=>{const c=ABIL[id].cd||0;return c&&u.team==='p'&&R('riddle')?Math.max(1,c-1):c};
+/* Sphinx's Riddle and Quickberries each take 1 turn off cooldowns (never below 1) */
+const abCd=(u,id)=>{const c=ABIL[id].cd||0;return c&&u.team==='p'?Math.max(1,c-(R('riddle')?1:0)-(M('quickberry')?1:0)):c};
 /* why an ability can't be used right now (null if it can) */
 function abBlock(u,id){const a=ABIL[id],cd=(u.cd||{})[id]||0;if(a.once&&cd>0)return'Used this fight';if(cd>0)return`Ready in ${cd} turn${cd>1?'s':''}`;if(a.mp&&(u.mp||0)<abCost(u,id))return'Not enough MP';
   if(a.side!=='self'&&!aimTiles(u,id).size)return'No target in range';return null}
@@ -257,7 +258,7 @@ function stCalc(x,xw,y){
   return{pow:(hasSt(x,'rally')&&phys?2:0),df:(phys&&hasSt(y,'rally')?2:0)-(phys&&hasSt(y,'sunder')?3:0)+(hasSt(y,'shell')?2:0)+(phys&&has(y,'plate')?2:0)+(phys&&hasSt(y,'iceShield')?3:0),
     acc:(hasSt(x,'blind')?-20:0)+(hasSt(x,'sandEyes')?-10:0)+(hasSt(x,'anthem')?10:0)+(state.units.some(o=>o!==x&&o.hp>0&&o.team===x.team&&has(o,'audience')&&man(o,x)<=2)?10:0),avo:(hasSt(y,'smoke')?30:0)+(has(y,'beginnersLuck')&&fy?10:0),crit:(has(x,'beginnersLuck')&&fx?10:0)};
 }
-const eagle=(u,w)=>w&&w.t==='bow'&&has(u,'eagleEye')?1:0;
+const eagle=()=>0;/* Eagle Eye (Kili's old +1 bow range) is gone: every bow is 2-3 now */
 /* zone of control: starting next to a hostile unit costs 1 Move (Slippery ignores it). Doesn't stack with Slow: the bigger penalty applies */
 const zoc=u=>!has(u,'slippery')&&!has(u,'outrider')&&state.units.some(o=>o.hp>0&&hostile(o,u)&&man(o,u)===1);
 const stMov=u=>Math.max(hasSt(u,'chill')?2:0,zoc(u)?1:0);

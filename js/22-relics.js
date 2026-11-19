@@ -242,6 +242,7 @@ function relicCalc(x, xw, y, ctx) {
   if (x.team === "p") {
     if (M("boar")) o.pow += 2;
     if (M("bread")) o.acc += 15;
+    if (M("vigourApple")) o.pow += 1;/* +1 Str and Mag */
   }
   if (y.team === "p" && M("pie")) o.df += 2;
   if (!run.relics) return o;

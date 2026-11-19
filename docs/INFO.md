@@ -21,9 +21,9 @@ Weapons never break (except the 5-use Meteor and Heaven's Bolt).
 | Cleaver | Heavy | 11 | 65 | 0 | 11 | 1 |  |
 | Throwing Axe | Heavy | 7 | 60 | 0 | 9 | 1–2 |  |
 | Halberd | Heavy | 9 | 70 | 0 | 9 | 1 |  |
-| Short Bow | Bow | 6 | 85 | 0 | 3 | 2 | Flier |
-| Ironwood Bow | Bow | 9 | 70 | 0 | 7 | 2 | Flier |
-| Crossbow | Bow | 8 | 80 | 0 | 6 | 2 | Flier |
+| Short Bow | Bow | 6 | 85 | 0 | 3 | 2–3 | Quarry |
+| Ironwood Bow | Bow | 9 | 70 | 0 | 7 | 2–3 | Quarry |
+| Crossbow | Bow | 8 | 80 | 0 | 6 | 2–3 | Quarry |
 | Ember Sigil | Sigil (Fire) | 5 | 90 | 0 | 2 | 1–2 | Plant |
 | Tide Sigil | Sigil (Water) | 5 | 90 | 0 | 3 | 1–2 |  |
 | Storm Sigil | Sigil (Lightning) | 8 | 80 | 5 | 5 | 1–2 |  |
@@ -38,13 +38,13 @@ Weapons never break (except the 5-use Meteor and Heaven's Bolt).
 | Stiletto | Blade | 4 | 90 | 25 | 2 | 1 |  |
 | Barbed Spear | Polearm | 8 | 75 | 30 | 7 | 1 |  |
 | Reaver Axe | Heavy | 10 | 65 | 30 | 9 | 1 |  |
-| Hawkeye Bow | Bow | 7 | 80 | 30 | 5 | 2 | Flier |
+| Hawkeye Bow | Bow | 7 | 80 | 30 | 5 | 2–3 | Quarry |
 | Jade Jian | Blade | 7 | 80 | 30 | 5 | 1 |  |
 | Jade Fang | Blade | 5 | 90 | 35 | 2 | 1 |  |
 | Jade Spear | Polearm | 9 | 75 | 30 | 8 | 1 |  |
 | Jade Axe | Heavy | 11 | 65 | 30 | 10 | 1 |  |
-| Jade Bow | Bow | 8 | 75 | 30 | 5 | 2 | Flier |
-| Longbow | Bow | 6 | 70 | 0 | 6 | 2–3 | Flier |
+| Jade Bow | Bow | 8 | 75 | 30 | 5 | 2–3 | Quarry |
+| Longbow | Bow | 6 | 70 | 0 | 6 | 2–3 | Quarry |
 | Throwing Knives | Blade | 3 | 90 | 10 | 1 | 1–2 |  |
 | Spark Sigil | Sigil (Lightning) | 4 | 95 | 15 | 2 | 1–2 |  |
 | Thunderhead Sigil | Sigil (Lightning) | 8 | 75 | 30 | 6 | 1–2 |  |
