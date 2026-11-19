@@ -54,6 +54,9 @@ function effOf(w){const o=(w&&w.eff||[]).slice();if(w&&w.t==='bow')o.push('flier
 const SLAYER={wolfsbane:'beast',stonebane:'armoured',spiritbane:'spectral'};
 /* elemental weaknesses: CLS weak is one element or a list (Ice Troll: fire) */
 const weakOf=u=>[].concat((CLS[u.cls]||{}).weak||[]);
+/* resistances: half damage from that element (fire monsters vs fire, frost monsters vs ice). Only your attacks on monsters */
+const resOf=u=>[].concat((CLS[u.cls]||{}).res||[]);
+const resHalf=(x,xw,y,d)=>x.team!=='e'&&xw&&xw.el&&resOf(y).includes(xw.el)?Math.floor(d/2):d;
 function effHit(x,xw,y){if(x.team==='e')return 0;if(xw&&(xw.el||xw.holy)&&weakOf(y).includes(xw.el||'light'))return 2;/* holy weapons (Holy Sword) count as light *//* elemental weakness (Ice Troll: fire) */const tg=tagsOf(y);if(!tg.length)return 0;const e=effOf(xw);for(const k in SLAYER)if(has(x,k))e.push(SLAYER[k]);
   if(CLS[x.cls]&&/Paladin/.test(CLS[x.cls].n))e.push('spectral');
   const hit=tg.filter(t=>e.includes(t));if(!hit.length)return 0;return 2}
@@ -75,7 +78,7 @@ function calc(x,xw,y,yw,ctx){
   const avo=add(bv,'AS ×2',AS(y,yw)*2)+add(bv,'Lck',LK(y))+add(bv,'Early Edge',has(y,'earlyEdge')&&state.turn<=5?20:0)+add(bv,(t.n||'Terrain')+(dead?' (Keen Eye ignores)':''),dead||yf?0:t.av)+add(bv,'Command aura',aura(y))+add(bv,'Relics, meals',RB.avo)+add(bv,'Statuses, passives',SB.avo);
   let crit=add(bc,'Relics, meals',RB.crit)+add(bc,'Statuses, passives',SB.crit)+add(bc,'Weapon Crit',xw.crit||0)+add(bc,'Class Crit',CLS[x.cls].crit||0)+add(bc,'Skl /2',Math.floor((x.skl+OL(x))/2))+add(bc,'Target Lck /2',-Math.floor(LK(y)/2));if(has(x,'focus')&&!state.units.some(o=>o!==x&&o.team===x.team&&o.hp>0&&man(o,x)===1))crit+=add(bc,'Focus',10);if(has(x,'wrath')&&x.hp*2<=x.maxhp)crit+=add(bc,'Wrath',15);if(has(x,'steadyAim')&&myTurn&&x.x===origin.x&&x.y===origin.y)crit+=add(bc,'Steady Aim',5);
   const asx=AS(x,xw),bonus=(has(x,'swiftstrike')&&ctx.init===x?3:0)+(has(x,'twinBolt')&&xw.el==='lightning'?3:0),asy=AS(y,yw);
-  return{dmg:dmgMods(x,y,ctx,Math.max(0,pow-df),mods),pow,df,hit:clamp(acc-avo,0,100),crit:x.team==='e'?0:clamp(crit,0,100),n:asx+bonus-asy>=4?2:1,eff,hd,
+  return{dmg:resHalf(x,xw,y,dmgMods(x,y,ctx,Math.max(0,pow-df),mods)),pow,df,hit:clamp(acc-avo,0,100),crit:x.team==='e'?0:clamp(crit,0,100),n:asx+bonus-asy>=4?2:1,eff,hd,
     br:{pow:bp,df:bd,acc:ba,avo:bv,crit:bc,mods,accT:acc,avoT:avo,critT:crit,noCrit:x.team==='e',asx,bonus,asy,mag:!!xw.mag}};
 }
 /* forecast: the numbers for the combat preview, before anything is rolled.

@@ -14,6 +14,8 @@ Object.assign(CLS,{
   Yeti:{n:'Yeti',w:['heavy'],body:'golem',mov:4,wade:true},
   Sage:{n:'Sage',w:['art'],body:'robe',mov:0}
 });
+/* elemental resistances (half damage): the monsters 5e would call immune */
+for(const[k,e]of Object.entries({HellHound:'fire',MagmaDragon:'fire',FireSprite:'fire',BoulderGolem:'fire',FrostWolf:'ice',IceWorm:'ice',FrostSprite:'ice',Yeti:'ice'}))if(CLS[k])CLS[k].res=e;
 IT.crystalBall={n:'Crystal Ball',t:'item',kind:'orb',uses:1,key:'crystalBall'};
 IT.frostBreath={n:'Frost Breath',t:'art',kind:'talisman',el:'water',mt:9,hit:80,crit:0,r:[1,2],uses:99,mag:true,key:'frostBreath'};
 IT.crystalShards={n:'Crystal Shards',t:'art',kind:'talisman',el:'earth',mt:7,hit:80,crit:10,r:[1,2],uses:99,mag:true,key:'crystalShards'};

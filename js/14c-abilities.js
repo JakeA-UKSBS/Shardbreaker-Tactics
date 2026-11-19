@@ -314,7 +314,7 @@ function abBackstab(u,t){return state.units.some(o=>o!==u&&o.team===u.team&&o.hp
 /* expected numbers against one target: {dmg (per strike), hit, n (strikes)} */
 function abVs(u,id,t,mult){
   const a=ABIL[id],w=abWeapon(u,a),c=calc(u,w,t,null,{init:u,phase});let m=(mult||a.dmg||0);if(a.backstab&&abBackstab(u,t))m*=1.5;
-  return{dmg:a.flat||dmgMods(u,t,{init:u},Math.max(0,Math.round(c.pow*m)-c.df)),hit:a.sure?100:clamp(c.hit+(a.hit||0)+ABIL_HIT,0,100),n:a.hits||1,eff:c.eff,c,m};
+  return{dmg:a.flat||resHalf(u,w,t,dmgMods(u,t,{init:u},Math.max(0,Math.round(c.pow*m)-c.df))),hit:a.sure?100:clamp(c.hit+(a.hit||0)+ABIL_HIT,0,100),n:a.hits||1,eff:c.eff,c,m};
 }
 /* an ability's damage bonus for the forecast: relics / skills / statuses, plus what its multiplier adds when it's over 1× */
 function abBonus(u,id,V){const src=dmgBonus(V.c).src.slice(),x=Math.round(V.c.pow*V.m)-V.c.pow;if(V.m>1&&x>0)src.push([ABIL[id].n,x]);return bonusChip(src)}
