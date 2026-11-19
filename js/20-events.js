@@ -112,13 +112,16 @@ function eventScene(prop){
    THE EVENT WINDOW: scene, text and choice buttons
    ================================================================== */
 const evEl=document.createElement('div');evEl.className='tav ev';evEl.hidden=true;document.body.appendChild(evEl);
+/* scene screens (events, the Crossroads): the scene is the sage tent's size unless the box needs more room underneath;
+   then it shrinks just enough, and stays that size until fitReset (the next event / Crossroads) */
+function fitReset(el){el._box=0;el.style.removeProperty('--fitbox')}
+function fitScene(el){for(let i=0;i<4;i++){const h=el.querySelector('.tv-box').offsetHeight+26;if(h>Math.max(190,el._box||0)){el._box=h;el.style.setProperty('--fitbox',h+'px')}}}
 function evShow(E,text,opts){
-  if(evEl.hidden){evEl._box=0;evEl.style.removeProperty('--evbox')}/* a new event: start at the tent's size */
+  if(evEl.hidden)fitReset(evEl);/* a new event: start at the tent's size */
   evEl.innerHTML=`<div class="tv-scene"><img class="tv-bg" src="${eventScene(E.art)}" alt="">${[].concat(E.fig||[],propFig(E.art)||[]).filter(f=>ART_PNG.has('scenes/'+f)).map(f=>`<img class="ev-fig ev-${f}" src="art/scenes/${f}.png" alt="">`).join('')}${E.ov||''}<span class="tv-gold">${gold()} gold</span></div>
     <div class="tv-box"><div class="tv-name">${E.t}</div><p class="tv-text">${text}</p>${E.card&&opts.length>1?E.card:''}<div class="tv-opts">${opts.map(([k,l,sub,dis])=>`<button type="button" class="tv-o" data-t="${k}"${dis?' disabled':''}>${l}${sub?`<span>${sub}</span>`:''}</button>`).join('')}</div></div>`;
   evEl.hidden=false;
-  /* the scene is the sage tent's size unless this box needs more room underneath; then it shrinks just enough (and stays that size for the rest of the event) */
-  for(let i=0;i<4;i++){const h=evEl.querySelector('.tv-box').offsetHeight+26;if(h>Math.max(190,evEl._box||0)){evEl._box=h;evEl.style.setProperty('--evbox',h+'px')}}
+  fitScene(evEl);
   return new Promise(res=>{evEl.onclick=e=>{const b=e.target.closest('[data-t]');if(!b||b.disabled)return;uiSfx(b.dataset.t,b.textContent.trim())||sfx('tick');res(b.dataset.t)}});
 }
 /* the Stables: Arthur can still join (never joined this run) */

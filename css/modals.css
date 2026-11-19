@@ -87,9 +87,7 @@
 .tav{position:fixed;inset:0;z-index:57;display:flex;flex-direction:column;align-items:center;gap:10px;overflow:auto;background:#140d0a;padding-block:max(12px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-bottom,0px));padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px))}
 .tav{--tvw:min(100%,1280px,calc((100vh - 300px)*16/9))}/* leaves room for the dialogue box (name, a line of text, two rows of options) */
 .tav.sg{--tvw:min(100vw - 24px,calc((100vh - 190px)*16/9));gap:8px;padding-block:8px;justify-content:center}/* Ithren's tent: as big as the screen allows, with just room for his one-line box underneath (trial) */
-.tav.ev{--tvw:min(100vw - 24px,calc((100vh - var(--evbox,190px))*16/9));gap:8px;padding-block:8px;justify-content:center}/* events: the same size as the tent (scenes drawn at the tent's size) */
-.tav.mus{--tvw:min(100vw - 24px,calc((100vh - var(--msbox,265px))*16/9));gap:8px;padding-block:8px;justify-content:center}/* the Crossroads: same as the tent, with more room for the unit cards and buttons */
-@media (max-width:1600px){.tav.mus{--msbox:350px}}/* narrower screens: the card text wraps, so the box gets taller */
+.tav.ev,.tav.mus{--tvw:min(100vw - 24px,calc((100vh - var(--fitbox,190px))*16/9));gap:8px;padding-block:8px;justify-content:center}/* events: the same size as the tent (scenes drawn at the tent's size) */
 .tv-scene{box-sizing:border-box;position:relative;width:max(min(100%,760px),var(--tvw));aspect-ratio:16/9;flex:none;border:2px solid #5a3a22;border-radius:8px;overflow:hidden}
 .tv-scene img{position:absolute;image-rendering:pixelated}
 .tv-bg{inset:0;width:100%;height:100%}
