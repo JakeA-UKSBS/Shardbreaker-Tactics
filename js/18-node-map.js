@@ -24,8 +24,8 @@ const fixedRoom = (fl) =>
         ? "tavern"
         : null;
 /* ROOM_W: relative chance of each room type when a room is rolled (out of 100). NO_REPEAT: types that can't come twice in a row. */
-const ROOM_W = { battle: 47, event: 31, rest: 12, elite: 10 },
-  ROOM_W_LIGHT = { battle: 36, event: 42, rest: 12, elite: 10 },
+const ROOM_W = { battle: 41, event: 28, rest: 12, elite: 19 },
+  ROOM_W_LIGHT = { battle: 31, event: 38, rest: 12, elite: 19 },
   NO_REPEAT = ["elite", "rest", "tavern"];
 const NODE_N = {
   tavern: "Tavern",
@@ -196,7 +196,7 @@ const actLen = () =>
 /* difficulty runs on a 10-floor scale whatever the map length */
 const flScale = (n) => Math.round(((n || 1) * 10) / RUN_LEN);
 const NODE_IC = {};
-/* battles from floor 2 on are sometimes defend maps (about 1 in 4, where the region has a town map). Decided by the seed, so the map can show it */
+/* battles from floor 2 on are sometimes defend maps (about 1 in 4, where the region has a town map). Decided by the seed; not shown on the map (a surprise) */
 /* relic icons in the side panel: hovering or focusing one shows its name and effect underneath */
 document.addEventListener("pointerover", relInfo);
 document.addEventListener("focusin", relInfo);
@@ -287,7 +287,7 @@ function mapScreen(preview) {
               vis.has(r + "," + i) ? "vis" : "",
               cur ? "cur" : "",
             ].join(" ");
-          return `<button type="button" class="${c}" style="left:${n.x}%;top:${Y(r)}px" data-n="${r},${i}" ${isOk(r, i) ? "" : 'tabindex="-1"'} aria-label="${NODE_N[n.t]}${cur ? " (you are here)" : ""}"><img ${picAttrs(nodeIcon(n.t), n.t === "boss" ? 116 : 24)} alt="">${nodeDef(r, i) ? '<span class="nd-def" title="Defend: hold out until the waves stop">DEF</span>' : ""}${cur ? `<i class="nflag"><img src="${flagArt()}" alt=""></i>` : ""}</button>`;
+          return `<button type="button" class="${c}" style="left:${n.x}%;top:${Y(r)}px" data-n="${r},${i}" ${isOk(r, i) ? "" : 'tabindex="-1"'} aria-label="${NODE_N[n.t]}${cur ? " (you are here)" : ""}"><img ${picAttrs(nodeIcon(n.t), n.t === "boss" ? 116 : 24)} alt="">${cur ? `<i class="nflag"><img src="${flagArt()}" alt=""></i>` : ""}</button>`;
         })
         .join(""),
     ).join("") +

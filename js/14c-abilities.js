@@ -161,7 +161,7 @@ const ABIL={
 };
 /* the kits: passive, MP pool (spellcasters) and abilities */
 const KITS={
-  kili:{passive:'clearShot',mp:0,abil:['aimedShot','pinningArrow','volley']},
+  kili:{passive:'keenEye',mp:0,abil:['aimedShot','pinningArrow','volley']},
   vaar:{passive:'outlander',mp:0,abil:['shove','flurry','leap']},
   morrigan:{passive:'siphon',mp:24,abil:['drainTouch','hex','vortex','darkPulse']},
   corvin:{passive:'coldSnap',mp:28,abil:['iceShard','frostWave','blizzard','iceShield','frostWall']},

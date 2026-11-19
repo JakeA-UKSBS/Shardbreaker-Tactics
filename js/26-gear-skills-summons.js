@@ -36,7 +36,11 @@ async function learnSkill(title){
     const u=await pickUnit(title||`Learn a ${rwTag('skill','skill')}`,'Choose who learns. Each unit picks from the skills that suit their role.',u=>roleSkills(u).length?null:'Knows them all','Skip',null,'skill');
     if(!u)return null;
     const opts=shuffle(roleSkills(u).slice()).slice(0,3);
-    const m=await modal(`<div class="eyebrow">${rwTag('skill')}</div><h2>${u.name} learns…</h2><div class="inv">${opts.map((k,i)=>`<button type="button" class="it" data-m="s${i}"><span><b>${SKILLS[k].n}</b> · ${SKILLS[k].d}</span></button>`).join('')}</div><div class="mbtns"><button type="button" data-m="back">Back</button></div>`);
+    const known=[u.skill,...(u.skills||[]).map(x=>x.id)].filter(k=>SKILLS[k]);
+    const m=await modal(`<div class="eyebrow">${rwTag('skill')}</div><h2>What does ${u.name} learn?</h2>
+      <div class="sk-who"><img src="${uSpr(u)}" alt=""><div><b>${u.name}</b><span class="dcls">${CLS[u.cls].n} · Lv ${u.lv}</span><span class="sk-known">Knows: ${known.map(k=>SKILLS[k].n).join(', ')}</span></div></div>
+      <div class="sk-opts">${opts.map((k,i)=>`<button type="button" class="sk-opt" data-m="s${i}"><b>${SKILLS[k].n}</b><span>${SKILLS[k].d}</span></button>`).join('')}</div>
+      <div class="mbtns"><button type="button" data-m="back">Choose someone else</button></div>`);
     if(m==='back')continue;const k=opts[+m.slice(1)];(u.skills=u.skills||[]).push({id:k,src:'learned'});sfx('fanfare');toast(`${u.name} learns ${SKILLS[k].n}`);return u}
 }
 /* a set skill (treasure 'skill:<id>'): pick who learns it */

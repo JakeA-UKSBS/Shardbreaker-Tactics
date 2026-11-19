@@ -87,6 +87,7 @@
 .tav{position:fixed;inset:0;z-index:57;display:flex;flex-direction:column;align-items:center;gap:10px;overflow:auto;background:#140d0a;padding-block:max(12px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-bottom,0px));padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px))}
 .tav{--tvw:min(100%,1280px,calc((100vh - 300px)*16/9))}/* leaves room for the dialogue box (name, a line of text, two rows of options) */
 .tav.sg{--tvw:min(100vw - 24px,calc((100vh - 190px)*16/9));gap:8px;padding-block:8px;justify-content:center}/* Ithren's tent: as big as the screen allows, with just room for his one-line box underneath (trial) */
+.tav.ev{--tvw:min(100vw - 24px,calc((100vh - var(--evbox,190px))*16/9));gap:8px;padding-block:8px;justify-content:center}/* events: the same size as the tent (scenes drawn at the tent's size) */
 .tav.mus{--tvw:min(100vw - 24px,calc((100vh - var(--msbox,265px))*16/9));gap:8px;padding-block:8px;justify-content:center}/* the Crossroads: same as the tent, with more room for the unit cards and buttons */
 @media (max-width:1600px){.tav.mus{--msbox:350px}}/* narrower screens: the card text wraps, so the box gets taller */
 .tv-scene{box-sizing:border-box;position:relative;width:max(min(100%,760px),var(--tvw));aspect-ratio:16/9;flex:none;border:2px solid #5a3a22;border-radius:8px;overflow:hidden}
@@ -114,6 +115,8 @@
 .dtick{position:absolute;right:8px;top:6px;color:var(--gold);font-weight:700}
 .ev-card{margin:0;cursor:default}
 .tv-scene .ev-ov{left:50%;bottom:24%;width:20%;transform:translateX(-50%);image-rendering:pixelated;filter:brightness(.8)}
+.tv-scene .ev-ov1{left:38%}.tv-scene .ev-ov2{left:62%}/* two riders at the stables */
+.ev-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .ec{display:flex;flex-direction:column;gap:6px;margin:6px 0}
 .ec-r{display:grid;grid-template-columns:1fr 46px 130px;align-items:center;gap:6px;background:var(--ink);border-radius:8px;padding:6px 10px}
 .ec-t{display:flex;align-items:center;gap:8px}.ec-t img{width:28px;height:28px;image-rendering:pixelated}
@@ -155,3 +158,12 @@
 .ev-ri{width:22px;height:22px;image-rendering:pixelated;vertical-align:middle;margin-right:6px}
 .ec-r{position:relative}.ec-list{display:none;grid-column:1/-1;margin:2px 0 0;font-size:11px;line-height:1.4;color:var(--muted)}.ec-r:hover .ec-list,.ec-r:focus-within .ec-list{display:block}.ec-el .ec-w b{font-size:13px;margin-left:4px}.ec-wk{color:#f0c060;border-color:#8a6a2a}.ec-rs{color:#9ab8d8;border-color:#3a5a7a}
 .ec-r .ec-t{flex-wrap:wrap;gap:6px 10px}.ec-tag{display:inline-flex;align-items:center;gap:6px}.ec-r{grid-template-columns:1fr 46px minmax(130px,auto)}.ec-w b{font-size:13px;margin-left:4px}
+
+/* learning a skill (tablet, rewards): who's learning, then the choices as cards */
+.sk-who{display:flex;gap:12px;align-items:center;background:#1a120e;border:1px solid #5a3a22;border-radius:8px;padding:8px 12px;margin-bottom:10px}
+.sk-who img{width:56px;height:56px;object-fit:contain;image-rendering:pixelated}
+.sk-who div{display:flex;flex-direction:column;gap:2px}.sk-who b{font-size:16px}.sk-known{font-size:12px;opacity:.75}
+.sk-opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px}
+.sk-opt{display:flex;flex-direction:column;align-items:flex-start;gap:6px;text-align:left;padding:12px;border-radius:8px;background:#2a1c14;border:1px solid #7a5230;cursor:pointer;min-height:96px}
+.sk-opt b{font-family:var(--display);font-size:16px;color:var(--gold)}.sk-opt span{font-size:13px;line-height:1.35;opacity:.9}
+.sk-opt:hover,.sk-opt:focus-visible{border-color:var(--gold);background:#3a281c}

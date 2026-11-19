@@ -81,7 +81,7 @@ Each base class ascends into one or two advanced classes at Lv 5.
 A poacher's son who has never missed a meal or a deer. Cheeky, and the one who climbs everything.
 - **Ascends into:** Sniper.
 - **Look:** green leathers, feather headdress, longbow.
-- **Passive: Clear Shot.** Ignores cover: her target gets no Avoid or Def from the terrain it stands on.
+- **Passive: Keen Eye.** +20 Hit, and her target's terrain gives no Avoid.
 - **Aimed Shot** (single, range 2–5 · CD 2): 1.5× Str, as accurate as a normal attack.
 - **Pinning Arrow** (single · CD 3): 0.8× Str, and the target can’t move for 2 turns (Root).
 - **Volley** (area r1 at range 3–5 · CD 4): 0.7× Str to everything in the area.
@@ -196,7 +196,7 @@ As Act 2 begins, two of these offer to join; the rest turn up in the recruit and
 ![Celestine](visuals/cast/celestine.png)
 
 A templar whose order is preaching holy war. She came to prove them wrong.
-- **Look:** mounted, white armour with blues, lance and kite shield.
+- **Look:** mounted, white armour with blues, Holy Sword and kite shield.
 - **Smite** (single, adjacent · 4 MP): 1.2× Str as light damage.
 - **Lay on Hands** (single ally, adjacent · 8 MP): heals 1.5× Mag.
 - **Consecrate** (burst r1 · 10 MP): for 3 turns these tiles heal allies 10% a turn and hurt Infernal creatures.
@@ -216,7 +216,7 @@ A sellsword from the southern deserts who fights for whoever pays, and right now
 ![Kaya](visuals/cast/kaya.png)
 
 A steppe rider with white-and-violet hair who trades arrows for passage. Laughs a lot, misses rarely.
-- **Look:** leathers, shortbow, on a grey horse.
+- **Look:** leathers, Yew Greatbow, on a grey horse.
 - **Passive: Parthian Shot.** Can move again after attacking, up to her remaining Move.
 - **Running Shot** (single, range 2 · CD 2): 1.0× Str, then +2 Move this turn.
 - **Twin Arrows** (single, range 2 · CD 3): 2 hits of 0.6× Str.
