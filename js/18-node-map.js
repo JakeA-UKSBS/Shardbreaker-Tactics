@@ -3,7 +3,7 @@
    Acts 1 and 2: 15 floors, then a camp and the boss, laid out like Slay the Spire's map: 5-6 paths climb a 6-column grid,
    stepping up, up-left or up-right without crossing, so rows hold different numbers of rooms and paths split and merge.
    3-4 starting rooms, and at least 2 diamonds (a room that splits in two and joins back up two floors later).
-   Fixed floors (FIXED_FL): 1 is a battle, 8 a treasure room, and every TAVERN_EVERY floors a tavern (4 and 12); taverns
+   Fixed floors (FIXED_FL): 1 is a battle, 8 a treasure room, and every TAVERN_EVERY floors a tavern (4 and 12, where one room is an armoury); taverns
    aren't rolled anywhere else. Every other room is rolled from ROOM_W, with its rules: no elite or camp before floor 6,
    no camp on floor 14 (a camp follows 15), and no elite or camp twice in a row on any path. On top of the odds, every
    route must pass ROUTE_OK: 5-8 fights (elites count) and at least one camp. One side of the map (left or right three
