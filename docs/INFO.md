@@ -28,7 +28,7 @@ Weapons never break (except the 5-use Meteor and Heaven's Bolt).
 | Tide Sigil | Sigil (Water) | 5 | 90 | 0 | 3 | 1–2 |  |
 | Storm Sigil | Sigil (Lightning) | 8 | 80 | 5 | 5 | 1–2 |  |
 | Thorn Sigil | Sigil (Nature) | 5 | 90 | 0 | 3 | 1–2 |  |
-| Dawn Sigil | Sigil (Light) | 5 | 90 | 0 | 2 | 1–2 | Spectral |
+| Dawn Sigil | Sigil (Light) | 5 | 90 | 0 | 2 | 1–2 | Infernal |
 | Umbral Sigil | Sigil (Dark) | 5 | 85 | 0 | 5 | 1–2 |  |
 | Crook Staff | Sigil | 6 | 85 | 0 | 4 | 1 |  |
 | Rune Staff | Sigil | 4 | 85 | 0 | 3 | 1–2 |  |
@@ -52,7 +52,7 @@ Weapons never break (except the 5-use Meteor and Heaven's Bolt).
 | Meteor Sigil | Sigil (Earth) | 13 | 60 | 0 | 9 | 3–10 |  |
 | War Hammer | Heavy | 8 | 70 | 0 | 10 | 1 | Armoured |
 | Hunting Spear | Polearm | 7 | 80 | 0 | 6 | 1 | Beast |
-| Holy Sword | Blade | 8 | 80 | 5 | 6 | 1 | Spectral |
+| Holy Sword | Blade | 8 | 80 | 5 | 6 | 1 | Infernal |
 | Giantslayer | Blade | 9 | 70 | 0 | 10 | 1 | Colossal |
 
 ## Effective damage
@@ -61,14 +61,16 @@ An effective hit multiplies weapon Mt ×2. Only your side deals them for now.
 
 | Monster type | Who has it | Beaten by |
 |---|---|---|
-| Flier | Hawk, Prism | Bows |
-| Armoured | Magma Golem, Crystal Sentinel, Sandstone Golem, Pyrite Colossus, Gem Golem, Amethyst Turtle, Stone Warden, Yeti | War Hammer, Stonebane |
-| Beast | Wolf, Hawk, Alligator, Blighted Stag, Magma Dragon, Bog Lurker, Sand Worm, Ice Worm, Hell Hound, Frost Wolf, Agate Wyrm, Hollow Bear, Spirit Wolf, Spirit Hawk | Hunting Spear, Wolfsbane |
-| Colossal | Every 2×2 boss | Giantslayer |
-| Spectral | Fire Sprite | Light sigils, Holy Sword, Spiritbane, Paladins |
-| Plant | Blighted Treant | Fire sigils |
+| Armoured | Magma Golem, Crystal Sentinel, Sandstone Golem, Pyrite Colossus, Gem Golem, Amethyst Turtle, Yeti | War Hammer, Stonebane |
+| Beast | Wolf, Alligator, Blighted Stag, Magma Dragon, Blighted Croc, Sand Worm, Ice Worm, Hell Hound, Frost Wolf, Agate Wyrm, Hollow Bear, Spirit Frog | Hunting Spear, Wolfsbane |
+| Quarry | Blighted Stag (bats, when added) | Bows |
+| Colossal | Every 2×2 or 3×3 boss | Giantslayer |
+| Infernal | Hell Hound, Magma Dragon (Pyraxis), Fire Sprite | Light (Dawn Sigil, light abilities), Holy Sword, Fiendbane |
+| Plant | Blighted Treant | Fire |
+| Ooze | Swamp Ooze | Lightning |
+| Troll | Ice Troll | Fire |
 
-**Elemental weaknesses** (×2 Mt from a sigil or ability of that element): Ice Worm, Ice Troll: fire · Lamia, Krondis (Alligator): ice · Mud Monster: lightning · Hell Hound: light (the Holy Sword counts as light too).
+**Elemental weaknesses** (×2 Mt from a sigil or ability of that element): Ice Worm: fire · Lamia, Krondis (Alligator): ice. (The Holy Sword counts as light.)
 
 **Elemental resistances** (half damage from your attacks of that element): Hell Hound, Magma Dragon, Fire Sprite, Magma Golem: fire · Frost Wolf, Ice Worm, Yeti: ice. The in-game chart (What beats what) lists every monster each row covers on hover.
 
@@ -100,7 +102,7 @@ Learned skills cost capacity (base 20, +5 when promoted). Personal skills are fr
 | Quick Study | 10 | Gains double EXP. |
 | Early Edge | 10 | +20 Hit and Avoid on turns 1 to 5. |
 | Wolfsbane | 10 | Effective (×2) against Beasts. |
-| Spiritbane | 10 | Effective (×2) against Spectral foes. |
+| Fiendbane | 10 | Effective (×2) against Infernal foes. |
 | Stonebane | 10 | Effective (×2) against Armoured foes. |
 | Guardian | 10 | Adjacent allies take 2 less damage. |
 | Pike Wall | 5 | +4 Def and +10 Hit against mounted units and fliers. |
@@ -158,7 +160,7 @@ Learned skills cost capacity (base 20, +5 when promoted). Personal skills are fr
 
 | Region | Monsters (weight; from floor) | Elite pack | Boss |
 |---|---|---|---|
-| Sobek’s Mire | Swamp Ooze, Blighted croc 3, Lamia 3 (fl 2+),  | Swamp Ooze, Lamia, Blighted Croc | Krondis |
+| Sobek’s Mire | Swamp Ooze, Blighted Croc 3, Lamia 3 (fl 2+),  | Swamp Ooze, Lamia, Blighted Croc | Krondis |
 | Cursed Woodland | Wolf 4, Blighted Stag 3 (fl 2+), Blighted Treant 2 (fl 5+) | Blighted Treant, Blighted Stag, Wolf | The Hollow Bear |
 | Volcanic Isle | Hell Hound 4, Fire Sprite 2 (fl 2+), Magma Golem 3 (fl 3+) | Magma Golem, Hell Hound, Fire Sprite | Pyraxis, the Magma Dragon |
 | The Heart of the Blight | Floating Crystals(4), Gem Golem | Crystal Sentinel, Shardling, Prism | The Crystal Heart |
@@ -173,7 +175,7 @@ Each monster has 2 moves on cooldowns (no MP). On its turn it scores every ready
 | Monster | Move 1 | Move 2 |
 |---|---|---|
 | Lamia | Stone Gaze (CD 4): melee, 0.5× magic, Stone | Constrict (CD 3): melee 0.8×, Root + Poison |
-| Mud Monster | Mud Spit (CD 3): range 2–3, 0.8×, Slow | Engulf (CD 3): melee 1.0×, Blind 2 turns |
+| Swamp Ooze | Mud Spit (CD 3): range 2–3, 0.8×, Slow | Engulf (CD 3): melee 1.0×, Blind 2 turns |
 | Wolf | Howl (CD 4): allies within 2 Rallied 2 turns | Hamstring (CD 3): melee 0.8×, Slow |
 | Blighted Treant | Grasping Roots (CD 3): range 1–3, Root | Bark Skin (CD 4): Guard self |
 | The Hollow Bear | Maul (CD 3): melee 1.5×, Sunder 2 turns | Roar (CD 4): enemies within 2 Weak |

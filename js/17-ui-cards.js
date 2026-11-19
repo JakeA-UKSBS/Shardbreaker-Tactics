@@ -35,7 +35,7 @@ async function recruitNode(where='recruit'){
   }
 }
 /* slayer loot follows the region: the body tags of its monsters pick which slayer weapon or skill can drop */
-const SLAYER_WPN={armoured:'warHammer',beast:'huntingSpear',colossal:'giantslayer',spectral:'holySword'};
+const SLAYER_WPN={armoured:'warHammer',beast:'huntingSpear',colossal:'giantslayer',infernal:'holySword'};
 function regionTags(withBoss){const B=actBiome(),t=[];for(const[c,w]of[...B.pool,...B.elitePool])for(const g of tagsOf({cls:c}))for(let i=0;i<w;i++)t.push(g);if(withBoss)t.push('colossal','colossal');return t}
 /* returns the item keys found after a win; winScreen offers each one with the Found picker.
    Includes anything that was left behind because a unit's bag was full (state.loot) */

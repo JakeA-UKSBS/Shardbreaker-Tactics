@@ -10,7 +10,6 @@ Rook	Rogue	Assassin	Starting roster	M	leather armour, wrapped hands, dark outfit
 Rhyn	Shieldmaiden	Valkyrie	Starting roster	F	sword + decorative shield, olive outfit
 Raptor	Adventurer	Hero	Tavern only	M	twin khopesh, light armour, orange
 Arthur	Cavalier	Warlord	Found during run	M	armour with a green tint
-Holt	Crossbowman	Artillery	Found during run	M	white hair, blue outfit
 Kaya	Horse Archer	–	After Act 1	F	white/purple hair, shortbow, leathers
 Jun	Swordsman	Swordmaster	Starting roster	M	blue Taoist robes
 Klaus	Pyromancer	Pyrolord	Found during run	M	red robes, gold trim

@@ -14,7 +14,7 @@ The cast, by when they can join. First names only for now. Kits are first drafts
 - **Lysander:** joins only through his event, The Wandering Minstrel.
 - **Act 2:** as it begins, a second Crossroads: two of the advanced characters wait by the fire and you take one. From then on they're in the recruit and tavern pools too.
 - **Once a run:** each character joins at most once a run.
-- **Weapons:** each character only ever wields the weapon type they start with (Menders: charms and arts), including after they ascend. They keep their weapon when they ascend, with two exceptions: Holt's crossbow becomes a longbow when he ascends to Sniper, and Crusaders are given a holy sword alongside their staff or charm.
+- **Weapons:** each character only ever wields the weapon type they start with (Menders: charms and arts), including after they ascend. They keep their weapon when they ascend, with one exception: Crusaders are given a holy sword alongside their staff or charm.
 - **Ascensions:** each character has one (cut back from two, Nov 2026, to keep the art manageable). Characters without one (Kaya, Celestine, Zwei) join already advanced, after Act 1.
 - **Sprites:** every character and ascension is drawn by the unit rig; see the Named cast section of `VISUALS.md`. Their looks are set in `js/14b-cast.js`.
 
@@ -196,10 +196,9 @@ As Act 2 begins, two of these offer to join; the rest turn up in the recruit and
 
 A templar whose order is preaching holy war. She came to prove them wrong.
 - **Look:** mounted, white armour with blues, lance and kite shield.
-- **Passive: Holy.** All her attacks are effective against spectral creatures.
 - **Smite** (single, adjacent · 4 MP): 1.2× Str as light damage.
 - **Lay on Hands** (single ally, adjacent · 8 MP): heals 1.5× Mag.
-- **Consecrate** (burst r1 · 10 MP): for 3 turns these tiles heal allies 10% a turn and hurt spectral creatures.
+- **Consecrate** (burst r1 · 10 MP): for 3 turns these tiles heal allies 10% a turn and hurt Infernal creatures.
 
 
 ### Zwei: Mercenary
@@ -244,7 +243,6 @@ Recruited from recruit stops, the caged-traveller event and the tavern, alongsid
 | Name | Class | Ascends into | Gender |
 |---|---|---|---|
 | Arthur | Cavalier | Paladin or Warlord | M |
-| Holt | Crossbowman | Artillery | M |
 | Klaus | Pyromancer | Pyrolord | M |
 | Raptor (tavern only) | Adventurer | Hero | M |
 | Seren | Summoner | Grand Summoner | F |
@@ -259,17 +257,6 @@ A hot-headed rider from a border garrison that fell to crystallised beasts. Ride
 - **Charge** (line, up to 4 tiles, stops at the first enemy · CD 3): 0.8× Str plus 0.2× for every tile travelled, then push 1.
 - **Lance Sweep** (arc · CD 2): 0.9× Str.
 - **Run Through** (pierce 2 · CD 3): 1.1× Str to both tiles.
-
-### Holt: Crossbowman
-![Holt](visuals/cast/holt.png)
-
-A white-haired militia veteran who has held more walls than he can count. Patient and dry.
-- **Ascends into:** Artillery.
-- **Look:** white hair, blue outfit, crossbow; his crossbow becomes a longbow when he ascends to Sniper.
-- **Passive: Braced.** +20 Hit and +2 damage if he didn’t move this turn.
-- **Bolt Through** (pierce 2 at range 2 · CD 2): 1.2× Str to both tiles.
-- **Crippling Shot** (single, range 2–3 · CD 3): 0.8× Str and Slow.
-- **Overwatch** (self · CD 4): until his next turn, he shoots the first enemy that moves into his range.
 
 ### Jun: Swordsman
 ![Jun](visuals/cast/jun.png)

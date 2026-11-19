@@ -53,7 +53,6 @@ Object.assign(SKILLS,{
   audience:{n:'Audience',kit:1,d:'Allies within 2 tiles of him get +10 Hit.'},
   coldSnap:{n:'Cold Snap',kit:1,d:'His ice sigil attacks also Slow the target.'},
   charger:{n:'Charger',kit:1,d:'+2 damage when he attacks after moving 3 or more tiles.'},
-  steadyAim:{n:'Steady Aim',kit:1,d:'+15 Hit and +5 Crit when he attacks without having moved this turn.'},
   outrider:{n:'Outrider',kit:1,d:'+1 Move, and ignores zone of control.'},
   iaido:{n:'Iaido',kit:1,d:'+10 Crit on the first strike of a fight he starts.'},
   emberHeart:{n:'Ember Heart',kit:1,d:'His fire attacks have a 30% chance to Burn, and Burn he causes lasts 1 turn longer.'},
@@ -110,7 +109,7 @@ const ABIL={
   purify:{n:'Purify',mp:3,side:'ally',r:[0,3],cure:1,d:'Cures every bad status on an ally up to 3 away (or herself): Poison and Stone too.'},
   circleOfFire:{n:'Circle of Fire',tfx:'fire',mp:8,mag:1,el:'fire',side:'foe',r:[1,3],shape:'area',aim:'any',dmg:.9,st:['burn',2],d:'A ring of flame on a 3×3 area up to 3 away: 0.9× magic damage and Burn to every enemy in it.'},
   /* Maelis's weak light attack (placeholder fx until Rhi's animation) */
-  smite:{n:'Smite',tfx:'holy',mp:3,mag:1,el:'light',side:'foe',r:[1,2],dmg:.6,d:'A shaft of light on one enemy up to 2 away: 0.6× magic damage. Light: ×2 against spectres and anything weak to it.'},
+  smite:{n:'Smite',tfx:'holy',mp:3,mag:1,el:'light',side:'foe',r:[1,2],dmg:.6,d:'A shaft of light on one enemy up to 2 away: 0.6× magic damage. Light: ×2 against Infernal foes and anything weak to it.'},
   holyBombardment:{n:'Holy Bombardment',tfx:'holy',mp:10,mag:1,el:'light',side:'foe',r:[1,3],shape:'area',aim:'any',dmg:.8,d:'Pillars of light strike a 3×3 area up to 3 away: 0.8× magic damage to every enemy in it.'},
   sanctuary:{n:'Sanctuary',afx:'sanctuary',mp:10,side:'ally',r:[0,2],shape:'area',aim:'any',give:['guard',1],d:'Guard (30% less damage) on every ally in a 3×3 area until your next turn.'},
   /* Rook (Rogue) */
@@ -134,10 +133,6 @@ const ABIL={
   lanceCharge:{n:'Lance Charge',cd:3,side:'foe',r:[2,4],dmg:1.3,charge:1,d:'Charges an enemy 2–4 tiles away, running up beside it: 1.3× damage.'},
   overrun:{n:'Overrun',cd:3,side:'foe',r:[1,1],shape:'pierce',aim:'dir',dmg:1,d:'Rides through 2 tiles in a line: 1.0× damage to both.'},
   warCry:{n:'War Cry',cd:4,side:'self',shape:'burst2',st:['weak',1],d:'Enemies within 2 tiles are Weak (deal 30% less damage) for a turn.'},
-  /* Holt (Crossbowman) */
-  piercingBolt:{n:'Piercing Bolt',cd:2,side:'foe',r:'wpn',dmg:1.1,st:['sunder',2],d:'1.1× damage, and the target has −3 Def for 2 turns.'},
-  cripplingShot:{n:'Crippling Shot',cd:3,side:'foe',r:'wpn',dmg:.8,st:['chill',1],d:'0.8× damage, and the target is Slowed (−2 Move).'},
-  suppressingFire:{n:'Suppressing Fire',cd:4,side:'foe',r:[2,4],shape:'area',aim:'any',dmg:.4,st:['blind',1],d:'Bolts sweep a 3×3 area 2–4 tiles away: 0.4× damage and Blind (−20 Hit) to every enemy in it.'},
   /* Kaya (Horse Archer) */
   quickShot:{n:'Quick Shot',cd:3,side:'foe',r:'wpn',dmg:.6,hits:2,d:'Two fast arrows of 0.6×.'},
   markPrey:{n:'Mark Prey',cd:2,side:'foe',r:'wpn',dmg:.8,st:['sunder',2],d:'0.8× damage, and the target has −3 Def for 2 turns.'},
@@ -175,7 +170,6 @@ const KITS={
   klaus:{mp:24,abil:['circleOfFire']},/* his passive is his personal skill, Ember Heart */
   /* these use their personal skill (PERSONAL) as the passive */
   arthur:{mp:0,abil:['lanceCharge','overrun','warCry']},
-  holt:{mp:0,abil:['piercingBolt','cripplingShot','suppressingFire']},
   kaya:{mp:0,abil:['quickShot','markPrey','rideOn']},
   jun:{mp:0,abil:['flashStep','twinSlash','counterStance']},
   celestine:{mp:0,abil:['radiantThrust','layOnHands','auraOfLight']},
@@ -189,7 +183,7 @@ const KITS={
 };
 const kitOf=u=>u&&u.cast&&KITS[u.cast]||null;
 /* personal skills for characters without a kit (KITS passives cover the rest) */
-const PERSONAL={arthur:'charger',holt:'steadyAim',kaya:'outrider',jun:'iaido',klaus:'emberHeart',celestine:'lightWard',seren:'kinship',zwei:'cleave'};
+const PERSONAL={arthur:'charger',kaya:'outrider',jun:'iaido',klaus:'emberHeart',celestine:'lightWard',seren:'kinship',zwei:'cleave'};
 const abilOf=u=>{if(u&&u.team==='e'&&MKITS[u.cls])return MKITS[u.cls];const k=kitOf(u);if(!k)return[];const cn=CLS[u.cls].n,sw=k.asc&&k.asc[cn],l=sw?k.abil.map(id=>sw[id]||id):k.abil;return k.add&&k.add[cn]?[...l,...k.add[cn]]:l};
 
 /* ---- monster moves: 2 per monster, cooldowns only (no MP). Extra fields: stone (Stone, bosses immune), psn (Poison),
