@@ -6,8 +6,7 @@
    Fixed floors (FIXED_FL): 1 is a battle, 8 a treasure room, and every TAVERN_EVERY floors a tavern (4 and 12, where one room is an armoury); taverns
    aren't rolled anywhere else. Every other room is rolled from ROOM_W, with its rules: no elite or camp before floor 6,
    no camp on floor 14 (a camp follows 15), and no elite or camp twice in a row on any path. On top of the odds, every
-   route must pass ROUTE_OK: 5-8 fights (elites count) and at least one camp. One side of the map (left or right three
-   columns) rolls from ROOM_W (monster-heavy), the other from ROOM_W_LIGHT (more events). Act 3 stays a short straight road. */
+   route must pass ROUTE_OK: 5-8 fights (elites count) and at least one camp. Act 3 stays a short straight road. */
 const FLOORS = 15,
   COLS = 6,
   TREASURE_FL = 8,
@@ -24,8 +23,7 @@ const fixedRoom = (fl) =>
         ? "tavern"
         : null;
 /* ROOM_W: relative chance of each room type when a room is rolled (out of 100). NO_REPEAT: types that can't come twice in a row. */
-const ROOM_W = { battle: 41, event: 28, rest: 12, elite: 19 },
-  ROOM_W_LIGHT = { battle: 31, event: 38, rest: 12, elite: 19 },
+const ROOM_W = { battle: 35, event: 35, rest: 12, elite: 18 },
   NO_REPEAT = ["elite", "rest", "tavern"];
 const NODE_N = {
   tavern: "Tavern",
@@ -126,8 +124,7 @@ function genLayout() {
   return null;
 }
 function fillRooms(rows) {
-  const heavyLeft = rand() < 0.5,
-    par = rows.map((row, r) =>
+  const par = rows.map((row, r) =>
       row.map((_, i) =>
         r ? rows[r - 1].filter((p) => p.next.includes(i)) : [],
       ),
@@ -141,7 +138,7 @@ function fillRooms(rows) {
           n.t = fx;
           return;
         }
-        const W = n.c < COLS / 2 === heavyLeft ? ROOM_W : ROOM_W_LIGHT,
+        const W = ROOM_W,
           tot = Object.values(W).reduce((a, b) => a + b);
         n.t = "battle";
         for (let q = 0; q < 60; q++) {
