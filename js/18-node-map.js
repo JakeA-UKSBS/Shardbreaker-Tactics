@@ -29,6 +29,7 @@ const ROOM_W = { battle: 47, event: 31, rest: 12, elite: 10 },
   NO_REPEAT = ["elite", "rest", "tavern"];
 const NODE_N = {
   tavern: "Tavern",
+  armoury: "Armoury",
   battle: "Battle",
   elite: "Elite",
   recruit: "Recruit",
@@ -176,6 +177,11 @@ function genMap() {
     if (L && fillRooms(L)) rows = L;
   }
   rows.forEach((row) => row.forEach((n) => (n.x = 10 + n.c * 16 + ri(-3, 3))));
+  /* each tavern floor (4 and 12) with 2+ rooms swaps one of them for an armoury */
+  rows.forEach((row) => {
+    if (row.length > 1 && row.every((n) => n.t === "tavern"))
+      row[Math.floor(rand() * row.length)].t = "armoury";
+  });
   rows.push(
     [{ t: "rest", x: 50, next: [0] }],
     [{ t: "boss", x: 50, next: [] }],
@@ -222,6 +228,8 @@ function nodeIcon(t) {
               : campArt()
             : t === "treasure"
               ? chestArt()
+              : t === "armoury"
+                ? "art/nodes/armoury.png"
               : t === "tavern"
                 ? ART_PNG.has("nodes/tavern")
                   ? "art/nodes/tavern.png"
@@ -639,6 +647,10 @@ async function mapStep() {
   }
   if (N.t === "tavern") {
     await tavernNode();
+    return mapStep();
+  }
+  if (N.t === "armoury") {
+    await armouryNode();
     return mapStep();
   }
   mapEl.hidden = true;
