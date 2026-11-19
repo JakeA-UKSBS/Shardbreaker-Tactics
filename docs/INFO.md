@@ -145,6 +145,8 @@ Learned skills cost capacity (base 20, +5 when promoted). Personal skills are fr
 - **Bosses:** 2×2, move 2, Colossal.
 - **Zone of control:** a unit (yours or theirs) that starts its move next to an enemy has −1 Move. Fliers and cavalry too; Slippery ignores it. Doesn't stack with Slow (−2): the bigger penalty applies.
 - **Loot:** skill after 40% of fights (half of those are the region's slayer skill), Salve after 50%, slayer weapon after 15% of battles and 35% of elites (only if someone can wield it).
+- **Push and pull:** a unit pushed into a wall or another unit takes 3; off a ledge, 2 per level dropped; into water, deep mud, magma or the void, 10 (it stays on the edge). Fliers and lava-walkers just move in. Bosses, 2×2 units and Steady ones can't be moved.
+- **Frozen water:** any ice ability with an area (Blizzard, Frost Wave, Frost Wall, Ice Spray) freezes the water it covers into Frozen Lake for 3 turns. Anyone can walk on it; it stays frozen while someone is standing on it.
 - **Inn:** one drink, one meal and one hire per visit.
 - **Ascension levels:** 1: Enemies are 1 level higher. · 2: Bosses and elite leaders are much tougher. · 3: No early ease, you start with no gold, and units recover only 5 HP after a fight. · 4: Enemies are another level higher, with one more in each battle. · 5: Every enemy knows a combat skill, and fallen units are lost for good (below Ascension 5 they get back up at 1 HP after a win).
 

@@ -26,7 +26,8 @@ const ri=(a,b)=>a+Math.floor(rand()*(b-a+1));
 const pick=a=>a[Math.floor(rand()*a.length)];
 const unitAt=(x,y)=>state.units.find(u=>u.hp>0&&x>=u.x&&y>=u.y&&x<u.x+(u.sz||1)&&y<u.y+(u.sz||1));
 const byId=id=>state.units.find(u=>u.id===id);
-const ter=(x,y)=>TER[MAP[y][x]];
+/* frozen water (state.frz, from ice abilities) counts as Frozen Lake until it thaws */
+const ter=(x,y)=>{const t=TER[MAP[y][x]];return t.k==='water'&&state&&state.frz&&state.frz[x+','+y]?TER.i:t};
 /* tile height level (0 = ground). HM is set with the map in setMap() */
 const hOf=(x,y)=>(HM[y]&&HM[y][x])||0;
 
