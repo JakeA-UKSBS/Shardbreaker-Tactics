@@ -77,7 +77,7 @@
   background-attachment:local;border:2px solid #6e4a26;box-shadow:inset 0 0 50px rgba(92,56,20,.55),inset 0 0 8px rgba(60,34,10,.6),0 6px 22px rgba(0,0,0,.5)}
 .nmap .nm-scroll .nd{box-shadow:0 2px 4px rgba(50,28,8,.45)}
 .nmap .nm-scroll .nd.cur{box-shadow:0 0 0 3px var(--gold),0 2px 4px rgba(50,28,8,.45)}
-.nmap .nm-scroll .nd:not(.ok):not(.cur):not(.vis):not(.n-boss):not(.n-start){opacity:.8;filter:saturate(.6) sepia(.25)}
+.nmap .nm-scroll .nd:not(.vis){opacity:1}/* rooms ahead you can still reach: full colour */.nmap .nm-scroll .nd.gone:not(.n-boss){opacity:.4;filter:grayscale(.85) sepia(.2)}/* rooms you can't reach any more */
 .nmap .nm-scroll .nd.n-boss{opacity:1;width:136px;height:136px;margin:-68px 0 0 -68px;border:0;background:none;box-shadow:none;border-radius:0;z-index:1;isolation:isolate;animation:blight 3.2s ease-in-out infinite}
 /* boss: a corrupted crystal behind the creature (every act) */
 .nmap .nm-scroll .nd.n-boss::after{content:'';position:absolute;z-index:-1;pointer-events:none}

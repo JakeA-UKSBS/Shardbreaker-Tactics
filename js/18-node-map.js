@@ -272,6 +272,16 @@ function mapScreen(preview) {
     isOk = (r, i) => ok.some((o) => o.r === r && o.i === i);
   const Y = (r) => H - 36 - (r + 1) * RH - (r === M.length - 1 ? 50 : 0),
     vis = new Set((run.path || []).map((p) => p.r + "," + p.i));
+  /* rooms you can still get to from here (all of them before the first step); the rest, and their trails, are greyed out */
+  const live = new Set();
+  if (!run.pos) M.forEach((row, r) => row.forEach((_, i) => live.add(r + "," + i)));
+  else
+    for (let st = [[run.pos.r, run.pos.i]]; st.length; ) {
+      const [r, i] = st.pop();
+      if (live.has(r + "," + i)) continue;
+      live.add(r + "," + i);
+      (M[r][i].next || []).forEach((j) => M[r + 1] && st.push([r + 1, j]));
+    }
   const nodes =
     M.map((row, r) =>
       row
@@ -282,6 +292,7 @@ function mapScreen(preview) {
               "n-" + n.t,
               isOk(r, i) ? "ok" : "",
               vis.has(r + "," + i) ? "vis" : "",
+              !live.has(r + "," + i) && !vis.has(r + "," + i) ? "gone" : "",
               cur ? "cur" : "",
             ].join(" ");
           return `<button type="button" class="${c}" style="left:${n.x}%;top:${Y(r)}px" data-n="${r},${i}" ${isOk(r, i) ? "" : 'tabindex="-1"'} aria-label="${NODE_N[n.t]}${cur ? " (you are here)" : ""}"><img ${picAttrs(nodeIcon(n.t), n.t === "boss" ? 116 : 24)} alt="">${cur ? `<i class="nflag"><img src="${flagArt()}" alt=""></i>` : ""}</button>`;
@@ -305,7 +316,7 @@ function mapScreen(preview) {
   );
   mapEl.hidden = false;
   mapEl.style.background = `radial-gradient(ellipse at 50% 0%,${actBiome().bg},#121018 72%)`;
-  mapEl._trails = () => drawTrails(M, Y, vis);
+  mapEl._trails = () => drawTrails(M, Y, vis, live);
   mapEl._trails();
   const sc = mapEl.querySelector(".nm-scroll"),
     focus = !anyRoom && ok[0] ? Y(ok[0].r) : run.pos ? Y(run.pos.r) : H;
@@ -467,9 +478,10 @@ function mapScreen(preview) {
   });
 }
 
-/* the paths between rooms: curving crystal veins. Drawn in pixels.
-   Each trail's bend comes from its rooms' positions, so it's the same every time the map opens. Dark red veins, lighter red shards, like the boss gem; walked ones are brighter. */
-function drawTrails(M, Y, vis) {
+/* the paths between rooms: curving jagged veins. Drawn in pixels.
+   Each trail's bend comes from its rooms' positions, so it's the same every time the map opens.
+   Walked trails are black; trails you can still take are dark red with crystal shards; ones you can't reach any more are faded grey. */
+function drawTrails(M, Y, vis, live) {
   const svg = mapEl.querySelector(".nm-trails");
   if (!svg) return;
   const W = svg.parentNode.clientWidth,
@@ -480,7 +492,7 @@ function drawTrails(M, Y, vis) {
     return v - Math.floor(v);
   };
   let out = "";
-  const trail = (x1, y1, x2, y2, walked, seed) => {
+  const trail = (x1, y1, x2, y2, walked, gone, seed) => {
     const dx = x2 - x1,
       dy = y2 - y1,
       L0 = Math.hypot(dx, dy),
@@ -518,14 +530,15 @@ function drawTrails(M, Y, vis) {
         )),
       );
     /* a jagged vein through the trimmed curve, with crystal shards budding off it every ~22px, alternating sides */
-    /* the boss gem's reds: dark red vein, lighter red shards. Walked veins are brighter and solid */
-    const cBase = walked ? "#6a0e0e" : "#4a0808",
-      cCore = walked ? "#c8302a" : "#8a1616",
-      cShard = walked ? "#ff7a68" : "#e8564a",
-      op = walked ? 1 : 0.65,
+    const st = walked ? "walked" : gone ? "gone" : "live",
+      cShard = "#e8564a",
+      cBase = { walked: "#141010", live: "#4a0808", gone: "#7a6e5e" }[st],
+      cCore = { walked: "#3a3230", live: "#8a1616", gone: "#a89a86" }[st],
+      op = { walked: 1, live: 0.75, gone: 0.35 }[st],
       vp = [];
+    /* crystal shards bud off the vein every ~22px, alternating sides: only on trails you can still take */
     let sh = 0,
-      nextS = 34;
+      nextS = st === "live" ? 34 : Infinity;
     for (let i = 0; i < pts.length; i++) {
       if (lens[i] < 24 || lens[i] > len - 24) continue;
       const j = i === 0 ? 1 : i,
@@ -569,6 +582,7 @@ function drawTrails(M, Y, vis) {
             (m.x * W) / 100,
             Y(r + 1),
             vis.has(r + "," + i) && vis.has(r + 1 + "," + j),
+            !(live.has(r + "," + i) || vis.has(r + "," + i)) || !live.has(r + 1 + "," + j),
             [r, i, j],
           );
       }),
@@ -576,7 +590,7 @@ function drawTrails(M, Y, vis) {
   );
   M[0].forEach((n, i) =>
     //Bézier curve
-    trail(W / 2, Y(-1), (n.x * W) / 100, Y(0), vis.has("0," + i), [-1, 0, i]),
+    trail(W / 2, Y(-1), (n.x * W) / 100, Y(0), vis.has("0," + i), !!run.pos && !vis.has("0," + i), [-1, 0, i]),
   );
   svg.innerHTML = out;
 }
