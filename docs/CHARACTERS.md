@@ -105,6 +105,7 @@ A witch-hunter's daughter who took up the dark arts to hunt the blight instead. 
 - **Passive: Siphon.** Her dark spells heal her for 25% of the damage they deal.
 - **Drain Touch** (single, adjacent · 4 MP): 1.2× Mag.
 - **Hex** (single, range 3 · 5 MP): Weak for 2 turns.
+- **Vortex** (5×5 diamond, range 4 · 7 MP): 0.4× Mag to every enemy within 2 tiles of the target tile, then they're all pulled 1 tile towards the centre (nearest first). Sets up area attacks.
 - **Dark Pulse** (burst r1 · 10 MP): 1.0× Mag to every adjacent enemy.
 
 ### Corvin: Ice Mage (tavern or caged traveller)
