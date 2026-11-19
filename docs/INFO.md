@@ -68,6 +68,8 @@ An effective hit multiplies weapon Mt ×2. Only your side deals them for now.
 | Spectral | Fire Sprite, Frost Sprite | Light sigils, Holy Sword, Spiritbane, Paladins |
 | Plant | Blighted Treant | Fire sigils |
 
+**Elemental weaknesses** (×2 Mt from a sigil or ability of that element): Ice Worm, Ice Troll: fire · Lamia, Krondis (Alligator): ice · Mud Monster: lightning · Hell Hound: light.
+
 ## Skills
 
 Learned skills cost capacity (base 20, +5 when promoted). Personal skills are free.
