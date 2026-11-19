@@ -15,7 +15,6 @@ A snapshot of what's outstanding, as of 19 November 2026. Tick things off or del
 ## Waiting on art (Rhi)
 
 - [ ] Maelis's light attack animation (Smite borrows the holy-pillar effect until then)
-- [ ] Shield icon for defend battles on the node map (shows a "DEF" text tag for now); from the asset pack
 - [ ] Type icons: Infernal, Ooze, Ice, Scaled (16px placeholders)
 - [ ] Artifact icons: Duellist's Charm, Wyrmscale, Innkeeper's Token, Crimson Edge (placeholders)
 - [ ] Fruit icons: Vigour Apple, Quickberries (placeholders)
