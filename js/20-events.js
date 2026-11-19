@@ -1678,6 +1678,44 @@ const evSfxOn = (ek, i, n) => {
   const e = EV_SFX[ek];
   return Array.isArray(e) && (e.includes(i) || (e[1] === 'act' && i < n - 1)) ? e[0] : null;
 };
+/* ARMOURY (one room on floors 4 and 12, beside the taverns): upgrades only (IT[k].armoury; nothing anyone starts with), all cheap.
+   Three on the racks: two aimed at this region's monster types (weapons effective against them), one random; only weapons someone
+   in the squad can wield. Buy as many as you can afford. */
+const armouryPrice = k => (IT[k].r && IT[k].r[1] >= 10 ? 40 : IT[k].crit >= 20 ? 35 : 30);
+async function armouryNode() {
+  const tags = regionTags(true),
+    pool = Object.keys(IT).filter(k => IT[k].armoury && run.roster.some(u => canUse(u, k))),
+    aimed = shuffle(pool.filter(k => effOf(IT[k]).some(t => tags.includes(t)))),
+    stock = [...new Set([...aimed.slice(0, 2), ...shuffle(pool.slice())])].slice(0, 3),
+    E = { t: 'The Armoury', art: 'armoury' };
+  let msg = stock.length
+    ? 'Racks of well-kept weapons, oiled and sharp. The quartermaster looks your squad over. “Upgrades only, and cheap. Pick what suits.”'
+    : 'The racks are bare. “Nothing here your lot could swing, sorry.”';
+  regionSound(actBiome().id);
+  sfx('anvil');
+  for (;;) {
+    const opts = stock.map((k, i) => {
+      const p = armouryPrice(k),
+        poor = gold() < p;
+      return [String(i), `<img class="ev-ri" src="${icon(k)}" alt="">${IT[k].n} · ${p}g`, itemText(k) + (poor ? ' (not enough gold)' : ''), poor];
+    });
+    opts.push(['x', 'Leave', '']);
+    const m = await evShow(E, msg, opts);
+    if (m === 'x') break;
+    const k = stock[+m],
+      u = await pickUnit(`Who takes the ${IT[k].n}?`, 'If their bag is full, you can swap something out.', u =>
+        canUse(u, k) ? null : 'Can’t wield it'
+      );
+    evEl.hidden = false;
+    if (!u || !(await stow(u, k))) continue;
+    spend(armouryPrice(k));
+    sfx('buy');
+    stock.splice(+m, 1);
+    msg = `${u.name} takes the <b>${IT[k].n}</b>. “Look after it.”` + (stock.length ? '' : ' The racks are empty now.');
+  }
+  evEl.hidden = true;
+  evEl.onclick = null;
+}
 async function eventNode() {
   /* act 3 only draws act-3 events; acts 1 and 2 never do */
   const A3 = (run.act || 1) >= 3,

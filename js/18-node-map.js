@@ -3,7 +3,7 @@
    Acts 1 and 2: 15 floors, then a camp and the boss, laid out like Slay the Spire's map: 5-6 paths climb a 6-column grid,
    stepping up, up-left or up-right without crossing, so rows hold different numbers of rooms and paths split and merge.
    3-4 starting rooms, and at least 2 diamonds (a room that splits in two and joins back up two floors later).
-   Fixed floors (FIXED_FL): 1 is a battle, 8 a treasure room, and every TAVERN_EVERY floors a tavern (4 and 12); taverns
+   Fixed floors (FIXED_FL): 1 is a battle, 8 a treasure room, and every TAVERN_EVERY floors a tavern (4 and 12, where one room is an armoury); taverns
    aren't rolled anywhere else. Every other room is rolled from ROOM_W, with its rules: no elite or camp before floor 6,
    no camp on floor 14 (a camp follows 15), and no elite or camp twice in a row on any path. On top of the odds, every
    route must pass ROUTE_OK: 5-8 fights (elites count) and at least one camp. One side of the map (left or right three
@@ -29,6 +29,7 @@ const ROOM_W = { battle: 47, event: 31, rest: 12, elite: 10 },
   NO_REPEAT = ["elite", "rest", "tavern"];
 const NODE_N = {
   tavern: "Tavern",
+  armoury: "Armoury",
   battle: "Battle",
   elite: "Elite",
   recruit: "Recruit",
@@ -176,6 +177,11 @@ function genMap() {
     if (L && fillRooms(L)) rows = L;
   }
   rows.forEach((row) => row.forEach((n) => (n.x = 10 + n.c * 16 + ri(-3, 3))));
+  /* each tavern floor (4 and 12) with 2+ rooms swaps one of them for an armoury */
+  rows.forEach((row) => {
+    if (row.length > 1 && row.every((n) => n.t === "tavern"))
+      row[Math.floor(rand() * row.length)].t = "armoury";
+  });
   rows.push(
     [{ t: "rest", x: 50, next: [0] }],
     [{ t: "boss", x: 50, next: [] }],
@@ -222,6 +228,8 @@ function nodeIcon(t) {
               : campArt()
             : t === "treasure"
               ? chestArt()
+              : t === "armoury"
+                ? "art/nodes/armoury.png"
               : t === "tavern"
                 ? ART_PNG.has("nodes/tavern")
                   ? "art/nodes/tavern.png"
@@ -639,6 +647,10 @@ async function mapStep() {
   }
   if (N.t === "tavern") {
     await tavernNode();
+    return mapStep();
+  }
+  if (N.t === "armoury") {
+    await armouryNode();
     return mapStep();
   }
   mapEl.hidden = true;
