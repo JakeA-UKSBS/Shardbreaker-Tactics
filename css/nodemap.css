@@ -1,0 +1,128 @@
+/* The node map: parchment board, nodes and their outlines, the boss crystal, the side panel (gold, relic grid, squad), unit details, scrollbars.
+   Split out of the old style.css; files load in index.html order (base, board, panels, modals, themes, nodemap, title), which keeps the cascade the same. */
+.ns-drop{margin-left:auto;opacity:.75}.ns-drop:hover{opacity:1}
+/* PC: a wider node map */
+@media (min-width:960px){
+  .nm-board{max-width:620px}.nm-scroll{max-width:760px;width:100%;margin:0 auto}
+  .nm-head,.nm-info,.nm-squad,.nm-relics{max-width:760px;width:100%;margin-inline:auto}.nd{width:54px;height:54px;margin:-27px 0 0 -27px}.nd img{width:30px;height:30px}
+}
+.nmap{position:fixed;inset:0;z-index:55;display:flex;flex-direction:column;background:radial-gradient(ellipse at 50% 0%,#2a2433,#121018 70%);padding:12px 12px max(12px,env(safe-area-inset-bottom,0px));padding-top:max(12px,env(safe-area-inset-top,0px));gap:8px}
+.nm-head h2{font-family:var(--display);margin:0;font-size:24px;letter-spacing:.05em}
+.nm-head .eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--gold)}
+.nm-scroll{flex:1;overflow:auto;min-height:0;border:1px solid var(--line);border-radius:10px;background:rgba(0,0,0,.18)}
+.nm-board{position:relative;max-width:420px;margin:0 auto}
+.nm-board svg{position:absolute;inset:0}
+.nd{position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;padding:0;display:grid;place-items:center;background:var(--panel2);border:2px solid var(--line);opacity:.55}
+.nd img{width:24px;height:24px;image-rendering:pixelated}
+.nd.n-boss{width:104px;height:104px;margin:-52px 0 0 -52px;border-width:3px;border-color:#a8483a;box-shadow:0 0 18px rgba(200,60,50,.45)}.nd.n-boss img{width:88px;height:88px}
+.nd.n-elite{border-color:#e0503a;background:radial-gradient(circle,#5a1a16,#2a0e0c);box-shadow:0 0 12px rgba(224,80,58,.55);width:52px;height:52px;margin:-26px 0 0 -26px}.nd.n-elite img{width:34px;height:34px}
+@media (min-width:960px){.nd.n-elite{width:64px;height:64px;margin:-32px 0 0 -32px}.nd.n-elite img{width:42px;height:42px}}.nd.n-rest{border-color:#c98a3a}.nd.n-recruit{border-color:var(--blue)}.nd.n-treasure{border-color:var(--gold)}.nd.n-tavern{border-color:#c98a4a}.nd.n-event{border-color:#8a6ab0}
+.nd.vis{opacity:.85;background:#2a2620}
+.nd.cur{opacity:1;box-shadow:0 0 0 3px var(--gold)}
+.nd.ok{opacity:1;animation:pulse 1.2s infinite}
+.nd.pick{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 25%,var(--panel2))}
+.nm-relics{display:flex;gap:4px;flex-wrap:wrap}.rl.ml{position:relative}.rl.ml i{position:absolute;right:1px;bottom:0;font:700 10px var(--body);font-style:normal;color:var(--gold)}
+.nd.n-start{border-color:#c98a4a;opacity:1}
+.rl{width:32px;height:32px;padding:0;display:grid;place-items:center}.rl img{width:22px;height:22px;image-rendering:pixelated}
+.nm-info{min-height:2.6em;font-size:14px;color:var(--muted);line-height:1.35}.nm-info b{color:var(--fg)}
+.nm-squad{display:flex;gap:6px;overflow-x:auto}
+.nm-squad div{display:flex;flex-direction:column;align-items:center;font-size:11px;min-width:52px}
+.nm-squad img{width:40px;height:40px;image-rendering:pixelated}.nm-squad small{color:var(--muted)}
+/* run panel on the node map (PC): gold, relics with what they do, meals */
+.nm-side{display:none}
+@media (min-width:1200px){
+  .nm-side{display:block;position:absolute;left:max(16px,calc(50% - 380px - 300px));top:96px;width:280px;max-height:calc(100% - 200px);overflow:auto;background:rgba(18,16,24,.82);border:1px solid var(--line);border-radius:10px;padding:12px 14px;box-sizing:border-box}
+  .nmap .nm-relics{display:none}
+}
+.ns-gold{display:flex;align-items:center;gap:8px;font-weight:700;color:var(--gold);font-size:16px;margin-bottom:6px}.ns-gold img{width:22px;height:22px;image-rendering:pixelated}
+.ns-h{font-family:var(--display);letter-spacing:.06em;font-size:14px;color:var(--fg);margin:10px 0 4px;text-transform:uppercase}
+.ns-row{display:flex;gap:8px;align-items:flex-start;padding:5px 0;border-top:1px solid rgba(255,255,255,.05);font-size:13px;line-height:1.3;color:var(--muted)}
+.ns-row img{width:28px;height:28px;image-rendering:pixelated;flex:none}.ns-row b{display:block;color:var(--fg);font-size:13px}.ns-none{font-size:13px;color:var(--muted);margin:2px 0}
+@media (min-width:1200px){.nm-side.nm-unit{left:auto;right:max(16px,calc(50% - 380px - 300px))}}
+.nm-side.nm-unit[hidden]{display:none}
+.nm-squad [data-u]{cursor:pointer;border-radius:8px;padding:2px 4px;border:1px solid transparent}.nm-squad [data-u]:hover,.nm-squad [data-u].on{border-color:var(--gold);background:rgba(226,181,83,.08)}
+.nu-head{display:flex;gap:10px;align-items:center}.nu-head img{width:56px;height:56px;image-rendering:pixelated;background:rgba(255,255,255,.04);border-radius:8px}
+.nu-head b{display:block;font-size:16px}.nu-head span{display:block;font-size:12px;color:var(--muted)}
+.nu-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:8px}.nu-stats div{text-align:center;background:rgba(255,255,255,.04);border-radius:6px;padding:4px 0}
+.nu-stats span{display:block;font-size:11px;color:var(--muted)}.nu-stats b{font-size:15px}
+.ns-h small{text-transform:none;font-family:var(--body);letter-spacing:0;margin-left:6px}
+.ns-h.gold{color:var(--gold)}
+.nm-head{position:relative}.nm-close{position:absolute;right:0;top:4px}
+/* ---- node map layout: the map gets the space; gold, relics and the squad sit in a column on the left (PC) ---- */
+@media (min-width:960px){
+  .nmap{display:grid;grid-template-columns:280px minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;column-gap:16px;row-gap:10px;padding:16px 20px}
+  .nmap .nm-head{grid-column:1/-1;max-width:none}
+  .nmap .nm-side:not(.nm-unit){display:block;position:static;grid-column:1;grid-row:2;width:auto;max-height:100%;min-height:0;overflow:auto;align-self:start}
+  .nmap .nm-squad{grid-column:1;grid-row:3;max-width:none;flex-wrap:wrap;overflow:visible;margin:0}
+  .nmap .nm-scroll{grid-column:2;grid-row:2/4;max-width:none;margin:0}
+  .nmap .nm-board{max-width:900px}
+  .nmap .nm-relics{display:none}
+  .nmap .nm-info{grid-column:2;grid-row:3;position:absolute;left:14px;right:14px;bottom:12px;max-width:none;margin:0;min-height:0;pointer-events:none}
+  .nmap .nm-info:not(:empty){background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 12px}
+}
+/* unit details float over the map instead of squeezing it */
+.nmap .nm-unit{display:block;position:absolute;left:auto;right:24px;top:88px;bottom:20px;max-height:none;width:min(400px,calc(100% - 32px));overflow:auto;z-index:3;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;box-sizing:border-box;box-shadow:0 10px 30px rgba(0,0,0,.55)}
+.nmap .nm-unit[hidden]{display:none}
+@media (max-width:959px){.nmap .nm-unit{right:16px;top:auto;max-height:70%}}
+.nu-x{position:sticky;top:0;float:right;margin:-4px -6px 0 8px;width:32px;height:32px;padding:0;border-radius:50%;z-index:1}
+.sq-hp{display:flex;align-items:center;gap:4px;width:100%;min-width:56px}.sq-hp i{flex:1;height:5px;border-radius:3px;background:rgba(0,0,0,.5);overflow:hidden;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.sq-hp b{display:block;height:100%;background:#5fd068}.sq-hp.mid b{background:#e8b83a}.sq-hp.lo b{background:#e8483a}.sq-hp em{font-style:normal;font-size:11px;font-weight:700;color:var(--fg)}
+.ns-eq{flex:none;align-self:center;font-size:11px;font-weight:700;color:var(--gold);padding:2px 6px;border:1px solid var(--gold);border-radius:9px}
+.ns-row.eqd>span b{color:var(--gold)}
+/* node map: parchment board */
+.nmap .nm-scroll{background-color:#e3cf9f;background-image:
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .36 0 0 0 0 .24 0 0 0 0 .1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+  radial-gradient(ellipse 30% 22% at 22% 30%,rgba(150,105,45,.18),transparent 70%),radial-gradient(ellipse 26% 30% at 78% 62%,rgba(150,105,45,.16),transparent 70%),radial-gradient(ellipse 35% 18% at 55% 88%,rgba(130,90,40,.14),transparent 70%),
+  radial-gradient(ellipse at 50% 40%,#f1e2bb 0%,#e3cf9f 55%,#c9ad74 100%);
+  background-attachment:local;border:2px solid #6e4a26;box-shadow:inset 0 0 50px rgba(92,56,20,.55),inset 0 0 8px rgba(60,34,10,.6),0 6px 22px rgba(0,0,0,.5)}
+.nmap .nm-scroll .nd{box-shadow:0 2px 4px rgba(50,28,8,.45)}
+.nmap .nm-scroll .nd.cur{box-shadow:0 0 0 3px var(--gold),0 2px 4px rgba(50,28,8,.45)}
+.nmap .nm-scroll .nd:not(.ok):not(.cur):not(.vis):not(.n-boss):not(.n-start){opacity:.8;filter:saturate(.6) sepia(.25)}
+.nmap .nm-scroll .nd.n-boss{opacity:1;width:136px;height:136px;margin:-68px 0 0 -68px;border:0;background:none;box-shadow:none;border-radius:0;z-index:1;isolation:isolate;animation:blight 3.2s ease-in-out infinite}
+/* boss: a corrupted crystal behind the creature (every act) */
+.nmap .nm-scroll .nd.n-boss::after{content:'';position:absolute;z-index:-1;pointer-events:none}
+.nmap .nm-scroll .nd.n-boss::after{inset:-12px;clip-path:polygon(50% 0,97% 21%,97% 79%,50% 100%,3% 79%,3% 21%);
+  background:linear-gradient(160deg,rgba(255,255,255,.28) 0 18%,transparent 18% 100%),conic-gradient(from 30deg at 50% 50%,#c8302a 0 60deg,#6a0e0e 60deg 120deg,#e8564a 120deg 180deg,#8a1616 180deg 240deg,#4a0808 240deg 300deg,#a82420 300deg 360deg)}
+@keyframes blight{0%,100%{filter:drop-shadow(0 0 6px rgba(220,40,30,.7)) drop-shadow(0 3px 4px rgba(40,10,8,.5))}50%{filter:drop-shadow(0 0 14px rgba(240,60,40,.9)) drop-shadow(0 3px 4px rgba(40,10,8,.5))}}
+.nmap .nm-scroll .nd.n-boss img{width:116px;height:116px}
+.nmap .nm-scroll .nd.n-elite img{width:48px;height:48px}
+/* node outlines by type */
+.nmap .nm-scroll .nd{border-width:3px}
+.nmap .nm-scroll .nd.n-battle{border-color:#9a9aa4}
+.nmap .nm-scroll .nd.n-elite{border-color:#e8402e}
+.nmap .nm-scroll .nd.n-tavern{border-color:#a06a3a}
+.nmap .nm-scroll .nd.n-rest{border-color:#f08a2a}
+.nmap .nm-scroll .nd.n-treasure{border-color:#4a8ae0}
+.nmap .nm-scroll .nd.n-event{border-color:#a06ad8}
+.nmap .nm-scroll .nd.n-recruit{border-color:#4aaa6a}
+.nmap .nm-scroll .nd.pick{border-color:var(--gold)}
+/* campfire is a 52px hand-drawn sprite (by Rhi), shown at 1x */
+.nmap .nm-scroll .nd.n-rest img{width:24px;height:24px;image-rendering:pixelated}/* same size as the tavern */
+.nmap .nm-scroll .nd.n-event img{width:32px;height:32px}
+/* map squad: unit sprites at their native 64px (1x, crisp) */
+.nmap .nm-squad img{width:64px;height:64px}.nmap .nm-squad div{min-width:72px;font-size:12px}
+.nmap .nm-scroll .nd.n-treasure img{width:24px;height:24px;image-rendering:pixelated}
+/* node map and its side panels: Dark Ages UI scroll thumbs (art/ui/scroll-v, scroll-h), 2x */
+:is(.nmap,.nmap *)::-webkit-scrollbar{width:14px;height:14px}
+:is(.nmap,.nmap *)::-webkit-scrollbar-track,:is(.nmap,.nmap *)::-webkit-scrollbar-corner{background:rgba(0,0,0,.35)}
+:is(.nmap,.nmap *)::-webkit-scrollbar-thumb:vertical{border-image:url(../art/ui/scroll-v.png) 12 0 fill / 24px 0 stretch;image-rendering:pixelated}
+:is(.nmap,.nmap *)::-webkit-scrollbar-thumb:horizontal{border-image:url(../art/ui/scroll-h.png) 0 12 fill / 0 24px stretch;image-rendering:pixelated}
+:is(.nmap,.nmap *)::-webkit-scrollbar-button{display:none}
+/* the tavern mug on the node map: regular node size, the 24px icon at its own size */
+.nmap .nm-scroll .nd.n-tavern img{width:24px;height:24px;image-rendering:pixelated}
+
+/* node map: a flag planted beside the current room, so it doesn't cover the icon */
+.nmap .nm-scroll .nd .nflag{position:absolute;left:100%;bottom:25%;width:40px;height:40px;margin-left:-10px;pointer-events:none;filter:drop-shadow(0 2px 2px rgba(50,28,8,.5));z-index:2}
+.nmap .nm-scroll .nd .nflag img{width:100%;height:100%;image-rendering:pixelated}
+.nmap .nm-scroll .nd.ok{opacity:1;filter:none;border-color:var(--gold);animation:npulse 1.1s ease-in-out infinite}
+@keyframes npulse{0%,100%{transform:scale(1);box-shadow:0 0 0 2px var(--gold),0 2px 4px rgba(50,28,8,.45)}50%{transform:scale(1.1);box-shadow:0 0 0 4px var(--gold),0 0 14px 4px color-mix(in srgb,var(--gold) 55%,transparent)}}
+@media (prefers-reduced-motion:reduce){.nmap .nm-scroll .nd.ok{animation:none;box-shadow:0 0 0 4px var(--gold)}}
+
+/* node map: the seed tucked in the top-right corner (act and gold are shown elsewhere) */
+.nm-head{position:relative}.nm-seed{position:fixed;top:12px;right:16px;z-index:5;font-family:var(--display);font-size:12px;letter-spacing:.06em;color:var(--muted)}
+/* node map: relics as an icon grid, hover or focus for the name and effect */
+.ns-rels{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}.ns-rel{position:relative;display:grid;place-items:center;width:36px;height:36px;border-radius:6px;background:rgba(255,255,255,.04);cursor:help}
+.ns-rel img{width:28px;height:28px;image-rendering:pixelated}.ns-rel:hover,.ns-rel:focus{background:rgba(255,255,255,.12);outline:none}
+.ns-rinfo{min-height:34px;margin-top:6px;font-size:12px;line-height:1.35;color:var(--muted)}.ns-rinfo b{display:block;color:var(--fg);font-size:13px}
+/* defend battles: a small DEF tag on the node (it went missing from style.css in a merge) */
+.nd .nd-def{position:absolute;right:-14px;top:-8px;padding:0 3px;border-radius:3px;background:#2a3a5a;border:1px solid #7aa0d8;color:#cfe0ff;font:700 9px/13px var(--display);letter-spacing:.04em;pointer-events:none}

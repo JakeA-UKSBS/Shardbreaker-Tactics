@@ -1,0 +1,179 @@
+/* Side panel and unit info: unit cards, equipment, the forecast and its pop-out, the unit sheet (both pages), skills and abilities, status chips, the battle cutscene, enemy type line, green +N bonuses.
+   Split out of the old style.css; files load in index.html order (base, board, panels, modals, themes, nodemap, title), which keeps the cascade the same. */
+.hpb{position:absolute;left:8px;right:8px;bottom:2px;height:3px;background:rgba(0,0,0,.6);border-radius:2px}
+.hpb i{display:block;height:100%;background:var(--green);border-radius:2px;transition:width .3s}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px;min-height:120px;display:flex;flex-direction:column;gap:8px}
+.hint{color:var(--muted);margin:0;line-height:1.4}
+.uc{display:flex;gap:10px;align-items:flex-start}
+.por{width:56px;height:56px;object-fit:cover;background:var(--panel2);border-radius:6px;border:1px solid var(--line);flex:none}
+.uc.e .por{background:#2d1d1f}
+.uci{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.ch{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.ch b{font-family:var(--display);font-size:17px}
+.ch span{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+.uc.p .ch b{color:var(--blue)}.uc.e .ch b{color:var(--red)}.uc.g .ch b{color:var(--green)}
+.uc.g .por{background:#1d2d22}
+.side.r.g{background:#16301f;border-color:var(--green)}
+.hp,.xp{display:flex;align-items:center;gap:8px;font-variant-numeric:tabular-nums;font-size:12px}
+.hp .bar,.xp .bar{flex:1;height:6px;background:#0d0f15;border-radius:3px;display:block}
+.hp .bar i{display:block;height:100%;background:var(--green);border-radius:3px}
+.xp .bar i{display:block;height:100%;background:var(--gold);border-radius:3px}
+.hp span,.xp span{min-width:58px;text-align:right;color:var(--muted)}
+.eq{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.eq img,.it img{width:20px;height:20px;image-rendering:pixelated}
+.sk{color:var(--gold)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;text-align:center;font-variant-numeric:tabular-nums}
+.stats div{background:var(--ink);border-radius:4px;padding:3px 0;font-weight:700}
+.stats small{display:block;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:500}
+.skd{font-size:13px;color:var(--muted);margin:0}
+.inv{display:flex;flex-direction:column;gap:2px}
+.it{display:flex;align-items:center;gap:8px;padding:4px 6px;border-radius:6px;background:var(--ink);font-size:14px;border:1px solid transparent;color:var(--fg);font-weight:500;text-align:left}
+.it .u{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--muted)}
+.it em{font-style:normal;font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:.06em}
+.it.eqd{border-color:color-mix(in srgb,var(--blue) 60%,transparent)}
+.inv.big{gap:8px}.inv.big button.it{padding:12px 14px;font-size:15px;gap:12px;border-color:color-mix(in srgb,var(--gold) 40%,transparent)}.inv.big .it img{width:40px;height:40px;image-rendering:pixelated}.inv.big button.it:hover{border-color:var(--gold)}
+.acts{display:flex;gap:6px;flex-wrap:wrap}
+.acts button{flex:1;min-width:64px}
+.fc{display:grid;grid-template-columns:1fr auto 1fr;gap:3px 10px;align-items:center;font-variant-numeric:tabular-nums;text-align:center}
+.fc .l{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.fc .pc{color:var(--blue)}.fc .ec{color:var(--red)}
+.fc .big{font-size:17px;font-weight:700}
+.wsel{display:flex;align-items:center;justify-content:center;gap:8px;font-size:14px}
+.wsel img{width:22px;height:22px;image-rendering:pixelated}
+.adv{color:var(--green)}.dis{color:var(--red)}
+/* battle scene */
+.bs{position:fixed;inset:0;z-index:50;background:#0b0c12;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.ground{position:absolute;left:0;right:0;bottom:0;height:30%;background:#363b33}
+.slash{position:absolute;width:110px;height:110px;border-radius:50%;border:6px solid transparent;border-top-color:#fff;border-right-color:rgba(255,255,255,.5);z-index:3;pointer-events:none}
+.rock{position:absolute;top:0;width:36px;height:30px;background:#9a7a4a;clip-path:polygon(20% 0,80% 8%,100% 55%,70% 100%,15% 90%,0 40%);z-index:3;pointer-events:none}
+.bolt{position:absolute;top:0;width:18px;background:linear-gradient(#fff9c4,#ffe04a);clip-path:polygon(40% 0,100% 0,60% 40%,100% 40%,20% 100%,40% 55%,0 55%);z-index:3;pointer-events:none}
+.side{border-radius:6px;padding:8px;border:2px solid;display:flex;flex-direction:column;gap:4px;min-width:0}
+.side.l{background:#3a1713;border-color:var(--red)}
+.side.r{background:#14243f;border-color:var(--blue)}
+.sn{font-family:var(--display);font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sw{display:flex;align-items:center;gap:4px;font-size:13px;color:#d9d4c4;white-space:nowrap;overflow:hidden}
+.sw img{width:20px;height:20px;image-rendering:pixelated}
+.ss{display:grid;grid-template-columns:auto 1fr;gap:0 8px;font-size:12px;font-variant-numeric:tabular-nums}
+.ss span{color:#b8b5aa;letter-spacing:.06em}.ss b{text-align:right}
+.expbox{position:absolute;left:50%;bottom:6%;transform:translateX(-50%);background:var(--panel);border:2px solid var(--gold);padding:6px 12px;display:flex;gap:8px;align-items:center;font-weight:700;z-index:6;border-radius:6px;font-variant-numeric:tabular-nums}
+.expbox .xb{width:120px;height:8px;background:#07080c;border-radius:2px;overflow:hidden}
+.expbox .xb i{display:block;height:100%;background:var(--gold)}
+/* unit sheet: FE-style two-page unit details */
+.sheet{position:fixed;inset:0;z-index:65;background:rgba(8,9,14,.9);display:flex;justify-content:center;align-items:center;padding:12px;padding-top:max(12px,env(safe-area-inset-top,0px));padding-bottom:max(12px,env(safe-area-inset-bottom,0px));touch-action:pan-y}
+.sbx{box-sizing:border-box;width:100%;max-width:420px;max-height:100%;overflow:auto;background:var(--panel);border:2px solid var(--line);border-radius:10px;display:flex;flex-direction:column}
+.sbx.p{border-color:color-mix(in srgb,var(--blue) 60%,var(--line))}.sbx.g{border-color:color-mix(in srgb,var(--green) 60%,var(--line))}.sbx.g .sn{color:var(--green)}.sbx.e{border-color:color-mix(in srgb,var(--red) 60%,var(--line))}
+.snav{display:flex;align-items:center;gap:6px;padding:8px}
+.snav span{flex:1;text-align:center;font-family:var(--display);color:var(--muted);letter-spacing:.06em;font-size:13px;font-variant-numeric:tabular-nums}
+.snav button{min-width:44px;font-size:16px;padding:6px 10px}
+.snav .sx{min-width:40px}
+.shd{display:flex;gap:12px;align-items:center;padding:4px 14px 12px}
+.shd>img{width:92px;height:92px;flex:none;image-rendering:pixelated;background:var(--panel2);border-radius:8px;border:2px solid var(--gold)}
+.sbx.e .shd>img{background:#2d1d1f}
+.shi{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.sn{font-family:var(--display);font-size:24px;letter-spacing:.04em;line-height:1.1}
+.sbx.p .sn{color:var(--blue)}.sbx.e .sn{color:var(--red)}
+.sc em{font-style:normal;font-family:var(--body);font-size:11px;color:#1a1408;background:var(--gold);border-radius:4px;padding:1px 5px;vertical-align:middle;letter-spacing:.06em;text-transform:uppercase}
+.sc{font-family:var(--display);color:var(--fg);font-size:15px}
+.slv{color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
+.stabs{display:flex;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--ink)}
+.stabs button{flex:1;border:0;border-radius:0;background:none;color:var(--muted);font-family:var(--display);letter-spacing:.08em;padding:10px;border-bottom:2px solid transparent}
+.stabs button.cur{color:var(--gold);border-bottom-color:var(--gold)}
+.spg{min-height:430px;box-sizing:border-box;padding:12px 14px 16px;display:flex;flex-direction:column;gap:12px}
+.sl{font-family:var(--display);color:var(--gold);font-size:13px;letter-spacing:.06em}
+.sgrid{display:flex;flex-direction:column;gap:6px}
+.srow{display:grid;grid-template-columns:44px 1fr 28px;align-items:center;gap:10px;font-variant-numeric:tabular-nums}
+.srow b{text-align:right;font-size:16px}
+.sbar{height:7px;background:#0d0f15;border-radius:4px;overflow:hidden}
+.sbar i{display:block;height:100%;background:linear-gradient(90deg,color-mix(in srgb,var(--gold) 55%,#000),var(--gold))}
+.sinfo{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.sinfo>div{background:var(--ink);border-radius:6px;padding:6px 8px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.sinfo .wide{grid-column:1/-1}
+.sinfo b{font-size:14px;font-weight:700}
+.wts{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:14px}
+.wt{display:inline-flex;align-items:center;gap:4px}
+.wt img,.srit img{width:20px;height:20px;image-rendering:pixelated}
+.sskill{background:var(--ink);border-radius:6px;padding:8px;border:1px solid color-mix(in srgb,var(--gold) 35%,transparent);display:flex;flex-direction:column;gap:2px}
+.sskill p,.sid{margin:0;color:var(--muted);font-size:14px;line-height:1.4}
+.sid b{color:var(--fg)}.sid.dim{font-size:13px}
+.scmb{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;font-variant-numeric:tabular-nums}
+.scmb div{background:var(--ink);border-radius:6px;padding:6px 8px;display:flex;justify-content:space-between;align-items:baseline}
+.scmb b{font-size:17px}
+.sitems{display:flex;flex-direction:column;gap:3px}
+.srit{display:flex;align-items:center;gap:8px;width:100%;text-align:left;font-weight:500;padding:6px 8px;background:var(--ink);border-color:transparent}
+.srit .e{width:16px;font-family:var(--display);color:var(--blue);font-weight:700}
+.srit em{font-style:normal;font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:.06em}
+.srit .u{margin-left:auto;color:var(--muted);font-variant-numeric:tabular-nums}
+.srit.eqd{border-color:color-mix(in srgb,var(--blue) 60%,transparent)}
+.srit.sel{border-color:var(--gold)}
+.srit.no{color:var(--muted)}
+/* skills list on the unit sheet */
+.skh{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.capn{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.skl{display:flex;flex-direction:column;gap:6px}
+.skr{display:grid;grid-template-columns:1fr auto;gap:2px 8px;align-items:center}
+.skr b{font-weight:700;color:var(--gold)}
+.skr small{grid-column:1/-1;color:var(--muted);font-size:13px;line-height:1.35}
+.skr .tag{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;display:flex;gap:6px;align-items:center}
+.skr .tag button{padding:2px 8px;font-size:11px}
+.skr .tag button.warn{border-color:var(--red);color:var(--red)}
+.skr.dim b,.skr.dim small{opacity:.55}
+.tipbox{border-color:var(--gold)}
+/* PC: the command panel sits right of the map */
+@media (min-width:960px){.panel{grid-column:2;grid-row:2;overflow:auto;align-self:stretch}}
+.umenu{position:absolute;z-index:30;background:rgba(18,14,24,.94);border:1px solid #6a5a7a;border-radius:8px;padding:5px;box-shadow:0 4px 14px rgba(0,0,0,.55)}.umenu[hidden]{display:none}.umenu .acts{display:flex;flex-direction:column;gap:4px;margin:0}.umenu button{min-width:110px;padding:6px 12px;font-size:14px;text-align:left}
+/* ---- body tags: map badges, sheet line, forecast chip, chart ---- */
+.stags{display:flex;align-items:center;gap:4px;flex-wrap:wrap;background:none;border:0;padding:0;margin:2px 0;font-size:12px;color:var(--gold);cursor:pointer;text-align:left}
+.stags img{width:16px;height:16px;image-rendering:pixelated}
+.effv{color:var(--green)}
+.effl{display:flex;align-items:center;justify-content:center;gap:6px;margin:6px auto 2px;padding:3px 12px;border-radius:999px;border:1px solid var(--green);background:rgba(114,192,122,.14);color:var(--green);font-weight:800;letter-spacing:.04em;font-size:13px}
+.effl img{width:16px;height:16px;image-rendering:pixelated}
+/* forecast pop-out (uses the umenu box) */
+.umenu.ufc{width:200px;padding:8px 10px;font-size:13px}
+.umenu.ufc button{min-width:0}
+.ufc-h{display:flex;align-items:center;justify-content:space-between;gap:4px;font-weight:800}.ufc-h img{width:20px;height:20px;image-rendering:pixelated}.ufc-h .pc{color:var(--blue)}.ufc-h .ec{color:var(--red);text-align:right}
+.ufc-h .mini,.ufc-w .mini{padding:0 5px;font-size:11px;min-width:0}
+.ufc-w{display:flex;align-items:center;justify-content:center;gap:6px;font-size:11px;color:var(--muted);margin:1px 0 4px}
+.ufc-g{display:grid;grid-template-columns:1fr auto 1fr;gap:2px 6px;text-align:center}.ufc-g b{font-variant-numeric:tabular-nums}.ufc-g i{font-style:normal;font-size:10px;color:var(--muted);align-self:center}
+.umenu.ufc .effl{margin:6px auto 2px;font-size:12px;padding:1px 10px}
+.ufc-b{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:6px}.ufc-b button{padding:5px}
+.ufc-w.hgt{color:var(--gold);font-size:12px}
+/* docked command menu / forecast: bottom-left or bottom-right of the map view */
+.vp>.umenu{top:auto;bottom:10px;left:auto;right:auto;z-index:40}
+.vp>.umenu.dl{left:10px}.vp>.umenu.dr{right:10px}
+/* aiming an ability: a slightly bigger Use/Back menu with a gold outline, so it stands apart from the normal command menu */
+.umenu.aim{border:2px solid #d8b24a;box-shadow:0 0 0 1px rgba(0,0,0,.6),0 4px 16px rgba(0,0,0,.6);padding:7px}
+.umenu.aim button{font-size:16px;padding:9px 16px}
+.umenu.aim.ufc{width:230px}
+/* abilities: MP bar, status chips, the ability list and its forecast */
+.mpl{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}.mpl .bar{flex:1;height:5px;border-radius:3px;background:#2a2638;overflow:hidden}.mpl .bar i{display:block;height:100%;background:#6a8cff}
+.stc{display:flex;flex-wrap:wrap;gap:4px;margin-top:3px}.st{font-size:11px;padding:1px 6px;border-radius:9px;font-weight:700}.st.bad{background:#5a2430;color:#ffb3b3}.st.good{background:#24503a;color:#b8f0c8}
+.abl{display:flex;flex-direction:column;gap:5px;min-width:250px;max-width:330px}.abl-h{display:flex;justify-content:space-between;align-items:baseline;color:var(--gold)}.abl-h span{font-size:12px;color:#9fb4ff}
+.ab{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:1px;padding:6px 9px}.ab .abn{display:flex;justify-content:space-between;width:100%;font-weight:700}.ab .abn i{font-style:normal;font-size:12px;color:#9fb4ff}
+.ab .abr{font-size:11px;color:var(--gold)}.ab .abd{font-size:12px;color:var(--muted);font-weight:400;line-height:1.3}.ab.off{opacity:.55}.ab .abd em{color:#f0a08a;font-style:normal}
+.abf-r{font-size:13px;padding:3px 0;border-top:1px solid rgba(255,255,255,.06)}.abf-r .ec,.abf-r .pc{font-weight:700;margin-right:6px}.abfn{color:var(--gold)}.abfc{margin-left:auto;font-size:12px;color:#9fb4ff}
+/* the unit card's equipment list in the side panel */
+.ueq{margin-top:8px}.ueq-h{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}.ueq .inv{margin:0}
+/* dev mode: damage breakdown beside the forecast */
+.ufc-dev{position:absolute;bottom:0;width:230px;max-height:70vh;overflow:auto;background:rgba(18,14,24,.96);border:1px dashed #d8b24a;border-radius:8px;padding:7px 9px;font-size:11px;line-height:1.35;box-shadow:0 4px 14px rgba(0,0,0,.55)}
+.umenu.dl .ufc-dev{left:calc(100% + 8px)}.umenu.dr .ufc-dev{right:calc(100% + 8px)}
+.ufc-dev hr{border:0;border-top:1px solid #6a5a7a;margin:6px 0}
+.ufc-dev .dvh{font-weight:800;color:var(--gold);margin-bottom:3px}
+.ufc-dev .dvs{margin:3px 0}.ufc-dev .dvs>b{display:block;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.ufc-dev .dvs div{display:flex;justify-content:space-between;gap:8px}.ufc-dev .dvs i{font-style:normal;font-variant-numeric:tabular-nums;white-space:nowrap}
+.ufc-dev .dvt{border-top:1px solid rgba(255,255,255,.12);font-weight:700}
+.ufc-dev .dvn{color:var(--muted);font-size:10px;margin-top:4px}
+.ufc-dev .dvx{float:right;margin:-3px -5px 0 6px;padding:0 6px;font-size:11px;line-height:16px;min-height:0;background:none;border:1px solid #6a5a7a;border-radius:4px;color:var(--gold);cursor:pointer}
+.ufc-dev.min{width:auto;padding:3px}.ufc-dev.min>:not(.dvx){display:none}.ufc-dev.min .dvx{float:none;margin:0}
+
+/* reward colour coding (fixed colours so themes don't recolour them) */
+.rw{font-weight:700}.rw-artifact{color:#5a9cf0}.rw-weapon{color:#e0604a}.rw-skill{color:#7ccf84}.rw-item{color:#f0c850}
+.capn{font-size:11px;color:var(--muted)}
+
+/* status chips: hover (or focus) shows what the status does */
+.st[data-tip]{position:relative;cursor:help}
+.st[data-tip]:hover::after,.st[data-tip]:focus::after{content:attr(data-tip);position:absolute;left:0;top:calc(100% + 6px);z-index:50;width:max-content;max-width:220px;padding:6px 8px;border-radius:6px;background:#1a161c;color:#f0e6d6;border:1px solid #5a4a3a;font-size:12px;font-weight:400;line-height:1.35;white-space:normal;box-shadow:0 4px 12px rgba(0,0,0,.5);pointer-events:none}
+
+/* damage boosted by relics / skills / statuses / abilities: a small green +N after the number, its sources above it on hover */
+.dmg-up{color:#7ddc6a;font-size:.65em;margin-left:2px;vertical-align:super;cursor:help;position:relative;font-weight:700}
+.dmg-up[data-tip]:hover::after,.dmg-up[data-tip]:focus::after{content:attr(data-tip);position:absolute;left:50%;transform:translateX(-50%);bottom:calc(100% + 6px);z-index:50;width:max-content;max-width:220px;padding:6px 8px;border-radius:6px;background:#1a161c;color:#f0e6d6;border:1px solid #5a4a3a;font-size:12px;font-weight:400;line-height:1.35;white-space:normal;pointer-events:none;vertical-align:baseline}
+.mtypes{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px}.mty{display:inline-flex;align-items:center;gap:4px}.mty img{width:16px;height:16px;image-rendering:pixelated}.mwk{color:#f0c060}.mrs{color:#9ab8d8}
