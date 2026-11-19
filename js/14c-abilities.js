@@ -108,6 +108,8 @@ const ABIL={
   circleOfRest:{n:'Circle of Rest',mp:8,side:'ally',r:[0,3],shape:'cross',aim:'any',heal:.8,cure:1,d:'Heals every ally in a cross for 0.8× (Mag + 5) and cures their bad statuses.'},
   purify:{n:'Purify',mp:3,side:'ally',r:[0,3],cure:1,d:'Cures every bad status on an ally up to 3 away (or herself): Poison and Stone too.'},
   circleOfFire:{n:'Circle of Fire',tfx:'fire',mp:8,mag:1,el:'fire',side:'foe',r:[1,3],shape:'area',aim:'any',dmg:.9,st:['burn',2],d:'A ring of flame on a 3×3 area up to 3 away: 0.9× magic damage and Burn to every enemy in it.'},
+  /* Maelis's weak light attack (placeholder fx until Rhi's animation) */
+  smite:{n:'Smite',tfx:'holy',mp:3,mag:1,el:'light',side:'foe',r:[1,2],dmg:.6,d:'A shaft of light on one enemy up to 2 away: 0.6× magic damage. Light: ×2 against spectres and anything weak to it.'},
   holyBombardment:{n:'Holy Bombardment',tfx:'holy',mp:10,mag:1,el:'light',side:'foe',r:[1,3],shape:'area',aim:'any',dmg:.8,d:'Pillars of light strike a 3×3 area up to 3 away: 0.8× magic damage to every enemy in it.'},
   sanctuary:{n:'Sanctuary',afx:'sanctuary',mp:10,side:'ally',r:[0,2],shape:'area',aim:'any',give:['guard',1],d:'Guard (30% less damage) on every ally in a 3×3 area until your next turn.'},
   /* Rook (Rogue) */
@@ -168,7 +170,7 @@ const KITS={
   corvin:{passive:'coldSnap',mp:28,abil:['iceShard','frostWave','blizzard','iceShield','frostWall']},
   drecken:{passive:'twinBolt',mp:28,abil:['spark','chainLightning','thunderclap']},
   aldric:{passive:'plate',mp:0,abil:['sunder','valiantThrust','cover']},
-  maelis:{passive:'lastLight',mp:26,abil:['mend','purify','circleOfRest','sanctuary'],add:{Saint:['holyBombardment']}},/* add: abilities gained on ascending */
+  maelis:{passive:'lastLight',mp:26,abil:['smite','mend','purify','circleOfRest','sanctuary'],add:{Saint:['holyBombardment']}},/* add: abilities gained on ascending */
   klaus:{mp:24,abil:['circleOfFire']},/* his passive is his personal skill, Ember Heart */
   /* these use their personal skill (PERSONAL) as the passive */
   arthur:{mp:0,abil:['lanceCharge','overrun','warCry']},

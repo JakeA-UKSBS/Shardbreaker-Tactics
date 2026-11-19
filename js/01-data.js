@@ -107,7 +107,7 @@ Object.assign(IT,{
   /* slayer weapons: effective (×2 Mt) against one body tag */
   warHammer:{n:'War Hammer',t:'heavy',kind:'hammer',mt:8,hit:70,crit:0,r:[1,1],uses:30,wt:10,eff:['armoured']},
   huntingSpear:{n:'Hunting Spear',t:'pole',kind:'spear',mt:7,hit:85,crit:0,r:[1,1],uses:30,wt:6,eff:['beast']},
-  holySword:{n:'Holy Sword',t:'blade',kind:'sword',mt:8,hit:80,crit:5,r:[1,1],uses:25,wt:6,eff:['spectral'],tint:'holy'},
+  holySword:{n:'Holy Sword',t:'blade',kind:'sword',mt:8,hit:80,crit:5,r:[1,1],uses:25,wt:6,eff:['spectral'],tint:'holy',holy:true},
   giantslayer:{n:'Giantslayer',t:'blade',kind:'greatsword',mt:9,hit:70,crit:0,r:[1,1],uses:25,wt:10,eff:['colossal'],tint:'steel'},
   farStaff:{n:'Far Staff',t:'spirit',kind:'staff',amt:10,r:[1,10],uses:15,tint:'mend'},
   /* two-handed swords (kind greatsword): heavy, hard-hitting blades. Zwei wields only these */
