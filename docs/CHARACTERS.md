@@ -81,7 +81,7 @@ Each base class ascends into one or two advanced classes at Lv 5.
 A poacher's son who has never missed a meal or a deer. Cheeky, and the one who climbs everything.
 - **Ascends into:** Sniper.
 - **Look:** green leathers, feather headdress, longbow.
-- **Passive: Eagle Eye.** +1 range on every shot, on top of the height bonus.
+- **Passive: Clear Shot.** Ignores cover: her target gets no Avoid or Def from the terrain it stands on.
 - **Aimed Shot** (single, range 2–5 · CD 2): 1.5× Str, as accurate as a normal attack.
 - **Pinning Arrow** (single · CD 3): 0.8× Str and Root.
 - **Volley** (area r1 at range 3–5 · CD 4): 0.7× Str to everything in the area.

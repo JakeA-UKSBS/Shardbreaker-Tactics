@@ -97,12 +97,24 @@ function itemRows(u,btn){
   return`<div class="inv">${u.items.map((it,i)=>{const w=IT[it.k],tag=btn?'button':'div';
     return`<${tag} class="it${i===ei?' eqd':''}${btn&&itemSel===i?' sel':''}"${btn?` data-act="item:${i}" type="button"`:''}><img src="${icon(it.k)}" alt="">${w.n}${it.d?' <em>drops</em>':''}<span class="u">${[w.r&&w.t!=='item'?`Rng ${rngTxt(w.r)}`:'',endless(it.k)?'':`${it.u}/${w.uses}`].filter(Boolean).join(' · ')}</span></${tag}>`}).join('')||'<p class="skd">No items.</p>'}</div>`;
 }
+/* enemy card: its types, and what it's weak to or resists */
+const TAG_BEATEN={armoured:'Hammers',beast:'Spears',quarry:'Bows',colossal:'Giantslayer',infernal:'Light',plant:'Fire',troll:'Fire',ooze:'Lightning'};
+const EL_N={fire:'Fire',ice:'Ice',lightning:'Lightning',light:'Light',dark:'Dark',nature:'Nature',water:'Water'};
+function monTypes(u){if(u.team!=='e')return'';const tg=tagsOf(u),wk=[...new Set([...tg.map(t=>TAG_BEATEN[t]),...weakOf(u).map(e=>EL_N[e]||e)])].filter(Boolean),rs=resOf(u).map(e=>EL_N[e]||e);
+  if(!tg.length&&!wk.length&&!rs.length)return'';
+  return`<div class="eq mtypes">${tg.map(t=>`<span class="mty"><img src="${tagArt(t)}" alt="">${TAGS[t].n}</span>`).join('')}${wk.length?`<span class="mwk">Weak: ${wk.join(', ')}</span>`:''}${rs.length?`<span class="mrs">Resists: ${rs.join(', ')} (½)</span>`:''}</div>`}
+/* bonuses from artifacts and food, for the green +N on a unit's sheet (target-free ones only) */
+function sheetBonus(u){const o={str:0,mag:0,def:0,res:0,atk:0,hit:0,crit:0,avo:0,mov:0};if(u.team!=='p'||!run)return o;
+  const ei=eqIdx(u),w=ei>=0?IT[u.items[ei].k]:{mt:0,hit:0},d={team:'e',cls:'Wolf',x:-99,y:-99,hp:1,maxhp:1};
+  const a=relicCalc(u,w,d,{init:u}),dp=relicCalc(d,{mt:0},u,{init:d}),dm=relicCalc(d,{mt:0,mag:true},u,{init:d});
+  Object.assign(o,{atk:a.pow,hit:a.acc,crit:a.crit,def:dp.df,res:dm.df,avo:dp.avo,mov:relicMov(u)});if(M('vigourApple'))o.str=o.mag=1;return o}
+const upChip=n=>n>0?`<small class="dmg-up" data-tip="From artifacts and food" tabindex="0">+${n}</small>`:'';
 function card(u){
   const ei=eqIdx(u),si=staffIdx(u),wi=ei>=0?ei:si,w=wi>=0?IT[u.items[wi].k]:null,sk=u.skill&&SKILLS[u.skill],t=ter(u.x,u.y);
   let h=`<div class="uc ${u.team}"><img class="por" ${picAttrs(portrait(u),56)} alt=""><div class="uci">
    <div class="ch"><b>${u.name}</b><span>${CLS[u.cls].n} · Lv ${u.lv}</span></div>
    <div class="hp"><span class="bar"><i style="width:${u.bars?barsOf(u).frac*100:u.hp/u.maxhp*100}%${u.bars?`;background:${BAR_COL[barsOf(u).n]}`:''}"></i></span><span>${u.hp}/${u.maxhp} HP${u.bars?` · Bar ${barsOf(u).n}/${u.bars}`:''}</span></div>
-   ${u.team==='p'?`<div class="xp"><span class="bar"><i style="width:${u.exp}%"></i></span><span>${u.exp} EXP</span></div>`:''}${mpLine(u)}${stChips(u)}${monMoves(u)}
+   ${u.team==='p'?`<div class="xp"><span class="bar"><i style="width:${u.exp}%"></i></span><span>${u.exp} EXP</span></div>`:''}${mpLine(u)}${stChips(u)}${monMoves(u)}${monTypes(u)}
    <div class="eq">${w?`<img src="${icon(w.key)}" alt="">${w.n} (Rng ${rngTxt(rngShow(u,w))})`:'Unarmed'}${sk?` · <b class="sk">${sk.n}</b>`:''} · ${terrText(t)} · H${hOf(u.x,u.y)}${u.psn?` · <b class="psnt">Poisoned (${u.psn})</b>`:''}${(()=>{const g=gearOf(u),t=Object.entries(g).filter(([,v])=>v).map(([k,v])=>`${v>0?'+':''}${v} ${GEAR_N[k]}`);return t.length?` · Gear ${t.join(', ')}`:''})()}</div>
   </div><button class="mini" type="button" data-act="sheet:${u.id}">Details</button></div>
   <div class="ueq"><div class="ueq-h">Equipment</div>${itemRows(u,false)}</div>`;
@@ -154,18 +166,18 @@ function itemInfo(u,k){
 function drawSheet(){
   const u=byId(sheetU),el=sheetEl();if(!u){closeSheet();return}
   const L=sheetList(u),idx=L.indexOf(u)+1,ei=eqIdx(u),w=ei>=0?IT[u.items[ei].k]:null,sk=u.skill&&SKILLS[u.skill],t=ter(u.x,u.y);
-  const bar=(l,v)=>`<div class="srow"><span class="sl">${l}</span><span class="sbar"><i style="width:${Math.min(100,v/30*100)}%"></i></span><b>${v}</b></div>`;
+  const SB=sheetBonus(u),bar=(l,v,b=0)=>`<div class="srow"><span class="sl">${l}</span><span class="sbar"><i style="width:${Math.min(100,(v+b)/30*100)}%"></i></span><b>${v+b}${upChip(b)}</b></div>`;
   const wt=CLS[u.cls].w.map(tp=>{const k=Object.keys(IT).find(k=>IT[k].t===tp);return`<span class="wt">${k?`<img src="${icon(k)}" alt="">`:''}${TN[tp]}</span>`}).join('');
   let pg;
   if(sheetPg===0){
     /* immunities: can't be pushed (bosses, big monsters, Iron Body, Steady), Stone, Root */
     const imm=[...(canPush(u)?[]:['Knockback']),...(stImmune(u,'stone')?['Stone']:[]),...(stImmune(u,'root')?['Root']:[])];
-    pg=`<div class="sgrid">${shown(u).filter(s=>s!=='hp').map(s=>bar(SL[s],s==='lck'?LK(u):u[s])).join('')}</div>
-    <div class="sinfo"><div><span class="sl">Move</span><b>${u.mov}</b></div><div><span class="sl">Terrain</span><b>${terrText(t)}</b></div><div class="wide"><span class="sl">Weapons</span><span class="wts">${wt}</span></div>${imm.length?`<div class="wide"><span class="sl">Immune</span><b>${imm.join(', ')}</b></div>`:''}${CLS[u.cls].weak?`<div class="wide"><span class="sl">Weak to</span><b>${weakOf(u).map(e=>({fire:'Fire',ice:'Ice',water:'Water',lightning:'Lightning',light:'Light',dark:'Dark',nature:'Nature'})[e]||e).join(', ')} (×2 Mt)</b></div>`:''}${resOf(u).length?`<div class="wide"><span class="sl">Resists</span><b>${resOf(u).map(e=>({fire:'Fire',ice:'Ice',lightning:'Lightning',light:'Light',dark:'Dark',nature:'Nature'})[e]||e).join(', ')} (½ damage)</b></div>`:''}${stChips(u)?`<div class="wide"><span class="sl">Status</span>${stChips(u)}</div>`:''}</div>
+    pg=`<div class="sgrid">${shown(u).filter(s=>s!=='hp').map(s=>bar(SL[s],s==='lck'?LK(u):u[s],SB[s]||0)).join('')}</div>
+    <div class="sinfo"><div><span class="sl">Move</span><b>${u.mov+SB.mov}${upChip(SB.mov)}</b></div><div><span class="sl">Terrain</span><b>${terrText(t)}</b></div><div class="wide"><span class="sl">Weapons</span><span class="wts">${wt}</span></div>${imm.length?`<div class="wide"><span class="sl">Immune</span><b>${imm.join(', ')}</b></div>`:''}${CLS[u.cls].weak?`<div class="wide"><span class="sl">Weak to</span><b>${weakOf(u).map(e=>({fire:'Fire',ice:'Ice',water:'Water',lightning:'Lightning',light:'Light',dark:'Dark',nature:'Nature'})[e]||e).join(', ')} (×2 Mt)</b></div>`:''}${resOf(u).length?`<div class="wide"><span class="sl">Resists</span><b>${resOf(u).map(e=>({fire:'Fire',ice:'Ice',lightning:'Lightning',light:'Light',dark:'Dark',nature:'Nature'})[e]||e).join(', ')} (½ damage)</b></div>`:''}${stChips(u)?`<div class="wide"><span class="sl">Status</span>${stChips(u)}</div>`:''}</div>
     ${skillBlock(u)}${monSheet(u)}`;
   }else{
     const atk=w?(w.mag?u.mag:u.str)+w.mt:'–',hit=w?w.hit+u.skl*2+Math.floor(LK(u)/2):'–',crit=w?(w.crit||0)+(CLS[u.cls].crit||0)+Math.floor(u.skl/2):'–';
-    pg=`<div class="scmb">${[['Atk',atk],['Hit',hit],['Crit',crit],['Avo',AS(u,w)*2+LK(u)],['AS',AS(u,w)],['Rng',w?rngTxt(rngShow(u,w)):'–']].map(([l,v])=>`<div><span class="sl">${l}</span><b>${v}</b></div>`).join('')}</div>
+    pg=`<div class="scmb">${[['Atk',atk,w?SB.atk:0],['Hit',hit,w?SB.hit:0],['Crit',crit,w?SB.crit:0],['Avo',AS(u,w)*2+LK(u),SB.avo],['AS',AS(u,w)],['Rng',w?rngTxt(rngShow(u,w)):'–']].map(([l,v,b=0])=>`<div><span class="sl">${l}</span><b>${typeof v==='number'?v+b:v}${upChip(b)}</b></div>`).join('')}</div>
     <div class="sitems">${u.items.map((it,i)=>{const x=IT[it.k];return`<button type="button" class="srit${i===ei?' eqd':''}${sheetIt===i?' sel':''}${isWpn(it.k)&&!canUse(u,it.k)?' no':''}" data-s="i${i}"><span class="e">${i===ei?'E':''}</span><img src="${icon(it.k)}" alt="">${x.n}${it.d?' <em>drops</em>':''}<span class="u">${[x.r&&x.t!=='item'?`Rng ${rngTxt(x.r)}`:'',endless(it.k)?'':`${it.u}/${x.uses}`].filter(Boolean).join(' · ')}</span></button>`}).join('')||'<p class="sid">No items.</p>'}</div>
     ${sheetIt!=null&&u.items[sheetIt]?`<p class="sid">${itemInfo(u,u.items[sheetIt].k)}</p>`:(isHi(u.cls,u.sz)||u.team==='p'?'<p class="sid dim">Click an item to see its stats. E marks the equipped weapon.</p>':'<p class="sid dim">Click an attack to see its stats.</p>')}`;
   }
