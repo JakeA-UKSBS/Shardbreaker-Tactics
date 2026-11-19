@@ -14,7 +14,7 @@ The cast, by when they can join. First names only for now. Kits are first drafts
 - **Lysander:** joins only through his event, The Wandering Minstrel.
 - **Act 2:** as it begins, a second Crossroads: two of the advanced characters wait by the fire and you take one. From then on they're in the recruit and tavern pools too.
 - **Once a run:** each character joins at most once a run.
-- **Weapons:** each character only ever wields the weapon type they start with (Menders: charms and arts), including after they ascend. They keep their weapon when they ascend, with one exception: Crusaders are given a holy sword alongside their staff or charm.
+- **Weapons:** each character only ever wields the weapon type they start with (swords, daggers, axes, spears, bows, sigils or staves), including after they ascend. Daggers (Rook) are their own type. Maelis starts with a staff and the Dawn Sigil, so she wields both. They keep their weapon when they ascend, with one exception: Crusaders are given a holy sword alongside their staff or charm.
 - **Ascensions:** each character has one (cut back from two, Nov 2026, to keep the art manageable). Characters without one (Kaya, Celestine, Zwei) join already advanced, after Act 1.
 - **Sprites:** every character and ascension is drawn by the unit rig; see the Named cast section of `VISUALS.md`. Their looks are set in `js/14b-cast.js`.
 

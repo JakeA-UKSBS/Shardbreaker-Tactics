@@ -108,7 +108,7 @@ function slashFx(X,Y,w,crit){const sm=w&&SMEAR(w);
   if(sm){const[x,y]=fxMid(Y),toL=scrC(Y.x,Y.y,Y.sz).x<scrC(X.x,X.y,X.sz).x,f=FX[sm[0]],fr=sm[1]||[...Array(f.n).keys()],k=sm[2]*(crit?1.25:1);
     const ang=sm[0]==='spearThrust'?Math.atan2(y-fxMid(X)[1],Math.abs(x-fxMid(X)[0])||1)*180/Math.PI:0;
     fxPlay(f,x,y,{frames:crit&&sm[3]?[...fr,...sm[3]]:fr,k,sx:toL?-1:1,rot:toL?-ang:ang});return}
-  if(!w||!['blade','heavy'].includes(w.t))return;/* lances ('pole', the 'thrust' frames) are off until the thrust looks right */
+  if(!w||!['blade','dagger','heavy'].includes(w.t))return;/* lances ('pole', the 'thrust' frames) are off until the thrust looks right */
   const fr=slashFrames(w.t==='pole'?'thrust':w.t==='heavy'?'heavy':'blade'),b=uBox(Y),a=scrC(X.x,X.y,X.sz),q=scrC(Y.x,Y.y,Y.sz),S=crit?80:64;
   const im=document.createElement('img');im.className='fx-slash';im.alt='';
   Object.assign(im.style,{left:b.l+b.w/2-S/2+'px',top:b.t+b.h*.5-S/2+'px',width:S+'px',height:S+'px',zIndex:9999,transform:q.x<a.x?'scaleX(-1)':''});
@@ -117,11 +117,11 @@ function slashFx(X,Y,w,crit){const sm=w&&SMEAR(w);
 /* ================= ON-MAP ATTACKS ================= */
 let fast=false;
 const D=ms=>ms*(fast?.3:1);
-const EL_COL={fire:'#ff8a3c',water:'#5ab4ff',ice:'#bfefff',wind:'#8ae8b0',earth:'#c8a060',lightning:'#ffe14a',illusion:'#b46aff',light:'#fff2b0',crystal:'#ff5a6a',nature:'#7ad85a',dark:'#b46aff'};
+const EL_COL={fire:'#ff8a3c',ice:'#bfefff',earth:'#c8a060',lightning:'#ffe14a',light:'#fff2b0',crystal:'#ff5a6a',dark:'#b46aff'};
 /* element attacks have their own sound; other magic (light, dark, nature) is silent for now */
 /* an animated monster's ability frames (MON_SHEET abil), about 140ms each, then back to idle */
 async function sheetPlay(u,frames){const el=uEls[u.id];if(!el)return;el._pose='abil';for(const f of frames){sheetFit(el.firstChild,`sheet:${u.cls}:${f}`,u.sz);await sleep(D(140))}await sleep(D(160));el._pose='idle';sheetFit(el.firstChild,`sheet:${u.cls}:${sheetFrame(u,0)}`,u.sz)}
-const EL_SFX={fire:'fire',water:'water',lightning:'thunder',wind:'wind',ice:'ice'};
+const EL_SFX={fire:'fire',lightning:'thunder',ice:'ice'};
 const CLAW_SFX=['Claws','Fangs','Talons','Bite'];
 function hitSfx(w,ranged){return w.acid?'poison':w.kind==='staff'&&!ranged?'swing':w.t==='art'?EL_SFX[w.el]||null:w.t==='bow'?'arrow':ranged?'throw':CLAW_SFX.includes(w.n)?'claw':w.t==='blade'?(w.kind==='sword'?'sword':'slash'):'swing'}
 /* a projectile flies from X to Y: arrows and thrown weapons arc (higher when shooting downhill), sigils fly straight and glow */

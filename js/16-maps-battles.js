@@ -16,26 +16,18 @@ Object.assign(CLS,{
 /* elemental resistances (half damage): the monsters 5e would call immune */
 for(const[k,e]of Object.entries({HellHound:'fire',MagmaDragon:'fire',FireSprite:'fire',BoulderGolem:'fire',FrostWolf:'ice',IceWorm:'ice',Yeti:'ice'}))if(CLS[k])CLS[k].res=e;
 IT.crystalBall={n:'Crystal Ball',t:'item',kind:'orb',uses:1,key:'crystalBall'};
-IT.frostBreath={n:'Frost Breath',t:'art',kind:'talisman',el:'water',mt:9,hit:80,crit:0,r:[1,2],uses:99,mag:true,key:'frostBreath'};
 IT.crystalShards={n:'Crystal Shards',t:'art',kind:'talisman',el:'earth',mt:7,hit:80,crit:10,r:[1,2],uses:99,mag:true,key:'crystalShards'};
 /* fields: see the ENEMY STATS key in 01-data.js (b/g order: HP, Str, Mag, Skl, Spd, Lck, Def, Res) */
 Object.assign(FOE,{
-  SandWorm:{b:[20,6,0,4,4,1,4,1],g:[.7,.4,0,.3,.25,.1,.2,.05],items:['bite'],look:{}},
-  SandstoneGolem:{b:[24,7,0,2,2,0,9,1],g:[.8,.4,0,.2,.1,0,.35,.05],items:['slam'],look:{}},
+  SandWorm:{b:[20,6,0,4,4,1,4,1],g:[.7,.4,0,.3,.25,.1,.2,.05],items:['bite']},
+  SandstoneGolem:{b:[24,7,0,2,2,0,9,1],g:[.8,.4,0,.2,.1,0,.35,.05],items:['slam']},
   FrostWolf:{b:[16,5,0,4,7,1,2,2],g:[.55,.35,0,.3,.45,.1,.15,.15],items:['fangs']},
-  IceWorm:{b:[21,6,0,4,4,1,5,2],g:[.7,.4,0,.3,.25,.1,.25,.1],items:['bite'],look:{}},
-  IceTroll:{b:[24,8,0,3,3,0,5,1],g:[.8,.5,0,.25,.2,.05,.3,.05],items:['slam'],look:{}},
-  GemGolem:{b:[22,7,0,3,2,0,9,3],g:[.75,.4,0,.25,.1,0,.35,.15],items:['slam'],look:{}}
+  IceWorm:{b:[21,6,0,4,4,1,5,2],g:[.7,.4,0,.3,.25,.1,.25,.1],items:['bite']},
+  IceTroll:{b:[24,8,0,3,3,0,5,1],g:[.8,.5,0,.25,.2,.05,.3,.05],items:['slam']},
+  GemGolem:{b:[22,7,0,3,2,0,9,3],g:[.75,.4,0,.25,.1,0,.35,.15],items:['slam']}
 });
 /* GEMS: crystal colours (green, red, blue, gold, violet) */
 const GEMS=['#3aa86a','#c8323a','#3a5ac8','#c8a83a','#9a5ac8'];
-Object.assign(MONLOOK,{
-  SandWorm:()=>({body:pick(['#c98a6a','#b8785a','#d8a07a'])}),
-  SandstoneGolem:()=>({body:pick(['#c9945a','#b8824a','#d8a46a']),eye:'#ffd23f'}),
-  IceWorm:()=>({body:pick(['#c8dcec','#b0c8e0','#d8e8f4'])}),
-  IceTroll:()=>({style:'bald',skin:pick(['#9ab8d0','#8aa8c4','#a8c8dc']),cloth:'#4a5a6a',eye:'#7fe3ff'}),
-  GemGolem:()=>({body:pick(GEMS),eye:'#ffffff'})
-});
 /* fields: see the TERRAIN key in 01-data.js */
 Object.assign(TER,{
   'D':{n:'Deep Mud',k:'mud',c:99,av:0,df:0},/* the swamp's impassable ground: its maps' water (w) becomes this */
@@ -54,11 +46,11 @@ Object.assign(BIOMES,{
   desert:{n:'Sandstone Desert',bg:'#4a3a24',town:['n','k'],townN:'Oasis Town',d:'Dunes and sandstone ruins under a white sun. Sand worms hunt beneath the dunes, and the quicksand swallows the careless.',
     tip:['desert','Quicksand','A unit that starts its turn in quicksand has 1 less Move. Sandstone rocks block the way.'],
     maps:['dunes','oasis','canyon'],bossMap:'sunTemple',pool:[['SandWorm',4],['SandstoneGolem',2,4]],elitePool:[['SandstoneGolem',3],['SandWorm',2]],
-    boss:{name:'The Pyrite Colossus',cls:'PyriteColossus',mov:3,s:[42,13,0,5,3,2,12,7],items:['slam'],skill:'steadfast',look:{body:'#c9a83a',eye:'#fff2b0',crysAt:[{core:[14,19],col:'#3ad87a'}]}}},
+    boss:{name:'The Pyrite Colossus',cls:'PyriteColossus',mov:3,s:[42,13,0,5,3,2,12,7],items:['slam'],skill:'steadfast'}},
   snow:{n:'Frostveil Reaches',bg:'#2a3a4e',town:['o','a'],townN:'Hill Village',d:'Snowfields studded with blue agate. Frost wolves hunt the drifts, and ice worms tunnel beneath them.',
     tip:['snow','Deep snow','A unit that starts its turn in deep snow has 1 less Move (snow creatures ignore it). Frozen lakes give −10 Avoid; blue agate gives +10 Avoid and +2 Def.'],
     maps:['tundra','frozenLake','agateField'],bossMap:'agateSpire',pool:[['FrostWolf',4],['IceWorm',2,4],['IceTroll',2,5]],elitePool:[['IceWorm',3],['IceTroll',2],['FrostWolf',2]],
-    boss:{name:'The Yeti',cls:'Yeti',mov:4,s:[42,13,0,6,5,2,9,8],items:['slam'],skill:'wrath',look:{body:'#e8eef8',eye:'#7fe3ff'}}},
+    boss:{name:'The Yeti',cls:'Yeti',mov:4,s:[42,13,0,6,5,2,9,8],items:['slam'],skill:'wrath'}},
   cavern:{n:'Gemstone Caverns',bg:'#2a2436',town:['c','e'],townN:'Miners’ Camp',d:'Caves glittering with emerald, ruby and sapphire, and golems made of the gems themselves.',
     tip:['cavern','Gem clusters','Gem clusters give +10 Avoid and +2 Def. The cave walls can’t be crossed.'],
     maps:['geode','mineshaft','glitter'],bossMap:'amethystHollow',pool:[['GemGolem',1]],elitePool:[['GemGolem',1]],
@@ -221,7 +213,7 @@ function genBattle(n,kind){
       const b=B.boss,up=[10,3,3,3,2,2,3,3].map((v,i)=>v*(act-1)+(A(2)?[8,2,2,1,1,0,2,2][i]:0));
       const bsz=b.sz||2,fits=(x,y)=>cellsOf(x,y,bsz).every(([cx,cy])=>cy>=0&&cx>=0&&cy<m.map.length&&cx<m.map[0].length&&TER[m.map[cy][cx]].c<99);
       for(const[dx,dy]of[[0,0],[-1,0],[0,-1],[-1,-1],[1,0],[0,1]])if(fits(bx+dx,by+dy)){bx+=dx;by+=dy;break}
-      const bu=boss({id:'boss',name:bossName,cls:b.cls,lv:6+6*(act-1),mov:b.mov!=null?b.mov:BOSS_MOV,x:bx,y:by,s:b.s.map((v,i)=>v+up[i]),items:b.items,skill:b.skill,look:b.look?clone(b.look):monLook(b.cls)});bu.sz=bsz;
+      const bu=boss({id:'boss',name:bossName,cls:b.cls,lv:6+6*(act-1),mov:b.mov!=null?b.mov:BOSS_MOV,x:bx,y:by,s:b.s.map((v,i)=>v+up[i]),items:b.items,skill:b.skill,look:{}});bu.sz=bsz;
       if(b.bars){bu.bars=b.bars;bu.maxhp=bu.hp=Math.ceil(bu.hp*2/b.bars)*b.bars}/* health bars: double HP split into equal bars */
       if(b.hp)bu.maxhp=bu.hp=b.hp+(A(2)?16:0);/* a set HP (the Crystal Heart: 200 at Normal, the same Ascension 2 bonus as before) */
       const bc=new Set(cellsOf(bx,by,bsz).map(c=>key(...c))),tk=new Set([...bc,...out.map(u=>key(u.x,u.y))]);

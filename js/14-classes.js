@@ -12,7 +12,7 @@ let run=null;
 const ROLES={
   bruiser:{n:'Fighter',n2:'Warrior',w:['heavy','pole'],body:'vest',crit:5,skills:['wrath','swiftstrike','steadfast','quickDraw','momentum','stonebane'],
     b:[21,7,0,4,4,2,4,1],gr:[[75,95],[45,65],[0,10],[30,45],[30,45],[15,35],[20,35],[5,20]],bonus:[5,3,0,1,2,0,2,1]},
-  tank:{n:'Guard',n2:'Bastion',w:['blade','heavy','pole'],body:'armor',skills:['steadfast','taunt','ironSkin','retaliate','spiritbane'],
+  tank:{n:'Guard',n2:'Bastion',w:['blade','heavy','pole'],body:'armor',skills:['steadfast','taunt','ironSkin','retaliate','fiendbane'],
     b:[22,5,0,3,2,1,7,1],gr:[[80,100],[40,55],[0,10],[25,40],[15,30],[15,30],[35,50],[5,20]],bonus:[6,2,0,1,1,0,4,2]},
   skirm:{n:'Skirmisher',n2:'Duelist',w:['blade','pole','bow'],body:'tunic',crit:10,skills:['swiftstrike','focus','keenEye','hitAndRun','flurry','earlyEdge'],
     b:[18,5,0,7,8,4,3,2],gr:[[60,80],[35,50],[0,15],[45,65],[50,70],[30,50],[15,30],[15,30]],bonus:[3,2,0,3,3,0,1,2]},
@@ -20,7 +20,7 @@ const ROLES={
     b:[17,0,6,5,5,3,2,5],gr:[[55,70],[0,10],[45,65],[35,50],[35,55],[20,40],[10,20],[35,55]],bonus:[3,0,3,2,1,0,1,3]},
   support:{n:'Mender',n2:'Lightbearer',w:['spirit'],body:'robe',skills:['renewal','spellWard','fleetFoot','quickStudy'],
     b:[17,0,3,4,6,5,1,6],gr:[[50,5],[0,10],[40,55],[30,45],[40,55],[40,60],[10,20],[40,60]],bonus:[4,0,2,1,2,0,1,3]},
-  rogue:{n:'Rogue',n2:'Assassin',w:['blade'],body:'tunic',crit:5,skills:['flurry','whirlwind','hitAndRun','wolfsbane','focus'],
+  rogue:{n:'Rogue',n2:'Assassin',w:['dagger'],body:'tunic',crit:5,skills:['flurry','whirlwind','hitAndRun','wolfsbane','focus'],
     b:[16,5,0,7,9,6,2,1],gr:[[50,65],[30,45],[0,10],[45,60],[55,70],[40,60],[10,20],[10,25]],bonus:[3,2,0,3,3,2,1,1]},
   /* fast duelist: swords only, high Spd and crit */
   sword:{n:'Swordsman',n2:'Swordmaster',w:['blade'],body:'tunic',crit:10,skills:['swiftstrike','flurry','focus','wolfsbane','earlyEdge'],
@@ -28,7 +28,7 @@ const ROLES={
   /* tanks with a shield: the Shieldmaiden protects her neighbours, the Knight is an armoured wall */
   shield:{n:'Shieldmaiden',n2:'Shield Warden',w:['blade','pole'],body:'tunic',shield:true,skills:['guardian','steadfast','taunt','spellWard'],
     b:[20,4,0,4,5,3,6,4],gr:[[70,90],[35,50],[0,10],[30,45],[30,45],[20,40],[30,45],[20,35]],bonus:[5,2,0,1,2,0,3,3]},
-  knight:{n:'Knight',n2:'General',w:['blade','pole'],body:'armor',shield:true,skills:['pikeWall','steadfast','ironSkin','retaliate'],
+  knight:{n:'Knight',n2:'General',w:['blade','pole'],body:'armor',shield:true,skills:['steadfast','ironSkin','retaliate'],
     b:[24,5,0,3,1,0,9,0],gr:[[85,100],[45,60],[0,10],[20,35],[10,25],[10,25],[40,55],[0,15]],bonus:[7,3,0,1,0,0,5,1]},
   /* summons a minion from the current region once per battle (twice once promoted) */
   summoner:{n:'Summoner',n2:'Conjurer',w:['art'],body:'robe',skills:['kindle','focus','quickStudy'],
@@ -67,9 +67,5 @@ IT.talons={n:'Talons',t:'blade',kind:'claw',mt:4,hit:90,crit:5,r:[1,1],uses:99,k
 Object.assign(FOE,{
   Wolf:{b:[15,5,0,3,7,1,2,0],g:[.55,.35,0,.3,.45,.1,.15,.05],items:['fangs']}
 });
-function monLook(c){
-  if(MONLOOK[c])return MONLOOK[c]();
-  return clone((FOE[c]&&FOE[c].look)||{});/* bosses with hand-drawn art have no look */
-}
-function mkMon(c,lv){const u=foe(c,lv,0,0);u.look=monLook(c);/* monsters move 1 less than their class (4+ only), so they rarely reach you on turn 1 */if(u.mov>=4)u.mov--;
+function mkMon(c,lv){const u=foe(c,lv,0,0);/* monsters move 1 less than their class (4+ only), so they rarely reach you on turn 1 */if(u.mov>=4)u.mov--;
   return u}

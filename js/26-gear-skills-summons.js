@@ -55,7 +55,7 @@ const FAMILIARS={spiritFrog:{cls:'SpiritFrog',n:'Spirit Frog',d:'wades through w
 /* CLS / FOE fields: see the CLASSES and ENEMY STATS keys in 01-data.js */
 Object.assign(CLS,{SpiritFrog:{n:'Spirit Frog',w:['blade'],body:'beast',mov:5,wade:true}});
 IT.tongue={n:'Acid Spew',acid:true,t:'blade',kind:'claw',mt:4,hit:90,crit:5,r:[1,2],uses:99,key:'fangs'};
-Object.assign(FOE,{SpiritFrog:{b:[17,5,0,6,6,3,3,4],g:[.55,.35,0,.35,.35,.2,.15,.2],items:['tongue'],look:{body:'#7ad8b0',belly:'#e8fff4',eye:'#ffffff',spirit:true}}});
+Object.assign(FOE,{SpiritFrog:{b:[17,5,0,6,6,3,3,4],g:[.55,.35,0,.35,.35,.2,.15,.2],items:['tongue'],look:{spirit:true}}});
 const famOf=u=>FAMILIARS[u.familiar]||FAMILIARS.spiritFrog;
 function summonTile(u){const probe={cls:famOf(u).cls};let best=null,bd=1e9;
   for(const[dx,dy]of DIRS){const x=u.x+dx,y=u.y+dy;if(x<0||y<0||x>=MW||y>=MH||unitAt(x,y)||mcost(probe,x,y)>=99)continue;

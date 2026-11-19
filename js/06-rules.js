@@ -14,11 +14,10 @@ function learnBlock(u,k){return has(u,k)?`${u.name} already knows ${SKILLS[k].n}
 const elv=u=>u.lv+(CLS[u.cls].tier===2?15:0);
 /* a few characters wield only certain kinds within their class's weapon types (Zwei: two-handed swords) */
 const ONLY_KIND={zwei:['greatsword']};
-/* blade kinds for the cast: daggers only for Rogues and Assassins; two-handed swords only for
-   Mercenaries (Zwei) and Warriors; the rogue classes can't use swords. Monsters and other non-cast units are unaffected */
-const DAGGERS=['dagger','twindagger'],DAGGER_CLS=['Rogue','Assassin'],GREAT_CLS=['Mercenary','Warrior'],ROGUE_CLS=['Rogue','Assassin'];
-const kindOk=(u,k)=>{const w=IT[k];if(!u.cast||w.t!=='blade')return true;const n=CLS[u.cls].n;
-  if(DAGGERS.includes(w.kind))return DAGGER_CLS.includes(n);if(w.kind==='greatsword')return GREAT_CLS.includes(n);if(['sword','rapier','scimitar'].includes(w.kind))return!ROGUE_CLS.includes(n);return false};
+/* two-handed swords (kind greatsword) only for the cast's Mercenaries (Zwei) and Warriors. Monsters and other non-cast units are
+   unaffected. (Daggers are their own weapon type, so Rogues and Assassins simply don't have the blade type.) */
+const GREAT_CLS=['Mercenary','Warrior'];
+const kindOk=(u,k)=>{const w=IT[k];if(!u.cast||w.t!=='blade'||w.kind!=='greatsword')return true;return GREAT_CLS.includes(CLS[u.cls].n)};
 /* signature elements: only Drecken wields lightning sigils, only Corvin ice ones */
 const EL_OWNER={lightning:'drecken',ice:'corvin'};
 const canUse=(u,k)=>CLS[u.cls].w.includes(IT[k].t)&&kindOk(u,k)&&(!EL_OWNER[IT[k].el]||u.cast===EL_OWNER[IT[k].el])&&(!u.cast||!ONLY_KIND[u.cast]||!WTYPES.includes(IT[k].t)||ONLY_KIND[u.cast].includes(IT[k].kind));
@@ -51,7 +50,7 @@ const TAG_FIX={BlightedTreant:['plant'],HellHound:['beast','infernal'],IceTroll:
 function tagsOf(u){if(!u||!u.cls||u.cls.startsWith('G.'))return[];const C=CLS[u.cls]||{};let t=(TAG_FIX[u.cls]||BODY_TAGS[C.body]||[]).slice();if((u.sz||1)>1)t.push('colossal');return[...new Set(t)]}
 /* what a weapon (or an ability's element) is effective against: its own list, plus bows vs beasts, light vs infernal, fire vs plants and ice creatures, ice vs scaled, lightning vs oozes */
 function effOf(w){const o=(w&&w.eff||[]).slice();if(w&&w.t==='bow')o.push('beast');if(w&&w.el==='light')o.push('infernal');if(w&&w.el==='fire')o.push('plant','ice');if(w&&w.el==='ice')o.push('scaled');if(w&&w.el==='lightning')o.push('ooze');return o}
-const SLAYER={wolfsbane:'beast',stonebane:'armoured',spiritbane:'infernal'};
+const SLAYER={wolfsbane:'beast',stonebane:'armoured',fiendbane:'infernal'};
 /* elemental weaknesses: CLS weak is one element or a list (Ice Troll: fire) */
 const weakOf=u=>[].concat((CLS[u.cls]||{}).weak||[]);
 /* resistances: half damage from that element (fire monsters vs fire, frost monsters vs ice). Only your attacks on monsters */
@@ -71,9 +70,9 @@ function calc(x,xw,y,yw,ctx){
   const yf=!!CLS[y.cls].fly;let df=add(bd,xw.mag?'Res':'Def',xw.mag?y.res:y.def)+add(bd,xw.mag?'Gear Res':'Gear Def',xw.mag?gy.res:gy.def)+add(bd,(t.n||'Terrain')+(has(x,'clearShot')&&t.df>0?' (Clear Shot ignores)':''),yf||(has(x,'clearShot')&&t.df>0)?0:t.df)+add(bd,'Relics, meals',RB.df)+add(bd,'Statuses, passives',SB.df);if(has(y,'steadfast')&&ctx.phase==='enemy'&&ctx.init!==y)df+=add(bd,'Steadfast',4);
   if(state.units.some(o=>o!==y&&o.team===y.team&&o.hp>0&&man(o,y)===1&&has(o,'guardian')))df+=add(bd,'Guardian ally',2);if(xw.mag&&state.units.some(o=>o!==y&&o.team===y.team&&o.hp>0&&man(o,y)===1&&has(o,'lightWard')))df+=add(bd,'Light Ward ally',2);
   if(has(y,'kinship')&&state.units.some(o=>o.summon&&o.owner===y.id&&o.hp>0&&man(o,y)===1))df+=add(bd,'Kinship',2);
-  const xm=CLS[x.cls].mnt||CLS[x.cls].fly,ym=CLS[y.cls].mnt||CLS[y.cls].fly;if(has(y,'pikeWall')&&xm)df+=add(bd,'Pike Wall',4);
+  
   const dead=has(x,'keenEye');
-  const acc=add(ba,'Height',Math.max(-10,hd*10))+add(ba,'Weapon Hit',xw.hit)+add(ba,'Skl ×2',(x.skl+OL(x))*2)+add(ba,'Lck /2',Math.floor(LK(x)/2))+add(ba,'Character bonus',CAST_HIT[x.cast]||0)+add(ba,'Early Edge',has(x,'earlyEdge')&&state.turn<=5?20:0)+add(ba,'Command aura',aura(x))+add(ba,'Keen Eye',dead?20:0)+add(ba,'Relics, meals',RB.acc)+add(ba,'Statuses, passives',SB.acc)+add(ba,'Pike Wall vs mounted',has(x,'pikeWall')&&ym?10:0);
+  const acc=add(ba,'Height',Math.max(-10,hd*10))+add(ba,'Weapon Hit',xw.hit)+add(ba,'Skl ×2',(x.skl+OL(x))*2)+add(ba,'Lck /2',Math.floor(LK(x)/2))+add(ba,'Character bonus',CAST_HIT[x.cast]||0)+add(ba,'Early Edge',has(x,'earlyEdge')&&state.turn<=5?20:0)+add(ba,'Command aura',aura(x))+add(ba,'Keen Eye',dead?20:0)+add(ba,'Relics, meals',RB.acc)+add(ba,'Statuses, passives',SB.acc);
   const avo=add(bv,'AS ×2',AS(y,yw)*2)+add(bv,'Lck',LK(y))+add(bv,'Early Edge',has(y,'earlyEdge')&&state.turn<=5?20:0)+add(bv,(t.n||'Terrain')+(dead?' (Keen Eye ignores)':has(x,'clearShot')&&t.av>0?' (Clear Shot ignores)':''),dead||yf||(has(x,'clearShot')&&t.av>0)?0:t.av)+add(bv,'Command aura',aura(y))+add(bv,'Relics, meals',RB.avo)+add(bv,'Statuses, passives',SB.avo);
   let crit=add(bc,'Relics, meals',RB.crit)+add(bc,'Statuses, passives',SB.crit)+add(bc,'Weapon Crit',xw.crit||0)+add(bc,'Class Crit',CLS[x.cls].crit||0)+add(bc,'Skl /2',Math.floor((x.skl+OL(x))/2))+add(bc,'Target Lck /2',-Math.floor(LK(y)/2));if(has(x,'focus')&&!state.units.some(o=>o!==x&&o.team===x.team&&o.hp>0&&man(o,x)===1))crit+=add(bc,'Focus',10);if(has(x,'wrath')&&x.hp*2<=x.maxhp)crit+=add(bc,'Wrath',15);
   const asx=AS(x,xw),bonus=(has(x,'swiftstrike')&&ctx.init===x?3:0)+(has(x,'twinBolt')&&xw.el==='lightning'?3:0),asy=AS(y,yw);

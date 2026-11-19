@@ -9,7 +9,7 @@ Weapons never break (except the 5-use Meteor and Heaven's Bolt).
 | Weapon | Type | Mt | Hit | Crit | Wt | Rng | Effective vs | Armoury |
 |---|---|---|---|---|---|---|---|---|
 | Worn Sword | Blade | 5 | 90 | 0 | 4 | 1 |  |  |
-| Twin Daggers | Blade | 4 | 95 | 5 | 2 | 1 |  |  |
+| Twin Daggers | Dagger | 4 | 95 | 5 | 2 | 1 |  |  |
 | Iron Spear | Polearm | 7 | 85 | 0 | 6 | 1 |  |  |
 | Steel Spear | Polearm | 10 | 75 | 0 | 10 | 1 |  | Yes |
 | Twin Khopesh | Blade | 5 | 90 | 10 | 4 | 1 |  |  |
@@ -19,28 +19,28 @@ Weapons never break (except the 5-use Meteor and Heaven's Bolt).
 | Steel Hatchet | Heavy | 11 | 65 | 0 | 11 | 1 |  | Yes |
 | Throwing Axe | Heavy | 7 | 60 | 0 | 9 | 1–2 |  | Yes |
 | Short Bow | Bow | 6 | 85 | 0 | 3 | 2–3 | Beast |  |
-| Fire Sigil | Sigil (Fire) | 5 | 90 | 0 | 2 | 1–2 | Plant, Troll |  |
-| Frost Sigil | Sigil (Ice) | 7 | 85 | 5 | 4 | 1–2 |  |  |
+| Fire Sigil | Sigil (Fire) | 5 | 90 | 0 | 2 | 1–2 | Plant, Ice |  |
+| Frost Sigil | Sigil (Ice) | 7 | 85 | 5 | 4 | 1–2 | Scaled |  |
 | Storm Sigil | Sigil (Lightning) | 4 | 95 | 15 | 2 | 1–2 | Ooze |  |
 | Dawn Sigil | Sigil (Light) | 5 | 90 | 0 | 2 | 1–2 | Infernal |  |
 | Umbral Sigil | Sigil (Dark) | 5 | 85 | 0 | 5 | 1–2 |  |  |
 | Rune Crook | Sigil | 4 | 85 | 0 | 3 | 1–2 |  |  |
 | Mending Staff | Staff | – | – | 0 | 0 | 1–2 |  |  |
 | Greatsword | Blade | 11 | 70 | 5 | 12 | 1 |  |  |
-| Stiletto | Blade | 4 | 90 | 25 | 2 | 1 |  | Yes |
+| Stiletto | Dagger | 4 | 90 | 25 | 2 | 1 |  | Yes |
 | Qiang | Polearm | 8 | 80 | 30 | 7 | 1 |  | Yes |
 | Reaver Axe | Heavy | 10 | 65 | 30 | 9 | 1 |  | Yes |
 | Hawkeye Bow | Bow | 7 | 80 | 30 | 5 | 2–3 | Beast | Yes |
 | Jade Jian | Blade | 7 | 80 | 30 | 5 | 1 |  | Yes |
-| Jade Fangs | Blade | 5 | 90 | 35 | 2 | 1 |  | Yes |
+| Jade Fangs | Dagger | 5 | 90 | 35 | 2 | 1 |  | Yes |
 | Longbow | Bow | 6 | 75 | 0 | 6 | 2–3 | Beast |  |
 | Tomahawk | Heavy | 10 | 65 | 0 | 9 | 1–2 |  | Yes |
-| Steel Knives | Blade | 5 | 90 | 10 | 2 | 1–2 |  | Yes |
+| Steel Knives | Dagger | 5 | 90 | 10 | 2 | 1–2 |  | Yes |
 | Gale Sword | Blade | 6 | 80 | 0 | 6 | 1–2 |  | Yes |
 | Yew Greatbow | Bow | 9 | 80 | 5 | 8 | 2–4 | Beast | Yes |
-| Throwing Knives | Blade | 3 | 90 | 10 | 1 | 1–2 |  | Yes |
-| Flame Sigil | Sigil (Fire) | 8 | 80 | 5 | 4 | 1–2 | Plant, Troll | Yes |
-| Blizzard Sigil | Sigil (Ice) | 9 | 80 | 5 | 5 | 1–2 |  | Yes |
+| Throwing Knives | Dagger | 3 | 90 | 10 | 1 | 1–2 |  | Yes |
+| Flame Sigil | Sigil (Fire) | 8 | 80 | 5 | 4 | 1–2 | Plant, Ice | Yes |
+| Blizzard Sigil | Sigil (Ice) | 9 | 80 | 5 | 5 | 1–2 | Scaled | Yes |
 | Thunder Sigil | Sigil (Lightning) | 8 | 80 | 5 | 5 | 1–2 | Ooze | Yes |
 | Heaven’s Bolt | Sigil (Lightning) | 10 | 65 | 5 | 8 | 3–10 | Ooze |  |
 | Meteor Sigil | Sigil (Earth) | 13 | 60 | 0 | 9 | 3–10 |  |  |
@@ -103,7 +103,6 @@ Learned skills cost capacity (base 20, +5 when promoted). Personal skills are fr
 | Fiendbane | 10 | Effective (×2) against Infernal foes. |
 | Stonebane | 10 | Effective (×2) against Armoured foes. |
 | Guardian | 10 | Adjacent allies take 2 less damage. |
-| Pike Wall | 5 | +4 Def and +10 Hit against mounted units and fliers. |
 
 ## Relics
 

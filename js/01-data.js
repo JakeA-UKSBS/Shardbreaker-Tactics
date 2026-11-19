@@ -35,7 +35,7 @@ const TER={
    key = icon art key (icons/<key>.png), eff = effective against (×2 damage), amt = HP healed by a staff/salve. */
 const IT={
   wornSword:{n:'Worn Sword',t:'blade',kind:'sword',mt:5,hit:90,crit:0,r:[1,1],uses:40},
-  twinDaggers:{n:'Twin Daggers',t:'blade',kind:'twindagger',mt:4,hit:95,crit:5,r:[1,1],uses:40},
+  twinDaggers:{n:'Twin Daggers',t:'dagger',kind:'twindagger',mt:4,hit:95,crit:5,r:[1,1],uses:40},
   ironSpear:{n:'Iron Spear',t:'pole',kind:'spear',mt:7,hit:85,crit:0,r:[1,1],uses:45},
   steelSpear:{n:'Steel Spear',t:'pole',kind:'spear',mt:10,hit:75,crit:0,r:[1,1],uses:30,tint:'steel'},
   /* Raptor's: twin khopesh (a sword with a bit more crit) and, once he's a Hero, the atlatl (javelin stats). Placeholder art */
@@ -58,10 +58,11 @@ const IT={
   claws:{n:'Claws',t:'blade',kind:'twin',mt:4,hit:85,crit:10,r:[1,1],uses:99},
   salve:{n:'Salve',t:'item',kind:'pill',amt:10,uses:3}
 };
+/* every item's icon key is its own id (icons/<id>.png): set in one go rather than typed on each item */
 for(const k in IT)IT[k].key=k;
 /* ---- weapon weight (Wt): weight above the wielder's Str (Mag for sigils) costs that much attack speed ---- */
 Object.assign(IT,{
-  stiletto:{n:'Stiletto',t:'blade',kind:'dagger',thin:true,mt:4,hit:90,crit:25,r:[1,1],uses:30,key:'stiletto'},
+  stiletto:{n:'Stiletto',t:'dagger',kind:'dagger',thin:true,mt:4,hit:90,crit:25,r:[1,1],uses:30,key:'stiletto'},
   qiang:{n:'Qiang',t:'pole',kind:'spear',mt:8,hit:80,crit:30,r:[1,1],uses:20,tint:'killer',key:'qiang'},
   reaverAxe:{n:'Reaver Axe',t:'heavy',kind:'axe',mt:10,hit:65,crit:30,r:[1,1],uses:20,tint:'killer',key:'reaverAxe'},
   hawkeyeBow:{n:'Hawkeye Bow',t:'bow',kind:'bow',mt:7,hit:80,crit:30,r:[2,3],uses:20,tint:'killer',key:'hawkeyeBow'}
@@ -70,18 +71,19 @@ Object.assign(IT,{
 const WT={wornSword:4,twinKhopesh:4,atlatl:8,twinDaggers:2,greatsword:12,ironSpear:6,steelSpear:10,javelin:8,hatchet:7,steelHatchet:11,throwingAxe:9,
   shortBow:3,fireSigil:2,frostSigil:4,stormSigil:2,dawnSigil:2,umbralSigil:5,runeCrook:3,
   stiletto:2,qiang:7,reaverAxe:9,hawkeyeBow:5};
+/* weights differ per item, so they're a table (the items added further down set wt on themselves instead) */
 for(const k in WT)IT[k].wt=WT[k];
 /* ---- special weapons from events: jade (killer) weapons, lightning sigils, long-range sigils and charms ---- */
 Object.assign(IT,{
   jadeJian:{n:'Jade Jian',t:'blade',kind:'sword',mt:7,hit:80,crit:30,r:[1,1],uses:25,tint:'jade',wt:5},
-  jadeFangs:{n:'Jade Fangs',t:'blade',kind:'dagger',mt:5,hit:90,crit:35,r:[1,1],uses:25,tint:'jade',wt:2},
+  jadeFangs:{n:'Jade Fangs',t:'dagger',kind:'dagger',mt:5,hit:90,crit:35,r:[1,1],uses:25,tint:'jade',wt:2},
   longbow:{n:'Longbow',t:'bow',kind:'bow',mt:6,hit:75,crit:0,r:[2,3],uses:30,wt:6},
   /* steel-tier ranged variants (reach 1–2): trade-ups for the javelin, throwing axe and throwing knives */
   tomahawk:{n:'Tomahawk',t:'heavy',kind:'axe',mt:10,hit:65,crit:0,r:[1,2],uses:20,thrown:true,wt:9,tint:'steel'},
-  steelKnives:{n:'Steel Knives',t:'blade',kind:'dagger',mt:5,hit:90,crit:10,r:[1,2],uses:30,thrown:true,wt:2,tint:'steel'},
+  steelKnives:{n:'Steel Knives',t:'dagger',kind:'dagger',mt:5,hit:90,crit:10,r:[1,2],uses:30,thrown:true,wt:2,tint:'steel'},
   galeSword:{n:'Gale Sword',t:'blade',kind:'sword',mt:6,hit:80,crit:0,r:[1,2],uses:25,wt:6,tint:'steel'},
   yewGreatbow:{n:'Yew Greatbow',t:'bow',kind:'bow',mt:9,hit:80,crit:5,r:[2,4],uses:30,wt:8,tint:'steel'},
-  throwingKnives:{n:'Throwing Knives',t:'blade',kind:'dagger',mt:3,hit:90,crit:10,r:[1,2],uses:30,thrown:true,wt:1},
+  throwingKnives:{n:'Throwing Knives',t:'dagger',kind:'dagger',mt:3,hit:90,crit:10,r:[1,2],uses:30,thrown:true,wt:1},
   /* armoury stock (not dropped or given by events) */
   flameSigil:{n:'Flame Sigil',t:'art',kind:'talisman',el:'fire',mt:8,hit:80,crit:5,r:[1,2],uses:30,mag:true,wt:4,key:'fireSigil'},
   blizzardSigil:{n:'Blizzard Sigil',t:'art',kind:'talisman',el:'ice',mt:9,hit:80,crit:5,r:[1,2],uses:30,mag:true,wt:5,key:'frostSigil'},
@@ -99,11 +101,14 @@ Object.assign(IT,{
   zweihander:{n:'Zweihänder',t:'blade',kind:'greatsword',mt:14,hit:65,crit:5,r:[1,1],uses:30,wt:14,tint:'steel'},
   flamberge:{n:'Flamberge',t:'blade',kind:'greatsword',mt:12,hit:70,crit:20,r:[1,1],uses:25,wt:12,tint:'killer'}
 });
+/* again, for the items just added */
 for(const k in IT)IT[k].key=k;
 
-/* WTYPES: weapon types. ELN: element display names. */
-const WTYPES=['blade','heavy','pole','bow','art'];
-const ELN={light:'Light',dark:'Dark',fire:'Fire',nature:'Nature',water:'Water',ice:'Ice',wind:'Wind',earth:'Earth',lightning:'Lightning',illusion:'Illusion',crystal:'Neutral'};
+/* WTYPES: the weapon types (dagger = knives and daggers, for Rogues and Assassins; art = magic weapons: sigils and attack staves;
+   spirit = healing staves, which aren't weapons).
+   ELN: element names shown on weapons (only the elements a weapon actually has). */
+const WTYPES=['blade','dagger','heavy','pole','bow','art'];
+const ELN={light:'Light',dark:'Dark',fire:'Fire',ice:'Ice',lightning:'Lightning',earth:'Earth',crystal:'Neutral'};
 /* CLASSES, keyed by class id (shared by player classes and monsters):
    n = class name shown in game, w = weapon types it can use, body = body type (tunic/robe/vest/armor/beast/golem...: used by the unit rig, tags and the boss PNG lookup),
    mov = Move, crit = bonus Crit %, promo = class it promotes to, tier = 2 for promoted classes, bonus = stats added on promotion (stat order above),
@@ -141,21 +146,18 @@ Object.assign(SKILLS,{
   quickStudy:{n:'Quick Study',d:'Gains double EXP.'},
   earlyEdge:{n:'Early Edge',d:'+20 Hit and Avoid on turns 1 to 5.'},
   wolfsbane:{n:'Wolfsbane',d:'Effective (×2) against Beasts.'},
-  spiritbane:{n:'Fiendbane',d:'Effective (×2) against Infernal foes.'},
+  fiendbane:{n:'Fiendbane',d:'Effective (×2) against Infernal foes.'},
   stonebane:{n:'Stonebane',d:'Effective (×2) against Armoured foes.'},
-  guardian:{n:'Guardian',d:'Adjacent allies take 2 less damage.'},
-  pikeWall:{n:'Pike Wall',d:'+4 Def and +10 Hit against mounted units and fliers.'}
+  guardian:{n:'Guardian',d:'Adjacent allies take 2 less damage.'}
 });
 /* PROMO_LV: level a unit can promote at */
 const PROMO_LV=5;
 /* ENEMY STATS, keyed by class id (must also exist in CLS):
    b = base stats at level 1, g = growth per level (a fixed amount, not a % chance), both in stat order [HP, Str, Mag, Skl, Spd, Lck, Def, Res].
    A foe's stat = b + floor(g × (level − 1)), see foe() in 02-state-rng.js.
-   items = weapons/attacks it carries (keys in IT), pic = portrait art key, look = sprite options (colours are hex: skin, eye, hair, cloth, wing, shell...).
-   Monsters with an entry in MONLOOK get a random look from there instead. */
+   items = weapons/attacks it carries (keys in IT), pic = portrait art key, look = optional flags (spirit: the summon glow).
+   Monster art is all PNG now (art/monsters, art/bosses). */
 const FOE={};
-/* HAIRS: dark hair colours (hex) */
-const HAIRS=['#1d1a24','#2a2230','#3a2a20','#241c1c','#4a3a30'];
 
 /* BATTLE: the current battle (made by genBattle) */
 let BATTLE=null;
