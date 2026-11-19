@@ -30,7 +30,7 @@ Object.assign(CLS,{
   /* the Heart's own creatures (Act 3) */
   Shardling:{n:'Shardling',w:['blade'],body:'shardling',mov:5},Prism:{n:'Prism',w:['art'],body:'prism',mov:4},CrystalSentinel:{n:'Crystal Sentinel',w:['heavy'],body:'sentinel',mov:3},
   /* Sobek's Mire */
-  Lamia:{n:'Lamia',w:['art'],body:'serpent',mov:5,wade:true,weak:'ice'},
+  Lamia:{n:'Lamia',w:['art'],body:'serpent',mov:5,wade:true},
   BogLurker:{n:'Blighted Croc',w:['blade'],body:'gator',mov:4,wade:true},BlightedTreant:{n:'Blighted Treant',w:['heavy'],body:'golem',mov:3}
 });
 /* fields: see the ENEMY STATS key in 01-data.js (b/g order: HP, Str, Mag, Skl, Spd, Lck, Def, Res) */

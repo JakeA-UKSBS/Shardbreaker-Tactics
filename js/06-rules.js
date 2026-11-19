@@ -47,7 +47,7 @@ const TAGS={armoured:{n:'Armoured'},beast:{n:'Beast'},colossal:{n:'Colossal'},in
 const BODY_TAGS={golem:['armoured'],snail:['armoured'],turtle:['armoured'],cubes:['armoured'],armor:['armoured'],beast:['beast'],gator:['scaled'],bear:['beast'],
   hawk:['beast'],dragon:['beast'],sentinel:['armoured'],flame:['infernal'],mud:['ooze']};
 /* ice: frost creatures, burned by fire. scaled: alligators and crocs, slowed by cold (weak to ice) */
-const TAG_FIX={BlightedTreant:['plant'],HellHound:['beast','infernal'],IceTroll:['ice'],IceWorm:['ice'],MagmaDragon:['infernal']};
+const TAG_FIX={BlightedTreant:['plant'],HellHound:['beast','infernal'],IceTroll:['ice'],IceWorm:['ice'],MagmaDragon:['infernal'],Lamia:['scaled']};
 function tagsOf(u){if(!u||!u.cls||u.cls.startsWith('G.'))return[];const C=CLS[u.cls]||{};let t=(TAG_FIX[u.cls]||BODY_TAGS[C.body]||[]).slice();if((u.sz||1)>1)t.push('colossal');return[...new Set(t)]}
 /* what a weapon (or an ability's element) is effective against: its own list, plus bows vs beasts, light vs infernal, fire vs plants and ice creatures, ice vs scaled, lightning vs oozes */
 function effOf(w){const o=(w&&w.eff||[]).slice();if(w&&w.t==='bow')o.push('beast');if(w&&w.el==='light')o.push('infernal');if(w&&w.el==='fire')o.push('plant','ice');if(w&&w.el==='ice')o.push('scaled');if(w&&w.el==='lightning')o.push('ooze');return o}

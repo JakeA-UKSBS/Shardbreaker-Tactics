@@ -5,7 +5,6 @@ Object.assign(CLS,{
   SandWorm:{n:'Sand Worm',w:['heavy'],body:'worm',mov:4,wade:true},SandstoneGolem:{n:'Sandstone Golem',w:['heavy'],body:'golem',mov:4},
   PyriteColossus:{n:'Pyrite Colossus',w:['heavy'],body:'cubes',mov:0},
   FrostWolf:{n:'Frost Wolf',w:['blade'],body:'beast',mov:6,wade:true},IceWorm:{n:'Ice Worm',w:['heavy'],body:'worm',mov:4,wade:true},
-  AgateWyrm:{n:'Agate Wyrm',w:['art','heavy'],body:'dragon',mov:0},
   GemGolem:{n:'Gem Golem',w:['heavy'],body:'golem',mov:4},
   AmethystTurtle:{n:'Amethyst Turtle',w:['heavy','art'],body:'turtle',mov:0},
   HollowBear:{n:'Hollow Bear',w:['heavy'],body:'bear',mov:4},

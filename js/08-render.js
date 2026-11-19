@@ -266,4 +266,6 @@ function devPanel(parts){const h=parts.filter(Boolean).join('<hr>');return h?`<d
 panel.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||busy)return;act(b.dataset.act)});
 /* cast PNGs taller than 64px (a rider on a horse) show at full height, feet still on the tile */
 document.addEventListener('load',e=>{const i=e.target;if(i.tagName!=='IMG'||!i.classList.contains('hi')||!i.src.includes('/art/cast/'))return;const h=i.naturalHeight;
-  if(h>64){i.style.setProperty('height',h+'px','important');i.style.marginTop=(-15-(h-64))+'px'}else{i.style.removeProperty('height');i.style.marginTop=''}},true);
+  if(h>64){i.style.setProperty('height',h+'px','important');i.style.marginTop=(-15-(h-64))+'px'}else{i.style.removeProperty('height');i.style.marginTop=''}
+  /* wider ones (Arthur's horse, 69px) keep their width too, anchored on the left like the pose frames */
+  const w=i.naturalWidth;if(w>64)i.style.setProperty('width',w+'px','important');else if(!i.onload)i.style.removeProperty('width')},true);

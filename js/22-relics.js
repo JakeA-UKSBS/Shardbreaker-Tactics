@@ -227,7 +227,6 @@ const CRYS_CLS = [
     "GemGolem",
     "AmethystTurtle",
     "PyriteColossus",
-    "AgateWyrm",
   ],
   isCrys = (u) => CRYS_CLS.includes(u.cls);
 /* combat hooks, called from calc(): only your units benefit */
