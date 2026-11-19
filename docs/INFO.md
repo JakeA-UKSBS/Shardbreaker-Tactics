@@ -70,6 +70,8 @@ An effective hit multiplies weapon Mt ×2. Only your side deals them for now.
 
 **Elemental weaknesses** (×2 Mt from a sigil or ability of that element): Ice Worm, Ice Troll: fire · Lamia, Krondis (Alligator): ice · Mud Monster: lightning · Hell Hound: light (the Holy Sword counts as light too).
 
+**Elemental resistances** (half damage from your attacks of that element): Hell Hound, Magma Dragon, Fire Sprite, Magma Golem: fire · Frost Wolf, Ice Worm, Frost Sprite, Yeti: ice. The in-game chart (What beats what) lists every monster each row covers on hover.
+
 ## Skills
 
 Learned skills cost capacity (base 20, +5 when promoted). Personal skills are free.

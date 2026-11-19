@@ -89,10 +89,20 @@ function promptEnd(){setTimeout(async()=>{
 /* the effective-damage chart: pictures, not paragraphs. Each row: what it is → what beats it */
 function effChart(){
   const ic=k=>`<img src="${icon(k)}" alt="${IT[k].n}" title="${IT[k].n}">`,tg=t=>`<img src="${tagArt(t)}" alt="">`,sk=k=>`<span class="ec-sk" title="${SKILLS[k].d}">${SKILLS[k].n}</span>`;
+  /* every monster type in the game (not the cast's classes, villagers or the Sage), for the hover lists */
+  const mons=Object.keys(CLS).filter(k=>!k.startsWith('G.')&&!['Villager','Sage'].includes(k));
+  const names=f=>[...new Set(mons.filter(f).map(k=>CLS[k].n))].sort().join(', ')||'None yet';
   const rows=[['flier',['shortBow','crossbow','longbow'],null,'×2'],['armoured',['warHammer'],'stonebane','×2'],['beast',['huntingSpear'],'wolfsbane','×2'],['colossal',['giantslayer'],null,'×2'],['spectral',['dawnSigil','holySword'],'spiritbane','×2',1],['plant',['emberSigil'],null,'×2']];
+  const who=t=>t==='colossal'?'Every 2×2 boss':names(k=>tagsOf({cls:k}).includes(t));
+  /* elements: sigils (and abilities) of that element. Weak = ×2 Mt, resists = half damage */
+  const EL=[['fire','Fire',['emberSigil']],['ice','Ice',['frostSigil']],['lightning','Lightning',['stormSigil']],['light','Light',['dawnSigil','holySword']]];
+  const elRow=([e,n,ws])=>{const wk=names(k=>weakOf({cls:k}).includes(e)),rs=names(k=>resOf({cls:k}).includes(e));
+    return`<div class="ec-r ec-el"><div class="ec-w">${ws.map(ic).join('')}<b>${n}</b></div><span class="ec-a">▶</span><div class="ec-t"><span class="ec-sk ec-wk">Weak ×2</span><span class="ec-sk ec-rs">Resist ½</span></div><p class="ec-list"><b>×2:</b> ${wk} · <b>½:</b> ${rs}</p></div>`};
   return modal(`<div class="eyebrow">Effective damage</div><h2>What beats what</h2>
-    <div class="ec">${rows.map(([t,ws,s,m,pal])=>`<div class="ec-r"><div class="ec-w">${ws.map(ic).join('')}${s?sk(s):''}${pal?'<span class="ec-sk" title="Paladins are effective against spectres with any weapon">Paladins</span>':''}</div><span class="ec-a">▶<em>${m}</em></span><div class="ec-t">${tg(t)}<b>${TAGS[t].n}</b></div></div>`).join('')}</div>
-    <p class="hint">Effective hits multiply weapon might. A monster's type is on its info sheet.</p>
+    <div class="ec">${rows.map(([t,ws,s,m,pal])=>`<div class="ec-r"><div class="ec-w">${ws.map(ic).join('')}${s?sk(s):''}${pal?'<span class="ec-sk" title="Paladins are effective against spectres with any weapon">Paladins</span>':''}</div><span class="ec-a">▶<em>${m}</em></span><div class="ec-t">${tg(t)}<b>${TAGS[t].n}</b></div><p class="ec-list">${who(t)}</p></div>`).join('')}</div>
+    <div class="eyebrow" style="margin-top:10px">Elements</div>
+    <div class="ec">${EL.map(elRow).join('')}</div>
+    <p class="hint">Effective and weak hits multiply weapon might; a resisted element deals half damage. Hover a row to see which monsters it covers.</p>
     <div class="mbtns"><button class="go" type="button" data-m="ok">Close</button></div>`);
 }
 
