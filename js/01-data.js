@@ -158,8 +158,6 @@ const PROMO_LV=5;
    items = weapons/attacks it carries (keys in IT), pic = portrait art key, look = sprite options (colours are hex: skin, eye, hair, cloth, wing, shell...).
    Monsters with an entry in MONLOOK get a random look from there instead. */
 const FOE={};
-/* HAIRS: dark hair colours (hex) */
-const HAIRS=['#1d1a24','#2a2230','#3a2a20','#241c1c','#4a3a30'];
 
 /* BATTLE: the current battle (made by genBattle) */
 let BATTLE=null;
