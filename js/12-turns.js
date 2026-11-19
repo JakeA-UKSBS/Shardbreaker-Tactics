@@ -94,7 +94,7 @@ function effChart(){
   const names=f=>[...new Set(mons.filter(f).map(k=>CLS[k].n))].sort();
   /* one row per kind of attack: what it is ×2 against (types, plus single monsters weak to that element) and who resists it (½) */
   const rows=[[['warHammer'],null,['armoured']],[['huntingSpear','shortBow','longbow','yewGreatbow'],null,['beast']],[['giantslayer'],null,['colossal']],
-    [['dawnSigil','holySword'],'light',['infernal']],[['fireSigil'],'fire',['plant','troll']],[['stormSigil'],'lightning',['ooze']],[['frostSigil'],'ice',[]]];
+    [['dawnSigil','holySword'],'light',['infernal']],[['fireSigil'],'fire',['plant','ice']],[['stormSigil'],'lightning',['ooze']],[['frostSigil'],'ice',['scaled']]];
   const row=([ws,el,tags])=>{const ts=tags.map(t=>t==='colossal'?['Every 2×2 or 3×3 boss']:names(k=>tagsOf({cls:k}).includes(t))).flat(),
       wk=el?names(k=>weakOf({cls:k}).includes(el)&&!ts.includes(CLS[k].n)):[],rs=el?names(k=>resOf({cls:k}).includes(el)):[];
     return`<div class="ec-r"><div class="ec-w">${ws.map(ic).join('')}${el?`<b>${{light:'Light',fire:'Fire',lightning:'Lightning',ice:'Ice'}[el]}</b>`:''}</div><span class="ec-a">▶<em>×2</em></span>

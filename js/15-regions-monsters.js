@@ -22,7 +22,7 @@ IT.magmaBreath={n:'Magma Breath',t:'art',kind:'talisman',el:'fire',mt:9,hit:80,c
 SKILLS.venom={n:'Venom',cost:15,d:'On a hit, poisons the target: it loses 2 HP at the start of each of its turns for 3 turns (never below 1 HP).'};
 /* fields: see the CLASSES key in 01-data.js */
 Object.assign(CLS,{
-  MudMonster:{n:'Swamp Ooze',w:['heavy'],body:'mud',mov:4,wade:true},Krondis:{n:'Alligator',w:['heavy'],body:'gator',mov:4,wade:true,weak:'ice'},
+  MudMonster:{n:'Swamp Ooze',w:['heavy'],body:'mud',mov:4,wade:true},Krondis:{n:'Alligator',w:['heavy'],body:'gator',mov:4,wade:true},
   BlightedStag:{n:'Blighted Stag',w:['pole'],body:'beast',mov:6},
   BoulderGolem:{n:'Magma Golem',w:['heavy'],body:'golem',mov:4},FireSprite:{n:'Fire Sprite',w:['art'],body:'flame',mov:5,lava:true},MagmaDragon:{n:'Magma Dragon',w:['art','heavy'],body:'dragon',mov:0,lava:true},
   HellHound:{n:'Hell Hound',w:['blade'],body:'beast',mov:6,lava:true},

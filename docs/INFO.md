@@ -60,14 +60,15 @@ An effective hit multiplies weapon Mt ×2. Only your side deals them for now.
 | Monster type | Who has it | Beaten by |
 |---|---|---|
 | Armoured | Magma Golem, Crystal Sentinel, Sandstone Golem, Pyrite Colossus, Gem Golem, Amethyst Turtle, Yeti | War Hammer, Stonebane |
-| Beast | Wolf, Alligator, Blighted Stag, Magma Dragon, Blighted Croc, Sand Worm, Ice Worm, Hell Hound, Frost Wolf, Agate Wyrm, Hollow Bear, Spirit Frog | Hunting Spear, bows, Wolfsbane |
+| Beast | Wolf, Blighted Stag, Hell Hound, Frost Wolf, Agate Wyrm, Hollow Bear, Spirit Frog | Hunting Spear, bows, Wolfsbane |
 | Colossal | Every 2×2 or 3×3 boss | Giantslayer |
 | Infernal | Hell Hound, Magma Dragon (Pyraxis), Fire Sprite | Light (Dawn Sigil, light abilities), Holy Sword, Fiendbane |
 | Plant | Blighted Treant | Fire |
 | Ooze | Swamp Ooze | Lightning |
-| Troll | Ice Troll | Fire |
+| Ice | Ice Troll, Ice Worm | Fire |
+| Scaled | Alligator (Krondis), Blighted Croc | Ice |
 
-**Elemental weaknesses** (×2 Mt from a sigil or ability of that element): Ice Worm: fire · Lamia, Krondis (Alligator): ice. (The Holy Sword counts as light.)
+**Elemental weaknesses** (×2 Mt from a sigil or ability of that element): Lamia: ice. (The Holy Sword counts as light.)
 
 **Elemental resistances** (half damage from your attacks of that element): Hell Hound, Magma Dragon, Fire Sprite, Magma Golem: fire · Frost Wolf, Ice Worm, Yeti: ice. The in-game chart (What beats what) lists every monster each row covers on hover.
 
