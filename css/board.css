@@ -1,0 +1,81 @@
+/* The battle board: tiles, terrain, move/attack ranges, units and their sprites, HP bars, damage pops, banners, toasts, projectiles and spell effects, standing props.
+   Split out of the old style.css; files load in index.html order (base, board, panels, modals, themes, nodemap, title), which keeps the cascade the same. */
+.board{position:absolute;left:0;top:0;transform-origin:0 0;display:grid}
+.tile{position:relative;width:48px;height:48px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.16);image-rendering:pixelated}
+.tile::before,.tile::after{content:"";position:absolute;pointer-events:none}
+.tile::after{inset:0}
+.t-plain{background:#56653f}
+.t-forest{background:radial-gradient(circle at 30% 35%,#24361c 0 18%,transparent 19%),radial-gradient(circle at 70% 65%,#24361c 0 20%,transparent 21%),radial-gradient(circle at 72% 25%,#2b4122 0 12%,transparent 13%),#384b2c}
+.t-hill{background:linear-gradient(135deg,transparent 48%,#5b4a2f 49% 54%,transparent 55%),linear-gradient(45deg,transparent 48%,#8d7650 49% 54%,transparent 55%),#76613f}
+.t-water{background:repeating-linear-gradient(170deg,transparent 0 7px,rgba(255,255,255,.08) 7px 9px),#2c4762}
+.t-bridge{background:repeating-linear-gradient(90deg,#7a5a39 0 6px,#5e432a 6px 7px)}
+.t-throne{background:linear-gradient(90deg,transparent 30%,#6a2b4f 30% 70%,transparent 70%),#5d5a66}
+.t-throne::before{left:28%;right:28%;top:14%;bottom:30%;background:#d8b15a;border:2px solid #3b2a12;border-radius:6px 6px 2px 2px}
+/* danger first, so a selected or inspected unit's move/attack range draws over it (the red outline still shows) */
+.dg::after{background:color-mix(in srgb,var(--red) 26%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--red) 60%,transparent)}
+.mv::after{background:color-mix(in srgb,var(--blue) 50%,transparent)}
+.atk::after{background:color-mix(in srgb,var(--red) 42%,transparent)}
+.hl::after{background:color-mix(in srgb,var(--green) 45%,transparent)}
+.tg::after{box-shadow:inset 0 0 0 3px var(--gold);animation:pulse 1s infinite}
+.cur::after{box-shadow:inset 0 0 0 3px var(--fg)}
+.unit.magma img{animation:magma 2.4s ease-in-out infinite}@keyframes magma{0%,100%{filter:brightness(.85) saturate(.9) drop-shadow(0 0 1px #8a2a10)}50%{filter:brightness(1.3) saturate(1.4) drop-shadow(0 0 6px #ff7a2a)}}
+.unit{position:absolute;width:48px;height:48px;pointer-events:none;transition:left .26s ease,top .26s ease,transform .15s ease,opacity .35s}
+.unit img{width:48px;height:48px;image-rendering:pixelated;display:block}
+.unit.e img{transform:scaleX(-1)}
+.unit img.artl{scale:-1 1}/* left-drawn art (ART_LEFT in 03-art.js): stacks with the transform flips, so it ends up facing like the rest */
+.unit.boss img{filter:var(--hf,) drop-shadow(0 0 2px var(--gold))}.unit.boss.threat img{filter:var(--hf,) drop-shadow(0 0 2px #ff3b2f) drop-shadow(0 0 3px #ff3b2f)}
+.unit.done img{filter:grayscale(.9) brightness(.65)}
+.unit.flash img{filter:brightness(3)}
+.unit.e .hpb i{background:#f0a35e}
+.pop{position:absolute;width:48px;text-align:center;font-weight:700;font-size:16px;pointer-events:none;text-shadow:0 1px 2px #000,0 0 3px #000;animation:rise .9s forwards;z-index:5}
+.pop.dmg{color:#ffd9cf}.pop.miss{color:#c9cbd8}.pop.heal{color:#9ff0a6}.pop.crit{color:#ffe27a;font-size:18px}
+@keyframes rise{to{transform:translateY(-34px);opacity:0}}
+.banner{position:absolute;left:0;right:0;top:42%;text-align:center;font-family:var(--display);font-size:26px;letter-spacing:.08em;padding:8px;background:rgba(10,11,16,.8);pointer-events:none;animation:ban 1.1s forwards;z-index:6}
+.banner.p{color:var(--blue)}.banner.e{color:var(--red)}.banner.g{color:var(--green)}
+@keyframes ban{0%{opacity:0}20%,75%{opacity:1}100%{opacity:0}}
+.notes{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:6px;z-index:9;pointer-events:none;max-width:min(320px,80%)}
+.note{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--gold);border-radius:8px;padding:8px 12px;box-shadow:0 4px 14px rgba(0,0,0,.5);animation:notein .25s ease-out,noteout .4s ease-in calc(var(--t) - .4s) forwards}
+.note img{width:32px;height:32px;image-rendering:pixelated;flex:none}.note b{display:block;color:var(--gold);font-size:14px}.note span{display:block;color:var(--muted);font-size:12px}
+@keyframes notein{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}@keyframes noteout{to{opacity:0;transform:translateX(24px)}}
+.toast{position:absolute;left:50%;top:10px;transform:translateX(-50%);background:var(--panel);border:1px solid var(--gold);color:var(--fg);padding:6px 12px;border-radius:6px;font-weight:700;font-size:14px;z-index:8;white-space:nowrap;animation:ban 1.8s forwards;pointer-events:none}
+.unit.g .hpb i{background:var(--green)}
+.unit.stone img{filter:grayscale(1) sepia(.35) brightness(1.15) contrast(1.4) drop-shadow(0 0 2px #e8e0cc) drop-shadow(0 0 4px #8a8070)}.stonet{color:#d8cfb8}
+.tile.dg[data-n]::after{content:attr(data-n);color:#ffd6cc;font:700 11px/1 system-ui,sans-serif;text-align:right;padding:3px 4px;box-sizing:border-box;text-shadow:0 1px 2px #000}
+.unit.threat img{filter:drop-shadow(0 0 2px #ff3b2f) drop-shadow(0 0 3px #ff3b2f)}
+.unit.sum img{filter:drop-shadow(0 0 3px #7fc8ff)}
+.unit.psn img{filter:drop-shadow(0 0 3px #b46ae0) saturate(.8)}.psnt{color:#c58aff}
+/* a unit that has acted stays greyed out even with a poison or summon glow */
+.unit.done.psn img{filter:grayscale(.9) brightness(.65) drop-shadow(0 0 3px #b46ae0)}.unit.done.sum img{filter:grayscale(.9) brightness(.65) drop-shadow(0 0 3px #7fc8ff)}
+@media (prefers-reduced-motion:reduce){.unit,.hpb i{transition:none}.note{animation:none}.pop,.banner,.toast,button.pulse,.tg::after{animation-duration:.01s}}
+.unit.spirit img{opacity:.88;filter:drop-shadow(0 0 3px #8ad8ff) drop-shadow(0 0 6px rgba(138,216,255,.6));animation:spiritbob 2.2s ease-in-out infinite}@keyframes spiritbob{50%{transform:translateY(-2px)}}
+.shard{position:absolute;pointer-events:none;z-index:6;clip-path:polygon(50% 0,100% 40%,60% 100%,0 60%);box-shadow:0 0 4px rgba(255,255,255,.6)}
+/* high-res units: 64px art, feet on the tile's bottom edge, overflowing upward like FE map sprites */
+.unit img.hi{width:64px!important;height:64px!important;margin:-15px 0 0 -8px;max-width:none}
+/* the Crystal Heart's Shatter: a spinning red shard */
+/* ---- isometric board (Shardbreaker Tactics greybox) ----
+   tiles are square art turned into diamonds with a transform; .blk holds each block's two side faces */
+.board.iso{display:block}
+.board.iso .tile{position:absolute;transform-origin:0 0}
+.board.iso .blk{position:absolute;pointer-events:none;--c:#4a4038}
+.board.iso .blk svg{display:block}
+.board.iso .pop,.board.iso .shard,.board.iso .proj-m,.board.iso .fx-m{z-index:9000}
+.board.iso .umenu{z-index:9500}
+/* on-map attack effects */
+.proj-m{position:absolute;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;pointer-events:none;background:#fff;box-shadow:0 0 8px 3px currentColor}
+.proj-m.arrow{width:18px;height:3px;margin:-1px 0 0 -9px;border-radius:1px;background:#e8dcc0;box-shadow:none}
+.proj-m.spin{width:12px;height:12px;border-radius:2px;background:#bfc4cc;box-shadow:none}
+.fx-m{position:absolute;width:56px;height:56px;margin:-28px 0 0 -28px;border-radius:50%;pointer-events:none;border:3px solid currentColor;opacity:0}
+/* standing props: trees, rocks, gems and the like stand on their tile (16b-terrain3d.js); they fade when a unit is behind them */
+.board.iso img.prop{position:absolute;pointer-events:none;image-rendering:pixelated;transition:opacity .2s}
+.board.iso img.prop.fade{opacity:.45}
+/* targeting: whatever stands in front of a unit you can pick (aimFade) */
+.board.iso .vfade{opacity:.3!important;transition:opacity .15s}
+.t-water{background:url(../art/tiles/water.png) 0 0/100% 100%}
+.fx-slash{position:absolute;pointer-events:none;image-rendering:pixelated;filter:drop-shadow(0 0 3px rgba(255,248,220,.7))}
+.tile.ice{box-shadow:inset 0 0 0 2px #e8faff,inset 0 0 0 999px rgba(190,235,255,.55)}
+
+/* the Magma Dragon's fireball (fireball() in 09-fx.js): art/fx/fireball.png at 2x, its head on the flight point */
+.proj-fb{position:absolute;left:0;top:0;width:64px;height:40px;margin:-20px 0 0 -50px;transform-origin:50px 20px;pointer-events:none;z-index:9000;background:url(../art/fx/fireball.png) 0 0/192px 40px no-repeat;image-rendering:pixelated;filter:drop-shadow(0 0 6px #ff7a1a)}
+
+/* spell VFX strips (FX in 09-fx.js) */
+.fx-strip{position:absolute;left:0;top:0;pointer-events:none;z-index:9000;background-repeat:no-repeat;image-rendering:pixelated}

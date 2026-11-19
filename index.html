@@ -6,7 +6,14 @@
 <title>Shardbreaker</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya+SC:wght@500;700&family=Alegreya+Sans:wght@400;500;700&display=swap">
-<link rel="stylesheet" href="css/style.css">
+<!-- styles, in cascade order: base layout, the battle board, side panels and the unit sheet, modals and scenes, colour themes, the node map, title and menus (themes sit before the node map, whose parchment look overrides them) -->
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/board.css">
+<link rel="stylesheet" href="css/panels.css">
+<link rel="stylesheet" href="css/modals.css">
+<link rel="stylesheet" href="css/themes.css">
+<link rel="stylesheet" href="css/nodemap.css">
+<link rel="stylesheet" href="css/title.css">
 <!-- set the saved colour theme before anything is drawn, so the page doesn't flash the base (Obsidian & Jade) colours first.
      Same rule as applyTheme() in 02-state-rng.js: anything other than jade is Tavern -->
 <script>try{var o=JSON.parse(localStorage.getItem('sbtactics.opts')||'{}');document.documentElement.className='th-'+(o&&o.theme==='jade'?'jade':'tavern')}catch(e){document.documentElement.className='th-tavern'}</script>
