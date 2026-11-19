@@ -124,6 +124,4 @@
 .ns-rels{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}.ns-rel{position:relative;display:grid;place-items:center;width:36px;height:36px;border-radius:6px;background:rgba(255,255,255,.04);cursor:help}
 .ns-rel img{width:28px;height:28px;image-rendering:pixelated}.ns-rel:hover,.ns-rel:focus{background:rgba(255,255,255,.12);outline:none}
 .ns-rinfo{min-height:34px;margin-top:6px;font-size:12px;line-height:1.35;color:var(--muted)}.ns-rinfo b{display:block;color:var(--fg);font-size:13px}
-/* defend battles: a small DEF tag on the node (it went missing from style.css in a merge) */
-.nd .nd-def{position:absolute;right:-14px;top:-8px;padding:0 3px;border-radius:3px;background:#2a3a5a;border:1px solid #7aa0d8;color:#cfe0ff;font:700 9px/13px var(--display);letter-spacing:.04em;pointer-events:none}
 .nmap .nm-scroll .nd.n-armoury{border-color:#8a96a8}.nmap .nm-scroll .nd.n-armoury img{width:24px;height:24px;image-rendering:pixelated}

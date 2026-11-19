@@ -45,8 +45,6 @@ function eventScene(prop){
   if(prop==='idol'){S(68,56,24,12,'#5a5762');S(72,30,16,26,G);p.ell(80,28,8,7,G);S(74,26,4,3,'#c8322e');S(82,26,4,3,'#c8322e');
     for(let a=0;a<12;a++)p.set(80+Math.round(16*Math.cos(a/12*6.28)),34+Math.round(14*Math.sin(a/12*6.28)),'#ffe14a')}
   if(prop==='cage'){S(58,66,44,4,M2);S(58,30,44,4,M2);S(60,34,40,32,'#2a2430')}
-  if(prop==='spring'){p.ell(80,64,30,8,'#6a6672');p.ell(80,63,26,6,'#4fb2ff');p.ell(80,62,18,3,'#9fd8ff');for(const[x,y,r]of[[54,60,5],[106,61,6],[60,66,4]])p.ell(x,y,r,r*.7,'#7a746e');
-    for(let i=0;i<6;i++)p.set(70+i*4,52-(i%2)*4,'#bff5e0')}
   if(prop==='well'){p.ell(80,62,16,6,'#6a6672');S(64,48,32,14,'#8a8794');for(let y=50;y<62;y+=4)S(64,y,32,1,'#6a6672');S(66,30,3,20,WD);S(91,30,3,20,WD);p.poly([[60,32],[100,32],[80,22]],'#7a2a2a');p.line(80,32,80,44,'#c9a070');S(78,44,5,4,WD)}
   if(prop==='battlefield'){p.line(44,70,52,46,M,2);p.line(110,70,104,50,M2,2);p.ell(70,68,6,4,M);p.ell(96,70,5,3,M2);S(84,36,2,34,WD);p.poly([[86,36],[100,40],[86,46]],'#7a2a2a');
     p.ell(60,70,3,2,'#e8e2d0');p.ell(118,68,4,2,'#e8e2d0');p.line(120,70,128,60,'#e8e2d0')}
@@ -72,8 +70,6 @@ function eventScene(prop){
     for(const[x,y]of[[50,56],[100,52]])S(x,y,12,3,'#efe6cf');for(let y=30;y<=44;y++)p.set(104+Math.round(3*Math.sin(Math.PI*(y-30)/14)),y,BROWN);p.line(58,48,64,40,M);p.line(62,48,68,40,M);p.ell(82,52,4,3,'#7ad6ff')}
   if(prop==='pond'){p.ell(78,66,34,9,'#2a5a6a');p.ell(78,65,28,6,'#3f8aa0');p.ell(70,64,10,2,'#8fd0e0');for(const[x,h]of[[46,10],[49,13],[52,9],[104,11],[107,14]])p.rect(x,66-h,1,h,'#6a8a3a');p.rect(30,60,8,7,'#7a5a3a');p.rect(30,60,8,1,'#9a7a5a');for(let i=0;i<22;i++)p.rect(40+i,50-Math.round(i*.35),1,1,'#8a6a4a');p.rect(61,42,1,22,'#d8d0c0')}/* a pond with reeds, a bucket and a rod (the Old Fisherman) */
   if(prop==='roadside'){p.ell(64,68,9,3,'#5a4a4a');p.poly([[58,66],[64,52],[70,66]],'#ff8a3c');p.poly([[61,66],[64,58],[67,66]],YL)}/* just a campfire by the road (the Wandering Minstrel stands beside it) */
-  if(prop==='veteran'){p.ell(64,68,9,3,'#5a4a4a');p.poly([[58,66],[64,52],[70,66]],'#ff8a3c');p.poly([[61,66],[64,58],[67,66]],YL);
-    S(92,52,12,14,'#5a5a6a');p.ell(98,48,4,4,'#e0b090');p.poly([[95,50],[101,50],[98,57]],'#e8e2d0');S(96,44,5,2,'#e8e2d0');S(86,62,8,6,'#5a4a3a');p.line(112,68,116,44,M,2);S(110,54,8,2,G)}
   if(prop==='statue'){S(64,58,32,10,ST1);S(60,54,40,4,ST2);S(74,34,12,20,ST2);p.ell(80,30,5,5,ST2);p.line(86,36,94,14,'#c9c9d0',2);S(84,34,6,2,ST1);
     for(const[x,y]of[[66,52],[92,52],[70,50]])p.ell(x,y,1.5,1.5,'#ff8a7a');p.ell(88,52,1.5,1.5,G)}
   if(prop==='drill'){for(const x of[40,70,100]){S(x+6,42,3,28,WD);p.ell(x+7,42,6,5,'#c9a46a');S(x+1,47,14,3,'#c9a46a')}S(128,24,2,46,WD);p.poly([[130,24],[146,28],[130,34]],'#c8322e')}
@@ -87,7 +83,6 @@ function eventScene(prop){
     for(const x of[60,70,80,90])p.line(x,0,x+1,10,'#5a7a3a');for(const x of[60,70,80,90])p.ell(x+1,11,2,3,'#6a8a3a');
     p.ell(84,66,16,7,'#2a2630');p.ell(84,61,13,4,'#7fd36a');for(const[x,y]of[[78,55],[88,52],[83,48]])p.ell(x,y,2,2,'#a8f08a');S(70,70,4,6,INK);S(94,70,4,6,INK);}
     /* the witch herself is a hand-drawn PNG laid over the scene (art/scenes/witch.png, see EV_FIG) */
-  if(prop==='fog'){S(76,30,2,30,WD);p.poly([[78,30],[90,33],[78,36]],'#efe6cf');p.line(40,62,60,40,'#5a4a3a');p.line(120,64,100,42,'#5a4a3a')}
   if(prop==='chest'){/* the chest itself is Rhi's PNG laid over the scene (art/scenes/chest.png, see EV_FIG) */for(const[x,y]of[[40,40],[120,36],[132,46],[28,48]]){p.set(x,y,'#ff3a3a');p.set(x+3,y,'#ff3a3a')}}
   if(prop==='library'){for(const x of[24,68,112]){S(x,22,26,46,WD2);for(let r=0;r<4;r++){S(x+1,25+r*10,24,1,WD);for(let b=0;b<8;b++)S(x+2+b*3,26+r*10,2,8,['#c8322e','#3a6a9a','#7fd36a','#c9a050','#8a4ab0'][(b+r+x)%5])}}
     p.ell(98,70,9,3,ST1);p.ell(58,72,5,2,ST2);S(54,66,10,4,'#e8dcc0');S(55,66,4,4,'#d8ccb0');p.ell(150,40,3,4,'#ffd27a')}
@@ -110,8 +105,6 @@ function eventScene(prop){
   if(prop==='hoard'){p.ell(80,66,40,8,'#b8912f');p.ell(80,62,30,7,G);p.ell(70,58,14,6,'#ffd96a');p.ell(96,60,10,4,'#ffd96a');p.ell(64,48,10,7,'#e8e2d0');p.ell(60,48,2,2,INK);p.ell(67,48,2,2,INK);
     p.line(98,56,104,36,JD,2);S(100,50,8,2,G);p.ell(86,54,3,3,JD);p.ell(78,56,2,2,'#c8322e');for(const[x,y]of[[120,40],[124,40]])p.set(x,y,'#ff3a3a')}
   p.outline('#120e14');
-  if(prop==='fog'){const mix=(h,a)=>{const n=parseInt(h.slice(1),16),f=[n>>16,(n>>8)&255,n&255].map((v,i)=>Math.round(v*(1-a)+[224,228,236][i]*a));return'#'+f.map(v=>v.toString(16).padStart(2,'0')).join('')};
-    for(let y=0;y<H;y++)for(let x=0;x<W;x++){const g=p.g[y*W+x];if(!g)continue;const d=.5*Math.sin(x/14+y/9)+.5*Math.sin(x/23-y/6),a=Math.max(0,Math.min(.6,.22+.18*d+(y>44?.18:0)));p.g[y*W+x]=mix(g,a)}}
   return sprCache[c]=p.url();
 }
 
@@ -120,13 +113,19 @@ function eventScene(prop){
    ================================================================== */
 const evEl=document.createElement('div');evEl.className='tav ev';evEl.hidden=true;document.body.appendChild(evEl);
 function evShow(E,text,opts){
+  if(evEl.hidden){evEl._box=0;evEl.style.removeProperty('--evbox')}/* a new event: start at the tent's size */
   evEl.innerHTML=`<div class="tv-scene"><img class="tv-bg" src="${eventScene(E.art)}" alt="">${[].concat(E.fig||[],propFig(E.art)||[]).filter(f=>ART_PNG.has('scenes/'+f)).map(f=>`<img class="ev-fig ev-${f}" src="art/scenes/${f}.png" alt="">`).join('')}${E.ov||''}<span class="tv-gold">${gold()} gold</span></div>
     <div class="tv-box"><div class="tv-name">${E.t}</div><p class="tv-text">${text}</p>${E.card&&opts.length>1?E.card:''}<div class="tv-opts">${opts.map(([k,l,sub,dis])=>`<button type="button" class="tv-o" data-t="${k}"${dis?' disabled':''}>${l}${sub?`<span>${sub}</span>`:''}</button>`).join('')}</div></div>`;
   evEl.hidden=false;
+  /* the scene is the sage tent's size unless this box needs more room underneath; then it shrinks just enough (and stays that size for the rest of the event) */
+  for(let i=0;i<4;i++){const h=evEl.querySelector('.tv-box').offsetHeight+26;if(h>Math.max(190,evEl._box||0)){evEl._box=h;evEl.style.setProperty('--evbox',h+'px')}}
   return new Promise(res=>{evEl.onclick=e=>{const b=e.target.closest('[data-t]');if(!b||b.disabled)return;uiSfx(b.dataset.t,b.textContent.trim())||sfx('tick');res(b.dataset.t)}});
 }
 /* the Stables: Arthur can still join (never joined this run) */
-const stableArthur=()=>!(run.castUsed||[]).includes('arthur')&&!run.roster.some(u=>u.cast==='arthur');
+const castFree=id=>!(run.castUsed||[]).includes(id)&&!run.roster.some(u=>u.cast===id);
+const stableArthur=()=>castFree('arthur');
+/* from Act 2 the Stables offers Kaya and Celestine instead (whichever haven't joined) */
+const stableRiders=()=>(run.act||1)>=2?['kaya','celestine'].filter(castFree):[];
 const lvAvg=()=>Math.max(1,Math.round(run.roster.reduce((a,u)=>a+u.lv,0)/run.roster.length));
 
 /* ==================================================================
@@ -158,45 +157,6 @@ const EVENTS = {
         }
       },
       { l: 'Move on', go: async () => 'You thank the smith and keep walking.' }
-    ]
-  },
-
-  /* One unit takes a stronger weapon of their kind, or the squad takes 2 Salves. */
-  armoury: {
-    t: 'Abandoned Armoury',
-    art: 'armoury',
-    d: 'Racks of old weapons, most rusted through. A few are still good, and there are medicine jars on a shelf.',
-    o: [
-      {
-        l: 'Take a better weapon',
-        sub: 'One unit gets a stronger weapon of their kind',
-        go: async () => {
-          const u = await pickUnit('Who takes a weapon?', `They get the one that suits them: ${steelList()}.`, u =>
-            steelFor(u) ? null : 'Nothing for them'
-          );
-          if (!u) return null;
-          const st = steelFor(u);
-          if (!(await stow(u, st))) return null;
-          sfx('item');
-          return `${u.name} pulls a <b>${IT[st].n}</b> from the rack. Mt ${IT[st].mt}, Wt ${IT[st].wt}.`;
-        }
-      },
-      {
-        l: 'Take the medicine',
-        sub: '2 Salves',
-        go: async () => {
-          evEl.hidden = true;
-          const a = await giveTo('salve', 'The first of two Salves.', true),
-            b = await giveTo('salve', 'The second Salve.', true);
-          evEl.hidden = false;
-          return (
-            [a, b]
-              .filter(Boolean)
-              .map(u => `${u.name} takes a Salve.`)
-              .join(' ') || 'You leave the medicine on the shelf.'
-          );
-        }
-      }
     ]
   },
 
@@ -305,64 +265,6 @@ const EVENTS = {
       },
       { l: 'Move on', go: async () => 'No time to train today.' }
     ]
-  },
-
-  /* A small shop: buy one item. */
-  merchant: {
-    t: 'Travelling Merchant',
-    art: 'merchant',
-    d: 'A covered wagon, a tired mule and a merchant who is very pleased to see paying customers.',
-    o: null,
-    make: () => {
-      /* javelin and throwing axe listed twice: a bit more common (the Set drops repeats) */
-      const stock = [...new Set(shuffle([
-          'warHammer',
-          'huntingSpear',
-          'giantslayer',
-          'holySword',
-          'claymore',
-          'flamberge',
-          'steelSpear',
-          'steelHatchet',
-          'yewGreatbow',
-          'javelin',
-          'javelin',
-          'throwingAxe',
-          'throwingAxe',
-          'throwingKnives',
-          'galeSword',
-          'leatherArmour',
-          'wardingCloak',
-          'travellersBoots',
-          'ironGauntlets',
-          'stiletto'
-        ]))].slice(0, 3),
-        price = k => (IT[k].t === 'gear' ? 40 : IT[k].crit >= 20 ? 55 : 45);
-      return [
-        ...stock.map(k => ({
-          l: `${IT[k].n} · ${price(k)}g`,
-          sub: itemText(k),
-          cost: price(k),
-          go: async () => {
-            const u = await pickUnit(
-              `Who takes the ${IT[k].n}?`,
-              'If their bag is full, you can swap something out.',
-              u =>
-                (isWpn(k) || IT[k].t === 'spirit') && !canUse(u, k)
-                  ? IT[k].t === 'spirit'
-                    ? 'Can’t use staves'
-                    : 'Can’t wield it'
-                  : null
-            );
-            if (!u) return null;
-            if (!(await stow(u, k))) return null;
-            spend(price(k));
-            return `${u.name} takes the <b>${IT[k].n}</b>. “Pleasure doing business.”`;
-          }
-        })),
-        { l: 'Just looking', go: async () => 'The merchant shrugs and waves you on.' }
-      ];
-    }
   },
 
   /* Bet 30 gold on even odds to win 60. */
@@ -617,15 +519,44 @@ const EVENTS = {
     }
   },
 
-  /* Arthur joins, or (if he's already been with you) his old groom Gu An gives you the Golden Spurs. */
+  /* Act 1: Arthur joins, or (if he's already been with you) his old groom Gu An gives you the Golden Spurs.
+     Act 2+: Kaya or Celestine (whichever haven't joined) waits at the stables; if both have, it's back to Arthur / the Spurs. */
   stables: {
     t: 'The Stables',
     art: 'stables',
     d: '',
     o: null,
-    ok: () => stableArthur() || !R('spurs'),
+    ok: () => stableRiders().length > 0 || stableArthur() || !R('spurs'),
     make: () => {
       const E = EVENTS.stables;
+      const riders = stableRiders().map(id => castUnit(id, lvAvg()));
+      if (riders.length) {
+        E.d = riders.length > 1
+          ? 'A row of stalls and the smell of hay. Two riders are resting their horses here, and both look ready to move on. “Heading for the crystals? We’ve been looking for a squad that’s actually fighting them.”'
+          : `A row of stalls and the smell of hay. ${riders[0].name} is resting a horse here. “Heading for the crystals? I’ve been looking for a squad that’s actually fighting them.”`;
+        E.card = riders.length > 1 ? `<div class="ev-cards">${riders.map(nu => `<div class="dcard on ev-card">${unitCard(nu)}</div>`).join('')}</div>` : `<div class="dcard on ev-card">${unitCard(riders[0])}</div>`;
+        E.ov = riders.map((nu, i) => `<img class="ev-ov${riders.length > 1 ? ` ev-ov${i + 1}` : ''}" src="${uSpr(nu)}" alt="">`).join('');
+        return [
+          ...riders.map(nu => ({
+            l: `Ride with ${nu.name}`,
+            sub: `${nu.name} (${CLS[nu.cls].n}) joins your squad`,
+            go: async () => {
+              if (run.roster.length >= TEAM_CAP) {
+                const d = await modal(
+                  `<h2>Who stays behind?</h2><p>${nu.name} (${CLS[nu.cls].n}) takes their place.</p><div class="draft">${run.roster.map((u, i) => `<button type="button" class="dcard" data-m="d${i}">${unitCard(u)}</button>`).join('')}</div><div class="mbtns"><button type="button" data-m="skip">Keep my squad</button></div>`
+                );
+                if (d === 'skip') return null;
+                run.roster.splice(+d.slice(1), 1);
+              }
+              run.roster.push(nu);
+              castJoined(nu);
+              sfx('item');
+              return `<b>${nu.name}</b>, a ${CLS[nu.cls].n}, swings into the saddle and joins the squad.`;
+            }
+          })),
+          { l: 'Ride on', go: async () => 'You leave them to their horses.' }
+        ];
+      }
       if (stableArthur()) {
         const nu = castUnit('arthur', lvAvg());
         E.d = 'A row of stalls and the smell of hay. A knight is saddling a warhorse. “Riding out? I could use the company, and you look like you could use a lance.”';
@@ -749,9 +680,7 @@ const EVENTS = {
         l: 'Study the carvings',
         sub: 'One unit learns a skill (choose from 3 that suit their role)',
         go: async () => {
-          evEl.hidden = true;
           const u = await learnSkill('Who studies the tablet?');
-          evEl.hidden = false;
           if (!u) return null;
           const k = u.skills[u.skills.length - 1].id;
           return `${u.name} traces the carvings until they make sense, and learns <b>${SKILLS[k].n}</b>. ${SKILLS[k].d}`;
@@ -800,36 +729,6 @@ const EVENTS = {
           run.gold = gold() + 30;
           sfx('buy');
           return 'Someone left a coin purse up here. <b>30 gold</b>.';
-        }
-      }
-    ]
-  },
-
-  /* One unit +3 max HP, or every unit +1 Res. */
-  spring: {
-    t: 'The Healing Fountain',
-    art: 'spring',
-    d: 'A fountain splashes in a quiet castle courtyard. The water glows faintly.',
-    o: [
-      {
-        l: 'One unit bathes',
-        sub: '+3 max HP for good',
-        go: async () => {
-          const u = await pickUnit('Who bathes in the fountain?', 'They gain 3 max HP for good.');
-          if (!u) return null;
-          u.maxhp += 3;
-          u.hp += 3;
-          sfx('heal');
-          return `${u.name} climbs out feeling years younger. Max HP ${u.maxhp}.`;
-        }
-      },
-      {
-        l: 'Everyone drinks',
-        sub: 'Every unit gains +1 Res',
-        go: async () => {
-          run.roster.forEach(u => u.res++);
-          sfx('heal');
-          return 'The water tastes of rain. Every unit gains 1 Res.';
         }
       }
     ]
@@ -1031,60 +930,6 @@ async function giveTo(k, why, found) {
    MORE EVENTS (acts 1 and 2; star, spire, oracle and sage are act 2 only)
    ================================================================== */
 Object.assign(EVENTS, {
-  /* Open one crate: a piece of gear for a particular class. */
-  cache: {
-    t: 'The Specialist’s Cache',
-    art: 'cache',
-    d: 'A sealed quartermaster’s cache. Each crate is stencilled for a different trade.',
-    o: null,
-    make: () => {
-      const has = f => run.roster.some(f),
-        o = [];
-      if (has(u => CLS[u.cls].w.includes('bow'))) o.push('longbow');
-      if (has(u => isRoleU(u, 'rogue'))) o.push('throwingKnives');
-      if (has(u => isRoleU(u, 'support'))) o.push('farStaff');
-      if (has(u => isRoleU(u, 'summoner'))) o.push('runeCrook');
-      if (o.length < 2) o.push(pick(['claymore', 'steelSpear', 'steelHatchet']));
-      return [
-        ...o.slice(0, 3).map(k => ({
-          l: `Open the ${IT[k].n} crate`,
-          sub: itemText(k),
-          go: async () => {
-            const u = await giveTo(k);
-            return u && `${u.name} takes the <b>${IT[k].n}</b>.`;
-          }
-        })),
-        { l: 'Leave it sealed', go: async () => 'Not your trade.' }
-      ];
-    }
-  },
-
-  /* EXP for everyone, or a lot of EXP for one unit. */
-  veteran: {
-    t: 'The Old Veteran',
-    art: 'veteran',
-    d: 'A grey-bearded soldier sits by a fire, sharpening a notched blade. “Sit. I’ve stories, if you’ve time.”',
-    o: [
-      {
-        l: 'Hear his stories',
-        sub: 'Every unit gains 20 EXP',
-        go: async () => {
-          await expAll(run.roster, 20);
-          return 'Old wars, old mistakes. Every unit gains 20 EXP.';
-        }
-      },
-      {
-        l: 'Ask him to train one',
-        sub: 'One unit gains 60 EXP',
-        go: async () => {
-          const u = await pickUnit('Who trains with him?', 'They gain 60 EXP.');
-          if (!u) return null;
-          await expAll([u], 60);
-          return `The veteran drills ${u.name} until dark. 60 EXP.`;
-        }
-      }
-    ]
-  },
 
   /* One unit +2 Str or Mag, or every unit +1 Def. */
   statue: {
@@ -1143,7 +988,7 @@ Object.assign(EVENTS, {
     ]
   },
 
-  /* Heal everyone, or one unit drinks for +1 Res and +2 max HP. */
+  /* Heal everyone, one unit drinks for +1 Res and +2 max HP, or one unit's tea leaves are read for +1 Mag and +1 Skl. */
   witch: {
     t: 'The Bog Witch',
     art: 'witch',
@@ -1171,37 +1016,19 @@ Object.assign(EVENTS, {
           return `${u.name} gags it down. +1 Res, +2 max HP.`;
         }
       },
-      { l: 'Back away', go: async () => '“Another time, then.”' }
-    ]
-  },
-
-  /* Shortcut (EXP for HP), send one scout (EXP, half HP), or wait. */
-  fog: {
-    t: 'The Strange Fog',
-    art: 'fog',
-    d: 'A thick white fog rolls over the road. There’s a shortcut through it, if you trust your feet.',
-    o: [
       {
-        l: 'Take the shortcut',
-        sub: 'Every unit gains 25 EXP and loses 5 HP',
+        l: 'Have your tea leaves read',
+        sub: 'One unit +1 Mag and +1 Skl for good',
         go: async () => {
-          await expAll(run.roster, 25);
-          hurtAll(5);
-          return 'You stumble out the far side hours later. Everyone gains 25 EXP, but the squad is battered (−5 HP).';
-        }
-      },
-      {
-        l: 'Send a scout ahead',
-        sub: 'One unit gains 50 EXP, but drops to half HP',
-        go: async () => {
-          const u = await pickUnit('Who scouts ahead?', '+50 EXP, but drops to half HP.');
+          const u = await pickUnit('Whose cup?', '+1 Mag and +1 Skl for good.');
           if (!u) return null;
-          await expAll([u], 50);
-          u.hp = Math.min(u.hp, Math.ceil(u.maxhp / 2));
-          return `${u.name} vanishes into the white and returns at dusk, scratched up but sharper for it.`;
+          bump(u, 'mag', 1);
+          bump(u, 'skl', 1);
+          sfx('heal');
+          return `She peers into ${u.name}’s cup for a long time and says nothing about what she sees. Somehow, ${u.name} feels sharper. +1 Mag, +1 Skl.`;
         }
       },
-      { l: 'Wait for it to lift', go: async () => 'By noon the road is clear.' }
+      { l: 'Back away', go: async () => '“Another time, then.”' }
     ]
   },
 
@@ -1230,10 +1057,11 @@ Object.assign(EVENTS, {
     ]
   },
 
-  /* A wounded creature half-eaten by the crystal: put it down for EXP, or cut the crystal out for a relic (the cutter gets hurt). */
+  /* A wounded creature half-eaten by the crystal: put it down for EXP, or cut the crystal out for the Corrupted Crystal relic (the cutter gets hurt). */
   beast: {
     t: 'The Crystal-Touched Beast',
     art: 'beast',
+    ok: () => !R('corrupted'),
     ov: '<img class="ev-fig ev-beast" src="art/monsters/BlightedStag.png" alt="">',
     d: 'A stag stands swaying in the undergrowth, breathing hard. Crystal has grown through one of its antlers, and its eyes are starting to glaze. This is how it starts, Ithren said.',
     o: [
@@ -1247,13 +1075,19 @@ Object.assign(EVENTS, {
       },
       {
         l: 'Cut the crystal out',
-        sub: 'Pick 1 of 2 relics; the one who cuts takes 5 damage',
+        sub: 'Corrupted Crystal relic (+2 damage to crystal creatures, everyone −2 max HP); the one who cuts takes 5 damage',
         go: async () => {
           const u = await pickUnit('Who cuts it out?', 'They take 5 damage as the crystal splinters.');
           if (!u) return null;
           u.hp = Math.max(1, u.hp - 5);
-          const k = await relicPick(2, ['c', 'u'], 'The Crystal-Touched Beast', 'Something was growing inside the crystal.');
-          return `The crystal splinters and cuts ${u.name} (−5 HP), but the stag staggers up and bolts into the trees.${k ? ` In the shards you find <b>${RELICS[k].n}</b>.` : ''}`;
+          run.roster.forEach(v => {
+            v.maxhp = Math.max(1, v.maxhp - 2);
+            v.hp = Math.max(1, Math.min(v.hp, v.maxhp));
+          });
+          (run.relics = run.relics || []).push('corrupted');
+          sfx('item');
+          toast(`${RELICS.corrupted.n} obtained`);
+          return `The crystal splinters and cuts ${u.name} (−5 HP), but the stag staggers up and bolts into the trees. You keep the shard: the <b>Corrupted Crystal</b>. It hums in your pack, and everyone feels a little weaker for carrying it (−2 max HP).`;
         }
       },
       { l: 'Leave it', go: async () => 'You leave it be. It watches you go.' }
@@ -1375,32 +1209,6 @@ Object.assign(EVENTS, {
     ]
   },
 
-  /* EXP for everyone, or heal 10 HP. */
-  sage: {
-    t: 'The Mountain Sage',
-    act: 2,
-    art: 'sage',
-    d: 'A sage sits on a peak above the clouds. He opens one eye. “You may listen, or rest. It would be wise to wait before continuing.”',
-    o: [
-      {
-        l: 'Meditate with the sage',
-        sub: 'Every unit gains 30 EXP',
-        go: async () => {
-          await expAll(run.roster, 30);
-          return 'The sage breathes, and you breathe with him. When you open your eyes, the world feels clearer. Every unit gains 30 EXP.';
-        }
-      },
-      {
-        l: 'Rest below',
-        sub: 'Every unit heals 10 HP',
-        go: async () => {
-          run.roster.forEach(u => (u.hp = Math.min(u.maxhp, u.hp + 10)));
-          sfx('heal');
-          return 'Every unit rests up before continuing.';
-        }
-      }
-    ]
-  }
 });
 
 /* ==================================================================
@@ -1664,13 +1472,9 @@ const EV_SFX = {
   enchanter: ['book', 1, 2],
   gnome: ['book', 0],
   chest: ['chestopen', 0],
-  cache: ['chestopen', 'act'],
   icecache: ['chestopen', 0],
-  armoury: ['chestopen', 0, 1],
-  spring: ['pour', 0, 1],
   witch: ['pour', 1],
   cage: ['lever', 0],
-  merchant: 'paper',
   antiquities: 'paper',
   tailor: 'paper'
 };

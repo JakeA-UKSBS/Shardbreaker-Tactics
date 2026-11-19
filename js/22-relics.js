@@ -126,6 +126,12 @@ const RELICS = {
   ankh: { n: "Golden Ankh", r: "u", ev: 1, d: "All units gain +1 Def." },
   riddle: { n: "Sphinx’s Riddle", r: "r", ev: 1, d: "Abilities cost 1 less MP, and their cooldowns are 1 turn shorter (never under 1)." },
   gloves: { n: "Imbued Gloves", r: "r", ev: 1, d: "All units gain +2 Res." },
+  corrupted: {
+    n: "Corrupted Crystal",
+    r: "u",
+    ev: 1,
+    d: "Units deal +2 damage to crystal creatures. Everyone in your squad when you take it loses 2 max HP.",
+  },
   notes: {
     n: "Gnome’s Research Notes",
     r: "u",
@@ -260,6 +266,7 @@ function relicCalc(x, xw, y, ctx) {
     if (R("coin")) o.crit += 10;
     if (R("aventurine")) o.crit += 5;
     if (R("notes") && isCrys(y)) o.pow += 2;
+    if (R("corrupted") && isCrys(y)) o.pow += 2;
   } else {
     if (R("mirror")) o.acc -= 10;
     if (R("gemcrown")) o.acc += 10;

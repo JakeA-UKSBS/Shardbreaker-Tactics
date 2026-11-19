@@ -82,12 +82,12 @@ add('Turns & battle UI','defeat','defeat','sfx',false);add('Turns & battle UI','
 add('Map & run','item','item, relic or gold gained');add('Map & run','chestopen','chests and caches opening');add('Map & run','buy','buying');
 [['roompick','picking a room on the node map'],['campfire','arriving at a camp'],['crossroads','the Crossroads'],['actstart','entering a new act / region'],['relic','relic gained (own sound)'],['gold','gold gained (own sound)'],['forge','weapon forged / upgraded']].forEach(([k,w])=>add('Map & run',k,w,'sfx',false));
 /* tavern */
-add('Tavern','pour','drinks, Bog Witch tea, fountain');[['eat','buying food'],['hire','hiring a recruit'],['innkeeper','innkeeper greeting']].forEach(([k,w])=>add('Tavern',k,w,'sfx',false));
+add('Tavern','pour','drinks, Bog Witch tea');[['eat','buying food'],['hire','hiring a recruit'],['innkeeper','innkeeper greeting']].forEach(([k,w])=>add('Tavern',k,w,'sfx',false));
 /* events */
 [['anvil','smith events (reforge)'],['book','reading events'],['lever','Caged Traveller lock'],['paper','merchant and tailor wares']].forEach(([k,w])=>add('Events',k,w));
 [['bloodshrine','Blood Shrine'],['spar','Training Ground'],['dice','Gambler’s Table'],['idol','The Golden Idol'],['lute','The Wandering Minstrel'],['coin','Wishing Well'],['battlefield','Old Battlefield'],
- ['choir','The Wayside Chapel'],['throne','The Empty Throne'],['storm','The Storm Altar / Storm Spire'],['veteran','The Old Veteran'],['statue','Statue of Valour'],['toll','The Toll Bridge'],['fog','The Strange Fog'],
- ['beastgrowl','The Crystal-Touched Beast'],['star','The Fallen Star'],['oracle','The Oracle'],['sage','The Mountain Sage'],['onyx','The Black Onyx'],['sinking','The Sinking Sands'],['echo','Ithren’s Echo'],['ghosts','Those Who Came Before']]
+ ['choir','The Wayside Chapel'],['throne','The Empty Throne'],['storm','The Storm Altar / Storm Spire'],['statue','Statue of Valour'],['toll','The Toll Bridge'],
+ ['beastgrowl','The Crystal-Touched Beast'],['star','The Fallen Star'],['oracle','The Oracle'],['onyx','The Black Onyx'],['sinking','The Sinking Sands'],['echo','Ithren’s Echo'],['ghosts','Those Who Came Before']]
   .forEach(([k,w])=>add('Events','ev-'+k,w,'sfx',false));
 /* menus */
 [['uiopen','dialogue menus: Continue / an event choice (trial)'],['cancel','backing out: Leave / Back / Skip in menus, right-click back, closing the map'],['equip','equipping gear']].forEach(([k,w])=>add('Menus & UI',k,w));

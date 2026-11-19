@@ -417,7 +417,7 @@ const CAST = [
     id: "kaya",
     name: "Kaya",
     cls: "Horse Archer",
-    wk: "shortBow",
+    wk: "yewGreatbow" /* joins already advanced, so a steel-tier bow */,
     joins: "act1",
     look: {
       fem: true,
@@ -520,7 +520,7 @@ const CAST = [
     id: "celestine",
     name: "Celestine",
     cls: "Paladin",
-    wk: "ironSpear",
+    wk: "holySword",
     joins: "act1",
     look: {
       fem: true,
