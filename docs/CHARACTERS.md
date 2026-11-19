@@ -83,7 +83,7 @@ A poacher's son who has never missed a meal or a deer. Cheeky, and the one who c
 - **Look:** green leathers, feather headdress, longbow.
 - **Passive: Clear Shot.** Ignores cover: her target gets no Avoid or Def from the terrain it stands on.
 - **Aimed Shot** (single, range 2–5 · CD 2): 1.5× Str, as accurate as a normal attack.
-- **Immobilise** (single · CD 3): 0.8× Str, and the target can’t move for 2 turns (Root).
+- **Pinning Arrow** (single · CD 3): 0.8× Str, and the target can’t move for 2 turns (Root).
 - **Volley** (area r1 at range 3–5 · CD 4): 0.7× Str to everything in the area.
 
 ### Vaar: Brawler

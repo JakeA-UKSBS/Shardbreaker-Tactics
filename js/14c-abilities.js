@@ -73,7 +73,7 @@ Object.assign(SKILLS,{
 const ABIL={
   /* Kili (Archer) */
   aimedShot:{n:'Aimed Shot',cd:2,side:'foe',r:[2,5],dmg:1.5,sure:1,d:'A careful shot from range 2–5: 1.5× damage, and it never misses.'},
-  pinningArrow:{n:'Immobilise',cd:3,side:'foe',r:'wpn',dmg:.8,st:['root',2],d:'0.8× damage, and the target is Rooted (can’t move) for 2 turns.'},
+  pinningArrow:{n:'Pinning Arrow',cd:3,side:'foe',r:'wpn',dmg:.8,st:['root',2],d:'0.8× damage, and the target is Rooted (can’t move) for 2 turns.'},
   volley:{n:'Volley',cd:4,side:'foe',r:[3,5],shape:'area',aim:'any',dmg:.7,d:'Arrows rain on a 3×3 area 3–5 tiles away: 0.7× damage to every enemy in it.'},
   /* Vaar (Brawler) */
   shove:{n:'Shove',cd:2,side:'foe',r:[1,1],dmg:.8,push:1,d:'0.8× damage and push 1. Into a wall or unit: 3 more; into water, mud, magma or the void: 10.'},
