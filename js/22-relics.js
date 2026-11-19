@@ -45,6 +45,10 @@ const RELICS = {
     r: "r",
     d: "Tavern hires and the crossroads offer units 1 level higher.",
   },
+  riposte: { n: "Duellist’s Charm", r: "c", d: "Counterattacks deal +1 damage." },
+  wyrmscale: { n: "Wyrmscale", r: "c", d: "Units take 1 less damage from enemy abilities." },
+  token: { n: "Innkeeper’s Token", r: "c", d: "Everything at the tavern costs 10 gold less." },
+  crimson: { n: "Crimson Edge", r: "u", d: "Critical hits heal the attacker 4 HP." },
   quiver: { n: "Endless Quiver", r: "u", x: 2, d: "Bows deal +3 damage." },
   focusgem: {
     n: "Focus Gem",
@@ -227,7 +231,7 @@ const CRYS_CLS = [
   ],
   isCrys = (u) => CRYS_CLS.includes(u.cls);
 /* combat hooks, called from calc(): only your units benefit */
-function relicCalc(x, xw, y) {
+function relicCalc(x, xw, y, ctx) {
   const o = { pow: 0, df: 0, acc: 0, avo: 0, crit: 0 };
   if (!run) return o;
   /* early ease: in Act 1, enemies deal 2 less damage on floors 1-3 and 1 less on 4-6 */
@@ -252,6 +256,7 @@ function relicCalc(x, xw, y) {
       o.acc += 10;
     }
     if (R("whetstone")) o.acc += 10;
+    if (R("riposte") && ctx && ctx.init && ctx.init !== x) o.pow += 1;/* counterattacks */
     if (R("coin")) o.crit += 10;
     if (R("aventurine")) o.crit += 5;
     if (R("notes") && isCrys(y)) o.pow += 2;
