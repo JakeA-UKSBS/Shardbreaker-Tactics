@@ -58,6 +58,7 @@ const IT={
   claws:{n:'Claws',t:'blade',kind:'twin',mt:4,hit:85,crit:10,r:[1,1],uses:99},
   salve:{n:'Salve',t:'item',kind:'pill',amt:10,uses:3}
 };
+/* every item's icon key is its own id (icons/<id>.png): set in one go rather than typed on each item */
 for(const k in IT)IT[k].key=k;
 /* ---- weapon weight (Wt): weight above the wielder's Str (Mag for sigils) costs that much attack speed ---- */
 Object.assign(IT,{
@@ -70,6 +71,7 @@ Object.assign(IT,{
 const WT={wornSword:4,twinKhopesh:4,atlatl:8,twinDaggers:2,greatsword:12,ironSpear:6,steelSpear:10,javelin:8,hatchet:7,steelHatchet:11,throwingAxe:9,
   shortBow:3,fireSigil:2,frostSigil:4,stormSigil:2,dawnSigil:2,umbralSigil:5,runeCrook:3,
   stiletto:2,qiang:7,reaverAxe:9,hawkeyeBow:5};
+/* weights differ per item, so they're a table (the items added further down set wt on themselves instead) */
 for(const k in WT)IT[k].wt=WT[k];
 /* ---- special weapons from events: jade (killer) weapons, lightning sigils, long-range sigils and charms ---- */
 Object.assign(IT,{
@@ -99,11 +101,13 @@ Object.assign(IT,{
   zweihander:{n:'Zweihänder',t:'blade',kind:'greatsword',mt:14,hit:65,crit:5,r:[1,1],uses:30,wt:14,tint:'steel'},
   flamberge:{n:'Flamberge',t:'blade',kind:'greatsword',mt:12,hit:70,crit:20,r:[1,1],uses:25,wt:12,tint:'killer'}
 });
+/* again, for the items just added */
 for(const k in IT)IT[k].key=k;
 
-/* WTYPES: weapon types. ELN: element display names. */
+/* WTYPES: the weapon types (art = magic weapons: sigils and attack staves; spirit = healing staves isn't a weapon).
+   ELN: element names shown on weapons (only the elements a weapon actually has). */
 const WTYPES=['blade','heavy','pole','bow','art'];
-const ELN={light:'Light',dark:'Dark',fire:'Fire',nature:'Nature',water:'Water',ice:'Ice',wind:'Wind',earth:'Earth',lightning:'Lightning',illusion:'Illusion',crystal:'Neutral'};
+const ELN={light:'Light',dark:'Dark',fire:'Fire',ice:'Ice',lightning:'Lightning',earth:'Earth',crystal:'Neutral'};
 /* CLASSES, keyed by class id (shared by player classes and monsters):
    n = class name shown in game, w = weapon types it can use, body = body type (tunic/robe/vest/armor/beast/golem...: used by the unit rig, tags and the boss PNG lookup),
    mov = Move, crit = bonus Crit %, promo = class it promotes to, tier = 2 for promoted classes, bonus = stats added on promotion (stat order above),
@@ -141,10 +145,9 @@ Object.assign(SKILLS,{
   quickStudy:{n:'Quick Study',d:'Gains double EXP.'},
   earlyEdge:{n:'Early Edge',d:'+20 Hit and Avoid on turns 1 to 5.'},
   wolfsbane:{n:'Wolfsbane',d:'Effective (×2) against Beasts.'},
-  spiritbane:{n:'Fiendbane',d:'Effective (×2) against Infernal foes.'},
+  fiendbane:{n:'Fiendbane',d:'Effective (×2) against Infernal foes.'},
   stonebane:{n:'Stonebane',d:'Effective (×2) against Armoured foes.'},
-  guardian:{n:'Guardian',d:'Adjacent allies take 2 less damage.'},
-  pikeWall:{n:'Pike Wall',d:'+4 Def and +10 Hit against mounted units and fliers.'}
+  guardian:{n:'Guardian',d:'Adjacent allies take 2 less damage.'}
 });
 /* PROMO_LV: level a unit can promote at */
 const PROMO_LV=5;

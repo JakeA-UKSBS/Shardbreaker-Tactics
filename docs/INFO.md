@@ -103,7 +103,6 @@ Learned skills cost capacity (base 20, +5 when promoted). Personal skills are fr
 | Fiendbane | 10 | Effective (×2) against Infernal foes. |
 | Stonebane | 10 | Effective (×2) against Armoured foes. |
 | Guardian | 10 | Adjacent allies take 2 less damage. |
-| Pike Wall | 5 | +4 Def and +10 Hit against mounted units and fliers. |
 
 ## Relics
 

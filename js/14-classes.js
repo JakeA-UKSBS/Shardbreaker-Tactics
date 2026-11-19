@@ -12,7 +12,7 @@ let run=null;
 const ROLES={
   bruiser:{n:'Fighter',n2:'Warrior',w:['heavy','pole'],body:'vest',crit:5,skills:['wrath','swiftstrike','steadfast','quickDraw','momentum','stonebane'],
     b:[21,7,0,4,4,2,4,1],gr:[[75,95],[45,65],[0,10],[30,45],[30,45],[15,35],[20,35],[5,20]],bonus:[5,3,0,1,2,0,2,1]},
-  tank:{n:'Guard',n2:'Bastion',w:['blade','heavy','pole'],body:'armor',skills:['steadfast','taunt','ironSkin','retaliate','spiritbane'],
+  tank:{n:'Guard',n2:'Bastion',w:['blade','heavy','pole'],body:'armor',skills:['steadfast','taunt','ironSkin','retaliate','fiendbane'],
     b:[22,5,0,3,2,1,7,1],gr:[[80,100],[40,55],[0,10],[25,40],[15,30],[15,30],[35,50],[5,20]],bonus:[6,2,0,1,1,0,4,2]},
   skirm:{n:'Skirmisher',n2:'Duelist',w:['blade','pole','bow'],body:'tunic',crit:10,skills:['swiftstrike','focus','keenEye','hitAndRun','flurry','earlyEdge'],
     b:[18,5,0,7,8,4,3,2],gr:[[60,80],[35,50],[0,15],[45,65],[50,70],[30,50],[15,30],[15,30]],bonus:[3,2,0,3,3,0,1,2]},
@@ -28,7 +28,7 @@ const ROLES={
   /* tanks with a shield: the Shieldmaiden protects her neighbours, the Knight is an armoured wall */
   shield:{n:'Shieldmaiden',n2:'Shield Warden',w:['blade','pole'],body:'tunic',shield:true,skills:['guardian','steadfast','taunt','spellWard'],
     b:[20,4,0,4,5,3,6,4],gr:[[70,90],[35,50],[0,10],[30,45],[30,45],[20,40],[30,45],[20,35]],bonus:[5,2,0,1,2,0,3,3]},
-  knight:{n:'Knight',n2:'General',w:['blade','pole'],body:'armor',shield:true,skills:['pikeWall','steadfast','ironSkin','retaliate'],
+  knight:{n:'Knight',n2:'General',w:['blade','pole'],body:'armor',shield:true,skills:['steadfast','ironSkin','retaliate'],
     b:[24,5,0,3,1,0,9,0],gr:[[85,100],[45,60],[0,10],[20,35],[10,25],[10,25],[40,55],[0,15]],bonus:[7,3,0,1,0,0,5,1]},
   /* summons a minion from the current region once per battle (twice once promoted) */
   summoner:{n:'Summoner',n2:'Conjurer',w:['art'],body:'robe',skills:['kindle','focus','quickStudy'],
