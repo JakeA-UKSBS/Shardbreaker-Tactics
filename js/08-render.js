@@ -102,7 +102,7 @@ function itemRows(u,btn){
     return`<${tag} class="it${i===ei?' eqd':''}${btn&&itemSel===i?' sel':''}"${btn?` data-act="item:${i}" type="button"`:''}><img src="${icon(it.k)}" alt="">${w.n}${it.d?' <em>drops</em>':''}<span class="u">${[w.r&&w.t!=='item'?`Rng ${rngTxt(w.r)}`:'',endless(it.k)?'':`${it.u}/${w.uses}`].filter(Boolean).join(' · ')}</span></${tag}>`}).join('')||'<p class="skd">No items.</p>'}</div>`;
 }
 /* enemy card: its types, and what it's weak to or resists */
-const TAG_BEATEN={armoured:'Hammers',beast:'Spears',quarry:'Bows',colossal:'Giantslayer',infernal:'Light',plant:'Fire',troll:'Fire',ooze:'Lightning'};
+const TAG_BEATEN={armoured:'Hammers',beast:'Spears, Bows',colossal:'Giantslayer',infernal:'Light',plant:'Fire',troll:'Fire',ooze:'Lightning'};
 const EL_N={fire:'Fire',ice:'Ice',lightning:'Lightning',light:'Light',dark:'Dark',nature:'Nature',water:'Water'};
 function monTypes(u){if(u.team!=='e')return'';const tg=tagsOf(u),wk=[...new Set([...tg.map(t=>TAG_BEATEN[t]),...weakOf(u).map(e=>EL_N[e]||e)])].filter(Boolean),rs=resOf(u).map(e=>EL_N[e]||e);
   if(!tg.length&&!wk.length&&!rs.length)return'';

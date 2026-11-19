@@ -18,10 +18,10 @@ Weapons never break (except the 5-use Meteor and Heaven's Bolt).
 | Hatchet | Heavy | 8 | 75 | 0 | 7 | 1 |  |  |
 | Steel Hatchet | Heavy | 11 | 65 | 0 | 11 | 1 |  | Yes |
 | Throwing Axe | Heavy | 7 | 60 | 0 | 9 | 1–2 |  | Yes |
-| Short Bow | Bow | 6 | 85 | 0 | 3 | 2–3 | Quarry |  |
+| Short Bow | Bow | 6 | 85 | 0 | 3 | 2–3 | Beast |  |
 | Fire Sigil | Sigil (Fire) | 5 | 90 | 0 | 2 | 1–2 | Plant, Troll |  |
 | Frost Sigil | Sigil (Ice) | 7 | 85 | 5 | 4 | 1–2 |  |  |
-| Storm Sigil | Sigil (Lightning) | 8 | 80 | 5 | 5 | 1–2 | Ooze |  |
+| Storm Sigil | Sigil (Lightning) | 4 | 95 | 15 | 2 | 1–2 | Ooze |  |
 | Dawn Sigil | Sigil (Light) | 5 | 90 | 0 | 2 | 1–2 | Infernal |  |
 | Umbral Sigil | Sigil (Dark) | 5 | 85 | 0 | 5 | 1–2 |  |  |
 | Rune Crook | Sigil | 4 | 85 | 0 | 3 | 1–2 |  |  |
@@ -30,18 +30,18 @@ Weapons never break (except the 5-use Meteor and Heaven's Bolt).
 | Stiletto | Blade | 4 | 90 | 25 | 2 | 1 |  | Yes |
 | Qiang | Polearm | 8 | 80 | 30 | 7 | 1 |  | Yes |
 | Reaver Axe | Heavy | 10 | 65 | 30 | 9 | 1 |  | Yes |
-| Hawkeye Bow | Bow | 7 | 80 | 30 | 5 | 2–3 | Quarry | Yes |
+| Hawkeye Bow | Bow | 7 | 80 | 30 | 5 | 2–3 | Beast | Yes |
 | Jade Jian | Blade | 7 | 80 | 30 | 5 | 1 |  | Yes |
 | Jade Fangs | Blade | 5 | 90 | 35 | 2 | 1 |  | Yes |
-| Longbow | Bow | 6 | 75 | 0 | 6 | 2–3 | Quarry |  |
+| Longbow | Bow | 6 | 75 | 0 | 6 | 2–3 | Beast |  |
 | Tomahawk | Heavy | 10 | 65 | 0 | 9 | 1–2 |  | Yes |
 | Steel Knives | Blade | 5 | 90 | 10 | 2 | 1–2 |  | Yes |
 | Gale Sword | Blade | 6 | 80 | 0 | 6 | 1–2 |  | Yes |
-| Yew Greatbow | Bow | 9 | 80 | 5 | 8 | 2–4 | Quarry | Yes |
+| Yew Greatbow | Bow | 9 | 80 | 5 | 8 | 2–4 | Beast | Yes |
 | Throwing Knives | Blade | 3 | 90 | 10 | 1 | 1–2 |  | Yes |
 | Flame Sigil | Sigil (Fire) | 8 | 80 | 5 | 4 | 1–2 | Plant, Troll | Yes |
 | Blizzard Sigil | Sigil (Ice) | 9 | 80 | 5 | 5 | 1–2 |  | Yes |
-| Thunder Sigil | Sigil (Lightning) | 4 | 95 | 15 | 2 | 1–2 | Ooze | Yes |
+| Thunder Sigil | Sigil (Lightning) | 8 | 80 | 5 | 5 | 1–2 | Ooze | Yes |
 | Heaven’s Bolt | Sigil (Lightning) | 10 | 65 | 5 | 8 | 3–10 | Ooze |  |
 | Meteor Sigil | Sigil (Earth) | 13 | 60 | 0 | 9 | 3–10 |  |  |
 | War Hammer | Heavy | 8 | 70 | 0 | 10 | 1 | Armoured | Yes |
@@ -60,8 +60,7 @@ An effective hit multiplies weapon Mt ×2. Only your side deals them for now.
 | Monster type | Who has it | Beaten by |
 |---|---|---|
 | Armoured | Magma Golem, Crystal Sentinel, Sandstone Golem, Pyrite Colossus, Gem Golem, Amethyst Turtle, Yeti | War Hammer, Stonebane |
-| Beast | Wolf, Alligator, Blighted Stag, Magma Dragon, Blighted Croc, Sand Worm, Ice Worm, Hell Hound, Frost Wolf, Agate Wyrm, Hollow Bear, Spirit Frog | Hunting Spear, Wolfsbane |
-| Quarry | Blighted Stag (bats, when added) | Bows |
+| Beast | Wolf, Alligator, Blighted Stag, Magma Dragon, Blighted Croc, Sand Worm, Ice Worm, Hell Hound, Frost Wolf, Agate Wyrm, Hollow Bear, Spirit Frog | Hunting Spear, bows, Wolfsbane |
 | Colossal | Every 2×2 or 3×3 boss | Giantslayer |
 | Infernal | Hell Hound, Magma Dragon (Pyraxis), Fire Sprite | Light (Dawn Sigil, light abilities), Holy Sword, Fiendbane |
 | Plant | Blighted Treant | Fire |

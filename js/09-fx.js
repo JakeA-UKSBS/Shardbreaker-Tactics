@@ -45,6 +45,8 @@ async function swingAt(X,Y,w,crit,ranged){const wk=w&&w.key;
   const k=SLOW_SWING.has(X.cast)?1.4:1;
   /* sigils / spells with an element projectile (EL_PROJ: dark orbs, ice shards), and the frog's acid */
   if(w&&w.t==='art'&&EL_PROJ[w.el]){mapPose(X,crit?'critup':'windup',Y,wk);await sleep(D((crit?120:150)*k));mapPose(X,'swing',Y,wk);lunge(X,Y,-6);await elShot(X,Y,w.el,crit);setTimeout(()=>mapPose(X,'follow',Y,wk),D(90));return}
+  /* light sigils (Dawn Sigil): no projectile, a burst of light on the target */
+  if(w&&w.t==='art'&&w.el==='light'){mapPose(X,crit?'critup':'windup',Y,wk);await sleep(D((crit?120:150)*k));mapPose(X,'swing',Y,wk);const[x,y]=fxMid(Y);await fxPlay(FX.lightBurst,x,y-6,{k:crit?1.5:1.2});setTimeout(()=>mapPose(X,'follow',Y,wk),D(90));return}
   if(w&&w.acid){mapPose(X,'windup',Y,wk);await sleep(D(150));mapPose(X,'swing',Y,wk);await acidSpew(X,Y);setTimeout(()=>mapPose(X,'follow',Y,wk),D(90));return}
   /* casters with their own bolt strip (Morrigan): it charges at the hand, then flies to the target */
   if(w&&w.t==='art'&&castPng(X,'bolt')){mapPose(X,crit?'critup':'windup',Y,wk);const ch=boltCharge(X,Y);await sleep(D((crit?120:150)*k));
@@ -150,7 +152,8 @@ const FX={
   iceShard:{src:'art/fx/ice-shard.png',fw:48,fh:32,n:3,ax:30,ay:16,ms:70},/* frost sigils and ice spells */
   iceNova:{src:'art/fx/ice-nova.png',fw:32,fh:32,n:25,ax:16,ay:28,ms:55,hit:7},/* a crystal bursts from a tile (frames 0-7), then breaks up */
   holyBeam:{src:'art/fx/holy-beam.png',fw:48,fh:48,n:15,ax:24,ay:45,ms:50,hit:6},/* a pillar of light lands on a tile, then sparks */
-  holyCross:{src:'art/fx/holy-cross.png',fw:32,fh:32,n:3,ax:16,ay:16,ms:110},/* healing */
+  heal:{src:'art/fx/heal.png',fw:64,fh:96,n:20,ax:32,ay:86,ms:55},/* healing: a ring on the ground, a column of light, then sparkles drift up */
+  lightBurst:{src:'art/fx/light-burst.png',fw:64,fh:72,n:18,ax:32,ay:18,ms:50,hit:3},/* light sigils (the Dawn Sigil): a starburst on the target, then golden shards fall */
   fireRing:{src:'art/fx/fire-ring.png',fw:96,fh:64,n:17,ax:48,ay:40,ms:65,hit:5},/* Klaus's Circle of Fire: a spark, the ring roars up, then burns down */
   frostBreath:{src:'art/fx/frost-breath.png',fw:96,fh:40,n:14,ax:4,ay:22,ms:60,hit:3},/* Corvin's Frost Wave: a gust of ice from the hand, widening as it goes */
   ballLightning:{src:'art/fx/ball-lightning.png',fw:44,fh:48,n:3,ax:30,ay:24,ms:60},/* lightning sigils (Drecken): the ball flies, crackling */
@@ -214,7 +217,7 @@ async function boulderFx(X,Y){mapPose(X,'windup',Y);await sleep(D(220));mapPose(
   const b=uBox(X),[ex,ey]=fxMid(Y),sx=b.l+b.w/2,sy=b.t+b.h*.25,f=FX.boulder,d=fxEl(f,sx,sy,1.6),N=14,arc=40+Math.hypot(ex-sx,ey-sy)*.35,pts=[];
   for(let i=0;i<=N;i++){const t=i/N;pts.push({transform:`translate(${sx+(ex-sx)*t-f.ax}px,${sy+(ey-sy)*t-arc*4*t*(1-t)-f.ay}px) rotate(${t*540}deg) scale(1.6)`})}
   await d.animate(pts,{duration:D(520),easing:'linear'}).finished;d.remove();shake();await fxPlay(FX.boulderImpact,ex,ey+8,{k:1.3});setTimeout(()=>mapPose(X,'idle'),D(200))}
-function healFx(t){const[x,y]=fxMid(t);fxPlay(FX.holyCross,x,y-4,{k:1.8,frames:[0,0,1,2]})}
+function healFx(t){const b=uBox(t);fxPlay(FX.heal,b.l+b.w/2,b.t+b.h-4)}
 /* a ring bursts on the target: element colour for sigils, white for crits */
 function burst(Y,col){const b=uBox(Y),r=document.createElement('div');r.className='fx-m';r.style.left=b.l+b.w/2+'px';r.style.top=b.t+b.h*.55+'px';r.style.color=col;boardEl.appendChild(r);
   r.animate([{transform:'scale(.3)',opacity:1},{transform:'scale(1.4)',opacity:0}],{duration:D(380),easing:'ease-out'}).finished.then(()=>r.remove())}

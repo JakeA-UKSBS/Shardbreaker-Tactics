@@ -48,7 +48,7 @@ const IT={
   shortBow:{n:'Short Bow',t:'bow',kind:'bow',mt:6,hit:85,crit:0,r:[2,3],uses:45},
   fireSigil:{n:'Fire Sigil',t:'art',kind:'talisman',el:'fire',mt:5,hit:90,crit:0,r:[1,2],uses:40,mag:true},
   frostSigil:{n:'Frost Sigil',t:'art',kind:'talisman',el:'ice',mt:7,hit:85,crit:5,r:[1,2],uses:35,mag:true},
-  stormSigil:{n:'Storm Sigil',t:'art',kind:'talisman',el:'lightning',mt:8,hit:80,crit:5,r:[1,2],uses:35,mag:true},
+  stormSigil:{n:'Storm Sigil',t:'art',kind:'talisman',el:'lightning',mt:4,hit:95,crit:15,r:[1,2],uses:40,mag:true},
   poisonSpit:{n:'Poison Spit',acid:true,t:'art',kind:'talisman',mt:5,hit:90,crit:0,r:[1,2],uses:99,mag:true,psn:.3,d:'30% chance to poison on a hit.'},/* the Lamia's attack: the frog's acid glob (acid:true), magic, sometimes poisons */
   dawnSigil:{n:'Dawn Sigil',t:'art',kind:'talisman',el:'light',mt:5,hit:90,crit:0,r:[1,2],uses:40,mag:true},
   umbralSigil:{n:'Umbral Sigil',t:'art',kind:'talisman',el:'dark',mt:5,hit:85,crit:0,r:[1,2],uses:40,mag:true,drain:true},
@@ -68,7 +68,7 @@ Object.assign(IT,{
 });
 /* WT: weapon weight. Weight above the wielder's Str (Mag for sigils) is taken off their attack speed (see wtOver/AS). */
 const WT={wornSword:4,twinKhopesh:4,atlatl:8,twinDaggers:2,greatsword:12,ironSpear:6,steelSpear:10,javelin:8,hatchet:7,steelHatchet:11,throwingAxe:9,
-  shortBow:3,fireSigil:2,frostSigil:4,stormSigil:5,dawnSigil:2,umbralSigil:5,runeCrook:3,
+  shortBow:3,fireSigil:2,frostSigil:4,stormSigil:2,dawnSigil:2,umbralSigil:5,runeCrook:3,
   stiletto:2,qiang:7,reaverAxe:9,hawkeyeBow:5};
 for(const k in WT)IT[k].wt=WT[k];
 /* ---- special weapons from events: jade (killer) weapons, lightning sigils, long-range sigils and charms ---- */
@@ -85,7 +85,7 @@ Object.assign(IT,{
   /* armoury stock (not dropped or given by events) */
   flameSigil:{n:'Flame Sigil',t:'art',kind:'talisman',el:'fire',mt:8,hit:80,crit:5,r:[1,2],uses:30,mag:true,wt:4,key:'fireSigil'},
   blizzardSigil:{n:'Blizzard Sigil',t:'art',kind:'talisman',el:'ice',mt:9,hit:80,crit:5,r:[1,2],uses:30,mag:true,wt:5,key:'frostSigil'},
-  thunderSigil:{n:'Thunder Sigil',armoury:true,t:'art',kind:'talisman',el:'lightning',mt:4,hit:95,crit:15,r:[1,2],uses:40,mag:true,wt:2},
+  thunderSigil:{n:'Thunder Sigil',armoury:true,t:'art',kind:'talisman',el:'lightning',mt:8,hit:80,crit:5,r:[1,2],uses:35,mag:true,wt:5},
   heavensBolt:{n:'Heaven’s Bolt',t:'art',kind:'talisman',el:'lightning',mt:10,hit:65,crit:5,r:[3,10],uses:5,mag:true,wt:8},
   meteorSigil:{n:'Meteor Sigil',t:'art',kind:'talisman',el:'earth',mt:13,hit:60,crit:0,r:[3,10],uses:5,mag:true,wt:9},
   /* slayer weapons: effective (×2 Mt) against one body tag */
