@@ -191,6 +191,16 @@ const actLen = () =>
 const flScale = (n) => Math.round(((n || 1) * 10) / RUN_LEN);
 const NODE_IC = {};
 /* battles from floor 2 on are sometimes defend maps (about 1 in 4, where the region has a town map). Decided by the seed, so the map can show it */
+/* relic icons in the side panel: hovering or focusing one shows its name and effect underneath */
+document.addEventListener("pointerover", relInfo);
+document.addEventListener("focusin", relInfo);
+function relInfo(e) {
+  const el = e.target.closest && e.target.closest(".ns-rel"),
+    box = document.querySelector(".nm-side .ns-rinfo");
+  if (!box) return;
+  if (el) box.innerHTML = `<b>${RELICS[el.dataset.rk].n}</b>${RELICS[el.dataset.rk].d}`;
+  else if (!e.target.closest || !e.target.closest(".ns-rels")) box.innerHTML = "";
+}
 function nodeDef(r, i) {
   const N = run.map.rows[r][i];
   if (N.t !== "battle" || r < 1 || !MAPS["town_" + actBiome().id]) return false;
@@ -278,7 +288,7 @@ function mapScreen(preview) {
     <div class="nm-scroll"><div class="nm-board" style="height:${H}px"><svg class="nm-trails" width="100%" height="${H}"></svg>${nodes}</div></div>
     ${(run.relics || []).length || (run.meals || []).length ? `<div class="nm-relics">${(run.relics || []).map((k) => `<button type="button" class="rl" data-rel="${k}" aria-label="${RELICS[k].n}"><img src="${relicArt(k)}" alt=""></button>`).join("")}${(run.meals || []).map((x) => `<button type="button" class="rl ml" data-meal="${x.id}" aria-label="${MEALS[x.id].n}"><img src="${mealArt(x.id)}" alt=""><i>${x.n}</i></button>`).join("")}</div>` : ""}
     <aside class="nm-side"><div class="ns-gold"><img src="${coinArt()}" alt="">${gold()} gold</div>
-      <div class="ns-h gold">Relics${(run.relics || []).length ? ` · ${run.relics.length}` : ""}</div>${(run.relics || []).map((k) => `<div class="ns-row"><img src="${relicArt(k)}" alt=""><span><b>${RELICS[k].n}</b>${RELICS[k].d}</span></div>`).join("") || ""}
+      <div class="ns-h gold">Relics${(run.relics || []).length ? ` · ${run.relics.length}` : ""}</div>${(run.relics || []).length ? `<div class="ns-rels">${run.relics.map((k) => `<span class="ns-rel" tabindex="0" data-rk="${k}"><img src="${relicArt(k)}" alt="${RELICS[k].n}"></span>`).join("")}</div><div class="ns-rinfo" aria-live="polite"></div>` : ""}
       ${(run.meals || []).length ? `<div class="ns-h">Meals</div>${run.meals.map((x) => `<div class="ns-row"><img src="${mealArt(x.id)}" alt=""><span><b>${MEALS[x.id].n}</b>${MEALS[x.id].d} · ${x.n} fight${x.n > 1 ? "s" : ""} left</span></div>`).join("")}` : ""}</aside>
     <div class="nm-info"></div>
     <aside class="nm-side nm-unit" hidden></aside>

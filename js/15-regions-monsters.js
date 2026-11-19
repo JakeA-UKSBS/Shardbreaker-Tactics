@@ -31,7 +31,6 @@ Object.assign(CLS,{
   Shardling:{n:'Shardling',w:['blade'],body:'shardling',mov:5},Prism:{n:'Prism',w:['art'],body:'prism',mov:4,fly:true},CrystalSentinel:{n:'Crystal Sentinel',w:['heavy'],body:'sentinel',mov:3},
   BogLurker:{n:'Bog Lurker',w:['blade'],body:'gator',mov:4,wade:true},BlightedTreant:{n:'Blighted Treant',w:['heavy'],body:'golem',mov:3}
 });
-CLS.Lamia.wade=true;
 /* fields: see the ENEMY STATS key in 01-data.js (b/g order: HP, Str, Mag, Skl, Spd, Lck, Def, Res) */
 Object.assign(FOE,{
   MudMonster:{b:[23,6,0,2,1,0,5,0],g:[.9,.4,0,.2,.1,0,.3,0],items:['slam'],look:{}},
