@@ -480,7 +480,7 @@ function mapScreen(preview) {
 
 /* the paths between rooms: curving jagged veins. Drawn in pixels.
    Each trail's bend comes from its rooms' positions, so it's the same every time the map opens.
-   Walked trails are black; trails you can still take are dark red; ones you can't reach any more are faded grey. */
+   Walked trails are black; trails you can still take are dark red with crystal shards; ones you can't reach any more are faded grey. */
 function drawTrails(M, Y, vis, live) {
   const svg = mapEl.querySelector(".nm-trails");
   if (!svg) return;
@@ -531,10 +531,14 @@ function drawTrails(M, Y, vis, live) {
       );
     /* a jagged vein through the trimmed curve, with crystal shards budding off it every ~22px, alternating sides */
     const st = walked ? "walked" : gone ? "gone" : "live",
+      cShard = "#e8564a",
       cBase = { walked: "#141010", live: "#4a0808", gone: "#7a6e5e" }[st],
       cCore = { walked: "#3a3230", live: "#8a1616", gone: "#a89a86" }[st],
       op = { walked: 1, live: 0.75, gone: 0.35 }[st],
       vp = [];
+    /* crystal shards bud off the vein every ~22px, alternating sides: only on trails you can still take */
+    let sh = 0,
+      nextS = st === "live" ? 34 : Infinity;
     for (let i = 0; i < pts.length; i++) {
       if (lens[i] < 24 || lens[i] > len - 24) continue;
       const j = i === 0 ? 1 : i,
@@ -543,6 +547,20 @@ function drawTrails(M, Y, vis, live) {
       const x = pts[i][0] - Math.sin(ang) * w,
         y = pts[i][1] + Math.cos(ang) * w;
       if (i % 3 === 0 || !vp.length) vp.push(`${x.toFixed(1)},${y.toFixed(1)}`);
+      if (lens[i] >= nextS && lens[i] < len - 30) {
+        const side = sh++ % 2 ? 1 : -1,
+          a2 = ang + side * (0.5 + hsh(i, seed[2], seed[0]) * 0.6),
+          L = 7 + hsh(seed[1], i, seed[0]) * 5,
+          wd = 2.6;
+        const tx = x + Math.cos(a2) * L,
+          ty = y + Math.sin(a2) * L,
+          mx = x + Math.cos(a2) * L * 0.45,
+          my = y + Math.sin(a2) * L * 0.45,
+          nx = -Math.sin(a2) * wd,
+          ny = Math.cos(a2) * wd;
+        out += `<polygon points="${x.toFixed(1)},${y.toFixed(1)} ${(mx + nx).toFixed(1)},${(my + ny).toFixed(1)} ${tx.toFixed(1)},${ty.toFixed(1)} ${(mx - nx).toFixed(1)},${(my - ny).toFixed(1)}" fill="${cShard}" opacity="${op}"/>`;
+        nextS += 22;
+      }
     }
     //Jagged line tech
     // two side corners, 45% of the way out and pushed ±wd px sideways (mx+nx, my+ny)
