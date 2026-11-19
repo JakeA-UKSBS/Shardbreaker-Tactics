@@ -24,7 +24,6 @@ const CAST_CLASSES = {
   Shieldmaiden: "shield.foot.blade.1",
   Adventurer: "shield.foot.blade.1",
   Cavalier: "tank.mounted.pole.1",
-  Crossbowman: "skirm.foot.bow.1",
   "Horse Archer": "skirm.mounted.bow.2",
   Swordsman: "sword.foot.blade.1",
   Pyromancer: "caster.foot.art.1",
@@ -43,7 +42,6 @@ const CAST_CLASSES = {
   Valkyrie: "shield.flying.pole.2",
   Hero: "shield.foot.blade.2",
   Warlord: "tank.mounted.heavy.2",
-  Artillery: "tank.armour.bow.2",
   Swordmaster: "sword.foot.blade.2",
   Pyrolord: "caster.foot.art.2",
   "Grand Summoner": "summoner.foot.art.2",
@@ -54,7 +52,6 @@ const CAST_CLASSES = {
    (HP, Str, Mag, Skl, Spd, Lck, Def, Res) */
 const ASC_BONUS = {
   Sniper: [2, 3, 0, 3, 2, 2, 1, 1],
-  Artillery: [5, 4, 0, 2, 0, 0, 4, 1],
   Berserker: [6, 5, 0, 2, 2, 0, 1, 0],
   Witch: [2, 0, 4, 2, 2, 0, 0, 4],
   Frostlord: [4, 0, 4, 1, 0, 0, 2, 4],
@@ -413,25 +410,6 @@ const CAST = [
           lanceC: "#e8e2d0",
         },
       },
-    },
-  },
-  {
-    id: "holt",
-    name: "Holt",
-    cls: "Crossbowman",
-    wk: "crossbow",
-    joins: "run",
-    look: {
-      style: "short",
-      hair: "#e8e2d0",
-      skin: "#e8b98f",
-      cloth: "#3a5a8a",
-      pants: "#3a3a4a",
-      sash: "#c9c3b8",
-      eye: "#3a5a8a",
-    },
-    asc: {
-      Artillery: { look: { metal: "#9aa8c0", capeC: "#2a3a5a", beard: true } },
     },
   },
   {

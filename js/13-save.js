@@ -10,6 +10,7 @@ function dropGone(o){if(!o||typeof o!=='object')return;
   if(o.cast==='vaar'&&o.skill==='ironBody')o.skill='outlander';/* Vaar's old personal skill (Nov 2026) */
   if(o.cls==='CursedStag')o.cls='BlightedStag';/* renamed (Nov 2026) */
   if(o.cast==='trent'){o.cast='arthur';if(o.name==='Trent')o.name='Arthur'}/* renamed (Nov 2026) */
+  if(Array.isArray(o.roster))o.roster=o.roster.filter(u=>!u||u.cast!=='holt');/* Holt cut (Nov 2026) */
   if(Array.isArray(o.skills))o.skills=o.skills.filter(x=>!x||!x.id||SKILLS[x.id]);
   if(Array.isArray(o.items))o.items=o.items.filter(i=>!i||!i.k||IT[i.k]);
   if(Array.isArray(o.relics))o.relics=o.relics.filter(k=>RELICS[k]);

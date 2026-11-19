@@ -107,7 +107,7 @@ Object.assign(IT,{
   /* slayer weapons: effective (×2 Mt) against one body tag */
   warHammer:{n:'War Hammer',t:'heavy',kind:'hammer',mt:8,hit:70,crit:0,r:[1,1],uses:30,wt:10,eff:['armoured']},
   huntingSpear:{n:'Hunting Spear',t:'pole',kind:'spear',mt:7,hit:85,crit:0,r:[1,1],uses:30,wt:6,eff:['beast']},
-  holySword:{n:'Holy Sword',t:'blade',kind:'sword',mt:8,hit:80,crit:5,r:[1,1],uses:25,wt:6,eff:['spectral'],tint:'holy',holy:true},
+  holySword:{n:'Holy Sword',t:'blade',kind:'sword',mt:8,hit:80,crit:5,r:[1,1],uses:25,wt:6,eff:['infernal'],tint:'holy',holy:true},
   giantslayer:{n:'Giantslayer',t:'blade',kind:'greatsword',mt:9,hit:70,crit:0,r:[1,1],uses:25,wt:10,eff:['colossal'],tint:'steel'},
   farStaff:{n:'Far Staff',t:'spirit',kind:'staff',amt:10,r:[1,10],uses:15,tint:'mend'},
   /* two-handed swords (kind greatsword): heavy, hard-hitting blades. Zwei wields only these */
@@ -123,7 +123,7 @@ const ELN={light:'Light',dark:'Dark',fire:'Fire',nature:'Nature',water:'Water',i
 /* CLASSES, keyed by class id (shared by player classes and monsters):
    n = class name shown in game, w = weapon types it can use, body = body type (tunic/robe/vest/armor/beast/golem...: used by the unit rig, tags and the boss PNG lookup),
    mov = Move, crit = bonus Crit %, promo = class it promotes to, tier = 2 for promoted classes, bonus = stats added on promotion (stat order above),
-   fly = flier (ignores terrain, weak to bows), mnt = mounted, wade = ignores water slowdown, phase = walks through walls, lava = can cross magma,
+   fly = flier (ignores terrain), mnt = mounted, wade = ignores water slowdown, phase = walks through walls, lava = can cross magma,
    jump = how high a step it can climb (default 2). */
 const CLS={
   /* a plain townsfolk body for NPC figures (the innkeeper, recruit icons) */
@@ -157,7 +157,7 @@ Object.assign(SKILLS,{
   quickStudy:{n:'Quick Study',d:'Gains double EXP.'},
   earlyEdge:{n:'Early Edge',d:'+20 Hit and Avoid on turns 1 to 5.'},
   wolfsbane:{n:'Wolfsbane',d:'Effective (×2) against Beasts.'},
-  spiritbane:{n:'Spiritbane',d:'Effective (×2) against Spectral foes.'},
+  spiritbane:{n:'Fiendbane',d:'Effective (×2) against Infernal foes.'},
   stonebane:{n:'Stonebane',d:'Effective (×2) against Armoured foes.'},
   guardian:{n:'Guardian',d:'Adjacent allies take 2 less damage.'},
   pikeWall:{n:'Pike Wall',d:'+4 Def and +10 Hit against mounted units and fliers.'}

@@ -41,24 +41,23 @@ function minRange(u){let m=9;u.items.forEach(it=>{if((isWpn(it.k)||IT[it.k].t===
 function aura(u){if(u.team!=='p')return 0;const l=state.units.find(o=>has(o,'command')&&o.hp>0&&o.team===u.team&&o.id!==u.id);return l&&man(l,u)<=2?10:0}
 
 /* ---- body tags and effective damage ----
-   Monsters carry body tags; some weapons (and the slayer skills) are effective against a tag: ×2 weapon Mt (bows vs fliers too).
+   Monsters carry body tags; some weapons (and the slayer skills) are effective against a tag: ×2 weapon Mt (bows vs quarry, light vs infernal, fire vs plants and trolls, lightning vs oozes).
    One-way for now: only your side (and green allies) deal effective hits; your own units have no tags. */
-const TAGS={flier:{n:'Flier'},armoured:{n:'Armoured'},beast:{n:'Beast'},colossal:{n:'Colossal'},spectral:{n:'Spectral'},plant:{n:'Plant'}};
+const TAGS={armoured:{n:'Armoured'},beast:{n:'Beast'},quarry:{n:'Quarry'},colossal:{n:'Colossal'},infernal:{n:'Infernal'},plant:{n:'Plant'},ooze:{n:'Ooze'},troll:{n:'Troll'}};
 const BODY_TAGS={golem:['armoured'],snail:['armoured'],turtle:['armoured'],cubes:['armoured'],armor:['armoured'],beast:['beast'],gator:['beast'],bear:['beast'],worm:['beast'],
-  hawk:['beast'],dragon:['beast'],sentinel:['armoured'],flame:['spectral'],frost:['spectral'],storm:['spectral']};
-const TAG_FIX={BlightedTreant:['plant']};
-function tagsOf(u){if(!u||!u.cls||u.cls.startsWith('G.'))return[];const C=CLS[u.cls]||{};let t=(TAG_FIX[u.cls]||BODY_TAGS[C.body]||[]).slice();if(C.fly)t.unshift('flier');if((u.sz||1)>1)t.push('colossal');return[...new Set(t)]}
-/* what a weapon is effective against: its own list, plus bows vs fliers, light sigils vs spectres, fire sigils vs plants */
-function effOf(w){const o=(w&&w.eff||[]).slice();if(w&&w.t==='bow')o.push('flier');if(w&&w.el==='light')o.push('spectral');if(w&&w.el==='fire')o.push('plant');return o}
-/* Paladins are holy warriors: everything they swing is effective against spectres */
-const SLAYER={wolfsbane:'beast',stonebane:'armoured',spiritbane:'spectral'};
+  hawk:['beast'],dragon:['beast'],sentinel:['armoured'],flame:['infernal'],mud:['ooze']};
+/* quarry: game animals that bows hunt (bats too, when they're added) */
+const TAG_FIX={BlightedTreant:['plant'],BlightedStag:['beast','quarry'],HellHound:['beast','infernal'],IceTroll:['troll'],MagmaDragon:['beast','infernal']};
+function tagsOf(u){if(!u||!u.cls||u.cls.startsWith('G.'))return[];const C=CLS[u.cls]||{};let t=(TAG_FIX[u.cls]||BODY_TAGS[C.body]||[]).slice();if((u.sz||1)>1)t.push('colossal');return[...new Set(t)]}
+/* what a weapon (or an ability's element) is effective against: its own list, plus bows vs quarry, light vs infernal, fire vs plants and trolls, lightning vs oozes */
+function effOf(w){const o=(w&&w.eff||[]).slice();if(w&&w.t==='bow')o.push('quarry');if(w&&w.el==='light')o.push('infernal');if(w&&w.el==='fire')o.push('plant','troll');if(w&&w.el==='lightning')o.push('ooze');return o}
+const SLAYER={wolfsbane:'beast',stonebane:'armoured',spiritbane:'infernal'};
 /* elemental weaknesses: CLS weak is one element or a list (Ice Troll: fire) */
 const weakOf=u=>[].concat((CLS[u.cls]||{}).weak||[]);
 /* resistances: half damage from that element (fire monsters vs fire, frost monsters vs ice). Only your attacks on monsters */
 const resOf=u=>[].concat((CLS[u.cls]||{}).res||[]);
 const resHalf=(x,xw,y,d)=>x.team!=='e'&&xw&&xw.el&&resOf(y).includes(xw.el)?Math.floor(d/2):d;
 function effHit(x,xw,y){if(x.team==='e')return 0;if(xw&&(xw.el||xw.holy)&&weakOf(y).includes(xw.el||'light'))return 2;/* holy weapons (Holy Sword) count as light *//* elemental weakness (Ice Troll: fire) */const tg=tagsOf(y);if(!tg.length)return 0;const e=effOf(xw);for(const k in SLAYER)if(has(x,k))e.push(SLAYER[k]);
-  if(CLS[x.cls]&&/Paladin/.test(CLS[x.cls].n))e.push('spectral');
   const hit=tg.filter(t=>e.includes(t));if(!hit.length)return 0;return 2}
 /* br: every term that went into the numbers, as [label, value] lists, for the dev-mode breakdown panel */
 function calc(x,xw,y,yw,ctx){
@@ -74,9 +73,9 @@ function calc(x,xw,y,yw,ctx){
   if(has(y,'kinship')&&state.units.some(o=>o.summon&&o.owner===y.id&&o.hp>0&&man(o,y)===1))df+=add(bd,'Kinship',2);
   const xm=CLS[x.cls].mnt||CLS[x.cls].fly,ym=CLS[y.cls].mnt||CLS[y.cls].fly;if(has(y,'pikeWall')&&xm)df+=add(bd,'Pike Wall',4);
   const dead=has(x,'keenEye');
-  const acc=add(ba,'Height',Math.max(-10,hd*10))+add(ba,'Weapon Hit',xw.hit)+add(ba,'Skl ×2',(x.skl+OL(x))*2)+add(ba,'Lck /2',Math.floor(LK(x)/2))+add(ba,'Character bonus',CAST_HIT[x.cast]||0)+add(ba,'Early Edge',has(x,'earlyEdge')&&state.turn<=5?20:0)+add(ba,'Command aura',aura(x))+add(ba,'Keen Eye',dead?20:0)+add(ba,'Relics, meals',RB.acc)+add(ba,'Statuses, passives',SB.acc)+add(ba,'Pike Wall vs mounted',has(x,'pikeWall')&&ym?10:0)+add(ba,'Steady Aim',has(x,'steadyAim')&&myTurn&&x.x===origin.x&&x.y===origin.y?15:0);
+  const acc=add(ba,'Height',Math.max(-10,hd*10))+add(ba,'Weapon Hit',xw.hit)+add(ba,'Skl ×2',(x.skl+OL(x))*2)+add(ba,'Lck /2',Math.floor(LK(x)/2))+add(ba,'Character bonus',CAST_HIT[x.cast]||0)+add(ba,'Early Edge',has(x,'earlyEdge')&&state.turn<=5?20:0)+add(ba,'Command aura',aura(x))+add(ba,'Keen Eye',dead?20:0)+add(ba,'Relics, meals',RB.acc)+add(ba,'Statuses, passives',SB.acc)+add(ba,'Pike Wall vs mounted',has(x,'pikeWall')&&ym?10:0);
   const avo=add(bv,'AS ×2',AS(y,yw)*2)+add(bv,'Lck',LK(y))+add(bv,'Early Edge',has(y,'earlyEdge')&&state.turn<=5?20:0)+add(bv,(t.n||'Terrain')+(dead?' (Keen Eye ignores)':''),dead||yf?0:t.av)+add(bv,'Command aura',aura(y))+add(bv,'Relics, meals',RB.avo)+add(bv,'Statuses, passives',SB.avo);
-  let crit=add(bc,'Relics, meals',RB.crit)+add(bc,'Statuses, passives',SB.crit)+add(bc,'Weapon Crit',xw.crit||0)+add(bc,'Class Crit',CLS[x.cls].crit||0)+add(bc,'Skl /2',Math.floor((x.skl+OL(x))/2))+add(bc,'Target Lck /2',-Math.floor(LK(y)/2));if(has(x,'focus')&&!state.units.some(o=>o!==x&&o.team===x.team&&o.hp>0&&man(o,x)===1))crit+=add(bc,'Focus',10);if(has(x,'wrath')&&x.hp*2<=x.maxhp)crit+=add(bc,'Wrath',15);if(has(x,'steadyAim')&&myTurn&&x.x===origin.x&&x.y===origin.y)crit+=add(bc,'Steady Aim',5);
+  let crit=add(bc,'Relics, meals',RB.crit)+add(bc,'Statuses, passives',SB.crit)+add(bc,'Weapon Crit',xw.crit||0)+add(bc,'Class Crit',CLS[x.cls].crit||0)+add(bc,'Skl /2',Math.floor((x.skl+OL(x))/2))+add(bc,'Target Lck /2',-Math.floor(LK(y)/2));if(has(x,'focus')&&!state.units.some(o=>o!==x&&o.team===x.team&&o.hp>0&&man(o,x)===1))crit+=add(bc,'Focus',10);if(has(x,'wrath')&&x.hp*2<=x.maxhp)crit+=add(bc,'Wrath',15);
   const asx=AS(x,xw),bonus=(has(x,'swiftstrike')&&ctx.init===x?3:0)+(has(x,'twinBolt')&&xw.el==='lightning'?3:0),asy=AS(y,yw);
   return{dmg:resHalf(x,xw,y,dmgMods(x,y,ctx,Math.max(0,pow-df),mods)),pow,df,hit:clamp(acc-avo,0,100),crit:x.team==='e'?0:clamp(crit,0,100),n:asx+bonus-asy>=4?2:1,eff,hd,
     br:{pow:bp,df:bd,acc:ba,avo:bv,crit:bc,mods,accT:acc,avoT:avo,critT:crit,noCrit:x.team==='e',asx,bonus,asy,mag:!!xw.mag}};

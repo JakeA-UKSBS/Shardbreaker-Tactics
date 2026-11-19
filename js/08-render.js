@@ -208,7 +208,7 @@ function renderPanel(){
       h=`<div class="wsel"><img src="${icon(w.key)}" alt="">${w.n}</div><p class="hint">Heal <b>${pending.name}</b>: ${pending.hp} → ${pending.hp+amt} HP. Click ${pending.name} again or press Heal.</p><div class="acts"><button class="go" type="button" data-act="doheal">Heal</button><button type="button" data-act="back">Back</button></div>`}
     else{
       const f=forecast(u,pendW,pending),A=f.A,D=f.D,list=wpnsAt(u,f.dist,pending);
-      const aft=(hp,s)=>Math.max(0,hp-(s?s.dmg*s.n:0)),effT=tagsOf(pending).filter(t=>effOf(f.aw).includes(t)||Object.entries(SLAYER).some(([k,v])=>v===t&&has(u,k))||(t==='spectral'&&/Paladin/.test(CLS[u.cls].n)));
+      const aft=(hp,s)=>Math.max(0,hp-(s?s.dmg*s.n:0)),effT=tagsOf(pending).filter(t=>effOf(f.aw).includes(t)||Object.entries(SLAYER).some(([k,v])=>v===t&&has(u,k)));
       /* the forecast pops out on the board next to the fight; the panel keeps the attacker's card */
       h=card(u)+`<p class="hint">Attack ${pending.name}? Click it again, or press Attack.</p>`;
       fm=`<div class="ufc-h"><span class="pc">${u.name}</span>${list.length>1?'<button class="mini" type="button" data-act="wprev" aria-label="Previous weapon">◀</button>':''}<img src="${icon(f.aw.key)}" alt="" title="${f.aw.n}">${list.length>1?'<button class="mini" type="button" data-act="wnext" aria-label="Next weapon">▶</button>':''}<span class="ec">${pending.name}</span></div>

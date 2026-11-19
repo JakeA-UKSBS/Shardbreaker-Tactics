@@ -13,7 +13,7 @@ Act 2  Volcanic Isle, Frostveil Reaches or Gemstone Caverns.
 
 | Region | Monsters | Rule | Boss |
 | --- | --- | --- | --- |
-| Sobek’s Mire | Bog Lurkers, Lamias, Mud Monsters | Starting a turn in ankle-deep water or mangrove roots costs 1 Move; sand is solid | Krondis the alligator |
+| Sobek’s Mire | Blighted Crocs, Lamias, Swamp Oozes | Starting a turn in ankle-deep water or mangrove roots costs 1 Move; sand is solid | Krondis the alligator |
 | Cursed Woodland | Wolves, Blighted Stags, Blighted Treants | Cursed thickets: +10 Avoid, 2 Move to enter | The Hollow Bear |
 | Volcanic Isle | Hell Hounds, Magma Golems, Fire Sprites (Hell Hound art is a placeholder) | Magma blocks foot units; fliers and fire creatures cross it | Pyraxis, the Magma Dragon |
 | Sandstone Desert | Sand Worms, Sandstone Golems | Quicksand costs 1 Move next turn; sandstone outcrops (cream feldspar with smoky quartz) give cover | The Pyrite Colossus |
