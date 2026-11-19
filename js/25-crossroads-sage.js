@@ -27,7 +27,7 @@ async function musterScene(opts,need,late){
   const chosen=[],B1=BIOMES[run.biomes[0]],B2=BIOMES[run.biomes[1]],n=opts.length;
   const signs=late?(run.act||1)>=3?[['Act 3',BIOMES.heart.n]]:[['Act 2',B2.n],['Beyond',BIOMES.heart.n]]:[['Act 1',B1.n],['Act 2',B2.n]];
   /* stand the travellers in an arc around the campfire: the far ones behind it, smaller */
-  const ang=i=>Math.PI*(1-i/(n-1)),pos=i=>50+38*Math.cos(ang(i)),up=i=>8+24*Math.sin(ang(i)),sc=i=>1-.22*Math.sin(ang(i));
+  const ang=i=>Math.PI*(1-i/(n-1)),pos=i=>50+38*Math.cos(ang(i)),up=i=>17+22*Math.sin(ang(i)),sc=i=>1-.22*Math.sin(ang(i));
   musEl.innerHTML=`<div class="tv-scene"><img class="tv-bg" src="${musterArt()}" alt=""><img class="ms-fire" src="${campArt()}" alt="">
       <div class="ms-post" aria-label="Signpost">${signs.map(([a,b])=>`<span class="ms-sign"><small>${a}</small>${b}</span>`).join('')}</div>
       ${opts.map((u,i)=>`<button type="button" class="mu" data-u="${i}" style="left:${pos(i)}%;bottom:${up(i)}%;--s:${sc(i)};z-index:${10-Math.round(Math.sin(ang(i))*5)}" aria-label="${u.name}"><img src="${u.cast&&castPng(u,'idle',true)||uSpr(u)}" alt=""${pos(i)>50?' class="fl"':''}><span>${u.name}</span></button>`).join('')}
@@ -35,13 +35,26 @@ async function musterScene(opts,need,late){
     <div class="tv-box"><div class="ms-head"><b class="ms-count"></b><button type="button" class="mini ms-info" data-g="info" aria-expanded="false">ⓘ What do stats do?</button></div>${statHelpHTML()}
       <div class="ms-cards"></div>
       <div class="mbtns">${late?'':'<button type="button" data-g="back">Back</button>'}<button type="button" class="go" data-g="go" disabled>Set out</button></div></div>`;
-  musEl.hidden=false;sgEl.hidden=true;fitReset(musEl);
+  musEl.hidden=false;sgEl.hidden=true;
   if(!late)tip('muster','Choose your squad','Click 3 travellers to bring them along. Their cards show stats, weapon and skill, and “What do stats do?” explains the numbers. Units who fall get back up at 1 HP once the fight is won (from Ascension 5 they’re gone for good).');
   const draw=()=>{musEl.querySelectorAll('.mu').forEach(b=>b.classList.toggle('on',chosen.includes(+b.dataset.u)));
     const g=musEl.querySelector('[data-g="go"]');g.disabled=chosen.length!==need;g.textContent=`Set out (${chosen.length}/${need})`;
     musEl.querySelector('.ms-count').textContent=chosen.length===need?'Your squad is ready.':late?'Two veterans wait at the crossroads. Only one can join you.':`Click ${need-chosen.length===need?need:need-chosen.length} more traveller${need-chosen.length===1?'':'s'} to bring along.`;
-    musEl.querySelector('.ms-cards').innerHTML=chosen.map(i=>{const u=opts[i],sk=SKILLS[u.skill];return`<div class="dcard on">${unitCard(u)}<button type="button" class="mini ms-x" data-u="${i}" aria-label="Remove ${u.name}">✕</button><p class="ms-sk"><b>${sk.n}:</b> ${sk.d}${isSummoner(u)?` <b>Familiar:</b> ${famOf(u).n}, ${famOf(u).d}. Called once per battle.`:''}</p></div>`}).join('');fitScene(musEl)};
+    const card=i=>{const u=opts[i],sk=SKILLS[u.skill];return`<div class="dcard on">${unitCard(u)}<button type="button" class="mini ms-x" data-u="${i}" aria-label="Remove ${u.name}">✕</button><p class="ms-sk"><b>${sk.n}:</b> ${sk.d}${isSummoner(u)?` <b>Familiar:</b> ${famOf(u).n}, ${famOf(u).d}. Called once per battle.`:''}</p></div>`};
+    /* one slot per pick: a chosen unit's card, or an empty square waiting for one */
+    musEl.querySelector('.ms-cards').innerHTML=Array.from({length:need},(_,k)=>chosen[k]!=null?card(chosen[k]):'<div class="ms-slot"></div>').join('');fitBox()};
+  /* the box is its full size from the start: size the slots to the tallest card any option would show, then fit the scene above it once */
+  let fitBox=()=>{};const cardsEl=musEl.querySelector('.ms-cards');cardsEl.classList.toggle('one',need===1);musEl.style.removeProperty('--ms-slot');
   draw();
+  const cardOf=i=>{const u=opts[i],sk=SKILLS[u.skill];return`<div class="dcard on">${unitCard(u)}<button type="button" class="mini ms-x">✕</button><p class="ms-sk"><b>${sk.n}:</b> ${sk.d}${isSummoner(u)?` <b>Familiar:</b> ${famOf(u).n}, ${famOf(u).d}. Called once per battle.`:''}</p></div>`};
+  const keep=cardsEl.innerHTML;cardsEl.style.visibility='hidden';cardsEl.innerHTML=opts.map((_,i)=>cardOf(i)).join('');
+  let slotH=Math.max(...[...cardsEl.children].map(c=>c.offsetHeight));musEl.style.setProperty('--ms-slot',slotH+'px');
+  cardsEl.innerHTML=keep;cardsEl.style.visibility='';
+  /* the scene stays the sage tent's size; if the full box doesn't fit underneath, it sits over the bottom of the scene */
+  const box=musEl.querySelector('.tv-box');
+  fitBox=()=>{const h=Math.max(...[...cardsEl.querySelectorAll('.dcard')].map(c=>{c.style.minHeight='0';const v=c.offsetHeight;c.style.minHeight='';return v}),0);if(h>slotH){slotH=h;musEl.style.setProperty('--ms-slot',h+'px')}
+    box.style.marginTop='';const ov=box.getBoundingClientRect().bottom-(innerHeight-8);box.style.marginTop=ov>0?-ov+'px':''};
+  fitBox();
   return new Promise(res=>{musEl.onclick=e=>{
     const u=e.target.closest('[data-u]');if(u){const i=+u.dataset.u,k=chosen.indexOf(i);if(k>=0)chosen.splice(k,1);else if(chosen.length<need)chosen.push(i);else if(need===1)chosen.splice(0,1,i);else toast(`Only ${need} can come. Remove someone first.`);sfx('tick');draw();return}
     const g=e.target.closest('[data-g]');if(!g||g.disabled)return;

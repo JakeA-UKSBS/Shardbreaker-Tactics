@@ -23,7 +23,9 @@
 .stathelp{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;background:#2e1e16;border:1px solid #5a3a22;border-radius:6px;padding:8px 10px;font-size:13px}
 .stathelp div{display:flex;gap:6px}.stathelp b{color:#f0c850;min-width:38px}.stathelp span{color:#ead9c0}
 @media (max-width:520px){.stathelp{grid-template-columns:1fr}}
-.ms-cards{display:grid;gap:6px}@media (min-width:960px){.ms-cards{grid-template-columns:repeat(3,1fr)}}
+.ms-cards{display:grid;gap:6px;grid-template-columns:repeat(3,minmax(0,1fr))}.ms-cards.one>*{grid-column:2}/* late Crossroads: one pick, in the middle */
+.ms-cards>*{min-height:var(--ms-slot,0);box-sizing:border-box}
+.ms-slot{border:2px dashed #6a4a2c;border-radius:8px;background:rgba(0,0,0,.18)}/* an empty pick, waiting for a unit */
 .ms-cards .dcard{display:grid;grid-template-columns:56px minmax(0,1fr);column-gap:10px;row-gap:6px;align-items:center;cursor:default;padding-right:34px}.ms-cards .dtxt{min-width:0}.ms-x{position:absolute;right:6px;top:6px;padding:2px 7px}
 .ms-sk{grid-column:1/-1;margin:0;font-size:12px;color:var(--muted);line-height:1.35}.ms-sk b{color:var(--gold)}
 .ms-cards .dtick{display:none}
@@ -91,7 +93,7 @@
 .a2n{font-variant-numeric:tabular-nums}
 .a2d{display:none;font-size:13px;color:var(--fg);margin-top:4px;line-height:1.35}.a2d em{display:block;font-style:normal;color:var(--muted);margin-top:2px}
 .ach2.open .a2d{display:block}.a2ok{color:var(--gold);font-weight:800}
-.tv-scene .ms-fire{left:50%;bottom:10%;width:11%;transform:translateX(-50%);z-index:6;filter:drop-shadow(0 0 10px rgba(255,140,40,.55))}
+.tv-scene .ms-fire{left:50%;bottom:18%;width:11%;transform:translateX(-50%);z-index:6;filter:drop-shadow(0 0 10px rgba(255,140,40,.55))}
 /* Ascension arrows over the crystal ball: gold arrowheads (art/ui/arrow-l, arrow-r), 3x */
 .sg-diff button{width:27px;height:16px;padding:0;border:0;border-radius:0;font-size:0;background:url(../art/ui/arrow-l.png) 0 0/100% 100%;image-rendering:pixelated}
 .sg-diff button[data-d="1"]{background-image:url(../art/ui/arrow-r.png)}
