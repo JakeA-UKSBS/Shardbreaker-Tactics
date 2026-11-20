@@ -45,8 +45,9 @@ async function swingAt(X,Y,w,crit,ranged){const wk=w&&w.key;
   const k=SLOW_SWING.has(X.cast)?1.4:1;
   /* sigils / spells with an element projectile (EL_PROJ: dark orbs, ice shards), and the frog's acid */
   if(w&&w.t==='art'&&EL_PROJ[w.el]){mapPose(X,crit?'critup':'windup',Y,wk);await sleep(D((crit?120:150)*k));mapPose(X,'swing',Y,wk);lunge(X,Y,-6);await elShot(X,Y,w.el,crit);setTimeout(()=>mapPose(X,'follow',Y,wk),D(90));return}
-  /* light sigils (Dawn Sigil): no projectile, a burst of light on the target */
-  if(w&&w.t==='art'&&w.el==='light'){mapPose(X,crit?'critup':'windup',Y,wk);await sleep(D((crit?120:150)*k));mapPose(X,'swing',Y,wk);const[x,y]=fxMid(Y);await fxPlay(FX.lightBurst,x,y-6,{k:crit?1.5:1.2});setTimeout(()=>mapPose(X,'follow',Y,wk),D(90));return}
+  /* light sigils (Dawn Sigil): a burst of light on the target; Maelis's (HOLY_BOLT) flies there as a holy bolt first */
+  if(w&&w.t==='art'&&w.el==='light'){mapPose(X,crit?'critup':'windup',Y,wk);await sleep(D((crit?120:150)*k));mapPose(X,'swing',Y,wk);const[x,y]=fxMid(Y);
+    if(HOLY_BOLT.has(X.cast)){lunge(X,Y,-6);const[fx,fy]=fxFrom(X,Y);await fxFly(FX.holyBolt,fx,fy,x,y-6,crit?1.4:1.1)}await fxPlay(FX.lightBurst,x,y-6,{k:crit?1.5:1.2});setTimeout(()=>mapPose(X,'follow',Y,wk),D(90));return}
   if(w&&w.acid){mapPose(X,'windup',Y,wk);await sleep(D(150));mapPose(X,'swing',Y,wk);await acidSpew(X,Y);setTimeout(()=>mapPose(X,'follow',Y,wk),D(90));return}
   /* casters with their own bolt strip (Morrigan): it charges at the hand, then flies to the target */
   if(w&&w.t==='art'&&castPng(X,'bolt')){mapPose(X,crit?'critup':'windup',Y,wk);const ch=boltCharge(X,Y);await sleep(D((crit?120:150)*k));
@@ -61,6 +62,7 @@ async function swingAt(X,Y,w,crit,ranged){const wk=w&&w.key;
 /* a cast member's own spell projectile: art/cast/<id>/<class>-bolt.png, 3 frames of 64x64 side by side, facing right:
    0 charging at the hand, 1 in flight, 2 the burst on the target. BOLT_AT is where the skull sits in each frame,
    and BOLT_HAND where the casting hand is in the attack frames (both in the frame's own pixels) */
+const HOLY_BOLT=new Set(['maelis']);/* light casters whose sigil flies as FX.holyBolt before the burst */
 const BOLT_AT=[[35,31],[37,27],[35,24]],BOLT_HAND={morrigan:[55,24]};
 function boltEl(src,f,x,y,flip){const d=document.createElement('div'),[ax,ay]=BOLT_AT[f];
   Object.assign(d.style,{position:'absolute',left:'0',top:'0',width:'64px',height:'64px',backgroundImage:`url(${src})`,backgroundSize:'300% 100%',
@@ -153,6 +155,8 @@ const FX={
   iceNova:{src:'art/fx/ice-nova.png',fw:32,fh:32,n:25,ax:16,ay:28,ms:55,hit:7},/* a crystal bursts from a tile (frames 0-7), then breaks up */
   holyBeam:{src:'art/fx/holy-beam.png',fw:48,fh:48,n:15,ax:24,ay:45,ms:50,hit:6},/* a pillar of light lands on a tile, then sparks */
   heal:{src:'art/fx/heal.png',fw:64,fh:96,n:20,ax:32,ay:86,ms:55},/* healing: a ring on the ground, a column of light, then sparkles drift up */
+  lamiaAcid:{src:'art/fx/lamia-acid.png',fw:32,fh:32,n:16,loop:10,ax:16,ay:16,ms:55},/* the Lamia's Poison Spit: frames 0-9 the glob in flight (looped), 10-14 the splash */
+  holyBolt:{src:'art/fx/holy-bolt.png',fw:32,fh:32,n:8,ax:26,ay:16,ms:60},/* Maelis's Dawn Sigil: a looping holy bolt (faces right, ax/ay = its head) */
   lightBurst:{src:'art/fx/light-burst.png',fw:64,fh:72,n:18,ax:32,ay:18,ms:50,hit:3},/* light sigils (the Dawn Sigil): a starburst on the target, then golden shards fall */
   fireRing:{src:'art/fx/fire-ring.png',fw:96,fh:64,n:17,ax:48,ay:40,ms:65,hit:5},/* Klaus's Circle of Fire: a spark, the ring roars up, then burns down */
   frostBreath:{src:'art/fx/frost-breath.png',fw:96,fh:40,n:14,ax:4,ay:22,ms:60,hit:3},/* Corvin's Frost Wave: a gust of ice from the hand, widening as it goes */
@@ -183,8 +187,8 @@ const fxFrame=(d,f,i)=>d.style.backgroundPosition=`${-i*f.fw}px 0`;
 /* play frames (default all) at (x,y); resolves when frame f.hit shows (or at the end), and removes itself at the end */
 function fxPlay(f,x,y,o={}){const fr=o.frames||[...Array(f.n).keys()],d=fxEl(f,x,y,o.k,o.rot,o.sx),ms=D(o.ms||f.ms);let i=0,hitAt=fr.indexOf(f.hit??-1);if(hitAt<0)hitAt=fr.length-1;
   return new Promise(res=>{fxFrame(d,f,fr[0]);if(!hitAt)res();const t=setInterval(()=>{i++;if(i>=fr.length){clearInterval(t);d.remove();res();return}fxFrame(d,f,fr[i]);if(i===hitAt)res()},ms)})}
-/* a looping strip flies from (sx,sy) to (ex,ey), turned to face where it's going */
-async function fxFly(f,sx,sy,ex,ey,k=1){const rot=Math.atan2(ey-sy,ex-sx)*180/Math.PI,d=fxEl(f,sx,sy,k,rot);let i=0;const t=setInterval(()=>fxFrame(d,f,i=(i+1)%f.n),D(f.ms));
+/* a looping strip flies from (sx,sy) to (ex,ey), turned to face where it's going (f.loop: loop only the first frames, e.g. a flight + splash strip) */
+async function fxFly(f,sx,sy,ex,ey,k=1){const rot=Math.atan2(ey-sy,ex-sx)*180/Math.PI,d=fxEl(f,sx,sy,k,rot);let i=0;const t=setInterval(()=>fxFrame(d,f,i=(i+1)%(f.loop||f.n)),D(f.ms));
   const at=(x,y)=>({transform:`translate(${x-f.ax}px,${y-f.ay}px) rotate(${rot}deg) scale(${k})`});
   await d.animate([at(sx,sy),at(ex,ey)],{duration:D(240+Math.hypot(ex-sx,ey-sy)*.9),easing:'ease-in'}).finished;clearInterval(t);d.remove()}
 const fxMid=u=>{const b=uBox(u);return[b.l+b.w/2,b.t+b.h*.5]};
@@ -196,6 +200,7 @@ async function elShot(X,Y,el,crit){const p=EL_PROJ[el];if(crit&&p.crit)await p.c
 /* the Spirit Frog's acid: a glob from its mouth, then a splash on the target */
 async function acidSpew(X,Y){const b=uBox(X),toL=boltFlip(X,Y),[ex,ey]=fxMid(Y);let sx=b.l+b.w/2+(toL?-8:8),sy=b.t+b.h*.6;
   {const s=!X.cast&&MON_SHEET[X.cls],img=uEls[X.id]&&uEls[X.id].firstChild;if(s&&s.mouth&&img){const r=img.getBoundingClientRect(),bb=boardEl.getBoundingClientRect(),fx=s.mouth[0]/s.w,fy=s.mouth[1]/s.fh,l=ex<((r.left+r.right)/2-bb.left)/cam.s;sx=((l?r.left+fx*r.width:r.right-fx*r.width)-bb.left)/cam.s;sy=(r.top+fy*r.height-bb.top)/cam.s}}/* from the mouth (MON_SHEET mouth) */
+  if(X.cls==='Lamia'){await fxFly(FX.lamiaAcid,sx,sy,ex,ey,1.2);fxPlay(FX.lamiaAcid,ex,ey,{frames:[10,11,12,13,14],k:1.3});return}/* the Lamia: her own acid strip */
   await fxFly(FX.acidGlob,sx,sy,ex,ey,1.2);fxPlay(FX.acidSplash,ex,ey,{k:1.3})}
 /* tile VFX for area spells (ABIL tfx): a crystal / pillar on every tile of the shape, a little staggered; resolves as they land */
 const TILE_FX={
