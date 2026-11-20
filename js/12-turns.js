@@ -140,6 +140,8 @@ async function act(a){
 async function fight(a,ai,d){
   busy=true;render();if(ensureVisible(d.x,d.y))await sleep(380);
   const res=resolve(a,ai,d);
+  /* Troll Blood: a fire hit stops regeneration next turn */
+  {const el=(u,i)=>i>=0&&u.items[i]?(IT[u.items[i].k]||{}).el:null;for(const e of res.ev)if(e.dmg>0){const[by,i,t]=e.by==='a'?[a,ai,d]:[d,res.f.di,a];if(el(by,i)==='fire')t.scorched=1}}
   await quickPlay(a,d,res);
   a.hp=res.hpA;d.hp=res.hpD;
   for(const u of[a,d])if(u.team==='p'&&u.hp<=0&&R('phoenix')&&!run.phx){u.hp=Math.min(10,u.maxhp);run.phx=1;pop(u,'Phoenix!','heal');sfx('heal');toast(`The Phoenix Feather saves ${u.name}`)}
@@ -193,6 +195,9 @@ function spawnWaves(t){const w=BATTLE.waves;if(!w||!w[t])return;const bo=state.u
   if(!fs.length)return;const taken=new Set(state.units.filter(u=>u.hp>0).flatMap(u=>cellsOf(u.x,u.y,u.sz).map(c=>key(...c))));
   for(const f of fs)f.fresh=1;/* reinforcements can't attack on the enemy phase after they arrive */
   for(const f of fs){const p=freeNear(f.x,f.y,taken,f);f.x=p.x;f.y=p.y;taken.add(key(p.x,p.y));state.units.push(f)}render();toast(bo&&BATTLE.waves[t][0]?.ifBoss?BATTLE.summonTxt||`${bo.name} raises the dead!`:'Enemy reinforcements!')}
+/* Troll Blood: trolls regain 3 HP at the start of their turn, unless fire hit them since their last turn or they are burning */
+function trollBlood(){for(const u of state.units){if(u.hp<=0||pasOf(u)!=='trollBlood')continue;u.noRegen=!!(u.scorched||hasSt(u,'burn'));u.scorched=0;if(u.hp>=u.maxhp)continue;
+  if(u.noRegen){pop(u,'No regen','miss');continue}const h=Math.min(3,u.maxhp-u.hp);u.hp+=h;pop(u,'+'+h,'heal')}}
 function phaseHeal(team){
   for(const u of state.units)if(u.team===team&&u.psn>0){const d=Math.min(2,u.hp-1);if(d>0){u.hp-=d;pop(u,'-'+d,'crit')}u.psn--}
   for(const c of state.units.filter(u=>u.team===team&&has(u,'renewal')))for(const u of state.units)if(u.team===team&&u!==c&&man(u,c)===1&&u.hp<u.maxhp){const a=Math.min(5,u.maxhp-u.hp);u.hp+=a;pop(u,'+'+a,'heal')}
@@ -227,7 +232,7 @@ async function enemyPhase(){
   for(const u of state.units)if(u.team==='p')u.stone=0;
   banner('Enemy Phase','e');await sleep(950);
   for(const u of state.units)if(u.team==='e')for(const k in u.cd||{})if(u.cd[k]>0)u.cd[k]--;
-  phaseHeal('e');tickSt('e','start');burnTick('e');render();await runAI('e');tickSt('e','end');
+  phaseHeal('e');trollBlood();tickSt('e','start');burnTick('e');render();await runAI('e');tickSt('e','end');
   busy=false;if(over)return;
   spawnWaves(state.turn+1);
   state.turn++;state.units.forEach(u=>{u.acted=false;u.canto=0});phase='player';phaseHeal('p');abPlayerStart();
@@ -255,7 +260,7 @@ const ST_VAL={stun:25,root:8,chill:8,blind:10,sandEyes:6,shell:30,weak:12,sunder
 function aiAbil(e,tiles,ps,canAtk){
   if(e.team!=='e'||!MKITS[e.cls]||hasSt(e,'challenged'))return null;let best=null;
   const near=(x,y,r)=>ps.filter(p=>man({x,y,sz:e.sz},p)<=r).length;
-  for(const id of MKITS[e.cls]){const a=ABIL[id];if((e.cd||{})[id]>0||a.when&&!a.when(e))continue;
+  for(const id of MKITS[e.cls]){const a=ABIL[id];if((e.cd||{})[id]>0||a.when&&!a.when(e)||id==='regenerate'&&(e.noRegen||hasSt(e,'burn')))continue;
     /* pure buffs (Howl, Bark Skin): always considered when it can't attack, otherwise only 1 turn in 4; from the tile nearest the foes */
     const buff=a.side==='self'&&!a.dmg&&!a.st&&!a.healPct&&!a.when;/* a 'when' move (Hunker Down) is always taken once its condition is met */if(buff&&canAtk&&rand()>.25)continue;
     const from=a.side==='tile'?[[e.x,e.y]]:tiles;
