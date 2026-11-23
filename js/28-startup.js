@@ -18,7 +18,7 @@ function titleMenu(items){
     /* wide screens: title and menu on the left, the crystal on the right; narrow: stacked with the crystal behind */
     const wide=innerWidth>=900,cx=wide?64:50,extra=TITLE_MULTI?(wide?[[34,.55],[90,.45]]:[[18,.5],[84,.45]]):[];
     titleEl.innerHTML=`<div class="tsky"></div>${titleVeins([[cx,1],...extra.map(([x])=>[x,.6])])}${extra.map(([x,k])=>`<img class="tcrys sm" src="${titleCrystalArt()}" alt="" style="left:${x}%;--k:${k}">`).join('')}<img class="tcrys" src="${titleCrystalArt()}" alt="" style="left:${cx}%"><div class="tembers">${Array.from({length:34},(_,i)=>`<i class="${i%3?'':'sh'}" style="left:${(i*37+11)%100}%;animation-delay:${((i*0.73)%7).toFixed(2)}s;animation-duration:${(6+(i%6)*1.3).toFixed(1)}s;--dx:${(i%2?1:-1)*(10+(i*7)%40)}px"></i>`).join('')}</div>
-    <div class="tcol"><div class="tlogo"><h1 class="tname">The Crystal Blight</h1><p class="tsub">Break the blight</p></div>
+    <div class="tcol"><div class="tlogo"><h1 class="tname">Blightbreakers</h1><p class="tsub">Break the blight</p></div>
     <nav class="tmenu">${items.map(([k,l])=>`<button type="button" data-t="${k}">${l}</button>`).join('')}</nav></div>`;
     titleEl.hidden=false;
     titleEl.onclick=e=>{const b=e.target.closest('[data-t]');if(!b)return;sfx('select');res(b.dataset.t)};
