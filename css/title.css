@@ -71,7 +71,7 @@
 .tcrys{transform:translateX(-50%)}
 .tcrys.sm{width:calc(min(50vh,400px,80vw) * var(--k,.5));opacity:.26;bottom:31%;animation-delay:-1.6s}
 @media (min-width:900px){
-  .title{flex-direction:row;justify-content:flex-start;padding-left:max(6vw,40px)}
+  .title{flex-direction:row;justify-content:center}
   .tcol{gap:44px}
   .tcrys{width:min(66vh,520px,44vw);bottom:26%;opacity:.5}
 }
