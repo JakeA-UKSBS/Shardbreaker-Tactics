@@ -41,7 +41,7 @@
 @keyframes ember{0%{transform:translate(0,0);opacity:0}10%{opacity:.9}100%{transform:translate(30px,-90vh);opacity:0}}
 .tlogo{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
 @keyframes flick{50%{transform:scale(1.05) translateY(-2px)}}
-.tname{font-family:var(--display);font-weight:700;font-size:clamp(44px,13vw,72px);line-height:1;margin:0;letter-spacing:.06em;color:var(--gold);text-shadow:0 2px 0 #2a2140,0 0 24px rgba(127,200,255,.4)}
+.tname{font-family:"Cinzel Decorative",var(--display);font-weight:700;font-size:clamp(44px,13vw,72px);line-height:1;margin:0;letter-spacing:.06em;color:var(--gold);text-shadow:0 2px 0 #2a2140,0 0 24px rgba(127,200,255,.4)}
 .tmenu{position:relative;display:flex;flex-direction:column;gap:10px;width:min(280px,100%)}
 .tmenu button{font-family:var(--display);font-size:20px;letter-spacing:.08em;padding:12px;background:rgba(20,22,34,.72);border:1px solid rgba(216,177,90,.45);color:var(--fg)}
 .tmenu button:first-child{border-color:var(--gold);color:var(--gold)}
