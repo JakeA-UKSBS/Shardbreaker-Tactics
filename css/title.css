@@ -42,7 +42,6 @@
 .tlogo{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
 @keyframes flick{50%{transform:scale(1.05) translateY(-2px)}}
 .tname{font-family:var(--display);font-weight:700;font-size:clamp(44px,13vw,72px);line-height:1;margin:0;letter-spacing:.06em;color:var(--gold);text-shadow:0 2px 0 #2a2140,0 0 24px rgba(127,200,255,.4)}
-.tsub{margin:0;color:#cbbf9f;font-size:14px;letter-spacing:.2em;text-transform:uppercase}
 .tmenu{position:relative;display:flex;flex-direction:column;gap:10px;width:min(280px,100%)}
 .tmenu button{font-family:var(--display);font-size:20px;letter-spacing:.08em;padding:12px;background:rgba(20,22,34,.72);border:1px solid rgba(216,177,90,.45);color:var(--fg)}
 .tmenu button:first-child{border-color:var(--gold);color:var(--gold)}
@@ -67,15 +66,13 @@
 .tname{text-shadow:0 2px 0 #2a0c18,0 0 26px rgba(255,60,80,.45)}
 .tmenu button{background:rgba(22,12,20,.78)}
 @media (prefers-reduced-motion:reduce){.tcrys,.tveins .vlit path,.tembers i{animation:none}}
-/* title layout: crystal stays clear of the logo; subtitle readable */
+/* title layout: crystal stays clear of the logo; the logo is centred over the menu */
 .tcol{position:relative;display:flex;flex-direction:column;align-items:center;gap:clamp(28px,8vh,64px)}
-.tsub{color:#f3dfb8;font-weight:600;font-size:15px;letter-spacing:.26em;text-shadow:0 1px 2px #000,0 0 10px rgba(0,0,0,.9)}
 .tcrys{transform:translateX(-50%)}
 .tcrys.sm{width:calc(min(50vh,400px,80vw) * var(--k,.5));opacity:.26;bottom:31%;animation-delay:-1.6s}
 @media (min-width:900px){
   .title{flex-direction:row;justify-content:flex-start;padding-left:max(6vw,40px)}
-  .tcol{align-items:flex-start;gap:44px}
-  .tlogo{align-items:flex-start;text-align:left}
+  .tcol{gap:44px}
   .tcrys{width:min(66vh,520px,44vw);bottom:26%;opacity:.5}
 }
 /* run history */
