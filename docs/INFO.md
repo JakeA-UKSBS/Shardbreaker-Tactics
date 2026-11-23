@@ -60,7 +60,7 @@ An effective hit multiplies weapon Mt ×2. Only your side deals them for now.
 | Monster type | Who has it | Beaten by |
 |---|---|---|
 | Armoured | Magma Golem, Crystal Sentinel, Sandstone Golem, Pyrite Colossus, Gem Golem, Amethyst Turtle, Yeti | War Hammer, Stonebane |
-| Beast | Wolf, Blighted Stag, Hell Hound, Frost Wolf, Hollow Bear, Spirit Frog | Hunting Spear, bows, Wolfsbane |
+| Beast | Wolf, Blighted Stag, Hell Hound, Frost Wolf, Hollow Bear, Spirit Frog, Cave Bat | Hunting Spear, bows, Wolfsbane |
 | Colossal | Every 2×2 or 3×3 boss | Giantslayer |
 | Infernal | Hell Hound, Magma Dragon (Pyraxis), Fire Sprite | Light (Dawn Sigil, light abilities), Holy Sword, Fiendbane |
 | Plant | Blighted Treant | Fire |
@@ -163,7 +163,7 @@ Learned skills cost capacity (base 20, +5 when promoted). Personal skills are fr
 | The Heart of the Blight | Floating Crystals(4), Gem Golem | Crystal Sentinel, Shardling, Prism | The Crystal Heart |
 | Sandstone Desert | Sand Worm 4, Sandstone Golem 2 (fl 4+) | Sandstone Golem, Sand Worm | The Pyrite Colossus |
 | Frostveil Reaches | Frost Wolf 4, Ice Worm 2 (fl 4+), Ice Troll 2 (fl 5+) | Ice Worm, Ice Troll, Frost Wolf | The Yeti |
-| Gemstone Caverns | Gem Golem, Crystal-Borer Beetles?| Gem Golem | Amethyra, the Amethyst Turtle |
+| Gemstone Caverns | Cave Bat 4, Gem Golem 3 (fl 2+) | Gem Golem, Cave Bat | Amethyra, the Amethyst Turtle |
 
 ## Monster moves
 
@@ -189,6 +189,7 @@ Each monster has 2 moves on cooldowns (no MP). On its turn it scores every ready
 | Sandstone Golem | Sand Stream (CD 3): range 1–3, −10 Hit for 2 turns | Sand Burn (CD 3): range 1–2, 0.6×, Burn |
 | The Yeti | Ground Slam (CD 3): 0.7× to every enemy around it | |
 | Blighted Stag | Charge (CD 3): runs up to a target 2 away, 1.2× | |
+| Cave Bat | Screech (CD 4): enemies within 2 Deafened (−2 Str and −2 Mag) 2 turns | |
 | Amethyra | Hunker Down (once, below half HP): +2 Def and Res for the rest of the fight | |
 
 
