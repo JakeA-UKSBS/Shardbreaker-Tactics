@@ -27,7 +27,8 @@ const STATUS={
   shieldUp:{n:'Shield Up',tick:'start',d:'Counterattacks deal 1.3×.'},
   valour:{n:'Valour',tick:'start',d:'Deals 20% more damage.'},
   anthem:{n:'Anthem',tick:'start',d:'Deals 30% more damage and +10 Hit.'},
-  iceShield:{n:'Ice Shield',tick:'start',d:'+3 Def.'}
+  iceShield:{n:'Ice Shield',tick:'start',d:'+3 Def.'},
+  screech:{n:'Deafened',tick:'end',bad:1,d:'−2 Str and −2 Mag.'}
 };
 const hasSt=(u,k)=>!!(u&&u.st&&u.st[k]&&u.st[k].n>0);
 /* status immunities: Rook (Slippery) can't be Rooted; bosses can't be turned to Stone */
@@ -201,6 +202,7 @@ Object.assign(ABIL,{
   barkSkin:{n:'Bark Skin',cd:4,side:'self',solo:1,self:[['guard',1]],d:'Guard (30% less damage) until its next turn.'},
   maul:{n:'Maul',cd:3,side:'foe',r:[1,1],dmg:1.5,st:['sunder',2],d:'1.5× damage, and the target is Sundered (−3 Def) for 2 turns.'},
   roar:{n:'Roar',cd:4,side:'self',shape:'burst2',st:['weak',1],d:'Enemies within 2 tiles are Weakened (deal 30% less damage).'},
+  screech:{n:'Screech',cd:4,side:'self',shape:'burst2',st:['screech',2],d:'Enemies within 2 tiles are Deafened (−2 Str and −2 Mag) for 2 turns.'},
   fireball:{n:'Fireball',cd:3,mag:1,el:'fire',side:'foe',r:[2,3],dmg:.8,st:['burn',2],d:'A fireball from 2–3 tiles away: 0.8× magic damage and Burn.'},
   flicker:{n:'Flicker',cd:3,side:'tile',r:[1,4],d:'Blinks to an empty tile up to 4 away.'},
   moltenFist:{n:'Molten Fist',cd:3,side:'foe',r:[1,1],dmg:1.2,st:['burn',2],d:'1.2× damage and Burn.'},
@@ -226,7 +228,7 @@ const MKITS={
   Lamia:['stoneGaze','constrict'],MudMonster:['mudSpit'],
   Wolf:['howl','hamstring'],BlightedTreant:['graspingRoots','barkSkin'],HollowBear:['maul','roar'],
   FireSprite:['fireball','flicker'],BoulderGolem:['moltenFist','eruption','boulderToss'],MagmaDragon:['searingBreath','wingGust'],
-  SandWorm:['burrow','sandBlast'],Krondis:['deathRoll'],PyriteColossus:['stalagmite','boulderToss'],GemGolem:['boulderToss'],SandstoneGolem:['sandStream','sandBurn','boulderToss'],Yeti:['groundSlam'],BlightedStag:['charge'],AmethystTurtle:['hunkerDown'],FrostWolf:['frostBite','howl'],IceWorm:['burrow','iceSpray'],HellHound:['flameBite','howl'],IceTroll:['clubSmash','regenerate']
+  SandWorm:['burrow','sandBlast'],Krondis:['deathRoll'],PyriteColossus:['stalagmite','boulderToss'],GemGolem:['boulderToss'],CaveBat:['screech'],SandstoneGolem:['sandStream','sandBurn','boulderToss'],Yeti:['groundSlam'],BlightedStag:['charge'],AmethystTurtle:['hunkerDown'],FrostWolf:['frostBite','howl'],IceWorm:['burrow','iceSpray'],HellHound:['flameBite','howl'],IceTroll:['clubSmash','regenerate']
 };
 /* the Moves block on an enemy's Details sheet */
 function monSheet(u){const l=u.team==='e'?MKITS[u.cls]:null;if(!l)return'';
@@ -256,7 +258,7 @@ function dmgMods(x,y,ctx,dmg,br){
 /* Pow/Def/Hit/Avoid/Crit changes from statuses and passives, added inside calc() */
 function stCalc(x,xw,y){
   const phys=!xw.mag,fx=x.hp>=x.maxhp,fy=y.hp>=y.maxhp;
-  return{pow:(hasSt(x,'rally')&&phys?2:0),df:(phys&&hasSt(y,'rally')?2:0)-(phys&&hasSt(y,'sunder')?3:0)+(hasSt(y,'shell')?2:0)+(phys&&has(y,'plate')?2:0)+(phys&&hasSt(y,'iceShield')?3:0),
+  return{pow:(hasSt(x,'rally')&&phys?2:0)-(hasSt(x,'screech')?2:0),df:(phys&&hasSt(y,'rally')?2:0)-(phys&&hasSt(y,'sunder')?3:0)+(hasSt(y,'shell')?2:0)+(phys&&has(y,'plate')?2:0)+(phys&&hasSt(y,'iceShield')?3:0),
     acc:(hasSt(x,'blind')?-20:0)+(hasSt(x,'sandEyes')?-10:0)+(hasSt(x,'anthem')?10:0)+(state.units.some(o=>o!==x&&o.hp>0&&o.team===x.team&&has(o,'audience')&&man(o,x)<=2)?10:0),avo:(hasSt(y,'smoke')?30:0)+(has(y,'beginnersLuck')&&fy?10:0),crit:(has(x,'beginnersLuck')&&fx?10:0)};
 }
 const eagle=()=>0;/* Eagle Eye (Kili's old +1 bow range) is gone: every bow is 2-3 now */

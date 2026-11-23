@@ -6,6 +6,7 @@ Object.assign(CLS,{
   PyriteColossus:{n:'Pyrite Colossus',w:['heavy'],body:'cubes',mov:0},
   FrostWolf:{n:'Frost Wolf',w:['blade'],body:'beast',mov:6,wade:true},IceWorm:{n:'Ice Worm',w:['heavy'],body:'worm',mov:4,wade:true},
   GemGolem:{n:'Gem Golem',w:['heavy'],body:'golem',mov:4},
+  CaveBat:{n:'Cave Bat',w:['blade'],body:'beast',mov:6},
   AmethystTurtle:{n:'Amethyst Turtle',w:['heavy','art'],body:'turtle',mov:0},
   HollowBear:{n:'Hollow Bear',w:['heavy'],body:'bear',mov:4},
   /* the Ice Troll is a placeholder humanoid brute until it gets its own art; the Yeti keeps the golem body for rules, its art is Rhi's art/bosses/yeti.png */
@@ -15,6 +16,7 @@ Object.assign(CLS,{
 });
 /* elemental resistances (half damage): the monsters 5e would call immune */
 for(const[k,e]of Object.entries({HellHound:'fire',MagmaDragon:'fire',FireSprite:'fire',BoulderGolem:'fire',FrostWolf:'ice',IceWorm:'ice',Yeti:'ice'}))if(CLS[k])CLS[k].res=e;
+IT.batBite={n:'Bite',t:'blade',kind:'claw',mt:4,hit:90,crit:5,r:[1,1],uses:99,key:'bite'};/* the Cave Bat's bite: weaker than the big Bite */
 IT.crystalBall={n:'Crystal Ball',t:'item',kind:'orb',uses:1,key:'crystalBall'};
 IT.crystalShards={n:'Crystal Shards',t:'art',kind:'talisman',el:'earth',mt:7,hit:80,crit:10,r:[1,2],uses:99,mag:true,key:'crystalShards'};
 /* fields: see the ENEMY STATS key in 01-data.js (b/g order: HP, Str, Mag, Skl, Spd, Lck, Def, Res) */
@@ -24,7 +26,8 @@ Object.assign(FOE,{
   FrostWolf:{b:[16,5,0,4,7,1,2,2],g:[.55,.35,0,.3,.45,.1,.15,.15],items:['fangs']},
   IceWorm:{b:[21,6,0,4,4,1,5,2],g:[.7,.4,0,.3,.25,.1,.25,.1],items:['bite']},
   IceTroll:{b:[24,8,0,3,3,0,5,1],g:[.8,.5,0,.25,.2,.05,.3,.05],items:['slam']},
-  GemGolem:{b:[22,7,0,3,2,0,9,3],g:[.75,.4,0,.25,.1,0,.35,.15],items:['slam']}
+  GemGolem:{b:[22,7,0,3,2,0,9,3],g:[.75,.4,0,.25,.1,0,.35,.15],items:['slam']},
+  CaveBat:{b:[14,5,0,5,8,2,1,2],g:[.5,.35,0,.3,.45,.15,.05,.1],items:['batBite']}
 });
 /* GEMS: crystal colours (green, red, blue, gold, violet) */
 const GEMS=['#3aa86a','#c8323a','#3a5ac8','#c8a83a','#9a5ac8'];
@@ -53,7 +56,7 @@ Object.assign(BIOMES,{
     boss:{name:'The Yeti',cls:'Yeti',mov:4,s:[42,13,0,6,5,2,9,8],items:['slam'],skill:'wrath'}},
   cavern:{n:'Gemstone Caverns',bg:'#2a2436',town:['c','e'],townN:'Miners’ Camp',d:'Caves glittering with emerald, ruby and sapphire, and golems made of the gems themselves.',
     tip:['cavern','Gem clusters','Gem clusters give +10 Avoid and +2 Def. The cave walls can’t be crossed.'],
-    maps:['geode','mineshaft','glitter'],bossMap:'amethystHollow',pool:[['GemGolem',1]],elitePool:[['GemGolem',1]],
+    maps:['geode','mineshaft','glitter'],bossMap:'amethystHollow',pool:[['CaveBat',4],['GemGolem',3,2]],elitePool:[['GemGolem',3],['CaveBat',2]],
     boss:{name:'Amethyra, the Amethyst Turtle',cls:'AmethystTurtle',s:[46,11,8,5,2,3,14,11],items:['slam','crystalShards'],skill:'steadfast'}}
 });
 Object.assign(BIOMES.swamp,{town:['n','v'],townN:'Stilt Village'});Object.assign(BIOMES.forest,{town:['.','f'],townN:'Woodcutters’ Hamlet'});Object.assign(BIOMES.mountain,{town:['b','m'],townN:'Smelters’ Camp'});
