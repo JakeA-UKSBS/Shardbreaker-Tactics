@@ -231,10 +231,11 @@ const MKITS={
   SandWorm:['burrow','sandBlast'],Krondis:['deathRoll'],PyriteColossus:['stalagmite','boulderToss'],GemGolem:['boulderToss'],CaveBat:['screech'],SandstoneGolem:['sandStream','sandBurn','boulderToss'],Yeti:['groundSlam'],BlightedStag:['charge'],AmethystTurtle:['hunkerDown'],FrostWolf:['frostBite','howl'],IceWorm:['burrow','iceSpray'],HellHound:['flameBite','howl'],IceTroll:['clubSmash','regenerate']
 };
 /* the Moves block on an enemy's Details sheet */
-function monSheet(u){const l=u.team==='e'?MKITS[u.cls]:null;if(!l)return'';
-  return`<div class="sskill"><div class="skh"><span class="sl">Moves</span></div><div class="skl">${l.map(id=>{const a=ABIL[id],cd=(u.cd||{})[id]||0;return`<div class="skr"><b>${a.n}</b><span class="tag">${cd?`Ready in ${cd}`:'Ready'} · CD ${a.cd}</span><small>${a.d}</small></div>`}).join('')}</div></div>`}
+function monSheet(u){const l=u.team==='e'?MKITS[u.cls]:null,P=PASSIVE[pasOf(u)],ph=P?`<div class="skr"><b>${P.n}</b><span class="tag">Passive</span><small>${P.d}</small></div>`:'';if(!l)return P?`<div class="sskill"><div class="skh"><span class="sl">Passive</span></div><div class="skl">${ph}</div></div>`:'';
+  return`<div class="sskill"><div class="skh"><span class="sl">Moves</span></div><div class="skl">${ph}${l.map(id=>{const a=ABIL[id],cd=(u.cd||{})[id]||0;return`<div class="skr"><b>${a.n}</b><span class="tag">${cd?`Ready in ${cd}`:'Ready'} · CD ${a.cd}</span><small>${a.d}</small></div>`}).join('')}</div></div>`}
 /* the moves line on an enemy's info card */
-function monMoves(u){const l=u.team==='e'?MKITS[u.cls]:null;if(!l)return'';return`<div class="eq">Moves: ${l.map(id=>{const cd=(u.cd||{})[id]||0;return`<b class="sk" title="${ABIL[id].d}">${ABIL[id].n}</b>${cd?` (ready in ${cd})`:''}`}).join(' · ')}</div>`}
+const pasLine=u=>{const p=PASSIVE[pasOf(u)];return p?`<div class="eq">Passive: <b class="sk" title="${p.d}">${p.n}</b></div>`:''};
+function monMoves(u){const l=u.team==='e'?MKITS[u.cls]:null;if(!l)return pasLine(u);return pasLine(u)+`<div class="eq">Moves: ${l.map(id=>{const cd=(u.cd||{})[id]||0;return`<b class="sk" title="${ABIL[id].d}">${ABIL[id].n}</b>${cd?` (ready in ${cd})`:''}`}).join(' · ')}</div>`}
 const mpMax=u=>(kitOf(u)||{mp:0}).mp;
 const MP_REGEN=2;
 /* abilities are a little less accurate than a basic attack */
@@ -322,7 +323,7 @@ function healAmt(u,id,t){const a=ABIL[id];let h=a.healPct?Math.round(t.maxhp*a.h
 function chainTo(u,id,t){const a=ABIL[id],out=[];let at=t;for(let i=0;i<a.chain[0];i++){const n=state.units.filter(o=>o!==t&&!out.includes(o)&&o.hp>0&&hostile(o,u)&&man(o,at)<=2).sort((p,q)=>man(p,at)-man(q,at))[0];if(!n)break;out.push(n);at=n}return out}
 
 /* ---- pushing ---- */
-const canPush=t=>!(t.sz>1)&&!t.boss&&!has(t,'ironBody')&&!hasSt(t,'steady');
+const canPush=t=>!(t.sz>1)&&pasOf(t)!=='heavy'&&!t.boss&&!has(t,'ironBody')&&!hasSt(t,'steady');
 const HAZARD={water:['Splash','water'],mud:['Sunk','water'],lava:['Scorch','fire'],void:['Fall','landing']};
 function pushUnit(u,t,n){
   if(!canPush(t)){pop(t,'Unmoved','miss');return 0}
@@ -359,6 +360,7 @@ async function useAbility(u,id,tx,ty){
       landed=hits>0;
       if(total&&has(u,'siphon')&&a.el==='dark'){const h=Math.min(Math.ceil(total/4),u.maxhp-u.hp);if(h){u.hp+=h;pop(u,'+'+h,'heal')}}
       exp+=expFor(u,t,total>0,t.hp<=0);
+      if(total&&(a.el||abWeapon(u,a).el)==='fire')t.scorched=1;
       if(t.hp>0&&total&&a.push){pushUnit(u,t,a.push);render();await sleep(D(250))}
       if(a.chain&&t.hp>0||a.chain){let prev=t;for(const c of chainTo(u,id,t)){const V2=abVs(u,id,c,a.chain[1]);sfx('thunder');await arcFx(prev,c);prev=c;
         if((rn()+rn())/2<V2.hit){const d=Math.min(V2.dmg,c.hp);c.hp-=d;pop(c,'-'+d,'dmg');flash(c);exp+=expFor(u,c,true,c.hp<=0);if(c.hp<=0)killed.push(c)}else pop(c,'Miss','miss');render();await sleep(D(260))}}

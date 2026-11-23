@@ -13,7 +13,12 @@ const shown=u=>['hp',usesMag(u)?'mag':'str','skl','lck','spd','def','res'];
 const wtOver=(u,w)=>Math.max(0,(w&&w.wt||0)-(w&&w.mag?u.mag:u.str));
 /* Outlander (Vaar): +1 Skl and +1 Spd while no ally is next to him */
 const OL=u=>has(u,'outlander')&&typeof state!=='undefined'&&state&&state.units&&!state.units.some(o=>o!==u&&o.team===u.team&&o.hp>0&&man(o,u)===1)?1:0;
-const AS=(u,w)=>Math.max(0,u.spd+OL(u)+gearOf(u).spd-wtOver(u,w));
+/* monster passives: always on, shown on the enemy card */
+const MON_PASSIVE={Wolf:'pack',FrostWolf:'pack',BoulderGolem:'heavy',SandstoneGolem:'heavy',GemGolem:'heavy',IceTroll:'trollBlood',BogLurker:'swampSwim'};
+const PASSIVE={pack:{n:'Pack Tactics',d:'+10 Hit when next to another wolf.'},heavy:{n:'Heavy',d:"Can't be pushed or pulled."},trollBlood:{n:'Troll Blood',d:'Regains 3 HP each turn. Fire or burning stops it for a turn.'},swampSwim:{n:'Swamp Swimmer',d:'+1 Spd in swamp water and mangrove roots.'}};
+const pasOf=u=>u&&u.team==='e'?MON_PASSIVE[u.cls]:null;
+const SWIM=u=>pasOf(u)==='swampSwim'&&typeof ter==='function'&&typeof state!=='undefined'&&typeof MAP!=='undefined'&&MAP&&MAP[u.y]&&['water','shallow','mangrove'].includes((ter(u.x,u.y)||{}).k)?1:0;
+const AS=(u,w)=>Math.max(0,u.spd+OL(u)+SWIM(u)+gearOf(u).spd-wtOver(u,w));
 /* DIRS: the 4 neighbouring tiles (right, left, down, up). T: tile size in px for the old flat board. */
 const DIRS=[[1,0],[-1,0],[0,1],[0,-1]];
 const T=48;

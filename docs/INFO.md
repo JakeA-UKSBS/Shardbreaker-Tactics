@@ -183,7 +183,7 @@ Each monster has 2 moves on cooldowns (no MP). On its turn it scores every ready
 | Frost Wolf | Frost Bite (CD 3): melee 1.0×, Slow | Howl (CD 4) |
 | Ice Worm | Burrow (CD 3) | Ice Spray (CD 3): 4-tile cone, 0.8×, Slow |
 | Hell Hound | Flame Bite (CD 3): melee 1.0×, Burn | Howl (CD 4) |
-| Ice Troll | Club Smash (CD 3): melee 1.5× | Regenerate (CD 4): heal 30% (below 60% HP) |
+| Ice Troll | Club Smash (CD 3): melee 1.5× | Regenerate (CD 4): heal 30% (below 60% HP; not while scorched or burning) |
 | Krondis | Death Roll (CD 3): melee, 3 hits of 0.5× (Rhi's roll animation) | |
 | The Pyrite Colossus | Stalagmite (CD 3): range 1–3, 5 flat damage, Slow | |
 | Sandstone Golem | Sand Stream (CD 3): range 1–3, −10 Hit for 2 turns | Sand Burn (CD 3): range 1–2, 0.6×, Burn |
@@ -191,6 +191,15 @@ Each monster has 2 moves on cooldowns (no MP). On its turn it scores every ready
 | Blighted Stag | Charge (CD 3): runs up to a target 2 away, 1.2× | |
 | Cave Bat | Screech (CD 4): enemies within 2 Deafened (−2 Str and −2 Mag) 2 turns | |
 | Amethyra | Hunker Down (once, below half HP): +2 Def and Res for the rest of the fight | |
+
+**Monster passives** (always on, shown on the enemy card):
+
+| Passive | Monsters | Effect |
+|---|---|---|
+| Pack Tactics | Wolf, Frost Wolf | +10 Hit when next to another wolf |
+| Heavy | Magma, Sandstone and Gem Golems | Can't be pushed or pulled |
+| Troll Blood | Ice Troll | Regains 3 HP at the start of each enemy turn. A fire hit (attack, counter or ability) or Burn stops it, and blocks Regenerate, for that turn |
+| Swamp Swimmer | Blighted Croc | +1 Spd while in water or mangrove roots |
 
 
 
