@@ -1,12 +1,50 @@
 /* Tavern colours (warm wood and gold, the look of the story and event scenes). Loaded before nodemap.css, whose parchment look overrides them.
    Split out of the old style.css; files load in index.html order (base, board, panels, modals, themes, nodemap, title), which keeps the cascade the same. */
-.title{--gold:#d8b15a}
+.title {
+  --gold: #d8b15a;
+}
 /* skill capacity pie on the right of unit cards */
 /* unlocks screen */
-.a2list{display:flex;flex-direction:column;gap:6px;max-height:62vh;overflow:auto;margin:4px 0}
-.a2h{font-family:var(--display);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin:6px 0 0}
+.a2list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 62vh;
+  overflow: auto;
+  margin: 4px 0;
+}
+.a2h {
+  font-family: var(--display);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 6px 0 0;
+}
 /* region backdrops in the battle scene */
-:root .mbox,:root .panel,:root .sbx,:root .nm-scroll,:root .nm-side,:root .vp{border-color:#7a5230}
-:where(:root) button{background:#2e1e16;border-color:#5a3a22;color:#f3e6d0}:where(:root) button.go{background:var(--gold);color:#2a1a0e;border-color:var(--gold)}
-:root .umenu{background:rgba(34,22,18,.96);border-color:#7a5230}
-:root h2,:root .tv-name{color:#f0c850}
+:root .mbox,
+:root .panel,
+:root .sbx,
+:root .nm-scroll,
+:root .nm-side,
+:root .vp {
+  border-color: #7a5230;
+}
+:where(:root) button {
+  background: #2e1e16;
+  border-color: #5a3a22;
+  color: #f3e6d0;
+}
+:where(:root) button.go {
+  background: var(--gold);
+  color: #2a1a0e;
+  border-color: var(--gold);
+}
+:root .umenu {
+  background: rgba(34, 22, 18, 0.96);
+  border-color: #7a5230;
+}
+:root h2,
+:root .tv-name {
+  color: #f0c850;
+}

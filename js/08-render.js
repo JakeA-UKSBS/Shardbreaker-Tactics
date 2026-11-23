@@ -65,7 +65,7 @@ function render(){
   for(const u of state.units){
     live.add(u.id);let el=uEls[u.id];
     if(!el){el=document.createElement('div');el.innerHTML='<img alt=""><div class="hpb"><i></i></div>';boardEl.appendChild(el);uEls[u.id]=el}
-    el.className='unit '+u.team+(u.summon?' sum':'')+(u.stone?' stone':'')+(u.psn?' psn':'')+(u.boss?' boss':'')+(u.look&&u.look.magma?' magma':'')+(u.look&&u.look.spirit?' spirit':'')+(u.acted&&u.team==='p'?' done':'')+(thr.has(u.id)?' threat':'');
+    el.className='unit '+u.team+(u.summon?' sum':'')+(u.stone?' stone':'')+(u.psn?' psn':'')+(u.boss?' boss':'')+(u.look&&u.look.spirit?' spirit':'')+(u.acted&&u.team==='p'?' done':'')+(thr.has(u.id)?' threat':'');
     const ub=uBox(u);
     /* units with a move frame (horses: Kaya) show it while they slide to a new tile */
     {const ps=ub.l+','+ub.t,mv=el.dataset.pos&&el.dataset.pos!==ps&&u.hp>0&&castPng(u,'move');el.dataset.pos=ps;
