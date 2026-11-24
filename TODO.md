@@ -129,7 +129,7 @@ No regular monster has a passive; only bosses do (Wrath, Steadfast, Focus).
 ## Housekeeping
 
 - [ ] **Credits** (art/CREDITS.md) still to confirm:
-  - the newer effect sheets (`heal.png`, `light-burst.png`, `holy-bolt.png`, `lamia-acid.png`): are these PVFX Foundry too?
+  - the Lamia's acid effect (`art/fx/lamia-acid.png`): not PVFX Foundry; source and licence
   - the oakhold menu sounds (source and licence)
   - the tagirijus heartbeats (check the pack's licence file)
 - [x] `.unit.magma` CSS class is never applied now that monster looks are gone.
