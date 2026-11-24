@@ -28,6 +28,7 @@ const STATUS={
   valour:{n:'Valour',tick:'start',d:'Deals 20% more damage.'},
   anthem:{n:'Anthem',tick:'start',d:'Deals 30% more damage and +10 Hit.'},
   iceShield:{n:'Ice Shield',tick:'start',d:'+3 Def.'},
+  regen:{n:'Regen',tick:'start',d:'Regains 3 HP at the start of each of its turns.'},
   screech:{n:'Deafened',tick:'end',bad:1,d:'−2 Str and −2 Mag.'}
 };
 const hasSt=(u,k)=>!!(u&&u.st&&u.st[k]&&u.st[k].n>0);
@@ -86,7 +87,7 @@ const ABIL={
   hex:{n:'Hex',tfx:'tendrils',mp:5,mag:1,el:'dark',side:'foe',r:[1,3],st:['weak',2],d:'The target is Weak (deals 30% less damage) for 2 turns.'},
   vortex:{n:'Vortex',tfx:'tendrils',mp:7,mag:1,el:'dark',side:'foe',r:[1,4],shape:'diamond2',aim:'any',dmg:.4,pull:1,d:'A dark whirl up to 4 away: 0.4× magic damage to every enemy within 2 tiles of it, and they are all pulled 1 tile towards the centre.'},
   darkPulse:{n:'Dark Pulse',mp:10,mag:1,el:'dark',side:'self',shape:'burst1',dmg:1,d:'1.0× magic damage to every enemy around her.'},
-  /* Corvin (Ice Mage) */
+  /* Yvera (Ice Mage) */
   iceShard:{n:'Ice Shard',mp:4,mag:1,el:'ice',side:'foe',r:[1,3],dmg:1,st:['chill',1],d:'1.0× magic damage up to 3 away, and Slow (−2 Move).'},
   iceShield:{n:'Ice Shield',mp:5,el:'ice',side:'ally',r:[0,3],give:['iceShield',3],d:'An ally up to 3 away (or herself) gets +3 Def for 3 turns.'},
   frostWall:{n:'Frost Wall',mp:8,el:'ice',side:'tile',wall:2,r:[1,3],shape:'wall',d:'Three tiles in a row, up to 3 away, freeze into ice walls for 2 enemy turns. Enemies can’t move through them; allies can.'},
@@ -97,7 +98,7 @@ const ABIL={
   /* Pepr (Poisoner; cut, see docs/CHARACTERS.md): Poison Dart and Noxious Cloud are unused */
   poisonDart:{n:'Poison Dart',cd:2,side:'foe',r:[2,3],dmg:.6,psn:1,d:'0.6× damage from 2–3 tiles away, and the target is Poisoned.'},
   noxiousCloud:{n:'Noxious Cloud',cd:4,side:'foe',r:[1,3],shape:'area',aim:'any',dmg:.3,psn:1,st:['weak',1],d:'A 3×3 cloud up to 3 away: 0.3× damage, Poison and Weak (30% less damage) for a turn on every enemy in it.'},
-  /* unused for now (was Corvin's) */
+  /* unused for now (was Yvera's) */
   flameBurst:{n:'Flame Burst',mp:5,mag:1,el:'fire',side:'foe',r:[1,3],shape:'cross',aim:'any',dmg:.9,st:['burn',2,.3],d:'A cross of fire up to 3 away: 0.9× magic damage, 30% chance to Burn.'},
   frostWave:{n:'Frost Wave',tfx:'breath',mp:7,mag:1,el:'ice',side:'foe',r:[1,1],shape:'cone',aim:'dir',dmg:.9,st:['chill',1],d:'A cone of frost (4 tiles): 0.9× magic damage and Slow (−2 Move).'},
   chainLightning:{n:'Chain Lightning',mp:9,mag:1,el:'lightning',side:'foe',r:[1,4],dmg:1,chain:[2,.6],d:'1.0× magic damage, then it bounces up to 2 times, each to an enemy within 2 tiles of the last one hit, at 0.6×.'},
@@ -140,7 +141,7 @@ const ABIL={
   markPrey:{n:'Mark Prey',cd:2,side:'foe',r:'wpn',dmg:.8,st:['sunder',2],d:'0.8× damage, and the target has −3 Def for 2 turns.'},
   rideOn:{n:'Ride On',cd:2,side:'self',tumble:1,free:1,d:'Move up to 2 more tiles, ignoring height. Doesn’t use her action.'},
   /* Jun (Swordsman) */
-  flashStep:{n:'Asura Slash',cd:3,side:'foe',r:[1,2],dmg:1.1,charge:1,d:'Dashes to an enemy up to 2 tiles away and cuts: 1.1× damage.'},
+  flashStep:{n:'Asura Slash',cd:3,side:'foe',r:[1,2],dmg:1.1,d:'Sends a cutting wave at an enemy up to 2 tiles away: 1.1× damage. Jun stays where he is.'},
   twinSlash:{n:'Flowing Blade',cd:2,side:'foe',r:[1,1],dmg:.6,hits:3,d:'Three flowing cuts of 0.6×.'},
   counterStance:{n:'Counter Stance',cd:3,side:'self',self:[['guard',1],['shieldUp',1]],d:'Guard (30% less damage), and his counterattacks deal 1.3×, until your next turn.'},
   /* Celestine (Paladin) */
@@ -165,7 +166,7 @@ const KITS={
   kili:{passive:'keenEye',mp:0,abil:['aimedShot','pinningArrow','volley']},
   vaar:{passive:'outlander',mp:0,abil:['shove','flurry','leap']},
   morrigan:{passive:'siphon',mp:24,abil:['drainTouch','hex','vortex','darkPulse']},
-  corvin:{passive:'coldSnap',mp:28,abil:['iceShard','frostWave','blizzard','iceShield','frostWall']},
+  yvera:{passive:'coldSnap',mp:28,abil:['iceShard','frostWave','blizzard','iceShield','frostWall']},
   drecken:{passive:'twinBolt',mp:28,abil:['spark','chainLightning','thunderclap']},
   aldric:{passive:'plate',mp:0,abil:['sunder','valiantThrust','cover']},
   maelis:{passive:'lastLight',mp:26,abil:['smite','mend','purify','circleOfRest','sanctuary'],add:{Saint:['holyBombardment']}},/* add: abilities gained on ascending */

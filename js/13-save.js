@@ -10,6 +10,7 @@ function dropGone(o){if(!o||typeof o!=='object')return;
   if(o.skill==='bulwarkAura')o.skill='heroic';/* Rhyn's old personal skill (Nov 2026) */
   if(o.cast==='vaar'&&o.skill==='ironBody')o.skill='outlander';/* Vaar's old personal skill (Nov 2026) */
   if(o.cls==='CursedStag')o.cls='BlightedStag';/* renamed (Nov 2026) */
+  if(o.cast==='yvera'&&o.name==='Corvin')o.name='Yvera';/* renamed (Nov 2026) */
   if(o.cast==='trent'){o.cast='arthur';if(o.name==='Trent')o.name='Arthur'}/* renamed (Nov 2026) */
   if(Array.isArray(o.roster))o.roster=o.roster.filter(u=>!u||u.cast!=='holt');/* Holt cut (Nov 2026) */
   if(Array.isArray(o.skills))o.skills.forEach(x=>{if(x&&x.id==='spiritbane')x.id='fiendbane'});/* renamed (Nov 2026) */
@@ -20,7 +21,7 @@ function dropGone(o){if(!o||typeof o!=='object')return;
   if(Array.isArray(o.units))o.units=o.units.filter(u=>!u||!u.cls||CLS[u.cls]);
   for(const v of Object.values(o))dropGone(v)}
 /* renamed cast ids, so older saves keep their characters */
-const CAST_RENAMED={brin:'raptor',celest:'celestine',ash:'klaus'};
+const CAST_RENAMED={brin:'raptor',celest:'celestine',ash:'klaus',corvin:'yvera'};
 function renameCast(o){if(!o||typeof o!=='object')return;if(CAST_RENAMED[o.cast])o.cast=CAST_RENAMED[o.cast];if(Array.isArray(o.castUsed))o.castUsed=o.castUsed.map(id=>CAST_RENAMED[id]||id);for(const v of Object.values(o))renameCast(v)}
 function loadGame(){if(!SAVES_ON){try{localStorage.removeItem(SAVE)}catch(_){}return null}try{const sv=JSON.parse(localStorage.getItem(SAVE));renameCast(sv);dropGone(sv);return sv}catch(_){return null}}
 function setupBattle(roster){

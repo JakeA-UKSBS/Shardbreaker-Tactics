@@ -1,6 +1,6 @@
 # Shardbreaker Tactics: to-do
 
-A snapshot of what's outstanding, as of 19 November 2026. Tick things off or delete them as they're done.
+A snapshot of what's outstanding, as of 24 November 2026. Tick things off or delete them as they're done.
 
 ## Open GitHub issues
 
@@ -15,23 +15,21 @@ A snapshot of what's outstanding, as of 19 November 2026. Tick things off or del
 ## Waiting on art (Rhi)
 
 - [ ] Maelis's light attack animation (Smite borrows the holy-pillar effect until then)
-- [ ] Type icons: Infernal, Ooze, Ice, Scaled (16px placeholders)
+- [ ] Type icons: Ice, Scaled (16px placeholders; Infernal and Ooze are done)
 - [ ] Artifact icons: Duellist's Charm, Wyrmscale, Innkeeper's Token, Crimson Edge (placeholders)
 - [ ] Fruit icons: Vigour Apple, Quickberries (placeholders)
-- [ ] Flame Sigil and Blizzard Sigil icons (copies of the Fire and Frost Sigil icons)
+- [ ] New item icons borrowing others for now: Tenebrous Seal (Umbral Sigil), Holy Seal (Dawn Sigil), Regen Staff (Mending Staff), Rapid Bow (Short Bow), Horse Bow (Longbow); the Lyre has a quick placeholder
 - [ ] Event scenes still drawn in code: Antiquities Dealer, The Stables, The Orchard, Jungle Maze, Tablet of the Ancients, Relaxing Outcrop
 - [ ] Spare frames not used yet: Kaya's 7th (bow drawn again), Celestine's 7th
 
 ## Decisions to make
 
-- [ ] **Worms:** the Sand Worm has no type at all, so nothing is effective against it. The Ice Worm is Ice.
 - [ ] **Desert, floors 1 to 3:** only Sand Worms spawn there since the Jackal went. It needs a new early monster.
 - [ ] **Seren's Spirit Bolt:** keep it or cut it? It's her only damaging ability. It no longer has an element.
-- [ ] **Bows vs Beast:** bows and the Hunting Spear both double against beasts. Watch whether bows get too strong.
+- [ ] **Bows vs Prey:** bows and the Hunting Spear both double against Prey (the old Beast type, wolves taken out). Watch whether bows get too strong.
+- [ ] **Wolfsbane:** the skill now doubles against Prey, which no longer includes wolves. Rename it?
 - [ ] **Thunder Sigil:** now the 8 Mt armoury upgrade; check it feels right next to the Storm Sigil.
-- [ ] **Jun's Asura Slash:** currently a dash up to 2 tiles. Should it be a 2-range sword wave that doesn't move him instead?
-- [ ] **Iron Bulwark** wording: it counts units with armour bodies (Aldric, Arthur, Celestine); reword to say so?
-- [ ] Offered earlier, never confirmed: frog poison; a +5 max HP fish at the Old Fisherman
+- [ ] Offered earlier, never confirmed: a +5 max HP fish at the Old Fisherman (no frog poison)
 
 ## Weapons
 
@@ -39,8 +37,8 @@ The big overhaul is planned; until then, these are thin. Starting weapons are ex
 
 | Who | Weapon type | Other weapons they can use |
 |---|---|---|
-| Lysander | Healing staff | 2: Mending Staff, Far Staff. He starts with no weapon at all |
-| Kili, Kaya | Bow | 3: the other bows (Short, Long, Hawkeye, Yew Greatbow) |
+| Lysander | Lyre (instrument) | 0: his Lyre can't attack or heal, and he can't use staves |
+| Kili, Kaya | Bow | 5: the other bows (Short, Long, Rapid, Hawkeye, Yew Greatbow). Kaya starts with the Horse Bow |
 | Rook | Dagger | 4: Stiletto, Jade Fangs, Steel Knives, Throwing Knives |
 | Rhyn, Jun, Raptor | Sword | 4: Twin Khopesh / Worn Sword, Jade Jian, Gale Sword, Holy Sword |
 | Celestine | Sword | 4: Worn Sword, Twin Khopesh, Jade Jian, Gale Sword |
@@ -51,14 +49,14 @@ The big overhaul is planned; until then, these are thin. Starting weapons are ex
 
 Gaps by element (signature sigils are locked to one person):
 
-- [ ] **Dark** (Morrigan): only her starting Umbral Sigil; no dark upgrade.
-- [ ] **Light** (Maelis): only her starting Dawn Sigil; no light upgrade.
+- [x] **Dark** (Morrigan): Tenebrous Seal added as her upgrade.
+- [x] **Light** (Maelis): Holy Seal added as her upgrade.
 - [ ] **Summoner** (Seren): the Rune Crook is the only attack staff; no upgrade.
-- [ ] **Ice** (Corvin): only the Blizzard Sigil.
+- [ ] **Ice** (Yvera): only the Blizzard Sigil.
 - [ ] **Fire** (Klaus): only the Flame Sigil.
-- [ ] **Healing staves:** only 3 exist in the whole game (Mending, Far, plus Maelis's start).
-- [ ] **Bows:** the Short Bow and Longbow are both 2–3 with similar stats; give them distinct roles.
-- [ ] **Armoury stock:** 26 items now; you plan to add more.
+- [ ] **Healing staves:** 3 now (Mending, Far and the new Regen Staff: heal 10, then 3 HP a turn for 3 turns).
+- [x] **Bows:** the Longbow now reaches 2–4; the new Rapid Bow gets +2 Spd for doubling.
+- [ ] **Armoury stock:** 30 items now; you plan to add more.
 
 ## Skills
 
@@ -68,7 +66,7 @@ Skill rewards (The Sphinx, Tablet of the Ancients) offer 3 skills from the unit'
 |---|---|---|
 | Knight | Aldric, Celestine | 3: Steadfast, Iron Skin, Retaliate |
 | Summoner | Seren | 3: Kindle, Focus, Quick Study |
-| Sigilist | Morrigan, Corvin, Drecken, Klaus | 4: Kindle, Focus, Spell Ward, Quick Study |
+| Sigilist | Morrigan, Yvera, Drecken, Klaus | 4: Kindle, Focus, Spell Ward, Quick Study |
 | Mender | Maelis, Lysander | 4: Renewal, Spell Ward, Fleet Foot, Quick Study |
 | Shieldmaiden | Rhyn, Raptor | 4: Guardian, Steadfast, Taunt, Spell Ward |
 | Guard | Arthur | 5: Steadfast, Taunt, Iron Skin, Retaliate, Fiendbane |
@@ -83,7 +81,7 @@ Skill rewards (The Sphinx, Tablet of the Ancients) offer 3 skills from the unit'
 
 ## Monsters
 
-No regular monster has a passive; only bosses do (Wrath, Steadfast, Focus).
+Wolves, golems, the Ice Troll and the Blighted Croc have passives (see below); otherwise only bosses do (Wrath, Steadfast, Focus).
 
 **No abilities at all:**
 
@@ -105,11 +103,12 @@ No regular monster has a passive; only bosses do (Wrath, Steadfast, Focus).
 
 **Passive ideas for regular monsters:**
 
-- [ ] Wolves / Frost Wolves: Pack Tactics (+Hit next to another wolf)
+- [x] Wolves / Frost Wolves: Pack Tactics (+10 Hit next to another wolf)
 - [ ] Oozes: split when hit by a sword or lightning (5e-style)
-- [ ] Golems: Heavy (can't be pushed)
+- [x] Golems: Heavy (can't be pushed or pulled)
 - [ ] Crystal monsters: Shatter (damage nearby units when they die)
-- [ ] Ice Troll: Regenerate switched off by fire
+- [x] Ice Troll: Troll Blood (3 HP a turn, switched off by fire)
+- [x] Blighted Croc: Swamp Swimmer (+1 Spd in water)
 
 ## Events
 

@@ -8,7 +8,7 @@ const STEEL={blade:'jadeJian',dagger:'steelKnives',heavy:'steelHatchet',pole:'st
 /* the Weaponmaster's trade-ups: each weapon line goes to its next tier, keeping the kind of weapon */
 const UPGRADE={wornSword:'jadeJian',ironSpear:'steelSpear',steelSpear:'qiang',hatchet:'steelHatchet',steelHatchet:'reaverAxe',
   shortBow:'hawkeyeBow',longbow:'yewGreatbow',javelin:'atlatl',throwingAxe:'tomahawk',throwingKnives:'steelKnives',twinDaggers:'jadeFangs',stiletto:'jadeFangs',
-  fireSigil:'flameSigil',frostSigil:'blizzardSigil',claymore:'greatsword',greatsword:'zweihander'};
+  fireSigil:'flameSigil',frostSigil:'blizzardSigil',umbralSigil:'tenebrousSeal',dawnSigil:'holySeal',claymore:'greatsword',greatsword:'zweihander'};
 /* the next tier of a unit's weapon (keeps any reforging); null if there's nothing better */
 function tierUp(u,it){const B=IT[it.k],up=UPGRADE[B.base||it.k],f=B.forge||0;return up&&canUse(u,up)?(f?ensureIt(up+'~'+f):up):null}
 

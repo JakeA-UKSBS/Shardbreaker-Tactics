@@ -18,7 +18,7 @@ Weapons never break (except the 5-use Meteor and Heaven's Bolt).
 | Hatchet | Heavy | 8 | 75 | 0 | 7 | 1 |  |  |
 | Steel Hatchet | Heavy | 11 | 65 | 0 | 11 | 1 |  | Yes |
 | Throwing Axe | Heavy | 7 | 60 | 0 | 9 | 1–2 |  | Yes |
-| Short Bow | Bow | 6 | 85 | 0 | 3 | 2–3 | Beast |  |
+| Short Bow | Bow | 6 | 85 | 0 | 3 | 2–3 | Prey |  |
 | Fire Sigil | Sigil (Fire) | 5 | 90 | 0 | 2 | 1–2 | Plant, Ice |  |
 | Frost Sigil | Sigil (Ice) | 7 | 85 | 5 | 4 | 1–2 | Scaled |  |
 | Storm Sigil | Sigil (Lightning) | 4 | 95 | 15 | 2 | 1–2 | Ooze |  |
@@ -30,14 +30,14 @@ Weapons never break (except the 5-use Meteor and Heaven's Bolt).
 | Stiletto | Dagger | 4 | 90 | 25 | 2 | 1 |  | Yes |
 | Qiang | Polearm | 8 | 80 | 30 | 7 | 1 |  | Yes |
 | Reaver Axe | Heavy | 10 | 65 | 30 | 9 | 1 |  | Yes |
-| Hawkeye Bow | Bow | 7 | 80 | 30 | 5 | 2–3 | Beast | Yes |
+| Hawkeye Bow | Bow | 7 | 80 | 30 | 5 | 2–3 | Prey | Yes |
 | Jade Jian | Blade | 7 | 80 | 30 | 5 | 1 |  | Yes |
 | Jade Fangs | Dagger | 5 | 90 | 35 | 2 | 1 |  | Yes |
-| Longbow | Bow | 6 | 75 | 0 | 6 | 2–3 | Beast |  |
+| Longbow | Bow | 6 | 75 | 0 | 6 | 2–4 | Prey |  |
 | Tomahawk | Heavy | 10 | 65 | 0 | 9 | 1–2 |  | Yes |
 | Steel Knives | Dagger | 5 | 90 | 10 | 2 | 1–2 |  | Yes |
 | Gale Sword | Blade | 6 | 80 | 0 | 6 | 1–2 |  | Yes |
-| Yew Greatbow | Bow | 9 | 80 | 5 | 8 | 2–4 | Beast | Yes |
+| Yew Greatbow | Bow | 9 | 80 | 5 | 8 | 2–4 | Prey | Yes |
 | Throwing Knives | Dagger | 3 | 90 | 10 | 1 | 1–2 |  | Yes |
 | Flame Sigil | Sigil (Fire) | 8 | 80 | 5 | 4 | 1–2 | Plant, Ice | Yes |
 | Blizzard Sigil | Sigil (Ice) | 9 | 80 | 5 | 5 | 1–2 | Scaled | Yes |
@@ -45,13 +45,24 @@ Weapons never break (except the 5-use Meteor and Heaven's Bolt).
 | Heaven’s Bolt | Sigil (Lightning) | 10 | 65 | 5 | 8 | 3–10 | Ooze |  |
 | Meteor Sigil | Sigil (Earth) | 13 | 60 | 0 | 9 | 3–10 |  |  |
 | War Hammer | Heavy | 8 | 70 | 0 | 10 | 1 | Armoured | Yes |
-| Hunting Spear | Polearm | 7 | 85 | 0 | 6 | 1 | Beast | Yes |
+| Hunting Spear | Polearm | 7 | 85 | 0 | 6 | 1 | Prey | Yes |
 | Holy Sword | Blade | 8 | 80 | 5 | 6 | 1 | Infernal | Yes |
 | Giantslayer | Blade | 9 | 70 | 0 | 10 | 1 | Colossal | Yes |
 | Far Staff | Staff | – | – | 0 | 0 | 1–10 |  | Yes |
 | Claymore | Blade | 9 | 75 | 0 | 10 | 1 |  | Yes |
 | Zweihänder | Blade | 14 | 65 | 5 | 14 | 1 |  | Yes |
 | Flamberge | Blade | 12 | 70 | 20 | 12 | 1 |  | Yes |
+| Tenebrous Seal | Sigil (Dark) | 8 | 80 | 5 | 4 | 1–2 |  | Yes |
+| Holy Seal | Sigil (Light) | 8 | 85 | 0 | 4 | 1–2 | Infernal | Yes |
+| Regen Staff | Staff | – | – | 0 | 0 | 1–2 |  | Yes |
+| Rapid Bow | Bow | 5 | 85 | 0 | 0 | 2–3 | Prey | Yes |
+| Horse Bow | Bow | 8 | 85 | 5 | 4 | 2–3 | Prey |  |
+| Lyre | Instrument | – | – | – | – | – |  |  |
+
+- **Tenebrous Seal** drains like the Umbral Sigil (Morrigan's upgrade). **Holy Seal** is Maelis's light upgrade.
+- **Regen Staff:** heals 10, then the target regains 3 HP at the start of each of its next 3 turns.
+- **Rapid Bow:** +2 Spd when working out double attacks.
+- **Horse Bow:** Kaya's starting bow. **Lyre:** Lysander's; it can't attack or heal.
 
 ## Effective damage
 
@@ -60,7 +71,7 @@ An effective hit multiplies weapon Mt ×2. Only your side deals them for now.
 | Monster type | Who has it | Beaten by |
 |---|---|---|
 | Armoured | Magma Golem, Crystal Sentinel, Sandstone Golem, Pyrite Colossus, Gem Golem, Amethyst Turtle, Yeti | War Hammer, Stonebane |
-| Beast | Wolf, Blighted Stag, Hell Hound, Frost Wolf, Hollow Bear, Spirit Frog, Cave Bat | Hunting Spear, bows, Wolfsbane |
+| Prey | Blighted Stag, Hell Hound, Hollow Bear, Spirit Frog, Cave Bat (not wolves) | Hunting Spear, bows, Wolfsbane |
 | Colossal | Every 2×2 or 3×3 boss | Giantslayer |
 | Infernal | Hell Hound, Magma Dragon (Pyraxis), Fire Sprite | Light (Dawn Sigil, light abilities), Holy Sword, Fiendbane |
 | Plant | Blighted Treant | Fire |
@@ -99,7 +110,7 @@ Learned skills cost capacity (base 20, +5 when promoted). Personal skills are fr
 | Taunt | 5 | Enemies would rather attack this unit. |
 | Quick Study | 10 | Gains double EXP. |
 | Early Edge | 10 | +20 Hit and Avoid on turns 1 to 5. |
-| Wolfsbane | 10 | Effective (×2) against Beasts. |
+| Wolfsbane | 10 | Effective (×2) against Prey. |
 | Fiendbane | 10 | Effective (×2) against Infernal foes. |
 | Stonebane | 10 | Effective (×2) against Armoured foes. |
 | Guardian | 10 | Adjacent allies take 2 less damage. |
@@ -123,7 +134,7 @@ Learned skills cost capacity (base 20, +5 when promoted). Personal skills are fr
 | Endless Quiver | Uncommon (after 2 runs) | Bows deal +3 damage. |
 | Focus Gem | Uncommon (after 2 runs) | Arts deal +2 damage and gain +10 Hit. |
 | Golden Spurs | Uncommon (after 4 runs) | Mounted and flying units gain +1 Move and +10 Avoid. |
-| Iron Bulwark | Uncommon (after 4 runs) | Armoured units take 2 less damage. |
+| Iron Bulwark | Uncommon (after 4 runs) | Units in heavy armour (Aldric, Arthur and Celestine) take 2 less damage. |
 | Pocket Anvil | Rare (after 6 runs) | The Wandering Smith reforges twice. |
 | Mirror Charm | Rare (after 6 runs) | Enemies get −10 Hit against your units. |
 | Iron Rose | Uncommon | Units below half HP take 3 less damage. |

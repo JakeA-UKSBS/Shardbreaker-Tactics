@@ -66,7 +66,7 @@ Each base class ascends into one or two advanced classes at Lv 5.
 | Kili | Archer | Sniper | M |
 | Vaar | Brawler | Berserker | M |
 | Morrigan | Cultist | Witch | F |
-| Corvin (tavern or caged traveller) | Ice Mage | Frostlord | F |
+| Yvera (tavern or caged traveller) | Ice Mage | Frostlord | F |
 | Drecken | Elemental Mage | Stormlord | M |
 | Aldric | Knight | Juggernaut | M |
 | Maelis | Mender | Saint | F |
@@ -109,13 +109,13 @@ A witch-hunter's daughter who took up the dark arts to hunt the blight instead. 
 - **Vortex** (5×5 diamond, range 4 · 7 MP): 0.4× Mag to every enemy within 2 tiles of the target tile, then they're all pulled 1 tile towards the centre (nearest first). Sets up area attacks.
 - **Dark Pulse** (burst r1 · 10 MP): 1.0× Mag to every adjacent enemy.
 
-### Corvin: Ice Mage (tavern or caged traveller)
-![Corvin](visuals/cast/corvin.png)
+### Yvera: Ice Mage (tavern or caged traveller)
+![Yvera](visuals/cast/yvera.png)
 
 A court magician's apprentice who walked out when her master started making weapons for the war. Curious and methodical. Works in frost.
 - **Ascends into:** Frostlord.
 - **Look:** dress and formal cloak, casts from her hand.
-- **Weapon:** Frost Sigil. Only Corvin can wield ice sigils.
+- **Weapon:** Frost Sigil. Only Yvera can wield ice sigils.
 - **Passive:** none yet (keeps a random skill).
 - Every attack spell Slows (−2 Move).
 - **Ice Shard** (single, range 3 · 4 MP): 1.0× Mag and Slow.
@@ -216,7 +216,8 @@ A sellsword from the southern deserts who fights for whoever pays, and right now
 ![Kaya](visuals/cast/kaya.png)
 
 A steppe rider with white-and-violet hair who trades arrows for passage. Laughs a lot, misses rarely.
-- **Look:** leathers, Yew Greatbow, on a grey horse.
+- **Look:** leathers, Horse Bow, on a grey horse.
+- **Weapon:** Horse Bow (8 Mt, 85 Hit, 2–3).
 - **Passive: Parthian Shot.** Can move again after attacking, up to her remaining Move.
 - **Running Shot** (single, range 2 · CD 2): 1.0× Str, then +2 Move this turn.
 - **Twin Arrows** (single, range 2 · CD 3): 2 hits of 0.6× Str.
@@ -235,7 +236,7 @@ A travelling bard who joined for the songs he'll write about it. Vain, charming,
 - **Encore** (single ally, range 3 · 15 MP, once per fight): an ally who has already acted acts again this turn.
 - **Soothing Ballad** (burst r1 · CD 3): allies around him heal 0.6× Mag.
 - **As a Bard:** Song of Valour becomes **Anthem of Valour** (30% more damage and +10 Hit for 2 turns), Lullaby costs 6 MP with a 65% Stun chance, and Soothing Ballad becomes **Soothing Hymn** (CD 2, heals 0.8× Mag and cures statuses).
-- He carries no staff and can't heal or attack: he sings.
+- He carries a **Lyre**, which can't heal or attack, and he can't use staves: he only sings.
 
 ## Found during the run
 
@@ -266,7 +267,7 @@ A wandering swordsman from a mountain temple, working off his bar tab. Quiet, an
 - **Ascends into:** Swordmaster.
 - **Look:** blue Taoist robes, hair in a bun, sword held low; wristguards and lapels as a Swordmaster.
 - **Passive: Iaido.** +10 Crit on the first strike of a fight he starts.
-- **Asura Slash** (single, range 1–2 · CD 3): dashes to the enemy and cuts for 1.1× Str.
+- **Asura Slash** (single, range 1–2 · CD 3): a cutting wave for 1.1× Str. Jun doesn't move.
 - **Flowing Blade** (single, adjacent · CD 2): 3 cuts of 0.6× Str.
 - **Counter Stance** (self · CD 3): Guard, and his counterattacks deal 1.3×, until your next turn.
 

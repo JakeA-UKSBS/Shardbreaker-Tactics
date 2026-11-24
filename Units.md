@@ -2,7 +2,7 @@ Name	Class	Ascends into	Joins	Gender	Look
 Kili	Archer	Sniper	Starting roster	M	green leather armour, feather headdress, longbow
 Vaar	Brawler	Berserker	Starting roster	M	Nordic axeman, blue tattoo, brown earthy colours
 Morrigan	Cultist	Witch	Starting roster	F	scarlet hair, cultist robes
-Corvin	Ice Mage	Frostlord	Tavern or caged traveller	F	dress + cloak, casts from her hand, ice
+Yvera	Ice Mage	Frostlord	Tavern or caged traveller	F	dress + cloak, casts from her hand, ice
 Drecken	Elemental Mage	Stormlord	Starting roster	M	storm-grey robes + cape, yellow sash, lightning
 Aldric	Knight	Juggernaut	Starting roster	M	heavy armour, lance, red and yellow
 Maelis	Mender	Saint	Starting roster	F	white gown + shawl, gold staff

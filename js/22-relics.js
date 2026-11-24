@@ -66,7 +66,7 @@ const RELICS = {
     n: "Iron Bulwark",
     r: "u",
     x: 4,
-    d: "Armoured units take 2 less damage.",
+    d: "Units in heavy armour (Aldric, Arthur and Celestine) take 2 less damage.",
   },
   anvil: {
     n: "Pocket Anvil",

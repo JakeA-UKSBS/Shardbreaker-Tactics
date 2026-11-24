@@ -159,7 +159,7 @@ const FX={
   holyBolt:{src:'art/fx/holy-bolt.png',fw:32,fh:32,n:8,ax:26,ay:16,ms:60},/* Maelis's Dawn Sigil: a looping holy bolt (faces right, ax/ay = its head) */
   lightBurst:{src:'art/fx/light-burst.png',fw:64,fh:72,n:18,ax:32,ay:18,ms:50,hit:3},/* light sigils (the Dawn Sigil): a starburst on the target, then golden shards fall */
   fireRing:{src:'art/fx/fire-ring.png',fw:96,fh:64,n:17,ax:48,ay:40,ms:65,hit:5},/* Klaus's Circle of Fire: a spark, the ring roars up, then burns down */
-  frostBreath:{src:'art/fx/frost-breath.png',fw:96,fh:40,n:14,ax:4,ay:22,ms:60,hit:3},/* Corvin's Frost Wave: a gust of ice from the hand, widening as it goes */
+  frostBreath:{src:'art/fx/frost-breath.png',fw:96,fh:40,n:14,ax:4,ay:22,ms:60,hit:3},/* Yvera's Frost Wave: a gust of ice from the hand, widening as it goes */
   ballLightning:{src:'art/fx/ball-lightning.png',fw:44,fh:48,n:3,ax:30,ay:24,ms:60},/* lightning sigils (Drecken): the ball flies, crackling */
   ballBurst:{src:'art/fx/ball-lightning-burst.png',fw:58,fh:48,n:8,ax:32,ay:24,ms:65},/* ...and bursts on the target */
   chainArc:{src:'art/fx/chain-lightning.png',fw:180,fh:72,n:13,ax:8,ay:40,ms:55,hit:4},/* Chain Lightning: an arc jumping from one target to the next, stretched to fit */
