@@ -344,6 +344,15 @@
     0 2px 0 #2a2140,
     0 0 24px rgba(127, 200, 255, 0.4);
 }
+/* the name on two lines: "Breakers" sits under "Blight", nudged to the right */
+.tname span {
+  display: block;
+  text-align: left;
+}
+.tname span + span {
+  margin-left: 1.2em;
+  margin-top: 0.05em;
+}
 .tmenu {
   position: relative;
   display: flex;
