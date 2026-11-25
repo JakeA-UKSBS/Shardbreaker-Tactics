@@ -18,8 +18,8 @@ const ONLY_KIND={zwei:['greatsword']};
    unaffected. (Daggers are their own weapon type, so Rogues and Assassins simply don't have the blade type.) */
 const GREAT_CLS=['Mercenary','Warrior'];
 const kindOk=(u,k)=>{const w=IT[k];if(!u.cast||w.t!=='blade'||w.kind!=='greatsword')return true;return GREAT_CLS.includes(CLS[u.cls].n)};
-/* signature elements: only Drecken wields lightning sigils, only Corvin ice ones */
-const EL_OWNER={lightning:'drecken',ice:'corvin'};
+/* signature elements: only Drecken wields lightning sigils, only Yvera ice ones */
+const EL_OWNER={lightning:'drecken',ice:'yvera'};
 const canUse=(u,k)=>CLS[u.cls].w.includes(IT[k].t)&&kindOk(u,k)&&(!EL_OWNER[IT[k].el]||u.cast===EL_OWNER[IT[k].el])&&(!u.cast||!ONLY_KIND[u.cast]||!WTYPES.includes(IT[k].t)||ONLY_KIND[u.cast].includes(IT[k].kind));
 /* ---- height (Ogre/FFTA style) ----
    Each tile has a height level (hOf). A unit can only step up or down JUMP levels at a time (fliers ignore it).

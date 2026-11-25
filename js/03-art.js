@@ -102,7 +102,9 @@ texStyle.textContent+=`.t-cliff{background:url(${tileArt('cliff')}) 0 0/100% 100
 document.body.appendChild(texStyle);
 
 /* PNG art (art/<key>.png, see art() in 03-art.js) */
-function iconArt(k){return art('icons/'+String(k).split('~')[0])}
+/* items that share another item's icon (the stronger sigils use their element's book; new items borrow one until they get their own) */
+const ICON_AS={flameSigil:'fireSigil',blizzardSigil:'frostSigil',tenebrousSeal:'umbralSigil',holySeal:'dawnSigil',regenStaff:'mendingStaff',rapidBow:'shortBow',horseBow:'longbow'};
+function iconArt(k){k=String(k).split('~')[0];return art('icons/'+(ICON_AS[k]||k))}
 function tagArt(t){return art('tags/'+t)}
 /* bare=true: only the feature (no grass), so it can sit on any region's ground */
 function tileArt(kind,used,bare){return art('tiles/'+kind+(used?'-used':'')+(bare?'-bare':''))}

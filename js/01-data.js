@@ -7,7 +7,7 @@ const PICS={};
 const ST=['hp','str','mag','skl','spd','lck','def','res'];
 const SL={hp:'HP',str:'Str',mag:'Mag',skl:'Skl',spd:'Spd',lck:'Luck',def:'Def',res:'Res'};
 /* the stats a unit shows and levels: HP, Str or Mag (by class), Skl, Luck, Spd, Def, Res. */
-const usesMag=u=>CLS[u.cls].w.every(t=>t==='art'||t==='spirit');
+const usesMag=u=>CLS[u.cls].w.every(t=>t==='art'||t==='spirit'||t==='instrument');
 const shown=u=>['hp',usesMag(u)?'mag':'str','skl','lck','spd','def','res'];
 /* attack speed (FE9): weight above your Str (Mag for sigils) slows doubling and dodging */
 const wtOver=(u,w)=>Math.max(0,(w&&w.wt||0)-(w&&w.mag?u.mag:u.str));
@@ -18,7 +18,7 @@ const MON_PASSIVE={Wolf:'pack',FrostWolf:'pack',BoulderGolem:'heavy',SandstoneGo
 const PASSIVE={pack:{n:'Pack Tactics',d:'+10 Hit when next to another wolf.'},heavy:{n:'Heavy',d:"Can't be pushed or pulled."},trollBlood:{n:'Troll Blood',d:'Regains 3 HP each turn. Fire or burning stops it for a turn.'},swampSwim:{n:'Swamp Swimmer',d:'+1 Spd in swamp water and mangrove roots.'}};
 const pasOf=u=>u&&u.team==='e'?MON_PASSIVE[u.cls]:null;
 const SWIM=u=>pasOf(u)==='swampSwim'&&typeof ter==='function'&&typeof state!=='undefined'&&typeof MAP!=='undefined'&&MAP&&MAP[u.y]&&['water','shallow','mangrove'].includes((ter(u.x,u.y)||{}).k)?1:0;
-const AS=(u,w)=>Math.max(0,u.spd+OL(u)+SWIM(u)+gearOf(u).spd-wtOver(u,w));
+const AS=(u,w)=>Math.max(0,u.spd+OL(u)+SWIM(u)+(w&&w.quick||0)+gearOf(u).spd-wtOver(u,w));
 /* DIRS: the 4 neighbouring tiles (right, left, down, up). T: tile size in px for the old flat board. */
 const DIRS=[[1,0],[-1,0],[0,1],[0,-1]];
 const T=48;
@@ -82,7 +82,7 @@ for(const k in WT)IT[k].wt=WT[k];
 Object.assign(IT,{
   jadeJian:{n:'Jade Jian',t:'blade',kind:'sword',mt:7,hit:80,crit:30,r:[1,1],uses:25,tint:'jade',wt:5},
   jadeFangs:{n:'Jade Fangs',t:'dagger',kind:'dagger',mt:5,hit:90,crit:35,r:[1,1],uses:25,tint:'jade',wt:2},
-  longbow:{n:'Longbow',t:'bow',kind:'bow',mt:6,hit:75,crit:0,r:[2,3],uses:30,wt:6},
+  longbow:{n:'Longbow',t:'bow',kind:'bow',mt:6,hit:75,crit:0,r:[2,4],uses:30,wt:6},
   /* steel-tier ranged variants (reach 1–2): trade-ups for the javelin, throwing axe and throwing knives */
   tomahawk:{n:'Tomahawk',t:'heavy',kind:'axe',mt:10,hit:65,crit:0,r:[1,2],uses:20,thrown:true,wt:9,tint:'steel'},
   steelKnives:{n:'Steel Knives',t:'dagger',kind:'dagger',mt:5,hit:90,crit:10,r:[1,2],uses:30,thrown:true,wt:2,tint:'steel'},
@@ -90,8 +90,19 @@ Object.assign(IT,{
   yewGreatbow:{n:'Yew Greatbow',t:'bow',kind:'bow',mt:9,hit:80,crit:5,r:[2,4],uses:30,wt:8,tint:'steel'},
   throwingKnives:{n:'Throwing Knives',t:'dagger',kind:'dagger',mt:3,hit:90,crit:10,r:[1,2],uses:30,thrown:true,wt:1},
   /* armoury stock (not dropped or given by events) */
-  flameSigil:{n:'Flame Sigil',t:'art',kind:'talisman',el:'fire',mt:8,hit:80,crit:5,r:[1,2],uses:30,mag:true,wt:4,key:'fireSigil'},
-  blizzardSigil:{n:'Blizzard Sigil',t:'art',kind:'talisman',el:'ice',mt:9,hit:80,crit:5,r:[1,2],uses:30,mag:true,wt:5,key:'frostSigil'},
+  flameSigil:{n:'Flame Sigil',t:'art',kind:'talisman',el:'fire',mt:8,hit:80,crit:5,r:[1,2],uses:30,mag:true,wt:4},
+  blizzardSigil:{n:'Blizzard Sigil',t:'art',kind:'talisman',el:'ice',mt:9,hit:80,crit:5,r:[1,2],uses:30,mag:true,wt:5},
+  /* signature upgrades: Morrigan's dark seal (drains like the Umbral Sigil) and Maelis's light seal */
+  tenebrousSeal:{n:'Tenebrous Seal',t:'art',kind:'talisman',el:'dark',mt:8,hit:80,crit:5,r:[1,2],uses:30,mag:true,wt:4,drain:true},
+  holySeal:{n:'Holy Seal',t:'art',kind:'talisman',el:'light',mt:8,hit:85,crit:0,r:[1,2],uses:30,mag:true,wt:4},
+  /* Regen Staff: a normal heal, then the target regains 3 HP at the start of each of its next 3 turns */
+  regenStaff:{n:'Regen Staff',t:'spirit',kind:'staff',amt:10,r:[1,2],uses:20,regen:3,tint:'mend'},
+  /* Rapid Bow: light and quick to draw: +2 Spd when working out double attacks */
+  rapidBow:{n:'Rapid Bow',t:'bow',kind:'bow',mt:5,hit:85,crit:0,r:[2,3],uses:35,quick:2},
+  /* Kaya's Horse Bow: a short, strong bow made to shoot from the saddle */
+  horseBow:{n:'Horse Bow',t:'bow',kind:'bow',mt:8,hit:85,crit:5,r:[2,3],uses:35,wt:4,tint:'steel'},
+  /* Lysander's Lyre: not a weapon. It can't attack or heal; his songs are all he does with it */
+  lyre:{n:'Lyre',t:'instrument',kind:'lyre',uses:1},
   thunderSigil:{n:'Thunder Sigil',armoury:true,t:'art',kind:'talisman',el:'lightning',mt:8,hit:80,crit:5,r:[1,2],uses:35,mag:true,wt:5},
   heavensBolt:{n:'Heaven’s Bolt',t:'art',kind:'talisman',el:'lightning',mt:10,hit:65,crit:5,r:[3,10],uses:5,mag:true,wt:8},
   meteorSigil:{n:'Meteor Sigil',t:'art',kind:'talisman',el:'earth',mt:13,hit:60,crit:0,r:[3,10],uses:5,mag:true,wt:9},
@@ -169,4 +180,4 @@ let BATTLE=null;
 
 
 /* armoury stock: upgrades only (nothing a unit starts with) */
-for(const k of ['stiletto', 'jadeJian', 'jadeFangs', 'claymore', 'flamberge', 'galeSword', 'steelKnives', 'throwingKnives', 'holySword', 'giantslayer', 'steelSpear', 'qiang', 'huntingSpear', 'javelin', 'steelHatchet', 'reaverAxe', 'warHammer', 'throwingAxe', 'tomahawk', 'hawkeyeBow', 'yewGreatbow', 'thunderSigil', 'farStaff', 'zweihander', 'flameSigil', 'blizzardSigil'])if(IT[k])IT[k].armoury=true;
+for(const k of ['stiletto', 'jadeJian', 'jadeFangs', 'claymore', 'flamberge', 'galeSword', 'steelKnives', 'throwingKnives', 'holySword', 'giantslayer', 'steelSpear', 'qiang', 'huntingSpear', 'javelin', 'steelHatchet', 'reaverAxe', 'warHammer', 'throwingAxe', 'tomahawk', 'hawkeyeBow', 'yewGreatbow', 'thunderSigil', 'farStaff', 'zweihander', 'flameSigil', 'blizzardSigil', 'tenebrousSeal', 'holySeal', 'regenStaff', 'rapidBow'])if(IT[k])IT[k].armoury=true;

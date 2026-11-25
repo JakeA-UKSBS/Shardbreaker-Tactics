@@ -65,7 +65,7 @@ function render(){
   for(const u of state.units){
     live.add(u.id);let el=uEls[u.id];
     if(!el){el=document.createElement('div');el.innerHTML='<img alt=""><div class="hpb"><i></i></div>';boardEl.appendChild(el);uEls[u.id]=el}
-    el.className='unit '+u.team+(u.summon?' sum':'')+(u.stone?' stone':'')+(u.psn?' psn':'')+(u.boss?' boss':'')+(u.look&&u.look.magma?' magma':'')+(u.look&&u.look.spirit?' spirit':'')+(u.acted&&u.team==='p'?' done':'')+(thr.has(u.id)?' threat':'');
+    el.className='unit '+u.team+(u.summon?' sum':'')+(u.stone?' stone':'')+(u.psn?' psn':'')+(u.boss?' boss':'')+(u.look&&u.look.spirit?' spirit':'')+(u.acted&&u.team==='p'?' done':'')+(thr.has(u.id)?' threat':'');
     const ub=uBox(u);
     /* units with a move frame (horses: Kaya) show it while they slide to a new tile */
     {const ps=ub.l+','+ub.t,mv=el.dataset.pos&&el.dataset.pos!==ps&&u.hp>0&&castPng(u,'move');el.dataset.pos=ps;
@@ -102,7 +102,7 @@ function itemRows(u,btn){
     return`<${tag} class="it${i===ei?' eqd':''}${btn&&itemSel===i?' sel':''}"${btn?` data-act="item:${i}" type="button"`:''}><img src="${icon(it.k)}" alt="">${w.n}${it.d?' <em>drops</em>':''}<span class="u">${[w.r&&w.t!=='item'?`Rng ${rngTxt(w.r)}`:'',endless(it.k)?'':`${it.u}/${w.uses}`].filter(Boolean).join(' · ')}</span></${tag}>`}).join('')||'<p class="skd">No items.</p>'}</div>`;
 }
 /* enemy card: its types, and what it's weak to or resists */
-const TAG_BEATEN={armoured:'Hammers',beast:'Spears, Bows',colossal:'Giantslayer',infernal:'Light',plant:'Fire',ice:'Fire',ooze:'Lightning',scaled:'Ice'};
+const TAG_BEATEN={armoured:'Hammers',beast:'Hunting Spear, Bows',colossal:'Giantslayer',infernal:'Light',plant:'Fire',ice:'Fire',ooze:'Lightning',scaled:'Ice'};
 const EL_N={fire:'Fire',ice:'Ice',lightning:'Lightning',light:'Light',dark:'Dark'};
 function monTypes(u){if(u.team!=='e')return'';const tg=tagsOf(u),wk=[...new Set([...tg.map(t=>TAG_BEATEN[t]),...weakOf(u).map(e=>EL_N[e]||e)])].filter(Boolean),rs=resOf(u).map(e=>EL_N[e]||e);
   if(!tg.length&&!wk.length&&!rs.length)return'';
@@ -126,7 +126,7 @@ function card(u){
 }
 
 /* ---- unit sheet (two pages, cycles through the same team) ---- */
-const TN={blade:'Blade',dagger:'Dagger',heavy:'Heavy',pole:'Polearm',bow:'Bow',art:'Sigil',spirit:'Staff',item:'Item'};
+const TN={blade:'Blade',dagger:'Dagger',heavy:'Heavy',pole:'Polearm',bow:'Bow',art:'Sigil',spirit:'Staff',instrument:'Instrument',item:'Item'};
 let sheetU=null,sheetPg=0,sheetIt=null;
 
 /* ==================================================================
@@ -164,8 +164,9 @@ function itemInfo(u,k){
   const x=IT[k];
   if(x.t==="item")return`<b>${x.n}</b> · Restores ${salveAmt(k)} HP and cures poison. Usable on the map between fights too.`;
   if(x.t==='gear')return`<b>${x.n}</b> · Gear · ${gearText(x)} while carried. Can be traded.`;
-  if(x.t==='spirit')return`<b>${x.n}</b> · ${TN.spirit} · Heals ${x.amt} HP · Rng ${rngTxt(x.r)}`+(canUse(u,k)?'':` · ${u.name} can't use this.`);
-  return`<b>${x.n}</b> · ${TN[x.t]}${x.el?' · '+ELN[x.el]:''} · Mt ${x.mt} · Hit ${x.hit} · Crit ${x.crit||0} · Wt ${x.wt||0} · Rng ${rngTxt(x.r)}${x.wt&&u.str!=null&&wtOver(u,x)?` · ${u.name} loses ${wtOver(u,x)} Spd`:''}${x.mag?' · Uses Mag':''}${x.thrown?' · Thrown':''}${effOf(x).length?` · <span class="effv">Effective vs ${effOf(x).map(t=>TAGS[t].n).join(', ')}</span>`:''}`+(canUse(u,k)?'':` · ${u.name} can't wield this.`);
+  if(x.t==='spirit')return`<b>${x.n}</b> · ${TN.spirit} · Heals ${x.amt} HP${x.regen?`, then ${x.regen} HP a turn for 3 turns`:''} · Rng ${rngTxt(x.r)}`+(canUse(u,k)?'':` · ${u.name} can't use this.`);
+  if(x.t==='instrument')return`<b>${x.n}</b> · ${TN.instrument} · Can't attack or heal; used for songs.`;
+  return`<b>${x.n}</b> · ${TN[x.t]}${x.el?' · '+ELN[x.el]:''} · Mt ${x.mt} · Hit ${x.hit} · Crit ${x.crit||0} · Wt ${x.wt||0} · Rng ${rngTxt(x.r)}${x.wt&&u.str!=null&&wtOver(u,x)?` · ${u.name} loses ${wtOver(u,x)} Spd`:''}${x.mag?' · Uses Mag':''}${x.quick?` · +${x.quick} Spd for doubling`:''}${x.thrown?' · Thrown':''}${effOf(x).length?` · <span class="effv">Effective vs ${effOf(x).map(t=>TAGS[t].n).join(', ')}</span>`:''}`+(canUse(u,k)?'':` · ${u.name} can't wield this.`);
 }
 function drawSheet(){
   const u=byId(sheetU),el=sheetEl();if(!u){closeSheet();return}

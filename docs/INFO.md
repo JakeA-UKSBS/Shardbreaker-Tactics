@@ -33,7 +33,7 @@ Weapons never break (except the 5-use Meteor and Heaven's Bolt).
 | Hawkeye Bow | Bow | 7 | 80 | 30 | 5 | 2–3 | Beast | Yes |
 | Jade Jian | Blade | 7 | 80 | 30 | 5 | 1 |  | Yes |
 | Jade Fangs | Dagger | 5 | 90 | 35 | 2 | 1 |  | Yes |
-| Longbow | Bow | 6 | 75 | 0 | 6 | 2–3 | Beast |  |
+| Longbow | Bow | 6 | 75 | 0 | 6 | 2–4 | Beast |  |
 | Tomahawk | Heavy | 10 | 65 | 0 | 9 | 1–2 |  | Yes |
 | Steel Knives | Dagger | 5 | 90 | 10 | 2 | 1–2 |  | Yes |
 | Gale Sword | Blade | 6 | 80 | 0 | 6 | 1–2 |  | Yes |
@@ -52,6 +52,17 @@ Weapons never break (except the 5-use Meteor and Heaven's Bolt).
 | Claymore | Blade | 9 | 75 | 0 | 10 | 1 |  | Yes |
 | Zweihänder | Blade | 14 | 65 | 5 | 14 | 1 |  | Yes |
 | Flamberge | Blade | 12 | 70 | 20 | 12 | 1 |  | Yes |
+| Tenebrous Seal | Sigil (Dark) | 8 | 80 | 5 | 4 | 1–2 |  | Yes |
+| Holy Seal | Sigil (Light) | 8 | 85 | 0 | 4 | 1–2 | Infernal | Yes |
+| Regen Staff | Staff | – | – | 0 | 0 | 1–2 |  | Yes |
+| Rapid Bow | Bow | 5 | 85 | 0 | 0 | 2–3 | Beast | Yes |
+| Horse Bow | Bow | 8 | 85 | 5 | 4 | 2–3 | Beast |  |
+| Lyre | Instrument | – | – | – | – | – |  |  |
+
+- **Tenebrous Seal** drains like the Umbral Sigil (Morrigan's upgrade). **Holy Seal** is Maelis's light upgrade.
+- **Regen Staff:** heals 10, then the target regains 3 HP at the start of each of its next 3 turns.
+- **Rapid Bow:** +2 Spd when working out double attacks.
+- **Horse Bow:** Kaya's starting bow. **Lyre:** Lysander's; it can't attack or heal.
 
 ## Effective damage
 
@@ -123,7 +134,7 @@ Learned skills cost capacity (base 20, +5 when promoted). Personal skills are fr
 | Endless Quiver | Uncommon (after 2 runs) | Bows deal +3 damage. |
 | Focus Gem | Uncommon (after 2 runs) | Arts deal +2 damage and gain +10 Hit. |
 | Golden Spurs | Uncommon (after 4 runs) | Mounted and flying units gain +1 Move and +10 Avoid. |
-| Iron Bulwark | Uncommon (after 4 runs) | Armoured units take 2 less damage. |
+| Iron Bulwark | Uncommon (after 4 runs) | Units in heavy armour (Aldric, Arthur and Celestine) take 2 less damage. |
 | Pocket Anvil | Rare (after 6 runs) | The Wandering Smith reforges twice. |
 | Mirror Charm | Rare (after 6 runs) | Enemies get −10 Hit against your units. |
 | Iron Rose | Uncommon | Units below half HP take 3 less damage. |

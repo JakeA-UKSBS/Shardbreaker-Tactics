@@ -93,8 +93,8 @@ function effChart(){
   const mons=Object.keys(CLS).filter(k=>!k.startsWith('G.')&&!['Villager','Sage'].includes(k));
   const names=f=>[...new Set(mons.filter(f).map(k=>CLS[k].n))].sort();
   /* one row per kind of attack: what it is ×2 against (types, plus single monsters weak to that element) and who resists it (½) */
-  const rows=[[['warHammer'],null,['armoured']],[['huntingSpear','shortBow','longbow','yewGreatbow'],null,['beast']],[['giantslayer'],null,['colossal']],
-    [['dawnSigil','holySword'],'light',['infernal']],[['fireSigil'],'fire',['plant','ice']],[['stormSigil'],'lightning',['ooze']],[['frostSigil'],'ice',['scaled']]];
+  const rows=[[['warHammer'],null,['armoured']],[['huntingSpear','shortBow','longbow','yewGreatbow','horseBow','rapidBow'],null,['beast']],[['giantslayer'],null,['colossal']],
+    [['dawnSigil','holySeal','holySword'],'light',['infernal']],[['fireSigil'],'fire',['plant','ice']],[['stormSigil'],'lightning',['ooze']],[['frostSigil'],'ice',['scaled']]];
   const row=([ws,el,tags])=>{const ts=tags.map(t=>t==='colossal'?['Every 2×2 or 3×3 boss']:names(k=>tagsOf({cls:k}).includes(t))).flat(),
       wk=el?names(k=>weakOf({cls:k}).includes(el)&&!ts.includes(CLS[k].n)):[],rs=el?names(k=>resOf({cls:k}).includes(el)):[];
     return`<div class="ec-r"><div class="ec-w">${ws.map(ic).join('')}${el?`<b>${{light:'Light',fire:'Fire',lightning:'Lightning',ice:'Ice'}[el]}</b>`:''}</div><span class="ec-a">▶<em>×2</em></span>
@@ -129,7 +129,7 @@ async function act(a){
   if(a==='wait'){commit();finishAction();return}
   if(a==='summon'){if(!canSummon(u))return;const still=stillAt(u);commit();doSummon(u);afterAct(u,still);return}
   if(a==='use'){const still=stillAt(u);commit();const it=u.items[itemSel],amt=Math.min(salveAmt(it.k),u.maxhp-u.hp);u.hp+=amt;it.u--;if(it.u<=0)u.items.splice(itemSel,1);pop(u,'+'+amt,'heal');if(u.psn){u.psn=0;pop(u,'Cured','heal')}afterAct(u,still);return}
-  if(a==='doheal'){const still=stillAt(u);commit();const t=pending,si=spiritFor(u,t),w=IT[u.items[si].k],amt=Math.min(w.amt,t.maxhp-t.hp);if(u.cast){mapPose(u,'swing',t);await sleep(D(280))}/* raise the staff, then heal */t.hp+=amt;if(!endless(u.items[si].k)){u.items[si].u--;if(u.items[si].u<=0){toast(w.n+' shattered');u.items.splice(si,1)}}pop(t,'+'+amt,'heal');healFx(t);sfx('heal');clearSel();ui='idle';busy=true;render();if(u.cast){mapPose(u,'swing',t);setTimeout(()=>mapPose(u,'idle'),D(600))}
+  if(a==='doheal'){const still=stillAt(u);commit();const t=pending,si=spiritFor(u,t),w=IT[u.items[si].k],amt=Math.min(w.amt,t.maxhp-t.hp);if(u.cast){mapPose(u,'swing',t);await sleep(D(280))}/* raise the staff, then heal */t.hp+=amt;if(w.regen)addSt(t,'regen',3);if(!endless(u.items[si].k)){u.items[si].u--;if(u.items[si].u<=0){toast(w.n+' shattered');u.items.splice(si,1)}}pop(t,'+'+amt,'heal');healFx(t);sfx('heal');clearSel();ui='idle';busy=true;render();if(u.cast){mapPose(u,'swing',t);setTimeout(()=>mapPose(u,'idle'),D(600))}
     const g=gainExp(u,Math.round(15*EXP_RATE));await showExp(u,g);if(g&&g.gains)await levelUp(u,g);busy=false;afterAct(u,still);return}
   if(a==='attack-go'){const still=stillAt(u);commit();const t=pending,it=u.items.splice(pendW,1)[0];u.items.unshift(it);clearSel();ui='idle';await fight(u,0,t);if(still&&u.acted){afterAct(u,still);return}saveGame();promptEnd();return}
 }
@@ -201,6 +201,7 @@ function trollBlood(){for(const u of state.units){if(u.hp<=0||pasOf(u)!=='trollB
 function phaseHeal(team){
   for(const u of state.units)if(u.team===team&&u.psn>0){const d=Math.min(2,u.hp-1);if(d>0){u.hp-=d;pop(u,'-'+d,'crit')}u.psn--}
   for(const c of state.units.filter(u=>u.team===team&&has(u,'renewal')))for(const u of state.units)if(u.team===team&&u!==c&&man(u,c)===1&&u.hp<u.maxhp){const a=Math.min(5,u.maxhp-u.hp);u.hp+=a;pop(u,'+'+a,'heal')}
+  for(const u of state.units)if(u.team===team&&u.hp>0&&hasSt(u,'regen')&&u.hp<u.maxhp){const a=Math.min(3,u.maxhp-u.hp);u.hp+=a;pop(u,'+'+a,'heal')}/* the Regen Staff */
   if(team==='p'&&R('sprig'))for(const u of state.units)if(u.team==='p'&&u.hp>0&&u.hp<u.maxhp){u.hp++;pop(u,'+1','heal')}
   if(team==='p'&&R('salvebag'))for(const u of state.units)if(u.team==='p'&&u.hp<u.maxhp){const a=Math.min(3,u.maxhp-u.hp);u.hp+=a;pop(u,'+'+a,'heal')}
 }

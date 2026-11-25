@@ -184,8 +184,8 @@ const CAST = [
     },
   },
   {
-    id: "corvin",
-    name: "Corvin",
+    id: "yvera",
+    name: "Yvera",
     cls: "Ice Mage",
     wk: "frostSigil",
     joins: "tavernEvent",
@@ -417,7 +417,7 @@ const CAST = [
     id: "kaya",
     name: "Kaya",
     cls: "Horse Archer",
-    wk: "yewGreatbow" /* joins already advanced, so a steel-tier bow */,
+    wk: "horseBow" /* joins already advanced: her own Horse Bow */,
     joins: "act1",
     look: {
       fem: true,
@@ -495,7 +495,7 @@ const CAST = [
     id: "lysander",
     name: "Lysander",
     cls: "Minstrel",
-    wk: null,
+    wk: "lyre",
     joins: "event",
     look: {
       body: "tunic",
@@ -662,7 +662,9 @@ function castArtAll() {
     );
   for (const c of CAST) {
     const ts =
-      c.cls.split(".")[1] === "support"
+      c.wk && IT[c.wk].t === "instrument"
+        ? ["instrument"] /* Lysander: his lyre only, no staves */
+        : c.cls.split(".")[1] === "support"
         ? ["spirit"]
         : [c.wk ? IT[c.wk].t : "spirit"];
     if (c.wk2) ts.push(IT[c.wk2].t); /* a second starting weapon adds its type (Maelis: sigils) */

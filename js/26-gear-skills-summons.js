@@ -11,7 +11,7 @@ const GEAR_N={def:'Def',res:'Res',spd:'Spd',mov:'Move',str:'Str'};
 function gearOf(u){const g={def:0,res:0,spd:0,mov:0,str:0},seen=new Set();
   for(const it of u.items||[]){const x=IT[it.k];if(!x||x.t!=='gear'||seen.has(it.k))continue;seen.add(it.k);for(const s in x.gear)g[s]+=x.gear[s]}return g}
 const gearText=x=>Object.entries(x.gear).map(([s,v])=>`${v>0?'+':''}${v} ${GEAR_N[s]}`).join(', ');
-const tradable=k=>!WTYPES.includes(IT[k].t)&&IT[k].t!=='spirit';
+const tradable=k=>!WTYPES.includes(IT[k].t)&&IT[k].t!=='spirit'&&IT[k].t!=='instrument';
 const tradeMates=u=>u.summon?[]:state.units.filter(o=>o!==u&&o.team==='p'&&!o.summon&&o.hp>0&&man(o,u)===1);
 /* trading: click one of your items to hand it over, or one of theirs to take it. Doesn't use up the action. */
 async function tradeWith(u){
