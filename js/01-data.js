@@ -161,7 +161,7 @@ Object.assign(SKILLS,{
   taunt:{n:'Taunt',d:'Enemies would rather attack this unit.'},
   quickStudy:{n:'Quick Study',d:'Gains double EXP.'},
   earlyEdge:{n:'Early Edge',d:'+20 Hit and Avoid on turns 1 to 5.'},
-  wolfsbane:{n:'Wolfsbane',d:'Effective (×2) against Prey.'},
+  wolfsbane:{n:'Wolfsbane',d:'Effective (×2) against Beasts.'},
   fiendbane:{n:'Fiendbane',d:'Effective (×2) against Infernal foes.'},
   stonebane:{n:'Stonebane',d:'Effective (×2) against Armoured foes.'},
   guardian:{n:'Guardian',d:'Adjacent allies take 2 less damage.'}

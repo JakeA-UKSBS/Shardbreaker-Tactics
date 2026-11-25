@@ -40,15 +40,15 @@ function minRange(u){let m=9;u.items.forEach(it=>{if((isWpn(it.k)||IT[it.k].t===
 function aura(u){if(u.team!=='p')return 0;const l=state.units.find(o=>has(o,'command')&&o.hp>0&&o.team===u.team&&o.id!==u.id);return l&&man(l,u)<=2?10:0}
 
 /* ---- body tags and effective damage ----
-   Monsters carry body tags; some weapons (and the slayer skills) are effective against a tag: ×2 weapon Mt (bows vs prey, light vs infernal, fire vs plants and ice creatures, ice vs scaled, lightning vs oozes).
+   Monsters carry body tags; some weapons (and the slayer skills) are effective against a tag: ×2 weapon Mt (bows vs beasts, light vs infernal, fire vs plants and ice creatures, ice vs scaled, lightning vs oozes).
    One-way for now: only your side (and green allies) deal effective hits; your own units have no tags. */
-const TAGS={armoured:{n:'Armoured'},beast:{n:'Prey'},colossal:{n:'Colossal'},infernal:{n:'Infernal'},plant:{n:'Plant'},ooze:{n:'Ooze'},ice:{n:'Ice'},scaled:{n:'Scaled'}};
+const TAGS={armoured:{n:'Armoured'},beast:{n:'Beast'},colossal:{n:'Colossal'},infernal:{n:'Infernal'},plant:{n:'Plant'},ooze:{n:'Ooze'},ice:{n:'Ice'},scaled:{n:'Scaled'}};
 const BODY_TAGS={golem:['armoured'],snail:['armoured'],turtle:['armoured'],cubes:['armoured'],armor:['armoured'],beast:['beast'],gator:['scaled'],bear:['beast'],
   hawk:['beast'],dragon:['beast'],sentinel:['armoured'],flame:['infernal'],mud:['ooze']};
 /* ice: frost creatures, burned by fire. scaled: alligators and crocs, slowed by cold (weak to ice) */
-const TAG_FIX={Wolf:[],FrostWolf:[],BlightedTreant:['plant'],HellHound:['beast','infernal'],IceTroll:['ice'],IceWorm:['ice'],MagmaDragon:['infernal'],Lamia:['scaled']};
+const TAG_FIX={BlightedTreant:['plant'],HellHound:['beast','infernal'],IceTroll:['ice'],IceWorm:['ice'],MagmaDragon:['infernal'],Lamia:['scaled']};
 function tagsOf(u){if(!u||!u.cls||u.cls.startsWith('G.'))return[];const C=CLS[u.cls]||{};let t=(TAG_FIX[u.cls]||BODY_TAGS[C.body]||[]).slice();if((u.sz||1)>1)t.push('colossal');return[...new Set(t)]}
-/* what a weapon (or an ability's element) is effective against: its own list, plus bows vs prey, light vs infernal, fire vs plants and ice creatures, ice vs scaled, lightning vs oozes */
+/* what a weapon (or an ability's element) is effective against: its own list, plus bows vs beasts, light vs infernal, fire vs plants and ice creatures, ice vs scaled, lightning vs oozes */
 function effOf(w){const o=(w&&w.eff||[]).slice();if(w&&w.t==='bow')o.push('beast');if(w&&w.el==='light')o.push('infernal');if(w&&w.el==='fire')o.push('plant','ice');if(w&&w.el==='ice')o.push('scaled');if(w&&w.el==='lightning')o.push('ooze');return o}
 const SLAYER={wolfsbane:'beast',stonebane:'armoured',fiendbane:'infernal'};
 /* elemental weaknesses: CLS weak is one element or a list (Ice Troll: fire) */

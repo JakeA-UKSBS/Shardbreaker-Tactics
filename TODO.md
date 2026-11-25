@@ -26,8 +26,7 @@ A snapshot of what's outstanding, as of 24 November 2026. Tick things off or del
 
 - [ ] **Desert, floors 1 to 3:** only Sand Worms spawn there since the Jackal went. It needs a new early monster.
 - [ ] **Seren's Spirit Bolt:** keep it or cut it? It's her only damaging ability. It no longer has an element.
-- [ ] **Bows vs Prey:** bows and the Hunting Spear both double against Prey (the old Beast type, wolves taken out). Watch whether bows get too strong.
-- [ ] **Wolfsbane:** the skill now doubles against Prey, which no longer includes wolves. Rename it?
+- [ ] **Bows vs Beast:** bows and the Hunting Spear both double against beasts. Watch whether bows get too strong.
 - [ ] **Thunder Sigil:** now the 8 Mt armoury upgrade; check it feels right next to the Storm Sigil.
 - [ ] Offered earlier, never confirmed: a +5 max HP fish at the Old Fisherman (no frog poison)
 
